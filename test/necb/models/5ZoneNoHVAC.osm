@@ -11067,7 +11067,7 @@ OS:WeatherFile,
   -79.63,                                 !- Longitude {deg}
   -5,                                     !- Time Zone {hr}
   173,                                    !- Elevation {m}
-  file:files/CAN_ON_Toronto.716240_CWEC.epw, !- Url
+  file:files/CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw, !- Url
   3537CA94;                               !- Checksum
 
 OS:Site,

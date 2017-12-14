@@ -279,11 +279,11 @@ module BTAP
           data['typical_spring_week'] = wf.typical_spring_week
           data['wf.heating_design_info[1]'] = wf.heating_design_info[1]
           data['cooling_design_info[1]'] = wf.cooling_design_info[1]
-          data['extremes_design_info[1]'] = wf.extremes_design_info[1].force_encoding('ISO-8859-1').encode('UTF-8')
+          data['extremes_design_info[1]'] = wf.extremes_design_info[1]
           data['db990'] = wf.db990
 
         end
-        File.write('/home/osdev/out.json',JSON.pretty_generate(data_array))
+        File.write(output_file,JSON.pretty_generate(data_array))
       end
     end
 

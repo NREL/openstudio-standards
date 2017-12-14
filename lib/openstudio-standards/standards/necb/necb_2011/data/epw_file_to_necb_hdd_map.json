@@ -2,2856 +2,3998 @@
   {
     "epw_file": "CAN_AB_Abee.AGDM.712850_CWEC2016.epw",
     "necb_location": "Athabasca,AB",
-    "distance_km": "52.93"
+    "hdd_difference": -118.0,
+    "distance_km": "52.93",
+    "hdd18": "6000"
   },
   {
     "epw_file": "CAN_AB_Andrew.AGDM.712860_CWEC2016.epw",
     "necb_location": "Vegreville,AB",
-    "distance_km": "47.97"
+    "hdd_difference": 79.0,
+    "distance_km": "47.97",
+    "hdd18": "5780"
   },
   {
     "epw_file": "CAN_AB_Atmore.AGDM.712870_CWEC2016.epw",
     "necb_location": "Athabasca,AB",
-    "distance_km": "30.35"
+    "hdd_difference": -108.0,
+    "distance_km": "30.35",
+    "hdd18": "6000"
   },
   {
     "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
     "necb_location": "Banff,AB",
-    "distance_km": "2.09"
+    "hdd_difference": -4.0,
+    "distance_km": "2.09",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_Barnwell.AGDM.713460_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "10.90"
+    "hdd_difference": -53.0,
+    "distance_km": "10.90",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Barrhead.AP.710610_CWEC2016.epw",
     "necb_location": "Barrhead,AB",
-    "distance_km": "4.34"
+    "hdd_difference": -109.0,
+    "distance_km": "4.34",
+    "hdd18": "5740"
   },
   {
     "epw_file": "CAN_AB_Beaverlodge.712300_CWEC2016.epw",
     "necb_location": "Beaverlodge,AB",
-    "distance_km": "2.56"
+    "hdd_difference": -113.0,
+    "distance_km": "2.56",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_AB_Blood.Tribe.AgDM.715170_CWEC2016.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "20.56"
+    "hdd_difference": 92.0,
+    "distance_km": "20.56",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Bodo.AgDM.712140_CWEC2016.epw",
     "necb_location": "Scott,SK",
-    "distance_km": "90.69"
+    "hdd_difference": -403.0,
+    "distance_km": "90.69",
+    "hdd18": "5960"
   },
   {
     "epw_file": "CAN_AB_Bow.Island.712310_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "50.59"
+    "hdd_difference": -100.0,
+    "distance_km": "50.59",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Bow.Island.Irrigation.AgDM.715190_CWEC2016.epw",
     "necb_location": "Suffield,AB",
-    "distance_km": "42.25"
+    "hdd_difference": -169.0,
+    "distance_km": "42.25",
+    "hdd18": "4770"
   },
   {
     "epw_file": "CAN_AB_Bow.Valley.Provinicial.Park.712320_CWEC2016.epw",
     "necb_location": "Canmore,AB",
-    "distance_km": "20.46"
+    "hdd_difference": -308.0,
+    "distance_km": "20.46",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_AB_Breton.Plots.712330_CWEC2016.epw",
     "necb_location": "Stony Plain,AB",
-    "distance_km": "56.86"
+    "hdd_difference": -247.0,
+    "distance_km": "56.86",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_AB_Brocket.AgDM.713410_CWEC2016.epw",
     "necb_location": "Pincher Creek,AB",
-    "distance_km": "17.42"
+    "hdd_difference": -495.0,
+    "distance_km": "17.42",
+    "hdd18": "4740"
   },
   {
     "epw_file": "CAN_AB_Brooks.714570_CWEC2016.epw",
     "necb_location": "Brooks,AB",
-    "distance_km": "3.75"
+    "hdd_difference": 49.0,
+    "distance_km": "3.75",
+    "hdd18": "4880"
   },
   {
     "epw_file": "CAN_AB_Calgary-Canadian.Olympic.Park.Upper.712350_CWEC2016.epw",
     "necb_location": "Calgary,AB",
-    "distance_km": "10.99"
+    "hdd_difference": -23.0,
+    "distance_km": "10.99",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC.epw",
     "necb_location": "Calgary,AB",
-    "distance_km": "8.70"
+    "hdd_difference": 147.0,
+    "distance_km": "8.70",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
     "necb_location": "Calgary,AB",
-    "distance_km": "8.09"
+    "hdd_difference": -219.0,
+    "distance_km": "8.09",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_AB_Camrose.712540_CWEC2016.epw",
     "necb_location": "Camrose,AB",
-    "distance_km": "1.73"
+    "hdd_difference": 217.0,
+    "distance_km": "1.73",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_Cardston.711530_CWEC2016.epw",
     "necb_location": "Cardston,AB",
-    "distance_km": "1.32"
+    "hdd_difference": -255.0,
+    "distance_km": "1.32",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_AB_Champion.AgDM.712170_CWEC2016.epw",
     "necb_location": "Claresholm,AB",
-    "distance_km": "33.64"
+    "hdd_difference": 246.0,
+    "distance_km": "33.64",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_AB_Claresholm.712340_CWEC2016.epw",
     "necb_location": "Claresholm,AB",
-    "distance_km": "4.29"
+    "hdd_difference": 203.0,
+    "distance_km": "4.29",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_AB_Cleardale.AgDM.712210_3074935_CWEC2016.epw",
     "necb_location": "Taylor,BC",
-    "distance_km": "60.59"
+    "hdd_difference": 330.0,
+    "distance_km": "60.59",
+    "hdd18": "5720"
   },
   {
     "epw_file": "CAN_AB_Cold.Lake.AP.711200_CWEC2016.epw",
     "necb_location": "Cold Lake,AB",
-    "distance_km": "8.84"
+    "hdd_difference": -217.0,
+    "distance_km": "8.84",
+    "hdd18": "5860"
   },
   {
     "epw_file": "CAN_AB_Consort.AgDM.712230_CWEC2016.epw",
     "necb_location": "Coronation,AB",
-    "distance_km": "53.09"
+    "hdd_difference": -280.0,
+    "distance_km": "53.09",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Coronation.AP.713180_CWEC2016.epw",
     "necb_location": "Coronation,AB",
-    "distance_km": "2.21"
+    "hdd_difference": -9.0,
+    "distance_km": "2.21",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Crowsnest.712360_CWEC2016.epw",
     "necb_location": "Coleman,AB",
-    "distance_km": "1.73"
+    "hdd_difference": -226.0,
+    "distance_km": "1.73",
+    "hdd18": "5210"
   },
   {
     "epw_file": "CAN_AB_Dapp.AgDM.713400_CWEC2016.epw",
     "necb_location": "Barrhead,AB",
-    "distance_km": "36.43"
+    "hdd_difference": 270.0,
+    "distance_km": "36.43",
+    "hdd18": "5740"
   },
   {
     "epw_file": "CAN_AB_Del.Bonita.AgDM.712240_CWEC2016.epw",
     "necb_location": "Cardston,AB",
-    "distance_km": "38.79"
+    "hdd_difference": 239.0,
+    "distance_km": "38.79",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_AB_Drumheller.East.712370_CWEC2016.epw",
     "necb_location": "Drumheller,AB",
-    "distance_km": "3.23"
+    "hdd_difference": 36.0,
+    "distance_km": "3.23",
+    "hdd18": "5050"
   },
   {
     "epw_file": "CAN_AB_Edmonton.City.Centre.AP.718790_CWEC2016.epw",
     "necb_location": "Edmonton,AB",
-    "distance_km": "3.59"
+    "hdd_difference": -249.0,
+    "distance_km": "3.59",
+    "hdd18": "5120"
   },
   {
     "epw_file": "CAN_AB_Edmonton.Intl.AP.711230_CWEC.epw",
     "necb_location": "Edmonton,AB",
-    "distance_km": "25.64"
+    "hdd_difference": 463.0,
+    "distance_km": "25.64",
+    "hdd18": "5120"
   },
   {
     "epw_file": "CAN_AB_Edmonton.Intl.AP.711230_CWEC2016.epw",
     "necb_location": "Edmonton,AB",
-    "distance_km": "26.71"
+    "hdd_difference": 468.0,
+    "distance_km": "26.71",
+    "hdd18": "5120"
   },
   {
     "epw_file": "CAN_AB_Edmonton.Stony.Plain.AP.711270_CWEC2016.epw",
     "necb_location": "Stony Plain,AB",
-    "distance_km": "7.36"
+    "hdd_difference": 57.0,
+    "distance_km": "7.36",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_AB_Edson.AP.711560_CWEC2016.epw",
     "necb_location": "Edson,AB",
-    "distance_km": "0.91"
+    "hdd_difference": -248.0,
+    "distance_km": "0.91",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_AB_Elk.Island.Natl.Park.712380_CWEC2016.epw",
     "necb_location": "Fort Saskatchewan,AB",
-    "distance_km": "22.57"
+    "hdd_difference": 14.0,
+    "distance_km": "22.57",
+    "hdd18": "5420"
   },
   {
     "epw_file": "CAN_AB_Enchant.AgDM.715180_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "48.57"
+    "hdd_difference": 90.0,
+    "distance_km": "48.57",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Esther.712400_CWEC2016.epw",
     "necb_location": "Kindersley,SK",
-    "distance_km": "76.07"
+    "hdd_difference": -177.0,
+    "distance_km": "76.07",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_AB_Fairiview.AgDM.713470_CWEC2016.epw",
     "necb_location": "Fairview,AB",
-    "distance_km": "3.20"
+    "hdd_difference": 30.0,
+    "distance_km": "3.20",
+    "hdd18": "5840"
   },
   {
     "epw_file": "CAN_AB_Fincastle.AgDM.715350_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "8.52"
+    "hdd_difference": 15.0,
+    "distance_km": "8.52",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Foremost.AgDM.712250_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "58.47"
+    "hdd_difference": -42.0,
+    "distance_km": "58.47",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Fort.McMurray.AP.715850_CWEC.epw",
     "necb_location": "Fort McMurray,AB",
-    "distance_km": "13.43"
+    "hdd_difference": -60.0,
+    "distance_km": "13.43",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_AB_Fort.McMurray.AP.716890_CWEC2016.epw",
     "necb_location": "Fort McMurray,AB",
-    "distance_km": "12.61"
+    "hdd_difference": -338.0,
+    "distance_km": "12.61",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_AB_Grande.Prairie.AP.719400_CWEC.epw",
     "necb_location": "Grande Prairie,AB",
-    "distance_km": "5.29"
+    "hdd_difference": 107.0,
+    "distance_km": "5.29",
+    "hdd18": "5790"
   },
   {
     "epw_file": "CAN_AB_Grande.Prairie.AP.719400_CWEC2016.epw",
     "necb_location": "Grande Prairie,AB",
-    "distance_km": "5.60"
+    "hdd_difference": -5.0,
+    "distance_km": "5.60",
+    "hdd18": "5790"
   },
   {
     "epw_file": "CAN_AB_Hendrickson.Creek.719790_CWEC2016.epw",
     "necb_location": "Hinton,AB",
-    "distance_km": "72.30"
+    "hdd_difference": 1021.0,
+    "distance_km": "72.30",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_High.Level.AP.710660_CWEC2016.epw",
     "necb_location": "Fort Vermilion,AB",
-    "distance_km": "71.43"
+    "hdd_difference": -67.0,
+    "distance_km": "71.43",
+    "hdd18": "6700"
   },
   {
     "epw_file": "CAN_AB_High.Prairie.AgDM.712260_CWEC2016.epw",
     "necb_location": "Valleyview,AB",
-    "distance_km": "60.17"
+    "hdd_difference": 29.0,
+    "distance_km": "60.17",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_AB_Holden.AgDM.712270_CWEC2016.epw",
     "necb_location": "Vegreville,AB",
-    "distance_km": "37.64"
+    "hdd_difference": -87.0,
+    "distance_km": "37.64",
+    "hdd18": "5780"
   },
   {
     "epw_file": "CAN_AB_Hussar-AgDM.713440_CWEC2016.epw",
     "necb_location": "Drumheller,AB",
-    "distance_km": "34.62"
+    "hdd_difference": 218.0,
+    "distance_km": "34.62",
+    "hdd18": "5050"
   },
   {
     "epw_file": "CAN_AB_Iron.Springs.AgDM.715280_CWEC2016.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "24.26"
+    "hdd_difference": -30.0,
+    "distance_km": "24.26",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Jasper-Warden.714860_CWEC2016.epw",
     "necb_location": "Jasper,AB",
-    "distance_km": "6.76"
+    "hdd_difference": 82.0,
+    "distance_km": "6.76",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_AB_Killam.AGDM.712280_CWEC2016.epw",
     "necb_location": "Hardisty,AB",
-    "distance_km": "42.76"
+    "hdd_difference": 143.0,
+    "distance_km": "42.76",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Lac.La.Biche.AP.713160_CWEC2016.epw",
     "necb_location": "Lac la Biche,AB",
-    "distance_km": "3.30"
+    "hdd_difference": -483.0,
+    "distance_km": "3.30",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_AB_Lacombe.712420_CWEC2016.epw",
     "necb_location": "Lacombe,AB",
-    "distance_km": "2.43"
+    "hdd_difference": 103.0,
+    "distance_km": "2.43",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_Lethbridge.AP.712430_CWEC.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "7.68"
+    "hdd_difference": -70.0,
+    "distance_km": "7.68",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Lethbridge.AP.712430_CWEC2016.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "5.31"
+    "hdd_difference": -204.0,
+    "distance_km": "5.31",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Lethbridge.Demo.Farm.AgDM.715090_CWEC2016.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "6.71"
+    "hdd_difference": -254.0,
+    "distance_km": "6.71",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Lloydminster.AP.718710_CWEC2016.epw",
     "necb_location": "Lloydminster,SK",
-    "distance_km": "5.63"
+    "hdd_difference": -199.0,
+    "distance_km": "5.63",
+    "hdd18": "5880"
   },
   {
     "epw_file": "CAN_AB_Manning.AgDM.712290_CWEC2016.epw",
     "necb_location": "Manning,AB",
-    "distance_km": "12.16"
+    "hdd_difference": 113.0,
+    "distance_km": "12.16",
+    "hdd18": "6300"
   },
   {
     "epw_file": "CAN_AB_Masinasin.AgDM.713450_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "80.63"
+    "hdd_difference": -191.0,
+    "distance_km": "80.63",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Medicine.Hat.AP.710260_CWEC.epw",
     "necb_location": "Medicine Hat,AB",
-    "distance_km": "3.33"
+    "hdd_difference": 137.0,
+    "distance_km": "3.33",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_AB_Medicine.Hat.AP.710260_CWEC2016.epw",
     "necb_location": "Medicine Hat,AB",
-    "distance_km": "3.37"
+    "hdd_difference": -68.0,
+    "distance_km": "3.37",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_AB_Mildred.Lake.AP.712550_CWEC2016.epw",
     "necb_location": "Fort McMurray,AB",
-    "distance_km": "36.63"
+    "hdd_difference": -508.0,
+    "distance_km": "36.63",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_AB_Milk.River.AP.712440_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "72.96"
+    "hdd_difference": 204.0,
+    "distance_km": "72.96",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Morrin.AgDM.712570_CWEC2016.epw",
     "necb_location": "Drumheller,AB",
-    "distance_km": "21.80"
+    "hdd_difference": 252.0,
+    "distance_km": "21.80",
+    "hdd18": "5050"
   },
   {
     "epw_file": "CAN_AB_Mundare.AgDM.713540_CWEC2016.epw",
     "necb_location": "Vegreville,AB",
-    "distance_km": "17.16"
+    "hdd_difference": -137.0,
+    "distance_km": "17.16",
+    "hdd18": "5780"
   },
   {
     "epw_file": "CAN_AB_Nakiska.Ski.Resort.Ridgetop.712450_CWEC2016.epw",
     "necb_location": "Canmore,AB",
-    "distance_km": "20.13"
+    "hdd_difference": 1838.0,
+    "distance_km": "20.13",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_AB_Nordegg.710600_CWEC2016.epw",
     "necb_location": "Rocky Mountain House,AB",
-    "distance_km": "77.07"
+    "hdd_difference": 98.0,
+    "distance_km": "77.07",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Olds.AgDM.712580_CWEC2016.epw",
     "necb_location": "Wimborne,AB",
-    "distance_km": "35.74"
+    "hdd_difference": -177.0,
+    "distance_km": "35.74",
+    "hdd18": "5310"
   },
   {
     "epw_file": "CAN_AB_Onefour.CDA.711160_CWEC2016.epw",
     "necb_location": "Medicine Hat,AB",
-    "distance_km": "103.80"
+    "hdd_difference": 266.0,
+    "distance_km": "103.80",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_AB_Oyen.AgDM.713420_CWEC2016.epw",
     "necb_location": "Kindersley,SK",
-    "distance_km": "83.41"
+    "hdd_difference": -242.0,
+    "distance_km": "83.41",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_AB_Peace.River.AP.710680_CWEC2016.epw",
     "necb_location": "Peace River,AB",
-    "distance_km": "9.84"
+    "hdd_difference": -142.0,
+    "distance_km": "9.84",
+    "hdd18": "6050"
   },
   {
     "epw_file": "CAN_AB_Peoria.AgDM.713480_CWEC2016.epw",
     "necb_location": "Fairview,AB",
-    "distance_km": "50.27"
+    "hdd_difference": -35.0,
+    "distance_km": "50.27",
+    "hdd18": "5840"
   },
   {
     "epw_file": "CAN_AB_Pincher.Creek.AP.710850_CWEC2016.epw",
     "necb_location": "Pincher Creek,AB",
-    "distance_km": "5.12"
+    "hdd_difference": -8.0,
+    "distance_km": "5.12",
+    "hdd18": "4740"
   },
   {
     "epw_file": "CAN_AB_Pollockville.AgDM.712590_CWEC2016.epw",
     "necb_location": "Brooks,AB",
-    "distance_km": "63.64"
+    "hdd_difference": 418.0,
+    "distance_km": "63.64",
+    "hdd18": "4880"
   },
   {
     "epw_file": "CAN_AB_Prentiss.713530_CWEC2016.epw",
     "necb_location": "Lacombe,AB",
-    "distance_km": "9.34"
+    "hdd_difference": -278.0,
+    "distance_km": "9.34",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_Raymond.AgDM.715360_CWEC2016.epw",
     "necb_location": "Lethbridge,AB",
-    "distance_km": "26.06"
+    "hdd_difference": -97.0,
+    "distance_km": "26.06",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_AB_Red.Deer.Regl.AP.718780_CWEC2016.epw",
     "necb_location": "Red Deer,AB",
-    "distance_km": "11.11"
+    "hdd_difference": -45.0,
+    "distance_km": "11.11",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_AB_Red.Earth.Creek.AP.712460_CWEC2016.epw",
     "necb_location": "Peace River,AB",
-    "distance_km": "128.73"
+    "hdd_difference": 15.0,
+    "distance_km": "128.73",
+    "hdd18": "6050"
   },
   {
     "epw_file": "CAN_AB_Rich.Lake.AgDM.713490_CWEC2016.epw",
     "necb_location": "Lac la Biche,AB",
-    "distance_km": "34.74"
+    "hdd_difference": -245.0,
+    "distance_km": "34.74",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_AB_Rocky.Mountain.House.AP.719280_3015523_CWEC2016.epw",
     "necb_location": "Rocky Mountain House,AB",
-    "distance_km": "4.65"
+    "hdd_difference": 188.0,
+    "distance_km": "4.65",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Schuler.AgDM_3025768_CWEC2016.epw",
     "necb_location": "Medicine Hat,AB",
-    "distance_km": "51.15"
+    "hdd_difference": 507.0,
+    "distance_km": "51.15",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_AB_Seven.Persons.AgDM.715250_CWEC2016.epw",
     "necb_location": "Medicine Hat,AB",
-    "distance_km": "22.01"
+    "hdd_difference": 273.0,
+    "distance_km": "22.01",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_AB_Slave.Lake.AP.710690_CWEC2016.epw",
     "necb_location": "Slave Lake,AB",
-    "distance_km": "0.80"
+    "hdd_difference": -149.0,
+    "distance_km": "0.80",
+    "hdd18": "5850"
   },
   {
     "epw_file": "CAN_AB_Smoky.Lake.AgDM.712740_CWEC2016.epw",
     "necb_location": "Lac la Biche,AB",
-    "distance_km": "64.37"
+    "hdd_difference": -213.0,
+    "distance_km": "64.37",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_AB_Spirit.River.715710_CWEC2016.epw",
     "necb_location": "Beaverlodge,AB",
-    "distance_km": "54.86"
+    "hdd_difference": 236.0,
+    "distance_km": "54.86",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_AB_St.Paul.AgCM.712750_CWEC2016.epw",
     "necb_location": "Ranfurly,AB",
-    "distance_km": "73.12"
+    "hdd_difference": 510.0,
+    "distance_km": "73.12",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_AB_Stavely.AAFC.715550_CWEC2016.epw",
     "necb_location": "Claresholm,AB",
-    "distance_km": "28.06"
+    "hdd_difference": 178.0,
+    "distance_km": "28.06",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_AB_Stettler.AgDM.712890_CWEC2016.epw",
     "necb_location": "Stettler,AB",
-    "distance_km": "8.26"
+    "hdd_difference": 0.0,
+    "distance_km": "8.26",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_AB_Strathmore.AgDM.715260_CWEC2016.epw",
     "necb_location": "Calgary,AB",
-    "distance_km": "55.11"
+    "hdd_difference": -18.0,
+    "distance_km": "55.11",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_AB_Sundre.AP.712480_CWEC2016.epw",
     "necb_location": "Rocky Mountain House,AB",
-    "distance_km": "68.77"
+    "hdd_difference": -123.0,
+    "distance_km": "68.77",
+    "hdd18": "5640"
   },
   {
     "epw_file": "CAN_AB_Three.Hills.712490_CWEC2016.epw",
     "necb_location": "Wimborne,AB",
-    "distance_km": "28.78"
+    "hdd_difference": 28.0,
+    "distance_km": "28.78",
+    "hdd18": "5310"
   },
   {
     "epw_file": "CAN_AB_Two.Hills.AgDM.712760_CWEC2016.epw",
     "necb_location": "Ranfurly,AB",
-    "distance_km": "24.99"
+    "hdd_difference": 196.0,
+    "distance_km": "24.99",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_AB_Valleyview.AgDM.712770_CWEC2016.epw",
     "necb_location": "Valleyview,AB",
-    "distance_km": "5.76"
+    "hdd_difference": 14.0,
+    "distance_km": "5.76",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_AB_Vauxhall.712510_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "29.38"
+    "hdd_difference": 27.0,
+    "distance_km": "29.38",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_AB_Vegreville.714580_CWEC2016.epw",
     "necb_location": "Vegreville,AB",
-    "distance_km": "2.37"
+    "hdd_difference": -152.0,
+    "distance_km": "2.37",
+    "hdd18": "5780"
   },
   {
     "epw_file": "CAN_AB_Vermilion.AgDM.712780_CWEC2016.epw",
     "necb_location": "Vermilion,AB",
-    "distance_km": "1.69"
+    "hdd_difference": -136.0,
+    "distance_km": "1.69",
+    "hdd18": "5740"
   },
   {
     "epw_file": "CAN_AB_Violet.Grove.710620_CWEC2016.epw",
     "necb_location": "Stony Plain,AB",
-    "distance_km": "85.98"
+    "hdd_difference": 15.0,
+    "distance_km": "85.98",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_AB_Wainwright.CFB-Airfield.21.711180_CWEC2016.epw",
     "necb_location": "Wainwright,AB",
-    "distance_km": "16.50"
+    "hdd_difference": -187.0,
+    "distance_km": "16.50",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_AB_Waterton.Lakes.Natl.Park.Gate.711540_CWEC2016.epw",
     "necb_location": "Cardston,AB",
-    "distance_km": "37.56"
+    "hdd_difference": -191.0,
+    "distance_km": "37.56",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_AB_Whitecourt.AP.712560_CWEC2016.epw",
     "necb_location": "Whitecourt,AB",
-    "distance_km": "6.46"
+    "hdd_difference": -203.0,
+    "distance_km": "6.46",
+    "hdd18": "5650"
   },
   {
     "epw_file": "CAN_AB_Willow.Creek.712520_CWEC2016.epw",
     "necb_location": "Hinton,AB",
-    "distance_km": "51.46"
+    "hdd_difference": 1062.0,
+    "distance_km": "51.46",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_AB_Wrentham.AgDM.713430_CWEC2016.epw",
     "necb_location": "Taber,AB",
-    "distance_km": "31.88"
+    "hdd_difference": -23.0,
+    "distance_km": "31.88",
+    "hdd18": "4580"
   },
   {
     "epw_file": "CAN_BC_Abbotsford.Intl.AP.711080_CWEC.epw",
     "necb_location": "Abbotsford,BC",
-    "distance_km": "5.29"
+    "hdd_difference": 275.0,
+    "distance_km": "5.29",
+    "hdd18": "2860"
   },
   {
     "epw_file": "CAN_BC_Abbotsford.Intl.AP.711080_CWEC2016.epw",
     "necb_location": "Abbotsford,BC",
-    "distance_km": "4.94"
+    "hdd_difference": -1.0,
+    "distance_km": "4.94",
+    "hdd18": "2860"
   },
   {
     "epw_file": "CAN_BC_Agassiz.711130_CWEC2016.epw",
     "necb_location": "Agassiz,BC",
-    "distance_km": "0.62"
+    "hdd_difference": 54.0,
+    "distance_km": "0.62",
+    "hdd18": "2750"
   },
   {
     "epw_file": "CAN_BC_Ballenas.Island.717690_CWEC2016.epw",
     "necb_location": "Parksville,BC",
-    "distance_km": "11.64"
+    "hdd_difference": -652.0,
+    "distance_km": "11.64",
+    "hdd18": "3200"
   },
   {
     "epw_file": "CAN_BC_Blue.River.AP.718830_CWEC2016.epw",
     "necb_location": "Jasper,AB",
-    "distance_km": "116.35"
+    "hdd_difference": -337.0,
+    "distance_km": "116.35",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_BC_Bonilla.Island.714840_CWEC2016.epw",
     "necb_location": "Sandspit,BC",
-    "distance_km": "83.19"
+    "hdd_difference": 73.0,
+    "distance_km": "83.19",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Burns.Lake.AP.719520_CWEC2016.epw",
     "necb_location": "Burns Lake,BC",
-    "distance_km": "20.91"
+    "hdd_difference": 286.0,
+    "distance_km": "20.91",
+    "hdd18": "5450"
   },
   {
     "epw_file": "CAN_BC_Callaghan.Valley-Whistler.Olympic.Park.Ski.Resort.716880_1101300_CWEC2016.epw",
     "necb_location": "Whistler,BC",
-    "distance_km": "11.38"
+    "hdd_difference": 612.0,
+    "distance_km": "11.38",
+    "hdd18": "4180"
   },
   {
     "epw_file": "CAN_BC_Cape.St.James.AP.711070_CWEC2016.epw",
     "necb_location": "Sandspit,BC",
-    "distance_km": "155.17"
+    "hdd_difference": -22.0,
+    "distance_km": "155.17",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Cathedral.Point.714820_CWEC2016.epw",
     "necb_location": "Ocean Falls,BC",
-    "distance_km": "23.89"
+    "hdd_difference": 82.0,
+    "distance_km": "23.89",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_BC_Clinton.714740_CWEC2016.epw",
     "necb_location": "Cache Creek,BC",
-    "distance_km": "39.28"
+    "hdd_difference": 1398.0,
+    "distance_km": "39.28",
+    "hdd18": "3700"
   },
   {
     "epw_file": "CAN_BC_Comox.Valley.AP.718930_CWEC.epw",
     "necb_location": "Comox,BC",
-    "distance_km": "5.55"
+    "hdd_difference": 77.0,
+    "distance_km": "5.55",
+    "hdd18": "3100"
   },
   {
     "epw_file": "CAN_BC_Comox.Valley.AP.718930_CWEC2016.epw",
     "necb_location": "Comox,BC",
-    "distance_km": "5.25"
+    "hdd_difference": -93.0,
+    "distance_km": "5.25",
+    "hdd18": "3100"
   },
   {
     "epw_file": "CAN_BC_Cranbrook.AP.718800_CWEC.epw",
     "necb_location": "Cranbrook,BC",
-    "distance_km": "10.82"
+    "hdd_difference": 246.0,
+    "distance_km": "10.82",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_BC_Crankbrook-Canadian.Rockies.Intl.AP.718800_CWEC2016.epw",
     "necb_location": "Cranbrook,BC",
-    "distance_km": "11.05"
+    "hdd_difference": 103.0,
+    "distance_km": "11.05",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_BC_Creston.717700_CWEC2016.epw",
     "necb_location": "Cranbrook,BC",
-    "distance_km": "71.49"
+    "hdd_difference": -709.0,
+    "distance_km": "71.49",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_BC_Cumshewa.Island.717710_CWEC2016.epw",
     "necb_location": "Sandspit,BC",
-    "distance_km": "27.83"
+    "hdd_difference": -97.0,
+    "distance_km": "27.83",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Dawson.Creek.AP.714710_CWEC2016.epw",
     "necb_location": "Dawson Creek,BC",
-    "distance_km": "3.94"
+    "hdd_difference": -33.0,
+    "distance_km": "3.94",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_BC_Discovery.Island.710310_CWEC2016.epw",
     "necb_location": "Victoria (Gonzales Hts),BC",
-    "distance_km": "7.09"
+    "hdd_difference": -40.0,
+    "distance_km": "7.09",
+    "hdd18": "2700"
   },
   {
     "epw_file": "CAN_BC_Entrance.Island.717720_CWEC2016.epw",
     "necb_location": "Nanaimo,BC",
-    "distance_km": "10.53"
+    "hdd_difference": -347.0,
+    "distance_km": "10.53",
+    "hdd18": "3000"
   },
   {
     "epw_file": "CAN_BC_Esquimalt.Harbour.717980_CWEC2016.epw",
     "necb_location": "Langford,BC",
-    "distance_km": "4.52"
+    "hdd_difference": 225.0,
+    "distance_km": "4.52",
+    "hdd18": "2750"
   },
   {
     "epw_file": "CAN_BC_Estevan.Point.AP.718940_CWEC2016.epw",
     "necb_location": "Tofino,BC",
-    "distance_km": "52.78"
+    "hdd_difference": 27.0,
+    "distance_km": "52.78",
+    "hdd18": "3150"
   },
   {
     "epw_file": "CAN_BC_Fanny.Island.715680_CWEC2016.epw",
     "necb_location": "Campbell River,BC",
-    "distance_km": "69.27"
+    "hdd_difference": 450.0,
+    "distance_km": "69.27",
+    "hdd18": "3000"
   },
   {
     "epw_file": "CAN_BC_Fort.Nelson-Northern.Rockies.Rgnl.AP.719450_CWEC2016.epw",
     "necb_location": "Fort Nelson,BC",
-    "distance_km": "6.72"
+    "hdd_difference": -16.0,
+    "distance_km": "6.72",
+    "hdd18": "6710"
   },
   {
     "epw_file": "CAN_BC_Fort.St.John-North.Peace.Rgnl.AP.719430_CWEC.epw",
     "necb_location": "Fort St. John,BC",
-    "distance_km": "7.61"
+    "hdd_difference": 112.0,
+    "distance_km": "7.61",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_BC_Fort.St.John-North.Peace.Rgnl.AP.719430_CWEC2016.epw",
     "necb_location": "Fort St. John,BC",
-    "distance_km": "6.77"
+    "hdd_difference": -2.0,
+    "distance_km": "6.77",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_BC_Grey.Islet.714760_CWEC2016.epw",
     "necb_location": "Prince Rupert,BC",
-    "distance_km": "38.25"
+    "hdd_difference": -203.0,
+    "distance_km": "38.25",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_BC_Herbert.Island.714850_CWEC2016.epw",
     "necb_location": "Port Hardy,BC",
-    "distance_km": "28.03"
+    "hdd_difference": -15.0,
+    "distance_km": "28.03",
+    "hdd18": "3440"
   },
   {
     "epw_file": "CAN_BC_Holland.Rock.712190_CWEC2016.epw",
     "necb_location": "Prince Rupert,BC",
-    "distance_km": "16.12"
+    "hdd_difference": -296.0,
+    "distance_km": "16.12",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_BC_Hope.Rgnl.Airpark.711870_CWEC2016.epw",
     "necb_location": "Hope,BC",
-    "distance_km": "4.35"
+    "hdd_difference": 93.0,
+    "distance_km": "4.35",
+    "hdd18": "3000"
   },
   {
     "epw_file": "CAN_BC_Howe.Sound-Pam.Rocks.712110_CWEC2016.epw",
     "necb_location": "West Vancouver,BC",
-    "distance_km": "19.53"
+    "hdd_difference": -173.0,
+    "distance_km": "19.53",
+    "hdd18": "2950"
   },
   {
     "epw_file": "CAN_BC_Kamloops.AP.717410_CWEC.epw",
     "necb_location": "Kamloops,BC",
-    "distance_km": "8.43"
+    "hdd_difference": 180.0,
+    "distance_km": "8.43",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Kamloops.AP.718870_CWEC2016.epw",
     "necb_location": "Kamloops,BC",
-    "distance_km": "9.10"
+    "hdd_difference": -33.0,
+    "distance_km": "9.10",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Kelowna.Intl.AP.712030_CWEC2016.epw",
     "necb_location": "Kelowna,BC",
-    "distance_km": "11.34"
+    "hdd_difference": 251.0,
+    "distance_km": "11.34",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_BC_Kindakun.Rocks.714720_CWEC2016.epw",
     "necb_location": "Queen Charlotte City,BC",
-    "distance_km": "46.89"
+    "hdd_difference": -98.0,
+    "distance_km": "46.89",
+    "hdd18": "3520"
   },
   {
     "epw_file": "CAN_BC_Langara.Island.719030_CWEC2016.epw",
     "necb_location": "Masset,BC",
-    "distance_km": "65.28"
+    "hdd_difference": 0.0,
+    "distance_km": "65.28",
+    "hdd18": "3700"
   },
   {
     "epw_file": "CAN_BC_Lillooet.719990_CWEC2016.epw",
     "necb_location": "Lillooet,BC",
-    "distance_km": "0.32"
+    "hdd_difference": -12.0,
+    "distance_km": "0.32",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_BC_Lucy.Island.Lightstation.712200_CWEC2016.epw",
     "necb_location": "Prince Rupert,BC",
-    "distance_km": "18.82"
+    "hdd_difference": -186.0,
+    "distance_km": "18.82",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_BC_Lytton.717650_CWEC2016.epw",
     "necb_location": "Lytton,BC",
-    "distance_km": "1.03"
+    "hdd_difference": -68.0,
+    "distance_km": "1.03",
+    "hdd18": "3300"
   },
   {
     "epw_file": "CAN_BC_Mackenzie.Muni.AP.719440_CWEC2016.epw",
     "necb_location": "Mackenzie,BC",
-    "distance_km": "5.01"
+    "hdd_difference": -332.0,
+    "distance_km": "5.01",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_BC_Malahat.717740_CWEC2016.epw",
     "necb_location": "Sidney,BC",
-    "distance_km": "12.76"
+    "hdd_difference": 433.0,
+    "distance_km": "12.76",
+    "hdd18": "2850"
   },
   {
     "epw_file": "CAN_BC_Nakusp.AP.712160_CWEC2016.epw",
     "necb_location": "Nakusp,BC",
-    "distance_km": "3.43"
+    "hdd_difference": 261.0,
+    "distance_km": "3.43",
+    "hdd18": "3560"
   },
   {
     "epw_file": "CAN_BC_Nelson.AP.717760_CWEC2016.epw",
     "necb_location": "Nelson,BC",
-    "distance_km": "0.76"
+    "hdd_difference": 96.0,
+    "distance_km": "0.76",
+    "hdd18": "3500"
   },
   {
     "epw_file": "CAN_BC_Osoyoos.712150_CWEC2016.epw",
     "necb_location": "Osoyoos,BC",
-    "distance_km": "2.04"
+    "hdd_difference": 33.0,
+    "distance_km": "2.04",
+    "hdd18": "3100"
   },
   {
     "epw_file": "CAN_BC_Pemberton.Rgnl.AP.717770_CWEC2016.epw",
     "necb_location": "Whistler,BC",
-    "distance_km": "26.41"
+    "hdd_difference": -403.0,
+    "distance_km": "26.41",
+    "hdd18": "4180"
   },
   {
     "epw_file": "CAN_BC_Penticton.Rgnl.AP.718890_CWEC2016.epw",
     "necb_location": "Penticton,BC",
-    "distance_km": "4.06"
+    "hdd_difference": -39.0,
+    "distance_km": "4.06",
+    "hdd18": "3350"
   },
   {
     "epw_file": "CAN_BC_Pitt.Meadows.Rgnl.AP.717750_CWEC2016.epw",
     "necb_location": "Haney,BC",
-    "distance_km": "4.99"
+    "hdd_difference": 141.0,
+    "distance_km": "4.99",
+    "hdd18": "2840"
   },
   {
     "epw_file": "CAN_BC_Point.Atkinson.710370_CWEC2016.epw",
     "necb_location": "West Vancouver,BC",
-    "distance_km": "7.14"
+    "hdd_difference": -624.0,
+    "distance_km": "7.14",
+    "hdd18": "2950"
   },
   {
     "epw_file": "CAN_BC_Port.Hardy.AP.711090_CWEC.epw",
     "necb_location": "Port Hardy,BC",
-    "distance_km": "7.31"
+    "hdd_difference": 272.0,
+    "distance_km": "7.31",
+    "hdd18": "3440"
   },
   {
     "epw_file": "CAN_BC_Port.Hardy.AP.711090_CWEC2016.epw",
     "necb_location": "Port Hardy,BC",
-    "distance_km": "7.45"
+    "hdd_difference": 76.0,
+    "distance_km": "7.45",
+    "hdd18": "3440"
   },
   {
     "epw_file": "CAN_BC_Prince.George.AP.713020_CWEC.epw",
     "necb_location": "Prince George,BC",
-    "distance_km": "6.15"
+    "hdd_difference": 351.0,
+    "distance_km": "6.15",
+    "hdd18": "4720"
   },
   {
     "epw_file": "CAN_BC_Prince.George.Intl.AP.718960_CWEC2016.epw",
     "necb_location": "Prince George,BC",
-    "distance_km": "5.46"
+    "hdd_difference": 186.0,
+    "distance_km": "5.46",
+    "hdd18": "4720"
   },
   {
     "epw_file": "CAN_BC_Prince.Rupert-Digby.Island.AP.710220_CWEC2016.epw",
     "necb_location": "Prince Rupert,BC",
-    "distance_km": "8.68"
+    "hdd_difference": -100.0,
+    "distance_km": "8.68",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_BC_Prince.Rupert-Digby.Island.AP.718980_CWEC.epw",
     "necb_location": "Prince Rupert,BC",
-    "distance_km": "8.22"
+    "hdd_difference": 252.0,
+    "distance_km": "8.22",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_BC_Princeton.Rgnl.AP.710320_CWEC2016.epw",
     "necb_location": "Princeton,BC",
-    "distance_km": "0.73"
+    "hdd_difference": 212.0,
+    "distance_km": "0.73",
+    "hdd18": "4250"
   },
   {
     "epw_file": "CAN_BC_Puntzi.Mountain.AP.710500_CWEC2016.epw",
     "necb_location": "Williams Lake,BC",
-    "distance_km": "136.17"
+    "hdd_difference": 1242.0,
+    "distance_km": "136.17",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_BC_Quesnel.AP.717790_CWEC2016.epw",
     "necb_location": "Quesnel,BC",
-    "distance_km": "5.09"
+    "hdd_difference": 67.0,
+    "distance_km": "5.09",
+    "hdd18": "4650"
   },
   {
     "epw_file": "CAN_BC_Revelstoke.AP.718820_CWEC2016.epw",
     "necb_location": "Revelstoke,BC",
-    "distance_km": "4.67"
+    "hdd_difference": 85.0,
+    "distance_km": "4.67",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_BC_Rose.Spit.714770_CWEC2016.epw",
     "necb_location": "Masset,BC",
-    "distance_km": "35.70"
+    "hdd_difference": -87.0,
+    "distance_km": "35.70",
+    "hdd18": "3700"
   },
   {
     "epw_file": "CAN_BC_Salmon.Arm.712180_CWEC2016.epw",
     "necb_location": "Salmon Arm,BC",
-    "distance_km": "0.60"
+    "hdd_difference": -14.0,
+    "distance_km": "0.60",
+    "hdd18": "3650"
   },
   {
     "epw_file": "CAN_BC_Sandheads.712090_CWEC2016.epw",
     "necb_location": "Richmond,BC",
-    "distance_km": "14.05"
+    "hdd_difference": -113.0,
+    "distance_km": "14.05",
+    "hdd18": "2800"
   },
   {
     "epw_file": "CAN_BC_Sandspit.AP.711010_CWEC.epw",
     "necb_location": "Sandspit,BC",
-    "distance_km": "0.78"
+    "hdd_difference": 192.0,
+    "distance_km": "0.78",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Sandspit.AP.711110_CWEC2016.epw",
     "necb_location": "Sandspit,BC",
-    "distance_km": "1.30"
+    "hdd_difference": -12.0,
+    "distance_km": "1.30",
+    "hdd18": "3450"
   },
   {
     "epw_file": "CAN_BC_Sartine.Island.714780_CWEC2016.epw",
     "necb_location": "Port Hardy,BC",
-    "distance_km": "102.52"
+    "hdd_difference": -16.0,
+    "distance_km": "102.52",
+    "hdd18": "3440"
   },
   {
     "epw_file": "CAN_BC_Saturna.Island.714730_CWEC2016.epw",
     "necb_location": "Sidney,BC",
-    "distance_km": "29.93"
+    "hdd_difference": -288.0,
+    "distance_km": "29.93",
+    "hdd18": "2850"
   },
   {
     "epw_file": "CAN_BC_Sheringham.Point.717800_CWEC2016.epw",
     "necb_location": "Jordan River,BC",
-    "distance_km": "10.34"
+    "hdd_difference": 121.0,
+    "distance_km": "10.34",
+    "hdd18": "2900"
   },
   {
     "epw_file": "CAN_BC_Sisters.Island.717810_CWEC2016.epw",
     "necb_location": "Qualicum Beach,BC",
-    "distance_km": "15.44"
+    "hdd_difference": -586.0,
+    "distance_km": "15.44",
+    "hdd18": "3200"
   },
   {
     "epw_file": "CAN_BC_Smithers.Rgnl.AP.719500_CWEC.epw",
     "necb_location": "Smithers,BC",
-    "distance_km": "4.25"
+    "hdd_difference": 226.0,
+    "distance_km": "4.25",
+    "hdd18": "5040"
   },
   {
     "epw_file": "CAN_BC_Smithers.Rgnl.AP.719500_CWEC2016.epw",
     "necb_location": "Smithers,BC",
-    "distance_km": "4.83"
+    "hdd_difference": -86.0,
+    "distance_km": "4.83",
+    "hdd18": "5040"
   },
   {
     "epw_file": "CAN_BC_Solander.Island.Ecological.Reserve.714790_CWEC2016.epw",
     "necb_location": "Port Alice,BC",
-    "distance_km": "47.50"
+    "hdd_difference": 345.0,
+    "distance_km": "47.50",
+    "hdd18": "3010"
   },
   {
     "epw_file": "CAN_BC_Sparwood.717820_CWEC2016.epw",
     "necb_location": "Fernie,BC",
-    "distance_km": "29.74"
+    "hdd_difference": 322.0,
+    "distance_km": "29.74",
+    "hdd18": "4750"
   },
   {
     "epw_file": "CAN_BC_Squamish.AP.712070_CWEC2016.epw",
     "necb_location": "Squamish,BC",
-    "distance_km": "9.06"
+    "hdd_difference": 352.0,
+    "distance_km": "9.06",
+    "hdd18": "2950"
   },
   {
     "epw_file": "CAN_BC_Summerland.717680_CWEC.epw",
     "necb_location": "Penticton,BC",
-    "distance_km": "8.87"
+    "hdd_difference": 36.0,
+    "distance_km": "8.87",
+    "hdd18": "3350"
   },
   {
     "epw_file": "CAN_BC_Summerland.717680_CWEC2016.epw",
     "necb_location": "Penticton,BC",
-    "distance_km": "8.15"
+    "hdd_difference": 63.0,
+    "distance_km": "8.15",
+    "hdd18": "3350"
   },
   {
     "epw_file": "CAN_BC_Tatlayoko.Lake.710280_CWEC2016.epw",
     "necb_location": "Dog Creek,BC",
-    "distance_km": "149.81"
+    "hdd_difference": 324.0,
+    "distance_km": "149.81",
+    "hdd18": "4800"
   },
   {
     "epw_file": "CAN_BC_Terrace.AP.719510_CWEC2016.epw",
     "necb_location": "Terrace,BC",
-    "distance_km": "5.71"
+    "hdd_difference": 207.0,
+    "distance_km": "5.71",
+    "hdd18": "4150"
   },
   {
     "epw_file": "CAN_BC_Vancouver.Intl.AP.718920_CWEC.epw",
     "necb_location": "Richmond,BC",
-    "distance_km": "3.04"
+    "hdd_difference": 220.0,
+    "distance_km": "3.04",
+    "hdd18": "2800"
   },
   {
     "epw_file": "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw",
     "necb_location": "Richmond,BC",
-    "distance_km": "4.84"
+    "hdd_difference": -3.0,
+    "distance_km": "4.84",
+    "hdd18": "2800"
   },
   {
     "epw_file": "CAN_BC_Vernon.711150_CWEC2016.epw",
     "necb_location": "Vernon,BC",
-    "distance_km": "7.45"
+    "hdd_difference": 238.0,
+    "distance_km": "7.45",
+    "hdd18": "3600"
   },
   {
     "epw_file": "CAN_BC_Victoria-Gonzales.712000_CWEC2016.epw",
     "necb_location": "Victoria (Gonzales Hts),BC",
-    "distance_km": "0.85"
+    "hdd_difference": 180.0,
+    "distance_km": "0.85",
+    "hdd18": "2700"
   },
   {
     "epw_file": "CAN_BC_Victoria-Hartland.710380_CWEC2016.epw",
     "necb_location": "Langford,BC",
-    "distance_km": "9.99"
+    "hdd_difference": 17.0,
+    "distance_km": "9.99",
+    "hdd18": "2750"
   },
   {
     "epw_file": "CAN_BC_Victoria-Univ.of.Victoria.717830_CWEC2016.epw",
     "necb_location": "Victoria (Mt Tolmie),BC",
-    "distance_km": "1.53"
+    "hdd_difference": 2.0,
+    "distance_km": "1.53",
+    "hdd18": "2700"
   },
   {
     "epw_file": "CAN_BC_Victoria.Intl.AP.717990_CWEC.epw",
     "necb_location": "Sidney,BC",
-    "distance_km": "2.28"
+    "hdd_difference": 226.0,
+    "distance_km": "2.28",
+    "hdd18": "2850"
   },
   {
     "epw_file": "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw",
     "necb_location": "Sidney,BC",
-    "distance_km": "2.02"
+    "hdd_difference": 51.0,
+    "distance_km": "2.02",
+    "hdd18": "2850"
   },
   {
     "epw_file": "CAN_BC_Warfield.714010_CWEC2016.epw",
     "necb_location": "Trail,BC",
-    "distance_km": "2.62"
+    "hdd_difference": 204.0,
+    "distance_km": "2.62",
+    "hdd18": "3600"
   },
   {
     "epw_file": "CAN_BC_West.Vancouver.717840_CWEC2016.epw",
     "necb_location": "West Vancouver,BC",
-    "distance_km": "2.33"
+    "hdd_difference": 36.0,
+    "distance_km": "2.33",
+    "hdd18": "2950"
   },
   {
     "epw_file": "CAN_BC_Whistler-Nesters.716870_CWEC2016.epw",
     "necb_location": "Whistler,BC",
-    "distance_km": "1.42"
+    "hdd_difference": 41.0,
+    "distance_km": "1.42",
+    "hdd18": "4180"
   },
   {
     "epw_file": "CAN_BC_White.Rock.717850_CWEC2016.epw",
     "necb_location": "Ladysmith,BC",
-    "distance_km": "3.52"
+    "hdd_difference": -300.0,
+    "distance_km": "3.52",
+    "hdd18": "3000"
   },
   {
     "epw_file": "CAN_BC_Williams.Lake.AP.711040_CWEC2016.epw",
     "necb_location": "Williams Lake,BC",
-    "distance_km": "7.54"
+    "hdd_difference": 475.0,
+    "distance_km": "7.54",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_BC_Yoho.Natl.Park.717860_CWEC2016.epw",
     "necb_location": "Golden,BC",
-    "distance_km": "45.91"
+    "hdd_difference": 1895.0,
+    "distance_km": "45.91",
+    "hdd18": "4750"
   },
   {
     "epw_file": "CAN_MB_Berens.River.AP.711580_CWEC2016.epw",
     "necb_location": "Gimli,MB",
-    "distance_km": "192.15"
+    "hdd_difference": 352.0,
+    "distance_km": "192.15",
+    "hdd18": "5800"
   },
   {
     "epw_file": "CAN_MB_Brandon.Muni.AP.711400_CWEC.epw",
     "necb_location": "Brandon,MB",
-    "distance_km": "7.95"
+    "hdd_difference": 151.0,
+    "distance_km": "7.95",
+    "hdd18": "5760"
   },
   {
     "epw_file": "CAN_MB_Brandon.Muni.AP.711400_CWEC2016.epw",
     "necb_location": "Brandon,MB",
-    "distance_km": "6.84"
+    "hdd_difference": -73.0,
+    "distance_km": "6.84",
+    "hdd18": "5760"
   },
   {
     "epw_file": "CAN_MB_Carberry.711700_CWEC2016.epw",
     "necb_location": "Neepawa,MB",
-    "distance_km": "36.62"
+    "hdd_difference": -165.0,
+    "distance_km": "36.62",
+    "hdd18": "5760"
   },
   {
     "epw_file": "CAN_MB_Carman-Univ.of.Manitoba.Research.Farm.711470_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "34.34"
+    "hdd_difference": 7.0,
+    "distance_km": "34.34",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Churchill.AP.716180_CWEC.epw",
     "necb_location": "Churchill,MB",
-    "distance_km": "6.32"
+    "hdd_difference": 165.0,
+    "distance_km": "6.32",
+    "hdd18": "8950"
   },
   {
     "epw_file": "CAN_MB_Churchill.AP.716180_CWEC2016.epw",
     "necb_location": "Churchill,MB",
-    "distance_km": "6.58"
+    "hdd_difference": -370.0,
+    "distance_km": "6.58",
+    "hdd18": "8950"
   },
   {
     "epw_file": "CAN_MB_Dauphin-Barker.AP.715500_CWEC2016.epw",
     "necb_location": "Dauphin,MB",
-    "distance_km": "5.59"
+    "hdd_difference": -480.0,
+    "distance_km": "5.59",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_MB_Deerwood.718400_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "28.12"
+    "hdd_difference": -118.0,
+    "distance_km": "28.12",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Delta.Marsh.715630_CWEC2016.epw",
     "necb_location": "Portage la Prairie,MB",
-    "distance_km": "24.32"
+    "hdd_difference": -28.0,
+    "distance_km": "24.32",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_MB_Emerson.715600_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "66.15"
+    "hdd_difference": -95.0,
+    "distance_km": "66.15",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Fisher.Branch.714420_CWEC2016.epw",
     "necb_location": "Gimli,MB",
-    "distance_km": "63.94"
+    "hdd_difference": 137.0,
+    "distance_km": "63.94",
+    "hdd18": "5800"
   },
   {
     "epw_file": "CAN_MB_Flin.Flon.AP.719540_CWEC2016.epw",
     "necb_location": "Flin Flon,MB",
-    "distance_km": "15.45"
+    "hdd_difference": 5.0,
+    "distance_km": "15.45",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_MB_George.Island.714450_CWEC2016.epw",
     "necb_location": "Island Lake,MB",
-    "distance_km": "239.20"
+    "hdd_difference": -589.0,
+    "distance_km": "239.20",
+    "hdd18": "6900"
   },
   {
     "epw_file": "CAN_MB_Gillam.AP.719120_CWEC2016.epw",
     "necb_location": "Split Lake,MB",
-    "distance_km": "86.30"
+    "hdd_difference": -259.0,
+    "distance_km": "86.30",
+    "hdd18": "7900"
   },
   {
     "epw_file": "CAN_MB_Gimli.Harbour.715770_CWEC2016.epw",
     "necb_location": "Gimli,MB",
-    "distance_km": "0.49"
+    "hdd_difference": -187.0,
+    "distance_km": "0.49",
+    "hdd18": "5800"
   },
   {
     "epw_file": "CAN_MB_Gimli.Industrial.Park.AP.717480_CWEC2016.epw",
     "necb_location": "Gimli,MB",
-    "distance_km": "4.33"
+    "hdd_difference": -79.0,
+    "distance_km": "4.33",
+    "hdd18": "5800"
   },
   {
     "epw_file": "CAN_MB_Grand.Rapids.718580_CWEC2016.epw",
     "necb_location": "The Pas,MB",
-    "distance_km": "148.92"
+    "hdd_difference": -50.0,
+    "distance_km": "148.92",
+    "hdd18": "6480"
   },
   {
     "epw_file": "CAN_MB_Gretna.714410_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "43.05"
+    "hdd_difference": -81.0,
+    "distance_km": "43.05",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Island.Lake.AP.711450_CWEC2016.epw",
     "necb_location": "Island Lake,MB",
-    "distance_km": "16.41"
+    "hdd_difference": -130.0,
+    "distance_km": "16.41",
+    "hdd18": "6900"
   },
   {
     "epw_file": "CAN_MB_Kelsey.Dam.AP.715720_CWEC2016.epw",
     "necb_location": "Split Lake,MB",
-    "distance_km": "34.59"
+    "hdd_difference": -327.0,
+    "distance_km": "34.59",
+    "hdd18": "7900"
   },
   {
     "epw_file": "CAN_MB_Lynn.Lake.AP.710780_CWEC2016.epw",
     "necb_location": "Lynn Lake,MB",
-    "distance_km": "2.03"
+    "hdd_difference": -430.0,
+    "distance_km": "2.03",
+    "hdd18": "7770"
   },
   {
     "epw_file": "CAN_MB_McCreary.711490_CWEC2016.epw",
     "necb_location": "Neepawa,MB",
-    "distance_km": "54.04"
+    "hdd_difference": -438.0,
+    "distance_km": "54.04",
+    "hdd18": "5760"
   },
   {
     "epw_file": "CAN_MB_Melita.714470_CWEC2016.epw",
     "necb_location": "Virden,MB",
-    "distance_km": "63.37"
+    "hdd_difference": -266.0,
+    "distance_km": "63.37",
+    "hdd18": "5620"
   },
   {
     "epw_file": "CAN_MB_Morden.715640_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "1.11"
+    "hdd_difference": -76.0,
+    "distance_km": "1.11",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Norway.House.AP.714100_CWEC2016.epw",
     "necb_location": "Thompson,MB",
-    "distance_km": "198.70"
+    "hdd_difference": -1088.0,
+    "distance_km": "198.70",
+    "hdd18": "7600"
   },
   {
     "epw_file": "CAN_MB_Oak.Point.Marine.711440_CWEC2016.epw",
     "necb_location": "Portage la Prairie,MB",
-    "distance_km": "61.38"
+    "hdd_difference": 45.0,
+    "distance_km": "61.38",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_MB_Pilot.Mound.711480_5022125_CWEC2016.epw",
     "necb_location": "Morden,MB",
-    "distance_km": "58.66"
+    "hdd_difference": 176.0,
+    "distance_km": "58.66",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_MB_Pinawa.714480_CWEC2016.epw",
     "necb_location": "Lac du Bonnet,MB",
-    "distance_km": "9.17"
+    "hdd_difference": -131.0,
+    "distance_km": "9.17",
+    "hdd18": "5730"
   },
   {
     "epw_file": "CAN_MB_Portage-Southport.AP.718510_CWEC2016.epw",
     "necb_location": "Portage la Prairie,MB",
-    "distance_km": "7.72"
+    "hdd_difference": -295.0,
+    "distance_km": "7.72",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_MB_Roblin.715530_CWEC2016.epw",
     "necb_location": "Kamsack,SK",
-    "distance_km": "56.43"
+    "hdd_difference": -200.0,
+    "distance_km": "56.43",
+    "hdd18": "6040"
   },
   {
     "epw_file": "CAN_MB_Shoal.Lake.AP.711500_CWEC2016.epw",
     "necb_location": "Rivers,MB",
-    "distance_km": "53.61"
+    "hdd_difference": 79.0,
+    "distance_km": "53.61",
+    "hdd18": "5840"
   },
   {
     "epw_file": "CAN_MB_Sprague.714490_CWEC2016.epw",
     "necb_location": "Sandilands,MB",
-    "distance_km": "60.60"
+    "hdd_difference": -230.0,
+    "distance_km": "60.60",
+    "hdd18": "5650"
   },
   {
     "epw_file": "CAN_MB_Swan.River.AP.714430_CWEC2016.epw",
     "necb_location": "Swan River,MB",
-    "distance_km": "2.80"
+    "hdd_difference": -157.0,
+    "distance_km": "2.80",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_MB_The.Pas.AP.716950_CWEC.epw",
     "necb_location": "The Pas,MB",
-    "distance_km": "18.75"
+    "hdd_difference": -37.0,
+    "distance_km": "18.75",
+    "hdd18": "6480"
   },
   {
     "epw_file": "CAN_MB_The.Pas.AP.718670_CWEC2016.epw",
     "necb_location": "The Pas,MB",
-    "distance_km": "18.47"
+    "hdd_difference": -235.0,
+    "distance_km": "18.47",
+    "hdd18": "6480"
   },
   {
     "epw_file": "CAN_MB_Thompson.AP.710790_CWEC2016.epw",
     "necb_location": "Thompson,MB",
-    "distance_km": "6.50"
+    "hdd_difference": -367.0,
+    "distance_km": "6.50",
+    "hdd18": "7600"
   },
   {
     "epw_file": "CAN_MB_Victoria.Beach.715520_CWEC2016.epw",
     "necb_location": "Pine Falls,MB",
-    "distance_km": "28.08"
+    "hdd_difference": -400.0,
+    "distance_km": "28.08",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_MB_Wasagaming.714440_CWEC2016.epw",
     "necb_location": "Dauphin,MB",
-    "distance_km": "55.56"
+    "hdd_difference": 179.0,
+    "distance_km": "55.56",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_MB_Winnipeg-Richardson.Intl.AP.718520_CWEC2016.epw",
     "necb_location": "Winnipeg,MB",
-    "distance_km": "7.20"
+    "hdd_difference": -163.0,
+    "distance_km": "7.20",
+    "hdd18": "5670"
   },
   {
     "epw_file": "CAN_MB_Winnipeg-The.Forks.715790_CWEC2016.epw",
     "necb_location": "Winnipeg,MB",
-    "distance_km": "1.04"
+    "hdd_difference": -377.0,
+    "distance_km": "1.04",
+    "hdd18": "5670"
   },
   {
     "epw_file": "CAN_MB_Winnipeg.Richardson.Intl.AP.718520_CWEC.epw",
     "necb_location": "Winnipeg,MB",
-    "distance_km": "6.59"
+    "hdd_difference": 84.0,
+    "distance_km": "6.59",
+    "hdd18": "5670"
   },
   {
     "epw_file": "CAN_NB_Bas-Caraquet.715980_CWEC2016.epw",
     "necb_location": "Shippagan,NB",
-    "distance_km": "11.50"
+    "hdd_difference": -332.0,
+    "distance_km": "11.50",
+    "hdd18": "4930"
   },
   {
     "epw_file": "CAN_NB_Bathurst.Rgnl.AP.715740_CWEC2016.epw",
     "necb_location": "Bathurst,NB",
-    "distance_km": "7.34"
+    "hdd_difference": -220.0,
+    "distance_km": "7.34",
+    "hdd18": "5020"
   },
   {
     "epw_file": "CAN_NB_Charlo.AP.713150_CWEC2016.epw",
     "necb_location": "Campbellton,NB",
-    "distance_km": "25.24"
+    "hdd_difference": -520.0,
+    "distance_km": "25.24",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_NB_Edmunston.715900_CWEC2016.epw",
     "necb_location": "Edmundston,NB",
-    "distance_km": "6.45"
+    "hdd_difference": -208.0,
+    "distance_km": "6.45",
+    "hdd18": "5320"
   },
   {
     "epw_file": "CAN_NB_Fredericton.Intl.AP.717000_CWEC.epw",
     "necb_location": "Oromocto,NB",
-    "distance_km": "4.46"
+    "hdd_difference": 84.0,
+    "distance_km": "4.46",
+    "hdd18": "4650"
   },
   {
     "epw_file": "CAN_NB_Fredericton.Intl.AP.717000_CWEC2016.epw",
     "necb_location": "Oromocto,NB",
-    "distance_km": "4.87"
+    "hdd_difference": -296.0,
+    "distance_km": "4.87",
+    "hdd18": "4650"
   },
   {
     "epw_file": "CAN_NB_Grand.Manan.AP.710300_CWEC2016.epw",
     "necb_location": "Saint Andrews,NB",
-    "distance_km": "44.83"
+    "hdd_difference": -542.0,
+    "distance_km": "44.83",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_NB_Miramichi.AP.717440_CWEC.epw",
     "necb_location": "Miramichi,NB",
-    "distance_km": "4.10"
+    "hdd_difference": -30.0,
+    "distance_km": "4.10",
+    "hdd18": "4950"
   },
   {
     "epw_file": "CAN_NB_Miramichi.AP.717440_CWEC2016.epw",
     "necb_location": "Miramichi,NB",
-    "distance_km": "3.85"
+    "hdd_difference": -342.0,
+    "distance_km": "3.85",
+    "hdd18": "4950"
   },
   {
     "epw_file": "CAN_NB_Miscou.Island.717190_CWEC2016.epw",
     "necb_location": "Shippagan,NB",
-    "distance_km": "33.44"
+    "hdd_difference": -132.0,
+    "distance_km": "33.44",
+    "hdd18": "4930"
   },
   {
     "epw_file": "CAN_NB_Moncton-Greater.Moncton.LeBlanc.Intl.AP.717050_CWEC2016.epw",
     "necb_location": "Moncton,NB",
-    "distance_km": "8.11"
+    "hdd_difference": -262.0,
+    "distance_km": "8.11",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_NB_Point.Lepreau.716990_CWEC2016.epw",
     "necb_location": "Saint George,NB",
-    "distance_km": "30.29"
+    "hdd_difference": -476.0,
+    "distance_km": "30.29",
+    "hdd18": "4680"
   },
   {
     "epw_file": "CAN_NB_Saint.John.AP.716090_CWEC.epw",
     "necb_location": "Saint John,NB",
-    "distance_km": "15.25"
+    "hdd_difference": 125.0,
+    "distance_km": "15.25",
+    "hdd18": "4570"
   },
   {
     "epw_file": "CAN_NB_Saint.John.AP.716090_CWEC2016.epw",
     "necb_location": "Saint John,NB",
-    "distance_km": "14.36"
+    "hdd_difference": -218.0,
+    "distance_km": "14.36",
+    "hdd18": "4570"
   },
   {
     "epw_file": "CAN_NB_St.Leonard.AP.710190_CWEC2016.epw",
     "necb_location": "Grand Falls,NB",
-    "distance_km": "14.08"
+    "hdd_difference": -248.0,
+    "distance_km": "14.08",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_NB_St.Stephen.AP.716070_CWEC2016.epw",
     "necb_location": "St. Stephen,NB",
-    "distance_km": "2.50"
+    "hdd_difference": -468.0,
+    "distance_km": "2.50",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_NL_Argentia.718070_CWEC2016.epw",
     "necb_location": "Argentia,NF",
-    "distance_km": "1.01"
+    "hdd_difference": -282.0,
+    "distance_km": "1.01",
+    "hdd18": "4600"
   },
   {
     "epw_file": "CAN_NL_Badger.714000_CWEC2016.epw",
     "necb_location": "Grand Falls,NF",
-    "distance_km": "30.22"
+    "hdd_difference": -175.0,
+    "distance_km": "30.22",
+    "hdd18": "5020"
   },
   {
     "epw_file": "CAN_NL_Bonavista.711780_CWEC2016.epw",
     "necb_location": "Bonavista,NF",
-    "distance_km": "1.53"
+    "hdd_difference": -340.0,
+    "distance_km": "1.53",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_NL_Burgeo.711520_CWEC2016.epw",
     "necb_location": "Channel-Port aux Basques,NF",
-    "distance_km": "114.04"
+    "hdd_difference": -437.0,
+    "distance_km": "114.04",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_NL_Cape.Race.718000_CWEC2016.epw",
     "necb_location": "Cape Race,NF",
-    "distance_km": "1.03"
+    "hdd_difference": -269.0,
+    "distance_km": "1.03",
+    "hdd18": "4900"
   },
   {
     "epw_file": "CAN_NL_Cartwright.718180_CWEC2016.epw",
     "necb_location": "Cape Harrison,NF",
-    "distance_km": "148.01"
+    "hdd_difference": -769.0,
+    "distance_km": "148.01",
+    "hdd18": "6900"
   },
   {
     "epw_file": "CAN_NL_Channel-Port.aux.Basques.711970_CWEC2016.epw",
     "necb_location": "Channel-Port aux Basques,NF",
-    "distance_km": "1.41"
+    "hdd_difference": -418.0,
+    "distance_km": "1.41",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_NL_Churchill.Falls.AP.710020_CWEC2016.epw",
     "necb_location": "Twin Falls,NF",
-    "distance_km": "27.83"
+    "hdd_difference": -662.0,
+    "distance_km": "27.83",
+    "hdd18": "7790"
   },
   {
     "epw_file": "CAN_NL_Corner.Brook.719730_CWEC2016.epw",
     "necb_location": "Corner Brook,NF",
-    "distance_km": "3.01"
+    "hdd_difference": 16.0,
+    "distance_km": "3.01",
+    "hdd18": "4760"
   },
   {
     "epw_file": "CAN_NL_Daniels.Harbour.711850_CWEC2016.epw",
     "necb_location": "Harrington-Harbour,QC",
-    "distance_km": "138.08"
+    "hdd_difference": -1204.0,
+    "distance_km": "138.08",
+    "hdd18": "6150"
   },
   {
     "epw_file": "CAN_NL_Deer.Lake.Rgnl.AP.718090_CWEC2016.epw",
     "necb_location": "Corner Brook,NF",
-    "distance_km": "49.77"
+    "hdd_difference": 52.0,
+    "distance_km": "49.77",
+    "hdd18": "4760"
   },
   {
     "epw_file": "CAN_NL_Englee.714170_CWEC2016.epw",
     "necb_location": "St. Anthony,NF",
-    "distance_km": "80.76"
+    "hdd_difference": -1077.0,
+    "distance_km": "80.76",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_NL_Ferolle.Point.714060_CWEC2016.epw",
     "necb_location": "St. Anthony,NF",
-    "distance_km": "111.90"
+    "hdd_difference": -1005.0,
+    "distance_km": "111.90",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_NL_Gander.Intl.AP-CFB.Gander.718030_CWEC2016.epw",
     "necb_location": "Gander,NF",
-    "distance_km": "4.29"
+    "hdd_difference": -271.0,
+    "distance_km": "4.29",
+    "hdd18": "5110"
   },
   {
     "epw_file": "CAN_NL_Gander.Intl.AP.717420_CWEC.epw",
     "necb_location": "Gander,NF",
-    "distance_km": "2.99"
+    "hdd_difference": -11.0,
+    "distance_km": "2.99",
+    "hdd18": "5110"
   },
   {
     "epw_file": "CAN_NL_Goose.Bay.AP-CFB.Goose.Bay.718160_CWEC2016.epw",
     "necb_location": "Happy Valley-Goose Bay,NF",
-    "distance_km": "6.28"
+    "hdd_difference": -480.0,
+    "distance_km": "6.28",
+    "hdd18": "6670"
   },
   {
     "epw_file": "CAN_NL_Goose.Bay.AP.718160_CWEC.epw",
     "necb_location": "Happy Valley-Goose Bay,NF",
-    "distance_km": "3.56"
+    "hdd_difference": -112.0,
+    "distance_km": "3.56",
+    "hdd18": "6670"
   },
   {
     "epw_file": "CAN_NL_Hopedale.AP.719000_CWEC2016.epw",
     "necb_location": "Cape Harrison,NF",
-    "distance_km": "157.49"
+    "hdd_difference": -36.0,
+    "distance_km": "157.49",
+    "hdd18": "6900"
   },
   {
     "epw_file": "CAN_NL_La.Scie.713370_CWEC2016.epw",
     "necb_location": "Grand Falls,NF",
-    "distance_km": "115.57"
+    "hdd_difference": 254.0,
+    "distance_km": "115.57",
+    "hdd18": "5020"
   },
   {
     "epw_file": "CAN_NL_Marys.Harbour.AP.713390_CWEC.epw",
     "necb_location": "St. Anthony,NF",
-    "distance_km": "104.61"
+    "hdd_difference": 23.0,
+    "distance_km": "104.61",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_NL_Marys.Harbour.AP.713390_CWEC2016.epw",
     "necb_location": "St. Anthony,NF",
-    "distance_km": "105.14"
+    "hdd_difference": -488.0,
+    "distance_km": "105.14",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_NL_Rocky.Harbour.715880_CWEC2016.epw",
     "necb_location": "Corner Brook,NF",
-    "distance_km": "69.25"
+    "hdd_difference": -59.0,
+    "distance_km": "69.25",
+    "hdd18": "4760"
   },
   {
     "epw_file": "CAN_NL_Sagona.Island.714080_CWEC2016.epw",
     "necb_location": "Grand Bank,NF",
-    "distance_km": "29.95"
+    "hdd_difference": -95.0,
+    "distance_km": "29.95",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_NL_St.Johns.Intl.AP.718010_CWEC.epw",
     "necb_location": "St. John's,NF",
-    "distance_km": "6.63"
+    "hdd_difference": 86.0,
+    "distance_km": "6.63",
+    "hdd18": "4800"
   },
   {
     "epw_file": "CAN_NL_St.Johns.Intl.AP.718010_CWEC2016.epw",
     "necb_location": "St. John's,NF",
-    "distance_km": "7.04"
+    "hdd_difference": -267.0,
+    "distance_km": "7.04",
+    "hdd18": "4800"
   },
   {
     "epw_file": "CAN_NL_St.Lawrence.711100_CWEC2016.epw",
     "necb_location": "Grand Bank,NF",
-    "distance_km": "34.64"
+    "hdd_difference": -202.0,
+    "distance_km": "34.64",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_NL_Stephenville.Intl.AP.718150_CWEC.epw",
     "necb_location": "Stephenville,NF",
-    "distance_km": "3.06"
+    "hdd_difference": -127.0,
+    "distance_km": "3.06",
+    "hdd18": "4850"
   },
   {
     "epw_file": "CAN_NL_Stephenville.Intl.AP.718150_CWEC2016.epw",
     "necb_location": "Stephenville,NF",
-    "distance_km": "2.45"
+    "hdd_difference": -372.0,
+    "distance_km": "2.45",
+    "hdd18": "4850"
   },
   {
     "epw_file": "CAN_NL_Terra.Nova.Natl.Park.715890_CWEC2016.epw",
     "necb_location": "Gander,NF",
-    "distance_km": "64.26"
+    "hdd_difference": -459.0,
+    "distance_km": "64.26",
+    "hdd18": "5110"
   },
   {
     "epw_file": "CAN_NL_Twillingate.714020_CWEC2016.epw",
     "necb_location": "Gander,NF",
-    "distance_km": "82.17"
+    "hdd_difference": -224.0,
+    "distance_km": "82.17",
+    "hdd18": "5110"
   },
   {
     "epw_file": "CAN_NL_Wabush.AP.718250_CWEC2016.epw",
     "necb_location": "Wabush,NF",
-    "distance_km": "2.51"
+    "hdd_difference": -447.0,
+    "distance_km": "2.51",
+    "hdd18": "7710"
   },
   {
     "epw_file": "CAN_NL_Winterland.AP.711810_CWEC2016.epw",
     "necb_location": "Grand Bank,NF",
-    "distance_km": "32.44"
+    "hdd_difference": -192.0,
+    "distance_km": "32.44",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_NL_Wreckhouse.711800_CWEC2016.epw",
     "necb_location": "Channel-Port aux Basques,NF",
-    "distance_km": "20.18"
+    "hdd_difference": -535.0,
+    "distance_km": "20.18",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_NS_Beaver.Island.714030_CWEC2016.epw",
     "necb_location": "Stewiacke,NS",
-    "distance_km": "86.67"
+    "hdd_difference": -167.0,
+    "distance_km": "86.67",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_NS_Bedford.Basin.713290_CWEC2016.epw",
     "necb_location": "Dartmouth,NS",
-    "distance_km": "7.08"
+    "hdd_difference": -422.0,
+    "distance_km": "7.08",
+    "hdd18": "4100"
   },
   {
     "epw_file": "CAN_NS_Bedford.Range.713250_CWEC2016.epw",
     "necb_location": "Dartmouth,NS",
-    "distance_km": "11.67"
+    "hdd_difference": -234.0,
+    "distance_km": "11.67",
+    "hdd18": "4100"
   },
   {
     "epw_file": "CAN_NS_Brier.Island.719880_CWEC2016.epw",
     "necb_location": "Yarmouth,NS",
-    "distance_km": "53.09"
+    "hdd_difference": -245.0,
+    "distance_km": "53.09",
+    "hdd18": "3990"
   },
   {
     "epw_file": "CAN_NS_CFB.Greenwood.713970_CWEC2016.epw",
     "necb_location": "Greenwood (CFB),NS",
-    "distance_km": "0.91"
+    "hdd_difference": -338.0,
+    "distance_km": "0.91",
+    "hdd18": "4140"
   },
   {
     "epw_file": "CAN_NS_CFB.Shearwater.716010_CWEC2016.epw",
     "necb_location": "Halifax,NS",
-    "distance_km": "6.21"
+    "hdd_difference": -193.0,
+    "distance_km": "6.21",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_NS_Caribou.Point.714150_CWEC2016.epw",
     "necb_location": "Pictou,NS",
-    "distance_km": "9.75"
+    "hdd_difference": -318.0,
+    "distance_km": "9.75",
+    "hdd18": "4310"
   },
   {
     "epw_file": "CAN_NS_Cheticamp.719590_CWEC2016.epw",
     "necb_location": "North Sydney,NS",
-    "distance_km": "72.19"
+    "hdd_difference": -559.0,
+    "distance_km": "72.19",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Debert.AP.713170_CWEC2016.epw",
     "necb_location": "Debert,NS",
-    "distance_km": "2.40"
+    "hdd_difference": -197.0,
+    "distance_km": "2.40",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Grand.Etang.715971_CWEC2016.epw",
     "necb_location": "North Sydney,NS",
-    "distance_km": "71.87"
+    "hdd_difference": -450.0,
+    "distance_km": "71.87",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Greenwood.CFB.713970_CWEC.epw",
     "necb_location": "Greenwood (CFB),NS",
-    "distance_km": "1.17"
+    "hdd_difference": -10.0,
+    "distance_km": "1.17",
+    "hdd18": "4140"
   },
   {
     "epw_file": "CAN_NS_Halifax.Dockyard.713280_CWEC2016.epw",
     "necb_location": "Halifax,NS",
-    "distance_km": "0.71"
+    "hdd_difference": -353.0,
+    "distance_km": "0.71",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_NS_Halifax.Stanfield.Intl.AP.713950_CWEC2016.epw",
     "necb_location": "Dartmouth,NS",
-    "distance_km": "24.44"
+    "hdd_difference": -52.0,
+    "distance_km": "24.44",
+    "hdd18": "4100"
   },
   {
     "epw_file": "CAN_NS_Hart.Island.714190_8202318_CWEC2016.epw",
     "necb_location": "Canso,NS",
-    "distance_km": "0.82"
+    "hdd_difference": -413.0,
+    "distance_km": "0.82",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_NS_Ingonish.Beach.710270_CWEC2016.epw",
     "necb_location": "North Sydney,NS",
-    "distance_km": "52.11"
+    "hdd_difference": -321.0,
+    "distance_km": "52.11",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Kejimkujik.Natl.Park.715990_CWEC2016.epw",
     "necb_location": "Digby,NS",
-    "distance_km": "50.24"
+    "hdd_difference": 19.0,
+    "distance_km": "50.24",
+    "hdd18": "4020"
   },
   {
     "epw_file": "CAN_NS_Kentville.716710_8202810_CWEC2016.epw",
     "necb_location": "Kentville,NS",
-    "distance_km": "1.42"
+    "hdd_difference": -246.0,
+    "distance_km": "1.42",
+    "hdd18": "4130"
   },
   {
     "epw_file": "CAN_NS_Lunenburg.710415_CWEC2016.epw",
     "necb_location": "Lunenburg,NS",
-    "distance_km": "2.41"
+    "hdd_difference": -381.0,
+    "distance_km": "2.41",
+    "hdd18": "4140"
   },
   {
     "epw_file": "CAN_NS_Malay.Falls.715901_CWEC2016.epw",
     "necb_location": "New Glasgow,NS",
-    "distance_km": "68.37"
+    "hdd_difference": -203.0,
+    "distance_km": "68.37",
+    "hdd18": "4320"
   },
   {
     "epw_file": "CAN_NS_McNabs.Island.715910_CWEC2016.epw",
     "necb_location": "Halifax,NS",
-    "distance_km": "7.22"
+    "hdd_difference": -134.0,
+    "distance_km": "7.22",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_NS_Nappan.713110_CWEC2016.epw",
     "necb_location": "Amherst,NS",
-    "distance_km": "6.58"
+    "hdd_difference": -282.0,
+    "distance_km": "6.58",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_North.Mountain.716040_CWEC2016.epw",
     "necb_location": "North Sydney,NS",
-    "distance_km": "75.10"
+    "hdd_difference": 464.0,
+    "distance_km": "75.10",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Northeast.Margaree.717367_CWEC2016.epw",
     "necb_location": "North Sydney,NS",
-    "distance_km": "58.43"
+    "hdd_difference": -157.0,
+    "distance_km": "58.43",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Parrsboro.714930_CWEC2016.epw",
     "necb_location": "Springhill,NS",
-    "distance_km": "34.45"
+    "hdd_difference": -358.0,
+    "distance_km": "34.45",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_NS_Sable.Island.AP.716000_CWEC.epw",
     "necb_location": "Canso,NS",
-    "distance_km": "174.35"
+    "hdd_difference": -540.0,
+    "distance_km": "174.35",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_NS_Sable.Island.Natl.Park.716000_CWEC2016.epw",
     "necb_location": "Canso,NS",
-    "distance_km": "174.53"
+    "hdd_difference": -903.0,
+    "distance_km": "174.53",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_NS_Shearwater-Halifax.CFB.712640_CWEC.epw",
     "necb_location": "Halifax,NS",
-    "distance_km": "5.57"
+    "hdd_difference": 199.0,
+    "distance_km": "5.57",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_NS_St.Paul.Island.714180_CWEC2016.epw",
     "necb_location": "Channel-Port aux Basques,NF",
-    "distance_km": "84.77"
+    "hdd_difference": -542.0,
+    "distance_km": "84.77",
+    "hdd18": "5000"
   },
   {
     "epw_file": "CAN_NS_Sydney-McCurdy.AP.717070_8205701_CWEC2016.epw",
     "necb_location": "Sydney,NS",
-    "distance_km": "11.58"
+    "hdd_difference": -297.0,
+    "distance_km": "11.58",
+    "hdd18": "4530"
   },
   {
     "epw_file": "CAN_NS_Sydney-McCurdy.AP.717070_CWEC.epw",
     "necb_location": "Sydney,NS",
-    "distance_km": "11.71"
+    "hdd_difference": 104.0,
+    "distance_km": "11.71",
+    "hdd18": "4530"
   },
   {
     "epw_file": "CAN_NS_Tracadie.713080_CWEC2016.epw",
     "necb_location": "Antigonish,NS",
-    "distance_km": "24.38"
+    "hdd_difference": -291.0,
+    "distance_km": "24.38",
+    "hdd18": "4510"
   },
   {
     "epw_file": "CAN_NS_Truro.713980_CWEC.epw",
     "necb_location": "Truro,NS",
-    "distance_km": "1.40"
+    "hdd_difference": 36.0,
+    "distance_km": "1.40",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_NS_Western.Head.714110_CWEC2016.epw",
     "necb_location": "Liverpool,NS",
-    "distance_km": "6.42"
+    "hdd_difference": -8.0,
+    "distance_km": "6.42",
+    "hdd18": "3990"
   },
   {
     "epw_file": "CAN_NS_Yarmouth.Intl.AP.716030_8206495_CWEC2016.epw",
     "necb_location": "Yarmouth,NS",
-    "distance_km": "2.63"
+    "hdd_difference": -188.0,
+    "distance_km": "2.63",
+    "hdd18": "3990"
   },
   {
     "epw_file": "CAN_NT_Fort.Simpson.AP.719460_CWEC2016.epw",
     "necb_location": "Fort Simpson,NT",
-    "distance_km": "12.95"
+    "hdd_difference": -131.0,
+    "distance_km": "12.95",
+    "hdd18": "7660"
   },
   {
     "epw_file": "CAN_NT_Fort.Smith.AP.719340_CWEC2016.epw",
     "necb_location": "Fort Smith,NT",
-    "distance_km": "4.58"
+    "hdd_difference": -349.0,
+    "distance_km": "4.58",
+    "hdd18": "7300"
   },
   {
     "epw_file": "CAN_NT_Hay.River-Carter.AP.719350_CWEC2016.epw",
     "necb_location": "Hay River,NT",
-    "distance_km": "2.65"
+    "hdd_difference": -391.0,
+    "distance_km": "2.65",
+    "hdd18": "7550"
   },
   {
     "epw_file": "CAN_NT_Inuvik-Zubko.AP.719570_CWEC.epw",
     "necb_location": "Inuvik,NT",
-    "distance_km": "12.05"
+    "hdd_difference": 351.0,
+    "distance_km": "12.05",
+    "hdd18": "9600"
   },
   {
     "epw_file": "CAN_NT_Inuvik-Zubko.AP.719570_CWEC2016.epw",
     "necb_location": "Inuvik,NT",
-    "distance_km": "11.95"
+    "hdd_difference": -300.0,
+    "distance_km": "11.95",
+    "hdd18": "9600"
   },
   {
     "epw_file": "CAN_NT_Norman.Wells.AP.710430_CWEC2016.epw",
     "necb_location": "Norman Wells,NT",
-    "distance_km": "1.38"
+    "hdd_difference": -406.0,
+    "distance_km": "1.38",
+    "hdd18": "8510"
   },
   {
     "epw_file": "CAN_NT_Yellowknife.AP.719360_CWEC.epw",
     "necb_location": "Yellowknife,NT",
-    "distance_km": "4.40"
+    "hdd_difference": 87.0,
+    "distance_km": "4.40",
+    "hdd18": "8170"
   },
   {
     "epw_file": "CAN_NT_Yellowknife.AP.719360_CWEC2016.epw",
     "necb_location": "Yellowknife,NT",
-    "distance_km": "3.65"
+    "hdd_difference": -322.0,
+    "distance_km": "3.65",
+    "hdd18": "8170"
   },
   {
     "epw_file": "CAN_NU_Baker.Lake.AP.719260_CWEC2016.epw",
     "necb_location": "Baker Lake,NU",
-    "distance_km": "3.40"
+    "hdd_difference": -149.0,
+    "distance_km": "3.40",
+    "hdd18": "10700"
   },
   {
     "epw_file": "CAN_NU_Cambridge.Bay.AP.719250_CWEC2016.epw",
     "necb_location": "Cambridge Bay/Iqaluktuuttiaq,NU",
-    "distance_km": "3.22"
+    "hdd_difference": -402.0,
+    "distance_km": "3.22",
+    "hdd18": "11670"
   },
   {
     "epw_file": "CAN_NU_Coral.Harbour.AP.719150_CWEC2016.epw",
     "necb_location": "Coral Harbour /Salliq,NU",
-    "distance_km": "10.97"
+    "hdd_difference": -729.0,
+    "distance_km": "10.97",
+    "hdd18": "10720"
   },
   {
     "epw_file": "CAN_NU_Eureka.AP.719170_CWEC2016.epw",
     "necb_location": "Eureka,NU",
-    "distance_km": "2.54"
+    "hdd_difference": -299.0,
+    "distance_km": "2.54",
+    "hdd18": "13500"
   },
   {
     "epw_file": "CAN_NU_Iqaluit.AP.719090_CWEC2016.epw",
     "necb_location": "Iqaluit,NU",
-    "distance_km": "1.67"
+    "hdd_difference": -463.0,
+    "distance_km": "1.67",
+    "hdd18": "9980"
   },
   {
     "epw_file": "CAN_NU_Kugluktuk.AP.719380_CWEC2016.epw",
     "necb_location": "Coppermine (Kugluktuk),NU",
-    "distance_km": "2.66"
+    "hdd_difference": -267.0,
+    "distance_km": "2.66",
+    "hdd18": "10300"
   },
   {
     "epw_file": "CAN_NU_Rankin.Inlet.AP.710830_CWEC2016.epw",
     "necb_location": "Rankin Inlet (Kangiqiniq),NU",
-    "distance_km": "1.88"
+    "hdd_difference": -277.0,
+    "distance_km": "1.88",
+    "hdd18": "10500"
   },
   {
     "epw_file": "CAN_NU_Resolute.AP.719240_CWEC2016.epw",
     "necb_location": "Resolute,NU",
-    "distance_km": "4.63"
+    "hdd_difference": -533.0,
+    "distance_km": "4.63",
+    "hdd18": "12360"
   },
   {
     "epw_file": "CAN_NU_Resolute.Bay.AP.710180_CWEC.epw",
     "necb_location": "Resolute,NU",
-    "distance_km": "5.08"
+    "hdd_difference": 211.0,
+    "distance_km": "5.08",
+    "hdd18": "12360"
   },
   {
     "epw_file": "CAN_NU_Taloyoak.AP.715800_CWEC2016.epw",
     "necb_location": "Cambridge Bay/Iqaluktuuttiaq,NU",
-    "distance_km": "452.28"
+    "hdd_difference": -223.0,
+    "distance_km": "452.28",
+    "hdd18": "11670"
   },
   {
     "epw_file": "CAN_ON_Algonquin.Park.East.Gate.715810_CWEC2016.epw",
     "necb_location": "Haliburton,ON",
-    "distance_km": "57.28"
+    "hdd_difference": 247.0,
+    "distance_km": "57.28",
+    "hdd18": "4840"
   },
   {
     "epw_file": "CAN_ON_Armstrong.AP.718410_CWEC2016.epw",
     "necb_location": "Armstrong,ON",
-    "distance_km": "10.89"
+    "hdd_difference": -183.0,
+    "distance_km": "10.89",
+    "hdd18": "6500"
   },
   {
     "epw_file": "CAN_ON_Atikokan.717470_CWEC2016.epw",
     "necb_location": "Atikokan,ON",
-    "distance_km": "0.73"
+    "hdd_difference": -393.0,
+    "distance_km": "0.73",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_ON_Bancroft.AP.712940_CWEC2016.epw",
     "necb_location": "Bancroft,ON",
-    "distance_km": "2.53"
+    "hdd_difference": -6.0,
+    "distance_km": "2.53",
+    "hdd18": "4740"
   },
   {
     "epw_file": "CAN_ON_Barrie.Oro.713140_CWEC2016.epw",
     "necb_location": "Guthrie,ON",
-    "distance_km": "1.13"
+    "hdd_difference": 98.0,
+    "distance_km": "1.13",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_Big.Trout.Lake.AP.716750_CWEC2016.epw",
     "necb_location": "Big Trout Lake (Kitchenuhmay-koosib),ON",
-    "distance_km": "0.49"
+    "hdd_difference": -235.0,
+    "distance_km": "0.49",
+    "hdd18": "7450"
   },
   {
     "epw_file": "CAN_ON_Burlington.Piers.714370_CWEC2016.epw",
     "necb_location": "Burlington,ON",
-    "distance_km": "2.84"
+    "hdd_difference": -301.0,
+    "distance_km": "2.84",
+    "hdd18": "3740"
   },
   {
     "epw_file": "CAN_ON_CFB.Borden.715340_CWEC2016.epw",
     "necb_location": "CFB Borden,ON",
-    "distance_km": "0.47"
+    "hdd_difference": -35.0,
+    "distance_km": "0.47",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_CFB.Trenton.716210_CWEC2016.epw",
     "necb_location": "Trenton,ON",
-    "distance_km": "3.88"
+    "hdd_difference": -276.0,
+    "distance_km": "3.88",
+    "hdd18": "4110"
   },
   {
     "epw_file": "CAN_ON_Cameron.Falls.712910_CWEC2016.epw",
     "necb_location": "Dorion,ON",
-    "distance_km": "43.61"
+    "hdd_difference": -288.0,
+    "distance_km": "43.61",
+    "hdd18": "5950"
   },
   {
     "epw_file": "CAN_ON_Cobourg.714310_CWEC2016.epw",
     "necb_location": "Cobourg,ON",
-    "distance_km": "0.27"
+    "hdd_difference": -161.0,
+    "distance_km": "0.27",
+    "hdd18": "3980"
   },
   {
     "epw_file": "CAN_ON_Collingwood.712700_CWEC2016.epw",
     "necb_location": "Collingwood,ON",
-    "distance_km": "0.09"
+    "hdd_difference": -384.0,
+    "distance_km": "0.09",
+    "hdd18": "4180"
   },
   {
     "epw_file": "CAN_ON_Delhi.715730_CWEC2016.epw",
     "necb_location": "Tillsonburg,ON",
-    "distance_km": "14.94"
+    "hdd_difference": -226.0,
+    "distance_km": "14.94",
+    "hdd18": "3840"
   },
   {
     "epw_file": "CAN_ON_Dryden.Rgnl.AP.715270_CWEC2016.epw",
     "necb_location": "Dryden,ON",
-    "distance_km": "8.47"
+    "hdd_difference": -337.0,
+    "distance_km": "8.47",
+    "hdd18": "5850"
   },
   {
     "epw_file": "CAN_ON_Ear.Falls.712950_CWEC2016.epw",
     "necb_location": "Red Lake,ON",
-    "distance_km": "60.36"
+    "hdd_difference": -304.0,
+    "distance_km": "60.36",
+    "hdd18": "6220"
   },
   {
     "epw_file": "CAN_ON_Earlton-Timiskaming.Rgnl.AP.716840_CWEC2016.epw",
     "necb_location": "Earlton,ON",
-    "distance_km": "2.59"
+    "hdd_difference": -331.0,
+    "distance_km": "2.59",
+    "hdd18": "5730"
   },
   {
     "epw_file": "CAN_ON_Egbert.712960_CWEC2016.epw",
     "necb_location": "CFB Borden,ON",
-    "distance_km": "10.68"
+    "hdd_difference": -130.0,
+    "distance_km": "10.68",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_Elora.713520_CWEC2016.epw",
     "necb_location": "Fergus,ON",
-    "distance_km": "6.97"
+    "hdd_difference": -27.0,
+    "distance_km": "6.97",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_Erieau.714650_CWEC2016.epw",
     "necb_location": "Chatham,ON",
-    "distance_km": "29.47"
+    "hdd_difference": -132.0,
+    "distance_km": "29.47",
+    "hdd18": "3470"
   },
   {
     "epw_file": "CAN_ON_Geraldton-Greenstone.Rgnl.AP.718340_CWEC2016.epw",
     "necb_location": "Geraldton,ON",
-    "distance_km": "6.04"
+    "hdd_difference": -450.0,
+    "distance_km": "6.04",
+    "hdd18": "6450"
   },
   {
     "epw_file": "CAN_ON_Goderich.Muni.AP.712610_CWEC2016.epw",
     "necb_location": "Goderich,ON",
-    "distance_km": "2.70"
+    "hdd_difference": -255.0,
+    "distance_km": "2.70",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_ON_Gore.Bay-Manitoulin.AP.719560_CWEC2016.epw",
     "necb_location": "Gore Bay,ON",
-    "distance_km": "8.88"
+    "hdd_difference": -360.0,
+    "distance_km": "8.88",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_ON_Hamilton-Royal.Botanic.Gardens.712970_CWEC2016.epw",
     "necb_location": "Hamilton,ON",
-    "distance_km": "4.94"
+    "hdd_difference": -22.0,
+    "distance_km": "4.94",
+    "hdd18": "3460"
   },
   {
     "epw_file": "CAN_ON_Hamilton.Intl.AP.712630_CWEC2016.epw",
     "necb_location": "Hamilton,ON",
-    "distance_km": "10.46"
+    "hdd_difference": 353.0,
+    "distance_km": "10.46",
+    "hdd18": "3460"
   },
   {
     "epw_file": "CAN_ON_Harrow.712980_CWEC2016.epw",
     "necb_location": "Leamington,ON",
-    "distance_km": "24.88"
+    "hdd_difference": 63.0,
+    "distance_km": "24.88",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_ON_Kapuskasing.AP.718310_CWEC2016.epw",
     "necb_location": "Kapuskasing,ON",
-    "distance_km": "6.05"
+    "hdd_difference": -312.0,
+    "distance_km": "6.05",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_ON_Kemptville.713000_CWEC2016.epw",
     "necb_location": "Kemptville,ON",
-    "distance_km": "2.09"
+    "hdd_difference": -229.0,
+    "distance_km": "2.09",
+    "hdd18": "4540"
   },
   {
     "epw_file": "CAN_ON_Kenora.AP.718500_CWEC2016.epw",
     "necb_location": "Kenora,ON",
-    "distance_km": "9.37"
+    "hdd_difference": -190.0,
+    "distance_km": "9.37",
+    "hdd18": "5630"
   },
   {
     "epw_file": "CAN_ON_Killarney.AP.714600_CWEC2016.epw",
     "necb_location": "Espanola,ON",
-    "distance_km": "38.42"
+    "hdd_difference": -508.0,
+    "distance_km": "38.42",
+    "hdd18": "4920"
   },
   {
     "epw_file": "CAN_ON_Kingston.AP.716200_CWEC.epw",
     "necb_location": "Kingston,ON",
-    "distance_km": "9.17"
+    "hdd_difference": 287.0,
+    "distance_km": "9.17",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_ON_Kirkland.Lake.713010_CWEC2016.epw",
     "necb_location": "Kirkland Lake,ON",
-    "distance_km": "2.34"
+    "hdd_difference": -381.0,
+    "distance_km": "2.34",
+    "hdd18": "6000"
   },
   {
     "epw_file": "CAN_ON_Lagoon.City.712820_CWEC2016.epw",
     "necb_location": "Beaverton,ON",
-    "distance_km": "14.02"
+    "hdd_difference": -102.0,
+    "distance_km": "14.02",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_Lansdowne.House.AP.718460_6014353_CWEC2016.epw",
     "necb_location": "Lansdowne House,ON",
-    "distance_km": "4.01"
+    "hdd_difference": -620.0,
+    "distance_km": "4.01",
+    "hdd18": "7150"
   },
   {
     "epw_file": "CAN_ON_London.Intl.AP.716220_CWEC.epw",
     "necb_location": "Strathroy,ON",
-    "distance_km": "13.01"
+    "hdd_difference": 331.0,
+    "distance_km": "13.01",
+    "hdd18": "3780"
   },
   {
     "epw_file": "CAN_ON_London.Intl.AP.716230_CWEC2016.epw",
     "necb_location": "London,ON",
-    "distance_km": "9.35"
+    "hdd_difference": -217.0,
+    "distance_km": "9.35",
+    "hdd18": "3900"
   },
   {
     "epw_file": "CAN_ON_Moosonee.AP.713980_CWEC2016.epw",
     "necb_location": "Moosonee,ON",
-    "distance_km": "3.04"
+    "hdd_difference": -296.0,
+    "distance_km": "3.04",
+    "hdd18": "6800"
   },
   {
     "epw_file": "CAN_ON_Mount.Forest.716310_CWEC.epw",
     "necb_location": "Mount Forest,ON",
-    "distance_km": "1.14"
+    "hdd_difference": -120.0,
+    "distance_km": "1.14",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_ON_Mount.Forest.716310_CWEC2016.epw",
     "necb_location": "Mount Forest,ON",
-    "distance_km": "1.15"
+    "hdd_difference": -459.0,
+    "distance_km": "1.15",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_ON_Muskoka.AP.715320_CWEC2016.epw",
     "necb_location": "Gravenhurst (Muskoka Airport),ON",
-    "distance_km": "0.94"
+    "hdd_difference": -330.0,
+    "distance_km": "0.94",
+    "hdd18": "4760"
   },
   {
     "epw_file": "CAN_ON_Muskoka.AP.716300_CWEC.epw",
     "necb_location": "Gravenhurst (Muskoka Airport),ON",
-    "distance_km": "9.65"
+    "hdd_difference": 13.0,
+    "distance_km": "9.65",
+    "hdd18": "4760"
   },
   {
     "epw_file": "CAN_ON_Nagagami.718320_CWEC2016.epw",
     "necb_location": "Hearst,ON",
-    "distance_km": "36.33"
+    "hdd_difference": -367.0,
+    "distance_km": "36.33",
+    "hdd18": "6450"
   },
   {
     "epw_file": "CAN_ON_North.Bay-Garland.AP.717310_CWEC2016.epw",
     "necb_location": "North Bay,ON",
-    "distance_km": "6.73"
+    "hdd_difference": -250.0,
+    "distance_km": "6.73",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_ON_North.Bay.AP.717310_CWEC.epw",
     "necb_location": "North Bay,ON",
-    "distance_km": "5.13"
+    "hdd_difference": 190.0,
+    "distance_km": "5.13",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw",
     "necb_location": "Ottawa (M-C Int'l Airport),ON",
-    "distance_km": "0.30"
+    "hdd_difference": -193.0,
+    "distance_km": "0.30",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_ON_Ottawa.Intl.AP.716280_CWEC.epw",
     "necb_location": "Ottawa (M-C Int'l Airport),ON",
-    "distance_km": "0.11"
+    "hdd_difference": 164.0,
+    "distance_km": "0.11",
+    "hdd18": "4500"
   },
   {
     "epw_file": "CAN_ON_Parry.Sound.CCG.711720_CWEC2016.epw",
     "necb_location": "Parry Sound,ON",
-    "distance_km": "0.81"
+    "hdd_difference": -352.0,
+    "distance_km": "0.81",
+    "hdd18": "4640"
   },
   {
     "epw_file": "CAN_ON_Peawanuck.AP.714340_CWEC2016.epw",
     "necb_location": "Attawapiskat,ON",
-    "distance_km": "231.02"
+    "hdd_difference": 745.0,
+    "distance_km": "231.02",
+    "hdd18": "7100"
   },
   {
     "epw_file": "CAN_ON_Peterborough.Muni.AP.714360_CWEC2016.epw",
     "necb_location": "Cavan,ON",
-    "distance_km": "9.08"
+    "hdd_difference": -181.0,
+    "distance_km": "9.08",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_ON_Pickle.Lake.AP.718450_CWEC2016.epw",
     "necb_location": "Armstrong,ON",
-    "distance_km": "151.35"
+    "hdd_difference": -304.0,
+    "distance_km": "151.35",
+    "hdd18": "6500"
   },
   {
     "epw_file": "CAN_ON_Point.Pelee.713030_CWEC2016.epw",
     "necb_location": "Leamington,ON",
-    "distance_km": "13.37"
+    "hdd_difference": 285.0,
+    "distance_km": "13.37",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_ON_Point.Petre.714300_CWEC2016.epw",
     "necb_location": "Picton,ON",
-    "distance_km": "18.62"
+    "hdd_difference": -264.0,
+    "distance_km": "18.62",
+    "hdd18": "3980"
   },
   {
     "epw_file": "CAN_ON_Port.Weller.714320_CWEC2016.epw",
     "necb_location": "St. Catharines,ON",
-    "distance_km": "10.36"
+    "hdd_difference": -161.0,
+    "distance_km": "10.36",
+    "hdd18": "3540"
   },
   {
     "epw_file": "CAN_ON_Pukaskwa.Natl.Park.717500_CWEC2016.epw",
     "necb_location": "White River,ON",
-    "distance_km": "75.04"
+    "hdd_difference": -778.0,
+    "distance_km": "75.04",
+    "hdd18": "6150"
   },
   {
     "epw_file": "CAN_ON_Sault.Ste.Marie.AP.712600_CWEC.epw",
     "necb_location": "Sault Ste. Marie,ON",
-    "distance_km": "13.38"
+    "hdd_difference": 32.0,
+    "distance_km": "13.38",
+    "hdd18": "4960"
   },
   {
     "epw_file": "CAN_ON_Sault.Ste.Marie.AP.712600_CWEC2016.epw",
     "necb_location": "Sault Ste. Marie,ON",
-    "distance_km": "13.20"
+    "hdd_difference": -339.0,
+    "distance_km": "13.20",
+    "hdd18": "4960"
   },
   {
     "epw_file": "CAN_ON_Simcoe.AP.715270_CWEC.epw",
     "necb_location": "Simcoe,ON",
-    "distance_km": "3.12"
+    "hdd_difference": 366.0,
+    "distance_km": "3.12",
+    "hdd18": "3700"
   },
   {
     "epw_file": "CAN_ON_Sioux.Lookout.Muni.AP.718420_CWEC2016.epw",
     "necb_location": "Sioux Lookout,ON",
-    "distance_km": "2.06"
+    "hdd_difference": -23.0,
+    "distance_km": "2.06",
+    "hdd18": "5950"
   },
   {
     "epw_file": "CAN_ON_Sudbury.AP.717300_CWEC2016.epw",
     "necb_location": "Sudbury,ON",
-    "distance_km": "16.55"
+    "hdd_difference": -253.0,
+    "distance_km": "16.55",
+    "hdd18": "5180"
   },
   {
     "epw_file": "CAN_ON_Thunder.Bay.Intl.AP.716670_CWEC.epw",
     "necb_location": "Thunder Bay,ON",
-    "distance_km": "6.20"
+    "hdd_difference": -27.0,
+    "distance_km": "6.20",
+    "hdd18": "5650"
   },
   {
     "epw_file": "CAN_ON_Thunder.Bay.Intl.AP.716670_CWEC2016.epw",
     "necb_location": "Thunder Bay,ON",
-    "distance_km": "6.01"
+    "hdd_difference": -265.0,
+    "distance_km": "6.01",
+    "hdd18": "5650"
   },
   {
     "epw_file": "CAN_ON_Timmins-Power.AP.717390_CWEC.epw",
     "necb_location": "Timmins,ON",
-    "distance_km": "11.09"
+    "hdd_difference": 12.0,
+    "distance_km": "11.09",
+    "hdd18": "5940"
   },
   {
     "epw_file": "CAN_ON_Timmins.Power.AP.717390_CWEC2016.epw",
     "necb_location": "Timmins,ON",
-    "distance_km": "11.12"
+    "hdd_difference": -195.0,
+    "distance_km": "11.12",
+    "hdd18": "5940"
   },
   {
     "epw_file": "CAN_ON_Toronto-Buttonville.Muni.AP.716390_CWEC2016.epw",
     "necb_location": "Markham,ON",
-    "distance_km": "2.62"
+    "hdd_difference": -183.0,
+    "distance_km": "2.62",
+    "hdd18": "4000"
   },
   {
     "epw_file": "CAN_ON_Toronto-City.Centre.715080_CWEC2016.epw",
     "necb_location": "Toronto (City Hall),ON",
-    "distance_km": "3.09"
+    "hdd_difference": 20.0,
+    "distance_km": "3.09",
+    "hdd18": "3520"
   },
   {
     "epw_file": "CAN_ON_Toronto.City.AP.712650_CWEC2016.epw",
     "necb_location": "Toronto (City Hall),ON",
-    "distance_km": "1.98"
+    "hdd_difference": -69.0,
+    "distance_km": "1.98",
+    "hdd18": "3520"
   },
   {
     "epw_file": "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC.epw",
     "necb_location": "Mississauga (Lester B. Pearson Int'l Airport),ON",
-    "distance_km": "0.95"
+    "hdd_difference": 199.0,
+    "distance_km": "0.95",
+    "hdd18": "3890"
   },
   {
     "epw_file": "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw",
     "necb_location": "Mississauga (Lester B. Pearson Int'l Airport),ON",
-    "distance_km": "0.50"
+    "hdd_difference": -275.0,
+    "distance_km": "0.50",
+    "hdd18": "3890"
   },
   {
     "epw_file": "CAN_ON_Trenton.CFB.716210_CWEC.epw",
     "necb_location": "Trenton,ON",
-    "distance_km": "4.25"
+    "hdd_difference": 65.0,
+    "distance_km": "4.25",
+    "hdd18": "4110"
   },
   {
     "epw_file": "CAN_ON_Upsala.714350_CWEC2016.epw",
     "necb_location": "Raith,ON",
-    "distance_km": "46.32"
+    "hdd_difference": 5.0,
+    "distance_km": "46.32",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_ON_Vineland.Station.711710_CWEC2016.epw",
     "necb_location": "St. Catharines,ON",
-    "distance_km": "12.69"
+    "hdd_difference": -97.0,
+    "distance_km": "12.69",
+    "hdd18": "3540"
   },
   {
     "epw_file": "CAN_ON_Wawa.Muni.AP.717380_CWEC2016.epw",
     "necb_location": "Wawa,ON",
-    "distance_km": "3.04"
+    "hdd_difference": -476.0,
+    "distance_km": "3.04",
+    "hdd18": "5840"
   },
   {
     "epw_file": "CAN_ON_Wiarton.Keppel.Intl.AP.716330_CWEC2016.epw",
     "necb_location": "Wiarton,ON",
-    "distance_km": "2.52"
+    "hdd_difference": -266.0,
+    "distance_km": "2.52",
+    "hdd18": "4300"
   },
   {
     "epw_file": "CAN_ON_Windsor.Intl.AP.715380_CWEC.epw",
     "necb_location": "Windsor,ON",
-    "distance_km": "7.40"
+    "hdd_difference": 169.0,
+    "distance_km": "7.40",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_ON_Windsor.Intl.AP.715380_CWEC2016.epw",
     "necb_location": "Windsor,ON",
-    "distance_km": "7.90"
+    "hdd_difference": -186.0,
+    "distance_km": "7.90",
+    "hdd18": "3400"
   },
   {
     "epw_file": "CAN_PE_Charlottetown.AP.717060_CWEC.epw",
     "necb_location": "Charlottetown,PE",
-    "distance_km": "4.64"
+    "hdd_difference": 186.0,
+    "distance_km": "4.64",
+    "hdd18": "4460"
   },
   {
     "epw_file": "CAN_PE_Charlottetown.AP.717060_CWEC2016.epw",
     "necb_location": "Charlottetown,PE",
-    "distance_km": "5.31"
+    "hdd_difference": -139.0,
+    "distance_km": "5.31",
+    "hdd18": "4460"
   },
   {
     "epw_file": "CAN_PE_East.Point.714120_CWEC2016.epw",
     "necb_location": "Souris,PE",
-    "distance_km": "23.36"
+    "hdd_difference": -282.0,
+    "distance_km": "23.36",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_PE_Harrington.713500_CWEC2016.epw",
     "necb_location": "Charlottetown,PE",
-    "distance_km": "12.13"
+    "hdd_difference": -67.0,
+    "distance_km": "12.13",
+    "hdd18": "4460"
   },
   {
     "epw_file": "CAN_PE_Maple.Plains.710267_CWEC2016.epw",
     "necb_location": "Summerside,PE",
-    "distance_km": "19.27"
+    "hdd_difference": -67.0,
+    "distance_km": "19.27",
+    "hdd18": "4600"
   },
   {
     "epw_file": "CAN_PE_North.Cape.719870_CWEC2016.epw",
     "necb_location": "Tignish,PE",
-    "distance_km": "12.26"
+    "hdd_difference": -436.0,
+    "distance_km": "12.26",
+    "hdd18": "4770"
   },
   {
     "epw_file": "CAN_PE_St.Peters.Bay.713100_CWEC2016.epw",
     "necb_location": "Souris,PE",
-    "distance_km": "27.01"
+    "hdd_difference": -230.0,
+    "distance_km": "27.01",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_PE_Summerside.AP.717020_CWEC2016.epw",
     "necb_location": "Summerside,PE",
-    "distance_km": "6.44"
+    "hdd_difference": -391.0,
+    "distance_km": "6.44",
+    "hdd18": "4600"
   },
   {
     "epw_file": "CAN_QC_Amqui.713860_CWEC2016.epw",
     "necb_location": "Matane,QC",
-    "distance_km": "42.01"
+    "hdd_difference": -269.0,
+    "distance_km": "42.01",
+    "hdd18": "5510"
   },
   {
     "epw_file": "CAN_QC_Bagotville.CFB.717270_CWEC.epw",
     "necb_location": "Saguenay (Bagotville),QC",
-    "distance_km": "0.78"
+    "hdd_difference": 80.0,
+    "distance_km": "0.78",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_Baie-Comeau.718290_CWEC2016.epw",
     "necb_location": "Baie-Comeau,QC",
-    "distance_km": "4.20"
+    "hdd_difference": -608.0,
+    "distance_km": "4.20",
+    "hdd18": "6020"
   },
   {
     "epw_file": "CAN_QC_Baie-Comeau.AP.711870_CWEC.epw",
     "necb_location": "Baie-Comeau,QC",
-    "distance_km": "10.77"
+    "hdd_difference": -131.0,
+    "distance_km": "10.77",
+    "hdd18": "6020"
   },
   {
     "epw_file": "CAN_QC_Baie-Comeau.AP.716910_CWEC2016.epw",
     "necb_location": "Baie-Comeau,QC",
-    "distance_km": "10.46"
+    "hdd_difference": -680.0,
+    "distance_km": "10.46",
+    "hdd18": "6020"
   },
   {
     "epw_file": "CAN_QC_Barrage.Temiscamingue.717320_CWEC2016.epw",
     "necb_location": "Temiscaming,QC",
-    "distance_km": "8.76"
+    "hdd_difference": -240.0,
+    "distance_km": "8.76",
+    "hdd18": "5020"
   },
   {
     "epw_file": "CAN_QC_Beauceville.713230_CWEC2016.epw",
     "necb_location": "Thetford Mines,QC",
-    "distance_km": "41.67"
+    "hdd_difference": -284.0,
+    "distance_km": "41.67",
+    "hdd18": "5120"
   },
   {
     "epw_file": "CAN_QC_Beauport.715780_CWEC2016.epw",
     "necb_location": "Quebec,QC",
-    "distance_km": "2.70"
+    "hdd_difference": -412.0,
+    "distance_km": "2.70",
+    "hdd18": "5080"
   },
   {
     "epw_file": "CAN_QC_Bonnard.713830_CWEC2016.epw",
     "necb_location": "Dolbeau,QC",
-    "distance_km": "223.26"
+    "hdd_difference": 305.0,
+    "distance_km": "223.26",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_QC_Cap-Madelaine.714250_CWEC2016.epw",
     "necb_location": "Gasp?,QC",
-    "distance_km": "76.85"
+    "hdd_difference": -439.0,
+    "distance_km": "76.85",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Cap-Tourmente.713840_CWEC2016.epw",
     "necb_location": "Montmagny,QC",
-    "distance_km": "20.26"
+    "hdd_difference": -581.0,
+    "distance_km": "20.26",
+    "hdd18": "5090"
   },
   {
     "epw_file": "CAN_QC_Cap-d-Espoir.714290_CWEC2016.epw",
     "necb_location": "Gasp?,QC",
-    "distance_km": "47.55"
+    "hdd_difference": -474.0,
+    "distance_km": "47.55",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Cap.Rouge.711860_CWEC2016.epw",
     "necb_location": "Saguenay (Bagotville),QC",
-    "distance_km": "34.59"
+    "hdd_difference": -599.0,
+    "distance_km": "34.59",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_Cape.Whittle.713740_CWEC2016.epw",
     "necb_location": "Harrington-Harbour,QC",
-    "distance_km": "55.60"
+    "hdd_difference": -519.0,
+    "distance_km": "55.60",
+    "hdd18": "6150"
   },
   {
     "epw_file": "CAN_QC_Chamouchouane.715230_CWEC2016.epw",
     "necb_location": "Dolbeau,QC",
-    "distance_km": "93.02"
+    "hdd_difference": -268.0,
+    "distance_km": "93.02",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_QC_Chapais.718240_CWEC2016.epw",
     "necb_location": "Dolbeau,QC",
-    "distance_km": "224.49"
+    "hdd_difference": -43.0,
+    "distance_km": "224.49",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_QC_Charlevoix-Le.Massif.713190_CWEC2016.epw",
     "necb_location": "Baie-Saint-Paul,QC",
-    "distance_km": "20.26"
+    "hdd_difference": 834.0,
+    "distance_km": "20.26",
+    "hdd18": "5280"
   },
   {
     "epw_file": "CAN_QC_Chevery.AP.718140_CWEC2016.epw",
     "necb_location": "Harrington-Harbour,QC",
-    "distance_km": "11.68"
+    "hdd_difference": -328.0,
+    "distance_km": "11.68",
+    "hdd18": "6150"
   },
   {
     "epw_file": "CAN_QC_Chute-des-Passes.715220_CWEC2016.epw",
     "necb_location": "Dolbeau,QC",
-    "distance_km": "131.50"
+    "hdd_difference": -141.0,
+    "distance_km": "131.50",
+    "hdd18": "6250"
   },
   {
     "epw_file": "CAN_QC_Deschambault.713890_CWEC2016.epw",
     "necb_location": "Nicolet (Gentilly),QC",
-    "distance_km": "40.42"
+    "hdd_difference": -16.0,
+    "distance_km": "40.42",
+    "hdd18": "4900"
   },
   {
     "epw_file": "CAN_QC_Foret.Montmorency.712120_CWEC2016.epw",
     "necb_location": "Baie-Saint-Paul,QC",
-    "distance_km": "50.27"
+    "hdd_difference": 862.0,
+    "distance_km": "50.27",
+    "hdd18": "5280"
   },
   {
     "epw_file": "CAN_QC_Frelighsburg.713730_CWEC2016.epw",
     "necb_location": "Bedford,QC",
-    "distance_km": "14.58"
+    "hdd_difference": -244.0,
+    "distance_km": "14.58",
+    "hdd18": "4420"
   },
   {
     "epw_file": "CAN_QC_Gaspe.AP.711880_CWEC2016.epw",
     "necb_location": "Gasp?,QC",
-    "distance_km": "6.32"
+    "hdd_difference": -423.0,
+    "distance_km": "6.32",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Grindstone.Island_CWEC.epw",
     "necb_location": "Souris,PE",
-    "distance_km": "117.62"
+    "hdd_difference": 390.0,
+    "distance_km": "117.62",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_QC_Havre-St-Pierre.AP.715840_CWEC2016.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "4.56"
+    "hdd_difference": -391.0,
+    "distance_km": "4.56",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_High.Falls.713910_CWEC2016.epw",
     "necb_location": "Wakefield,QC",
-    "distance_km": "30.95"
+    "hdd_difference": -105.0,
+    "distance_km": "30.95",
+    "hdd18": "4820"
   },
   {
     "epw_file": "CAN_QC_Ile.Rouge.714260_CWEC2016.epw",
     "necb_location": "Tadoussac,QC",
-    "distance_km": "14.45"
+    "hdd_difference": -20.0,
+    "distance_km": "14.45",
+    "hdd18": "5450"
   },
   {
     "epw_file": "CAN_QC_Ile.aux.Perroquets.713750_CWEC2016.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "43.34"
+    "hdd_difference": -268.0,
+    "distance_km": "43.34",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_Iles-de-la-Madeleine.AP.717100_CWEC2016.epw",
     "necb_location": "Souris,PE",
-    "distance_km": "124.38"
+    "hdd_difference": -57.0,
+    "distance_km": "124.38",
+    "hdd18": "4550"
   },
   {
     "epw_file": "CAN_QC_Jonquiere.716170_CWEC2016.epw",
     "necb_location": "Saguenay,QC",
-    "distance_km": "5.51"
+    "hdd_difference": -328.0,
+    "distance_km": "5.51",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw",
     "necb_location": "Kuujjuaq,QC",
-    "distance_km": "0.35"
+    "hdd_difference": -607.0,
+    "distance_km": "0.35",
+    "hdd18": "8550"
   },
   {
     "epw_file": "CAN_QC_Kuujjuarapik.AP.719050_CWEC.epw",
     "necb_location": "Kuujjuarapik,QC",
-    "distance_km": "1.06"
+    "hdd_difference": -3.0,
+    "distance_km": "1.06",
+    "hdd18": "7990"
   },
   {
     "epw_file": "CAN_QC_Kuujuaq.AP.719060_CWEC.epw",
     "necb_location": "Kuujjuaq,QC",
-    "distance_km": "0.34"
+    "hdd_difference": -59.0,
+    "distance_km": "0.34",
+    "hdd18": "8550"
   },
   {
     "epw_file": "CAN_QC_Kuujuarapik.AP.719050_CWEC2016.epw",
     "necb_location": "Kuujjuarapik,QC",
-    "distance_km": "0.83"
+    "hdd_difference": -577.0,
+    "distance_km": "0.83",
+    "hdd18": "7990"
   },
   {
     "epw_file": "CAN_QC_L-Acadie.713720_CWEC2016.epw",
     "necb_location": "Saint-Jean-sur-Richelieu,QC",
-    "distance_km": "7.51"
+    "hdd_difference": -226.0,
+    "distance_km": "7.51",
+    "hdd18": "4450"
   },
   {
     "epw_file": "CAN_QC_L-Assompton.715240_CWEC2016.epw",
     "necb_location": "Verch?res,QC",
-    "distance_km": "7.51"
+    "hdd_difference": 6.0,
+    "distance_km": "7.51",
+    "hdd18": "4450"
   },
   {
     "epw_file": "CAN_QC_L-Etape.713820_CWEC2016.epw",
     "necb_location": "Baie-Saint-Paul,QC",
-    "distance_km": "56.06"
+    "hdd_difference": 1155.0,
+    "distance_km": "56.06",
+    "hdd18": "5280"
   },
   {
     "epw_file": "CAN_QC_La.Baie.713880_CWEC2016.epw",
     "necb_location": "Saguenay (Bagotville),QC",
-    "distance_km": "7.31"
+    "hdd_difference": -94.0,
+    "distance_km": "7.31",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_La.Grande.Riviere.AP.718270_CWEC.epw",
     "necb_location": "Kuujjuarapik,QC",
-    "distance_km": "182.91"
+    "hdd_difference": -374.0,
+    "distance_km": "182.91",
+    "hdd18": "7990"
   },
   {
     "epw_file": "CAN_QC_La.Pocatiere.717130_CWEC2016.epw",
     "necb_location": "La Pocati?re,QC",
-    "distance_km": "1.11"
+    "hdd_difference": -392.0,
+    "distance_km": "1.11",
+    "hdd18": "5160"
   },
   {
     "epw_file": "CAN_QC_La.Tuque.AP.713780_CWEC2016.epw",
     "necb_location": "La-Tuque,QC",
-    "distance_km": "3.05"
+    "hdd_difference": -284.0,
+    "distance_km": "3.05",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Lac.Benoit.715200_CWEC2016.epw",
     "necb_location": "Nitchequon,QC",
-    "distance_km": "185.28"
+    "hdd_difference": -1054.0,
+    "distance_km": "185.28",
+    "hdd18": "8100"
   },
   {
     "epw_file": "CAN_QC_Lac.Eon.AP.714210_CWEC.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "182.41"
+    "hdd_difference": 1284.0,
+    "distance_km": "182.41",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_Lac.Eon.AP.714210_CWEC2016.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "182.04"
+    "hdd_difference": 818.0,
+    "distance_km": "182.04",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_Lac.Memphremagog.710359_CWEC2016.epw",
     "necb_location": "Magog,QC",
-    "distance_km": "1.49"
+    "hdd_difference": -246.0,
+    "distance_km": "1.49",
+    "hdd18": "4730"
   },
   {
     "epw_file": "CAN_QC_Lac.Saint-Pierre.711980_CWEC2016.epw",
     "necb_location": "Louiseville,QC",
-    "distance_km": "8.36"
+    "hdd_difference": -532.0,
+    "distance_km": "8.36",
+    "hdd18": "4900"
   },
   {
     "epw_file": "CAN_QC_Laterriere.710400_CWEC2016.epw",
     "necb_location": "Saguenay (Bagotville),QC",
-    "distance_km": "10.13"
+    "hdd_difference": -216.0,
+    "distance_km": "10.13",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_Lemieux.716160_CWEC2016.epw",
     "necb_location": "Nicolet (Gentilly),QC",
-    "distance_km": "19.98"
+    "hdd_difference": -17.0,
+    "distance_km": "19.98",
+    "hdd18": "4900"
   },
   {
     "epw_file": "CAN_QC_Lennoxville.716110_CWEC2016.epw",
     "necb_location": "Lennoxville,QC",
-    "distance_km": "2.53"
+    "hdd_difference": -235.0,
+    "distance_km": "2.53",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_QC_Longue-Pointe-de-Mingan.715120_CWEC2016.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "44.72"
+    "hdd_difference": -314.0,
+    "distance_km": "44.72",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_Lourdes-de-Blanc-Sablon.AP.718080_CWEC2016.epw",
     "necb_location": "St. Anthony,NF",
-    "distance_km": "110.58"
+    "hdd_difference": -501.0,
+    "distance_km": "110.58",
+    "hdd18": "6440"
   },
   {
     "epw_file": "CAN_QC_Maniwaki.AP.717210_CWEC2016.epw",
     "necb_location": "Maniwaki,QC",
-    "distance_km": "11.59"
+    "hdd_difference": -441.0,
+    "distance_km": "11.59",
+    "hdd18": "5280"
   },
   {
     "epw_file": "CAN_QC_Manouane.Est.715210_CWEC2016.epw",
     "necb_location": "Gagnon,QC",
-    "distance_km": "208.11"
+    "hdd_difference": -916.0,
+    "distance_km": "208.11",
+    "hdd18": "7600"
   },
   {
     "epw_file": "CAN_QC_Matagami.AP.718210_CWEC2016.epw",
     "necb_location": "Amos,QC",
-    "distance_km": "134.99"
+    "hdd_difference": -87.0,
+    "distance_km": "134.99",
+    "hdd18": "6160"
   },
   {
     "epw_file": "CAN_QC_Mont-Joli.AP.717180_CWEC.epw",
     "necb_location": "Mont-Joli,QC",
-    "distance_km": "2.72"
+    "hdd_difference": 151.0,
+    "distance_km": "2.72",
+    "hdd18": "5370"
   },
   {
     "epw_file": "CAN_QC_Mont-Joli.AP.717180_CWEC2016.epw",
     "necb_location": "Mont-Joli,QC",
-    "distance_km": "3.08"
+    "hdd_difference": -287.0,
+    "distance_km": "3.08",
+    "hdd18": "5370"
   },
   {
     "epw_file": "CAN_QC_Montreal-College.Jean-de-Brebeuf.716120_CWEC.epw",
     "necb_location": "Montreal (City Hall),QC",
-    "distance_km": "2.23"
+    "hdd_difference": 415.0,
+    "distance_km": "2.23",
+    "hdd18": "4200"
   },
   {
     "epw_file": "CAN_QC_Montreal-Est.716751_CWEC2016.epw",
     "necb_location": "Montreal-Est,QC",
-    "distance_km": "3.62"
+    "hdd_difference": -282.0,
+    "distance_km": "3.62",
+    "hdd18": "4470"
   },
   {
     "epw_file": "CAN_QC_Montreal-Longueuil-Saint.Hubert.AP.713710_CWEC.epw",
     "necb_location": "St-Hubert,QC",
-    "distance_km": "2.63"
+    "hdd_difference": 76.0,
+    "distance_km": "2.63",
+    "hdd18": "4490"
   },
   {
     "epw_file": "CAN_QC_Montreal-McTavish.716120_CWEC2016.epw",
     "necb_location": "Montreal (City Hall),QC",
-    "distance_km": "2.23"
+    "hdd_difference": -146.0,
+    "distance_km": "2.23",
+    "hdd18": "4200"
   },
   {
     "epw_file": "CAN_QC_Montreal-Mirabel.Intl.AP.716278_CWEC.epw",
     "necb_location": "St-Jerome,QC",
-    "distance_km": "10.78"
+    "hdd_difference": 42.0,
+    "distance_km": "10.78",
+    "hdd18": "4820"
   },
   {
     "epw_file": "CAN_QC_Montreal-Mirabel.Intl.AP.719050_CWEC2016.epw",
     "necb_location": "St-Jerome,QC",
-    "distance_km": "10.82"
+    "hdd_difference": -279.0,
+    "distance_km": "10.82",
+    "hdd18": "4820"
   },
   {
     "epw_file": "CAN_QC_Montreal-St-Hubert.Longueuil.AP.713710_CWEC2016.epw",
     "necb_location": "St-Hubert,QC",
-    "distance_km": "2.23"
+    "hdd_difference": -243.0,
+    "distance_km": "2.23",
+    "hdd18": "4490"
   },
   {
     "epw_file": "CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC.epw",
     "necb_location": "Dorval,QC",
-    "distance_km": "2.32"
+    "hdd_difference": 93.0,
+    "distance_km": "2.32",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw",
     "necb_location": "Dorval,QC",
-    "distance_km": "2.41"
+    "hdd_difference": -310.0,
+    "distance_km": "2.41",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_QC_Natashquan.AP.715130_CWEC2016.epw",
     "necb_location": "Havre-St-Pierre,QC",
-    "distance_km": "127.32"
+    "hdd_difference": -472.0,
+    "distance_km": "127.32",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_QC_New.Carlisle.716190_CWEC2016.epw",
     "necb_location": "Bathurst,NB",
-    "distance_km": "49.85"
+    "hdd_difference": -183.0,
+    "distance_km": "49.85",
+    "hdd18": "5020"
   },
   {
     "epw_file": "CAN_QC_Nicolet.717230_CWEC2016.epw",
     "necb_location": "Trois-Rivi?res,QC",
-    "distance_km": "15.37"
+    "hdd_difference": -430.0,
+    "distance_km": "15.37",
+    "hdd18": "4900"
   },
   {
     "epw_file": "CAN_QC_Nitchequon.AP.CAN270_CWEC.epw",
     "necb_location": "Nitchequon,QC",
-    "distance_km": "0.92"
+    "hdd_difference": -178.0,
+    "distance_km": "0.92",
+    "hdd18": "8100"
   },
   {
     "epw_file": "CAN_QC_Normandin.713790_CWEC2016.epw",
     "necb_location": "St-F?licien,QC",
-    "distance_km": "22.32"
+    "hdd_difference": -34.0,
+    "distance_km": "22.32",
+    "hdd18": "5850"
   },
   {
     "epw_file": "CAN_QC_Parent.717260_CWEC2016.epw",
     "necb_location": "La-Tuque,QC",
-    "distance_km": "147.88"
+    "hdd_difference": 327.0,
+    "distance_km": "147.88",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Pointe-au-Pere.715540_CWEC2016.epw",
     "necb_location": "Rimouski,QC",
-    "distance_km": "9.24"
+    "hdd_difference": -111.0,
+    "distance_km": "9.24",
+    "hdd18": "5300"
   },
   {
     "epw_file": "CAN_QC_Pointe-des-Monts.714270_CWEC2016.epw",
     "necb_location": "Matane,QC",
-    "distance_km": "53.66"
+    "hdd_difference": -28.0,
+    "distance_km": "53.66",
+    "hdd18": "5510"
   },
   {
     "epw_file": "CAN_QC_Pointe.Claveau.711890_CWEC2016.epw",
     "necb_location": "Tadoussac,QC",
-    "distance_km": "32.32"
+    "hdd_difference": -285.0,
+    "distance_km": "32.32",
+    "hdd18": "5450"
   },
   {
     "epw_file": "CAN_QC_Pointe.Noire.713900_CWEC2016.epw",
     "necb_location": "Sept-?les,QC",
-    "distance_km": "7.05"
+    "hdd_difference": -898.0,
+    "distance_km": "7.05",
+    "hdd18": "6200"
   },
   {
     "epw_file": "CAN_QC_Pointe.de.l-Islet.711900_CWEC2016.epw",
     "necb_location": "Tadoussac,QC",
-    "distance_km": "1.13"
+    "hdd_difference": -408.0,
+    "distance_km": "1.13",
+    "hdd18": "5450"
   },
   {
     "epw_file": "CAN_QC_Port-Menier.AP.718100_CWEC2016.epw",
     "necb_location": "Gasp?,QC",
-    "distance_km": "14.22"
+    "hdd_difference": -134.0,
+    "distance_km": "14.22",
+    "hdd18": "5500"
   },
   {
     "epw_file": "CAN_QC_Quebec-Lesage.Intl.AP.717140_CWEC.epw",
     "necb_location": "Ancienne-Lorette,QC",
-    "distance_km": "2.52"
+    "hdd_difference": -164.0,
+    "distance_km": "2.52",
+    "hdd18": "5130"
   },
   {
     "epw_file": "CAN_QC_Quebec-Lesage.Intl.AP.717140_CWEC2016.epw",
     "necb_location": "Ancienne-Lorette,QC",
-    "distance_km": "2.61"
+    "hdd_difference": -417.0,
+    "distance_km": "2.61",
+    "hdd18": "5130"
   },
   {
     "epw_file": "CAN_QC_Riviere-du-Loup.717150_CWEC.epw",
     "necb_location": "Riviere-du-Loup,QC",
-    "distance_km": "3.07"
+    "hdd_difference": 43.0,
+    "distance_km": "3.07",
+    "hdd18": "5380"
   },
   {
     "epw_file": "CAN_QC_Riviere-du-Loup.717150_CWEC2016.epw",
     "necb_location": "Riviere-du-Loup,QC",
-    "distance_km": "3.47"
+    "hdd_difference": -156.0,
+    "distance_km": "3.47",
+    "hdd18": "5380"
   },
   {
     "epw_file": "CAN_QC_Roberval.AP.717280_CWEC.epw",
     "necb_location": "Roberval,QC",
-    "distance_km": "3.54"
+    "hdd_difference": 7.0,
+    "distance_km": "3.54",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_QC_Roberval.AP.717280_CWEC2016.epw",
     "necb_location": "Roberval,QC",
-    "distance_km": "3.24"
+    "hdd_difference": -319.0,
+    "distance_km": "3.24",
+    "hdd18": "5750"
   },
   {
     "epw_file": "CAN_QC_Rouyn-Noranda.AP.717255_CWEC2016.epw",
     "necb_location": "Noranda,QC",
-    "distance_km": "13.90"
+    "hdd_difference": -330.0,
+    "distance_km": "13.90",
+    "hdd18": "6050"
   },
   {
     "epw_file": "CAN_QC_Rouyn.717340_CWEC2016.epw",
     "necb_location": "Noranda,QC",
-    "distance_km": "1.73"
+    "hdd_difference": -400.0,
+    "distance_km": "1.73",
+    "hdd18": "6050"
   },
   {
     "epw_file": "CAN_QC_Saguenay-Bagotville.AP-CFB.Bagotville.717270_CWEC2016.epw",
     "necb_location": "Saguenay (Bagotville),QC",
-    "distance_km": "0.44"
+    "hdd_difference": -297.0,
+    "distance_km": "0.44",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_QC_Sainte-Agathe-des-Monts.717200_CWEC.epw",
     "necb_location": "Ste-Agathe-des-,QC",
-    "distance_km": "0.20"
+    "hdd_difference": -39.0,
+    "distance_km": "0.20",
+    "hdd18": "5390"
   },
   {
     "epw_file": "CAN_QC_Schefferville.AP.718280_CWEC.epw",
     "necb_location": "Schefferville,QC",
-    "distance_km": "2.74"
+    "hdd_difference": -494.0,
+    "distance_km": "2.74",
+    "hdd18": "8550"
   },
   {
     "epw_file": "CAN_QC_Schefferville.AP.718280_CWEC2016.epw",
     "necb_location": "Schefferville,QC",
-    "distance_km": "2.32"
+    "hdd_difference": -919.0,
+    "distance_km": "2.32",
+    "hdd18": "8550"
   },
   {
     "epw_file": "CAN_QC_Sept-Iles.AP.718110_CWEC.epw",
     "necb_location": "Sept-?les,QC",
-    "distance_km": "7.56"
+    "hdd_difference": -65.0,
+    "distance_km": "7.56",
+    "hdd18": "6200"
   },
   {
     "epw_file": "CAN_QC_Sept-Iles.AP.718110_CWEC2016.epw",
     "necb_location": "Sept-?les,QC",
-    "distance_km": "7.89"
+    "hdd_difference": -456.0,
+    "distance_km": "7.89",
+    "hdd18": "6200"
   },
   {
     "epw_file": "CAN_QC_Shawinigan.713700_CWEC2016.epw",
     "necb_location": "Shawinigan,QC",
-    "distance_km": "0.81"
+    "hdd_difference": -302.0,
+    "distance_km": "0.81",
+    "hdd18": "5050"
   },
   {
     "epw_file": "CAN_QC_Sherbrooke.AP.716100_CWEC.epw",
     "necb_location": "Lennoxville,QC",
-    "distance_km": "15.41"
+    "hdd_difference": 367.0,
+    "distance_km": "15.41",
+    "hdd18": "4700"
   },
   {
     "epw_file": "CAN_QC_St-Anicet.717120_CWEC2016.epw",
     "necb_location": "Salaberry-de-Valleyfield,QC",
-    "distance_km": "18.85"
+    "hdd_difference": -188.0,
+    "distance_km": "18.85",
+    "hdd18": "4400"
   },
   {
     "epw_file": "CAN_QC_St-Jovite.713760_CWEC2016.epw",
     "necb_location": "St-Jovite,QC",
-    "distance_km": "5.47"
+    "hdd_difference": -306.0,
+    "distance_km": "5.47",
+    "hdd18": "5250"
   },
   {
     "epw_file": "CAN_QC_Ste-Anne-de-Bellevue.713770_CWEC2016.epw",
     "necb_location": "Ste-Anne-de-Bellevue,QC",
-    "distance_km": "3.12"
+    "hdd_difference": -268.0,
+    "distance_km": "3.12",
+    "hdd18": "4460"
   },
   {
     "epw_file": "CAN_QC_Ste-Clothilde.716140_CWEC2016.epw",
     "necb_location": "Hemmingford,QC",
-    "distance_km": "13.56"
+    "hdd_difference": -120.0,
+    "distance_km": "13.56",
+    "hdd18": "4380"
   },
   {
     "epw_file": "CAN_QC_Ste-Foy-Univ.Laval.713920_CWEC2016.epw",
     "necb_location": "Ste-Foy,QC",
-    "distance_km": "0.34"
+    "hdd_difference": -398.0,
+    "distance_km": "0.34",
+    "hdd18": "5100"
   },
   {
     "epw_file": "CAN_QC_Val-d-Or.Rgnl.AP.717250_CWEC2016.epw",
     "necb_location": "Val-d'Or,QC",
-    "distance_km": "4.69"
+    "hdd_difference": -598.0,
+    "distance_km": "4.69",
+    "hdd18": "6180"
   },
   {
     "epw_file": "CAN_QC_Val-dOr.Rgnl.AP.717250_CWEC.epw",
     "necb_location": "Val-d'Or,QC",
-    "distance_km": "3.43"
+    "hdd_difference": -51.0,
+    "distance_km": "3.43",
+    "hdd18": "6180"
   },
   {
     "epw_file": "CAN_QC_Varennes.711840_CWEC2016.epw",
     "necb_location": "Verch?res,QC",
-    "distance_km": "5.91"
+    "hdd_difference": -99.0,
+    "distance_km": "5.91",
+    "hdd18": "4450"
   },
   {
     "epw_file": "CAN_SK_Assiniboia.AP.714870_CWEC2016.epw",
     "necb_location": "Assiniboia,SK",
-    "distance_km": "11.11"
+    "hdd_difference": -26.0,
+    "distance_km": "11.11",
+    "hdd18": "5180"
   },
   {
     "epw_file": "CAN_SK_Broadview.718610_CWEC2016.epw",
     "necb_location": "Broadview,SK",
-    "distance_km": "1.26"
+    "hdd_difference": -213.0,
+    "distance_km": "1.26",
+    "hdd18": "5760"
   },
   {
     "epw_file": "CAN_SK_Buffalo.Narrows.AP.710770_CWEC2016.epw",
     "necb_location": "Cold Lake,AB",
-    "distance_km": "189.27"
+    "hdd_difference": 550.0,
+    "distance_km": "189.27",
+    "hdd18": "5860"
   },
   {
     "epw_file": "CAN_SK_CFB.Moose.Jaw.715390_CWEC2016.epw",
     "necb_location": "Moose Jaw,SK",
-    "distance_km": "6.71"
+    "hdd_difference": -211.0,
+    "distance_km": "6.71",
+    "hdd18": "5270"
   },
   {
     "epw_file": "CAN_SK_Coronach.715160_CWEC2016.epw",
     "necb_location": "Assiniboia,SK",
-    "distance_km": "74.63"
+    "hdd_difference": -179.0,
+    "distance_km": "74.63",
+    "hdd18": "5180"
   },
   {
     "epw_file": "CAN_SK_Cypress.Hills.Interprovincial.Park.711390_CWEC2016.epw",
     "necb_location": "Maple Creek,SK",
-    "distance_km": "29.63"
+    "hdd_difference": 517.0,
+    "distance_km": "29.63",
+    "hdd18": "4780"
   },
   {
     "epw_file": "CAN_SK_Eastend-Cypress.711310_CWEC2016.epw",
     "necb_location": "Maple Creek,SK",
-    "distance_km": "62.96"
+    "hdd_difference": 540.0,
+    "distance_km": "62.96",
+    "hdd18": "4780"
   },
   {
     "epw_file": "CAN_SK_Elbow.714500_CWEC2016.epw",
     "necb_location": "Dundurn,SK",
-    "distance_km": "75.41"
+    "hdd_difference": -385.0,
+    "distance_km": "75.41",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_SK_Estevan.AP.718620_CWEC.epw",
     "necb_location": "Estevan,SK",
-    "distance_km": "9.13"
+    "hdd_difference": 28.0,
+    "distance_km": "9.13",
+    "hdd18": "5340"
   },
   {
     "epw_file": "CAN_SK_Estevan.Rgnl.AP.718620_CWEC2016.epw",
     "necb_location": "Estevan,SK",
-    "distance_km": "8.10"
+    "hdd_difference": -19.0,
+    "distance_km": "8.10",
+    "hdd18": "5340"
   },
   {
     "epw_file": "CAN_SK_Hudson.Bay.AP.718680_CWEC2016.epw",
     "necb_location": "Hudson Bay,SK",
-    "distance_km": "6.51"
+    "hdd_difference": -234.0,
+    "distance_km": "6.51",
+    "hdd18": "6280"
   },
   {
     "epw_file": "CAN_SK_Indian.Head.715150_CWEC2016.epw",
     "necb_location": "Qu'Appelle,SK",
-    "distance_km": "16.11"
+    "hdd_difference": -21.0,
+    "distance_km": "16.11",
+    "hdd18": "5620"
   },
   {
     "epw_file": "CAN_SK_Island.Falls.713310_CWEC2016.epw",
     "necb_location": "Island Falls,SK",
-    "distance_km": "0.41"
+    "hdd_difference": -432.0,
+    "distance_km": "0.41",
+    "hdd18": "7100"
   },
   {
     "epw_file": "CAN_SK_Jimmy.Lake.710230_CWEC2016.epw",
     "necb_location": "Cold Lake,AB",
-    "distance_km": "51.17"
+    "hdd_difference": -88.0,
+    "distance_km": "51.17",
+    "hdd18": "5860"
   },
   {
     "epw_file": "CAN_SK_Key.Lake.AP.710330_CWEC2016.epw",
     "necb_location": "Island Falls,SK",
-    "distance_km": "278.30"
+    "hdd_difference": 263.0,
+    "distance_km": "278.30",
+    "hdd18": "7100"
   },
   {
     "epw_file": "CAN_SK_Kindersley.Rgnl.AP.711290_CWEC2016.epw",
     "necb_location": "Kindersley,SK",
-    "distance_km": "5.58"
+    "hdd_difference": -314.0,
+    "distance_km": "5.58",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_SK_La.Ronge.AP.719220_CWEC2016.epw",
     "necb_location": "Island Falls,SK",
-    "distance_km": "189.26"
+    "hdd_difference": -744.0,
+    "distance_km": "189.26",
+    "hdd18": "7100"
   },
   {
     "epw_file": "CAN_SK_Last.Mountain.Lake.Natl.Wildlife.Area.715560_CWEC2016.epw",
     "necb_location": "Strasbourg,SK",
-    "distance_km": "43.67"
+    "hdd_difference": 220.0,
+    "distance_km": "43.67",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_SK_Leader.AP.714590_CWEC2016.epw",
     "necb_location": "Kindersley,SK",
-    "distance_km": "69.96"
+    "hdd_difference": -370.0,
+    "distance_km": "69.96",
+    "hdd18": "5550"
   },
   {
     "epw_file": "CAN_SK_Lucky.Lake.714550_CWEC2016.epw",
     "necb_location": "Swift Current,SK",
-    "distance_km": "86.90"
+    "hdd_difference": -73.0,
+    "distance_km": "86.90",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_SK_Maple.Creek.714530_CWEC2016.epw",
     "necb_location": "Maple Creek,SK",
-    "distance_km": "1.09"
+    "hdd_difference": -191.0,
+    "distance_km": "1.09",
+    "hdd18": "4780"
   },
   {
     "epw_file": "CAN_SK_Meadow.Lake.AP.719700_CWEC2016.epw",
     "necb_location": "Meadow Lake,SK",
-    "distance_km": "5.88"
+    "hdd_difference": -206.0,
+    "distance_km": "5.88",
+    "hdd18": "6280"
   },
   {
     "epw_file": "CAN_SK_Melfort.714560_CWEC2016.epw",
     "necb_location": "Melfort,SK",
-    "distance_km": "4.97"
+    "hdd_difference": -103.0,
+    "distance_km": "4.97",
+    "hdd18": "6050"
   },
   {
     "epw_file": "CAN_SK_Nipawin.AP.713120_CWEC2016.epw",
     "necb_location": "Nipawin,SK",
-    "distance_km": "3.38"
+    "hdd_difference": -196.0,
+    "distance_km": "3.38",
+    "hdd18": "6300"
   },
   {
     "epw_file": "CAN_SK_North.Battleford.AP.717540_CWEC.epw",
     "necb_location": "North Battleford,SK",
-    "distance_km": "2.62"
+    "hdd_difference": 61.0,
+    "distance_km": "2.62",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_SK_North.Battleford.AP.718760_CWEC2016.epw",
     "necb_location": "North Battleford,SK",
-    "distance_km": "3.69"
+    "hdd_difference": -329.0,
+    "distance_km": "3.69",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_SK_Outlook.715510_CWEC2016.epw",
     "necb_location": "Dundurn,SK",
-    "distance_km": "52.15"
+    "hdd_difference": -447.0,
+    "distance_km": "52.15",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_SK_Prince.Albert.AP.718690_CWEC2016.epw",
     "necb_location": "Prince Albert,SK",
-    "distance_km": "5.93"
+    "hdd_difference": -15.0,
+    "distance_km": "5.93",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_SK_Regina.Intl.AP.715140_CWEC.epw",
     "necb_location": "Regina,SK",
-    "distance_km": "4.00"
+    "hdd_difference": 46.0,
+    "distance_km": "4.00",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_SK_Regina.Intl.AP.715140_CWEC2016.epw",
     "necb_location": "Regina,SK",
-    "distance_km": "3.67"
+    "hdd_difference": -64.0,
+    "distance_km": "3.67",
+    "hdd18": "5600"
   },
   {
     "epw_file": "CAN_SK_Rockglen.711350_CWEC2016.epw",
     "necb_location": "Assiniboia,SK",
-    "distance_km": "51.78"
+    "hdd_difference": -58.0,
+    "distance_km": "51.78",
+    "hdd18": "5180"
   },
   {
     "epw_file": "CAN_SK_Rosetown.AP.715100_CWEC2016.epw",
     "necb_location": "Rosetown,SK",
-    "distance_km": "5.28"
+    "hdd_difference": 53.0,
+    "distance_km": "5.28",
+    "hdd18": "5620"
   },
   {
     "epw_file": "CAN_SK_Saskatoon.Intl.AP.718660_CWEC.epw",
     "necb_location": "Saskatoon,SK",
-    "distance_km": "5.32"
+    "hdd_difference": 112.0,
+    "distance_km": "5.32",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_SK_Saskatoon.Intl.AP.718660_CWEC2016.epw",
     "necb_location": "Saskatoon,SK",
-    "distance_km": "4.94"
+    "hdd_difference": -118.0,
+    "distance_km": "4.94",
+    "hdd18": "5700"
   },
   {
     "epw_file": "CAN_SK_Scott.714890_CWEC2016.epw",
     "necb_location": "Scott,SK",
-    "distance_km": "0.77"
+    "hdd_difference": -245.0,
+    "distance_km": "0.77",
+    "hdd18": "5960"
   },
   {
     "epw_file": "CAN_SK_Southend.AP.714510_CWEC2016.epw",
     "necb_location": "Island Falls,SK",
-    "distance_km": "106.92"
+    "hdd_difference": -137.0,
+    "distance_km": "106.92",
+    "hdd18": "7100"
   },
   {
     "epw_file": "CAN_SK_Spiritwood.West.711330_CWEC2016.epw",
     "necb_location": "North Battleford,SK",
-    "distance_km": "82.49"
+    "hdd_difference": 2.0,
+    "distance_km": "82.49",
+    "hdd18": "5900"
   },
   {
     "epw_file": "CAN_SK_Stony.Rapids.AP.711320_CWEC2016.epw",
     "necb_location": "Uranium City,SK",
-    "distance_km": "161.12"
+    "hdd_difference": 230.0,
+    "distance_km": "161.12",
+    "hdd18": "7500"
   },
   {
     "epw_file": "CAN_SK_Swift.Current.714460_CWEC2016.epw",
     "necb_location": "Swift Current,SK",
-    "distance_km": "4.98"
+    "hdd_difference": 105.0,
+    "distance_km": "4.98",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_SK_Swift.Current.AP.711420_CWEC.epw",
     "necb_location": "Swift Current,SK",
-    "distance_km": "8.34"
+    "hdd_difference": 77.0,
+    "distance_km": "8.34",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_SK_Swift.Current.AP.711420_CWEC2016.epw",
     "necb_location": "Swift Current,SK",
-    "distance_km": "7.58"
+    "hdd_difference": -56.0,
+    "distance_km": "7.58",
+    "hdd18": "5150"
   },
   {
     "epw_file": "CAN_SK_Val.Marie.Southeast.711370_CWEC2016.epw",
     "necb_location": "Assiniboia,SK",
-    "distance_km": "132.03"
+    "hdd_difference": -62.0,
+    "distance_km": "132.03",
+    "hdd18": "5180"
   },
   {
     "epw_file": "CAN_SK_Waskesiu.Lake.714540_CWEC2016.epw",
     "necb_location": "Prince Albert,SK",
-    "distance_km": "82.02"
+    "hdd_difference": -220.0,
+    "distance_km": "82.02",
+    "hdd18": "6100"
   },
   {
     "epw_file": "CAN_SK_Watrous.East.715110_CWEC2016.epw",
     "necb_location": "Dafoe,SK",
-    "distance_km": "61.27"
+    "hdd_difference": -85.0,
+    "distance_km": "61.27",
+    "hdd18": "5860"
   },
   {
     "epw_file": "CAN_SK_Weyburn.AP.714520_CWEC2016.epw",
     "necb_location": "Weyburn,SK",
-    "distance_km": "5.60"
+    "hdd_difference": -144.0,
+    "distance_km": "5.60",
+    "hdd18": "5400"
   },
   {
     "epw_file": "CAN_SK_Wynyard.718650_CWEC2016.epw",
     "necb_location": "Dafoe,SK",
-    "distance_km": "22.19"
+    "hdd_difference": -42.0,
+    "distance_km": "22.19",
+    "hdd18": "5860"
   },
   {
     "epw_file": "CAN_SK_Yorkton.Muni.AP.712920_CWEC2016.epw",
     "necb_location": "Yorkton,SK",
-    "distance_km": "5.35"
+    "hdd_difference": -309.0,
+    "distance_km": "5.35",
+    "hdd18": "6000"
   },
   {
     "epw_file": "CAN_YT_Mayo.AP.719650_CWEC2016.epw",
     "necb_location": "Dawson,YT",
-    "distance_km": "181.55"
+    "hdd_difference": -780.0,
+    "distance_km": "181.55",
+    "hdd18": "8120"
   },
   {
     "epw_file": "CAN_YT_Watson.Lake.AP.711900_CWEC2016.epw",
     "necb_location": "Watson Lake,YT",
-    "distance_km": "8.62"
+    "hdd_difference": -412.0,
+    "distance_km": "8.62",
+    "hdd18": "7470"
   },
   {
     "epw_file": "CAN_YT_Whitehorse.AP.719640_CWEC.epw",
     "necb_location": "Whitehorse,YT",
-    "distance_km": "0.73"
+    "hdd_difference": 366.0,
+    "distance_km": "0.73",
+    "hdd18": "6580"
   },
   {
     "epw_file": "CAN_YT_Whitehorse.Intl.AP.719640_CWEC2016.epw",
     "necb_location": "Whitehorse,YT",
-    "distance_km": "1.51"
+    "hdd_difference": -89.0,
+    "distance_km": "1.51",
+    "hdd18": "6580"
   }
 ]
