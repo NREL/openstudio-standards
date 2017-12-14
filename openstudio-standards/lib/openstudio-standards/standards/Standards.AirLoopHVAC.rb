@@ -3654,6 +3654,10 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Clean name of airloop
     loop_name_clean = self.name.get.to_s.gsub(/\W/, '').delete('_')
+    # If the name starts with a number, prepend with a letter
+    if loop_name_clean[0] =~ /[0-9]/
+      loop_name_clean = "SYS#{loop_name_clean}"
+    end
 
     # Sensors
     oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
