@@ -45,7 +45,6 @@ class NECB2011
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
         building_type = 'Space Function'
-        puts 'here'
         puts space_type_map
 
         space_type_map.sort.each do |space_type_name, space_names|

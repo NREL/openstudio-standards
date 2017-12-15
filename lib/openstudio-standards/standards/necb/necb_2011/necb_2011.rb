@@ -12,34 +12,15 @@ class NECB2011 < Standard
     load_standards_database
     @necb_standards_data = Hash.new
 
-    #load NECB 2015 Table C1 for NECB 2011 work
-    file = "#{File.dirname(__FILE__)}/data/necb_2015_table_c1.json"
-    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
+    # Load NECB data files.
+    ['necb_2015_table_c1.json',
+     'regional_fuel_use.json',
+     'surface_thermal_transmittance.json'
+    ].each do |file|
+      file = "#{File.dirname(__FILE__)}/data/#{file}"
+      @necb_standards_data = @necb_standards_data.merge (JSON.parse(File.read(file)))
+    end
 
-    file = "#{File.dirname(__FILE__)}/data/regional_fuel_use.json"
-    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
-
-
-    # Surfaces
-    @necb_standards_data['surface_thermal_transmittance'] = {
-        'data_type' => 'table',
-        'refs' => ['NECB2011_S_3.2.2.2', 'NECB2011_S_3.2.2.3', 'NECB2011_S_3.2.2.4', 'NECB2011_S_3.2.3.1'],
-        'units' => 'W_per_m2_K',
-        'formula_variable_ranges' => {
-            'hdd' => [0.0, 10000.0]
-        },
-        'table' => [
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.315 : ( hdd < 4000) ? 0.278 : ( hdd < 5000 ) ? 0.247 : ( hdd < 6000) ? 0.210 :( hdd < 7000) ? 0.210 : 0.183"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'formula' => "( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'formula' => "( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
-            {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
-            {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
-            {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'formula' => "( hdd < 7000) ? 0.757 : 0.379"}
-        ],
-        'notes' => 'Requires hdd to be defined to be evaluated in code. Never have ground windows or doors.'
-    }
 
     @necb_standards_data['fdwr_formula'] = {
         'data_type' => 'formula',
@@ -175,15 +156,16 @@ class NECB2011 < Standard
     }
 
 
+    standards_database_to_excel()
     @standards_data = @standards_data.merge(@necb_standards_data)
 
     #@standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
   end
 
-  def save_standards_database()
+  def standards_database_to_excel()
     necb_2011_workbook = RubyXL::Workbook.new
 
-    #Values
+    #Write Values
     values_sheet = necb_2011_workbook.add_worksheet('Values')
     values_array = @necb_standards_data.select {|key, value| value['data_type'] == 'value'}
     header_row = 0
@@ -195,12 +177,12 @@ class NECB2011 < Standard
       values_sheet.add_cell(row, 0, key)
       values_sheet.add_cell(row, 1, value['value'])
       values_sheet.add_cell(row, 2, value['units'])
-      values_sheet.add_cell(row, 3, value['refs'].to_s)
+      values_sheet.add_cell(row, 3, value['refs'])
       values_sheet.add_cell(row, 4, value['notes'])
       row += 1
     end
 
-    #Formulas
+    #Write Formulas
     formula_sheet = necb_2011_workbook.add_worksheet('Formulas')
     formula_array = @necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
     row = 0
@@ -208,25 +190,27 @@ class NECB2011 < Standard
       formula_sheet.add_cell(row, 0, key)
       formula_sheet.add_cell(row, 1, value['formula'])
       formula_sheet.add_cell(row, 2, value['refs'])
-      formula_sheet.add_cell(row, 3, value['units'].to_s)
+      formula_sheet.add_cell(row, 3, value['units'])
       formula_sheet.add_cell(row, 3, value['notes'])
       row += 1
     end
 
-    #Tables
+    #WriteTables
 
     table_array = @necb_standards_data.select {|key, value| value['data_type'] == 'table'}
 
     row = 0
     table_array.each_pair do |key, value|
+      header_row = value.keys.size
       sheet = necb_2011_workbook.add_worksheet(key)
-      sheet.add_cell(0, 0, 'refs').change_font_bold(true)
-      sheet.add_cell(0, 1, value['refs'])
-      sheet.add_cell(1, 0, 'units').change_font_bold(true)
-      sheet.add_cell(1, 1, value['units'].to_s)
-      sheet.add_cell(2, 0, 'notes').change_font_bold(true)
-      sheet.add_cell(2, 1, value['notes'])
-      header_row = 3
+      counter = 0
+      value.keys.each_with_index do |key|
+        unless (key == 'table')
+          sheet.add_cell(counter, 0, key).change_font_bold(true)
+          sheet.add_cell(counter, 1, value[key])
+          counter += 1
+        end
+      end
       value['table'].first.keys().each_with_index do |header, index|
         sheet.add_cell(header_row, index, header).change_font_bold(true)
       end
@@ -239,7 +223,7 @@ class NECB2011 < Standard
         table_row += 1
       end
     end
-    necb_2011_workbook.write("/home/osdev/windows-host/projects/file.xlsx")
+    necb_2011_workbook.write("/home/osdev/file.xlsx")
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -260,10 +244,10 @@ class NECB2011 < Standard
   end
 
   # this method returns the default system fuel types by epw_file.
-  def get_canadian_system_defaults_by_weatherfile_name( model )
+  def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect{|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }
+    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
