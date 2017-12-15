@@ -38,7 +38,7 @@ class FullHVACTest < MiniTest::Test
   #System #1 ToDo
   # mua_types = false will fail. (PTAC Issue Kamel Mentioned) 
   #Control zone for SZ systems. 
-
+  
   def test_system_1()
     name = String.new
     output_folder = "#{File.dirname(__FILE__)}/output/system_1"
@@ -55,29 +55,23 @@ class FullHVACTest < MiniTest::Test
       #save baseline
       BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
       #interate through combinations. 
-      always_on = model.alwaysOnDiscreteSchedule	
+  
       boiler_fueltypes.each do |boiler_fueltype|
         baseboard_types.each do |baseboard_type|
           mau_types.each do |mau_type|
-            hw_loop = nil
             if mau_type == true
               mau_heating_coil_types.each do |mau_heating_coil_type|
                 name = "sys1_Boiler~#{boiler_fueltype}_Mau~#{mau_type}_MauCoil~#{mau_heating_coil_type}_Baseboard~#{baseboard_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
                 BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-                if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
-                  hw_loop = OpenStudio::Model::PlantLoop.new(model)
-                  BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-                end
                 BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
                   model, 
                   model.getThermalZones, 
                   boiler_fueltype, 
                   mau_type, 
                   mau_heating_coil_type, 
-                  baseboard_type,
-				  hw_loop)
+                  baseboard_type)
                 #Save the model after btap hvac. 
                 BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
                 #run the standards
@@ -91,18 +85,14 @@ class FullHVACTest < MiniTest::Test
               puts "***************************************#{name}*******************************************************\n"
               model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
               BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-              if (baseboard_type == "Hot Water")
-                hw_loop = OpenStudio::Model::PlantLoop.new(model)
-                BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-              end                 
+                 
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
                 model, 
                 model.getThermalZones, 
                 boiler_fueltype, 
                 mau_type, 
                 "Electric", #value will not be used.  
-                baseboard_type,
-				hw_loop)
+                baseboard_type)
               #Save the model after btap hvac. 
               BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
   
@@ -119,7 +109,8 @@ class FullHVACTest < MiniTest::Test
       self.run_simulations(output_folder)
     end
   end
-  
+      
+    
   #System #2 
   #Sizing Convergence Errors when mua_cooling_types = DX
   def test_system_2()
@@ -127,6 +118,7 @@ class FullHVACTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/system_2"
     FileUtils.rm_rf( output_folder )
     FileUtils::mkdir_p( output_folder )
+    
     boiler_fueltypes = ["NaturalGas","Electricity","FuelOil#2",]
     chiller_types = ["Scroll","Centrifugal","Rotary Screw","Reciprocating"]
     mua_cooling_types = ["Hydronic","DX"]
@@ -134,7 +126,6 @@ class FullHVACTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       chiller_types.each do |chiller_type|
         mua_cooling_types.each do |mua_cooling_type|
@@ -142,15 +133,13 @@ class FullHVACTest < MiniTest::Test
           puts "***************************************#{name}*******************************************************\n"
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-          hw_loop = OpenStudio::Model::PlantLoop.new(model)
-          BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+                 
           BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
             model, 
             model.getThermalZones, 
             boiler_fueltype, 
             chiller_type, 
-            mua_cooling_type,
-            hw_loop)
+            mua_cooling_type)
           #Save the model after btap hvac. 
           BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
           result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -162,7 +151,8 @@ class FullHVACTest < MiniTest::Test
     end
     self.run_simulations(output_folder)
   end
-
+    
+      
   #Runs!
   def test_system_3()
     name = String.new
@@ -172,11 +162,11 @@ class FullHVACTest < MiniTest::Test
     boiler_fueltypes = ["NaturalGas","Electricity","FuelOil#2"]
     baseboard_types = ["Hot Water" , "Electric"]
     heating_coil_types_sys3 = ["Electric", "Gas", "DX"]
+    
     model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       baseboard_types.each do |baseboard_type|
         heating_coil_types_sys3.each do |heating_coil_type_sys3|
@@ -184,18 +174,13 @@ class FullHVACTest < MiniTest::Test
           puts "***************************************#{name}*******************************************************\n"
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-          hw_loop = nil
-          if (baseboard_type == "Hot Water")
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-          end
+                 
           BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
             model, 
             model.getThermalZones, 
             boiler_fueltype, 
             heating_coil_type_sys3, 
-            baseboard_type,
-            hw_loop)
+            baseboard_type)
           #Save the model after btap hvac. 
           BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
           result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -223,7 +208,6 @@ class FullHVACTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       baseboard_types.each do |baseboard_type|
         heating_coil_types_sys4.each do |heating_coil|
@@ -231,18 +215,13 @@ class FullHVACTest < MiniTest::Test
           puts "***************************************#{name}*******************************************************\n"
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-          hw_loop = nil
-          if (baseboard_type == "Hot Water")
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-          end                 
+                 
           BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(
             model, 
             model.getThermalZones, 
             boiler_fueltype, 
             heating_coil, 
-            baseboard_type,
-            hw_loop)
+            baseboard_type)
           #Save the model after btap hvac. 
           BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
           result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -270,7 +249,6 @@ class FullHVACTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       chiller_types.each do |chiller_type|
         mua_cooling_types.each do |mua_cooling_type|
@@ -278,15 +256,13 @@ class FullHVACTest < MiniTest::Test
           puts "***************************************#{name}*******************************************************\n"
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-          hw_loop = OpenStudio::Model::PlantLoop.new(model)
-          BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+                 
           BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys5(
             model, 
             model.getThermalZones, 
             boiler_fueltype, 
             chiller_type, 
-            mua_cooling_type,
-            hw_loop)
+            mua_cooling_type)
           #Save the model after btap hvac. 
           BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
           result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -330,7 +306,6 @@ class FullHVACTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       chiller_types.each do |chiller_type|
         baseboard_types.each do |baseboard_type|
@@ -340,11 +315,7 @@ class FullHVACTest < MiniTest::Test
               puts "***************************************#{name}*******************************************************\n"
               model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
               BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-              hw_loop = nil
-              if (baseboard_type == "Hot Water") || (heating_coil_type == "Hot Water")
-                hw_loop = OpenStudio::Model::PlantLoop.new(model)
-                BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-              end              
+               
               BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
                 model, 
                 model.getThermalZones, 
@@ -352,8 +323,7 @@ class FullHVACTest < MiniTest::Test
                 heating_coil_type, 
                 baseboard_type, 
                 chiller_type, 
-                fan_type,
-                hw_loop)
+                fan_type)
               #Save the model after btap hvac. 
               BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
               result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -382,7 +352,6 @@ class FullHVACTest < MiniTest::Test
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
     #save baseline
     BTAP::FileIO::save_osm(model, "#{output_folder}/baseline.osm")
-    always_on = model.alwaysOnDiscreteSchedule	
     boiler_fueltypes.each do |boiler_fueltype|
       chiller_types.each do |chiller_type|
         mua_cooling_types.each do |mua_cooling_type|
@@ -390,15 +359,13 @@ class FullHVACTest < MiniTest::Test
           puts "***************************************#{name}*******************************************************\n"
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
-          hw_loop = OpenStudio::Model::PlantLoop.new(model)
-          BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+                 
           BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
             model, 
             model.getThermalZones, 
             boiler_fueltype, 
             chiller_type, 
-            mua_cooling_type,
-            hw_loop)
+            mua_cooling_type)
           #Save the model after btap hvac. 
           BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
           result = run_the_measure(model,"#{output_folder}/#{name}/sizing") 
@@ -427,7 +394,6 @@ class FullHVACTest < MiniTest::Test
       assert_equal(true, are_there_no_severe_errors,"Simulations had severe errors. Check #{output_folder}/failed simulations.txt ")
     end
   end
-
 
   def run_the_measure(model, sizing_dir) 
     if PERFORM_STANDARDS
