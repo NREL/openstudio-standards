@@ -1562,4 +1562,27 @@ class OpenStudio::Model::ThermalZone
 
   end
 
+  # Determine if this zone is a vestibule.
+  # Zone must be less than 200ft^2 and
+  # also have an infiltration object specified
+  # using Flow/Zone.
+  # @return [Bool] returns true if vestibule, false if not
+  def vestibule?
+    is_vest = false
+
+    # Check area and presence of infiltration
+    if self.floorArea < OpenStudio.convert(200, 'ft^2', 'm^2').get
+      self.spaces.each do |space|
+        space.spaceInfiltrationDesignFlowRates.each do |infil|
+          if infil.	designFlowRate.is_initialized
+            is_vest = true
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{self.name}: This zone is considered a vestibule.")
+            break
+          end
+        end
+      end
+    end
+
+    return is_vest
+  end
 end

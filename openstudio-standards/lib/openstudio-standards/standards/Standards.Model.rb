@@ -1998,6 +1998,9 @@ class OpenStudio::Model::Model
     # Air Loop Controls
     getAirLoopHVACs.sort.each { |obj| obj.apply_standard_controls(template, climate_zone) }
 
+    # Zone HVAC Controls
+    getZoneHVACComponents.sort.each { |obj| obj.apply_standard_controls(template) }
+
     ##### Apply equipment efficiencies
 
     # Fans
