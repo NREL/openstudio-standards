@@ -24,7 +24,7 @@ JSON.parse(File.read(epw_data_file_path)).each do |epw|
   epw['necb_tbl_c_prov'] = nil
   min_distance = 100000000000000.0
   necb_closest = nil
-  JSON.parse(File.read(necb_data_file_path))['NECB2011_Table_C1']['table'].each do |necb|
+  JSON.parse(File.read(necb_data_file_path))['necb_2015_table_c1']['table'].each do |necb|
     next if necb['lat_long'].nil?
     d = distance([epw['latitude'].to_f, epw['longitude']], necb['lat_long'])
     if min_distance > d
@@ -32,7 +32,12 @@ JSON.parse(File.read(epw_data_file_path)).each do |epw|
       necb_closest = necb
     end
   end
-  array_of_hashes << {'epw_file' => epw['file'], 'necb_location' => "#{necb_closest['city']},#{necb_closest['province']}" , "hdd_difference" => (epw['hdd18'].to_f - necb_closest['degree_days_below_18_c'].to_f), 'distance_km' => '%.2f' % (min_distance/1000.0)}
+  array_of_hashes << {'epw_file' => epw['file'],
+                      'necb_location' => "#{necb_closest['city']},#{necb_closest['province']}" ,
+                      "hdd_difference" => (epw['hdd18'].to_f - necb_closest['degree_days_below_18_c'].to_f),
+                      'distance_km' => '%.2f' % (min_distance/1000.0),
+                      'hdd18' => necb_closest['degree_days_below_18_c']
+                      }
 end
 File.write("#{File.dirname(__FILE__)}/../standards/necb/necb_2011/data/epw_file_to_necb_hdd_map.json", JSON.pretty_generate(array_of_hashes))
 

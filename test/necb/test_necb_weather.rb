@@ -11,14 +11,14 @@ class WeatherTests < Minitest::Test
   # @return [Bool] true if successful. 
   def test_weather_reading()
     #todo Must deal with ground temperatures..They are currently not correct for NECB.
-    BTAP::Environment::create_climate_index_file(
+    BTAP::Environment::create_climate_json_file(
       File.join(File.dirname(__FILE__),'../../','data','weather'), 
-      File.join(File.dirname(__FILE__),'data','weather_test_results.csv') 
+      File.join(File.dirname(__FILE__),'data','weather_test_results.json')
     )
     
     test = FileUtils.compare_file(
-        File.join(File.dirname(__FILE__),'data','weather_expected_results.csv'), 
-        File.join(File.dirname(__FILE__),'data','weather_test_results.csv') )
+        File.join(File.dirname(__FILE__),'data','weather_expected_results.json'),
+        File.join(File.dirname(__FILE__),'data','weather_test_results.json') )
       
     assert( test ,
         "Weather output from test does not match what is expected. Compare #{File.join(File.dirname(__FILE__),'data','weather_expected_results.csv')} with #{File.join(File.dirname(__FILE__),'data','weather_test_results.csv')}"

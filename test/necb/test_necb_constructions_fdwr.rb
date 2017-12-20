@@ -9,12 +9,12 @@ require_relative '../helpers/minitest_helper'
 class NECB_Constructions_FDWR_Tests < Minitest::Test
   #set global weather files sample
   NECB_epw_files_for_cdn_climate_zones = [
-    'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 4 HDD = 2932
-    'CAN_BC_Kamloops.718870_CWEC.epw',#    CZ 5 HDD = 3567
-    'CAN_ON_Ottawa.716280_CWEC.epw', #CZ 6 HDD = 4563
-    'CAN_PQ_Ste.Agathe.des.Monts.717200_CWEC.epw', #CZ 7aHDD = 5501
-    'CAN_MB_The.Pas.718670_CWEC.epw', #CZ 7b HDD = 6572
-    'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8HDD = 12570
+    'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw',#  CZ 4 HDD = 2932
+    'CAN_BC_Kamloops.AP.718870_CWEC2016.epw',#    CZ 5 HDD = 3567
+    'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw', #CZ 6 HDD = 4563
+    'CAN_AB_Banff.CS.711220_CWEC2016.epw', #CZ 7aHDD = 5501
+    'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
+    'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ] 
   #Set Compliance vintage
   Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']

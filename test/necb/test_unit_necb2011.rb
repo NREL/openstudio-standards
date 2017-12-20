@@ -7,7 +7,7 @@ class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
 
   template = 'NECB 2011'
   climate_zone = 'NECB HDD Method'
-  epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
+  epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
 
 
   model = NECB2011.new()

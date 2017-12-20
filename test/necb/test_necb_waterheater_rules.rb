@@ -23,7 +23,7 @@ class SHWTests < MiniTest::Test
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "shw"
@@ -96,7 +96,7 @@ class SHWTests < MiniTest::Test
     test_vols = [200.0,300.0]
     # Generate the osm files for all relevant cases to generate the test data
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     test_caps.each do |icap|
@@ -104,7 +104,7 @@ class SHWTests < MiniTest::Test
         name = "shw_cap~#{icap}kW~vol~#{ivol}liters"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         # add shw loop
         prototype_input = {}
         prototype_input['main_water_heater_volume'] = 100.0

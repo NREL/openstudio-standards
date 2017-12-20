@@ -31,7 +31,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
         model = OpenStudio::Model::Model.new
         template = 'NECB 2011'
         #Set weather file
-        standard.model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.718920_CWEC.epw'))
+        standard.model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'))
         standard.model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method')
         #Create Floors
         (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}

@@ -5,12 +5,13 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 #set global variables
 NECB_epw_files_for_cdn_climate_zones = [
-#  'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 5 - Gas HDD = 3019 
-#  'CAN_ON_Toronto.716240_CWEC.epw', #CZ 6 - Gas HDD = 4088
-#  'CAN_PQ_Sherbrooke.716100_CWEC.epw', #CZ 7a - Electric HDD = 5068
-#  'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
-  'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8  -FuelOil2 HDD = 12570
-] 
+    'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw',#  CZ 4 HDD = 2932
+    'CAN_BC_Kamloops.AP.718870_CWEC2016.epw',#    CZ 5 HDD = 3567
+    'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw', #CZ 6 HDD = 4563
+    'CAN_AB_Banff.CS.711220_CWEC2016.epw', #CZ 7aHDD = 5501
+    'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
+    'CAN_NU_Resolute.AP.719240_CWEC2016.epw']
+
 NECB_climate_zone = ['NECB HDD Method']
 NECB_templates = [ 'NECB 2011']
 CREATE_MODELS = true

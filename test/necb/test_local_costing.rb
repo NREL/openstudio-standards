@@ -7,14 +7,7 @@ class TestCosting < NECB2011
   template = 'NECB 2011'
   building_type = 'FullServiceRestaurant'
   climate_zone = 'NECB HDD Method'
-  #epw_file = 'CAN_AB_Edmonton.711230_CWEC.epw'
-  #epw_file = 'CAN_AB_Calgary.718770_CWEC.epw'
-  #epw_file = 'CAN_AB_Grande.Prairie.719400_CWEC.epw'
-  #epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
-  #epw_file = 'CAN_BC_Vancouver.718920_CWEC.epw'
-  #epw_file = 'CAN_PQ_Sherbrooke.716100_CWEC.epw'
-  #epw_file = 'CAN_YT_Whitehorse.719640_CWEC.epw'
-  epw_file = 'CAN_NU_Resolute.719240_CWEC.epw'
+  epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
 
   model = nil
 
