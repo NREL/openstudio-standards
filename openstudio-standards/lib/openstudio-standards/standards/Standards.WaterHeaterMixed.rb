@@ -195,7 +195,8 @@ class OpenStudio::Model::WaterHeaterMixed
     setOnCycleParasiticHeatFractiontoTank(0)
     setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
-    setOffCycleParasiticHeatFractiontoTank(0.0)
+    # input from google doc (12202017)
+    # setOffCycleParasiticHeatFractiontoTank(0.0)
 
     # set part-load performance curve
     if template == 'NECB 2011' && fuel_type == 'NaturalGas'

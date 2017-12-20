@@ -26,11 +26,11 @@ class TestSecondarySchool < CreateDOEPrototypeBuildingTest
                'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
                'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
                
-  create_models = false
-  run_models = false
+  create_models = true
+  run_models = true
   compare_results = true
   
-  debug = false
+  debug = true
   
   TestSecondarySchool.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   

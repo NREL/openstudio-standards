@@ -3534,6 +3534,7 @@ class OpenStudio::Model::Model
                    water_heater_volume,
                    water_heater_fuel,
                    parasitic_fuel_consumption_rate,
+                   off_cycle_parasitic_heat_fraction_to_tank,
                    building_type = nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop.')
@@ -3610,6 +3611,7 @@ class OpenStudio::Model::Model
                                     0.0,
                                     nil,
                                     water_heater_thermal_zone,
+                                    off_cycle_parasitic_heat_fraction_to_tank,
                                     building_type)
 
     service_water_loop.addSupplyBranchForComponent(water_heater)
@@ -3662,7 +3664,8 @@ class OpenStudio::Model::Model
                        set_peak_use_flowrate,
                        peak_flowrate,
                        flowrate_schedule,
-                       water_heater_thermal_zone,
+                       water_heater_thermal_zone,  
+                       off_cycle_parasitic_heat_fraction_to_tank,                       
                        building_type = nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater.')
@@ -3750,6 +3753,10 @@ class OpenStudio::Model::Model
       schedule = add_schedule(flowrate_schedule)
       water_heater.setUseFlowRateFractionSchedule(schedule)
     end
+    
+    # set the off cycle parasitic heat fraction to tank (12202017)
+    water_heater.setOffCycleParasiticHeatFractiontoTank(off_cycle_parasitic_heat_fraction_to_tank) 
+   
 
     return water_heater
   end

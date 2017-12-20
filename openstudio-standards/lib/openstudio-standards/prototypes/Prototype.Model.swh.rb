@@ -34,6 +34,7 @@ class OpenStudio::Model::Model
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                    prototype_input['main_water_heater_fuel'],
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
+                                   prototype_input['main_off_cycle_parasitic_heat_fraction_to_tank'],
                                    building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
       # Attach the end uses if specified in prototype inputs
@@ -79,6 +80,7 @@ class OpenStudio::Model::Model
                                        OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                        prototype_input['main_water_heater_fuel'],
                                        OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
+                                       prototype_input['main_off_cycle_parasitic_heat_fraction_to_tank'],
                                        building_type)
 
           add_swh_end_uses(template,
@@ -275,6 +277,7 @@ class OpenStudio::Model::Model
                                       OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
                                       prototype_input['laundry_water_heater_fuel'],
                                       OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
+                                      prototype_input['other_off_cycle_parasitic_heat_fraction_to_tank'],
                                       building_type)
 
       # Attach the end uses if specified in prototype inputs
@@ -409,6 +412,9 @@ class OpenStudio::Model::Model
             water_heater_volume = OpenStudio::convert(40.0,"gal","m^3").get
             parasitic_fuel_consumption_rate = 173.0
           end
+          
+          # 12202017
+          off_cycle_parasitic_heat_fration_to_tank = 0
 
           # make loop for each unit and add on water use equipment
           unit_hot_water_loop = add_swh_loop(template,
@@ -421,6 +427,7 @@ class OpenStudio::Model::Model
                                                    water_heater_volume,
                                                    water_heater_fuel,
                                                    parasitic_fuel_consumption_rate,
+                                                   off_cycle_parasitic_heat_fration_to_tank,
                                                 stds_bldg_type)
 
           # Connect the water use connection to the SWH loop
@@ -501,6 +508,9 @@ class OpenStudio::Model::Model
         water_heater_capacity = water_heater_sizing[:water_heater_capacity]
         water_heater_volume = water_heater_sizing[:water_heater_volume]
         parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
+        
+        # 12202017
+        off_cycle_parasitic_heat_fration_to_tank = 0
 
         # make loop for each unit and add on water use equipment
         dedicated_hot_water_loop = add_swh_loop(template,
@@ -513,6 +523,7 @@ class OpenStudio::Model::Model
                                               water_heater_volume,
                                               water_heater_fuel,
                                               parasitic_fuel_consumption_rate,
+                                              off_cycle_parasitic_heat_fration_to_tank,
                                               stds_bldg_type)
 
         # Connect the water use connection to the SWH loop
@@ -689,6 +700,9 @@ class OpenStudio::Model::Model
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loopo of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
       end
 
+      # 12202017
+      off_cycle_parasitic_heat_fration_to_tank = 0
+      
       # make loop for each unit and add on water use equipment
       shared_hot_water_loop = add_swh_loop(template,
                                               sys_name,
@@ -700,6 +714,7 @@ class OpenStudio::Model::Model
                                               water_heater_volume,
                                               water_heater_fuel,
                                               parasitic_fuel_consumption_rate,
+                                              off_cycle_parasitic_heat_fration_to_tank,
                                               stds_bldg_type)
 
       # find water heater

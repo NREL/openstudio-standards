@@ -28,6 +28,10 @@ class OpenStudio::Model::CoilHeatingDXSingleSpeed
     if rated_resistive_defrost_heater_capacity.is_initialized
       self.setResistiveDefrostHeaterCapacity(rated_resistive_defrost_heater_capacity.get) 
     end     
+    
+    # reset the defrost time period fraction to defaut
+    setDefrostTimePeriodFraction(0.058333)
+    # reset the resistive defrost heater capacity to "AUTOSIZE".
       
   end
 

@@ -111,6 +111,22 @@ def seer_to_cop_cooling_no_fan(seer)
   return cop
 end
 
+# Convert from SEER to COP (no fan) for cooling coils
+# per the method specified in 90.1-2013 Appendix G
+#
+# @param seer [Double] seasonal energy efficiency ratio (SEER)
+# @return [Double] Coefficient of Performance (COP)
+def seer_to_cop_cooling_wt_fan(seer)
+  eer = -0.0182 * seer * seer + 1.1088 * seer
+  cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+
+
+  return cop
+end
+
+
+
+
 # Convert from COP_H to COP (no fan) for heat pump heating coils
 # per the method specified in 90.1-2013 Appendix G
 #
@@ -136,6 +152,14 @@ def hspf_to_cop_heating_no_fan(hspf)
 
   return cop
 end
+
+def hspf_to_cop_heating_wt_fan(hspf)
+  cop = -0.0255 * hspf * hspf + 0.6239 * hspf
+
+  return cop
+end
+
+
 
 # Convert from COP to SEER
 # per the method specified in "Achieving the 30% Goal: Energy

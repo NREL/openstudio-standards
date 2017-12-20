@@ -1868,7 +1868,7 @@ class OpenStudio::Model::AirLoopHVAC
       erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
       erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
     end
-    erv.setSupplyAirOutletTemperatureControl(true)
+    erv.setSupplyAirOutletTemperatureControl(false)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
     erv.setEconomizerLockout(true)
@@ -2759,10 +2759,10 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-3A',
           'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
-        minimum_oa_flow_cfm = 300
+        minimum_oa_flow_cfm = 0
         maximum_stories = 999 # Any number of stories
       else
-        minimum_oa_flow_cfm = 300
+        minimum_oa_flow_cfm = 0
         maximum_stories = 3
       end
     when '90.1-2010', '90.1-2013'
@@ -2774,10 +2774,10 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-3A',
           'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
-        minimum_oa_flow_cfm = 300
+        minimum_oa_flow_cfm = 0
         maximum_stories = 999 # Any number of stories
       else
-        minimum_oa_flow_cfm = 300
+        minimum_oa_flow_cfm = 0
         maximum_stories = 0
       end
     end
