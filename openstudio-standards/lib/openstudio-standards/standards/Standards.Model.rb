@@ -2757,12 +2757,18 @@ class OpenStudio::Model::Model
     # Exterior surfaces constructions
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
-    if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
-      exterior_surfaces.setFloorConstruction(find_and_add_construction(template,
-                                                                       climate_zone_set,
-                                                                       'ExteriorFloor',
-                                                                       data['exterior_floor_standards_construction_type'],
-                                                                       data['exterior_floor_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor
+    # but the soffit is uninsulated
+    if spc_type == 'Attic'
+      exterior_surfaces.setFloorConstruction(add_construction('Typical Attic Soffit'))
+    else
+      if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
+        exterior_surfaces.setFloorConstruction(find_and_add_construction(template,
+                                                                         climate_zone_set,
+                                                                         'ExteriorFloor',
+                                                                         data['exterior_floor_standards_construction_type'],
+                                                                         data['exterior_floor_building_category']))
+      end
     end
     if data['exterior_wall_standards_construction_type'] && data['exterior_wall_building_category']
       exterior_surfaces.setWallConstruction(find_and_add_construction(template,
