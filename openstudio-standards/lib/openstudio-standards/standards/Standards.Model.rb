@@ -2738,11 +2738,10 @@ class OpenStudio::Model::Model
       data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
 
       unless data
+        # Search again without the building type to find attics
+        data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'space_type' => spc_type, 'is_residential' => is_residential)
 
-        # for debugging (maria)
-        # puts "data = #{data}"
-
-        return construction_set
+        return construction_set unless data
       end
 
     end
@@ -2772,21 +2771,43 @@ class OpenStudio::Model::Model
                                                                       data['exterior_wall_standards_construction_type'],
                                                                       data['exterior_wall_building_category']))
     end
-    if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
-      exterior_surfaces.setRoofCeilingConstruction(find_and_add_construction(template,
-                                                                             climate_zone_set,
-                                                                             'ExteriorRoof',
-                                                                             data['exterior_roof_standards_construction_type'],
-                                                                             data['exterior_roof_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor
+    # and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(add_construction('Typical Uninsulated Wood Joist Attic Roof'))
+      end
+    else
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(find_and_add_construction(template,
+                                                                               climate_zone_set,
+                                                                               'ExteriorRoof',
+                                                                               data['exterior_roof_standards_construction_type'],
+                                                                               data['exterior_roof_building_category']))
+      end
     end
 
     # Interior surfaces constructions
     interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(self)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = data['interior_floors']
-    unless construction_name.nil?
-      interior_surfaces.setFloorConstruction(add_construction(construction_name))
+    # Special condition for attics, where the insulation is actually on the floor
+    # and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        interior_surfaces.setFloorConstruction(find_and_add_construction(template,
+                                                                         climate_zone_set,
+                                                                         'ExteriorRoof',
+                                                                         data['exterior_roof_standards_construction_type'],
+                                                                         data['exterior_roof_building_category']))
+
+      end
+    else
+      unless construction_name.nil?
+        interior_surfaces.setFloorConstruction(add_construction(construction_name))
+      end
     end
+
     construction_name = data['interior_walls']
     unless construction_name.nil?
       interior_surfaces.setWallConstruction(add_construction(construction_name))
