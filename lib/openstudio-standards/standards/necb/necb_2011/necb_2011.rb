@@ -189,7 +189,7 @@ class NECB2011 < Standard
     @necb_standards_data['construction_sets'] = {
         'data_type' => 'table',
         'refs' => ["assumption"],
-        'table' => @standards_data['construction_sets']
+        'table' => @standards_data['construction_sets'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
     @necb_standards_data['constructions'] = {
