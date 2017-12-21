@@ -24,7 +24,7 @@
         "swh_fueltype": "NaturalGas"
       },
       {
-        "state_province_regions": ["MB", "PE", "PQ","QC","NF"],
+        "state_province_regions": ["MB","PE","PQ","QC","NF","NL"],
         "boiler_fueltype": "Electricity",
         "baseboard_type": "Electric",
         "mau_type": true,
