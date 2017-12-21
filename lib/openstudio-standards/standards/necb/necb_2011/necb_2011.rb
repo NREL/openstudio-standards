@@ -156,10 +156,126 @@ class NECB2011 < Standard
     }
 
 
-    standards_database_to_excel()
-    @standards_data = @standards_data.merge(@necb_standards_data)
+    @necb_standards_data['schedules'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    }
 
-    #@standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    @necb_standards_data['schedules']['table'] << JSON.parse('{
+        "name": "Always On",
+        "category": "Unknown",
+        "units": null,
+        "day_types": "Default",
+        "start_date": "2014-01-01T00:00:00+00:00",
+        "end_date": "2014-12-31T00:00:00+00:00",
+        "type": "Constant",
+        "notes": null,
+        "values": [
+            1.0
+        ]
+    }')
+    @necb_standards_data['materials'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['materials']
+    }
+    @necb_standards_data['constructions'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['constructions']
+    }
+
+    @necb_standards_data['construction_sets'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['construction_sets']
+    }
+
+    @necb_standards_data['constructions'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['constructions']
+    }
+
+    @necb_standards_data['construction_properties'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['construction_properties'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['space_types'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['space_types'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['boilers'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['boilers'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+
+    @necb_standards_data['chillers'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['chillers'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['heat_pumps'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['heat_pumps'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['heat_pumps_heating'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['heat_pumps_heating'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['unitary_acs'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['unitary_acs'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+
+
+
+    @necb_standards_data['motors'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['motors'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
+
+    @necb_standards_data['curves'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['curves'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    }
+    @necb_standards_data['prototype_inputs'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['prototype_inputs']
+    }
+
+    @necb_standards_data['ground_temperatures'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['ground_temperatures']
+    }
+
+    @necb_standards_data['climate_zone_sets'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['climate_zone_sets'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    }
+
+
+    @standards_data = @necb_standards_data
+    File.write('/home/osdev/openstudio-standards/data/necb.json',(JSON.pretty_generate(@necb_standards_data)))
   end
 
 
@@ -378,7 +494,7 @@ class NECB2011 < Standard
   def determine_necb_schedule_type(space)
     raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-    space_type_properties = @standards_data['space_types'].detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
+    space_type_properties = @standards_data['space_types']['table'].detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
   end
 
