@@ -2,7 +2,20 @@ require 'json'
 require 'rubyXL'
 require 'yaml'
 
+class Hash
+  def sort_by_key(recursive = false, &block)
+    self.keys.sort(&block).reduce({}) do |seed, key|
+      seed[key] = self[key]
+      if recursive && seed[key].is_a?(Hash)
+        seed[key] = seed[key].sort_by_key(true, &block)
+      end
+      seed
+    end
+  end
+end
+
 class SpreadSheetDataView
+
 
   def load_json()
     necb_standards_data = {}
@@ -24,7 +37,7 @@ class SpreadSheetDataView
   end
 
   def json_to_excel(standards_json_file = 'standards.json')
-    necb_standards_data = JSON.parse(File.read(standards_json_file))
+    necb_standards_data = JSON.parse(File.read(standards_json_file)).sort_by_key(true)
     xlsx_file = 'standards.xlsx'
     necb_2011_workbook = RubyXL::Workbook.new
     necb_2011_workbook.worksheets.delete(necb_2011_workbook['Sheet1'])
@@ -34,7 +47,8 @@ class SpreadSheetDataView
     values_array = necb_standards_data.select {|key, value| value['data_type'] == 'value'}
     header_row = 0
     ['key', 'value', 'units', 'refs', 'notes'].each_with_index do |header, index|
-      values_sheet.add_cell(header_row, index, header).change_font_bold(true)
+      cell = values_sheet.add_cell(header_row, index, header)
+      cell.change_font_bold(true)
     end
     row = 1
     values_array.each_pair do |key, value|
@@ -113,7 +127,7 @@ class SpreadSheetDataView
         in_table = false
         sheet.each do |row|
           if row.cells[0].value != 'Table' and row.cells[0].value != '' and not row.cells[0].value.nil? and in_table == false
-            table_hash[row.cells[0].value ] = jsonify_cell(row.cells[1])
+            table_hash[row.cells[0].value] = jsonify_cell(row.cells[1])
           end
           if row.cells[0].value == 'Table'
             next_row_is_header = true
@@ -140,7 +154,7 @@ class SpreadSheetDataView
         output_hash = output_hash.merge(parent_hash)
       end
     end
-    File.write('new_standards.json',JSON.pretty_generate(output_hash))
+    File.write('new_standards.json', JSON.pretty_generate(output_hash.sort_by_key(true)))
   end
 
   #this method will try to see if there is json content in the cell.. if not it will return the raw cell data.
