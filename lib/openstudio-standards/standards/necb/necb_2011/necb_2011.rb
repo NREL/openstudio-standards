@@ -162,69 +162,6 @@ class NECB2011 < Standard
     #@standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
   end
 
-  def standards_database_to_excel()
-    necb_2011_workbook = RubyXL::Workbook.new
-
-    #Write Values
-    values_sheet = necb_2011_workbook.add_worksheet('Values')
-    values_array = @necb_standards_data.select {|key, value| value['data_type'] == 'value'}
-    header_row = 0
-    ['key', 'value', 'units', 'refs', 'notes'].each_with_index do |header, index|
-      values_sheet.add_cell(header_row, index, header).change_font_bold(true)
-    end
-    row = 1
-    values_array.each_pair do |key, value|
-      values_sheet.add_cell(row, 0, key)
-      values_sheet.add_cell(row, 1, value['value'])
-      values_sheet.add_cell(row, 2, value['units'])
-      values_sheet.add_cell(row, 3, value['refs'])
-      values_sheet.add_cell(row, 4, value['notes'])
-      row += 1
-    end
-
-    #Write Formulas
-    formula_sheet = necb_2011_workbook.add_worksheet('Formulas')
-    formula_array = @necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
-    row = 0
-    formula_array.each_pair do |key, value|
-      formula_sheet.add_cell(row, 0, key)
-      formula_sheet.add_cell(row, 1, value['formula'])
-      formula_sheet.add_cell(row, 2, value['refs'])
-      formula_sheet.add_cell(row, 3, value['units'])
-      formula_sheet.add_cell(row, 3, value['notes'])
-      row += 1
-    end
-
-    #WriteTables
-
-    table_array = @necb_standards_data.select {|key, value| value['data_type'] == 'table'}
-
-    row = 0
-    table_array.each_pair do |key, value|
-      header_row = value.keys.size
-      sheet = necb_2011_workbook.add_worksheet(key)
-      counter = 0
-      value.keys.each_with_index do |key|
-        unless (key == 'table')
-          sheet.add_cell(counter, 0, key).change_font_bold(true)
-          sheet.add_cell(counter, 1, value[key])
-          counter += 1
-        end
-      end
-      value['table'].first.keys().each_with_index do |header, index|
-        sheet.add_cell(header_row, index, header).change_font_bold(true)
-      end
-      #table header
-      table_row = header_row + 1
-      value['table'].each do |row|
-        row.keys.each_with_index do |item, index|
-          sheet.add_cell(table_row, index, row[item])
-        end
-        table_row += 1
-      end
-    end
-    necb_2011_workbook.write("/home/osdev/file.xlsx")
-  end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
   def distance(loc1, loc2)
