@@ -235,6 +235,13 @@ class NECB2011 < Standard
         'table' => @standards_data['heat_pumps_heating'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
+    #Need to trim this one
+    @necb_standards_data['heat_rejection'] = {
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['heat_rejection']
+    }
+
     @necb_standards_data['unitary_acs'] = {
         'data_type' => 'table',
         'refs' => ["assumption"],
