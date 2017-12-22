@@ -275,7 +275,7 @@ class NECB2011 < Standard
 
 
     @standards_data = @necb_standards_data
-    File.write('/home/osdev/openstudio-standards/data/necb.json',(JSON.pretty_generate(@necb_standards_data)))
+    #File.write('/home/osdev/openstudio-standards/data/necb.json',(JSON.pretty_generate(@necb_standards_data)))
   end
 
 

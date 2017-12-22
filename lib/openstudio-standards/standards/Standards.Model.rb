@@ -1955,7 +1955,7 @@ class Standard
     search_criteria_matching_objects = []
     matching_objects = []
 
-    if hash_of_objects.key?('table')
+    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
     end
 
@@ -2055,7 +2055,7 @@ class Standard
   def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
     #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
 
-    if hash_of_objects.key?('table')
+    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
     end
     desired_object = nil
