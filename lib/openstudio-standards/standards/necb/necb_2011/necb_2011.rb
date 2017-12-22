@@ -156,6 +156,8 @@ class NECB2011 < Standard
     }
 
 
+
+
     @necb_standards_data['schedules'] = {
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -175,6 +177,9 @@ class NECB2011 < Standard
             1.0
         ]
     }')
+
+
+
     @necb_standards_data['materials'] = {
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -204,11 +209,16 @@ class NECB2011 < Standard
         'table' => @standards_data['construction_properties'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
+=begin
     @necb_standards_data['space_types'] = {
         'data_type' => 'table',
         'refs' => ["assumption"],
-        'table' => @standards_data['space_types'].select {|s| s['template'].to_s.match(/NECB.*/)}
+        'table' => @standards_data['space_types']#.select {|s| s['template'].to_s.match(/NECB.*/)}
     }
+=end
+
+
+
 
     @necb_standards_data['boilers'] = {
         'data_type' => 'table',
@@ -222,6 +232,9 @@ class NECB2011 < Standard
         'refs' => ["assumption"],
         'table' => @standards_data['chillers'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
+
+
+
 
     @necb_standards_data['heat_pumps'] = {
         'data_type' => 'table',
@@ -247,7 +260,6 @@ class NECB2011 < Standard
         'refs' => ["assumption"],
         'table' => @standards_data['unitary_acs'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
-
 
 
 
@@ -281,7 +293,8 @@ class NECB2011 < Standard
     }
 
 
-    @standards_data = @necb_standards_data
+    @standards_data = @standards_data.merge(@necb_standards_data)
+
     #File.write('/home/osdev/openstudio-standards/data/necb.json',(JSON.pretty_generate(@necb_standards_data)))
   end
 
@@ -358,7 +371,9 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map) # standards candidate
     # For some building types, stories are defined explicitly
 
-    return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
+      raise( "sizing run 0 failed!")
+    end
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
@@ -367,7 +382,10 @@ class NECB2011 < Standard
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
     model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
-    return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+      raise( "sizing run 1 failed!")
+    end
+
     # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
     # Apply the prototype HVAC assumptions
@@ -499,9 +517,15 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
+    spacetype_data = nil
+    if @standards_data['space_types'].is_a?(Hash) == true
+      spacetype_data = @standards_data['space_types']['table']
+    else
+      spacetype_data = @standards_data['space_types']
+    end
     raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-    space_type_properties = @standards_data['space_types']['table'].detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
+    space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
   end
 

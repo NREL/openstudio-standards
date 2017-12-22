@@ -1183,35 +1183,7 @@ class NECB2011
   # Helper method to find out which climate zone set contains a specific climate zone.
   # Returns climate zone set name as String if success, nil if not found.
   def model_find_climate_zone_set(model, clim)
-
-    result = nil
-
-
-    possible_climate_zones = []
-    standards_data['climate_zone_sets']['table'].each do |climate_zone_set|
-      puts climate_zone_set
-      if climate_zone_set['climate_zones'].include?(clim)
-        possible_climate_zones << climate_zone_set['name']
-      end
-    end
-
-
-
-    # Check the results
-    if possible_climate_zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
-      raise()
-    elsif possible_climate_zones.size > 2
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
-    end
-    result = possible_climate_zones.sort.first
-
-    # Check that a climate zone set was found
-    if result.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
-    end
-
-    return result
+    return "NECB-CNEB ClimatZone 4-8"
   end
 
   def add_sys1_unitary_ac_baseboard_heating(model, zones, boiler_fueltype, mau, mau_heating_coil_type, baseboard_type, hw_loop)
