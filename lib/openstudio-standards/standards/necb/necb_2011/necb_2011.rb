@@ -209,13 +209,8 @@ class NECB2011 < Standard
         'table' => @standards_data['construction_properties'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
-=begin
-    @necb_standards_data['space_types'] = {
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['space_types']#.select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-=end
+
+    @necb_standards_data['space_types'] = @standards_data['space_types']
 
 
 
@@ -293,7 +288,7 @@ class NECB2011 < Standard
     }
 
 
-    @standards_data = @standards_data.merge(@necb_standards_data)
+    @standards_data = @necb_standards_data
 
     #File.write('/home/osdev/openstudio-standards/data/necb.json',(JSON.pretty_generate(@necb_standards_data)))
   end
