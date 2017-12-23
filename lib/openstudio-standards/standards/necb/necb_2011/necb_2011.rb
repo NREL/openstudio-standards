@@ -210,8 +210,11 @@ class NECB2011 < Standard
     }
 
 
-    @necb_standards_data['space_types'] = @standards_data['space_types']
-
+    @necb_standards_data['space_types'] ={
+        'data_type' => 'table',
+        'refs' => ["assumption"],
+        'table' => @standards_data['space_types'].select {|s| s['template'].to_s.match(/NECB.*/)}
+    }
 
 
 
