@@ -203,8 +203,7 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
     # SRR limit
-    srr_lim = @standards_data['skylight_to_roof_ratio_max_value']['value'] * 100.0
-
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -241,8 +240,7 @@ class NECB2011
   # @return [Double] a constant float
   def max_fwdr(hdd)
     #get formula from json database.
-    fdwr_formula = @standards_data['formulas'].detect { |table| table['name'] == 'fdwr_formula'}['value']
-    return eval( fdwr_formula )
+    return eval( self.get_standards_formula('fdwr_formula'))
   end
 
   # Go through the default construction sets and hard-assigned
@@ -311,7 +309,7 @@ class NECB2011
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
 
-    table = @standards_data['tables'].detect { |table| table['name'] == 'surface_thermal_transmittance'}['table']
+    table = self.get_standards_table('surface_thermal_transmittance')
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
     wall_rsi = 1.0 / (scale_wall * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Wall'}['formula']))
     floor_rsi = 1.0 / (scale_floor * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Floor'}['formula']))

@@ -8,6 +8,25 @@ class NECB2011 < Standard
   attr_reader :template
   attr_accessor :necb_standards_data
 
+  def get_standards_constant(name)
+    object = @standards_data['constants'].detect { |constant| constant['name'] == name }
+    raise("could not find #{name} in standards constants database. ") if object.nil? or object['value'].nil?
+    return object['value']
+  end
+
+  def get_standards_formula(name)
+    object = @standards_data['formulas'].detect { |formula| formula['name'] == name }
+    raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
+    return object['value']
+  end
+
+  def get_standards_table(name)
+    object = @standards_data['tables'].detect { |table| table['name'] == name }
+    raise("could not find #{name} in standards table database. ") if object.nil? or object['table'].nil?
+    return object['table']
+  end
+
+
   def initialize
     super()
     @template = @@template
@@ -23,6 +42,10 @@ class NECB2011 < Standard
       @necb_standards_data = @necb_standards_data.deep_merge (JSON.parse(File.read(file)))
     end
 
+    #formula = @standards_data['formulas'].detect { |formula| formula['name'] == 'fdwr_formula'}['value']
+    #skylight_to_roof_ratio_max_value = @standards_data['constants'].detect { |constant| constant['name'] == 'skylight_to_roof_ratio_max_value'}['value']
+    #table = @standards_data['tables'].detect { |table| table['name'] == 'fdwr_formula'}['table']
+
     @necb_standards_data['formulas'] << {
         'name' => 'fdwr_formula',
         'data_type' => 'formula',
@@ -33,7 +56,7 @@ class NECB2011 < Standard
         'notes' => 'Requires hdd to be defined to be evaluated in code.'
     }
 
-    @necb_standards_data['skylight_to_roof_ratio_max_value'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'skylight_to_roof_ratio_max_value',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_3.2.1.4(2)'],
@@ -41,7 +64,7 @@ class NECB2011 < Standard
         'units' => 'ratio'
     }
 
-    @necb_standards_data['sizing_factor_max_cooling'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'sizing_factor_max_cooling',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_8.4.4.9(1)'],
@@ -49,7 +72,7 @@ class NECB2011 < Standard
         'value' => 1.10
     }
 
-    @necb_standards_data['sizing_factor_max_heating'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'sizing_factor_max_heating',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_8.4.4.9(2)'],
@@ -69,7 +92,7 @@ class NECB2011 < Standard
     }
 
     #Fan Information
-    @necb_standards_data['fan_constant_volume_pressure_rise_value'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'fan_constant_volume_pressure_rise_value',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_5.Assumption'],
@@ -77,7 +100,7 @@ class NECB2011 < Standard
         'units' => 'Pa'
     }
 
-    @necb_standards_data['fan_variable_volume_pressure_rise_value'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'fan_variable_volume_pressure_rise_value',
         'data_type' => 'value',
         'ref' => ['NECB2011_S_5.Assumption'],
@@ -313,7 +336,7 @@ class NECB2011 < Standard
 
     @standards_data = @necb_standards_data
 
-    File.write('/home/osdev/openstudio-standards/data/necb.json', (JSON.pretty_generate(@necb_standards_data)))
+    File.write("#{File.dirname(__FILE__)}/data/necb.json", (JSON.pretty_generate(@necb_standards_data)))
   end
 
   def get_all_spacetype_names
