@@ -14,7 +14,7 @@ class NECB2011 < Standard
     load_standards_database
     @necb_standards_data = {}
     @necb_standards_data['formulas'] = []
-    @necb_standards_data['constants'] =[]
+    @necb_standards_data['constants'] = []
     @necb_standards_data['tables'] = []
 
     # Load NECB data files.
@@ -23,7 +23,7 @@ class NECB2011 < Standard
       @necb_standards_data = @necb_standards_data.deep_merge (JSON.parse(File.read(file)))
     end
 
-    @necb_standards_data['fdwr_formula'] = {
+    @necb_standards_data['formulas'] << {
         'name' => 'fdwr_formula',
         'data_type' => 'formula',
         'refs' => ['NECB2011_S_3.2.1.4(1)'],

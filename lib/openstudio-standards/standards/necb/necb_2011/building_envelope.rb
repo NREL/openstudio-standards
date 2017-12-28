@@ -240,7 +240,9 @@ class NECB2011
   # @param hdd [Float]
   # @return [Double] a constant float
   def max_fwdr(hdd)
-    return eval(@standards_data['fdwr_formula']['value'])
+    #get formula from json database.
+    fdwr_formula = @standards_data['formulas'].detect { |table| table['name'] == 'fdwr_formula'}['value']
+    return eval( fdwr_formula )
   end
 
   # Go through the default construction sets and hard-assigned
@@ -373,7 +375,6 @@ class NECB2011
         conductance_value *= 0.80
       end
       return BTAP::Geometry::Surfaces.set_surfaces_construction_conductance([surface], conductance_value)
-
     end
   end
 
