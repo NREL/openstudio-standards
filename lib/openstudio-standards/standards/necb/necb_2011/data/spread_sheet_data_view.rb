@@ -16,7 +16,6 @@ end
 
 class SpreadSheetDataView
 
-
   def load_json()
     necb_standards_data = {}
     # Load NECB data files.
@@ -36,7 +35,7 @@ class SpreadSheetDataView
     a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item)}
   end
 
-  def json_to_excel(standards_json_file = 'standards.json')
+  def json_to_excel(standards_json_file = 'necb.json')
     necb_standards_data = JSON.parse(File.read(standards_json_file)).sort_by_key(true)
     xlsx_file = 'standards.xlsx'
     necb_2011_workbook = RubyXL::Workbook.new
@@ -45,18 +44,23 @@ class SpreadSheetDataView
     #Write Values
     values_sheet = necb_2011_workbook.add_worksheet('values')
     values_array = necb_standards_data.select {|key, value| value['data_type'] == 'value'}
-    header_row = 0
-    ['key', 'value', 'units', 'refs', 'notes'].each_with_index do |header, index|
+    formula_array = necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
+    #headers
+    headers = []
+    values_array.each { |key,value| headers.concat( value.keys) }
+    formula_array.each { |key,value| headers.concat( value.keys) }
+    headers.uniq!
+    headers.unshift('key')
+
+    headers.each_with_index do |header, index|
       cell = values_sheet.add_cell(header_row, index, header)
       cell.change_font_bold(true)
     end
     row = 1
     values_array.each_pair do |key, value|
       values_sheet.add_cell(row, 0, key)
-      values_sheet.add_cell(row, 1, value['value'])
-      values_sheet.add_cell(row, 2, value['units'])
-      values_sheet.add_cell(row, 3, value['refs'])
-      values_sheet.add_cell(row, 4, value['notes'])
+      headers.each_with_index do |header,index|
+      values_sheet.add_cell(row, 1+index, value[header])
       row += 1
     end
 
@@ -115,6 +119,57 @@ class SpreadSheetDataView
     output_hash = {}
     workbook = RubyXL::Parser.parse(xlsx_file)
     workbook.worksheets.each do |sheet|
+=begin
+      if ['values', 'formulas'].include?(sheet.sheet_name)
+        parent_hash = {}
+        table_hash = {}
+        parent_hash[sheet.sheet_name] = value_hash
+        table_array_of_hashes = []
+        table_header = []
+        table_header_found = false
+        next_row_is_header = false
+        next_row_is_table_data = false
+        in_table = false
+        sheet.each do |row|
+          #Get Non-table information.
+          if row.cells[0].value != 'Table' and row.cells[0].value != '' and not row.cells[0].value.nil? and in_table == false
+            table_hash[row.cells[0].value] = jsonify_cell(row.cells[1])
+          end
+          #check flag to indicate start of table data
+          if row.cells[0].value == 'Table'
+            next_row_is_header = true
+            in_table = true
+            next
+          elsif next_row_is_header == true
+            #collect headers of table
+            row && row.cells.each do |cell|
+              val = cell && cell.value
+              table_header << val
+            end
+            #change flags to tell we are in table next
+            next_row_is_header = false
+            next_row_is_table_data = true
+            next
+          elsif next_row_is_table_data == true
+            #collect table row info using header info already collected.
+            row_hash = {}
+            row && row.cells.each_with_index do |cell, index|
+              val = jsonify_cell(cell)
+              row_hash[table_header[index]] = val
+            end
+            table_array_of_hashes << row_hash
+            next
+          end
+        end
+        table_hash['table'] = table_array_of_hashes
+        File.write("#{sheet.sheet_name}.new.json", JSON.pretty_generate(parent_hash.sort_by_key(true)))
+        output_hash = output_hash.merge(parent_hash)
+      end
+=end
+
+
+
+
       unless ['values', 'formulas'].include?(sheet.sheet_name)
         parent_hash = {}
         table_hash = {}
@@ -126,35 +181,42 @@ class SpreadSheetDataView
         next_row_is_table_data = false
         in_table = false
         sheet.each do |row|
+          #Get Non-table information.
           if row.cells[0].value != 'Table' and row.cells[0].value != '' and not row.cells[0].value.nil? and in_table == false
             table_hash[row.cells[0].value] = jsonify_cell(row.cells[1])
           end
+          #check flag to indicate start of table data
           if row.cells[0].value == 'Table'
             next_row_is_header = true
             in_table = true
             next
           elsif next_row_is_header == true
+            #collect headers of table
             row && row.cells.each do |cell|
               val = cell && cell.value
               table_header << val
             end
+            #change flags to tell we are in table next
             next_row_is_header = false
             next_row_is_table_data = true
+            next
           elsif next_row_is_table_data == true
-            new_hash = {}
+            #collect table row info using header info already collected.
+            row_hash = {}
             row && row.cells.each_with_index do |cell, index|
               val = jsonify_cell(cell)
-              new_hash[table_header[index]] = val
+              row_hash[table_header[index]] = val
             end
-            table_array_of_hashes << new_hash
+            table_array_of_hashes << row_hash
             next
           end
         end
         table_hash['table'] = table_array_of_hashes
+        File.write("#{sheet.sheet_name}.new.json", JSON.pretty_generate(parent_hash.sort_by_key(true)))
         output_hash = output_hash.merge(parent_hash)
       end
     end
-    File.write('new_standards.json', JSON.pretty_generate(output_hash.sort_by_key(true)))
+    # File.write('new_standards.json', JSON.pretty_generate(output_hash.sort_by_key(true)))
   end
 
   #this method will try to see if there is json content in the cell.. if not it will return the raw cell data.

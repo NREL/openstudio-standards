@@ -2162,7 +2162,6 @@ class Standard
       schedule.defaultDaySchedule.setName("#{name} Default")
     end
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
-
     return schedule
   end
 
@@ -2194,7 +2193,7 @@ class Standard
     end
 
     # Make a schedule ruleset
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new( model )
     sch_ruleset.setName(schedule_name.to_s)
 
     # Loop through the rules, making one for each row in the spreadsheet
@@ -2206,7 +2205,6 @@ class Standard
       values = rule['values']
 
       # Day Type choices: Wkdy, Wknd, Mon, Tue, Wed, Thu, Fri, Sat, Sun, WntrDsn, SmrDsn, Hol
-
       # Default
       if day_types.include?('Default')
         day_sch = sch_ruleset.defaultDaySchedule
@@ -2275,10 +2273,8 @@ class Standard
         sch_rule.setApplyFriday(true) if day_types.include?('Fri')
         sch_rule.setApplySaturday(true) if day_types.include?('Sat')
         sch_rule.setApplySunday(true) if day_types.include?('Sun')
-
       end
     end # Next rule
-
     return sch_ruleset
   end
 

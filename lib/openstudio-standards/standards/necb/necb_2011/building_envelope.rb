@@ -309,16 +309,15 @@ class NECB2011
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
 
-    table = self.get_standards_table('surface_thermal_transmittance')
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Wall'}['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Floor'}['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'RoofCeiling'}['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'Wall'}['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'Floor'}['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval( table.detect {|row| row['boundary_condition'] == 'Ground' and row['surface'] == 'RoofCeiling'}['formula']))
-    door_rsi = 1.0 / (scale_door * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Door'}['formula']))
-    window_rsi = 1.0 / (scale_window * eval( table.detect {|row| row['boundary_condition'] == 'Outdoors' and row['surface'] == 'Window'}['formula']))
+    wall_rsi = 1.0 / (scale_wall * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
+    door_rsi = 1.0 / (scale_door * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
+    window_rsi = 1.0 / (scale_window * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
