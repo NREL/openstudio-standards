@@ -35,82 +35,48 @@ class SpreadSheetDataView
     a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item)}
   end
 
+  def array_of_hashes_to_excel_sheet(sheet, array, starting_row = 0)
+    #get all possible headers
+    headers = []
+    array.each {|value| headers.concat(value.keys)}
+    #print unique headers
+    headers.uniq!
+    headers.each_with_index do |header, index|
+      cell = sheet.add_cell(starting_row, index, header)
+      cell.change_font_bold(true)
+    end
+    row = starting_row +1
+    array.each do |item|
+      headers.each_with_index do |header, index|
+        sheet.add_cell(row, index, item[header])
+      end
+      row += 1
+    end
+  end
+
   def json_to_excel(standards_json_file = 'necb.json')
     necb_standards_data = JSON.parse(File.read(standards_json_file)).sort_by_key(true)
     xlsx_file = 'standards.xlsx'
     necb_2011_workbook = RubyXL::Workbook.new
     necb_2011_workbook.worksheets.delete(necb_2011_workbook['Sheet1'])
 
-    #Write Values
-    values_sheet = necb_2011_workbook.add_worksheet('values')
-    values_array = necb_standards_data.select {|key, value| value['data_type'] == 'value'}
-    formula_array = necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
-    #headers
-    headers = []
-    values_array.each { |key,value| headers.concat( value.keys) }
-    formula_array.each { |key,value| headers.concat( value.keys) }
-    headers.uniq!
-    headers.unshift('key')
-
-    headers.each_with_index do |header, index|
-      cell = values_sheet.add_cell(header_row, index, header)
-      cell.change_font_bold(true)
-    end
-    row = 1
-    values_array.each_pair do |key, value|
-      values_sheet.add_cell(row, 0, key)
-      headers.each_with_index do |header,index|
-      values_sheet.add_cell(row, 1+index, value[header])
-      row += 1
-    end
-
-    #Write Formulas
-    formula_sheet = necb_2011_workbook.add_worksheet('formulas')
-    formula_array = necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
-    row = 0
-    formula_array.each_pair do |key, value|
-      formula_sheet.add_cell(row, 0, key)
-      formula_sheet.add_cell(row, 1, value['formula'])
-      formula_sheet.add_cell(row, 2, value['refs'])
-      formula_sheet.add_cell(row, 3, value['units'])
-      formula_sheet.add_cell(row, 3, value['notes'])
-      row += 1
-    end
-
-    #WriteTables
-
-    table_array = necb_standards_data.select {|key, value| value['data_type'] == 'table'}
-    row = 0
-    table_array.each_pair do |key, value|
-      header_row = value.keys.size
-      sheet = necb_2011_workbook.add_worksheet(key)
-      counter = 0
-      value.keys.each_with_index do |key|
-        unless (key == 'table')
-          sheet.add_cell(counter, 0, key).change_font_bold(true)
-          sheet.add_cell(counter, 1, value[key])
-          counter += 1
+    #Write Constants Sheet.
+    self.array_of_hashes_to_excel_sheet(necb_2011_workbook.add_worksheet('constants') ,necb_standards_data['constants'])
+    self.array_of_hashes_to_excel_sheet(necb_2011_workbook.add_worksheet('formulas') ,necb_standards_data['formulas'])
+    necb_standards_data['tables'].each do |table|
+      sheet = necb_2011_workbook.add_worksheet(table['name'])
+      row = 0
+      table.each do |key,value|
+        unless key == 'table'
+          sheet.add_cell(row, 0, key).change_font_bold(true)
+          sheet.add_cell(row, 1, value)
+          row += 1
         end
       end
-      sheet.add_cell((header_row-1), 0, 'Table').change_font_bold(true)
-      value['table'].first.keys().each_with_index do |header, index|
-        sheet.add_cell(header_row, index, header).change_font_bold(true)
-        sheet.change_column_width(index, (header.size() * 3 / 2).to_i)
-      end
-      #table header
-      table_row = header_row + 1
-      max_size_of_cols = []
-      value['table'].each do |row|
-        row.keys.each_with_index do |item, index|
-          sheet.add_cell(table_row, index, row[item])
-          if sheet.get_column_width(index) < (row[item].to_s.size() * 3 / 2).to_i
-            sheet.change_column_width(index, (row[item].to_s.size() * 3 / 2).to_i)
-          end
-        end
-        table_row += 1
-      end
+      row += 1
+      sheet.add_cell(row, 0, row.to_s)
+      self.array_of_hashes_to_excel_sheet(sheet,table['table'], row)
     end
-
     necb_2011_workbook.write(xlsx_file)
     return xlsx_file
   end
@@ -166,8 +132,6 @@ class SpreadSheetDataView
         output_hash = output_hash.merge(parent_hash)
       end
 =end
-
-
 
 
       unless ['values', 'formulas'].include?(sheet.sheet_name)

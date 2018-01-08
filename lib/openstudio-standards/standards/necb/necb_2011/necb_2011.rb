@@ -7,23 +7,55 @@ class NECB2011 < Standard
   register_standard @@template
   attr_reader :template
   attr_accessor :necb_standards_data
+  attr_accessor :used_standards_data
+
+
+  # Create a schedule from the openstudio standards dataset and
+  # add it to the model.
+  #
+  # @param schedule_name [String} name of the schedule
+  # @return [ScheduleRuleset] the resulting schedule ruleset
+  # @todo make return an OptionalScheduleRuleset
+  def model_add_schedule(model, schedule_name)
+
+    super(model, schedule_name)
+  end
 
   def get_standards_constant(name)
-    object = @standards_data['constants'].detect { |constant| constant['name'] == name }
+    object = @standards_data['constants'].detect {|constant| constant['name'] == name}
     raise("could not find #{name} in standards constants database. ") if object.nil? or object['value'].nil?
+    @used_standards_data['constants'] << object
     return object['value']
   end
 
   def get_standards_formula(name)
-    object = @standards_data['formulas'].detect { |formula| formula['name'] == name }
+    object = @standards_data['formulas'].detect {|formula| formula['name'] == name}
     raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
+    @used_standards_data['formulas'] << object
     return object['value']
   end
 
-  def get_standards_table(name)
-    object = @standards_data['tables'].detect { |table| table['name'] == name }
-    raise("could not find #{name} in standards table database. ") if object.nil? or object['table'].nil?
-    return object['table']
+  def get_standards_table(table_name, search_criteria = nil)
+    return_objects = nil
+    object = @standards_data['tables'].detect {|table| table['name'] == table_name}
+    raise("could not find #{table_name} in standards table database. ") if object.nil? or object['table'].nil?
+    if search_criteria.nil?
+      return object['table']
+    else
+      if @used_standards_data['tables'].detect {|table| table['name'] == table_name}.nil?
+        copy_table = Marshal.load(Marshal.dump(object))
+        copy_table['table'] = []
+        @used_standards_data['tables'] << copy_table
+      end
+      return_objects =  model_find_objects(object['table'], search_criteria)
+      copy_table = @used_standards_data['tables'].detect {|table| table['name'] == table_name}['table']
+      return_objects.each do |item|
+        unless copy_table.include?(item)
+          copy_table << item
+        end
+      end
+      return return_objects
+    end
   end
 
 
@@ -35,6 +67,11 @@ class NECB2011 < Standard
     @necb_standards_data['formulas'] = []
     @necb_standards_data['constants'] = []
     @necb_standards_data['tables'] = []
+
+    @used_standards_data = {}
+    @used_standards_data['formulas'] = []
+    @used_standards_data['constants'] = []
+    @used_standards_data['tables'] = []
 
     # Load NECB data files.
     ['necb_2015_table_c1.json', 'regional_fuel_use.json', 'surface_thermal_transmittance.json'].each do |file|
@@ -68,7 +105,7 @@ class NECB2011 < Standard
         'name' => 'sizing_factor_max_cooling',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_8.4.4.9(1)'],
-        'unit' => 'ratio',
+        'units' => 'ratio',
         'value' => 1.10
     }
 
@@ -76,12 +113,12 @@ class NECB2011 < Standard
         'name' => 'sizing_factor_max_heating',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_8.4.4.9(2)'],
-        'unit' => 'ratio',
+        'units' => 'ratio',
         'value' => 1.30
     }
 
 
-    @necb_standards_data['occupancy_sensors_space_types_formula'] = {
+    @necb_standards_data['formulas'] << {
         'name' => 'occupancy_sensors_space_types_formula',
         'data_type' => 'formula',
         'refs' => ['NECB2011_S_8.4.4.6(3)'],
@@ -103,7 +140,7 @@ class NECB2011 < Standard
     @necb_standards_data['constants'] << {
         'name' => 'fan_variable_volume_pressure_rise_value',
         'data_type' => 'value',
-        'ref' => ['NECB2011_S_5.Assumption'],
+        'refs' => ['NECB2011_S_5.Assumption'],
         'value' => 1458.33,
         'units' => 'Pa',
         'notes' => 'Sets the fan pressure rise based on the Prototype buildings inputs which are governed by the flow rate coming through the fan and whether the fan lives inside a unit heater, PTAC, etc. 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)'
@@ -111,7 +148,7 @@ class NECB2011 < Standard
 
 
     # NECB Infiltration rate information for standard.
-    @necb_standards_data['infiltration_rate_m3_per_s_per_m2'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'infiltration_rate_m3_per_s_per_m2',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_5.Assumption'],
@@ -120,7 +157,7 @@ class NECB2011 < Standard
         'notes' => ''
     }
 
-    @necb_standards_data['infiltration_constant_term_coefficient'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'infiltration_constant_term_coefficient',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_5.Assumption'],
@@ -128,7 +165,7 @@ class NECB2011 < Standard
         'units' => '',
         'notes' => ''
     }
-    @necb_standards_data['infiltration_temperature_term_coefficient'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'infiltration_temperature_term_coefficient',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_5.Assumption'],
@@ -136,7 +173,7 @@ class NECB2011 < Standard
         'units' => '',
         'notes' => ''
     }
-    @necb_standards_data['infiltration_velocity_term_coefficient'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'infiltration_velocity_term_coefficient',
         'data_type' => 'value',
         'refs' => ['Assumption'],
@@ -144,7 +181,7 @@ class NECB2011 < Standard
         'units' => '',
         'notes' => ''
     }
-    @necb_standards_data['infiltration_velocity_squared_term_coefficient'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'infiltration_velocity_squared_term_coefficient',
         'data_type' => 'value',
         'refs' => ['Assumption'],
@@ -153,7 +190,7 @@ class NECB2011 < Standard
         'notes' => ''
     }
 
-    @necb_standards_data['skylight_to_roof_ratio'] = {
+    @necb_standards_data['constants'] << {
         'name' => 'skylight_to_roof_ratio',
         'data_type' => 'value',
         'refs' => ['NECB2011_S_3.2.1.4(2)'],
@@ -162,7 +199,7 @@ class NECB2011 < Standard
         'notes' => ''
     }
 
-    @necb_standards_data['necb_hvac_system_selection_type'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'necb_hvac_system_selection_type',
         'data_type' => 'table',
         'table' => [
@@ -189,14 +226,16 @@ class NECB2011 < Standard
     }
 
 
-    @necb_standards_data['schedules'] = {
+
+    schedules = {
         'name' => 'schedules',
         'data_type' => 'table',
         'refs' => ["assumption"],
-        'table' => @standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+        'table' => @standards_data['schedules'].select { |s| s['name'].to_s.match(/NECB.*/)}
     }
 
-    @necb_standards_data['schedules']['table'] << JSON.parse('{
+
+    schedules['table'] << JSON.parse('{
         "name": "Always On",
         "category": "Unknown",
         "units": null,
@@ -210,43 +249,38 @@ class NECB2011 < Standard
         ]
     }')
 
+    @necb_standards_data['tables'] << schedules
 
-    @necb_standards_data['materials'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'materials',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['materials']
     }
-    @necb_standards_data['constructions'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'constructions',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['constructions']
     }
 
-    @necb_standards_data['construction_sets'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'construction_sets',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['construction_sets'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
-    @necb_standards_data['constructions'] = {
-        'name' => 'constructions',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['constructions']
-    }
 
-    @necb_standards_data['construction_properties'] = {
-        'name' => 'constructions',
+    @necb_standards_data['tables'] << {
+        'name' => 'construction_properties',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['construction_properties'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
 
-    @necb_standards_data['space_types'] ={
+    @necb_standards_data['tables'] << {
         'name' => 'space_types',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -254,7 +288,7 @@ class NECB2011 < Standard
     }
 
 
-    @necb_standards_data['boilers'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'boilers',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -262,7 +296,7 @@ class NECB2011 < Standard
     }
 
 
-    @necb_standards_data['chillers'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'chillers',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -270,14 +304,14 @@ class NECB2011 < Standard
     }
 
 
-    @necb_standards_data['heat_pumps'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'heat_pumps',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['heat_pumps'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
-    @necb_standards_data['heat_pumps_heating'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'heat_pumps_heating',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -285,28 +319,28 @@ class NECB2011 < Standard
     }
 
     #Need to trim this one
-    @necb_standards_data['heat_rejection'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'heat_rejection',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['heat_rejection']
     }
 
-    @necb_standards_data['unitary_acs'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'unitary_acs',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['unitary_acs'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
-    @necb_standards_data['motors'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'motors',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['motors'].select {|s| s['template'].to_s.match(/NECB.*/)}
     }
 
-    @necb_standards_data['curves'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'curves',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -319,14 +353,14 @@ class NECB2011 < Standard
         'table' => @standards_data['prototype_inputs']
     }
 
-    @necb_standards_data['ground_temperatures'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'ground_temperatures',
         'data_type' => 'table',
         'refs' => ["assumption"],
         'table' => @standards_data['ground_temperatures']
     }
 
-    @necb_standards_data['climate_zone_sets'] = {
+    @necb_standards_data['tables'] << {
         'name' => 'climate_zone_sets',
         'data_type' => 'table',
         'refs' => ["assumption"],
@@ -334,9 +368,13 @@ class NECB2011 < Standard
     }
 
 
-    @standards_data = @necb_standards_data
-
     File.write("#{File.dirname(__FILE__)}/data/necb.json", (JSON.pretty_generate(@necb_standards_data)))
+
+    #needed for compatibility of standards database format
+    @necb_standards_data['tables'].each do |table|
+      @necb_standards_data[table['name']] = table
+    end
+    @standards_data = @necb_standards_data
   end
 
   def get_all_spacetype_names
@@ -364,7 +402,7 @@ class NECB2011 < Standard
   def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['tables'].detect { |table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
+    fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
@@ -375,7 +413,7 @@ class NECB2011 < Standard
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
     #this extracts the table from the json database.
-    necb_2015_table_c1 = @standards_data['tables'].detect { |table| table['name'] == 'necb_2015_table_c1'}['table']
+    necb_2015_table_c1 = @standards_data['tables'].detect {|table| table['name'] == 'necb_2015_table_c1'}['table']
     necb_2015_table_c1.each do |necb|
       next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
       dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
@@ -604,7 +642,7 @@ class NECB2011 < Standard
     # that it only occurs through exterior walls and roofs (not floors as
     # explicit stated in the NECB 2011 so overhang/cantilevered floors will
     # have no effective infiltration)
-    tot_infil_m3_per_s = @standards_data['infiltration_rate_m3_per_s_per_m2']['value'] * exterior_wall_and_roof_and_subsurface_area
+    tot_infil_m3_per_s = self.get_standards_constant('infiltration_rate_m3_per_s_per_m2') * exterior_wall_and_roof_and_subsurface_area
     # Now spread the total infiltration rate over all
     # exterior surface area (for the E+ input field) this will include the exterior floor if present.
     all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
@@ -640,10 +678,10 @@ class NECB2011 < Standard
     infiltration.setName("#{space.name} Infiltration")
     infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
     infiltration.setSchedule(infil_sch)
-    infiltration.setConstantTermCoefficient(@standards_data['infiltration_constant_term_coefficient']['value'])
-    infiltration.setTemperatureTermCoefficient(@standards_data['infiltration_constant_term_coefficient']['value'])
-    infiltration.setVelocityTermCoefficient(@standards_data['infiltration_velocity_term_coefficient']['value'])
-    infiltration.setVelocitySquaredTermCoefficient(@standards_data['infiltration_velocity_squared_term_coefficient']['value'])
+    infiltration.setConstantTermCoefficient(self.get_standards_constant('infiltration_constant_term_coefficient'))
+    infiltration.setTemperatureTermCoefficient(self.get_standards_constant('infiltration_constant_term_coefficient'))
+    infiltration.setVelocityTermCoefficient(self.get_standards_constant('infiltration_velocity_term_coefficient'))
+    infiltration.setVelocitySquaredTermCoefficient(self.get_standards_constant('infiltration_velocity_squared_term_coefficient'))
     infiltration.setSpace(space)
 
     return true
