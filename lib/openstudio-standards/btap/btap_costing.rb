@@ -248,13 +248,13 @@ class BTAPCosting
     costing_report["Building"]["ClosestProv"] = closest_prov
     costing_report["Building"]["ClosestCity"] = closest_city
 
-    envelope_cost = cost_audit_envelope(model, costing_report)
+    #envelope_cost = cost_audit_envelope(model, costing_report)
 
-    lighting_cost = cost_audit_lighting(model, costing_report)
+    #lighting_cost = cost_audit_lighting(model, costing_report)
 
   end
 
-  def cost_audit_envelope(model, costing_report)
+  def cost_audit_envelope(model)
 
     # Create a Hash to collect costing data.
     costing_report = {}
