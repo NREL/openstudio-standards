@@ -5,7 +5,7 @@ require 'deep_merge'
 class NECB2011 < Standard
   @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
   register_standard @@template
-  attr_reader :template
+  attr_reader   :template
   attr_accessor :necb_standards_data
   attr_accessor :used_standards_data
 

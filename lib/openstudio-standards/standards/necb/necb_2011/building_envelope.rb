@@ -203,7 +203,7 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
     # SRR limit
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
