@@ -10,6 +10,7 @@
         "NECB2011_S_3.2.2.4",
         "NECB2011_S_3.2.3.1"
       ],
+      "units": "W_per_m2_K",
       "table": [
         {
           "boundary_condition": "Outdoors",
@@ -51,8 +52,7 @@
           "surface": "Floor",
           "formula": "( hdd < 7000) ? 0.757 : 0.379"
         }
-      ],
-      "units": "W_per_m2_K"
+      ]
     }
   ]
 }
