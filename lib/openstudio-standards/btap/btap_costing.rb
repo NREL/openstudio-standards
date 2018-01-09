@@ -308,14 +308,14 @@ class BTAPCosting
         }.first
 
 
-        #Create Hash to store surfaces for this space by surface type
+        # Create Hash to store surfaces for this space by surface type
         surfaces = {}
         #Exterior
         exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Outdoors")
         surfaces["ExteriorWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Wall")
         surfaces["ExteriorRoof"]= BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "RoofCeiling")
         surfaces["ExteriorFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Floor")
-        #Exterior Subsurface
+        # Exterior Subsurface
         exterior_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(exterior_surfaces)
         surfaces["ExteriorFixedWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"])
         surfaces["ExteriorOperableWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"])
@@ -326,13 +326,13 @@ class BTAPCosting
         surfaces["ExteriorGlassDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"])
         surfaces["ExteriorOverheadDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"])
 
-        #Ground Surfaces
+        # Ground Surfaces
         ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Ground")
         surfaces["GroundContactWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
         surfaces["GroundContactRoof"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         surfaces["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        #These are the only envelope costing items we are considering right now..
+        # These are the only envelope costing items we are considering for envelopes..
         costed_surfaces = [
             "ExteriorWall",
             "ExteriorRoof",
@@ -352,13 +352,18 @@ class BTAPCosting
 
         # Iterate through
         costed_surfaces.each do |surface_type|
-          # Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
-          # levels for that city. This has been collected by RS means.
-          cost_range_hash = @costing_database['constructions_costs'].select {|construction|
-            construction['construction_type_name'] == construction_set[surface_type] &&
-            construction['province-state'] == closest_prov &&
-            construction['city'] == closest_city
-          }
+          # Get Costs for this construction type. This will get the cost for the particular construction type
+          # for all rsi levels for this location. This has been collected by RS means. Note that a space_type
+          # of "- undefined -" will create a nil construction_set!
+          if construction_set.nil?
+            cost_range_hash = {}
+          else
+            cost_range_hash = @costing_database['constructions_costs'].select {|construction|
+              construction['construction_type_name'] == construction_set[surface_type] &&
+                  construction['province-state'] == closest_prov &&
+                  construction['city'] == closest_city
+            }
+          end
 
           # We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
           surfaceIsGlazing = (surface_type == 'ExteriorFixedWindow' || surface_type == 'ExteriorOperableWindow' ||
@@ -412,7 +417,11 @@ class BTAPCosting
             totEnvCost = totEnvCost + surfCost
 
             # Bin the costing by construction standard type and rsi
-            name = "#{construction_set[surface_type]}_#{rsi}"
+            if construction_set.nil?
+              name = "undefined space type_#{rsi}"
+            else
+              name = "#{construction_set[surface_type]}_#{rsi}"
+            end
             if costing_report['Envelope'].has_key?(name)
               costing_report['Envelope'][name]['area'] += surfArea
               costing_report['Envelope'][name]['cost'] += surfCost
