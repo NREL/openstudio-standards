@@ -3996,7 +3996,7 @@
           "design_temp_july_2_5p_dry": 26,
           "design_temp_july_2_5p_wet": 20,
           "degree_days_below_18_c": 7450,
-          "degree_days_below_15_c": "",
+          "degree_days_below_15_c": null,
           "hourly_wind_pressures_one_tenth": 0.33,
           "hourly_wind_pressures_one_fiftyth": 0.42,
           "lat_long": [
@@ -5781,7 +5781,7 @@
           "design_temp_july_2_5p_dry": 31,
           "design_temp_july_2_5p_wet": 24,
           "degree_days_below_18_c": 3890,
-          "degree_days_below_15_c": "",
+          "degree_days_below_15_c": null,
           "hourly_wind_pressures_one_tenth": 0.34,
           "hourly_wind_pressures_one_fiftyth": 0.44,
           "lat_long": [

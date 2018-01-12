@@ -15,7 +15,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0
           ]
@@ -28,7 +28,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0
           ]
@@ -41,7 +41,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0
           ]
@@ -54,7 +54,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0
           ]
@@ -67,7 +67,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0
           ]
@@ -80,7 +80,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0
           ]
@@ -93,7 +93,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0
           ]
@@ -106,7 +106,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -142,7 +142,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -178,7 +178,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -214,7 +214,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -250,7 +250,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -286,7 +286,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -322,7 +322,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -358,7 +358,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -394,7 +394,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -430,7 +430,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -466,7 +466,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -502,7 +502,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -538,7 +538,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -574,7 +574,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -610,7 +610,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.2,
@@ -646,7 +646,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -682,7 +682,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -718,7 +718,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -754,7 +754,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -790,7 +790,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -826,7 +826,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -862,7 +862,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -898,7 +898,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -934,7 +934,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -983,7 +983,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1019,7 +1019,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1055,7 +1055,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.5,
@@ -1091,7 +1091,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -1127,7 +1127,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -1163,7 +1163,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             1.0,
@@ -1199,7 +1199,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1235,7 +1235,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1271,7 +1271,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.5,
@@ -1307,7 +1307,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.1,
@@ -1343,7 +1343,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.3,
@@ -1379,7 +1379,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.3,
@@ -1415,7 +1415,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1451,7 +1451,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.5,
@@ -1487,7 +1487,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.5,
@@ -1523,7 +1523,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.6,
             0.5,
@@ -1559,7 +1559,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.7,
             0.6,
@@ -1595,7 +1595,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.6,
@@ -1631,7 +1631,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             35.0,
@@ -1667,7 +1667,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             35.0,
@@ -1703,7 +1703,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -1739,7 +1739,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             22.0,
@@ -1775,7 +1775,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             22.0,
@@ -1811,7 +1811,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             22.0,
@@ -1847,7 +1847,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -1883,7 +1883,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -1919,7 +1919,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -1955,7 +1955,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -1991,7 +1991,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2027,7 +2027,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2063,7 +2063,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2099,7 +2099,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2135,7 +2135,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2171,7 +2171,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2207,7 +2207,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2243,7 +2243,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2279,7 +2279,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2315,7 +2315,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2351,7 +2351,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2387,7 +2387,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2423,7 +2423,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2459,7 +2459,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2495,7 +2495,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -2531,7 +2531,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -2567,7 +2567,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -2603,7 +2603,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -2639,7 +2639,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -2675,7 +2675,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -2711,7 +2711,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2747,7 +2747,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2783,7 +2783,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2819,7 +2819,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2855,7 +2855,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2891,7 +2891,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -2927,7 +2927,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2963,7 +2963,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -2999,7 +2999,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3035,7 +3035,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3071,7 +3071,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3107,7 +3107,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3143,7 +3143,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3179,7 +3179,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3215,7 +3215,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3251,7 +3251,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3287,7 +3287,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3323,7 +3323,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3359,7 +3359,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -3395,7 +3395,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -3431,7 +3431,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -3467,7 +3467,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -3503,7 +3503,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -3539,7 +3539,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -3575,7 +3575,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3611,7 +3611,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3647,7 +3647,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3683,7 +3683,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3719,7 +3719,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3755,7 +3755,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3791,7 +3791,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3827,7 +3827,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3863,7 +3863,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -3899,7 +3899,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3935,7 +3935,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -3971,7 +3971,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -4007,7 +4007,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4043,7 +4043,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4079,7 +4079,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4115,7 +4115,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4151,7 +4151,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4187,7 +4187,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -4223,7 +4223,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -4259,7 +4259,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -4295,7 +4295,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -4331,7 +4331,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -4367,7 +4367,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -4403,7 +4403,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -4439,7 +4439,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4475,7 +4475,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4511,7 +4511,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.3,
@@ -4547,7 +4547,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -4583,7 +4583,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -4619,7 +4619,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -4655,7 +4655,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4691,7 +4691,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4727,7 +4727,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.3,
@@ -4763,7 +4763,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -4799,7 +4799,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.7,
             0.9,
@@ -4835,7 +4835,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.8,
             0.7,
@@ -4871,7 +4871,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4907,7 +4907,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -4943,7 +4943,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.3,
@@ -4979,7 +4979,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.3,
@@ -5015,7 +5015,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.3,
@@ -5051,7 +5051,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.3,
@@ -5087,7 +5087,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -5123,7 +5123,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -5159,7 +5159,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -5195,7 +5195,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -5231,7 +5231,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -5267,7 +5267,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -5303,7 +5303,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5339,7 +5339,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5375,7 +5375,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5411,7 +5411,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -5447,7 +5447,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -5483,7 +5483,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -5519,7 +5519,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.0,
@@ -5555,7 +5555,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.0,
@@ -5591,7 +5591,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.0,
@@ -5627,7 +5627,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -5663,7 +5663,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -5699,7 +5699,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -5735,7 +5735,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5771,7 +5771,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5807,7 +5807,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.3,
             0.2,
@@ -5843,7 +5843,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.05,
@@ -5879,7 +5879,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.05,
@@ -5915,7 +5915,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.05,
@@ -5951,7 +5951,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -5987,7 +5987,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -6023,7 +6023,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -6059,7 +6059,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -6095,7 +6095,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -6131,7 +6131,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -6167,7 +6167,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6203,7 +6203,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6239,7 +6239,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6275,7 +6275,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -6311,7 +6311,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -6347,7 +6347,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             1.0,
@@ -6383,7 +6383,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6419,7 +6419,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6455,7 +6455,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6491,7 +6491,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6527,7 +6527,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6563,7 +6563,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6599,7 +6599,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6635,7 +6635,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6671,7 +6671,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6707,7 +6707,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6743,7 +6743,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6779,7 +6779,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.9,
             0.9,
@@ -6815,7 +6815,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -6851,7 +6851,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -6887,7 +6887,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             24.0,
             24.0,
@@ -6923,7 +6923,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -6959,7 +6959,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -6995,7 +6995,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             22.0,
             18.0,
@@ -7031,7 +7031,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7067,7 +7067,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7103,7 +7103,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7139,7 +7139,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             0.0,
@@ -7175,7 +7175,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0,
             0.0,
@@ -7211,7 +7211,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -7247,7 +7247,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.05,
@@ -7283,7 +7283,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.5,
             0.05,
@@ -7319,7 +7319,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -7355,7 +7355,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.0,
@@ -7391,7 +7391,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.0,
@@ -7427,7 +7427,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.0,
             0.0,
@@ -7463,7 +7463,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7499,7 +7499,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7535,7 +7535,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.1,
             0.1,
@@ -7571,7 +7571,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.05,
@@ -7607,7 +7607,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.2,
             0.05,
@@ -7643,7 +7643,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             0.05,
             0.05,
@@ -7679,7 +7679,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -7715,7 +7715,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -7751,7 +7751,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             35.0,
             35.0,
@@ -7787,7 +7787,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -7823,7 +7823,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -7859,7 +7859,7 @@
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Hourly",
-          "notes": "",
+          "notes": null,
           "values": [
             18.0,
             18.0,
@@ -7890,12 +7890,12 @@
         {
           "name": "Always On",
           "category": "Unknown",
-          "units": "",
+          "units": null,
           "day_types": "Default",
           "start_date": "2014-01-01T00:00:00+00:00",
           "end_date": "2014-12-31T00:00:00+00:00",
           "type": "Constant",
-          "notes": "",
+          "notes": null,
           "values": [
             1.0
           ]

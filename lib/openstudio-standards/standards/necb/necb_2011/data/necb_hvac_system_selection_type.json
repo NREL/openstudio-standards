@@ -153,7 +153,7 @@
           "min_stories": 0,
           "max_stories": 99999,
           "max_cooling_capacity_kw": 99999,
-          "system_type": "",
+          "system_type": null,
           "dwelling": false
         }
       ]

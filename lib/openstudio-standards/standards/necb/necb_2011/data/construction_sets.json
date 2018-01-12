@@ -43,11 +43,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -85,11 +85,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -127,11 +127,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -169,11 +169,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -211,9 +211,9 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
           "notes": "listed as \"Crawl\" (crawlspace) in DEER"
         },
@@ -253,11 +253,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -295,11 +295,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -337,11 +337,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -379,11 +379,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -421,11 +421,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -463,11 +463,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -505,11 +505,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -547,11 +547,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -589,11 +589,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -631,11 +631,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -673,11 +673,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -715,11 +715,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -757,9 +757,9 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
           "notes": "Note \"occupied' as default spacetype"
         },
@@ -799,11 +799,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         },
         {
           "template": "NECB 2011",
@@ -841,11 +841,11 @@
           "interior_fixed_windows": "Typical Interior Window",
           "interior_operable_windows": "Typical Interior Window",
           "interior_doors": "Typical Interior Door",
-          "space_shading": "",
-          "building_shading": "",
-          "site_shading": "",
+          "space_shading": null,
+          "building_shading": null,
+          "site_shading": null,
           "interior_partitions": "Typical Interior Partition",
-          "notes": ""
+          "notes": null
         }
       ]
     }

@@ -17,22 +17,6 @@ end
 
 class SpreadSheetDataView
 
-  def load_json()
-
-    necb_standards_data = {}
-    # Load NECB data files.
-    ['necb_2015_table_c1.json',
-     'regional_fuel_use.json',
-     'surface_thermal_transmittance.json'
-    ].each do |file|
-      file = "#{File.dirname(__FILE__)}/#{file}"
-      necb_standards_data = necb_standards_data.merge (JSON.parse(File.read(file)))
-    end
-    puts necb_standards_data
-    File.write('input.json', JSON.pretty_generate(necb_standards_data))
-    return necb_standards_data
-  end
-
 
   def array_of_hashes_to_excel_sheet(sheet, array, starting_row = 0)
     #get all possible headers
@@ -54,11 +38,7 @@ class SpreadSheetDataView
   end
 
   def json_to_excel()
-    files = Dir.glob("#{File.dirname(__FILE__)}/**/*.json").select{ |e| File.file? e }
-    necb_standards_data = {}
-    files.each do |file|
-      necb_standards_data = necb_standards_data.deep_merge (JSON.parse(File.read(file)))
-    end
+    necb_standards_data = self.load_data()
     xlsx_file = 'standards.xlsx'
     necb_2011_workbook = RubyXL::Workbook.new
     necb_2011_workbook.worksheets.delete(necb_2011_workbook['Sheet1'])
@@ -83,19 +63,69 @@ class SpreadSheetDataView
     return xlsx_file
   end
 
+  def load_data
+    files = Dir.glob("#{File.dirname(__FILE__)}/**/*.json").select {|e| File.file? e}
+    necb_standards_data = {}
+    files.each do |file|
+      necb_standards_data = necb_standards_data.deep_merge (JSON.parse(File.read(file)))
+    end
+    necb_standards_data
+  end
+
   def excel_to_json(xlsx_file = 'standards.xlsx')
+    self.extract_excel_tables(xlsx_file)
+    self.extract_excel_constants_and_formulas(xlsx_file)
+  end
+
+  def extract_excel_constants_and_formulas(xlsx_file)
+    workbook = RubyXL::Parser.parse(xlsx_file)
+    workbook.worksheets.each do |sheet|
+      table_header = []
+      table_array_of_hashes = []
+      headers_collected = false
+      if ['constants', 'formulas'].include?(sheet.sheet_name)
+        sheet.each_with_index do |row|
+          if row.nil?
+            #skip blank rows
+            next
+          end
+          if headers_collected == false
+            #collect headers of table
+            row && row.cells.each do |cell|
+              val = cell && cell.value
+              table_header << val
+            end
+            headers_collected = true
+            next
+          else
+            #collect table row info using header info already collected.
+            row_hash = {}
+            row && row.cells.each_with_index do |cell, index|
+              val = jsonify_cell(cell)
+              row_hash[ table_header[ index ]] = val
+            end
+            table_array_of_hashes << row_hash
+            next
+          end
+        end
+        sheet_hash = {}
+        sheet_hash[sheet.sheet_name] = table_array_of_hashes
+        File.write( "#{sheet.sheet_name}.json", JSON.pretty_generate( sheet_hash) )
+      end
+    end
+  end
+
+
+  def extract_excel_tables(xlsx_file)
     output_hash = {}
     workbook = RubyXL::Parser.parse(xlsx_file)
     workbook.worksheets.each do |sheet|
-      unless ['values', 'formulas'].include?(sheet.sheet_name)
-
-        puts sheet.sheet_name
+      unless ['constants', 'formulas'].include?(sheet.sheet_name)
         parent_hash = {}
         table_hash = {}
         parent_hash[sheet.sheet_name] = table_hash
         table_array_of_hashes = []
         table_header = []
-        table_header_found = false
         next_row_is_header = false
         next_row_is_table_data = false
         in_table = false
@@ -132,6 +162,10 @@ class SpreadSheetDataView
             row_hash = {}
             row && row.cells.each_with_index do |cell, index|
               val = jsonify_cell(cell)
+              #make all empty cells nil instead of ''
+              if val == ''
+                val = nil
+              end
               row_hash[table_header[index]] = val
             end
             table_array_of_hashes << row_hash
@@ -143,8 +177,6 @@ class SpreadSheetDataView
         table_hash_array['tables'] = [table_hash]
         File.write("#{sheet.sheet_name}.json", JSON.pretty_generate(table_hash_array.sort_by_key(true)))
         output_hash = output_hash.merge(parent_hash)
-      else
-        puts "still have to implement formulas and constants"
       end
     end
   end

@@ -5,9 +5,26 @@ require 'deep_merge'
 class NECB2011 < Standard
   @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
   register_standard @@template
-  attr_reader   :template
+  attr_reader :template
   attr_accessor :necb_standards_data
   attr_accessor :used_standards_data
+
+
+  def load_standards_database_new()
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/"
+    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+    @standards_data = {}
+    files.each do |file|
+      @standards_data = @standards_data.deep_merge (JSON.parse(File.read(file)))
+    end
+    #needed for compatibility of standards database format
+    @standards_data['tables'].each do |table|
+      @standards_data[table['name']] = table
+    end
+    return @standards_data
+  end
 
 
   # Create a schedule from the openstudio standards dataset and
@@ -24,14 +41,12 @@ class NECB2011 < Standard
   def get_standards_constant(name)
     object = @standards_data['constants'].detect {|constant| constant['name'] == name}
     raise("could not find #{name} in standards constants database. ") if object.nil? or object['value'].nil?
-    @used_standards_data['constants'] << object
     return object['value']
   end
 
   def get_standards_formula(name)
     object = @standards_data['formulas'].detect {|formula| formula['name'] == name}
     raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
-    @used_standards_data['formulas'] << object
     return object['value']
   end
 
@@ -42,18 +57,7 @@ class NECB2011 < Standard
     if search_criteria.nil?
       return object['table']
     else
-      if @used_standards_data['tables'].detect {|table| table['name'] == table_name}.nil?
-        copy_table = Marshal.load(Marshal.dump(object))
-        copy_table['table'] = []
-        @used_standards_data['tables'] << copy_table
-      end
-      return_objects =  model_find_objects(object['table'], search_criteria)
-      copy_table = @used_standards_data['tables'].detect {|table| table['name'] == table_name}['table']
-      return_objects.each do |item|
-        unless copy_table.include?(item)
-          copy_table << item
-        end
-      end
+      return_objects = model_find_objects(object['table'], search_criteria)
       return return_objects
     end
   end
@@ -62,319 +66,7 @@ class NECB2011 < Standard
   def initialize
     super()
     @template = @@template
-    load_standards_database
-    @necb_standards_data = {}
-    @necb_standards_data['formulas'] = []
-    @necb_standards_data['constants'] = []
-    @necb_standards_data['tables'] = []
-
-    @used_standards_data = {}
-    @used_standards_data['formulas'] = []
-    @used_standards_data['constants'] = []
-    @used_standards_data['tables'] = []
-
-    # Load NECB data files.
-    ['necb_2015_table_c1.json', 'regional_fuel_use.json', 'surface_thermal_transmittance.json'].each do |file|
-      file = "#{File.dirname(__FILE__)}/data/#{file}"
-      @necb_standards_data = @necb_standards_data.deep_merge (JSON.parse(File.read(file)))
-    end
-
-    #formula = @standards_data['formulas'].detect { |formula| formula['name'] == 'fdwr_formula'}['value']
-    #skylight_to_roof_ratio_max_value = @standards_data['constants'].detect { |constant| constant['name'] == 'skylight_to_roof_ratio_max_value'}['value']
-    #table = @standards_data['tables'].detect { |table| table['name'] == 'fdwr_formula'}['table']
-
-    @necb_standards_data['formulas'] << {
-        'name' => 'fdwr_formula',
-        'data_type' => 'formula',
-        'refs' => ['NECB2011_S_3.2.1.4(1)'],
-        'required_variables' => ['hdd'],
-        'value' => "( hdd < 4000.0) ? 0.4 : ( hdd >= 4000.0 and hdd < 7000.0 ) ? ( (2000.0 - 0.2 * hdd) / 3000.00) : 0.2;",
-        'units' => 'ratio',
-        'notes' => 'Requires hdd to be defined to be evaluated in code.'
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'skylight_to_roof_ratio_max_value',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_3.2.1.4(2)'],
-        'value' => 0.05,
-        'units' => 'ratio'
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'sizing_factor_max_cooling',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_8.4.4.9(1)'],
-        'units' => 'ratio',
-        'value' => 1.10
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'sizing_factor_max_heating',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_8.4.4.9(2)'],
-        'units' => 'ratio',
-        'value' => 1.30
-    }
-
-
-    @necb_standards_data['formulas'] << {
-        'name' => 'occupancy_sensors_space_types_formula',
-        'data_type' => 'formula',
-        'refs' => ['NECB2011_S_8.4.4.6(3)'],
-        'required_variables' => ['standard_space_type_name', 'floor_area'],
-        'value' => " ( [ 'Storage area','Storage area - refrigerated','Hospital - medical supply'].include?(standard_space_type_name) and floor_area < 100.0) or ( 'Office - enclosed' == standard_space_type_name and floor_area < 25.0) ? true : false ",
-        'units' => 'bool',
-        'notes' => ' using eval returns true if spaces require occupancy sensors'
-    }
-
-    #Fan Information
-    @necb_standards_data['constants'] << {
-        'name' => 'fan_constant_volume_pressure_rise_value',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 640.00,
-        'units' => 'Pa'
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'fan_variable_volume_pressure_rise_value',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 1458.33,
-        'units' => 'Pa',
-        'notes' => 'Sets the fan pressure rise based on the Prototype buildings inputs which are governed by the flow rate coming through the fan and whether the fan lives inside a unit heater, PTAC, etc. 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)'
-    }
-
-
-    # NECB Infiltration rate information for standard.
-    @necb_standards_data['constants'] << {
-        'name' => 'infiltration_rate_m3_per_s_per_m2',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.25 * 0.001, # m3/s/m2,
-        'units' => 'm3/s/m2',
-        'notes' => ''
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'infiltration_constant_term_coefficient',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['constants'] << {
-        'name' => 'infiltration_temperature_term_coefficient',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['constants'] << {
-        'name' => 'infiltration_velocity_term_coefficient',
-        'data_type' => 'value',
-        'refs' => ['Assumption'],
-        'value' => 0.224,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['constants'] << {
-        'name' => 'infiltration_velocity_squared_term_coefficient',
-        'data_type' => 'value',
-        'refs' => ['Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-
-    @necb_standards_data['constants'] << {
-        'name' => 'skylight_to_roof_ratio',
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_3.2.1.4(2)'],
-        'value' => 0.05,
-        'units' => '',
-        'notes' => ''
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'necb_hvac_system_selection_type',
-        'data_type' => 'table',
-        'table' => [
-            {'necb_hvac_system_selection_type' => '- undefined -', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 0, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 0, 'max_stories' => 4, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 4, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Automotive Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 19.999, 'system_type' => 1, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 2, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Historical Collections Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Hospital Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Indoor Arena', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 7, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Industrial Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Residential/Accomodation Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 1, 'dwelling' => true},
-            {'necb_hvac_system_selection_type' => 'Sleeping Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => true},
-            {'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area - vented', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Warehouse Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Warehouse Area - refrigerated', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 5, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Wildcard', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => nil, 'dwelling' => false}
-        ]
-    }
-
-
-
-    schedules = {
-        'name' => 'schedules',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['schedules'].select { |s| s['name'].to_s.match(/NECB.*/)}
-    }
-
-
-    schedules['table'] << JSON.parse('{
-        "name": "Always On",
-        "category": "Unknown",
-        "units": null,
-        "day_types": "Default",
-        "start_date": "2014-01-01T00:00:00+00:00",
-        "end_date": "2014-12-31T00:00:00+00:00",
-        "type": "Constant",
-        "notes": null,
-        "values": [
-            1.0
-        ]
-    }')
-
-    @necb_standards_data['tables'] << schedules
-
-    @necb_standards_data['tables'] << {
-        'name' => 'materials',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['materials']
-    }
-    @necb_standards_data['tables'] << {
-        'name' => 'constructions',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['constructions']
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'construction_sets',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['construction_sets'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-
-    @necb_standards_data['tables'] << {
-        'name' => 'construction_properties',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['construction_properties'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-
-    @necb_standards_data['tables'] << {
-        'name' => 'space_types',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['space_types'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-
-    @necb_standards_data['tables'] << {
-        'name' => 'boilers',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['boilers'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-
-    @necb_standards_data['tables'] << {
-        'name' => 'chillers',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['chillers'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-
-    @necb_standards_data['tables'] << {
-        'name' => 'heat_pumps',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['heat_pumps'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'heat_pumps_heating',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['heat_pumps_heating'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-    #Need to trim this one
-    @necb_standards_data['tables'] << {
-        'name' => 'heat_rejection',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['heat_rejection']
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'unitary_acs',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['unitary_acs'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'motors',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['motors'].select {|s| s['template'].to_s.match(/NECB.*/)}
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'curves',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['curves'].select {|s| s['name'].to_s.match(/NECB.*/)}
-    }
-    @necb_standards_data['prototype_inputs'] = {
-        'name' => 'prototype_inputs',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['prototype_inputs']
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'ground_temperatures',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['ground_temperatures']
-    }
-
-    @necb_standards_data['tables'] << {
-        'name' => 'climate_zone_sets',
-        'data_type' => 'table',
-        'refs' => ["assumption"],
-        'table' => @standards_data['climate_zone_sets'].select {|s| s['name'].to_s.match(/NECB.*/)}
-    }
-
-
-    File.write("#{File.dirname(__FILE__)}/data/necb.json", (JSON.pretty_generate(@necb_standards_data)))
-
-    #needed for compatibility of standards database format
-    @necb_standards_data['tables'].each do |table|
-      @necb_standards_data[table['name']] = table
-    end
-    @standards_data = @necb_standards_data
+    @standards_data = self.load_standards_database_new()
   end
 
   def get_all_spacetype_names
