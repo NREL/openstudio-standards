@@ -3,10 +3,10 @@
     {
       "name": "prototype_inputs",
       "data_type": "table",
-      "notes": "This is a list of the fuel sources for all NECB system types by province. Mike Lubun compiled these very high level assumptions.",
+      "notes": "This is a list of default inputs for spacetypes and building types. Developed by NREL",
       "refs": [
         "Survey",
-        "Mike.lubun@canada.ca",
+        "andrew.parker@nrel.gov",
         "Kamel.Haddad@canada.ca",
         "Phylroy.lopez@Canada.ca"
       ],
