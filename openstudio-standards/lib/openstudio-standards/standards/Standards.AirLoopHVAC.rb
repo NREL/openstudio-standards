@@ -10,7 +10,7 @@ class OpenStudio::Model::AirLoopHVAC
   # return [Bool] returns true if successful, false if not
   def apply_multizone_vav_outdoor_air_sizing(template)
     # TODO: enable damper position adjustment for legacy IDFS
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'CEC Pre-1978' || template == 'CEC T24 1978' || template == 'CEC T24 1992' || template == 'CEC T24 2001' || template == 'CEC T24 2005' || template == 'CEC T24 2008'
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', 'Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.')
       return true
     end

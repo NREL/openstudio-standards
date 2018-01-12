@@ -5594,7 +5594,7 @@ class OpenStudio::Model::Model
                                           cooling_fuel = nil,
                                           condenser_water_loop,
                                           building_type = nil)
-      when 'Electricity'
+      when 'Electricity'        
         if air_cooled
           chilled_water_loop = add_chw_loop(template,
                                             'const_pri',
@@ -5609,6 +5609,7 @@ class OpenStudio::Model::Model
           if template == '90.1-2013'
             fan_type = 'Variable Speed Fan'
           end
+         
           condenser_water_loop = add_cw_loop(template,
                                              'Open Cooling Tower',
                                              'Propeller or Axial',
@@ -5870,24 +5871,28 @@ class OpenStudio::Model::Model
                      electric_reheat)
 
     when 'PVAV Reheat'
-      hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
-      chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+        hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
+        
+        ## BRICR ## 
+        if template != 'CEC Pre-1978' && template != 'CEC T24 1978' && template != 'CEC T24 1992' && template != 'CEC T24 2001' && template != 'CEC T24 2005' && template != 'CEC T24 2008'
+          chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
+        end 
 
-      electric_reheat = false
-      if zone_heat_fuel == 'Electricity'
-        electric_reheat = true
-      end
+        electric_reheat = false
+        if zone_heat_fuel == 'Electricity'
+         electric_reheat = true
+        end
 
-      add_pvav(template,
-               sys_name=nil,
-               zones,
-               hvac_op_sch=nil,
-               oa_damper_sch=nil,
-               electric_reheat,
-               hot_water_loop,
-               chilled_water_loop,
-               return_plenum=nil)
-
+        add_pvav(template,
+                sys_name=nil,
+                zones,
+                hvac_op_sch=nil,
+                oa_damper_sch=nil,
+                electric_reheat,
+                hot_water_loop,
+                chilled_water_loop,
+                return_plenum=nil)
+      
     when 'PVAV PFP Boxes'
       case cool_fuel
       when 'DistrictCooling'
@@ -6105,21 +6110,30 @@ class OpenStudio::Model::Model
         size_category = 'res_med'
       end
     when 'nonresidential'
-      # nonresidential and 3 floors or less and < 75,000 ft2
-      if num_stories <= 3 && area_ft2 < 75_000
-        size_category = 'nonres_small'
-      # nonresidential and 4 or 5 floors OR 5 floors or less and 75,000 ft2 to 150,000 ft2
-      elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < 75_000) || (num_stories <= 5 && (area_ft2 >= 75_000 && area_ft2 <= 150_000))
-        size_category = 'nonres_med'
-      # nonresidential and more than 5 floors or >150,000 ft2
-      elsif num_stories >= 5 || area_ft2 > 150_000
-        size_category = 'nonres_lg'
+	    # nonresidential and 3 floors or less and < 75,000 ft2
+	    if num_stories <= 3 && area_ft2 < 75_000
+		    size_category = 'nonres_small'
+	    # nonresidential and 4 or 5 floors OR 5 floors or less and 75,000 ft2 to 150,000 ft2
+	    elsif ((num_stories == 4 || num_stories == 5) && area_ft2 < 75_000) || (num_stories <= 5 && (area_ft2 >= 75_000 && area_ft2 <= 150_000))
+		    size_category = 'nonres_med'
+	    # nonresidential and more than 5 floors or >150,000 ft2
+	    elsif num_stories >= 5 || area_ft2 > 150_000
+		    size_category = 'nonres_lg'
+      end
+	    ## BRICR template ##
+      case template
+      when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+        if area_ft2 < 20_000
+          size_category = 'nonres_small'
+        else
+          size_category = 'nonres_med'
+        end
       end
     end
 
     # Define the lookup by row and by fuel type
     syts = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
-    # [heating_source][cooling_source][delivery_type][size_category]
+    # [heating_source][cooling_source]yvx [delivery_type][size_category]
     #  = [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
 
     ## Forced Air ##

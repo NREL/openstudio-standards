@@ -210,7 +210,7 @@
       "notes": "From PNNL Prototype Buildings OutPatientHealtCare, RestaurantFastFood, RestaurantSitDown, SchoolPrimary, SchoolSecondary"
     },
     {
-      "name": "Curve_Quadratic _CBES_1",
+      "name": "Curve_Quadratic_CBES_01",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
       "coeff_3": 0,
@@ -221,9 +221,9 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve_Quadratic _CBES_2",
-      "coeff_1": 1.1552,
-      "coeff_2": -0.1808,
+      "name": "Curve_Quadratic_CBES_02",
+      "coeff_1": 1.156,
+      "coeff_2": -0.1816,
       "coeff_3": 0.0256,
       "min_x": 0.5,
       "max_x": 1.5,
@@ -232,9 +232,9 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve_Quadratic _CBES_3",
-      "coeff_1": 0.85,
-      "coeff_2": 0.15,
+      "name": "Curve_Quadratic_CBES_03",
+      "coeff_1": 1,
+      "coeff_2": 0,
       "coeff_3": 0,
       "min_x": 0,
       "max_x": 1,
@@ -243,7 +243,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve_Quadratic _CBES_4",
+      "name": "Curve_Quadratic_CBES_04",
       "coeff_1": 0.8,
       "coeff_2": 0.2,
       "coeff_3": 0,
@@ -254,7 +254,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve_Quadratic _CBES_5",
+      "name": "Curve_Quadratic_CBES_05",
       "coeff_1": 1.1552,
       "coeff_2": -0.1808,
       "coeff_3": 0.0256,
@@ -265,7 +265,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "name": "Curve_Quadratic _CBES_6",
+      "name": "Curve_Quadratic_CBES_06",
       "coeff_1": 0.85,
       "coeff_2": 0.15,
       "coeff_3": 0,
@@ -472,39 +472,6 @@
       "min_out": null,
       "max_out": null,
       "notes": "From NECB 2011"
-    },
-    {
-      "name": "back perimeter space Cooling capacity of flow",
-      "coeff_1": 0.8,
-      "coeff_2": 0.2,
-      "coeff_3": 0,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
-    },
-    {
-      "name": "back perimeter space Energy input ration of flow",
-      "coeff_1": 1.156,
-      "coeff_2": -0.1816,
-      "coeff_3": 0.0256,
-      "min_x": 0.5,
-      "max_x": 1.5,
-      "min_out": null,
-      "max_out": null,
-      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
-    },
-    {
-      "name": "back perimeter space Heating coil part load 1",
-      "coeff_1": 1,
-      "coeff_2": 0,
-      "coeff_3": 0,
-      "min_x": 0,
-      "max_x": 1,
-      "min_out": null,
-      "max_out": null,
-      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     }
   ]
 }

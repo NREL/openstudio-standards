@@ -1896,7 +1896,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.825,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
@@ -1906,7 +1906,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.875,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
@@ -1916,7 +1916,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.875,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
@@ -1926,7 +1926,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.875,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
@@ -1936,7 +1936,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.91,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
@@ -1946,7 +1946,7 @@
       "type": "Enclosed",
       "synchronous_speed": 1800,
       "minimum_capacity": 0,
-      "maximum_capacity": 9999,
+      "maximum_capacity": 99999,
       "nominal_full_load_efficiency": 0.91,
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     }
