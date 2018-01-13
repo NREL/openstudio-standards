@@ -280,6 +280,19 @@ def export_spreadsheet_to_json
             val = nil
           end
         end
+        # Convert date columns to standard format
+        if headers[j]['name'].include?('_date')
+          if val.is_a?(DateTime)
+            val = val.to_s
+          else
+            begin
+              val = DateTime.parse(val).to_s
+            rescue ArgumentError
+              puts "ERROR - value '#{val}', class #{val.class} in #{sheet_name}, row #{i}, col #{j} is not a valid date"
+            end
+          end
+        end
+
         # Record the value
         obj[headers[j]['name']] = val
         # Skip recording units for unitless values
