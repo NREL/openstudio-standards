@@ -1896,9 +1896,9 @@
       "type": "Enclosed",
       "synchronous_speed": 1800.0,
       "minimum_capacity": 0.0,
-      "maximum_capacity": 9999.0,
+      "maximum_capacity": 99999.0,
       "nominal_full_load_efficiency": 0.825,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 1978",
@@ -1908,7 +1908,7 @@
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.875,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 1992",
@@ -1918,7 +1918,7 @@
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.875,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2001",
@@ -1928,7 +1928,7 @@
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.875,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2005",
@@ -1938,7 +1938,7 @@
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.91,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "CEC T24 2008",
@@ -1948,7 +1948,7 @@
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999.0,
       "nominal_full_load_efficiency": 0.91,
-      "notes": null
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
       "template": "NREL ZNE Ready 2017",
