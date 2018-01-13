@@ -2706,8 +2706,15 @@ class Standard
 
   # Adds a curve from the OpenStudio-Standards dataset to the model
   # based on the curve name.
-  # @todo Check for curve already in model before re-adding?
   def model_add_curve(model, curve_name)
+    # First check model and return curve if it already exists
+    model.getCurves.sort.each do |curve|
+      if curve.name.get.to_s == curve_name
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
+        return curve
+      end
+    end
+
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
