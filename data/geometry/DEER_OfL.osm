@@ -4653,7 +4653,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {c7a59789-6e47-42fe-a65e-7632c36af7f9}, !- Handle
   EL1 West Perim Plnm (M.W19) ZN,         !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -4981,7 +4981,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {36fe8e5a-53fb-4f38-9d92-6354be2d207b}, !- Handle
   EL1 South Perim Spc (M.S11) ZN,         !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5063,7 +5063,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {b0a72c51-6d3a-417b-92af-f6d914155de1}, !- Handle
   EL1 East Perim Spc (M.E12) ZN,          !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5145,7 +5145,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {ec8a36be-48b4-448f-9902-c342b8d758cb}, !- Handle
   EL1 North Perim Spc (M.N13) ZN,         !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5227,7 +5227,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {39f65e57-9d51-42d6-99a8-17749b77f501}, !- Handle
   EL1 West Perim Spc (M.W14) ZN,          !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5309,7 +5309,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {0e931d2f-c121-4eab-8c4b-6fa435956c11}, !- Handle
   EL1 Core Spc (M.C15) ZN,                !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5391,7 +5391,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {f2887843-907c-4832-b8ac-03fdf140a3b0}, !- Handle
   EL1 South Perim Plnm (M.S16) ZN,        !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5473,7 +5473,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {4f6aa8b9-25de-4c65-91f7-f51b45a751c1}, !- Handle
   EL1 East Perim Plnm (M.E17) ZN,         !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5555,7 +5555,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {7bafe57c-01b2-4b6e-b838-276df795bcec}, !- Handle
   EL1 North Perim Plnm (M.N18) ZN,        !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -5637,7 +5637,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {8a498057-fb4b-436c-8a2f-17264552c6cb}, !- Handle
   EL1 Core Plnm (M.C20) ZN,               !- Name
-  ,                                       !- Multiplier
+  8,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}

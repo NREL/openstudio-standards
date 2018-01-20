@@ -7638,7 +7638,7 @@ OS:Rendering:Color,
 OS:ThermalZone,
   {4f55139d-76cd-489d-be39-833fa13e7769}, !- Handle
   E9 South Perim Spc (M.S5) ZN,           !- Name
-  ,                                       !- Multiplier
+  2,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -11820,7 +11820,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {966a1e4b-dfe4-4ecc-9c75-46e5a8083108}, !- Handle
   E9 North Perim Spc (M.N4) ZN,           !- Name
-  ,                                       !- Multiplier
+  2,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
@@ -11984,7 +11984,7 @@ OS:ZoneHVAC:EquipmentList,
 OS:ThermalZone,
   {67f402fd-c876-46e8-aabf-e7163a106a84}, !- Handle
   E9 Core Spc (M.C6) ZN,                  !- Name
-  ,                                       !- Multiplier
+  2,                                      !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
   ,                                       !- Floor Area {m2}
