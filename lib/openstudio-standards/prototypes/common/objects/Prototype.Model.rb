@@ -164,6 +164,7 @@ Standard.class_eval do
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name} does not have a Space Type assigned.")
       else
         if space.spaceType.get.standardsSpaceType.empty?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "SpaceType #{space.spaceType.get.name} does not have a standardsSpaceType assigned.")
           all_space_types_have_standard_space_types = false
         else
           space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType.get.to_s].nil?
