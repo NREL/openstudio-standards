@@ -72,6 +72,18 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
+
+  require_relative "#{stds}/deer/deer"
+  require_relative "#{stds}/deer/deer_pre_1975/deer_pre_1975"
+  require_relative "#{stds}/deer/deer_1985/deer_1985"
+  require_relative "#{stds}/deer/deer_1996/deer_1996"
+  require_relative "#{stds}/deer/deer_2003/deer_2003"
+  require_relative "#{stds}/deer/deer_2007/deer_2007"
+  require_relative "#{stds}/deer/deer_2011/deer_2011"
+  require_relative "#{stds}/deer/deer_2014/deer_2014"
+  require_relative "#{stds}/deer/deer_2015/deer_2015"
+  require_relative "#{stds}/deer/deer_2017/deer_2017"
+
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"
