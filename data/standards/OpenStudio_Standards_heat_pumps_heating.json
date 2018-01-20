@@ -1263,7 +1263,7 @@
     {
       "template": "NREL ZNE Ready 2017",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "Split System",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
