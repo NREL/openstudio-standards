@@ -39,7 +39,24 @@ class Standard
         'NECB-CNEB-6'  => epw_file.to_s,
         'NECB-CNEB-7a' => epw_file.to_s,
         'NECB-CNEB-7b' => epw_file.to_s,
-        'NECB-CNEB-8'  => epw_file.to_s
+        'NECB-CNEB-8'  => epw_file.to_s,
+        # For DEER
+        'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
+        'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
+        'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
+        'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
+        'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
+        'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
+        'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
+        'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
+        'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
+        'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
+        'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
+        'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
+        'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
+        'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
+        'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
+        'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
     }
 
     # Get the weather file name from the hash
