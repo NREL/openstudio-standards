@@ -69,4 +69,13 @@ module References
   # @see http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf The PNNL technical report
   class PNNLInfiltration; end
 
+  # DEER and MASControl
+  # The Database for Energy Efficient Resources (DEER) contains information on selected energy-efficient technologies and measures.
+  # The DEER provides estimates of the energy-savings potential for these technologies in residential and nonresidential applications.
+  # To determine the energy-savings potential, a DOE-2-based system called MASControl was developed by consultants of
+  # the California Public Utility Commission. The DEER "Standards" in this library represent the input assumptions used
+  # inside of MASControl to represent CA buildings of different vintages.
+  # @see http://deeresources.com/index.php/deer-versions
+  class DEERMASControl; end
+
 end
