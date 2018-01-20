@@ -439,7 +439,10 @@ OS:SpaceType,
   WarehouseCond,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d96a8503-90e2-45c6-88a1-ed79953b0a73}; !- Group Rendering Name
+  {d96a8503-90e2-45c6-88a1-ed79953b0a73}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  SCn,                                    !- Standards Building Type
+  WarehouseCond;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {d96a8503-90e2-45c6-88a1-ed79953b0a73}, !- Handle

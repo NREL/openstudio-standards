@@ -1373,7 +1373,10 @@ OS:SpaceType,
   OfficeGeneral,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {dec8a281-9599-4337-98af-66a6153b5ee4}; !- Group Rendering Name
+  {dec8a281-9599-4337-98af-66a6153b5ee4}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  RtL,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {dec8a281-9599-4337-98af-66a6153b5ee4}, !- Handle
@@ -1387,7 +1390,10 @@ OS:SpaceType,
   StockRoom,                              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {aa1b14c4-7fb8-4b60-876c-e0aa2897ae8e}; !- Group Rendering Name
+  {aa1b14c4-7fb8-4b60-876c-e0aa2897ae8e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  RtL,                                    !- Standards Building Type
+  StockRoom;                              !- Standards Space Type
 
 OS:Rendering:Color,
   {aa1b14c4-7fb8-4b60-876c-e0aa2897ae8e}, !- Handle
@@ -1401,7 +1407,10 @@ OS:SpaceType,
   Work,                                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1c9749cb-0af9-4a0e-9579-3812102b8d13}; !- Group Rendering Name
+  {1c9749cb-0af9-4a0e-9579-3812102b8d13}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  RtL,                                    !- Standards Building Type
+  Work;                                   !- Standards Space Type
 
 OS:Rendering:Color,
   {1c9749cb-0af9-4a0e-9579-3812102b8d13}, !- Handle
@@ -1415,7 +1424,10 @@ OS:SpaceType,
   RetailSales,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {dcc6230a-5908-4a14-b7fe-d29f286ed091}; !- Group Rendering Name
+  {dcc6230a-5908-4a14-b7fe-d29f286ed091}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  RtL,                                    !- Standards Building Type
+  RetailSales;                            !- Standards Space Type
 
 OS:Rendering:Color,
   {dcc6230a-5908-4a14-b7fe-d29f286ed091}, !- Handle
@@ -1429,7 +1441,10 @@ OS:SpaceType,
   Kitchen,                                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d71cf5fc-cef6-4b57-86c3-5c83dc666b32}; !- Group Rendering Name
+  {d71cf5fc-cef6-4b57-86c3-5c83dc666b32}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  RtL,                                    !- Standards Building Type
+  Kitchen;                                !- Standards Space Type
 
 OS:Rendering:Color,
   {d71cf5fc-cef6-4b57-86c3-5c83dc666b32}, !- Handle

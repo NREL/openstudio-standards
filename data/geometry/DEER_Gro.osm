@@ -1304,7 +1304,10 @@ OS:SpaceType,
   GrocSales,                              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c8228984-3e0b-4053-aabf-3610931ba30e}; !- Group Rendering Name
+  {c8228984-3e0b-4053-aabf-3610931ba30e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  GrocSales;                              !- Standards Space Type
 
 OS:Rendering:Color,
   {c8228984-3e0b-4053-aabf-3610931ba30e}, !- Handle
@@ -1319,7 +1322,10 @@ OS:SpaceType,
   OfficeGeneral,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {05e39b0d-10ca-4105-82a7-ed90f092406e}; !- Group Rendering Name
+  {05e39b0d-10ca-4105-82a7-ed90f092406e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {05e39b0d-10ca-4105-82a7-ed90f092406e}, !- Handle
@@ -1334,7 +1340,10 @@ OS:SpaceType,
   RefFoodPrep,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {990f9b4a-fdfd-4e63-86fb-073d6b6bd739}; !- Group Rendering Name
+  {990f9b4a-fdfd-4e63-86fb-073d6b6bd739}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  RefFoodPrep;                            !- Standards Space Type
 
 OS:Rendering:Color,
   {990f9b4a-fdfd-4e63-86fb-073d6b6bd739}, !- Handle
@@ -1349,7 +1358,10 @@ OS:SpaceType,
   RefWalkinCool,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {de19653f-b8b1-45ba-8c3e-24ded3b846f7}; !- Group Rendering Name
+  {de19653f-b8b1-45ba-8c3e-24ded3b846f7}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  RefWalkinCool;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {de19653f-b8b1-45ba-8c3e-24ded3b846f7}, !- Handle
@@ -1364,7 +1376,10 @@ OS:SpaceType,
   RefWalkinFreeze,                        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {b7815105-fd14-4ba1-a7f4-8e3c0b27696b}; !- Group Rendering Name
+  {b7815105-fd14-4ba1-a7f4-8e3c0b27696b}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  RefWalkinFreeze;                        !- Standards Space Type
 
 OS:Rendering:Color,
   {b7815105-fd14-4ba1-a7f4-8e3c0b27696b}, !- Handle
@@ -1379,7 +1394,10 @@ OS:SpaceType,
   IndLoadDock,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {8f7eaea9-26ab-4f52-8b60-3ded500a976d}; !- Group Rendering Name
+  {8f7eaea9-26ab-4f52-8b60-3ded500a976d}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Gro,                                    !- Standards Building Type
+  IndLoadDock;                            !- Standards Space Type
 
 OS:Rendering:Color,
   {8f7eaea9-26ab-4f52-8b60-3ded500a976d}, !- Handle

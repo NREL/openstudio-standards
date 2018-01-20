@@ -664,7 +664,10 @@ OS:SpaceType,
   StockRoom,                              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {815bc85a-94c9-41c3-aa4e-1e5bd0a0e642}; !- Group Rendering Name
+  {815bc85a-94c9-41c3-aa4e-1e5bd0a0e642}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  MLI,                                    !- Standards Building Type
+  StockRoom;                              !- Standards Space Type
 
 OS:Rendering:Color,
   {815bc85a-94c9-41c3-aa4e-1e5bd0a0e642}, !- Handle
@@ -678,7 +681,10 @@ OS:SpaceType,
   Work,                                   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0ff75d97-9ac3-4d5f-8703-d157338bb65e}; !- Group Rendering Name
+  {0ff75d97-9ac3-4d5f-8703-d157338bb65e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  MLI,                                    !- Standards Building Type
+  Work;                                   !- Standards Space Type
 
 OS:Rendering:Color,
   {0ff75d97-9ac3-4d5f-8703-d157338bb65e}, !- Handle

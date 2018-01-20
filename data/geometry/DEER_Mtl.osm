@@ -5409,7 +5409,10 @@ OS:SpaceType,
   GuestRmCorrid,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {63b35d58-0e64-40fe-8256-78e393fee22e}; !- Group Rendering Name
+  {63b35d58-0e64-40fe-8256-78e393fee22e}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Mtl,                                    !- Standards Building Type
+  GuestRmCorrid;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {63b35d58-0e64-40fe-8256-78e393fee22e}, !- Handle
@@ -5423,7 +5426,10 @@ OS:SpaceType,
   GuestRmOcc,                             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {171be861-a397-4f0f-93e9-8adfdf662128}; !- Group Rendering Name
+  {171be861-a397-4f0f-93e9-8adfdf662128}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Mtl,                                    !- Standards Building Type
+  GuestRmOcc;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {171be861-a397-4f0f-93e9-8adfdf662128}, !- Handle
@@ -5437,7 +5443,10 @@ OS:SpaceType,
   Laundry,                                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {fccc58e6-1803-4433-8d6d-5274055d5441}; !- Group Rendering Name
+  {fccc58e6-1803-4433-8d6d-5274055d5441}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Mtl,                                    !- Standards Building Type
+  Laundry;                                !- Standards Space Type
 
 OS:Rendering:Color,
   {fccc58e6-1803-4433-8d6d-5274055d5441}, !- Handle
@@ -5451,7 +5460,10 @@ OS:SpaceType,
   OfficeGeneral,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {44492b77-50a1-4011-abf8-3c286020d338}; !- Group Rendering Name
+  {44492b77-50a1-4011-abf8-3c286020d338}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Mtl,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {44492b77-50a1-4011-abf8-3c286020d338}, !- Handle

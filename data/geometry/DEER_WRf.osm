@@ -744,7 +744,10 @@ OS:SpaceType,
   IndLoadDock,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {d8c5b381-0f34-48d5-a89d-c5ac89ff082a}; !- Group Rendering Name
+  {d8c5b381-0f34-48d5-a89d-c5ac89ff082a}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  WRf,                                    !- Standards Building Type
+  IndLoadDock;                            !- Standards Space Type
 
 OS:Rendering:Color,
   {d8c5b381-0f34-48d5-a89d-c5ac89ff082a}, !- Handle
@@ -759,7 +762,10 @@ OS:SpaceType,
   OfficeGeneral,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c1782377-fd50-4017-9845-d1b79475f052}; !- Group Rendering Name
+  {c1782377-fd50-4017-9845-d1b79475f052}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  WRf,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {c1782377-fd50-4017-9845-d1b79475f052}, !- Handle
@@ -774,7 +780,10 @@ OS:SpaceType,
   RefStorCooler,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {3b11fe7d-34e3-4d85-bcc6-54c00a4170fc}; !- Group Rendering Name
+  {3b11fe7d-34e3-4d85-bcc6-54c00a4170fc}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  WRf,                                    !- Standards Building Type
+  RefStorCooler;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {3b11fe7d-34e3-4d85-bcc6-54c00a4170fc}, !- Handle
@@ -789,7 +798,10 @@ OS:SpaceType,
   RefStorFreezer,                         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {57ab0332-84b6-4b75-91bf-47b9ed1cfea3}; !- Group Rendering Name
+  {57ab0332-84b6-4b75-91bf-47b9ed1cfea3}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  WRf,                                    !- Standards Building Type
+  RefStorFreezer;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {57ab0332-84b6-4b75-91bf-47b9ed1cfea3}, !- Handle

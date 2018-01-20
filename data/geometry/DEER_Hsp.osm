@@ -175,7 +175,7 @@ OS:Space,
 OS:Space,
   {ddafee7c-4dff-484a-a276-9eb3bdfc09fe}, !- Handle
   EL2 East Perim Plnm (G.E8),             !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -183,12 +183,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {d6fe96b7-c6af-44f3-8b27-9bf5f9e681d1}; !- Thermal Zone Name
+  {d6fe96b7-c6af-44f3-8b27-9bf5f9e681d1}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {63f1f798-be3c-4873-b8dd-4668b476d54c}, !- Handle
   EL2 SSW Perim Plnm (G.SSW9),            !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -196,12 +197,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {fd4ff461-ecff-4628-aec5-4eca40710984}; !- Thermal Zone Name
+  {fd4ff461-ecff-4628-aec5-4eca40710984}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {0b26b949-61f1-4f7f-b077-246e98ef3e59}, !- Handle
   EL2 NNW Perim Plnm (G.NNW10),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -209,12 +211,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {40695886-02b8-4dea-bb4d-12af3987cd99}; !- Thermal Zone Name
+  {40695886-02b8-4dea-bb4d-12af3987cd99}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {56553a10-4ef6-414b-9f5b-d14409de33ca}, !- Handle
   EL2 West Perim Plnm (G.W11),            !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -222,12 +225,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {7540ab17-3257-4451-9ae9-1df1d1a2a57e}; !- Thermal Zone Name
+  {7540ab17-3257-4451-9ae9-1df1d1a2a57e}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {639801ac-8c25-4471-9d86-e5f9a3e3dbce}, !- Handle
   EL2 South Perim Plnm (G.S12),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -235,12 +239,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {b3b39d1e-9b73-4885-8a48-c3d4e62a1c57}; !- Thermal Zone Name
+  {b3b39d1e-9b73-4885-8a48-c3d4e62a1c57}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {5bec2da8-abb5-48f7-b00c-c1322cfe7a3d}, !- Handle
   EL2 North Perim Plnm (G.N13),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -248,12 +253,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {b1b1b29b-0bf6-4a99-97df-f4140aecd5fe}; !- Thermal Zone Name
+  {b1b1b29b-0bf6-4a99-97df-f4140aecd5fe}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {ebf480d4-6d08-496f-a18f-94635e39b98b}, !- Handle
   EL2 Core Plnm (G.C14),                  !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -261,7 +267,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {017b18e8-7927-48b2-a4ee-fc4622a4e5f6}, !- Building Story Name
-  {147b89cf-92e5-431a-87c2-74c583f834db}; !- Thermal Zone Name
+  {147b89cf-92e5-431a-87c2-74c583f834db}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {fc9b1428-2156-4c48-8e19-ebd18e597aef}, !- Handle
@@ -370,7 +377,7 @@ OS:Space,
 OS:Space,
   {22b39522-232b-4ed8-94d8-95506150068b}, !- Handle
   EL3 East Perim Plnm (G.E9),             !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -378,12 +385,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {e556b729-ae4e-4a9d-aff6-cd8e4ef17b69}; !- Thermal Zone Name
+  {e556b729-ae4e-4a9d-aff6-cd8e4ef17b69}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {f90b5874-6d39-4a00-b281-f62c42bdb0ea}, !- Handle
   EL3 West Perim Plnm (G.W10),            !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -391,12 +399,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {dd3fa291-8d87-4a72-8329-849e4e9144c3}; !- Thermal Zone Name
+  {dd3fa291-8d87-4a72-8329-849e4e9144c3}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {f2a3abc9-95ce-465d-9539-a919e5edf0df}, !- Handle
   EL3 North Perim Plnm (G.N11),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -404,12 +413,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {0377f48f-1985-44b6-a0c5-041990c2f28c}; !- Thermal Zone Name
+  {0377f48f-1985-44b6-a0c5-041990c2f28c}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {4e143c67-0ef6-4f0e-bdf5-48ade697ccff}, !- Handle
   EL3 South Perim Plnm (G.S12),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -417,12 +427,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {3330214d-5fe6-4b0e-af00-d047cda4cbf2}; !- Thermal Zone Name
+  {3330214d-5fe6-4b0e-af00-d047cda4cbf2}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {990b5c71-0870-4419-84aa-f3b98eb60f15}, !- Handle
   EL3 Core Plnm (G.C13),                  !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -430,12 +441,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {5330cf7c-281d-4e33-a787-8bd2084957ef}; !- Thermal Zone Name
+  {5330cf7c-281d-4e33-a787-8bd2084957ef}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {4ece531d-331c-4644-a9bd-3f62e1873119}, !- Handle
   EL3 North Perim Plnm (G.N14),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -443,12 +455,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {c642674c-d5ab-4db8-9b77-03fc09ed5f5f}; !- Thermal Zone Name
+  {c642674c-d5ab-4db8-9b77-03fc09ed5f5f}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {2ac0f794-6670-491d-b48a-ae19a2c5cfd1}, !- Handle
   EL3 South Perim Plnm (G.S15),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -456,12 +469,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {74024660-9abe-4697-ab77-4b87550164ad}; !- Thermal Zone Name
+  {74024660-9abe-4697-ab77-4b87550164ad}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {cbd757f1-be65-4c51-8a8c-47b865893ad8}, !- Handle
   EL3 Core Plnm (G.C16),                  !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -469,7 +483,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {70cfb9cd-8f9c-448c-a503-0fee9f66f6a4}, !- Building Story Name
-  {910690ba-002c-484a-9d29-8e5439fb35b0}; !- Thermal Zone Name
+  {910690ba-002c-484a-9d29-8e5439fb35b0}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {1a632669-aae9-4c23-89cd-e6b3bbf06a8d}, !- Handle
@@ -578,7 +593,7 @@ OS:Space,
 OS:Space,
   {ab903c25-f7ee-428f-bf97-0ebb11403889}, !- Handle
   EL4 East Perim Plnm (G.E9),             !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -586,12 +601,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {a9598f65-21c8-4332-87e6-8e2f5fac1a3b}; !- Thermal Zone Name
+  {a9598f65-21c8-4332-87e6-8e2f5fac1a3b}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {f86b3984-a84e-4ec6-9c9f-b46addb7fabb}, !- Handle
   EL4 West Perim Plnm (G.W10),            !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -599,12 +615,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {03d8545b-32d0-4d6a-86af-172dbd145128}; !- Thermal Zone Name
+  {03d8545b-32d0-4d6a-86af-172dbd145128}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {b9bcede5-6035-4067-88e2-a5402eb99204}, !- Handle
   EL4 North Perim Plnm (G.N11),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -612,12 +629,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {d7c7b39b-f76e-413d-9dcc-96f709110ecc}; !- Thermal Zone Name
+  {d7c7b39b-f76e-413d-9dcc-96f709110ecc}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {e4f22b4e-67db-4b2c-8ef3-bf9db0782c62}, !- Handle
   EL4 South Perim Plnm (G.S12),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -625,12 +643,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {8b4e78a6-1d01-4d6d-be5d-abcb1f93e9d1}; !- Thermal Zone Name
+  {8b4e78a6-1d01-4d6d-be5d-abcb1f93e9d1}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {86f1a993-f77c-486d-b56c-9511ee26d545}, !- Handle
   EL4 Core Plnm (G.C13),                  !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -638,12 +657,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {7e1f588e-9317-4998-8818-d5298e63c5e5}; !- Thermal Zone Name
+  {7e1f588e-9317-4998-8818-d5298e63c5e5}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {47ccf4c5-52e4-49eb-89b6-8422bd5fb97f}, !- Handle
   EL4 North Perim Plnm (G.N14),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -651,12 +671,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {476a1f0f-965b-4913-a423-133fac1bd76f}; !- Thermal Zone Name
+  {476a1f0f-965b-4913-a423-133fac1bd76f}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {9fe3a7f0-bf0c-4215-ad24-eacb6283ceb2}, !- Handle
   EL4 South Perim Plnm (G.S15),           !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -664,12 +685,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {467ee788-2a3a-44b6-8061-b919029c9891}; !- Thermal Zone Name
+  {467ee788-2a3a-44b6-8061-b919029c9891}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {4e9386e8-ea2b-4fc4-8cff-847e1a73f8c2}, !- Handle
   EL4 Core Plnm (G.C16),                  !- Name
-  ,                                       !- Space Type Name
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -677,7 +699,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {51b9b6be-f010-49f2-9954-396fcb5ccdb2}, !- Building Story Name
-  {47693164-5c40-4e3e-8073-18cb4d91cc05}; !- Thermal Zone Name
+  {47693164-5c40-4e3e-8073-18cb4d91cc05}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Surface,
   {fc5d45a8-9c43-441c-b3ad-d4e4bb48e4d6}, !- Handle
@@ -6444,7 +6467,10 @@ OS:SpaceType,
   Dining,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {21808fd5-19c6-480e-b328-4245da5807c7}; !- Group Rendering Name
+  {21808fd5-19c6-480e-b328-4245da5807c7}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Hsp,                                    !- Standards Building Type
+  Dining;                                 !- Standards Space Type
 
 OS:Rendering:Color,
   {21808fd5-19c6-480e-b328-4245da5807c7}, !- Handle
@@ -6458,7 +6484,10 @@ OS:SpaceType,
   HspSurgOutptLab,                        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1e40ea0b-c4db-459f-bd6d-d9d8ae0f7ac7}; !- Group Rendering Name
+  {1e40ea0b-c4db-459f-bd6d-d9d8ae0f7ac7}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Hsp,                                    !- Standards Building Type
+  HspSurgOutptLab;                        !- Standards Space Type
 
 OS:Rendering:Color,
   {1e40ea0b-c4db-459f-bd6d-d9d8ae0f7ac7}, !- Handle
@@ -6472,7 +6501,10 @@ OS:SpaceType,
   Kitchen,                                !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {80009c8a-1c27-4dd2-a360-21a997d5f209}; !- Group Rendering Name
+  {80009c8a-1c27-4dd2-a360-21a997d5f209}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Hsp,                                    !- Standards Building Type
+  Kitchen;                                !- Standards Space Type
 
 OS:Rendering:Color,
   {80009c8a-1c27-4dd2-a360-21a997d5f209}, !- Handle
@@ -6488,8 +6520,8 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {54477dc6-4827-4b9c-9edc-7ac4cafc41fd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
-  ,                                       !- Standards Building Type
-  ;                                       !- Standards Space Type
+  Hsp,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {54477dc6-4827-4b9c-9edc-7ac4cafc41fd}, !- Handle
@@ -6505,8 +6537,8 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {bd1c3ea2-01be-4bd9-874e-afbf16a88c61}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
-  ,                                       !- Standards Building Type
-  ;                                       !- Standards Space Type
+  Hsp,                                    !- Standards Building Type
+  PatientRoom;                            !- Standards Space Type
 
 OS:Rendering:Color,
   {48185983-a8ef-4055-80bf-5299806695f3}, !- Handle
@@ -10532,4 +10564,14 @@ OS:ZoneHVAC:EquipmentList,
   {2dda8726-3890-4f68-a71c-b0afe2e10135}, !- Handle
   Zone HVAC Equipment List 49,            !- Name
   {467ee788-2a3a-44b6-8061-b919029c9891}; !- Thermal Zone
+
+OS:SpaceType,
+  {73c8f460-7bf8-40dc-8a5b-3e5dbba93b76}, !- Handle
+  Plenum,                                 !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Building Type
+  Plenum;                                 !- Standards Space Type
 

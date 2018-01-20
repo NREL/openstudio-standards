@@ -41,7 +41,7 @@ OS:Space,
 OS:Space,
   {6b971eb5-c3ac-47df-8a43-d0d49a8b7e40}, !- Handle
   EL1 Plnm (G.2),                         !- Name
-  ,                                       !- Space Type Name
+  {f5b85e66-f459-40fe-bc20-e617bffa7680}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -49,7 +49,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {ea4a1b6e-0c84-4f5b-aaa2-68e16ee1b95d}, !- Building Story Name
-  {60fe5081-aa3e-4e3a-aa86-f726412c48b9}; !- Thermal Zone Name
+  {60fe5081-aa3e-4e3a-aa86-f726412c48b9}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Surface,
   {3806faa3-d34e-42a5-b825-e9c3cc868a7e}, !- Handle
@@ -572,7 +573,10 @@ OS:SpaceType,
   Classroom,                              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {69c08e9c-a7bc-4798-b102-527b86e59a69}; !- Group Rendering Name
+  {69c08e9c-a7bc-4798-b102-527b86e59a69}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ERC,                                    !- Standards Building Type
+  Classroom;                              !- Standards Space Type
 
 OS:Rendering:Color,
   {69c08e9c-a7bc-4798-b102-527b86e59a69}, !- Handle
@@ -826,4 +830,14 @@ OS:ZoneHVAC:EquipmentList,
   {e1fa238d-ba89-4e2e-bdc2-482a539052b0}, !- Handle
   Zone HVAC Equipment List 3,             !- Name
   {0bdcf29b-8101-4f22-ae51-7e943d636b8a}; !- Thermal Zone
+
+OS:SpaceType,
+  {f5b85e66-f459-40fe-bc20-e617bffa7680}, !- Handle
+  Plenum,                                 !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Building Type
+  Plenum;                                 !- Standards Space Type
 

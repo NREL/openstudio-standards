@@ -80,7 +80,7 @@ OS:Space,
 OS:Space,
   {60e5cf01-a777-482c-9230-978cd3356893}, !- Handle
   EL1 West Perim Plnm (G.W6),             !- Name
-  ,                                       !- Space Type Name
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -88,12 +88,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {87840c01-b33e-489f-a1dc-0637b282bc36}, !- Building Story Name
-  {781b3d53-9905-42e0-8b87-18448c5672e6}; !- Thermal Zone Name
+  {781b3d53-9905-42e0-8b87-18448c5672e6}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {2a7bef10-b226-402a-a591-8a6de3207a75}, !- Handle
   EL1 SW Perim Plnm (G.SW7),              !- Name
-  ,                                       !- Space Type Name
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -101,12 +102,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {87840c01-b33e-489f-a1dc-0637b282bc36}, !- Building Story Name
-  {89d9cda4-5a76-4101-84df-af9ee95d6c49}; !- Thermal Zone Name
+  {89d9cda4-5a76-4101-84df-af9ee95d6c49}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {acc9a301-e5db-45f3-b1fd-b1e3fa9e33f8}, !- Handle
   EL1 NW Perim Plnm (G.NW8),              !- Name
-  ,                                       !- Space Type Name
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -114,12 +116,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {87840c01-b33e-489f-a1dc-0637b282bc36}, !- Building Story Name
-  {6948a317-4523-4f72-969f-4bb290f9dbaf}; !- Thermal Zone Name
+  {6948a317-4523-4f72-969f-4bb290f9dbaf}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {85084468-ae6c-4a77-8c35-21c2d894bb07}, !- Handle
   EL1 SE Perim Plnm (G.SE9),              !- Name
-  ,                                       !- Space Type Name
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -127,12 +130,13 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {87840c01-b33e-489f-a1dc-0637b282bc36}, !- Building Story Name
-  {f3cf1b4e-e516-4d77-bf9f-6fd0f8bc623f}; !- Thermal Zone Name
+  {f3cf1b4e-e516-4d77-bf9f-6fd0f8bc623f}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {52845182-b83b-4958-973e-0210e30665a8}, !- Handle
   EL1 NE Perim Plnm (G.NE10),             !- Name
-  ,                                       !- Space Type Name
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -140,7 +144,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {87840c01-b33e-489f-a1dc-0637b282bc36}, !- Building Story Name
-  {74ef0a4b-52d8-4eb1-a35a-e53bd2f4c96c}; !- Thermal Zone Name
+  {74ef0a4b-52d8-4eb1-a35a-e53bd2f4c96c}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Surface,
   {0d9f64d3-3e00-471a-8e49-e8cb72e701bf}, !- Handle
@@ -1765,7 +1770,10 @@ OS:SpaceType,
   Auditorium,                             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {6ba1649f-3a40-4103-ae73-cbddfad1325b}; !- Group Rendering Name
+  {6ba1649f-3a40-4103-ae73-cbddfad1325b}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Asm,                                    !- Standards Building Type
+  Auditorium;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {6ba1649f-3a40-4103-ae73-cbddfad1325b}, !- Handle
@@ -1779,7 +1787,10 @@ OS:SpaceType,
   OfficeGeneral,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {bf00f18d-ec33-479f-9741-b0ffb45182b8}; !- Group Rendering Name
+  {bf00f18d-ec33-479f-9741-b0ffb45182b8}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Asm,                                    !- Standards Building Type
+  OfficeGeneral;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {bf00f18d-ec33-479f-9741-b0ffb45182b8}, !- Handle
@@ -2607,4 +2618,14 @@ OS:ZoneHVAC:EquipmentList,
   {96c02b79-cb27-44a7-aa30-9f48dad08a9e}, !- Handle
   Zone HVAC Equipment List 10,            !- Name
   {74ef0a4b-52d8-4eb1-a35a-e53bd2f4c96c}; !- Thermal Zone
+
+OS:SpaceType,
+  {1ced028b-e4a9-4d14-83ff-be85c876c9e2}, !- Handle
+  Plenum,                                 !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Building Type
+  Plenum;                                 !- Standards Space Type
 
