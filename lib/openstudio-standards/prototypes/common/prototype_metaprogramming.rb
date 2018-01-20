@@ -473,6 +473,15 @@ end
   # Does nothing unless implmented by the specific standard
   def model_update_fan_efficiency(model)
   end
+
+  # Get the name of the building type used in lookups.
+  # For DEER, this is the building type.
+  #
+  # @param building_type [String] the building type
+  # @return [String] returns the lookup name as a string
+  def model_get_lookup_name(building_type)
+    return building_type
+  end
 end
 "
       end
