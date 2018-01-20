@@ -5,7 +5,7 @@ OS:Version,
 
 OS:BuildingStory,
   {fac19bec-d503-4d1a-8870-9e28d79dd012}, !- Handle
-  "EL1 Ground Flr",                       !- Name
+  EL1 Ground Flr,                         !- Name
   ,                                       !- Nominal Z Coordinate {m}
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
@@ -14,7 +14,7 @@ OS:BuildingStory,
 
 OS:Space,
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Handle
-  "EL1 ESE Perim Spc (G.ESE1)",           !- Name
+  EL1 ESE Perim Spc (G.ESE1),             !- Name
   {fda38c4d-b815-4763-ae5e-eac444a528f6}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -27,7 +27,7 @@ OS:Space,
 
 OS:Space,
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Handle
-  "EL1 SSW Perim Spc (G.SSW2)",           !- Name
+  EL1 SSW Perim Spc (G.SSW2),             !- Name
   {f750e5ca-117c-42fb-b229-4120e6ac488c}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -40,7 +40,7 @@ OS:Space,
 
 OS:Space,
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Handle
-  "EL1 NW Perim Spc (G.NW3)",             !- Name
+  EL1 NW Perim Spc (G.NW3),               !- Name
   {13209b99-4226-4a26-8950-9d6f7039c223}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -56,7 +56,7 @@ OS:Space,
 
 OS:Space,
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Handle
-  "EL1 North Perim Spc (G.N4)",           !- Name
+  EL1 North Perim Spc (G.N4),             !- Name
   {e218e120-5b48-433e-9d16-8f40bfd4341a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -69,7 +69,7 @@ OS:Space,
 
 OS:Space,
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Handle
-  "EL1 ESE Perim Plnm (G.ESE5)",          !- Name
+  EL1 ESE Perim Plnm (G.ESE5),            !- Name
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -82,7 +82,7 @@ OS:Space,
 
 OS:Space,
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Handle
-  "EL1 SSW Perim Plnm (G.SSW6)",          !- Name
+  EL1 SSW Perim Plnm (G.SSW6),            !- Name
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -95,7 +95,7 @@ OS:Space,
 
 OS:Space,
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Handle
-  "EL1 NW Perim Plnm (G.NW7)",            !- Name
+  EL1 NW Perim Plnm (G.NW7),              !- Name
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -108,7 +108,7 @@ OS:Space,
 
 OS:Space,
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Handle
-  "EL1 North Perim Plnm (G.N8)",          !- Name
+  EL1 North Perim Plnm (G.N8),            !- Name
   ,                                       !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -121,7 +121,7 @@ OS:Space,
 
 OS:Surface,
   {72ba54c3-1457-4134-bc53-3080d254e014}, !- Handle
-  "EL1 East Wall (G.ESE1.E1)",            !- Name
+  EL1 East Wall (G.ESE1.E1),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -138,7 +138,7 @@ OS:Surface,
 
 OS:SubSurface,
   {8580cdc2-0115-417e-8307-20d2d8562203}, !- Handle
-  "EL1 East Win (G.ESE1.E1.W1)",          !- Name
+  EL1 East Win (G.ESE1.E1.W1),            !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {72ba54c3-1457-4134-bc53-3080d254e014}, !- Surface Name
@@ -155,7 +155,7 @@ OS:SubSurface,
 
 OS:Surface,
   {3be5fbac-2816-483e-ba05-4c0861fd2d6d}, !- Handle
-  "EL1 North Wall (G.ESE1.E2)",           !- Name
+  EL1 North Wall (G.ESE1.E2),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -172,7 +172,7 @@ OS:Surface,
 
 OS:SubSurface,
   {8221e033-5698-43eb-98f4-54ea4052770f}, !- Handle
-  "EL1 North Win (G.ESE1.E2.W1)",         !- Name
+  EL1 North Win (G.ESE1.E2.W1),           !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {3be5fbac-2816-483e-ba05-4c0861fd2d6d}, !- Surface Name
@@ -189,7 +189,7 @@ OS:SubSurface,
 
 OS:Surface,
   {cbff3a15-45d6-4b3e-8449-8f4ad71c0fb8}, !- Handle
-  "EL1 South Wall (G.ESE1.E3)",           !- Name
+  EL1 South Wall (G.ESE1.E3),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -206,7 +206,7 @@ OS:Surface,
 
 OS:SubSurface,
   {2e123d9c-6cbc-47bb-a1b3-7b8a2ce85c33}, !- Handle
-  "EL1 South Win (G.ESE1.E3.W1)",         !- Name
+  EL1 South Win (G.ESE1.E3.W1),           !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {cbff3a15-45d6-4b3e-8449-8f4ad71c0fb8}, !- Surface Name
@@ -223,7 +223,7 @@ OS:SubSurface,
 
 OS:Surface,
   {1e8e8ba5-2dbc-40eb-8471-6611fee06313}, !- Handle
-  "EL1 West Wall (G.ESE1.I1)",            !- Name
+  EL1 West Wall (G.ESE1.I1),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -240,7 +240,7 @@ OS:Surface,
 
 OS:Surface,
   {6421f15b-4563-4a70-a7e8-eff1c6723454}, !- Handle
-  "EL1 West Wall (G.ESE1.I1)"-mirror,     !- Name
+  EL1 West Wall (G.ESE1.I1)-mirror,       !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -257,7 +257,7 @@ OS:Surface,
 
 OS:Surface,
   {91f8f8ae-1d00-479e-9b5e-dc8d2a2dc978}, !- Handle
-  "EL1 North Wall (G.ESE1.I2)",           !- Name
+  EL1 North Wall (G.ESE1.I2),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -274,7 +274,7 @@ OS:Surface,
 
 OS:Surface,
   {09169dcd-3545-4458-9dcd-194342e8f522}, !- Handle
-  "EL1 North Wall (G.ESE1.I2)"-mirror,    !- Name
+  EL1 North Wall (G.ESE1.I2)-mirror,      !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -291,7 +291,7 @@ OS:Surface,
 
 OS:Surface,
   {42f41297-2d37-48e8-835e-c68d75247f40}, !- Handle
-  "EL1 West Wall (G.ESE1.I3)",            !- Name
+  EL1 West Wall (G.ESE1.I3),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -308,7 +308,7 @@ OS:Surface,
 
 OS:Surface,
   {cee5a14c-02d2-4e12-b89e-2aa161e1f5f6}, !- Handle
-  "EL1 West Wall (G.ESE1.I3)"-mirror,     !- Name
+  EL1 West Wall (G.ESE1.I3)-mirror,       !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -325,7 +325,7 @@ OS:Surface,
 
 OS:Surface,
   {6d0aa095-4cb7-4d31-972b-9fc49a964fb6}, !- Handle
-  "EL1 West Wall (G.ESE1.I4)",            !- Name
+  EL1 West Wall (G.ESE1.I4),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -342,7 +342,7 @@ OS:Surface,
 
 OS:Surface,
   {57d7dc45-b428-42a1-ae62-5587c5e4d268}, !- Handle
-  "EL1 West Wall (G.ESE1.I4)"-mirror,     !- Name
+  EL1 West Wall (G.ESE1.I4)-mirror,       !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -359,7 +359,7 @@ OS:Surface,
 
 OS:Surface,
   {e754b89c-956e-42c4-a77d-832611c1ba48}, !- Handle
-  "EL1 Ceiling (G.ESE1.I5)",              !- Name
+  EL1 Ceiling (G.ESE1.I5),                !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -378,7 +378,7 @@ OS:Surface,
 
 OS:Surface,
   {70ea76a4-f826-4bc5-bc20-f7693849b584}, !- Handle
-  "EL1 Ceiling (G.ESE1.I5)"-mirror,       !- Name
+  EL1 Ceiling (G.ESE1.I5)-mirror,         !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -397,7 +397,7 @@ OS:Surface,
 
 OS:Surface,
   {5cf38c25-09a0-4849-84d6-3cf01be7b646}, !- Handle
-  "EL1 Flr (G.ESE1.U1)",                  !- Name
+  EL1 Flr (G.ESE1.U1),                    !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {219f5563-f2d0-441c-b7b6-7a36e568ba8b}, !- Space Name
@@ -416,7 +416,7 @@ OS:Surface,
 
 OS:Surface,
   {f4c84dc4-6375-424f-8ac7-6ac7343ca3dc}, !- Handle
-  "EL1 South Wall (G.SSW2.E4)",           !- Name
+  EL1 South Wall (G.SSW2.E4),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -433,7 +433,7 @@ OS:Surface,
 
 OS:SubSurface,
   {a67e27b4-a648-40e7-ab28-e12771610da3}, !- Handle
-  "EL1 South Win (G.SSW2.E4.W1)",         !- Name
+  EL1 South Win (G.SSW2.E4.W1),           !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {f4c84dc4-6375-424f-8ac7-6ac7343ca3dc}, !- Surface Name
@@ -450,7 +450,7 @@ OS:SubSurface,
 
 OS:Surface,
   {1ae2ad40-8136-4e54-b06c-025cbfa1c251}, !- Handle
-  "EL1 West Wall (G.SSW2.E5)",            !- Name
+  EL1 West Wall (G.SSW2.E5),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -467,7 +467,7 @@ OS:Surface,
 
 OS:SubSurface,
   {9ee192b5-3f4e-4195-be70-bb66d4a37032}, !- Handle
-  "EL1 West Win (G.SSW2.E5.W1)",          !- Name
+  EL1 West Win (G.SSW2.E5.W1),            !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {1ae2ad40-8136-4e54-b06c-025cbfa1c251}, !- Surface Name
@@ -484,7 +484,7 @@ OS:SubSurface,
 
 OS:Surface,
   {efbc193e-f573-426e-b7d3-8f3a24cbcc6e}, !- Handle
-  "EL1 Ceiling (G.SSW2.I6)",              !- Name
+  EL1 Ceiling (G.SSW2.I6),                !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -501,7 +501,7 @@ OS:Surface,
 
 OS:Surface,
   {883b2184-966e-4236-b93c-9939c3d185d2}, !- Handle
-  "EL1 Ceiling (G.SSW2.I6)"-mirror,       !- Name
+  EL1 Ceiling (G.SSW2.I6)-mirror,         !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -518,7 +518,7 @@ OS:Surface,
 
 OS:Surface,
   {f3f2d4bb-3af3-4f4e-ac41-0522eb214359}, !- Handle
-  "EL1 Flr (G.SSW2.U2)",                  !- Name
+  EL1 Flr (G.SSW2.U2),                    !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -535,7 +535,7 @@ OS:Surface,
 
 OS:Surface,
   {ac82d259-6d02-48ba-95a9-c405132e2c8a}, !- Handle
-  "EL1 West Wall (G.NW3.E6)",             !- Name
+  EL1 West Wall (G.NW3.E6),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -552,7 +552,7 @@ OS:Surface,
 
 OS:Surface,
   {b41d4845-0f0b-4b09-bc9f-e4418933b5bd}, !- Handle
-  "EL1 North Wall (G.NW3.E7)",            !- Name
+  EL1 North Wall (G.NW3.E7),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -569,7 +569,7 @@ OS:Surface,
 
 OS:Surface,
   {8647c677-89e8-4b9d-b93f-b6710bcdb897}, !- Handle
-  "EL1 South Wall (G.NW3.I7)",            !- Name
+  EL1 South Wall (G.NW3.I7),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -586,7 +586,7 @@ OS:Surface,
 
 OS:Surface,
   {b1046404-558d-4c7c-9588-543237da733e}, !- Handle
-  "EL1 South Wall (G.NW3.I7)"-mirror,     !- Name
+  EL1 South Wall (G.NW3.I7)-mirror,       !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0a05bdfa-c2f9-437e-a466-9031965360aa}, !- Space Name
@@ -603,7 +603,7 @@ OS:Surface,
 
 OS:Surface,
   {0bd87d1a-cf2c-4ea2-9f01-d410b88042cc}, !- Handle
-  "EL1 Ceiling (G.NW3.I8)",               !- Name
+  EL1 Ceiling (G.NW3.I8),                 !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -620,7 +620,7 @@ OS:Surface,
 
 OS:Surface,
   {e03dccb7-11bb-44e8-a1cb-cf94aeab341e}, !- Handle
-  "EL1 Ceiling (G.NW3.I8)"-mirror,        !- Name
+  EL1 Ceiling (G.NW3.I8)-mirror,          !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -637,7 +637,7 @@ OS:Surface,
 
 OS:Surface,
   {c085fe9f-99eb-4a68-9a80-b938496e7a53}, !- Handle
-  "EL1 Flr (G.NW3.U3)",                   !- Name
+  EL1 Flr (G.NW3.U3),                     !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -654,7 +654,7 @@ OS:Surface,
 
 OS:Surface,
   {bbdcc5bc-31cb-4329-a213-c89938be890f}, !- Handle
-  "EL1 North Wall (G.N4.E8)",             !- Name
+  EL1 North Wall (G.N4.E8),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -671,7 +671,7 @@ OS:Surface,
 
 OS:Surface,
   {8cd29247-8b0f-4a90-a664-90aa388d35c9}, !- Handle
-  "EL1 West Wall (G.N4.I9)",              !- Name
+  EL1 West Wall (G.N4.I9),                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -688,7 +688,7 @@ OS:Surface,
 
 OS:Surface,
   {24c6d721-c176-4fd0-912e-d678a6e1cd86}, !- Handle
-  "EL1 West Wall (G.N4.I9)"-mirror,       !- Name
+  EL1 West Wall (G.N4.I9)-mirror,         !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d5e1e4a-c9ac-475e-bbfd-3387d544e489}, !- Space Name
@@ -705,7 +705,7 @@ OS:Surface,
 
 OS:Surface,
   {9e359e65-a779-4d1b-9283-8e87c13a71f2}, !- Handle
-  "EL1 Ceiling (G.N4.I10)",               !- Name
+  EL1 Ceiling (G.N4.I10),                 !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -722,7 +722,7 @@ OS:Surface,
 
 OS:Surface,
   {e886616c-58b4-4d0f-bdac-8f1f3fa59bfb}, !- Handle
-  "EL1 Ceiling (G.N4.I10)"-mirror,        !- Name
+  EL1 Ceiling (G.N4.I10)-mirror,          !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -739,7 +739,7 @@ OS:Surface,
 
 OS:Surface,
   {a4b562af-f0e8-4ed0-acb0-76e5ee11a631}, !- Handle
-  "EL1 Flr (G.N4.U4)",                    !- Name
+  EL1 Flr (G.N4.U4),                      !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {8765e28b-0714-4437-acc6-a4c4d6ea17a4}, !- Space Name
@@ -756,7 +756,7 @@ OS:Surface,
 
 OS:Surface,
   {1e9596ed-54fc-4793-bca2-7945fd68741c}, !- Handle
-  "EL1 East Wall (G.ESE5.E9)",            !- Name
+  EL1 East Wall (G.ESE5.E9),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -773,7 +773,7 @@ OS:Surface,
 
 OS:Surface,
   {d64e63cc-e3a9-4abf-992d-7024bd30496d}, !- Handle
-  "EL1 North Wall (G.ESE5.E10)",          !- Name
+  EL1 North Wall (G.ESE5.E10),            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -790,7 +790,7 @@ OS:Surface,
 
 OS:Surface,
   {82876fd3-1f40-41d7-9b25-8e127cbfa31c}, !- Handle
-  "EL1 South Wall (G.ESE5.E11)",          !- Name
+  EL1 South Wall (G.ESE5.E11),            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -807,7 +807,7 @@ OS:Surface,
 
 OS:Surface,
   {f74f9d87-b1d5-4b85-8b95-6f0d9434b79d}, !- Handle
-  "EL1 Roof (G.ESE5.E12)",                !- Name
+  EL1 Roof (G.ESE5.E12),                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -826,7 +826,7 @@ OS:Surface,
 
 OS:Surface,
   {be3a4066-be45-449d-91cf-c0c52973e552}, !- Handle
-  "EL1 West Wall (G.ESE5.I11)",           !- Name
+  EL1 West Wall (G.ESE5.I11),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -843,7 +843,7 @@ OS:Surface,
 
 OS:Surface,
   {40f27ca3-d359-4962-9400-8f7318bcc83f}, !- Handle
-  "EL1 West Wall (G.ESE5.I11)"-mirror,    !- Name
+  EL1 West Wall (G.ESE5.I11)-mirror,      !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -860,7 +860,7 @@ OS:Surface,
 
 OS:Surface,
   {a78478bc-90fb-4e00-b3d5-f4439552cd73}, !- Handle
-  "EL1 North Wall (G.ESE5.I12)",          !- Name
+  EL1 North Wall (G.ESE5.I12),            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -877,7 +877,7 @@ OS:Surface,
 
 OS:Surface,
   {b29a27d9-838a-4b16-8a65-22d9afac3a4e}, !- Handle
-  "EL1 North Wall (G.ESE5.I12)"-mirror,   !- Name
+  EL1 North Wall (G.ESE5.I12)-mirror,     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -894,7 +894,7 @@ OS:Surface,
 
 OS:Surface,
   {80157231-9e2d-468f-bb2c-6fb7ee5ae700}, !- Handle
-  "EL1 West Wall (G.ESE5.I13)",           !- Name
+  EL1 West Wall (G.ESE5.I13),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -911,7 +911,7 @@ OS:Surface,
 
 OS:Surface,
   {48a795b2-8540-4d28-9b28-c9a0306c5714}, !- Handle
-  "EL1 West Wall (G.ESE5.I13)"-mirror,    !- Name
+  EL1 West Wall (G.ESE5.I13)-mirror,      !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -928,7 +928,7 @@ OS:Surface,
 
 OS:Surface,
   {6a8c6a1c-b81b-477c-bb44-3e2f4ffa9ba8}, !- Handle
-  "EL1 West Wall (G.ESE5.I14)",           !- Name
+  EL1 West Wall (G.ESE5.I14),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c3d46a43-c808-4a67-9ca6-19015ec0aa2a}, !- Space Name
@@ -945,7 +945,7 @@ OS:Surface,
 
 OS:Surface,
   {6b068c96-e6ab-4b3f-bb14-2ca8f5576d52}, !- Handle
-  "EL1 West Wall (G.ESE5.I14)"-mirror,    !- Name
+  EL1 West Wall (G.ESE5.I14)-mirror,      !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -962,7 +962,7 @@ OS:Surface,
 
 OS:Surface,
   {7e8948b4-8f3b-4c19-ace9-45920da33518}, !- Handle
-  "EL1 South Wall (G.SSW6.E13)",          !- Name
+  EL1 South Wall (G.SSW6.E13),            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -979,7 +979,7 @@ OS:Surface,
 
 OS:Surface,
   {3ea02990-08b9-46e2-b84a-3ad8a91d53ff}, !- Handle
-  "EL1 West Wall (G.SSW6.E14)",           !- Name
+  EL1 West Wall (G.SSW6.E14),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -996,7 +996,7 @@ OS:Surface,
 
 OS:Surface,
   {2ceb5d21-03b0-409d-887d-b61854c019b5}, !- Handle
-  "EL1 Roof (G.SSW6.E15)",                !- Name
+  EL1 Roof (G.SSW6.E15),                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -1013,7 +1013,7 @@ OS:Surface,
 
 OS:Surface,
   {4468d6ac-7b81-450a-abee-d2d15ef6b5dc}, !- Handle
-  "EL1 West Wall (G.NW7.E16)",            !- Name
+  EL1 West Wall (G.NW7.E16),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -1030,7 +1030,7 @@ OS:Surface,
 
 OS:Surface,
   {b119fc64-e175-48a5-af5c-a737bb027884}, !- Handle
-  "EL1 North Wall (G.NW7.E17)",           !- Name
+  EL1 North Wall (G.NW7.E17),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -1047,7 +1047,7 @@ OS:Surface,
 
 OS:Surface,
   {0336f574-c714-4c08-9a0a-8040a29b74bb}, !- Handle
-  "EL1 Roof (G.NW7.E18)",                 !- Name
+  EL1 Roof (G.NW7.E18),                   !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -1064,7 +1064,7 @@ OS:Surface,
 
 OS:Surface,
   {a5b0edac-ed41-4b1e-9f28-2361afc54224}, !- Handle
-  "EL1 South Wall (G.NW7.I15)",           !- Name
+  EL1 South Wall (G.NW7.I15),             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name
@@ -1081,7 +1081,7 @@ OS:Surface,
 
 OS:Surface,
   {1df64584-48b0-4363-a80e-1d6dfe7e02d5}, !- Handle
-  "EL1 South Wall (G.NW7.I15)"-mirror,    !- Name
+  EL1 South Wall (G.NW7.I15)-mirror,      !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2b7ea482-a75b-46a7-b933-444a9b5a5e94}, !- Space Name
@@ -1098,7 +1098,7 @@ OS:Surface,
 
 OS:Surface,
   {f9c12bdc-a8e2-484c-bd1f-d4296005163f}, !- Handle
-  "EL1 North Wall (G.N8.E19)",            !- Name
+  EL1 North Wall (G.N8.E19),              !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -1115,7 +1115,7 @@ OS:Surface,
 
 OS:Surface,
   {f7f575f9-3c8b-4e39-90b3-fff392c3594d}, !- Handle
-  "EL1 Roof (G.N8.E20)",                  !- Name
+  EL1 Roof (G.N8.E20),                    !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -1132,7 +1132,7 @@ OS:Surface,
 
 OS:Surface,
   {e511fea7-000f-4440-8234-aa0e8f937d1a}, !- Handle
-  "EL1 West Wall (G.N8.I16)",             !- Name
+  EL1 West Wall (G.N8.I16),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9cde3e9a-4e9c-4af1-9a9b-9f63336610a4}, !- Space Name
@@ -1149,7 +1149,7 @@ OS:Surface,
 
 OS:Surface,
   {cc0a84a4-c4e3-45f1-8b3f-ed9c74dd9ea5}, !- Handle
-  "EL1 West Wall (G.N8.I16)"-mirror,      !- Name
+  EL1 West Wall (G.N8.I16)-mirror,        !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d283f5c9-4a4f-4324-8d99-d5d5784cd43b}, !- Space Name

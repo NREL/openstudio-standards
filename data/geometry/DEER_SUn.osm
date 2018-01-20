@@ -5,7 +5,7 @@ OS:Version,
 
 OS:BuildingStory,
   {8bf1e529-f937-4fde-9374-ea076ca172ff}, !- Handle
-  "EL1 Ground Flr",                       !- Name
+  EL1 Ground Flr,                         !- Name
   ,                                       !- Nominal Z Coordinate {m}
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
@@ -14,7 +14,7 @@ OS:BuildingStory,
 
 OS:Space,
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Handle
-  "EL1 South Perim Spc (G.S1)",           !- Name
+  EL1 South Perim Spc (G.S1),             !- Name
   {ca52d123-93a2-49ac-9d2d-3cff51cd6a9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -27,7 +27,7 @@ OS:Space,
 
 OS:Space,
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Handle
-  "EL1 North Perim Spc (G.N2)",           !- Name
+  EL1 North Perim Spc (G.N2),             !- Name
   {ca52d123-93a2-49ac-9d2d-3cff51cd6a9d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
@@ -40,7 +40,7 @@ OS:Space,
 
 OS:Surface,
   {57014e83-9763-4db8-ab88-b4f7c08cfc2e}, !- Handle
-  "EL1 South Wall (G.S1.E1)",             !- Name
+  EL1 South Wall (G.S1.E1),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -57,7 +57,7 @@ OS:Surface,
 
 OS:SubSurface,
   {3d67e7c2-c96b-4823-a9b7-e2be25c9f8f6}, !- Handle
-  "EL1 South Win (G.S1.E1.W1)",           !- Name
+  EL1 South Win (G.S1.E1.W1),             !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {57014e83-9763-4db8-ab88-b4f7c08cfc2e}, !- Surface Name
@@ -74,7 +74,7 @@ OS:SubSurface,
 
 OS:Surface,
   {5f690d09-5dc9-46f0-b381-8e36201c2e43}, !- Handle
-  "EL1 East Wall (G.S1.E2)",              !- Name
+  EL1 East Wall (G.S1.E2),                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -91,7 +91,7 @@ OS:Surface,
 
 OS:SubSurface,
   {199f56bd-45a2-4977-b015-374a957f771e}, !- Handle
-  "EL1 East Win (G.S1.E2.W1)",            !- Name
+  EL1 East Win (G.S1.E2.W1),              !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {5f690d09-5dc9-46f0-b381-8e36201c2e43}, !- Surface Name
@@ -108,7 +108,7 @@ OS:SubSurface,
 
 OS:Surface,
   {17098709-ee7c-4230-a6bd-d6944dba6e77}, !- Handle
-  "EL1 West Wall (G.S1.E3)",              !- Name
+  EL1 West Wall (G.S1.E3),                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -125,7 +125,7 @@ OS:Surface,
 
 OS:SubSurface,
   {760d3ff6-5500-47a5-80d3-0d41d880d992}, !- Handle
-  "EL1 West Win (G.S1.E3.W1)",            !- Name
+  EL1 West Win (G.S1.E3.W1),              !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {17098709-ee7c-4230-a6bd-d6944dba6e77}, !- Surface Name
@@ -142,7 +142,7 @@ OS:SubSurface,
 
 OS:Surface,
   {17be3ce2-2f91-4f3f-b013-f001be0372b3}, !- Handle
-  "EL1 Roof (G.S1.E4)",                   !- Name
+  EL1 Roof (G.S1.E4),                     !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -159,7 +159,7 @@ OS:Surface,
 
 OS:Surface,
   {99431fc7-6eac-42f1-9061-d964e4b8cbbe}, !- Handle
-  "EL1 North Wall (G.S1.I1)",             !- Name
+  EL1 North Wall (G.S1.I1),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -176,7 +176,7 @@ OS:Surface,
 
 OS:Surface,
   {e53cc627-866f-4f30-8c4b-8aac9aa84d1f}, !- Handle
-  "EL1 North Wall (G.S1.I1)"-mirror,      !- Name
+  EL1 North Wall (G.S1.I1)-mirror,        !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
@@ -193,7 +193,7 @@ OS:Surface,
 
 OS:Surface,
   {906a9eb8-23a4-412f-a940-7140e6fbf820}, !- Handle
-  "EL1 Flr (G.S1.U1)",                    !- Name
+  EL1 Flr (G.S1.U1),                      !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {d7692415-4564-4dc0-b67b-3aa5eda56a77}, !- Space Name
@@ -210,7 +210,7 @@ OS:Surface,
 
 OS:Surface,
   {a67626e0-8dce-4ad2-aa8e-c747962ac408}, !- Handle
-  "EL1 North Wall (G.N2.E5)",             !- Name
+  EL1 North Wall (G.N2.E5),               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
@@ -227,7 +227,7 @@ OS:Surface,
 
 OS:SubSurface,
   {251992a8-d076-4d3f-81d9-d5516c597512}, !- Handle
-  "EL1 North Win (G.N2.E5.W1)",           !- Name
+  EL1 North Win (G.N2.E5.W1),             !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {a67626e0-8dce-4ad2-aa8e-c747962ac408}, !- Surface Name
@@ -244,7 +244,7 @@ OS:SubSurface,
 
 OS:Surface,
   {63eeacdb-51f2-43fa-a183-2a109ef41931}, !- Handle
-  "EL1 West Wall (G.N2.E6)",              !- Name
+  EL1 West Wall (G.N2.E6),                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
@@ -261,7 +261,7 @@ OS:Surface,
 
 OS:SubSurface,
   {d1b1fbea-a5a3-4538-a1b1-a1eb8e626b43}, !- Handle
-  "EL1 West Win (G.N2.E6.W1)",            !- Name
+  EL1 West Win (G.N2.E6.W1),              !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {63eeacdb-51f2-43fa-a183-2a109ef41931}, !- Surface Name
@@ -278,7 +278,7 @@ OS:SubSurface,
 
 OS:Surface,
   {f18ed7ac-fa95-417c-baa4-25841d965ed1}, !- Handle
-  "EL1 East Wall (G.N2.E7)",              !- Name
+  EL1 East Wall (G.N2.E7),                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
@@ -295,7 +295,7 @@ OS:Surface,
 
 OS:SubSurface,
   {8c65d247-3152-4ec6-8c1f-ea678fe9136e}, !- Handle
-  "EL1 East Win (G.N2.E7.W1)",            !- Name
+  EL1 East Win (G.N2.E7.W1),              !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {f18ed7ac-fa95-417c-baa4-25841d965ed1}, !- Surface Name
@@ -312,7 +312,7 @@ OS:SubSurface,
 
 OS:Surface,
   {b788cba1-e969-4f67-a343-98ea03f26bb1}, !- Handle
-  "EL1 Roof (G.N2.E8)",                   !- Name
+  EL1 Roof (G.N2.E8),                     !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
@@ -329,7 +329,7 @@ OS:Surface,
 
 OS:Surface,
   {dba1d24c-2d4e-41be-a2c3-b3b2c8bb6377}, !- Handle
-  "EL1 Flr (G.N2.U2)",                    !- Name
+  EL1 Flr (G.N2.U2),                      !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {faa88c2a-23da-456e-8092-04859202aa8e}, !- Space Name
