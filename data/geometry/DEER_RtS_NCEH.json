@@ -1,0 +1,98 @@
+[
+  {
+    "name": "EL1 Sys1 (UVT) (G.S1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)",
+      "EL1 South Perim Pl Spc (G.S3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.N2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N2)",
+      "EL1 North Perim Pl Spc (G.N4)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.W1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL2 West Perim Spc (G.W1)",
+      "EL2 West Perim Pl Spc (G.W3)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.E2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL2 East Perim Spc (G.E2)",
+      "EL2 East Perim Pl Spc (G.E4)"
+    ]
+  },
+  {
+    "name": "EL3 Sys1 (UVT) (G.N1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)",
+      "EL3 North Perim Pl Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL3 Sys1 (UVT) (G.S2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL3 South Perim Spc (G.S2)",
+      "EL3 South Perim Pl Spc (G.S4)"
+    ]
+  },
+  {
+    "name": "EL4 Sys1 (UVT) (G.E1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL4 East Perim Spc (G.E1)",
+      "EL4 East Perim Pl Spc (G.E3)"
+    ]
+  },
+  {
+    "name": "EL4 Sys1 (UVT) (G.W2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL4 West Perim Spc (G.W2)",
+      "EL4 West Perim Pl Spc (G.W4)"
+    ]
+  }
+]

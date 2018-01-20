@@ -1,0 +1,79 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.S1)",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)",
+      "EL1 South Perim Pl Spc (G.S12)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E2)",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)",
+      "EL1 East Perim Pl Spc (G.E13)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)",
+      "EL1 North Perim Pl Spc (G.N14)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)",
+      "EL1 West Perim Pl Spc (G.W15)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C5)",
+    "space_names": [
+      "EL1 Core Spc (G.C5)",
+      "EL1 Core Pl Spc (G.C16)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C6)",
+    "space_names": [
+      "EL1 Core Spc (G.C6)",
+      "EL1 Core Pl Spc (G.C17)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C7)",
+    "space_names": [
+      "EL1 Core Spc (G.C7)",
+      "EL1 Core Pl Spc (G.C18)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C8)",
+    "space_names": [
+      "EL1 Core Spc (G.C8)",
+      "EL1 Core Pl Spc (G.C19)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C9)",
+    "space_names": [
+      "EL1 Core Spc (G.C9)",
+      "EL1 Core Pl Spc (G.C20)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C10)",
+    "space_names": [
+      "EL1 Core Spc (G.C10)",
+      "EL1 Core Pl Spc (G.C21)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C11)",
+    "space_names": [
+      "EL1 Core Spc (G.C11)",
+      "EL1 Core Pl Spc (G.C22)"
+    ]
+  }
+]

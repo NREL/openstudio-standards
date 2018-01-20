@@ -1,0 +1,142 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.S1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)",
+      "EL1 South Perim Pl Spc (G.S6)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E2)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)",
+      "EL1 East Perim Pl Spc (G.E7)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)",
+      "EL1 North Perim Pl Spc (G.N8)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)",
+      "EL1 West Perim Pl Spc (G.W9)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C5)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C5)",
+      "EL1 Core Pl Spc (G.C10)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.S11)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 South Perim Spc (T.S11)",
+      "EL1 South Perim Pl Spc (T.S16)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.E12)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (T.E12)",
+      "EL1 East Perim Pl Spc (T.E17)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.N13)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 North Perim Spc (T.N13)",
+      "EL1 North Perim Pl Spc (T.N18)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.W14)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (T.W14)",
+      "EL1 West Perim Pl Spc (T.W19)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.C15)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Electricity",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (T.C15)",
+      "EL1 Core Pl Spc (T.C20)"
+    ]
+  }
+]

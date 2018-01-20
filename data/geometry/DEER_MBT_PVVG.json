@@ -1,0 +1,25 @@
+[
+  {
+    "name": "EL1 Sys1 (PVAVS) (G)",
+    "type": "PVAV",
+    "vav_operation_schedule": null,
+    "vav_oa_damper_schedule": null,
+    "vav_fan_efficiency": 0.6,
+    "vav_fan_pressure_rise": 2.5,
+    "vav_fan_motor_efficiency": 0.9,
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)",
+      "EL1 East Perim Spc (G.E2)",
+      "EL1 North Perim Spc (G.N3)",
+      "EL1 West Perim Spc (G.W4)",
+      "EL1 Core Spc (G.C5)",
+      "EL1 Core Spc (G.C6)",
+      "EL1 Core Spc (G.C7)",
+      "EL1 Core Spc (G.C8)",
+      "EL1 Core Spc (G.C9)",
+      "EL1 Core Spc (G.C10)",
+      "EL1 Core Spc (G.C11)",
+      "EL1 Pl Spc (G.12)"
+    ]
+  }
+]

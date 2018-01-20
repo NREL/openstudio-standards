@@ -1,0 +1,456 @@
+[
+  {
+    "name": "E1 Sys1 (PVVT) (G.W1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E1 West Perim Spc (G.W1)",
+      "E1 West Perim Pl Spc (G.W2)"
+    ]
+  },
+  {
+    "name": "E2 Sys1 (PVVT) (G.W1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E2 West Perim Spc (G.W1)",
+      "E2 West Perim Pl Spc (G.W4)"
+    ]
+  },
+  {
+    "name": "E2 Sys1 (PVVT) (G.S2)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E2 South Perim Spc (G.S2)",
+      "E2 South Perim Pl Spc (G.S5)"
+    ]
+  },
+  {
+    "name": "E2 Sys1 (PVVT) (G.N3)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E2 North Perim Spc (G.N3)",
+      "E2 North Perim Pl Spc (G.N6)"
+    ]
+  },
+  {
+    "name": "E3 Sys1 (PVVT) (G.S1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E3 South Perim Spc (G.S1)"
+    ]
+  },
+  {
+    "name": "E4 Sys2 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 South Perim Spc (G.S1)",
+      "E4 East Perim Spc (G.E2)",
+      "E4 North Perim Spc (G.N3)",
+      "E4 West Perim Spc (G.W4)",
+      "E4 Core Spc (G.C6)",
+      "E4 South Perim Pl Spc (G.S7)",
+      "E4 East Perim Pl Spc (G.E8)",
+      "E4 North Perim Pl Spc (G.N9)",
+      "E4 West Perim Pl Spc (G.W10)",
+      "E4 Core Pl Spc (G.C12)"
+    ]
+  },
+  {
+    "name": "E4 Sys2 (PVVT) (M)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 South Perim Spc (M.S13)",
+      "E4 East Perim Spc (M.E14)",
+      "E4 North Perim Spc (M.N15)",
+      "E4 West Perim Spc (M.W16)",
+      "E4 Core Spc (M.C18)",
+      "E4 South Perim Pl Spc (M.S19)",
+      "E4 East Perim Pl Spc (M.E20)",
+      "E4 North Perim Pl Spc (M.N21)",
+      "E4 West Perim Pl Spc (M.W22)",
+      "E4 Core Pl Spc (M.C24)"
+    ]
+  },
+  {
+    "name": "E4 Sys2 (PVVT) (T)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 South Perim Spc (T.S25)",
+      "E4 East Perim Spc (T.E26)",
+      "E4 North Perim Spc (T.N27)",
+      "E4 West Perim Spc (T.W28)",
+      "E4 Core Spc (T.C30)",
+      "E4 South Perim Pl Spc (T.S31)",
+      "E4 East Perim Pl Spc (T.E32)",
+      "E4 North Perim Pl Spc (T.N33)",
+      "E4 West Perim Pl Spc (T.W34)",
+      "E4 Core Pl Spc (T.C36)"
+    ]
+  },
+  {
+    "name": "E5 Sys3 (PVVT) (G.N1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E5 North Perim Spc (G.N1)",
+      "E5 North Perim Pl Spc (G.N2)"
+    ]
+  },
+  {
+    "name": "E6 Sys3 (PVVT) (G.N1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E6 North Perim Spc (G.N1)",
+      "E6 North Perim Pl Spc (G.N4)"
+    ]
+  },
+  {
+    "name": "E6 Sys3 (PVVT) (G.W2)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E6 West Perim Spc (G.W2)",
+      "E6 West Perim Pl Spc (G.W5)"
+    ]
+  },
+  {
+    "name": "E6 Sys3 (PVVT) (G.E3)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E6 East Perim Spc (G.E3)",
+      "E6 East Perim Pl Spc (G.E6)"
+    ]
+  },
+  {
+    "name": "E7 Sys3 (PVVT) (G.W1)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E7 West Perim Spc (G.W1)"
+    ]
+  },
+  {
+    "name": "E8 Sys4 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 West Perim Spc (G.W1)",
+      "E8 South Perim Spc (G.S2)",
+      "E8 East Perim Spc (G.E3)",
+      "E8 North Perim Spc (G.N4)",
+      "E8 Core Spc (G.C6)",
+      "E8 West Perim Pl Spc (G.W7)",
+      "E8 South Perim Pl Spc (G.S8)",
+      "E8 East Perim Pl Spc (G.E9)",
+      "E8 North Perim Pl Spc (G.N10)",
+      "E8 Core Pl Spc (G.C12)"
+    ]
+  },
+  {
+    "name": "E8 Sys4 (PVVT) (M)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 West Perim Spc (M.W13)",
+      "E8 South Perim Spc (M.S14)",
+      "E8 East Perim Spc (M.E15)",
+      "E8 North Perim Spc (M.N16)",
+      "E8 Core Spc (M.C18)",
+      "E8 West Perim Pl Spc (M.W19)",
+      "E8 South Perim Pl Spc (M.S20)",
+      "E8 East Perim Pl Spc (M.E21)",
+      "E8 North Perim Pl Spc (M.N22)",
+      "E8 Core Pl Spc (M.C24)"
+    ]
+  },
+  {
+    "name": "E8 Sys4 (PVVT) (T)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 West Perim Spc (T.W25)",
+      "E8 South Perim Spc (T.S26)",
+      "E8 East Perim Spc (T.E27)",
+      "E8 North Perim Spc (T.N28)",
+      "E8 Core Spc (T.C30)",
+      "E8 West Perim Pl Spc (T.W31)",
+      "E8 South Perim Pl Spc (T.S32)",
+      "E8 East Perim Pl Spc (T.E33)",
+      "E8 North Perim Pl Spc (T.N34)",
+      "E8 Core Pl Spc (T.C36)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (PVVT) (G.C5)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (G.C5)",
+      "E4 Core Pl Spc (G.C11)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (PVVT) (M.C17)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (M.C17)",
+      "E4 Core Pl Spc (M.C23)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (PVVT) (T.C29)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (T.C29)",
+      "E4 Core Pl Spc (T.C35)"
+    ]
+  },
+  {
+    "name": "E8 Sys5 (PVVT) (G.C5)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 Core Spc (G.C5)",
+      "E8 Core Pl Spc (G.C11)"
+    ]
+  },
+  {
+    "name": "E8 Sys5 (PVVT) (M.C17)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 Core Spc (M.C17)",
+      "E8 Core Pl Spc (M.C23)"
+    ]
+  },
+  {
+    "name": "E8 Sys5 (PVVT) (T.C29)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E8 Core Spc (T.C29)",
+      "E8 Core Pl Spc (T.C35)"
+    ]
+  },
+  {
+    "name": "E3 Sys6 (PSZ) (G.N2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Gas",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "E3 North Perim Spc (G.N2)"
+    ]
+  },
+  {
+    "name": "E7 Sys6 (PSZ) (G.E2)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Gas",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "E7 East Perim Spc (G.E2)"
+    ]
+  },
+  {
+    "name": "E9 Sys8 (PVVT) (G.C3)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (G.C3)"
+    ]
+  },
+  {
+    "name": "E9 Sys8 (PVVT) (M.C6)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (M.C6)"
+    ]
+  },
+  {
+    "name": "E9 Sys8 (PVVT) (T.C9)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (T.C9)"
+    ]
+  },
+  {
+    "name": "E10 Sys8 (PVVT) (G.C3)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E10 Core Spc (G.C3)"
+    ]
+  },
+  {
+    "name": "E10 Sys8 (PVVT) (M.C6)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E10 Core Spc (M.C6)"
+    ]
+  },
+  {
+    "name": "E10 Sys8 (PVVT) (T.C9)",
+    "type": "PSZ-AC",
+    "pszac_operation_schedule": null,
+    "pszac_oa_damper_schedule": null,
+    "pszac_cooling_type": "Single Speed DX AC",
+    "pszac_heating_type": "Gas",
+    "pszac_fan_type": "ConstantVolume",
+    "pszac_supplemental_heating_type": "Gas",
+    "space_names": [
+      "E10 Core Spc (T.C9)"
+    ]
+  }
+]

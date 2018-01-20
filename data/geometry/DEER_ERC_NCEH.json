@@ -1,0 +1,28 @@
+[
+  {
+    "name": "EL1 Sys1 (UVT) (G.1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL1 Spc (G.1)",
+      "EL1 CrZ (G.1)",
+      "EL1 Pl Spc (G.2)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.1)",
+    "type": "UnitHeater",
+    "unitheater_heating_type": "Electric",
+    "unitheater_fan_control_type": "OnOff",
+    "unitheater_fan_static_pressure": 1,
+    "unitheater_operation_schedule": null,
+    "space_names": [
+      "EL2 Spc (G.1)",
+      "EL2 CrZ (G.1)",
+      "EL2 Pl Spc (G.2)"
+    ]
+  }
+]
