@@ -189,7 +189,7 @@ def create_deer_class_array
   ]
 
   # Only a subset of building type and HVAC type combinations are valid
-  building_to_hvac = {
+  building_to_hvac_systems = {
       'Asm' => [
           'DXEH',
           'DXGF',
@@ -394,14 +394,14 @@ end
 
     # Create Building Specific classes for each building.
     # Example class DEER1985AsmDXGF
-    prototype_buildings.each do |name|
-      next if building_to_hvac[name].nil?
-      building_to_hvac[name].each do |hvac|
+    prototype_buildings.each do |building_type|
+      next if building_to_hvac_systems[building_type].nil?
+      building_to_hvac_systems[building_type].each do |hvac_system|
       class_array << "
-  # This class represents a prototypical #{template} #{name} #{hvac}.
-  class #{template}#{name}#{hvac} < #{template}
-  @@building_type = \"#{name}\"
-  @@hvac = \"#{hvac}\"
+  # This class represents a prototypical #{template} #{building_type} #{hvac_system}.
+  class #{template}#{building_type}#{hvac_system} < #{template}
+  @@building_type = \"#{building_type}\"
+  @@hvac_system = \"#{hvac_system}\"
   register_standard (\"\#{@@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
@@ -414,10 +414,10 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac}, nil)
+    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system}, nil)
     if @prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac}}, cannot create model.\")
-      raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
+      raise(\"Could not find prototype inputs for #{template}#{building_type}, cannot create model.\")
       return false
     end
     @lookup_building_type = @@building_type
@@ -435,7 +435,6 @@ end
   def set_variables()
     # Will be overwritten in class reopen file.
     # add all building methods for now.
-    self.extend(#{name}) unless @template == 'NECB 2011'
   end
 
   # Returns the mapping between the names of the spaces
