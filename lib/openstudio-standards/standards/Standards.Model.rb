@@ -2182,8 +2182,10 @@ class Standard
     # Find all the schedule rules that match the name
     rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-      return false # TODO: change to return empty optional schedule:ruleset?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+      sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+      sch_ruleset.setName("NOT ACTUALLY #{schedule_name}")
+      return sch_ruleset
     end
 
     # Make a schedule ruleset
@@ -4424,23 +4426,24 @@ class Standard
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     model = version_translator.loadModel(osm_model_path).get
     if model.getBuildingStorys.empty?
-      raise("Building Storeys are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
     end
     if model.getThermalZones.empty?
-      raise("ThermalZones are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
     end
     if model.getBuilding.standardsNumberOfStories.empty?
-      raise("standardsNumberOfStories are not set in the model #{osm_model_path}. \n Please define the stndards number of stories  before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
     end
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
-      raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
     end
 
     if @space_type_map.nil? || @space_type_map.empty?
-      @space_type_map = get_space_type_maps_from_model(model).sort.to_h
+      @space_type_map = get_space_type_maps_from_model(model)
       if @space_type_map.nil? || @space_type_map.empty?
-        raise("space_type_maps are not set in the model#{osm_model_path}, or in standards database#{@space_type_map}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
       else
+        @space_type_map = @space_type_map.sort.to_h
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
       end
     end
