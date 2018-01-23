@@ -1962,7 +1962,8 @@ class Standard
         # Don't check non-existent search criteria
         next unless object.key?(key)
         # Stop as soon as one of the search criteria is not met
-        if object[key] != value
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
           meets_all_search_criteria = false
           break
         end
@@ -2062,7 +2063,8 @@ class Standard
         # Don't check non-existent search criteria
         next unless object.key?(key)
         # Stop as soon as one of the search criteria is not met
-        if object[key] != value
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
           meets_all_search_criteria = false
           break
         end
