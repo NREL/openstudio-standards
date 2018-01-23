@@ -4,6 +4,7 @@ class Standard
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
   def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+    success = true
     require_relative 'Weather.stat_file'
 
     # Remove any existing Design Day objects that are in the file
@@ -67,7 +68,7 @@ class Standard
                         end
     if weather_file_name.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
-      return false
+      success = false
     end
 
     # Define where the weather files lives
@@ -126,8 +127,8 @@ class Standard
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Mean dry bulb is #{stat_file.mean_dry_bulb}")
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Delta dry bulb is #{stat_file.delta_dry_bulb}")
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .stat file for: #{stat_filename}.")
-      return false
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not find .stat file for weather, will use default water mains temperatures which may be inaccurate for the location.")
+      success = false
     end
 
     # Load in the ddy file based on convention that it is in
@@ -143,13 +144,17 @@ class Standard
           # OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
       end
+      # Check to ensure that some design days were added
+      if model.getDesignDays.size.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "No design days were loaded, check syntax of .ddy file: #{ddy_file}.")
+      end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
       puts "Could not find .ddy file for: #{ddy_file}."
-      return false
+      success = false
     end
 
-    return true
+    return success
   end
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
