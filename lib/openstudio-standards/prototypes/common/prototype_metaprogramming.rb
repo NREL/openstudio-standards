@@ -402,7 +402,7 @@ end
   class #{template}#{building_type}#{hvac_system} < #{template}
   @@building_type = \"#{building_type}\"
   @@hvac_system = \"#{hvac_system}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"\#{@@template}_\#{@@building_type}_\#{@@hvac_system}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -417,13 +417,23 @@ end
     @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system}, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
-      raise(\"Could not find prototype inputs for #{template}#{building_type}, cannot create model.\")
+      raise(\"Could not find prototype inputs for #{template}#{building_type}#{hvac_system}, cannot create model.\")
       return false
     end
     @lookup_building_type = @@building_type
     #ideally we should map the data required to a instance variable.
     @geometry_file = Folders.instance.data_geometry_folder + '/' + @prototype_input['geometry_osm']
+    if !File.exist?(@geometry_file)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
+      raise(\"Could not find geometry osm \#{@prototype_input['geometry_osm']} for #{template}#{building_type}#{hvac_system}, cannot create model.\")
+      return false
+    end
     hvac_map_file =  Folders.instance.data_geometry_folder + '/' + @prototype_input['hvac_json']
+    if !File.exist?(hvac_map_file)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
+      raise(\"Could not find HVAC json \#{@prototype_input['hvac_json']} for #{template}#{building_type}#{hvac_system}, cannot create model.\")
+      return false
+    end
     @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
     self.set_variables()
   end
@@ -481,6 +491,22 @@ end
   # @return [String] returns the lookup name as a string
   def model_get_lookup_name(building_type)
     return building_type
+  end
+
+  # Makes changes to the HVAC systems that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  # Makes changes to the SWH systems that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
   end
 end
 "
