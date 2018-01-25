@@ -79,7 +79,7 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
             
       # Paths for this test run
       
-      model_name = "#{building_type}-#{template}-#{climate_zone}"
+      model_name = "#{building_type}-#{template}-#{hvac_system}-#{climate_zone}"
       
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
@@ -92,12 +92,9 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
       output_path = OpenStudio::Path.new(run_dir)
             
       model = nil
-            puts "Creating Models dfa"
       # Create the model, if requested
       if create_models
-        puts "Creating Models"
-        prototype_creator = Standard.build("#{template}_#{building_type}")
-        puts prototype_creator.class
+        prototype_creator = Standard.build("#{template}_#{building_type}_#{hvac_system}")
         model = prototype_creator.model_create_prototype_model(climate_zone, nil, run_dir)
         output_variable_array =
           [
@@ -120,6 +117,9 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
           "Cooling Tower Fan Electric Energy"
         ]
         BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
+              
+        # Save the final osm
+        model.save(osm_path_string, true)
               
         # Convert the model to energyplus idf
         forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new

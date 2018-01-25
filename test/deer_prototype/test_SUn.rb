@@ -1,16 +1,16 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_deer_prototype_helper'
 
-class TestAsm < CreateDEERPrototypeBuildingTest
+class TestSUn < CreateDEERPrototypeBuildingTest
   
-  building_types = ['Asm']
+  building_types = ['SUn']
   templates = ['DEER Pre-1975']
-  hvacs = ['DXEH']#, 'DXGF', 'DXHP', 'NCEH', 'NCGF']
+  hvacs = ['Unc']
   climate_zones = ['CEC T24-CEC1']
   
-  # building_types = ['Asm']
+  # building_types = ['SUn']
   # templates = ['DEER Pre-1975', 'DEER 1985', 'DEER 1996', 'DEER 2003', 'DEER 2007', 'DEER 2011', 'DEER 2014', 'DEER 2015', 'DEER 2017']
-  # hvacs = ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
+  # hvacs = ['Unc']
   # climate_zones = ['CEC T24-CEC1', 'CEC T24-CEC2', 'CEC T24-CEC3', 'CEC T24-CEC4',
                   # 'CEC T24-CEC5', 'CEC T24-CEC6', 'CEC T24-CEC7', 'CEC T24-CEC8',
                   # 'CEC T24-CEC9', 'CEC T24-CEC10', 'CEC T24-CEC11', 'CEC T24-CEC12',
@@ -22,6 +22,6 @@ class TestAsm < CreateDEERPrototypeBuildingTest
   
   debug = false
   
-  TestAsm.create_run_model_tests(building_types, templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
+  TestSUn.create_run_model_tests(building_types, templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
   
 end

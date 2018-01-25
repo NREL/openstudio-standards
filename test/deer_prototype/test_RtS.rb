@@ -1,14 +1,14 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_deer_prototype_helper'
 
-class TestAsm < CreateDEERPrototypeBuildingTest
+class TestRtS < CreateDEERPrototypeBuildingTest
   
-  building_types = ['Asm']
+  building_types = ['RtS']
   templates = ['DEER Pre-1975']
-  hvacs = ['DXEH']#, 'DXGF', 'DXHP', 'NCEH', 'NCGF']
+  hvacs = ['DXEH'] # , 'DXGF', 'DXHP', 'NCEH', 'NCGF']
   climate_zones = ['CEC T24-CEC1']
   
-  # building_types = ['Asm']
+  # building_types = ['RtS']
   # templates = ['DEER Pre-1975', 'DEER 1985', 'DEER 1996', 'DEER 2003', 'DEER 2007', 'DEER 2011', 'DEER 2014', 'DEER 2015', 'DEER 2017']
   # hvacs = ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
   # climate_zones = ['CEC T24-CEC1', 'CEC T24-CEC2', 'CEC T24-CEC3', 'CEC T24-CEC4',
@@ -22,6 +22,6 @@ class TestAsm < CreateDEERPrototypeBuildingTest
   
   debug = false
   
-  TestAsm.create_run_model_tests(building_types, templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
+  TestRtS.create_run_model_tests(building_types, templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
   
 end
