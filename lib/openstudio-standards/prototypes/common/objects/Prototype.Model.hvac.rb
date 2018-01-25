@@ -6,7 +6,7 @@ class Standard
     # for each building in the Prototype.building_name files.
 
     # Add each HVAC system
-    @system_to_space_map .each do |system|
+    @system_to_space_map.each do |system|
       thermal_zones = model_get_zones_from_spaces_on_system(model, system)
 
       return_plenum = model_get_return_plenum_from_system(model, system)
@@ -31,7 +31,7 @@ class Standard
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           condenser_water_loop = nil
-          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+          if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Centrifugal',
@@ -42,10 +42,10 @@ class Standard
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                                  prototype_input['chw_pumping_type'],
-                                                  prototype_input['chiller_cooling_type'],
-                                                  prototype_input['chiller_condenser_type'],
-                                                  prototype_input['chiller_compressor_type'],
+                                                  system['chw_pumping_type'],
+                                                  system['chiller_cooling_type'],
+                                                  system['chiller_condenser_type'],
+                                                  system['chiller_compressor_type'],
                                                   'Electricity',
                                                   condenser_water_loop)
 
@@ -57,11 +57,11 @@ class Standard
                              hot_water_loop,
                              chilled_water_loop,
                              thermal_zones,
-                             prototype_input['vav_operation_schedule'],
-                             prototype_input['vav_oa_damper_schedule'],
-                             prototype_input['vav_fan_efficiency'],
-                             prototype_input['vav_fan_motor_efficiency'],
-                             prototype_input['vav_fan_pressure_rise'],
+                             system['vav_operation_schedule'],
+                             system['vav_oa_damper_schedule'],
+                             system['vav_fan_efficiency'],
+                             system['vav_fan_motor_efficiency'],
+                             system['vav_fan_pressure_rise'],
                              return_plenum,
                              reheat_type = 'Water',
                              building_type)
@@ -82,16 +82,16 @@ class Standard
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         elsif building_type == 'Hospital'
           condenser_water_loop = nil
-          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+          if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model)
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                                  prototype_input['chw_pumping_type'],
-                                                  prototype_input['chiller_cooling_type'],
-                                                  prototype_input['chiller_condenser_type'],
-                                                  prototype_input['chiller_compressor_type'],
-                                                  prototype_input['chiller_capacity_guess'],
+                                                  system['chw_pumping_type'],
+                                                  system['chiller_cooling_type'],
+                                                  system['chiller_condenser_type'],
+                                                  system['chiller_compressor_type'],
+                                                  system['chiller_capacity_guess'],
                                                   condenser_water_loop)
         end
 
@@ -100,11 +100,11 @@ class Standard
                       system['name'],
                       hot_water_loop,
                       thermal_zones,
-                      prototype_input['vav_operation_schedule'],
-                      prototype_input['vav_oa_damper_schedule'],
-                      prototype_input['vav_fan_efficiency'],
-                      prototype_input['vav_fan_motor_efficiency'],
-                      prototype_input['vav_fan_pressure_rise'],
+                      system['vav_operation_schedule'],
+                      system['vav_oa_damper_schedule'],
+                      system['vav_fan_efficiency'],
+                      system['vav_fan_motor_efficiency'],
+                      system['vav_fan_pressure_rise'],
                       chilled_water_loop,
                       building_type)
 
@@ -118,26 +118,26 @@ class Standard
         hvac_op_sch = nil
         oa_sch = nil
         if system['hvac_op_sch_index'].nil? || system['hvac_op_sch_index'] == 1
-          hvac_op_sch = prototype_input['pszac_operation_schedule']
-          oa_sch = prototype_input['pszac_oa_damper_schedule']
+          hvac_op_sch = system['pszac_operation_schedule']
+          oa_sch = system['pszac_oa_damper_schedule']
         elsif system['hvac_op_sch_index'] == 2
-          hvac_op_sch = prototype_input['pszac_operation_schedule_2']
-          oa_sch = prototype_input['pszac_oa_damper_schedule_2']
+          hvac_op_sch = system['pszac_operation_schedule_2']
+          oa_sch = system['pszac_oa_damper_schedule_2']
         elsif system['hvac_op_sch_index'] == 3
-          hvac_op_sch = prototype_input['pszac_operation_schedule_3']
-          oa_sch = prototype_input['pszac_oa_damper_schedule_3']
+          hvac_op_sch = system['pszac_operation_schedule_3']
+          oa_sch = system['pszac_oa_damper_schedule_3']
         end
 
         # Special logic to make unitary heat pumps all blow-through
         fan_position = 'DrawThrough'
-        if prototype_input['pszac_heating_type'] == 'Single Speed Heat Pump' ||
-           prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
+        if system['pszac_heating_type'] == 'Single Speed Heat Pump' ||
+           system['pszac_heating_type'] == 'Water To Air Heat Pump'
           fan_position = 'BlowThrough'
         end
 
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
-        if prototype_input['pszac_heating_type'] == 'Water To Air Heat Pump'
+        if system['pszac_heating_type'] == 'Water To Air Heat Pump'
           heat_pump_loop = model_add_hp_loop(model, building_type)
         end
 
@@ -149,10 +149,10 @@ class Standard
                          hvac_op_sch,
                          oa_sch,
                          fan_position,
-                         prototype_input['pszac_fan_type'],
-                         prototype_input['pszac_heating_type'],
-                         prototype_input['pszac_supplemental_heating_type'],
-                         prototype_input['pszac_cooling_type'],
+                         system['pszac_fan_type'],
+                         system['pszac_heating_type'],
+                         system['pszac_supplemental_heating_type'],
+                         system['pszac_cooling_type'],
                          building_type)
 
       when 'PVAV'
@@ -171,8 +171,8 @@ class Standard
         model_add_pvav(model,
                        system['name'],
                        thermal_zones,
-                       prototype_input['vav_operation_schedule'],
-                       prototype_input['vav_oa_damper_schedule'],
+                       system['vav_operation_schedule'],
+                       system['vav_oa_damper_schedule'],
                        electric_reheat = false,
                        hot_water_loop,
                        chilled_water_loop = nil,
@@ -197,7 +197,7 @@ class Standard
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           condenser_water_loop = nil
-          if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+          if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
                                                      'Open Cooling Tower',
                                                      'Centrifugal',
@@ -208,10 +208,10 @@ class Standard
           end
 
           chilled_water_loop = model_add_chw_loop(model,
-                                                  prototype_input['chw_pumping_type'],
-                                                  prototype_input['chiller_cooling_type'],
-                                                  prototype_input['chiller_condenser_type'],
-                                                  prototype_input['chiller_compressor_type'],
+                                                  system['chw_pumping_type'],
+                                                  system['chiller_cooling_type'],
+                                                  system['chiller_condenser_type'],
+                                                  system['chiller_compressor_type'],
                                                   'Electricity',
                                                   condenser_water_loop)
         end
@@ -221,10 +221,10 @@ class Standard
                        hot_water_loop,
                        chilled_water_loop,
                        thermal_zones,
-                       prototype_input['vav_operation_schedule'],
-                       prototype_input['doas_oa_damper_schedule'],
-                       prototype_input['doas_fan_maximum_flow_rate'],
-                       prototype_input['doas_economizer_control_type'],
+                       system['vav_operation_schedule'],
+                       system['doas_oa_damper_schedule'],
+                       system['doas_fan_maximum_flow_rate'],
+                       system['doas_economizer_control_type'],
                        building_type)
 
         model_add_four_pipe_fan_coil(model,
@@ -258,8 +258,8 @@ class Standard
                                    hot_water_loop,
                                    heat_pump_loop,
                                    thermal_zones,
-                                   prototype_input['flow_fraction_schedule_name'],
-                                   prototype_input['flow_fraction_schedule_name'],
+                                   system['flow_fraction_schedule_name'],
+                                   system['flow_fraction_schedule_name'],
                                    system['main_data_center'])
 
       when 'SAC'
@@ -267,13 +267,13 @@ class Standard
         model_add_split_ac(model,
                            nil,
                            thermal_zones,
-                           prototype_input['sac_operation_schedule'],
-                           prototype_input['sac_operation_schedule_meeting'],
-                           prototype_input['sac_oa_damper_schedule'],
-                           prototype_input['sac_fan_type'],
-                           prototype_input['sac_heating_type'],
-                           prototype_input['sac_heating_type'],
-                           prototype_input['sac_cooling_type'],
+                           system['sac_operation_schedule'],
+                           system['sac_operation_schedule_meeting'],
+                           system['sac_oa_damper_schedule'],
+                           system['sac_fan_type'],
+                           system['sac_heating_type'],
+                           system['sac_heating_type'],
+                           system['sac_cooling_type'],
                            building_type)
 
       when 'UnitHeater'
@@ -281,10 +281,10 @@ class Standard
         model_add_unitheater(model,
                              nil,
                              thermal_zones,
-                             prototype_input['unitheater_operation_schedule'],
-                             prototype_input['unitheater_fan_control_type'],
-                             OpenStudio.convert(prototype_input['unitheater_fan_static_pressure'], 'inH_{2}O', 'Pa').get,
-                             prototype_input['unitheater_heating_type'],
+                             system['unitheater_operation_schedule'],
+                             system['unitheater_fan_control_type'],
+                             OpenStudio.convert(system['unitheater_fan_static_pressure'], 'inH_{2}O', 'Pa').get,
+                             system['unitheater_heating_type'],
                              hot_water_loop = nil,
                              building_type)
 
@@ -294,9 +294,9 @@ class Standard
                        nil,
                        nil,
                        thermal_zones,
-                       prototype_input['ptac_fan_type'],
-                       prototype_input['ptac_heating_type'],
-                       prototype_input['ptac_cooling_type'],
+                       system['ptac_fan_type'],
+                       system['ptac_heating_type'],
+                       system['ptac_cooling_type'],
                        building_type)
 
       when 'Exhaust Fan'
@@ -361,7 +361,7 @@ class Standard
     system['space_names'].each do |space_name|
       space = model.getSpaceByName(space_name)
       if space.empty?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{space_name} was found in the model, cannot be added to HVAC system.")
         next
       end
       space = space.get
@@ -386,7 +386,7 @@ class Standard
     # Get the space
     space = model.getSpaceByName(system['return_plenum'])
     if space.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "No space called #{system['return_plenum']} was found in the model, cannot be a return plenum.")
       return return_plenum
     end
     space = space.get
