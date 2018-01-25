@@ -9,9 +9,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 ESE Perim Spc (G.ESE1)",
-      "EL1 ESE Perim Pl Spc (G.ESE5)"
-    ]
+      "EL1 ESE Perim Spc (G.ESE1)"
+    ],
+    "return_plenum": "EL1 ESE Perim Plnm (G.ESE5)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.SSW2)",
@@ -23,9 +23,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 SSW Perim Spc (G.SSW2)",
-      "EL1 SSW Perim Pl Spc (G.SSW6)"
-    ]
+      "EL1 SSW Perim Spc (G.SSW2)"
+    ],
+    "return_plenum": "EL1 SSW Perim Plnm (G.SSW6)"
   },
   {
     "name": "EL2 Sys1 (PVVT) (G.WNW1)",
@@ -37,9 +37,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL2 WNW Perim Spc (G.WNW1)",
-      "EL2 WNW Perim Pl Spc (G.WNW5)"
-    ]
+      "EL2 WNW Perim Spc (G.WNW1)"
+    ],
+    "return_plenum": "EL2 WNW Perim Plnm (G.WNW5)"
   },
   {
     "name": "EL2 Sys1 (PVVT) (G.NNE2)",
@@ -51,8 +51,8 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL2 NNE Perim Spc (G.NNE2)",
-      "EL2 NNE Perim Pl Spc (G.NNE6)"
-    ]
+      "EL2 NNE Perim Spc (G.NNE2)"
+    ],
+    "return_plenum": "EL2 NNE Perim Plnm (G.NNE6)"
   }
 ]

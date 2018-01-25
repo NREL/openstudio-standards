@@ -9,9 +9,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 ESE Perim Spc (G.ESE1)",
-      "EL1 ESE Perim Pl Spc (G.ESE5)"
-    ]
+      "EL1 ESE Perim Spc (G.ESE1)"
+    ],
+    "return_plenum": "EL1 ESE Perim Plnm (G.ESE5)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.SSW2)",
@@ -23,9 +23,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 SSW Perim Spc (G.SSW2)",
-      "EL1 SSW Perim Pl Spc (G.SSW6)"
-    ]
+      "EL1 SSW Perim Spc (G.SSW2)"
+    ],
+    "return_plenum": "EL1 SSW Perim Plnm (G.SSW6)"
   },
   {
     "name": "EL2 Sys1 (PVVT) (G.WNW1)",
@@ -37,9 +37,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL2 WNW Perim Spc (G.WNW1)",
-      "EL2 WNW Perim Pl Spc (G.WNW5)"
-    ]
+      "EL2 WNW Perim Spc (G.WNW1)"
+    ],
+    "return_plenum": "EL2 WNW Perim Plnm (G.WNW5)"
   },
   {
     "name": "EL2 Sys1 (PVVT) (G.NNE2)",
@@ -51,9 +51,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL2 NNE Perim Spc (G.NNE2)",
-      "EL2 NNE Perim Pl Spc (G.NNE6)"
-    ]
+      "EL2 NNE Perim Spc (G.NNE2)"
+    ],
+    "return_plenum": "EL2 NNE Perim Plnm (G.NNE6)"
   },
   {
     "name": "EL1 Sys2 (PSZ) (G.NW3)",
@@ -63,9 +63,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 NW Perim Spc (G.NW3)",
-      "EL1 NW Perim Pl Spc (G.NW7)"
-    ]
+      "EL1 NW Perim Spc (G.NW3)"
+    ],
+    "return_plenum": "EL1 NW Perim Plnm (G.NW7)"
   },
   {
     "name": "EL1 Sys2 (PSZ) (G.N4)",
@@ -75,9 +75,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 North Perim Spc (G.N4)",
-      "EL1 North Perim Pl Spc (G.N8)"
-    ]
+      "EL1 North Perim Spc (G.N4)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (G.N8)"
   },
   {
     "name": "EL2 Sys2 (PSZ) (G.SE3)",
@@ -87,9 +87,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL2 SE Perim Spc (G.SE3)",
-      "EL2 SE Perim Pl Spc (G.SE7)"
-    ]
+      "EL2 SE Perim Spc (G.SE3)"
+    ],
+    "return_plenum": "EL2 SE Perim Plnm (G.SE7)"
   },
   {
     "name": "EL2 Sys2 (PSZ) (G.S4)",
@@ -99,8 +99,8 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL2 South Perim Spc (G.S4)",
-      "EL2 South Perim Pl Spc (G.S8)"
-    ]
+      "EL2 South Perim Spc (G.S4)"
+    ],
+    "return_plenum": "EL2 South Perim Plnm (G.S8)"
   }
 ]

@@ -8,8 +8,7 @@
     "unitheater_operation_schedule": null,
     "space_names": [
       "EL1 Spc (G.1)",
-      "EL1 CrZ (G.1)",
-      "EL1 Pl Spc (G.2)"
+      "EL1 CrZ (G.1)"
     ]
   },
   {
@@ -21,8 +20,7 @@
     "unitheater_operation_schedule": null,
     "space_names": [
       "EL2 Spc (G.1)",
-      "EL2 CrZ (G.1)",
-      "EL2 Pl Spc (G.2)"
+      "EL2 CrZ (G.1)"
     ]
   }
 ]

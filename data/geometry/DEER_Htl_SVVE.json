@@ -11,16 +11,12 @@
       "EL1 West Perim Spc (G.W1)",
       "EL1 West Perim Spc (G.W2)",
       "EL1 East Perim Spc (G.E3)",
-      "EL1 Pl Spc (G.4)",
       "EL2 North Perim Spc (G.N2)",
       "EL2 West Perim Spc (G.W3)",
-      "EL2 North Perim Pl Spc (G.N5)",
-      "EL2 West Perim Pl Spc (G.W6)",
       "EL3 South Perim Spc (G.S2)",
-      "EL3 West Perim Spc (G.W3)",
-      "EL3 South Perim Pl Spc (G.S5)",
-      "EL3 West Perim Pl Spc (G.W6)"
-    ]
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
   },
   {
     "name": "S2 Sys (VAVS)",
@@ -34,15 +30,11 @@
       "EL5 North Perim Spc (G.N1)",
       "EL5 North Perim Spc (G.N2)",
       "EL5 South Perim Spc (G.S3)",
-      "EL5 Pl Spc (G.4)",
       "EL6 East Perim Spc (G.E2)",
       "EL6 North Perim Spc (G.N3)",
-      "EL6 East Perim Pl Spc (G.E5)",
-      "EL6 North Perim Pl Spc (G.N6)",
       "EL7 West Perim Spc (G.W2)",
-      "EL7 North Perim Spc (G.N3)",
-      "EL7 West Perim Pl Spc (G.W5)",
-      "EL7 North Perim Pl Spc (G.N6)"
-    ]
+      "EL7 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL6 East Perim Plnm (G.E5)"
   }
 ]

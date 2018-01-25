@@ -18,8 +18,8 @@
       "EL1 Core Spc (G.C8)",
       "EL1 Core Spc (G.C9)",
       "EL1 Core Spc (G.C10)",
-      "EL1 Core Spc (G.C11)",
-      "EL1 Pl Spc (G.12)"
-    ]
+      "EL1 Core Spc (G.C11)"
+    ],
+    "return_plenum": "EL1 Plnm (G.12)"
   }
 ]

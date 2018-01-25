@@ -7,8 +7,7 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 West Perim Spc (G.W1)",
-      "EL1 West Perim Pl Spc (G.W6)"
+      "EL1 West Perim Spc (G.W1)"
     ]
   },
   {
@@ -19,8 +18,7 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 SW Perim Spc (G.SW2)",
-      "EL1 SW Perim Pl Spc (G.SW7)"
+      "EL1 SW Perim Spc (G.SW2)"
     ]
   },
   {
@@ -31,8 +29,7 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 NW Perim Spc (G.NW3)",
-      "EL1 NW Perim Pl Spc (G.NW8)"
+      "EL1 NW Perim Spc (G.NW3)"
     ]
   },
   {
@@ -43,8 +40,7 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 SE Perim Spc (G.SE4)",
-      "EL1 SE Perim Pl Spc (G.SE9)"
+      "EL1 SE Perim Spc (G.SE4)"
     ]
   },
   {
@@ -55,8 +51,7 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 NE Perim Spc (G.NE5)",
-      "EL1 NE Perim Pl Spc (G.NE10)"
+      "EL1 NE Perim Spc (G.NE5)"
     ]
   }
 ]

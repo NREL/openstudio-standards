@@ -9,13 +9,12 @@
     "vav_fan_motor_efficiency": 0.9,
     "space_names": [
       "EL1 West Perim Spc (G.W1)",
-      "EL1 Pl Spc (G.2)",
       "EL2 West Perim Spc (G.W1)",
       "EL2 South Perim Spc (G.S2)",
       "EL2 North Perim Spc (G.N3)",
-      "EL2 Pl Spc (G.4)",
       "EL3 SW Perim Spc (G.SW1)"
-    ]
+    ],
+    "return_plenum": "EL2 Plnm (G.4)"
   },
   {
     "name": "EL4 Sys2 (VAVS) (G)",
@@ -30,13 +29,9 @@
       "EL4 East Perim Spc (G.E2)",
       "EL4 North Perim Spc (G.N3)",
       "EL4 West Perim Spc (G.W4)",
-      "EL4 Core Spc (G.C6)",
-      "EL4 South Perim Pl Spc (G.S7)",
-      "EL4 East Perim Pl Spc (G.E8)",
-      "EL4 North Perim Pl Spc (G.N9)",
-      "EL4 West Perim Pl Spc (G.W10)",
-      "EL4 Core Pl Spc (G.C12)"
-    ]
+      "EL4 Core Spc (G.C6)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C12)"
   },
   {
     "name": "EL4 Sys2 (VAVS) (T)",
@@ -51,13 +46,9 @@
       "EL4 East Perim Spc (T.E14)",
       "EL4 North Perim Spc (T.N15)",
       "EL4 West Perim Spc (T.W16)",
-      "EL4 Core Spc (T.C18)",
-      "EL4 South Perim Pl Spc (T.S19)",
-      "EL4 East Perim Pl Spc (T.E20)",
-      "EL4 North Perim Pl Spc (T.N21)",
-      "EL4 West Perim Pl Spc (T.W22)",
-      "EL4 Core Pl Spc (T.C24)"
-    ]
+      "EL4 Core Spc (T.C18)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C24)"
   },
   {
     "name": "EL8 Sys2 (VAVS) (G)",
@@ -72,13 +63,9 @@
       "EL8 South Perim Spc (G.S2)",
       "EL8 East Perim Spc (G.E3)",
       "EL8 North Perim Spc (G.N4)",
-      "EL8 Core Spc (G.C6)",
-      "EL8 West Perim Pl Spc (G.W7)",
-      "EL8 South Perim Pl Spc (G.S8)",
-      "EL8 East Perim Pl Spc (G.E9)",
-      "EL8 North Perim Pl Spc (G.N10)",
-      "EL8 Core Pl Spc (G.C12)"
-    ]
+      "EL8 Core Spc (G.C6)"
+    ],
+    "return_plenum": "EL8 Core Plnm (G.C12)"
   },
   {
     "name": "EL8 Sys2 (VAVS) (T)",
@@ -93,13 +80,9 @@
       "EL8 South Perim Spc (T.S14)",
       "EL8 East Perim Spc (T.E15)",
       "EL8 North Perim Spc (T.N16)",
-      "EL8 Core Spc (T.C18)",
-      "EL8 West Perim Pl Spc (T.W19)",
-      "EL8 South Perim Pl Spc (T.S20)",
-      "EL8 East Perim Pl Spc (T.E21)",
-      "EL8 North Perim Pl Spc (T.N22)",
-      "EL8 Core Pl Spc (T.C24)"
-    ]
+      "EL8 Core Spc (T.C18)"
+    ],
+    "return_plenum": "EL8 Core Plnm (T.C24)"
   },
   {
     "name": "S5 Sys (VAVS)",
@@ -111,12 +94,11 @@
     "vav_fan_motor_efficiency": 0.9,
     "space_names": [
       "EL5 North Perim Spc (G.N1)",
-      "EL5 Pl Spc (G.2)",
       "EL6 North Perim Spc (G.N1)",
       "EL6 West Perim Spc (G.W2)",
       "EL6 East Perim Spc (G.E3)",
-      "EL6 Pl Spc (G.4)",
       "EL7 NW Perim Spc (G.NW1)"
-    ]
+    ],
+    "return_plenum": "EL6 Plnm (G.4)"
   }
 ]

@@ -14,7 +14,8 @@
       "EL2 Spc (T.2)",
       "EL1 Spc (G.1)",
       "EL3 Spc (G.1)"
-    ]
+    ],
+    "return_plenum": "EL2 Roof Zone 1"
   },
   {
     "name": "S2 Sys (PVVT)",
@@ -31,7 +32,8 @@
       "EL7 North Perim Spc (G.N2)",
       "EL7 South Perim Spc (G.S3)",
       "EL7 North Perim Spc (G.N4)"
-    ]
+    ],
+    "return_plenum": "EL7 Roof Zone 1"
   },
   {
     "name": "S3 Sys (PVVT)",
@@ -48,7 +50,8 @@
       "EL5 Spc (T.2)",
       "EL4 Spc (G.1)",
       "EL6 Spc (G.1)"
-    ]
+    ],
+    "return_plenum": "EL5 Roof Zone 1"
   },
   {
     "name": "S4 Sys (PVVT)",
@@ -65,6 +68,7 @@
       "EL8 East Perim Spc (G.E2)",
       "EL8 West Perim Spc (G.W3)",
       "EL8 East Perim Spc (G.E4)"
-    ]
+    ],
+    "return_plenum": "EL8 Roof Zone 1"
   }
 ]

@@ -10,9 +10,9 @@
     "space_names": [
       "E2 West Perim Spc (G.W1)",
       "E2 South Perim Spc (G.S2)",
-      "E2 North Perim Spc (G.N3)",
-      "E2 Pl Spc (G.4)"
-    ]
+      "E2 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "E2 Plnm (G.4)"
   },
   {
     "name": "E4 Sys1 (VAVS) (G)",
@@ -27,13 +27,9 @@
       "E4 East Perim Spc (G.E2)",
       "E4 North Perim Spc (G.N3)",
       "E4 West Perim Spc (G.W4)",
-      "E4 Core Spc (G.C6)",
-      "E4 South Perim Pl Spc (G.S7)",
-      "E4 East Perim Pl Spc (G.E8)",
-      "E4 North Perim Pl Spc (G.N9)",
-      "E4 West Perim Pl Spc (G.W10)",
-      "E4 Core Pl Spc (G.C12)"
-    ]
+      "E4 Core Spc (G.C6)"
+    ],
+    "return_plenum": "E4 South Perim Plnm (G.S7)"
   },
   {
     "name": "E6 Sys1 (VAVS) (G)",
@@ -46,9 +42,9 @@
     "space_names": [
       "E6 North Perim Spc (G.N1)",
       "E6 West Perim Spc (G.W2)",
-      "E6 East Perim Spc (G.E3)",
-      "E6 Pl Spc (G.4)"
-    ]
+      "E6 East Perim Spc (G.E3)"
+    ],
+    "return_plenum": "E6 Plnm (G.4)"
   },
   {
     "name": "E8 Sys1 (VAVS) (G)",
@@ -63,13 +59,9 @@
       "E8 South Perim Spc (G.S2)",
       "E8 East Perim Spc (G.E3)",
       "E8 North Perim Spc (G.N4)",
-      "E8 Core Spc (G.C6)",
-      "E8 West Perim Pl Spc (G.W7)",
-      "E8 South Perim Pl Spc (G.S8)",
-      "E8 East Perim Pl Spc (G.E9)",
-      "E8 North Perim Pl Spc (G.N10)",
-      "E8 Core Pl Spc (G.C12)"
-    ]
+      "E8 Core Spc (G.C6)"
+    ],
+    "return_plenum": "E8 West Perim Plnm (G.W7)"
   },
   {
     "name": "E10 Sys1 (VAVS) (G)",
@@ -82,9 +74,9 @@
     "space_names": [
       "E10 East Perim Spc (G.E1)",
       "E10 North Perim Spc (G.N2)",
-      "E10 South Perim Spc (G.S3)",
-      "E10 Pl Spc (G.4)"
-    ]
+      "E10 South Perim Spc (G.S3)"
+    ],
+    "return_plenum": "E10 Plnm (G.4)"
   },
   {
     "name": "E12 Sys1 (VAVS) (G)",
@@ -99,13 +91,9 @@
       "E12 West Perim Spc (G.W2)",
       "E12 South Perim Spc (G.S3)",
       "E12 East Perim Spc (G.E4)",
-      "E12 Core Spc (G.C6)",
-      "E12 North Perim Pl Spc (G.N7)",
-      "E12 West Perim Pl Spc (G.W8)",
-      "E12 South Perim Pl Spc (G.S9)",
-      "E12 East Perim Pl Spc (G.E10)",
-      "E12 Core Pl Spc (G.C12)"
-    ]
+      "E12 Core Spc (G.C6)"
+    ],
+    "return_plenum": "E12 North Perim Plnm (G.N7)"
   },
   {
     "name": "E14 Sys1 (VAVS) (G)",
@@ -118,9 +106,9 @@
     "space_names": [
       "E14 South Perim Spc (G.S1)",
       "E14 East Perim Spc (G.E2)",
-      "E14 West Perim Spc (G.W3)",
-      "E14 Pl Spc (G.4)"
-    ]
+      "E14 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "E14 Plnm (G.4)"
   },
   {
     "name": "E16 Sys1 (VAVS) (G)",
@@ -135,12 +123,8 @@
       "E16 North Perim Spc (G.N2)",
       "E16 West Perim Spc (G.W3)",
       "E16 South Perim Spc (G.S4)",
-      "E16 Core Spc (G.C6)",
-      "E16 East Perim Pl Spc (G.E7)",
-      "E16 North Perim Pl Spc (G.N8)",
-      "E16 West Perim Pl Spc (G.W9)",
-      "E16 South Perim Pl Spc (G.S10)",
-      "E16 Core Pl Spc (G.C12)"
-    ]
+      "E16 Core Spc (G.C6)"
+    ],
+    "return_plenum": "E16 East Perim Plnm (G.E7)"
   }
 ]

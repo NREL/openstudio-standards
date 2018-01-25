@@ -9,9 +9,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 South Perim Spc (G.S1)",
-      "EL1 South Perim Pl Spc (G.S6)"
-    ]
+      "EL1 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (G.S6)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.E2)",
@@ -23,9 +23,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 East Perim Spc (G.E2)",
-      "EL1 East Perim Pl Spc (G.E7)"
-    ]
+      "EL1 East Perim Spc (G.E2)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E7)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.N3)",
@@ -37,9 +37,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 North Perim Spc (G.N3)",
-      "EL1 North Perim Pl Spc (G.N8)"
-    ]
+      "EL1 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (G.N8)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.W4)",
@@ -51,9 +51,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 West Perim Spc (G.W4)",
-      "EL1 West Perim Pl Spc (G.W9)"
-    ]
+      "EL1 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W9)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.C5)",
@@ -65,9 +65,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 Core Spc (G.C5)",
-      "EL1 Core Pl Spc (G.C10)"
-    ]
+      "EL1 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C10)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (M.S11)",
@@ -79,9 +79,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 South Perim Spc (M.S11)",
-      "EL1 South Perim Pl Spc (M.S16)"
-    ]
+      "EL1 South Perim Spc (M.S11)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (M.S16)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (M.E12)",
@@ -93,9 +93,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 East Perim Spc (M.E12)",
-      "EL1 East Perim Pl Spc (M.E17)"
-    ]
+      "EL1 East Perim Spc (M.E12)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (M.E17)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (M.N13)",
@@ -107,9 +107,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 North Perim Spc (M.N13)",
-      "EL1 North Perim Pl Spc (M.N18)"
-    ]
+      "EL1 North Perim Spc (M.N13)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (M.N18)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (M.W14)",
@@ -121,9 +121,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 West Perim Spc (M.W14)",
-      "EL1 West Perim Pl Spc (M.W19)"
-    ]
+      "EL1 West Perim Spc (M.W14)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (M.W19)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (M.C15)",
@@ -135,9 +135,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 Core Spc (M.C15)",
-      "EL1 Core Pl Spc (M.C20)"
-    ]
+      "EL1 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL1 Core Plnm (M.C20)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.S21)",
@@ -149,9 +149,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 South Perim Spc (T.S21)",
-      "EL1 South Perim Pl Spc (T.S26)"
-    ]
+      "EL1 South Perim Spc (T.S21)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (T.S26)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.E22)",
@@ -163,9 +163,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 East Perim Spc (T.E22)",
-      "EL1 East Perim Pl Spc (T.E27)"
-    ]
+      "EL1 East Perim Spc (T.E22)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (T.E27)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.N23)",
@@ -177,9 +177,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 North Perim Spc (T.N23)",
-      "EL1 North Perim Pl Spc (T.N28)"
-    ]
+      "EL1 North Perim Spc (T.N23)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (T.N28)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.W24)",
@@ -191,9 +191,9 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 West Perim Spc (T.W24)",
-      "EL1 West Perim Pl Spc (T.W29)"
-    ]
+      "EL1 West Perim Spc (T.W24)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (T.W29)"
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.C25)",
@@ -205,8 +205,8 @@
     "pszac_fan_type": "ConstantVolume",
     "pszac_supplemental_heating_type": "Gas",
     "space_names": [
-      "EL1 Core Spc (T.C25)",
-      "EL1 Core Pl Spc (T.C30)"
-    ]
+      "EL1 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL1 Core Plnm (T.C30)"
   }
 ]

@@ -7,9 +7,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 West Perim Spc (G.W1)",
-      "EL1 West Perim Pl Spc (G.W4)"
-    ]
+      "EL1 West Perim Spc (G.W1)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W4)"
   },
   {
     "name": "EL1 Sys1 (PSZ) (G.W2)",
@@ -19,9 +19,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 West Perim Spc (G.W2)",
-      "EL1 West Perim Pl Spc (G.W5)"
-    ]
+      "EL1 West Perim Spc (G.W2)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W5)"
   },
   {
     "name": "EL1 Sys1 (PSZ) (G.E3)",
@@ -31,9 +31,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL1 East Perim Spc (G.E3)",
-      "EL1 East Perim Pl Spc (G.E6)"
-    ]
+      "EL1 East Perim Spc (G.E3)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E6)"
   },
   {
     "name": "EL2 Sys1 (PSZ) (G.N2)",
@@ -43,9 +43,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL2 North Perim Spc (G.N2)",
-      "EL2 North Perim Pl Spc (G.N5)"
-    ]
+      "EL2 North Perim Spc (G.N2)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
   },
   {
     "name": "EL2 Sys1 (PSZ) (G.W3)",
@@ -55,9 +55,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL2 West Perim Spc (G.W3)",
-      "EL2 West Perim Pl Spc (G.W6)"
-    ]
+      "EL2 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 West Perim Plnm (G.W6)"
   },
   {
     "name": "EL3 Sys1 (PSZ) (G.S2)",
@@ -67,9 +67,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL3 South Perim Spc (G.S2)",
-      "EL3 South Perim Pl Spc (G.S5)"
-    ]
+      "EL3 South Perim Spc (G.S2)"
+    ],
+    "return_plenum": "EL3 South Perim Plnm (G.S5)"
   },
   {
     "name": "EL3 Sys1 (PSZ) (G.W3)",
@@ -79,9 +79,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL3 West Perim Spc (G.W3)",
-      "EL3 West Perim Pl Spc (G.W6)"
-    ]
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL3 West Perim Plnm (G.W6)"
   },
   {
     "name": "EL5 Sys2 (PSZ) (G.N1)",
@@ -91,9 +91,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL5 North Perim Spc (G.N1)",
-      "EL5 North Perim Pl Spc (G.N4)"
-    ]
+      "EL5 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL5 North Perim Plnm (G.N4)"
   },
   {
     "name": "EL5 Sys2 (PSZ) (G.N2)",
@@ -103,9 +103,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL5 North Perim Spc (G.N2)",
-      "EL5 North Perim Pl Spc (G.N5)"
-    ]
+      "EL5 North Perim Spc (G.N2)"
+    ],
+    "return_plenum": "EL5 North Perim Plnm (G.N5)"
   },
   {
     "name": "EL5 Sys2 (PSZ) (G.S3)",
@@ -115,9 +115,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL5 South Perim Spc (G.S3)",
-      "EL5 South Perim Pl Spc (G.S6)"
-    ]
+      "EL5 South Perim Spc (G.S3)"
+    ],
+    "return_plenum": "EL5 South Perim Plnm (G.S6)"
   },
   {
     "name": "EL6 Sys2 (PSZ) (G.E2)",
@@ -127,9 +127,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL6 East Perim Spc (G.E2)",
-      "EL6 East Perim Pl Spc (G.E5)"
-    ]
+      "EL6 East Perim Spc (G.E2)"
+    ],
+    "return_plenum": "EL6 East Perim Plnm (G.E5)"
   },
   {
     "name": "EL6 Sys2 (PSZ) (G.N3)",
@@ -139,9 +139,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL6 North Perim Spc (G.N3)",
-      "EL6 North Perim Pl Spc (G.N6)"
-    ]
+      "EL6 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL6 North Perim Plnm (G.N6)"
   },
   {
     "name": "EL7 Sys2 (PSZ) (G.W2)",
@@ -151,9 +151,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL7 West Perim Spc (G.W2)",
-      "EL7 West Perim Pl Spc (G.W5)"
-    ]
+      "EL7 West Perim Spc (G.W2)"
+    ],
+    "return_plenum": "EL7 West Perim Plnm (G.W5)"
   },
   {
     "name": "EL7 Sys2 (PSZ) (G.N3)",
@@ -163,9 +163,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL7 North Perim Spc (G.N3)",
-      "EL7 North Perim Pl Spc (G.N6)"
-    ]
+      "EL7 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL7 North Perim Plnm (G.N6)"
   },
   {
     "name": "EL2 Sys3 (PSZ) (G.S1)",
@@ -175,9 +175,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL2 South Perim Spc (G.S1)",
-      "EL2 South Perim Pl Spc (G.S4)"
-    ]
+      "EL2 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL2 South Perim Plnm (G.S4)"
   },
   {
     "name": "EL3 Sys3 (PSZ) (G.N1)",
@@ -187,9 +187,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL3 North Perim Spc (G.N1)",
-      "EL3 North Perim Pl Spc (G.N4)"
-    ]
+      "EL3 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL3 North Perim Plnm (G.N4)"
   },
   {
     "name": "EL4 Sys3 (PSZ) (G.C5)",
@@ -199,9 +199,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL4 Core Spc (G.C5)",
-      "EL4 Core Pl Spc (G.C10)"
-    ]
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C10)"
   },
   {
     "name": "EL4 Sys3 (PSZ) (M.C15)",
@@ -211,9 +211,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL4 Core Spc (M.C15)",
-      "EL4 Core Pl Spc (M.C20)"
-    ]
+      "EL4 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL4 Core Plnm (M.C20)"
   },
   {
     "name": "EL4 Sys3 (PSZ) (T.C25)",
@@ -223,9 +223,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL4 Core Spc (T.C25)",
-      "EL4 Core Pl Spc (T.C30)"
-    ]
+      "EL4 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C30)"
   },
   {
     "name": "EL6 Sys3 (PSZ) (G.W1)",
@@ -235,9 +235,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL6 West Perim Spc (G.W1)",
-      "EL6 West Perim Pl Spc (G.W4)"
-    ]
+      "EL6 West Perim Spc (G.W1)"
+    ],
+    "return_plenum": "EL6 West Perim Plnm (G.W4)"
   },
   {
     "name": "EL7 Sys3 (PSZ) (G.E1)",
@@ -247,9 +247,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL7 East Perim Spc (G.E1)",
-      "EL7 East Perim Pl Spc (G.E4)"
-    ]
+      "EL7 East Perim Spc (G.E1)"
+    ],
+    "return_plenum": "EL7 East Perim Plnm (G.E4)"
   },
   {
     "name": "EL8 Sys3 (PSZ) (G.C5)",
@@ -259,9 +259,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL8 Core Spc (G.C5)",
-      "EL8 Core Pl Spc (G.C10)"
-    ]
+      "EL8 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL8 Core Plnm (G.C10)"
   },
   {
     "name": "EL8 Sys3 (PSZ) (M.C15)",
@@ -271,9 +271,9 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL8 Core Spc (M.C15)",
-      "EL8 Core Pl Spc (M.C20)"
-    ]
+      "EL8 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL8 Core Plnm (M.C20)"
   },
   {
     "name": "EL8 Sys3 (PSZ) (T.C25)",
@@ -283,8 +283,8 @@
     "unitheater_fan_static_pressure": 1,
     "unitheater_operation_schedule": null,
     "space_names": [
-      "EL8 Core Spc (T.C25)",
-      "EL8 Core Pl Spc (T.C30)"
-    ]
+      "EL8 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL8 Core Plnm (T.C30)"
   }
 ]
