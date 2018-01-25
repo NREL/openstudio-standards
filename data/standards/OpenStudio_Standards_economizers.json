@@ -1329,6 +1329,118 @@
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2003",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2003",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2007",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2007",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2011",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2011",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2014",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2014",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": null,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2015",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2015",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2017",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
+    },
+    {
+      "template": "DEER 2017",
+      "climate_zone": "Any",
+      "data_center": true,
+      "capacity_limit": 55000.0,
+      "notes": "From MASControl2"
     }
   ]
 }

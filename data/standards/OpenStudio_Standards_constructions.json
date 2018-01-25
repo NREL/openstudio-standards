@@ -251,6 +251,16 @@
       ]
     },
     {
+      "name": "DEER Skylight",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": "Simple Glazing",
+      "skylight_framing": null,
+      "materials": [
+        "Simple Glazing"
+      ]
+    },
+    {
       "name": "DEER Uncarpeted 12in Slab Floor",
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
