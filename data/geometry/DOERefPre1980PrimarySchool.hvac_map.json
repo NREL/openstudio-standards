@@ -2,6 +2,8 @@
   {
     "type": "PVAV",
     "name": "PVAV_POD_1",
+    "operation_schedule": "PrimarySchool VAV Operation",
+    "oa_damper_schedule": "PrimarySchool VAV OA Damper",
     "space_names": [
       "Corner_Class_1_Pod_1_ZN_1_FLR_1",
       "Mult_Class_1_Pod_1_ZN_1_FLR_1",
@@ -13,6 +15,8 @@
   {
     "type": "PVAV",
     "name": "PVAV_POD_2",
+    "operation_schedule": "PrimarySchool VAV Operation",
+    "oa_damper_schedule": "PrimarySchool VAV OA Damper",
     "space_names": [
       "Mult_Class_1_Pod_2_ZN_1_FLR_1",
       "Corridor_Pod_2_ZN_1_FLR_1",
@@ -24,6 +28,8 @@
   {
     "type": "PVAV",
     "name": "PVAV_POD_3",
+    "operation_schedule": "PrimarySchool VAV Operation",
+    "oa_damper_schedule": "PrimarySchool VAV OA Damper",
     "space_names": [
       "Corner_Class_1_Pod_3_ZN_1_FLR_1",
       "Mult_Class_1_Pod_3_ZN_1_FLR_1",
@@ -35,6 +41,8 @@
   {
     "type": "PVAV",
     "name": "PVAV_OTHER",
+    "operation_schedule": "PrimarySchool VAV Operation",
+    "oa_damper_schedule": "PrimarySchool VAV OA Damper",
     "space_names": [
       "Computer_Class_ZN_1_FLR_1",
       "Main_Corridor_ZN_1_FLR_1",
@@ -48,6 +56,12 @@
   {
     "type": "PSZ-AC",
     "name": "PSZ-AC_1-6",
+    "operation_schedule": "PrimarySchool PSZ-AC Operation",
+    "oa_damper_schedule": "PrimarySchool PSZ-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
     "space_names": [
       "Kitchen_ZN_1_FLR_1"
     ]
@@ -55,6 +69,12 @@
   {
     "type": "PSZ-AC",
     "name": "PSZ-AC_2-5",
+    "operation_schedule": "PrimarySchool PSZ-AC Operation",
+    "oa_damper_schedule": "PrimarySchool PSZ-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
     "space_names": [
       "Gym_ZN_1_FLR_1"
     ]
@@ -62,6 +82,12 @@
   {
     "type": "PSZ-AC",
     "name": "PSZ-AC_2-7",
+    "operation_schedule": "PrimarySchool PSZ-AC Operation",
+    "oa_damper_schedule": "PrimarySchool PSZ-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
     "space_names": [
       "Cafeteria_ZN_1_FLR_1"
     ]
@@ -69,10 +95,10 @@
   {
     "type": "Exhaust Fan",
     "name": "Kitchen Exhaust Fan",
-    "availability_sch_name": "SchoolPrimary Kitchen_Exhaust_SCH",
     "flow_rate": 2.1237634944000003,
     "flow_fraction_schedule_name": "SchoolSecondary Kitchen_Exhaust_SCH_DCV",
     "balanced_exhaust_fraction_schedule_name": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
+    "operation_schedule": "SchoolPrimary Kitchen_Exhaust_SCH",
     "space_names": [
       "Kitchen_ZN_1_FLR_1"
     ]
@@ -80,8 +106,8 @@
   {
     "type": "Exhaust Fan",
     "name": "Bathrooms_ZN_1_FLR_1",
-    "availability_sch_name": "SchoolPrimary Hours_of_operation",
     "flow_rate": 0.28316846592000006,
+    "operation_schedule": "SchoolPrimary Hours_of_operation",
     "space_names": [
       "Bath_ZN_1_FLR_1"
     ]
@@ -93,13 +119,13 @@
     "length": 3.66,
     "evaporator_fan_pwr_per_length": 68.3,
     "lighting_per_length": 33.0,
-    "lighting_sch_name": "SchoolSecondary BLDG_LIGHT_SCH",
     "defrost_pwr_per_length": 410.0,
-    "restocking_sch_name": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
     "cop": 1.5,
     "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
     "condenser_fan_pwr": 750.0,
     "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
+    "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
+    "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
     "space_names": [
       "Kitchen_ZN_1_FLR_1"
     ]
@@ -111,13 +137,13 @@
     "length": 3.66,
     "evaporator_fan_pwr_per_length": 55.0,
     "lighting_per_length": 33.0,
-    "lighting_sch_name": "SchoolSecondary BLDG_LIGHT_SCH",
     "defrost_pwr_per_length": 0.0,
-    "restocking_sch_name": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
     "cop": 3.0,
     "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
     "condenser_fan_pwr": 750.0,
     "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
+    "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
+    "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
     "space_names": [
       "Kitchen_ZN_1_FLR_1"
     ]

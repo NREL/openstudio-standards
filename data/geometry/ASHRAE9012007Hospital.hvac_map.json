@@ -2,6 +2,12 @@
   {
     "type": "VAV",
     "name": "VAV_1",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "Basement",
       "Office1_Mult4_Flr_1",
@@ -16,6 +22,12 @@
   {
     "type": "VAV",
     "name": "VAV_ER",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "ER_Exam1_Mult4_Flr_1",
       "ER_Trauma1_Flr_1",
@@ -27,6 +39,12 @@
   {
     "type": "VAV",
     "name": "VAV_OR",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "OR1_Flr_2",
       "OR2_Mult5_Flr_2",
@@ -37,6 +55,12 @@
   {
     "type": "VAV",
     "name": "VAV_ICU",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "IC_PatRoom1_Mult5_Flr_2",
       "IC_PatRoom2_Flr_2",
@@ -47,6 +71,12 @@
   {
     "type": "VAV",
     "name": "VAV_PATRMS",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "PatRoom1_Mult10_Flr_3",
       "PatRoom2_Flr_3",
@@ -69,6 +99,12 @@
   {
     "type": "VAV",
     "name": "VAV_2",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "PhysTherapy_Flr_3",
       "NurseStn_Lobby_Flr_3",
@@ -90,6 +126,12 @@
   {
     "type": "VAV",
     "name": "VAV_LABS",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "Lab_Flr_3",
       "Lab_Flr_4"
@@ -98,6 +140,12 @@
   {
     "type": "CAV",
     "name": "CAV_KITCHEN",
+    "operation_schedule": "Hospital HVACOperationSchd",
+    "oa_damper_schedule": "Hospital BLDG_OA_FRAC_SCH",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
     "space_names": [
       "Kitchen_Flr_5"
     ]
@@ -105,9 +153,9 @@
   {
     "type": "Exhaust Fan",
     "name": "Kitchen_Flr_5 Exhaust Fan",
-    "availability_sch_name": "Hospital Kitchen_Exhaust_SCH",
     "flow_rate": 3.7755795456000008,
     "balanced_exhaust_fraction_schedule_name": "Hospital Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
+    "operation_schedule": "Hospital Kitchen_Exhaust_SCH",
     "space_names": [
       "Kitchen_Flr_5"
     ]
@@ -119,13 +167,13 @@
     "length": 10.98,
     "evaporator_fan_pwr_per_length": 69,
     "lighting_per_length": 33,
-    "lighting_sch_name": "Hospital BLDG_LIGHT_SCH",
     "defrost_pwr_per_length": 364,
-    "restocking_sch_name": "Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched",
     "cop": 1.5,
     "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
     "condenser_fan_pwr": 1000,
     "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
+    "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
+    "restocking_schedule": "Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched",
     "space_names": [
       "Kitchen_Flr_5"
     ]
@@ -137,13 +185,13 @@
     "length": 8.93,
     "evaporator_fan_pwr_per_length": 67,
     "lighting_per_length": 40,
-    "lighting_sch_name": "Hospital BLDG_LIGHT_SCH",
     "defrost_pwr_per_length": 0.0,
-    "restocking_sch_name": "Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
     "cop": 3.0,
     "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
     "condenser_fan_pwr": 1000,
     "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
+    "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
+    "restocking_schedule": "Hospital Kitchen_Flr_5_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
     "space_names": [
       "Kitchen_Flr_5"
     ]

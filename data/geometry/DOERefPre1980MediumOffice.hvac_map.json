@@ -1,6 +1,12 @@
 [
   {
     "type": "PSZ-AC",
+    "operation_schedule": "OfficeMedium HVACOperationSchd",
+    "oa_damper_schedule": "OfficeMedium MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
     "space_names": [
       "Perimeter_bot_ZN_1",
       "Perimeter_bot_ZN_2",
