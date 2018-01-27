@@ -91,7 +91,7 @@ class Standard
                                                   system['chiller_cooling_type'],
                                                   system['chiller_condenser_type'],
                                                   system['chiller_compressor_type'],
-                                                  system['chiller_capacity_guess'],
+                                                  'Electricity',
                                                   condenser_water_loop)
         end
 
