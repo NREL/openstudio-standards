@@ -106,6 +106,8 @@
     "name": "Kitchen_Flr_5 Exhaust Fan",
     "flow_rate": 1.750925014272,
     "operation_schedule": "Hospital HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Kitchen_Flr_5"
     ]
@@ -115,6 +117,8 @@
     "name": "Dining_Flr_5 Exhaust Fan",
     "flow_rate": 0.7499244872448001,
     "operation_schedule": "Hospital HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Dining_Flr_5"
     ]

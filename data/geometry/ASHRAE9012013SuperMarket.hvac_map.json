@@ -186,6 +186,8 @@
     "name": "Bakery Exahust Fan",
     "flow_rate": 0.354,
     "operation_schedule": "SuperMarket MinOA_MotorizedDamper_Sched",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Bakery"
     ]
@@ -195,6 +197,8 @@
     "name": "Deli Exahust Fan",
     "flow_rate": 0.3374,
     "operation_schedule": "SuperMarket MinOA_MotorizedDamper_Sched",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Deli"
     ]

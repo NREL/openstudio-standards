@@ -114,9 +114,9 @@
       0.044,
       0.1416
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
     "operation_schedule": "OutPatientHealthCare AHU1-Fan_Pre2004",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 MRI Control Room",

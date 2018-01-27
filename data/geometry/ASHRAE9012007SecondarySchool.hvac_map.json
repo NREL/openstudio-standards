@@ -157,9 +157,9 @@
     "type": "Exhaust Fan",
     "name": "Kitchen Exhaust Fan",
     "flow_rate": 2.5485161932800002,
-    "flow_fraction_schedule_name": "SchoolSecondary Kitchen_Exhaust_SCH_DCV",
-    "balanced_exhaust_fraction_schedule_name": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
     "operation_schedule": "SchoolSecondary Kitchen_Exhaust_SCH",
+    "flow_fraction_schedule": "SchoolSecondary Kitchen_Exhaust_SCH_DCV",
+    "balanced_exhaust_fraction_schedule": "SchoolSecondary Kitchen Exhaust Fan Balanced Exhaust Fraction Schedule",
     "space_names": [
       "Kitchen_ZN_1_FLR_1"
     ]
@@ -169,6 +169,8 @@
     "name": "Bathrooms_ZN_1_FLR_1",
     "flow_rate": 0.28316846592000006,
     "operation_schedule": "SchoolSecondary Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Bathrooms_ZN_1_FLR_1"
     ]
@@ -178,6 +180,8 @@
     "name": "Bathrooms_ZN_1_FLR_2",
     "flow_rate": 0.28316846592000006,
     "operation_schedule": "SchoolSecondary Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Bathrooms_ZN_1_FLR_2"
     ]

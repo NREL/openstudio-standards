@@ -16,9 +16,9 @@
     "type": "Exhaust Fan",
     "name": "Dining Exhaust Fan",
     "flow_rate": 0.834532374,
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
     "operation_schedule": "RestaurantFastFood HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Dining"
     ]
@@ -27,9 +27,9 @@
     "type": "Exhaust Fan",
     "name": "Kitchen Exhaust Fan",
     "flow_rate": 0.722467626,
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
     "operation_schedule": "RestaurantFastFood HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Kitchen"
     ]

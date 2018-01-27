@@ -150,9 +150,9 @@
       0.0440456672,
       0.141575359
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
     "operation_schedule": "OutPatientHealthCare Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 Lobby Toilet",
@@ -178,9 +178,9 @@
       0.0424726077,
       0.0660685008
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
     "operation_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 2 Conference Toilet",
       "Floor 2 Reception Toilet",
