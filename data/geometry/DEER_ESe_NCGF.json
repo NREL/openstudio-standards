@@ -2,10 +2,10 @@
   {
     "name": "E2 Sys1 (PSZ) (G.W1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E2 West Perim Spc (G.W1)"
     ],
@@ -14,10 +14,10 @@
   {
     "name": "E2 Sys1 (PSZ) (G.S2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E2 South Perim Spc (G.S2)"
     ],
@@ -26,10 +26,10 @@
   {
     "name": "E2 Sys1 (PSZ) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E2 North Perim Spc (G.N3)"
     ],
@@ -38,10 +38,10 @@
   {
     "name": "E4 Sys1 (PSZ) (G.S1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 South Perim Spc (G.S1)"
     ],
@@ -50,10 +50,10 @@
   {
     "name": "E4 Sys1 (PSZ) (G.E2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 East Perim Spc (G.E2)"
     ],
@@ -62,10 +62,10 @@
   {
     "name": "E4 Sys1 (PSZ) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 North Perim Spc (G.N3)"
     ],
@@ -74,10 +74,10 @@
   {
     "name": "E4 Sys1 (PSZ) (G.W4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 West Perim Spc (G.W4)"
     ],
@@ -86,10 +86,10 @@
   {
     "name": "E4 Sys1 (PSZ) (G.C6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 Core Spc (G.C6)"
     ],
@@ -98,10 +98,10 @@
   {
     "name": "E6 Sys1 (PSZ) (G.N1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E6 North Perim Spc (G.N1)"
     ],
@@ -110,10 +110,10 @@
   {
     "name": "E6 Sys1 (PSZ) (G.W2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E6 West Perim Spc (G.W2)"
     ],
@@ -122,10 +122,10 @@
   {
     "name": "E6 Sys1 (PSZ) (G.E3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E6 East Perim Spc (G.E3)"
     ],
@@ -134,10 +134,10 @@
   {
     "name": "E8 Sys1 (PSZ) (G.W1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 West Perim Spc (G.W1)"
     ],
@@ -146,10 +146,10 @@
   {
     "name": "E8 Sys1 (PSZ) (G.S2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 South Perim Spc (G.S2)"
     ],
@@ -158,10 +158,10 @@
   {
     "name": "E8 Sys1 (PSZ) (G.E3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 East Perim Spc (G.E3)"
     ],
@@ -170,10 +170,10 @@
   {
     "name": "E8 Sys1 (PSZ) (G.N4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 North Perim Spc (G.N4)"
     ],
@@ -182,10 +182,10 @@
   {
     "name": "E8 Sys1 (PSZ) (G.C6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 Core Spc (G.C6)"
     ],
@@ -194,10 +194,10 @@
   {
     "name": "E10 Sys1 (PSZ) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E10 East Perim Spc (G.E1)"
     ],
@@ -206,10 +206,10 @@
   {
     "name": "E10 Sys1 (PSZ) (G.N2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E10 North Perim Spc (G.N2)"
     ],
@@ -218,10 +218,10 @@
   {
     "name": "E10 Sys1 (PSZ) (G.S3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E10 South Perim Spc (G.S3)"
     ],
@@ -230,10 +230,10 @@
   {
     "name": "E12 Sys1 (PSZ) (G.N1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 North Perim Spc (G.N1)"
     ],
@@ -242,10 +242,10 @@
   {
     "name": "E12 Sys1 (PSZ) (G.W2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 West Perim Spc (G.W2)"
     ],
@@ -254,10 +254,10 @@
   {
     "name": "E12 Sys1 (PSZ) (G.S3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 South Perim Spc (G.S3)"
     ],
@@ -266,10 +266,10 @@
   {
     "name": "E12 Sys1 (PSZ) (G.E4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 East Perim Spc (G.E4)"
     ],
@@ -278,10 +278,10 @@
   {
     "name": "E12 Sys1 (PSZ) (G.C6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 Core Spc (G.C6)"
     ],
@@ -290,10 +290,10 @@
   {
     "name": "E14 Sys1 (PSZ) (G.S1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E14 South Perim Spc (G.S1)"
     ],
@@ -302,10 +302,10 @@
   {
     "name": "E14 Sys1 (PSZ) (G.E2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E14 East Perim Spc (G.E2)"
     ],
@@ -314,10 +314,10 @@
   {
     "name": "E14 Sys1 (PSZ) (G.W3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E14 West Perim Spc (G.W3)"
     ],
@@ -326,10 +326,10 @@
   {
     "name": "E16 Sys1 (PSZ) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 East Perim Spc (G.E1)"
     ],
@@ -338,10 +338,10 @@
   {
     "name": "E16 Sys1 (PSZ) (G.N2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 North Perim Spc (G.N2)"
     ],
@@ -350,10 +350,10 @@
   {
     "name": "E16 Sys1 (PSZ) (G.W3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 West Perim Spc (G.W3)"
     ],
@@ -362,10 +362,10 @@
   {
     "name": "E16 Sys1 (PSZ) (G.S4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 South Perim Spc (G.S4)"
     ],
@@ -374,10 +374,10 @@
   {
     "name": "E16 Sys1 (PSZ) (G.C6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 Core Spc (G.C6)"
     ],
@@ -386,10 +386,10 @@
   {
     "name": "E1 Sys2 (PSZ) (G.W1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E1 West Perim Spc (G.W1)"
     ]
@@ -397,10 +397,10 @@
   {
     "name": "E3 Sys2 (PSZ) (G.SW1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E3 SW Perim Spc (G.SW1)"
     ]
@@ -408,10 +408,10 @@
   {
     "name": "E3 Sys2 (PSZ) (G.NE2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E3 NE Perim Spc (G.NE2)"
     ]
@@ -419,10 +419,10 @@
   {
     "name": "E4 Sys2 (PSZ) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E4 Core Spc (G.C5)"
     ],
@@ -431,10 +431,10 @@
   {
     "name": "E5 Sys2 (PSZ) (G.N1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E5 North Perim Spc (G.N1)"
     ]
@@ -442,10 +442,10 @@
   {
     "name": "E7 Sys2 (PSZ) (G.NW1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E7 NW Perim Spc (G.NW1)"
     ]
@@ -453,10 +453,10 @@
   {
     "name": "E7 Sys2 (PSZ) (G.SE2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E7 SE Perim Spc (G.SE2)"
     ]
@@ -464,10 +464,10 @@
   {
     "name": "E8 Sys2 (PSZ) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E8 Core Spc (G.C5)"
     ],
@@ -476,10 +476,10 @@
   {
     "name": "E9 Sys2 (PSZ) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E9 East Perim Spc (G.E1)"
     ]
@@ -487,10 +487,10 @@
   {
     "name": "E11 Sys2 (PSZ) (G.NE1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E11 NE Perim Spc (G.NE1)"
     ]
@@ -498,10 +498,10 @@
   {
     "name": "E11 Sys2 (PSZ) (G.SW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E11 SW Perim Spc (G.SW2)"
     ]
@@ -509,10 +509,10 @@
   {
     "name": "E12 Sys2 (PSZ) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E12 Core Spc (G.C5)"
     ],
@@ -521,10 +521,10 @@
   {
     "name": "E13 Sys2 (PSZ) (G.S1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E13 South Perim Spc (G.S1)"
     ]
@@ -532,10 +532,10 @@
   {
     "name": "E15 Sys2 (PSZ) (G.SE1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E15 SE Perim Spc (G.SE1)"
     ]
@@ -543,10 +543,10 @@
   {
     "name": "E15 Sys2 (PSZ) (G.NW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E15 NW Perim Spc (G.NW2)"
     ]
@@ -554,10 +554,10 @@
   {
     "name": "E16 Sys2 (PSZ) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E16 Core Spc (G.C5)"
     ],
@@ -566,10 +566,10 @@
   {
     "name": "E17 Sys2 (PSZ) (G.W1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Gas",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "E17 West Perim Spc (G.W1)"
     ]

@@ -2,11 +2,9 @@
   {
     "name": "EL1 Sys1 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL1 South Perim Spc (G.S1)",
       "EL1 East Perim Spc (G.E2)",

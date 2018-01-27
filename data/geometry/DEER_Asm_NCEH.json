@@ -2,10 +2,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.W1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 West Perim Spc (G.W1)"
     ]
@@ -13,10 +13,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.SW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 SW Perim Spc (G.SW2)"
     ]
@@ -24,10 +24,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.NW3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 NW Perim Spc (G.NW3)"
     ]
@@ -35,10 +35,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.SE4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 SE Perim Spc (G.SE4)"
     ]
@@ -46,10 +46,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.NE5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 NE Perim Spc (G.NE5)"
     ]

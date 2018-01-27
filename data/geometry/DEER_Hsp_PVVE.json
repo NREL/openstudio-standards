@@ -2,11 +2,9 @@
   {
     "name": "EL2 Sys1 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL2 SSW Perim Spc (G.SSW2)",
       "EL2 NNW Perim Spc (G.NNW3)",
@@ -17,11 +15,9 @@
   {
     "name": "EL6 Sys2 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL6 WNW Perim Spc (G.WNW2)",
       "EL6 ENE Perim Spc (G.ENE3)",
@@ -32,12 +28,12 @@
   {
     "name": "EL1 Sys3 (PVVT) (G.W3)",
     "type": "PSZ-AC",
-    "pszac_operation_schedule": null,
-    "pszac_oa_damper_schedule": null,
-    "pszac_cooling_type": "Single Speed DX AC",
-    "pszac_heating_type": "Electricity",
-    "pszac_fan_type": "ConstantVolume",
-    "pszac_supplemental_heating_type": "Electricity",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 West Perim Spc (G.W3)"
     ]
@@ -45,12 +41,12 @@
   {
     "name": "EL5 Sys3 (PVVT) (G.N3)",
     "type": "PSZ-AC",
-    "pszac_operation_schedule": null,
-    "pszac_oa_damper_schedule": null,
-    "pszac_cooling_type": "Single Speed DX AC",
-    "pszac_heating_type": "Electricity",
-    "pszac_fan_type": "ConstantVolume",
-    "pszac_supplemental_heating_type": "Electricity",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL5 North Perim Spc (G.N3)"
     ]
@@ -58,11 +54,9 @@
   {
     "name": "S5 Sys (PVAVS)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL1 North Perim Spc (G.N1)",
       "EL1 South Perim Spc (G.S2)",
@@ -76,11 +70,9 @@
   {
     "name": "S6 Sys (PVAVS)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL5 East Perim Spc (G.E1)",
       "EL5 West Perim Spc (G.W2)",
@@ -94,11 +86,9 @@
   {
     "name": "S7 Sys (PVAVS)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL4 West Perim Spc (G.W2)",
       "EL4 North Perim Spc (G.N3)",
@@ -110,11 +100,9 @@
   {
     "name": "S8 Sys (PVAVS)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL8 North Perim Spc (G.N2)",
       "EL8 East Perim Spc (G.E3)",
@@ -126,11 +114,9 @@
   {
     "name": "EL4 Sys9 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL4 East Perim Spc (G.E1)",
       "EL4 North Perim Spc (G.N6)",
@@ -142,11 +128,9 @@
   {
     "name": "EL8 Sys10 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL8 South Perim Spc (G.S1)",
       "EL8 East Perim Spc (G.E6)",
@@ -158,11 +142,9 @@
   {
     "name": "EL3 Sys11 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL3 West Perim Spc (G.W2)",
       "EL3 North Perim Spc (G.N3)",
@@ -174,11 +156,9 @@
   {
     "name": "EL7 Sys12 (PVAVS) (G)",
     "type": "PVAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 2.5,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "space_names": [
       "EL7 North Perim Spc (G.N2)",
       "EL7 East Perim Spc (G.E3)",

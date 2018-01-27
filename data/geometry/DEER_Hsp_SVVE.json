@@ -2,11 +2,12 @@
   {
     "name": "EL2 Sys1 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL2 SSW Perim Spc (G.SSW2)",
       "EL2 NNW Perim Spc (G.NNW3)",
@@ -17,11 +18,12 @@
   {
     "name": "EL6 Sys2 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL6 WNW Perim Spc (G.WNW2)",
       "EL6 ENE Perim Spc (G.ENE3)",
@@ -32,11 +34,12 @@
   {
     "name": "EL3 Sys4 (VAVS) (G.E1)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL3 East Perim Spc (G.E1)"
     ]
@@ -44,11 +47,12 @@
   {
     "name": "EL3 Sys4 (VAVS) (G.N6)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL3 North Perim Spc (G.N6)"
     ]
@@ -56,11 +60,12 @@
   {
     "name": "EL3 Sys4 (VAVS) (G.S7)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL3 South Perim Spc (G.S7)"
     ]
@@ -68,11 +73,12 @@
   {
     "name": "EL3 Sys4 (VAVS) (G.C8)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL3 Core Spc (G.C8)"
     ]
@@ -80,11 +86,12 @@
   {
     "name": "EL7 Sys4 (VAVS) (G.S1)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL7 South Perim Spc (G.S1)"
     ]
@@ -92,11 +99,12 @@
   {
     "name": "EL7 Sys4 (VAVS) (G.E6)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL7 East Perim Spc (G.E6)"
     ]
@@ -104,11 +112,12 @@
   {
     "name": "EL7 Sys4 (VAVS) (G.W7)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL7 West Perim Spc (G.W7)"
     ]
@@ -116,11 +125,12 @@
   {
     "name": "EL7 Sys4 (VAVS) (G.C8)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL7 Core Spc (G.C8)"
     ]
@@ -128,11 +138,12 @@
   {
     "name": "S5 Sys (VAVS)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL1 North Perim Spc (G.N1)",
       "EL1 South Perim Spc (G.S2)",
@@ -146,11 +157,12 @@
   {
     "name": "S6 Sys (VAVS)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL5 East Perim Spc (G.E1)",
       "EL5 West Perim Spc (G.W2)",
@@ -164,11 +176,12 @@
   {
     "name": "S7 Sys (VAVS)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL4 West Perim Spc (G.W2)",
       "EL4 North Perim Spc (G.N3)",
@@ -180,11 +193,12 @@
   {
     "name": "S8 Sys (VAVS)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL8 North Perim Spc (G.N2)",
       "EL8 East Perim Spc (G.E3)",
@@ -196,11 +210,12 @@
   {
     "name": "EL4 Sys9 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL4 East Perim Spc (G.E1)",
       "EL4 North Perim Spc (G.N6)",
@@ -212,11 +227,12 @@
   {
     "name": "EL8 Sys10 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL8 South Perim Spc (G.S1)",
       "EL8 East Perim Spc (G.E6)",
@@ -228,11 +244,12 @@
   {
     "name": "EL3 Sys11 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL3 West Perim Spc (G.W2)",
       "EL3 North Perim Spc (G.N3)",
@@ -244,11 +261,12 @@
   {
     "name": "EL7 Sys12 (VAVS) (G)",
     "type": "VAV",
-    "vav_operation_schedule": null,
-    "vav_oa_damper_schedule": null,
-    "vav_fan_efficiency": 0.6,
-    "vav_fan_pressure_rise": 4,
-    "vav_fan_motor_efficiency": 0.9,
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
     "space_names": [
       "EL7 North Perim Spc (G.N2)",
       "EL7 East Perim Spc (G.E3)",

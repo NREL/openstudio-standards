@@ -2,10 +2,10 @@
   {
     "name": "EL2 Sys1 (UVT) (G.SSW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 SSW Perim Spc (G.SSW2)"
     ]
@@ -13,10 +13,10 @@
   {
     "name": "EL2 Sys1 (UVT) (G.NNW3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 NNW Perim Spc (G.NNW3)"
     ]
@@ -24,10 +24,10 @@
   {
     "name": "EL2 Sys1 (UVT) (G.W4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 West Perim Spc (G.W4)"
     ]
@@ -35,10 +35,10 @@
   {
     "name": "EL6 Sys2 (UVT) (G.WNW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 WNW Perim Spc (G.WNW2)"
     ]
@@ -46,10 +46,10 @@
   {
     "name": "EL6 Sys2 (UVT) (G.ENE3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 ENE Perim Spc (G.ENE3)"
     ]
@@ -57,10 +57,10 @@
   {
     "name": "EL6 Sys2 (UVT) (G.N4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 North Perim Spc (G.N4)"
     ]
@@ -68,10 +68,10 @@
   {
     "name": "EL1 Sys3 (UVT) (G.W3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 West Perim Spc (G.W3)"
     ]
@@ -79,10 +79,10 @@
   {
     "name": "EL5 Sys3 (UVT) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL5 North Perim Spc (G.N3)"
     ]
@@ -90,10 +90,10 @@
   {
     "name": "EL3 Sys4 (UVT) (G)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL3 East Perim Spc (G.E1)",
       "EL3 North Perim Spc (G.N6)",
@@ -104,10 +104,10 @@
   {
     "name": "EL7 Sys4 (UVT) (G)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL7 South Perim Spc (G.S1)",
       "EL7 East Perim Spc (G.E6)",
@@ -118,10 +118,10 @@
   {
     "name": "EL1 Sys5 (UVT) (G.N1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 North Perim Spc (G.N1)"
     ]
@@ -129,10 +129,10 @@
   {
     "name": "EL1 Sys5 (UVT) (G.S2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 South Perim Spc (G.S2)"
     ]
@@ -140,10 +140,10 @@
   {
     "name": "EL2 Sys5 (UVT) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 East Perim Spc (G.E1)"
     ]
@@ -151,10 +151,10 @@
   {
     "name": "EL2 Sys5 (UVT) (G.S5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 South Perim Spc (G.S5)"
     ]
@@ -162,10 +162,10 @@
   {
     "name": "EL2 Sys5 (UVT) (G.N6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 North Perim Spc (G.N6)"
     ]
@@ -173,10 +173,10 @@
   {
     "name": "EL2 Sys5 (UVT) (G.C7)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL2 Core Spc (G.C7)"
     ]
@@ -184,10 +184,10 @@
   {
     "name": "EL5 Sys6 (UVT) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL5 East Perim Spc (G.E1)"
     ]
@@ -195,10 +195,10 @@
   {
     "name": "EL5 Sys6 (UVT) (G.W2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL5 West Perim Spc (G.W2)"
     ]
@@ -206,10 +206,10 @@
   {
     "name": "EL6 Sys6 (UVT) (G.S1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 South Perim Spc (G.S1)"
     ]
@@ -217,10 +217,10 @@
   {
     "name": "EL6 Sys6 (UVT) (G.W5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 West Perim Spc (G.W5)"
     ]
@@ -228,10 +228,10 @@
   {
     "name": "EL6 Sys6 (UVT) (G.E6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 East Perim Spc (G.E6)"
     ]
@@ -239,10 +239,10 @@
   {
     "name": "EL6 Sys6 (UVT) (G.C7)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL6 Core Spc (G.C7)"
     ]
@@ -250,10 +250,10 @@
   {
     "name": "EL4 Sys7 (UVT) (G.W2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 West Perim Spc (G.W2)"
     ]
@@ -261,10 +261,10 @@
   {
     "name": "EL4 Sys7 (UVT) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 North Perim Spc (G.N3)"
     ]
@@ -272,10 +272,10 @@
   {
     "name": "EL4 Sys7 (UVT) (G.S4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 South Perim Spc (G.S4)"
     ]
@@ -283,10 +283,10 @@
   {
     "name": "EL4 Sys7 (UVT) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 Core Spc (G.C5)"
     ]
@@ -294,10 +294,10 @@
   {
     "name": "EL8 Sys8 (UVT) (G.N2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 North Perim Spc (G.N2)"
     ]
@@ -305,10 +305,10 @@
   {
     "name": "EL8 Sys8 (UVT) (G.E3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 East Perim Spc (G.E3)"
     ]
@@ -316,10 +316,10 @@
   {
     "name": "EL8 Sys8 (UVT) (G.W4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 West Perim Spc (G.W4)"
     ]
@@ -327,10 +327,10 @@
   {
     "name": "EL8 Sys8 (UVT) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 Core Spc (G.C5)"
     ]
@@ -338,10 +338,10 @@
   {
     "name": "EL4 Sys9 (UVT) (G.E1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 East Perim Spc (G.E1)"
     ]
@@ -349,10 +349,10 @@
   {
     "name": "EL4 Sys9 (UVT) (G.N6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 North Perim Spc (G.N6)"
     ]
@@ -360,10 +360,10 @@
   {
     "name": "EL4 Sys9 (UVT) (G.S7)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 South Perim Spc (G.S7)"
     ]
@@ -371,10 +371,10 @@
   {
     "name": "EL4 Sys9 (UVT) (G.C8)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL4 Core Spc (G.C8)"
     ]
@@ -382,10 +382,10 @@
   {
     "name": "EL8 Sys10 (UVT) (G.S1)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 South Perim Spc (G.S1)"
     ]
@@ -393,10 +393,10 @@
   {
     "name": "EL8 Sys10 (UVT) (G.E6)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 East Perim Spc (G.E6)"
     ]
@@ -404,10 +404,10 @@
   {
     "name": "EL8 Sys10 (UVT) (G.W7)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 West Perim Spc (G.W7)"
     ]
@@ -415,10 +415,10 @@
   {
     "name": "EL8 Sys10 (UVT) (G.C8)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL8 Core Spc (G.C8)"
     ]
@@ -426,10 +426,10 @@
   {
     "name": "EL3 Sys11 (UVT) (G.W2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL3 West Perim Spc (G.W2)"
     ]
@@ -437,10 +437,10 @@
   {
     "name": "EL3 Sys11 (UVT) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL3 North Perim Spc (G.N3)"
     ]
@@ -448,10 +448,10 @@
   {
     "name": "EL3 Sys11 (UVT) (G.S4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL3 South Perim Spc (G.S4)"
     ]
@@ -459,10 +459,10 @@
   {
     "name": "EL3 Sys11 (UVT) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL3 Core Spc (G.C5)"
     ]
@@ -470,10 +470,10 @@
   {
     "name": "EL7 Sys12 (UVT) (G.N2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL7 North Perim Spc (G.N2)"
     ]
@@ -481,10 +481,10 @@
   {
     "name": "EL7 Sys12 (UVT) (G.E3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL7 East Perim Spc (G.E3)"
     ]
@@ -492,10 +492,10 @@
   {
     "name": "EL7 Sys12 (UVT) (G.W4)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL7 West Perim Spc (G.W4)"
     ]
@@ -503,10 +503,10 @@
   {
     "name": "EL7 Sys12 (UVT) (G.C5)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL7 Core Spc (G.C5)"
     ]

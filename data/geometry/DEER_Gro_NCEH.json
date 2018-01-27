@@ -2,10 +2,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.SW2)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 SW Perim Spc (G.SW2)"
     ]
@@ -13,10 +13,10 @@
   {
     "name": "EL1 Sys1 (UVT) (G.N3)",
     "type": "UnitHeater",
-    "unitheater_heating_type": "Electric",
-    "unitheater_fan_control_type": "OnOff",
-    "unitheater_fan_static_pressure": 1,
-    "unitheater_operation_schedule": null,
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
     "space_names": [
       "EL1 North Perim Spc (G.N3)"
     ]
@@ -24,12 +24,12 @@
   {
     "name": "EL1 Sys2 (PVVT) (G.SSE1)",
     "type": "PSZ-AC",
-    "pszac_operation_schedule": null,
-    "pszac_oa_damper_schedule": null,
-    "pszac_cooling_type": "Single Speed DX AC",
-    "pszac_heating_type": "Electricity",
-    "pszac_fan_type": "ConstantVolume",
-    "pszac_supplemental_heating_type": "Electricity",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 SSE Perim Spc (G.SSE1)"
     ]
