@@ -4,6 +4,7 @@
     "return_plenum": "FirstFloor_Plenum",
     "operation_schedule": "OfficeMedium VAV Operation",
     "oa_damper_schedule": "OfficeMedium VAV OA Damper",
+    "heating_type": "Gas",
     "space_names": [
       "Perimeter_bot_ZN_1",
       "Perimeter_bot_ZN_2",
@@ -17,6 +18,7 @@
     "return_plenum": "MidFloor_Plenum",
     "operation_schedule": "OfficeMedium VAV Operation",
     "oa_damper_schedule": "OfficeMedium VAV OA Damper",
+    "heating_type": "Gas",
     "space_names": [
       "Perimeter_mid_ZN_1",
       "Perimeter_mid_ZN_2",
@@ -30,6 +32,7 @@
     "return_plenum": "TopFloor_Plenum",
     "operation_schedule": "OfficeMedium VAV Operation",
     "oa_damper_schedule": "OfficeMedium VAV OA Damper",
+    "heating_type": "Gas",
     "space_names": [
       "Perimeter_top_ZN_1",
       "Perimeter_top_ZN_2",

@@ -4,6 +4,7 @@
     "name": "PVAV_POD_1",
     "operation_schedule": "SchoolPrimary HVACOperationSchd",
     "oa_damper_schedule": "SchoolPrimary MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
     "space_names": [
       "Corner_Class_1_Pod_1_ZN_1_FLR_1",
       "Mult_Class_1_Pod_1_ZN_1_FLR_1",
@@ -17,6 +18,7 @@
     "name": "PVAV_POD_2",
     "operation_schedule": "SchoolPrimary HVACOperationSchd",
     "oa_damper_schedule": "SchoolPrimary MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
     "space_names": [
       "Mult_Class_1_Pod_2_ZN_1_FLR_1",
       "Corridor_Pod_2_ZN_1_FLR_1",
@@ -30,6 +32,7 @@
     "name": "PVAV_POD_3",
     "operation_schedule": "SchoolPrimary HVACOperationSchd",
     "oa_damper_schedule": "SchoolPrimary MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
     "space_names": [
       "Corner_Class_1_Pod_3_ZN_1_FLR_1",
       "Mult_Class_1_Pod_3_ZN_1_FLR_1",
@@ -43,6 +46,7 @@
     "name": "PVAV_OTHER",
     "operation_schedule": "SchoolPrimary HVACOperationSchd",
     "oa_damper_schedule": "SchoolPrimary MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
     "space_names": [
       "Computer_Class_ZN_1_FLR_1",
       "Main_Corridor_ZN_1_FLR_1",

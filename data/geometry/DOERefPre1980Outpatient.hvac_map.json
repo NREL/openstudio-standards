@@ -4,6 +4,7 @@
     "name": "PVAV Outpatient F1",
     "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
     "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH_Pre2004",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 Bio Haz",
@@ -57,6 +58,7 @@
     "name": "PVAV Outpatient F2 F3",
     "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
     "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH_Pre2004",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 2 Conference",
       "Floor 2 Dictation",
