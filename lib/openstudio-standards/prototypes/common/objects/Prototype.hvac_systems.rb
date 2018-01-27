@@ -2787,7 +2787,6 @@ class Standard
                          sys_name,
                          thermal_zones,
                          hvac_op_sch,
-                         alt_hvac_op_sch,
                          oa_damper_sch,
                          fan_type,
                          heating_type,
@@ -2805,13 +2804,6 @@ class Standard
                   else
                     model_add_schedule(model, hvac_op_sch)
                   end
-
-    # alternate hvac operation schedule
-    alt_hvac_op_sch = if alt_hvac_op_sch.nil?
-                        model.alwaysOnDiscreteSchedule
-                      else
-                        model_add_schedule(model, alt_hvac_op_sch)
-                      end
 
     # oa damper schedule
     oa_damper_sch = if oa_damper_sch.nil?
@@ -2843,11 +2835,6 @@ class Standard
       sizing_zone.setZoneHeatingDesignSupplyAirHumidityRatio(0.008)
     end
     thermal_zone_name = parts.join(' - ')
-
-    # Meeting room cycling fan schedule
-    if space_type_names.include? 'Meeting'
-      hvac_op_sch = alt_hvac_op_sch
-    end
 
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
     air_loop.setName("#{thermal_zone_name} SAC")

@@ -57,11 +57,11 @@ class Standard
                              hot_water_loop,
                              chilled_water_loop,
                              thermal_zones,
-                             system['vav_operation_schedule'],
-                             system['vav_oa_damper_schedule'],
-                             system['vav_fan_efficiency'],
-                             system['vav_fan_motor_efficiency'],
-                             system['vav_fan_pressure_rise'],
+                             system['operation_schedule'],
+                             system['oa_damper_schedule'],
+                             vav_fan_efficiency = 0.62,
+                             vav_fan_motor_efficiency = 0.9,
+                             vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                              return_plenum,
                              reheat_type = 'Water',
                              building_type)
@@ -100,44 +100,26 @@ class Standard
                       system['name'],
                       hot_water_loop,
                       thermal_zones,
-                      system['vav_operation_schedule'],
-                      system['vav_oa_damper_schedule'],
-                      system['vav_fan_efficiency'],
-                      system['vav_fan_motor_efficiency'],
-                      system['vav_fan_pressure_rise'],
+                      system['operation_schedule'],
+                      system['oa_damper_schedule'],
+                      vav_fan_efficiency = 0.62,
+                      vav_fan_motor_efficiency = 0.9,
+                      vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                       chilled_water_loop,
                       building_type)
 
       when 'PSZ-AC'
 
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
-
-        # Special logic to differentiate between operation schedules
-        # that vary even inside of a system type for stripmall.
-        hvac_op_sch = nil
-        oa_sch = nil
-        if system['hvac_op_sch_index'].nil? || system['hvac_op_sch_index'] == 1
-          hvac_op_sch = system['pszac_operation_schedule']
-          oa_sch = system['pszac_oa_damper_schedule']
-        elsif system['hvac_op_sch_index'] == 2
-          hvac_op_sch = system['pszac_operation_schedule_2']
-          oa_sch = system['pszac_oa_damper_schedule_2']
-        elsif system['hvac_op_sch_index'] == 3
-          hvac_op_sch = system['pszac_operation_schedule_3']
-          oa_sch = system['pszac_oa_damper_schedule_3']
-        end
-
         # Special logic to make unitary heat pumps all blow-through
         fan_position = 'DrawThrough'
-        if system['pszac_heating_type'] == 'Single Speed Heat Pump' ||
-           system['pszac_heating_type'] == 'Water To Air Heat Pump'
+        if system['heating_type'] == 'Single Speed Heat Pump' ||
+           system['heating_type'] == 'Water To Air Heat Pump'
           fan_position = 'BlowThrough'
         end
 
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
-        if system['pszac_heating_type'] == 'Water To Air Heat Pump'
+        if system['heating_type'] == 'Water To Air Heat Pump'
           heat_pump_loop = model_add_hp_loop(model, building_type)
         end
 
@@ -146,13 +128,13 @@ class Standard
                          heat_pump_loop, # Typically nil unless water source hp
                          heat_pump_loop, # Typically nil unless water source hp
                          thermal_zones,
-                         hvac_op_sch,
-                         oa_sch,
+                         system['operation_schedule'],
+                         system['oa_damper_schedule'],
                          fan_position,
-                         system['pszac_fan_type'],
-                         system['pszac_heating_type'],
-                         system['pszac_supplemental_heating_type'],
-                         system['pszac_cooling_type'],
+                         system['fan_type'],
+                         system['heating_type'],
+                         system['supplemental_heating_type'],
+                         system['cooling_type'],
                          building_type)
 
       when 'PVAV'
@@ -171,8 +153,8 @@ class Standard
         model_add_pvav(model,
                        system['name'],
                        thermal_zones,
-                       system['vav_operation_schedule'],
-                       system['vav_oa_damper_schedule'],
+                       system['operation_schedule'],
+                       system['oa_damper_schedule'],
                        electric_reheat = false,
                        hot_water_loop,
                        chilled_water_loop = nil,
@@ -221,10 +203,10 @@ class Standard
                        hot_water_loop,
                        chilled_water_loop,
                        thermal_zones,
-                       system['vav_operation_schedule'],
-                       system['doas_oa_damper_schedule'],
-                       system['doas_fan_maximum_flow_rate'],
-                       system['doas_economizer_control_type'],
+                       system['operation_schedule'],
+                       system['oa_damper_schedule'],
+                       system['fan_maximum_flow_rate'],
+                       system['economizer_control_type'],
                        building_type)
 
         model_add_four_pipe_fan_coil(model,
@@ -258,8 +240,8 @@ class Standard
                                    hot_water_loop,
                                    heat_pump_loop,
                                    thermal_zones,
-                                   system['flow_fraction_schedule_name'],
-                                   system['flow_fraction_schedule_name'],
+                                   system['flow_fraction_schedule'],
+                                   system['flow_fraction_schedule'],
                                    system['main_data_center'])
 
       when 'SAC'
@@ -267,13 +249,12 @@ class Standard
         model_add_split_ac(model,
                            nil,
                            thermal_zones,
-                           system['sac_operation_schedule'],
-                           system['sac_operation_schedule_meeting'],
-                           system['sac_oa_damper_schedule'],
-                           system['sac_fan_type'],
-                           system['sac_heating_type'],
-                           system['sac_heating_type'],
-                           system['sac_cooling_type'],
+                           system['operation_schedule'],
+                           system['oa_damper_schedule'],
+                           system['fan_type'],
+                           system['heating_type'],
+                           system['heating_type'],
+                           system['cooling_type'],
                            building_type)
 
       when 'UnitHeater'
@@ -281,10 +262,10 @@ class Standard
         model_add_unitheater(model,
                              nil,
                              thermal_zones,
-                             system['unitheater_operation_schedule'],
-                             system['unitheater_fan_control_type'],
-                             OpenStudio.convert(system['unitheater_fan_static_pressure'], 'inH_{2}O', 'Pa').get,
-                             system['unitheater_heating_type'],
+                             system['operation_schedule'],
+                             system['fan_type'],
+                             OpenStudio.convert(system['fan_static_pressure'], 'inH_{2}O', 'Pa').get,
+                             system['heating_type'],
                              hot_water_loop = nil,
                              building_type)
 
@@ -294,22 +275,22 @@ class Standard
                        nil,
                        nil,
                        thermal_zones,
-                       system['ptac_fan_type'],
-                       system['ptac_heating_type'],
-                       system['ptac_cooling_type'],
+                       system['fan_type'],
+                       system['heating_type'],
+                       system['cooling_type'],
                        building_type)
 
       when 'Exhaust Fan'
 
-        model_add_exhaust_fan(model, system['availability_sch_name'],
+        model_add_exhaust_fan(model, system['operation_schedule'],
                               system['flow_rate'],
-                              system['flow_fraction_schedule_name'],
-                              system['balanced_exhaust_fraction_schedule_name'],
+                              system['flow_fraction_schedule'],
+                              system['balanced_exhaust_fraction_schedule'],
                               thermal_zones)
 
       when 'Zone Ventilation'
 
-        model_add_zone_ventilation(model, system['availability_sch_name'],
+        model_add_zone_ventilation(model, system['operation_schedule'],
                                    system['flow_rate'],
                                    system['ventilation_type'],
                                    thermal_zones)
@@ -322,9 +303,9 @@ class Standard
                                 system['length'],
                                 system['evaporator_fan_pwr_per_length'],
                                 system['lighting_per_length'],
-                                system['lighting_sch_name'],
+                                system['lighting_schedule'],
                                 system['defrost_pwr_per_length'],
-                                system['restocking_sch_name'],
+                                system['restocking_schedule'],
                                 system['cop'],
                                 system['cop_f_of_t_curve_name'],
                                 system['condenser_fan_pwr'],
@@ -336,7 +317,7 @@ class Standard
 
         model_add_refrigeration_system(model,
                                        system['compressor_type'],
-                                       system['sys_name'],
+                                       system['name'],
                                        system['cases'],
                                        system['walkins'],
                                        thermal_zones[0])
