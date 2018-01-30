@@ -148,7 +148,9 @@ class BTAPCosting
      'constructions_glazing',
      'materials_glazing',
      'Constructions',
-     'ConstructionProperties'
+     'ConstructionProperties',
+     'lighting',
+     'materials_lighting'
     ].each do |sheet|
       @costing_database['raw'][sheet] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, sheet)
     end
@@ -157,8 +159,7 @@ class BTAPCosting
 
   def generate_materials_cost_database
 
-    [
-        @costing_database['raw']['materials_glazing'], @costing_database['raw']['materials_opaque']].each do |mat_lib|
+    [@costing_database['raw']['materials_glazing'], @costing_database['raw']['materials_opaque'], @costing_database['raw']['materials_lighting']].each do |mat_lib|
       [mat_lib].each do |materials|
 
         lookup_list = materials.map {|material|
@@ -168,7 +169,7 @@ class BTAPCosting
         }
 
         lookup_list.each do |material|
-          #check if it's already in our database with right catalog year.
+          # check if it's already in our database with right catalog year.
           api_return = @costing_database['rsmean_api_data'].detect {|rs_means|
             rs_means['id'] == material['id'] and rs_means['catalog']['id'] == material['catalog_id']
           }
@@ -216,23 +217,25 @@ class BTAPCosting
     end
   end
 
-  def cost_audit_envelope(model)
-    #Creates a Hash to collect costing data.
+  def cost_audit_all(model)
+    # JTB: This procedure in progress and not yet fully developed (or called)
+
+
+    # Create a Hash to collect costing data.
     costing_report = {}
-    #Creates a Hash in the hash for envelope costing.
+    # Create a Hash in the hash for categories of costing.
     costing_report["Building"] = {}
     costing_report["Envelope"] = {}
     costing_report["Lighting"] = {}
     costing_report["HVAC"] = {}
     costing_report["Totals"] = {}
-    totEnvCost = 0
 
-    #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
+    # Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
     if model.getBuilding.standardsBuildingType.empty? or model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
     end
 
-    #store number of stories. Required for envelope costing logic.
+    # Store number of stories. Required for envelope costing logic.
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
 
     closest_loc = get_closest_cost_location(model.getWeatherFile.latitude, model.getWeatherFile.longitude)
@@ -244,6 +247,43 @@ class BTAPCosting
     costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
     costing_report["Building"]["ClosestProv"] = closest_prov
     costing_report["Building"]["ClosestCity"] = closest_city
+
+    #envelope_cost = cost_audit_envelope(model, costing_report)
+
+    #lighting_cost = cost_audit_lighting(model, costing_report)
+
+  end
+
+  def cost_audit_envelope(model)
+
+    # Create a Hash to collect costing data.
+    costing_report = {}
+    # Create a Hash in the hash for categories of costing.
+    costing_report["Building"] = {}
+    costing_report["Envelope"] = {}
+    costing_report["Lighting"] = {}
+    costing_report["HVAC"] = {}
+    costing_report["Totals"] = {}
+
+    # Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
+    if model.getBuilding.standardsBuildingType.empty? or model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
+    end
+
+    # Store number of stories. Required for envelope costing logic.
+    num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
+
+    closest_loc = get_closest_cost_location(model.getWeatherFile.latitude, model.getWeatherFile.longitude)
+    closest_city = closest_loc['city']
+    closest_prov = closest_loc['province-state']
+
+    costing_report["Building"]["BuildingType"] = model.getBuilding.standardsBuildingType.to_s
+    costing_report["Building"]["WeatherProv"] = model.getWeatherFile.stateProvinceRegion
+    costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
+    costing_report["Building"]["ClosestProv"] = closest_prov
+    costing_report["Building"]["ClosestCity"] = closest_city
+
+    totEnvCost = 0
 
     # Iterate through the thermal zones.
     model.getThermalZones.each do |zone|
@@ -268,14 +308,14 @@ class BTAPCosting
         }.first
 
 
-        #Create Hash to store surfaces for this space by surface type
+        # Create Hash to store surfaces for this space by surface type
         surfaces = {}
         #Exterior
         exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Outdoors")
         surfaces["ExteriorWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Wall")
         surfaces["ExteriorRoof"]= BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "RoofCeiling")
         surfaces["ExteriorFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Floor")
-        #Exterior Subsurface
+        # Exterior Subsurface
         exterior_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(exterior_surfaces)
         surfaces["ExteriorFixedWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"])
         surfaces["ExteriorOperableWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"])
@@ -286,13 +326,13 @@ class BTAPCosting
         surfaces["ExteriorGlassDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"])
         surfaces["ExteriorOverheadDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"])
 
-        #Ground Surfaces
+        # Ground Surfaces
         ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Ground")
         surfaces["GroundContactWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
         surfaces["GroundContactRoof"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         surfaces["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        #These are the only envelope costing items we are considering right now..
+        # These are the only envelope costing items we are considering for envelopes..
         costed_surfaces = [
             "ExteriorWall",
             "ExteriorRoof",
@@ -312,13 +352,18 @@ class BTAPCosting
 
         # Iterate through
         costed_surfaces.each do |surface_type|
-          # Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
-          # levels for that city. This has been collected by RS means.
-          cost_range_hash = @costing_database['constructions_costs'].select {|construction|
-            construction['construction_type_name'] == construction_set[surface_type] &&
-            construction['province-state'] == closest_prov &&
-            construction['city'] == closest_city
-          }
+          # Get Costs for this construction type. This will get the cost for the particular construction type
+          # for all rsi levels for this location. This has been collected by RS means. Note that a space_type
+          # of "- undefined -" will create a nil construction_set!
+          if construction_set.nil?
+            cost_range_hash = {}
+          else
+            cost_range_hash = @costing_database['constructions_costs'].select {|construction|
+              construction['construction_type_name'] == construction_set[surface_type] &&
+                  construction['province-state'] == closest_prov &&
+                  construction['city'] == closest_city
+            }
+          end
 
           # We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
           surfaceIsGlazing = (surface_type == 'ExteriorFixedWindow' || surface_type == 'ExteriorOperableWindow' ||
@@ -357,8 +402,7 @@ class BTAPCosting
             # If the cost is nil, that means the rsi is out of range. Flag in the report.
             if cost.nil?
               if !cost_range_array.empty?
-
-  notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
+                notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
                 cost = 0.0
               else
                 notes = "Cost is 0!"
@@ -373,7 +417,11 @@ class BTAPCosting
             totEnvCost = totEnvCost + surfCost
 
             # Bin the costing by construction standard type and rsi
-            name = "#{construction_set[surface_type]}_#{rsi}"
+            if construction_set.nil?
+              name = "undefined space type_#{rsi}"
+            else
+              name = "#{construction_set[surface_type]}_#{rsi}"
+            end
             if costing_report['Envelope'].has_key?(name)
               costing_report['Envelope'][name]['area'] += surfArea
               costing_report['Envelope'][name]['cost'] += surfCost
@@ -400,6 +448,13 @@ class BTAPCosting
     return totEnvCost
 
   end
+
+  def cost_audit_lighting(model, costing_report)
+
+
+
+  end
+
 
   #This will convert a sheet in a given workbook into an array of hashes with the headers as symbols.
   def convert_workbook_sheet_to_array_of_hashes(xlsx_path, sheet_name)

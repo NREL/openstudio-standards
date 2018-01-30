@@ -5,7 +5,12 @@ class TestCosting < NECB2011
 
   #create model
   template = 'NECB 2011'
-  building_type = 'FullServiceRestaurant'
+
+  #building_type = 'FullServiceRestaurant'
+  #building_type ='SmallOffice'
+  #building_type ='MediumOffice'
+  building_type ='LargeOffice'
+
   climate_zone = 'NECB HDD Method'
   epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
 

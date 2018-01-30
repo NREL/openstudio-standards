@@ -37,7 +37,9 @@
             "MB",
             "PE",
             "PQ",
-            "QC"
+            "QC",
+            "NF",
+            "NL"
           ],
           "boiler_fueltype": "Electricity",
           "baseboard_type": "Electric",
@@ -73,3 +75,4 @@
     }
   ]
 }
+
