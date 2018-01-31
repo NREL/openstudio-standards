@@ -10,7 +10,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestNECBSecondarySchool < CreateDOEPrototypeBuildingTest
   building_types = ['Hospital']
 
-  templates = [ 'NECB2011']
+  templates = ['NECB2011','NECB2015']
   climate_zones = ['NECB HDD Method']
   epw_files = [
       'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'

@@ -14,8 +14,8 @@ class NECB2015 < NECB2011
     @standards_data['tables'].each do |table|
       puts table['name']
       table['table'].each do |row|
-        if row.has_key? "template"
-          row["template"].gsub!('NECB2011', 'NECB2015')
+        ["lighting_standard", "ventilation_standard", "template"].each do |item|
+          row[item].gsub!('NECB2011', 'NECB2015') unless row[item].nil?
         end
       end
     end

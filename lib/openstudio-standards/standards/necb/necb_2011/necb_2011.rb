@@ -418,4 +418,205 @@ class NECB2011 < Standard
     end
     return true
   end
+
+  # Adds code-minimum constructions based on the building type
+  # as defined in the OpenStudio_Standards_construction_sets.json file.
+  # Where there is a separate construction set specified for the
+  # individual space type, this construction set will be created and applied
+  # to this space type, overriding the whole-building construction set.
+  #
+  # @param building_type [String] the type of building
+  # @param climate_zone [String] the name of the climate zone the building is in
+  # @return [Bool] returns true if successful, false if not
+  def model_add_constructions(model, building_type, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
+    is_residential = 'No' # default is nonresidential for building level
+
+    # The constructions lookup table uses a slightly different list of
+    # building types.
+    @lookup_building_type = model_get_lookup_name(building_type)
+    # TODO: this is a workaround.  Need to synchronize the building type names
+    # across different parts of the code, including splitting of Office types
+    case building_type
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice'
+        new_lookup_building_type = building_type
+      else
+        new_lookup_building_type = model_get_lookup_name(building_type)
+    end
+
+    # Assign construction to adiabatic construction
+    # Assign a material to all internal mass objects
+    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    cp02_carpet_pad.setName('CP02 CARPET PAD')
+    cp02_carpet_pad.setRoughness('VeryRough')
+    cp02_carpet_pad.setThermalResistance(0.21648)
+    cp02_carpet_pad.setThermalAbsorptance(0.9)
+    cp02_carpet_pad.setSolarAbsorptance(0.7)
+    cp02_carpet_pad.setVisibleAbsorptance(0.8)
+
+    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
+    normalweight_concrete_floor.setRoughness('MediumSmooth')
+    normalweight_concrete_floor.setThickness(0.1016)
+    normalweight_concrete_floor.setConductivity(2.31)
+    normalweight_concrete_floor.setDensity(2322)
+    normalweight_concrete_floor.setSpecificHeat(832)
+
+    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
+    nonres_floor_insulation.setRoughness('MediumSmooth')
+    nonres_floor_insulation.setThermalResistance(2.88291975297193)
+    nonres_floor_insulation.setThermalAbsorptance(0.9)
+    nonres_floor_insulation.setSolarAbsorptance(0.7)
+    nonres_floor_insulation.setVisibleAbsorptance(0.7)
+
+    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    floor_adiabatic_construction.setName('Floor Adiabatic construction')
+    floor_layers = OpenStudio::Model::MaterialVector.new
+    floor_layers << cp02_carpet_pad
+    floor_layers << normalweight_concrete_floor
+    floor_layers << nonres_floor_insulation
+    floor_adiabatic_construction.setLayers(floor_layers)
+
+    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
+    g01_13mm_gypsum_board.setRoughness('Smooth')
+    g01_13mm_gypsum_board.setThickness(0.0127)
+    g01_13mm_gypsum_board.setConductivity(0.1600)
+    g01_13mm_gypsum_board.setDensity(800)
+    g01_13mm_gypsum_board.setSpecificHeat(1090)
+    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
+    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
+    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
+
+    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    wall_adiabatic_construction.setName('Wall Adiabatic construction')
+    wall_layers = OpenStudio::Model::MaterialVector.new
+    wall_layers << g01_13mm_gypsum_board
+    wall_layers << g01_13mm_gypsum_board
+    wall_adiabatic_construction.setLayers(wall_layers)
+
+    m10_200mm_concrete_block_basement_wall = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
+    m10_200mm_concrete_block_basement_wall.setRoughness('MediumRough')
+    m10_200mm_concrete_block_basement_wall.setThickness(0.2032)
+    m10_200mm_concrete_block_basement_wall.setConductivity(1.326)
+    m10_200mm_concrete_block_basement_wall.setDensity(1842)
+    m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
+
+    basement_wall_construction = OpenStudio::Model::Construction.new(model)
+    basement_wall_construction.setName('Basement Wall construction')
+    basement_wall_layers = OpenStudio::Model::MaterialVector.new
+    basement_wall_layers << m10_200mm_concrete_block_basement_wall
+    basement_wall_construction.setLayers(basement_wall_layers)
+
+    basement_floor_construction = OpenStudio::Model::Construction.new(model)
+    basement_floor_construction.setName('Basement Floor construction')
+    basement_floor_layers = OpenStudio::Model::MaterialVector.new
+    basement_floor_layers << m10_200mm_concrete_block_basement_wall
+    basement_floor_layers << cp02_carpet_pad
+    basement_floor_construction.setLayers(basement_floor_layers)
+
+    model.getSurfaces.sort.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
+        if surface.surfaceType.to_s == 'Wall'
+          surface.setConstruction(wall_adiabatic_construction)
+        else
+          surface.setConstruction(floor_adiabatic_construction)
+        end
+      elsif surface.outsideBoundaryCondition.to_s == 'OtherSideCoefficients'
+        # Ground
+        if surface.surfaceType.to_s == 'Wall'
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_wall_construction)
+        else
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_floor_construction)
+        end
+      end
+    end
+
+    # Make the default construction set for the building
+    spc_type = 'WholeBuilding'
+    bldg_def_const_set = model_add_construction_set(model, climate_zone, new_lookup_building_type, spc_type, is_residential)
+
+    if bldg_def_const_set.is_initialized
+      model.getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not create default construction set for the building.')
+      return false
+    end
+
+    # Make a construction set for each space type, if one is specified
+    model.getSpaceTypes.sort.each do |space_type|
+      # Get the standards building type
+      stds_building_type = nil
+      if space_type.standardsBuildingType.is_initialized
+        stds_building_type = space_type.standardsBuildingType.get
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards building type.")
+      end
+
+      # Get the standards space type
+      stds_spc_type = nil
+      if space_type.standardsSpaceType.is_initialized
+        stds_spc_type = space_type.standardsSpaceType.get
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards space type.")
+      end
+
+      # If the standards space type is Attic,
+      # the building type should be blank.
+      if stds_spc_type == 'Attic'
+        stds_building_type = ''
+      end
+
+      # Attempt to make a construction set for this space type
+      # and assign it if it can be created.
+      spc_type_const_set = model_add_construction_set(model, climate_zone, stds_building_type, stds_spc_type, is_residential)
+      if spc_type_const_set.is_initialized
+        space_type.setDefaultConstructionSet(spc_type_const_set.get)
+      end
+    end
+
+
+
+    # Make skylights have the same construction as fixed windows
+    # sub_surface = self.getBuilding.defaultConstructionSet.get.defaultExteriorSubSurfaceConstructions.get
+    # window_construction = sub_surface.fixedWindowConstruction.get
+    # sub_surface.setSkylightConstruction(window_construction)
+
+    # Assign a material to all internal mass objects
+    material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    material.setName('Std Wood 6inch')
+    material.setRoughness('MediumSmooth')
+    material.setThickness(0.15)
+    material.setConductivity(0.12)
+    material.setDensity(540)
+    material.setSpecificHeat(1210)
+    material.setThermalAbsorptance(0.9)
+    material.setSolarAbsorptance(0.7)
+    material.setVisibleAbsorptance(0.7)
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setName('InteriorFurnishings')
+    layers = OpenStudio::Model::MaterialVector.new
+    layers << material
+    construction.setLayers(layers)
+
+    # Assign the internal mass construction to existing internal mass objects
+    model.getSpaces.sort.each do |space|
+      internal_masses = space.internalMass
+      internal_masses.each do |internal_mass|
+        internal_mass.internalMassDefinition.setConstruction(construction)
+      end
+    end
+
+
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+
+    return true
+  end
+
+
 end
