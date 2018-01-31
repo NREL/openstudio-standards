@@ -3,8 +3,8 @@
 require 'rubyXL'
 require 'deep_merge'
 class NECB2011 < Standard
-  @@template = 'NECB2011' # rubocop:disable Style/ClassVars
-  register_standard @@template
+  @template = self.new.class.name # rubocop:disable Style/ClassVars
+  register_standard( @template )
   attr_reader :template
   attr_accessor :necb_standards_data
   attr_accessor :used_standards_data
@@ -65,7 +65,6 @@ class NECB2011 < Standard
 
   def initialize
     super()
-    @template = @@template
     @standards_data = self.load_standards_database_new()
   end
 

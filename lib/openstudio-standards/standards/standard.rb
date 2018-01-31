@@ -20,6 +20,7 @@ class Standard
 
   # Add the standard to the STANDARDS_LIST.
   def self.register_standard(name)
+    puts "registering #{name}"
     STANDARDS_LIST[name] = self
   end
 
@@ -41,6 +42,33 @@ class Standard
   def intialize
     super()
   end
+
+  # Get the name of the building type used in lookups
+  #
+  # @param building_type [String] the building type
+  # @return [String] returns the lookup name as a string
+  # @todo Unify the lookup names and eliminate this method
+  def model_get_lookup_name(building_type)
+    lookup_name = building_type
+    case building_type
+      when 'SmallOffice'
+        lookup_name = 'Office'
+      when 'MediumOffice'
+        lookup_name = 'Office'
+      when 'LargeOffice'
+        lookup_name = 'Office'
+      when 'LargeOfficeDetail'
+        lookup_name = 'Office'
+      when 'RetailStandalone'
+        lookup_name = 'Retail'
+      when 'RetailStripmall'
+        lookup_name = 'StripMall'
+      when 'Office'
+        lookup_name = 'Office'
+    end
+    return lookup_name
+  end
+
 
   # Loads the default openstudio standards dataset.
   #

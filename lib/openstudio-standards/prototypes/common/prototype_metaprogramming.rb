@@ -25,6 +25,7 @@ def create_class_array
   ]
 
   templates = ['NECB2011',
+               'NECB2015',
                'ASHRAE9012004',
                'ASHRAE9012007',
                'ASHRAE9012010',
@@ -51,56 +52,60 @@ end
       class_array << "
   # This class represents a prototypical #{template} #{name}.
   class #{template}#{name} < #{template}
-  @@building_type = \"#{name}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
-  attr_accessor :prototype_database
-  attr_accessor :prototype_input
-  attr_accessor :lookup_building_type
-  attr_accessor :space_type_map
-  attr_accessor :geometry_file
-  attr_accessor :building_story_map
-  attr_accessor :system_to_space_map
+    BUILDING_TYPE = \"#{name}\"
+    TEMPLATE =  \"#{template}\"
+    register_standard (\"\#{TEMPLATE}_\#{BUILDING_TYPE}\")
+    attr_accessor :prototype_database
+    attr_accessor :prototype_input
+    attr_accessor :lookup_building_type
+    attr_accessor :space_type_map
+    attr_accessor :geometry_file
+    attr_accessor :building_story_map
+    attr_accessor :system_to_space_map
 
-  def initialize
-    super()
-    @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
-    if @prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
-      raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
-      return false
+    def initialize
+      super()
+      @building_type = BUILDING_TYPE
+      @template = TEMPLATE
+      @instvarbuilding_type = @building_type
+      @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @building_type }, nil)
+      if @prototype_input.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @building_type }}, cannot create model.\")
+        #puts JSON.pretty_generate(standards_data['prototype_inputs'])
+        raise(\"Could not find prototype inputs for \#{@template}\#{@name}, cannot create model.\")
+        return false
+      end
+      @lookup_building_type = self.model_get_lookup_name(@building_type)
+      #ideally we should map the data required to a instance variable.
+      @geometry_file = Folders.instance.data_geometry_folder + '/' + self.class.name + '.osm'
+      hvac_map_file =  Folders.instance.data_geometry_folder + '/' + self.class.name + '.hvac_map.json'
+      @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
+      self.set_variables()
     end
-    @lookup_building_type = self.model_get_lookup_name(@@building_type)
-    #ideally we should map the data required to a instance variable.
-    @geometry_file = Folders.instance.data_geometry_folder + '/' + self.class.name + '.osm'
-    hvac_map_file =  Folders.instance.data_geometry_folder + '/' + self.class.name + '.hvac_map.json'
-    @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
-    self.set_variables()
-  end
 
   # This method is used to extend the class with building-type-specific
   # methods, as defined in Prototype.SomeBuildingType.rb.  Each building type
   # has its own set of methods that change things which are not
   # common across all prototype buildings, even within a given Standard.
-  def set_variables()
-    # Will be overwritten in class reopen file.
-    # add all building methods for now.
-    self.extend(#{name}) unless @template == 'NECB2011'
-  end
+    def set_variables()
+      # Will be overwritten in class reopen file.
+      # add all building methods for now.
+      self.extend(#{name}) unless @template == 'NECB2011'
+    end
 
   # Returns the mapping between the names of the spaces
   # in the geometry .osm file and the space types
   # available for this particular Standard.
-  def define_space_type_map(building_type, climate_zone)
-    return @space_type_map
-  end
+    def define_space_type_map(building_type, climate_zone)
+      return @space_type_map
+    end
 
   # Returns the mapping between the names of the spaces
   # in the geometry .osm file and the HVAC system that will
   # be applied to those spaces.
-  def define_hvac_system_map(building_type, climate_zone)
-    return @system_to_space_map
-  end
+    def define_hvac_system_map(building_type, climate_zone)
+      return @system_to_space_map
+    end
 
   # Returns the mapping between the names of the spaces
   # in the geometry .osm file and the building story
@@ -125,31 +130,6 @@ end
   def model_update_fan_efficiency(model)
   end
 
-  # Get the name of the building type used in lookups
-  #
-  # @param building_type [String] the building type
-  # @return [String] returns the lookup name as a string
-  # @todo Unify the lookup names and eliminate this method
-  def model_get_lookup_name(building_type)
-    lookup_name = building_type
-    case building_type
-      when 'SmallOffice'
-        lookup_name = 'Office'
-      when 'MediumOffice'
-        lookup_name = 'Office'
-      when 'LargeOffice'
-        lookup_name = 'Office'
-      when 'LargeOfficeDetail'
-        lookup_name = 'Office'
-      when 'RetailStandalone'
-        lookup_name = 'Retail'
-      when 'RetailStripmall'
-        lookup_name = 'StripMall'
-      when 'Office'
-        lookup_name = 'Office'
-    end
-    return lookup_name
-  end
 end
 "
     end
