@@ -1,9 +1,9 @@
-# This class holds methods that apply NECB 2011 rules.
+# This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 require 'rubyXL'
 require 'deep_merge'
 class NECB2011 < Standard
-  @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
+  @@template = 'NECB2011' # rubocop:disable Style/ClassVars
   register_standard @@template
   attr_reader :template
   attr_accessor :necb_standards_data
@@ -162,7 +162,7 @@ class NECB2011 < Standard
       raise("sizing run 1 failed!")
     end
 
-    # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
@@ -332,7 +332,7 @@ class NECB2011 < Standard
     end
     # Calculate the total infiltration, assuming
     # that it only occurs through exterior walls and roofs (not floors as
-    # explicit stated in the NECB 2011 so overhang/cantilevered floors will
+    # explicit stated in the NECB2011 so overhang/cantilevered floors will
     # have no effective infiltration)
     tot_infil_m3_per_s = self.get_standards_constant('infiltration_rate_m3_per_s_per_m2') * exterior_wall_and_roof_and_subsurface_area
     # Now spread the total infiltration rate over all
@@ -388,7 +388,7 @@ class NECB2011 < Standard
         next if space.empty?
         space = space.get
 
-        # Check if space type for this space matches NECB 2011 specific space type
+        # Check if space type for this space matches NECB2011 specific space type
         # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
 
         if (space_type_name == 'Storage area' && space.floorArea < 100) ||
@@ -397,7 +397,7 @@ class NECB2011 < Standard
             (space_type_name == 'Office - enclosed' && space.floorArea < 25)
           # If there is only one space assigned to this space type, then reassign this stub
           # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
-          # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
+          # for this space. Required to use reduced LPD by NECB2011 0.9 factor.
           space_type_name_occsens = space_type_name + ' - occsens'
           stub_space_type_occsens = model.getSpaceTypeByName("#{building_type} #{space_type_name_occsens}")
 

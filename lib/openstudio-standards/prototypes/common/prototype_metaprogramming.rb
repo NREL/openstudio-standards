@@ -85,7 +85,7 @@ end
   def set_variables()
     # Will be overwritten in class reopen file.
     # add all building methods for now.
-    self.extend(#{name}) unless @template == 'NECB 2011'
+    self.extend(#{name}) unless @template == 'NECB2011'
   end
 
   # Returns the mapping between the names of the spaces

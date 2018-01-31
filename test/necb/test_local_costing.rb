@@ -4,7 +4,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestCosting < NECB2011
 
   #create model
-  template = 'NECB 2011'
+  template = 'NECB2011'
 
   #building_type = 'FullServiceRestaurant'
   #building_type ='SmallOffice'

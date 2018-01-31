@@ -9,7 +9,7 @@ class NECB2011
       swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
       # Add the main service water loop
-      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && template != 'NECB2011'
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
                                            nil,

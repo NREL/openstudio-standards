@@ -60,7 +60,7 @@ class NECB2011
               end
       end
       space_cats[space] = cat
-      # NECB 2011 keep track of totals for NECB regardless of conditioned or not.
+      # NECB2011 keep track of totals for NECB regardless of conditioned or not.
       total_wall_m2 += wall_area_m2
       total_subsurface_m2 += wind_area_m2 # this contains doors as well.
 
@@ -84,7 +84,7 @@ class NECB2011
     wwr_nr = ((nr_wind_m2 / nr_wall_m2) * 100.0).round(1)
     wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
     wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
-    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB 2011
+    fdwr = ((total_subsurface_m2 / total_wall_m2) * 100).round(1) # used by NECB2011
 
     # Convert to IP and report
     nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get

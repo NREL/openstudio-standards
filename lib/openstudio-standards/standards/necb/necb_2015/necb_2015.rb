@@ -1,4 +1,4 @@
-# This class holds methods that apply NECB 2011 rules.
+# This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 require 'rubyXL'
 require 'deep_merge'
@@ -6,14 +6,14 @@ class NECB2015 < NECB2011
   @@template = 'NECB 2015' # rubocop:disable Style/ClassVars
   register_standard @@template
   def load_standards_database_new()
-    #load NECB 2011 data.
+    #load NECB2011 data.
     super()
     #replace template to 2015 for all tables.
     @standards_data['tables'].each do |table|
       table.each do |item|
         item.each do |row|
           if row.has_key? "template"
-            row["template"].gsub!('NECB 2011', 'NECB 2015')
+            row["template"].gsub!('NECB2011', 'NECB 2015')
           end
         end
       end

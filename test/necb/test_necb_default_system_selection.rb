@@ -6,7 +6,7 @@ require_relative '../helpers/minitest_helper'
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class NECB2011DefaultSystemSelectionTests < Minitest::Test
   #Standards
-  Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
 
 
@@ -17,7 +17,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
     #report variables. 
     header_output = ""
     results_array = []
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
     
     #Create new model for testing. 
     empty_model = OpenStudio::Model::Model.new
@@ -29,7 +29,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
       [2,4,5].each do |number_of_floors| 
         #Create new model for testing. 
         model = OpenStudio::Model::Model.new
-        template = 'NECB 2011'
+        template = 'NECB2011'
         #Set weather file
         standard.model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'))
         standard.model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method')
@@ -37,7 +37,7 @@ class NECB2011DefaultSystemSelectionTests < Minitest::Test
         (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}
         
         #Go Through each space type. with a counter
-        standard.model_find_objects(standard.standards_data["space_types"], { "template" => 'NECB 2011'}).each_with_index do |space_type_properties , index|
+        standard.model_find_objects(standard.standards_data["space_types"], { "template" => 'NECB2011'}).each_with_index do |space_type_properties , index|
 
           # Create a space type
           #puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"

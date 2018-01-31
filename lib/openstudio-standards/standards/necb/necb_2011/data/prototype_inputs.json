@@ -8378,7 +8378,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "NECB",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -8467,7 +8467,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "LargeOffice",
           "chw_pumping_type": "const_pri",
           "chiller_cooling_type": "AirCooled",
@@ -8556,7 +8556,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "FullServiceRestaurant",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -8645,7 +8645,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "Hospital",
           "chw_pumping_type": "const_pri_var_sec",
           "chiller_cooling_type": "AirCooled",
@@ -8734,7 +8734,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "LargeHotel",
           "chw_pumping_type": "const_pri_var_sec",
           "chiller_cooling_type": "AirCooled",
@@ -8823,7 +8823,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "MidriseApartment",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -8912,7 +8912,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "HighriseApartment",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9001,7 +9001,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "Office",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9090,7 +9090,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "Outpatient",
           "chw_pumping_type": "const_pri_var_sec",
           "chiller_cooling_type": "AirCooled",
@@ -9179,7 +9179,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "PrimarySchool",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9268,7 +9268,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "QuickServiceRestaurant",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9357,7 +9357,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "Retail",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9446,7 +9446,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "SecondarySchool",
           "chw_pumping_type": "const_pri_var_sec",
           "chiller_cooling_type": "AirCooled",
@@ -9535,7 +9535,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "SmallHotel",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9624,7 +9624,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "StripMall",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9713,7 +9713,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "SuperMarket",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9802,7 +9802,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "Warehouse",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9891,7 +9891,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "SmallOffice",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -9980,7 +9980,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "MediumOffice",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -10069,7 +10069,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "RetailStandalone",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,
@@ -10158,7 +10158,7 @@
           "nonmetal_framing": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "building_type": "RetailStripmall",
           "chw_pumping_type": null,
           "chiller_cooling_type": null,

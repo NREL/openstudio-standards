@@ -8,7 +8,7 @@
       ],
       "table": [
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorWindow",
@@ -26,7 +26,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorDoor",
@@ -44,7 +44,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorDoor",
@@ -62,7 +62,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorFloor",
@@ -80,7 +80,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorRoof",
@@ -98,7 +98,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorWall",
@@ -116,7 +116,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorWall",
@@ -134,7 +134,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "ExteriorWindow",
@@ -152,7 +152,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "GroundContactFloor",
@@ -170,7 +170,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "GroundContactWall",
@@ -188,7 +188,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "Skylight",
@@ -206,7 +206,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "GroundContactRoof",
@@ -224,7 +224,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "GlassDoor",
@@ -242,7 +242,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "TubularDaylightDome",
@@ -260,7 +260,7 @@
           "notes": null
         },
         {
-          "template": "NECB 2011",
+          "template": "NECB2011",
           "climate_zone_set": "NECB-CNEB ClimatZone 4-8",
           "operation_type": null,
           "intended_surface_type": "TubularDaylightDiffuser",

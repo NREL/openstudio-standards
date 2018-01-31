@@ -162,7 +162,7 @@ class NECB2011
     # Calculate the percent OA at design airflow
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
-    # The NECB 2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
+    # The NECB2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
     # The calculation for this is done below, to modify erv_required
     # erv_cfm set to nil here as placeholder, will lead to erv_required = false
     erv_cfm = nil
@@ -180,7 +180,7 @@ class NECB2011
       erv_required = true
     end
 
-    # This code modifies erv_required for NECB 2011
+    # This code modifies erv_required for NECB2011
     # Calculation of exhaust heat content and check whether it is > 150 kW
 
     # get all zones in the model
@@ -234,7 +234,7 @@ class NECB2011
     weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
 
     # get winter(heating) design temp stored in array
-    # Note that the NECB 2011 specifies using the 2.5% january design temperature
+    # Note that the NECB2011 specifies using the 2.5% january design temperature
     # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
     outdoor_temp = weather_file.heating_design_info[1]
 
@@ -1088,7 +1088,7 @@ class NECB2011
   end
 
   def apply_economizers(climate_zone, model)
-    # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
+    # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
     econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
     econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
@@ -2353,7 +2353,7 @@ class NECB2011
 
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
-          # NECB 2011 minimum zone airflow setting
+          # NECB2011 minimum zone airflow setting
           min_flow_rate = 0.002 * zone.floorArea
           vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate)
           vav_terminal.setMaximumReheatAirTemperature(43.0)
@@ -2538,7 +2538,7 @@ class NECB2011
     # Array to store schedule objects
     schedule_type_array = []
 
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
 
     # find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
@@ -2559,7 +2559,7 @@ class NECB2011
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        space_type_property = standard.model_find_object(standards_data['space_types'], 'template' => 'NECB 2011', 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
+        space_type_property = standard.model_find_object(standards_data['space_types'], 'template' => 'NECB2011', 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
@@ -2674,7 +2674,7 @@ class NECB2011
     return schedule_type_array.uniq!, space_zoning_data_array
   end
 
-  # This method will take a model that uses NECB 2011 spacetypes , and..
+  # This method will take a model that uses NECB2011 spacetypes , and..
   # 1. Create a building story schema.
   # 2. Remove all existing Thermal Zone defintions.
   # 3. Create new thermal zones based on the following definitions.

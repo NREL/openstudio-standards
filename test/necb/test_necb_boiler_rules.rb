@@ -15,7 +15,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_efficiencies_expected_results.csv')
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
     
     # Initialize hashes for storing expected boiler efficiency data from file
     fuel_type_min_cap = {}
@@ -144,7 +144,7 @@ class HVACEfficienciesTest < MiniTest::Test
   end
 
   # Test to validate the number of boilers used and their capacities depending on total heating capacity.
-  # NECB 2011 rule for number of boilers is:
+  # NECB2011 rule for number of boilers is:
   # if capacity <= 176 kW ---> one single stage boiler
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
@@ -298,7 +298,7 @@ class HVACEfficienciesTest < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

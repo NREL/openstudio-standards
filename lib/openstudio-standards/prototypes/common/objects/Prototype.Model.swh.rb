@@ -6,7 +6,7 @@ class Standard
     unless prototype_input['main_water_heater_volume'].nil?
       swh_fueltype = prototype_input['main_water_heater_fuel']
       # Add the main service water loop
-      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && template != 'NECB2011'
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
                                            nil,
@@ -24,7 +24,7 @@ class Standard
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' && template != 'NECB 2011'
+      if building_type == 'LargeOffice' && template != 'NECB2011'
 
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
@@ -38,7 +38,7 @@ class Standard
                                  space_name,
                                  building_type)
         end
-      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1', 'Mechanical_Mid_ZN_1', 'Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
@@ -51,7 +51,7 @@ class Standard
                                  space_name,
                                  building_type)
         end
-      elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
+      elsif building_type == 'RetailStripmall' && template != 'NECB2011'
 
         return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
 
@@ -105,7 +105,7 @@ class Standard
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
 
-        if template == 'NECB 2011'
+        if template == 'NECB2011'
           building_type = 'Space Function'
         end
 
@@ -121,14 +121,14 @@ class Standard
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.sort.each do |space_name|
             space = model.getSpaceByName(space_name).get
             space_multiplier = nil
             space_multiplier = case template
-                                 when 'NECB 2011'
+                                 when 'NECB2011'
                                    # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
                                    1
                                  else
