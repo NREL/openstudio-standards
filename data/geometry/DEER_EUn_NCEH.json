@@ -100,106 +100,6 @@
     ]
   },
   {
-    "name": "E5 Sys3 (UVT) (G.N1)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E5 North Perim Spc (G.N1)"
-    ]
-  },
-  {
-    "name": "E6 Sys3 (UVT) (G.N1)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E6 North Perim Spc (G.N1)"
-    ]
-  },
-  {
-    "name": "E6 Sys3 (UVT) (G.W2)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E6 West Perim Spc (G.W2)"
-    ]
-  },
-  {
-    "name": "E6 Sys3 (UVT) (G.E3)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E6 East Perim Spc (G.E3)"
-    ]
-  },
-  {
-    "name": "E7 Sys3 (UVT) (G.W1)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E7 West Perim Spc (G.W1)"
-    ]
-  },
-  {
-    "name": "E8 Sys4 (UVT) (G)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 West Perim Spc (G.W1)",
-      "E8 South Perim Spc (G.S2)",
-      "E8 East Perim Spc (G.E3)",
-      "E8 North Perim Spc (G.N4)",
-      "E8 Core Spc (G.C6)"
-    ]
-  },
-  {
-    "name": "E8 Sys4 (UVT) (M)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 West Perim Spc (M.W13)",
-      "E8 South Perim Spc (M.S14)",
-      "E8 East Perim Spc (M.E15)",
-      "E8 North Perim Spc (M.N16)",
-      "E8 Core Spc (M.C18)"
-    ]
-  },
-  {
-    "name": "E8 Sys4 (UVT) (T)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 West Perim Spc (T.W25)",
-      "E8 South Perim Spc (T.S26)",
-      "E8 East Perim Spc (T.E27)",
-      "E8 North Perim Spc (T.N28)",
-      "E8 Core Spc (T.C30)"
-    ]
-  },
-  {
     "name": "E3 Sys5 (UVT) (G.N2)",
     "type": "UnitHeater",
     "heating_type": "Electric",
@@ -241,50 +141,6 @@
     "operation_schedule": null,
     "space_names": [
       "E4 Core Spc (T.C29)"
-    ]
-  },
-  {
-    "name": "E7 Sys5 (UVT) (G.E2)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E7 East Perim Spc (G.E2)"
-    ]
-  },
-  {
-    "name": "E8 Sys5 (UVT) (G.C5)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 Core Spc (G.C5)"
-    ]
-  },
-  {
-    "name": "E8 Sys5 (UVT) (M.C17)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 Core Spc (M.C17)"
-    ]
-  },
-  {
-    "name": "E8 Sys5 (UVT) (T.C29)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E8 Core Spc (T.C29)"
     ]
   },
   {
@@ -354,72 +210,6 @@
     ]
   },
   {
-    "name": "E10 Sys6 (UVT) (G.E1)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 East Perim Spc (G.E1)"
-    ]
-  },
-  {
-    "name": "E10 Sys6 (UVT) (G.W2)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 West Perim Spc (G.W2)"
-    ]
-  },
-  {
-    "name": "E10 Sys6 (UVT) (M.E4)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 East Perim Spc (M.E4)"
-    ]
-  },
-  {
-    "name": "E10 Sys6 (UVT) (M.W5)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 West Perim Spc (M.W5)"
-    ]
-  },
-  {
-    "name": "E10 Sys6 (UVT) (T.E7)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 East Perim Spc (T.E7)"
-    ]
-  },
-  {
-    "name": "E10 Sys6 (UVT) (T.W8)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 West Perim Spc (T.W8)"
-    ]
-  },
-  {
     "name": "E9 Sys7 (UVT) (G.C3)",
     "type": "UnitHeater",
     "heating_type": "Electric",
@@ -450,39 +240,6 @@
     "operation_schedule": null,
     "space_names": [
       "E9 Core Spc (T.C9)"
-    ]
-  },
-  {
-    "name": "E10 Sys7 (UVT) (G.C3)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 Core Spc (G.C3)"
-    ]
-  },
-  {
-    "name": "E10 Sys7 (UVT) (M.C6)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 Core Spc (M.C6)"
-    ]
-  },
-  {
-    "name": "E10 Sys7 (UVT) (T.C9)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "E10 Core Spc (T.C9)"
     ]
   }
 ]

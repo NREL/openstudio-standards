@@ -42,49 +42,5 @@
     "space_names": [
       "EL1 North Perim Spc (G.N4)"
     ]
-  },
-  {
-    "name": "EL2 Sys1 (UVT) (G.W1)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL2 West Perim Spc (G.W1)"
-    ]
-  },
-  {
-    "name": "EL2 Sys1 (UVT) (G.NE2)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL2 NE Perim Spc (G.NE2)"
-    ]
-  },
-  {
-    "name": "EL2 Sys1 (UVT) (G.ESE3)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL2 ESE Perim Spc (G.ESE3)"
-    ]
-  },
-  {
-    "name": "EL2 Sys1 (UVT) (G.S4)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL2 South Perim Spc (G.S4)"
-    ]
   }
 ]

@@ -49,55 +49,6 @@
     "return_plenum": "EL3 West Perim Plnm (G.W6)"
   },
   {
-    "name": "EL5 Sys2 (PVVT) (G.N1)",
-    "space_names": [
-      "EL5 North Perim Spc (G.N1)"
-    ],
-    "return_plenum": "EL5 North Perim Plnm (G.N4)"
-  },
-  {
-    "name": "EL5 Sys2 (PVVT) (G.N2)",
-    "space_names": [
-      "EL5 North Perim Spc (G.N2)"
-    ],
-    "return_plenum": "EL5 North Perim Plnm (G.N5)"
-  },
-  {
-    "name": "EL5 Sys2 (PVVT) (G.S3)",
-    "space_names": [
-      "EL5 South Perim Spc (G.S3)"
-    ],
-    "return_plenum": "EL5 South Perim Plnm (G.S6)"
-  },
-  {
-    "name": "EL6 Sys2 (PVVT) (G.E2)",
-    "space_names": [
-      "EL6 East Perim Spc (G.E2)"
-    ],
-    "return_plenum": "EL6 East Perim Plnm (G.E5)"
-  },
-  {
-    "name": "EL6 Sys2 (PVVT) (G.N3)",
-    "space_names": [
-      "EL6 North Perim Spc (G.N3)"
-    ],
-    "return_plenum": "EL6 North Perim Plnm (G.N6)"
-  },
-  {
-    "name": "EL7 Sys2 (PVVT) (G.W2)",
-    "space_names": [
-      "EL7 West Perim Spc (G.W2)"
-    ],
-    "return_plenum": "EL7 West Perim Plnm (G.W5)"
-  },
-  {
-    "name": "EL7 Sys2 (PVVT) (G.N3)",
-    "space_names": [
-      "EL7 North Perim Spc (G.N3)"
-    ],
-    "return_plenum": "EL7 North Perim Plnm (G.N6)"
-  },
-  {
     "name": "EL2 Sys3 (PVVT) (G.S1)",
     "space_names": [
       "EL2 South Perim Spc (G.S1)"
@@ -131,41 +82,6 @@
       "EL4 Core Spc (T.C25)"
     ],
     "return_plenum": "EL4 Core Plnm (T.C30)"
-  },
-  {
-    "name": "EL6 Sys3 (PVVT) (G.W1)",
-    "space_names": [
-      "EL6 West Perim Spc (G.W1)"
-    ],
-    "return_plenum": "EL6 West Perim Plnm (G.W4)"
-  },
-  {
-    "name": "EL7 Sys3 (PVVT) (G.E1)",
-    "space_names": [
-      "EL7 East Perim Spc (G.E1)"
-    ],
-    "return_plenum": "EL7 East Perim Plnm (G.E4)"
-  },
-  {
-    "name": "EL8 Sys3 (PVVT) (G.C5)",
-    "space_names": [
-      "EL8 Core Spc (G.C5)"
-    ],
-    "return_plenum": "EL8 Core Plnm (G.C10)"
-  },
-  {
-    "name": "EL8 Sys3 (PVVT) (M.C15)",
-    "space_names": [
-      "EL8 Core Spc (M.C15)"
-    ],
-    "return_plenum": "EL8 Core Plnm (M.C20)"
-  },
-  {
-    "name": "EL8 Sys3 (PVVT) (T.C25)",
-    "space_names": [
-      "EL8 Core Spc (T.C25)"
-    ],
-    "return_plenum": "EL8 Core Plnm (T.C30)"
   },
   {
     "name": "EL4 Sys4 (PVVT) (G.N1)",
@@ -250,89 +166,5 @@
       "EL4 South Perim Spc (T.S24)"
     ],
     "return_plenum": "EL4 South Perim Plnm (T.S29)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (G.E1)",
-    "space_names": [
-      "EL8 East Perim Spc (G.E1)"
-    ],
-    "return_plenum": "EL8 East Perim Plnm (G.E6)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (G.WNW2)",
-    "space_names": [
-      "EL8 WNW Perim Spc (G.WNW2)"
-    ],
-    "return_plenum": "EL8 WNW Perim Plnm (G.WNW7)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (G.ESE3)",
-    "space_names": [
-      "EL8 ESE Perim Spc (G.ESE3)"
-    ],
-    "return_plenum": "EL8 ESE Perim Plnm (G.ESE8)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (G.W4)",
-    "space_names": [
-      "EL8 West Perim Spc (G.W4)"
-    ],
-    "return_plenum": "EL8 West Perim Plnm (G.W9)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (M.E11)",
-    "space_names": [
-      "EL8 East Perim Spc (M.E11)"
-    ],
-    "return_plenum": "EL8 East Perim Plnm (M.E16)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (M.WNW12)",
-    "space_names": [
-      "EL8 WNW Perim Spc (M.WNW12)"
-    ],
-    "return_plenum": "EL8 WNW Perim Plnm (M.WNW17)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (M.ESE13)",
-    "space_names": [
-      "EL8 ESE Perim Spc (M.ESE13)"
-    ],
-    "return_plenum": "EL8 ESE Perim Plnm (M.ESE18)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (M.W14)",
-    "space_names": [
-      "EL8 West Perim Spc (M.W14)"
-    ],
-    "return_plenum": "EL8 West Perim Plnm (M.W19)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (T.E21)",
-    "space_names": [
-      "EL8 East Perim Spc (T.E21)"
-    ],
-    "return_plenum": "EL8 East Perim Plnm (T.E26)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (T.WNW22)",
-    "space_names": [
-      "EL8 WNW Perim Spc (T.WNW22)"
-    ],
-    "return_plenum": "EL8 WNW Perim Plnm (T.WNW27)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (T.ESE23)",
-    "space_names": [
-      "EL8 ESE Perim Spc (T.ESE23)"
-    ],
-    "return_plenum": "EL8 ESE Perim Plnm (T.ESE28)"
-  },
-  {
-    "name": "EL8 Sys4 (PVVT) (T.W24)",
-    "space_names": [
-      "EL8 West Perim Spc (T.W24)"
-    ],
-    "return_plenum": "EL8 West Perim Plnm (T.W29)"
   }
 ]

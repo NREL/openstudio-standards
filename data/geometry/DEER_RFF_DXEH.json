@@ -26,33 +26,5 @@
       "EL1 SSW Perim Spc (G.SSW2)"
     ],
     "return_plenum": "EL1 SSW Perim Plnm (G.SSW6)"
-  },
-  {
-    "name": "EL2 Sys1 (PVVT) (G.WNW1)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "EL2 WNW Perim Spc (G.WNW1)"
-    ],
-    "return_plenum": "EL2 WNW Perim Plnm (G.WNW5)"
-  },
-  {
-    "name": "EL2 Sys1 (PVVT) (G.NNE2)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "EL2 NNE Perim Spc (G.NNE2)"
-    ],
-    "return_plenum": "EL2 NNE Perim Plnm (G.NNE6)"
   }
 ]

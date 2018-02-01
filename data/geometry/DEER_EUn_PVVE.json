@@ -79,85 +79,6 @@
     "return_plenum": "E4 Core Plnm (T.C36)"
   },
   {
-    "name": "E5 Sys3 (PVAVS) (G)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E5 North Perim Spc (G.N1)"
-    ],
-    "return_plenum": "E5 Plnm (G.2)"
-  },
-  {
-    "name": "E6 Sys3 (PVAVS) (G)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E6 North Perim Spc (G.N1)",
-      "E6 West Perim Spc (G.W2)",
-      "E6 East Perim Spc (G.E3)"
-    ],
-    "return_plenum": "E6 Plnm (G.4)"
-  },
-  {
-    "name": "E7 Sys3 (PVAVS) (G)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E7 West Perim Spc (G.W1)"
-    ]
-  },
-  {
-    "name": "E8 Sys4 (PVAVS) (G)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E8 West Perim Spc (G.W1)",
-      "E8 South Perim Spc (G.S2)",
-      "E8 East Perim Spc (G.E3)",
-      "E8 North Perim Spc (G.N4)",
-      "E8 Core Spc (G.C6)"
-    ],
-    "return_plenum": "E8 Core Plnm (G.C12)"
-  },
-  {
-    "name": "E8 Sys4 (PVAVS) (M)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E8 West Perim Spc (M.W13)",
-      "E8 South Perim Spc (M.S14)",
-      "E8 East Perim Spc (M.E15)",
-      "E8 North Perim Spc (M.N16)",
-      "E8 Core Spc (M.C18)"
-    ],
-    "return_plenum": "E8 Core Plnm (M.C24)"
-  },
-  {
-    "name": "E8 Sys4 (PVAVS) (T)",
-    "type": "PVAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "heating_type": "Electricity",
-    "space_names": [
-      "E8 West Perim Spc (T.W25)",
-      "E8 South Perim Spc (T.S26)",
-      "E8 East Perim Spc (T.E27)",
-      "E8 North Perim Spc (T.N28)",
-      "E8 Core Spc (T.C30)"
-    ],
-    "return_plenum": "E8 Core Plnm (T.C36)"
-  },
-  {
     "name": "E4 Sys5 (PVVT) (G.C5)",
     "type": "PSZ-AC",
     "operation_schedule": null,
@@ -200,48 +121,6 @@
     "return_plenum": "E4 Core Plnm (T.C35)"
   },
   {
-    "name": "E8 Sys5 (PVVT) (G.C5)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E8 Core Spc (G.C5)"
-    ],
-    "return_plenum": "E8 Core Plnm (G.C11)"
-  },
-  {
-    "name": "E8 Sys5 (PVVT) (M.C17)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E8 Core Spc (M.C17)"
-    ],
-    "return_plenum": "E8 Core Plnm (M.C23)"
-  },
-  {
-    "name": "E8 Sys5 (PVVT) (T.C29)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E8 Core Spc (T.C29)"
-    ],
-    "return_plenum": "E8 Core Plnm (T.C35)"
-  },
-  {
     "name": "E9 Sys8 (PVVT) (G.C3)",
     "type": "PSZ-AC",
     "operation_schedule": null,
@@ -278,45 +157,6 @@
     "supplemental_heating_type": "Electricity",
     "space_names": [
       "E9 Core Spc (T.C9)"
-    ]
-  },
-  {
-    "name": "E10 Sys8 (PVVT) (G.C3)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E10 Core Spc (G.C3)"
-    ]
-  },
-  {
-    "name": "E10 Sys8 (PVVT) (M.C6)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E10 Core Spc (M.C6)"
-    ]
-  },
-  {
-    "name": "E10 Sys8 (PVVT) (T.C9)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Electricity",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Electricity",
-    "space_names": [
-      "E10 Core Spc (T.C9)"
     ]
   }
 ]

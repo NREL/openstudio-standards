@@ -42,48 +42,6 @@
     "return_plenum": "EL2 West Perim Plnm (G.W11)"
   },
   {
-    "name": "EL6 Sys2 (PVVT) (G.WNW2)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 WNW Perim Spc (G.WNW2)"
-    ],
-    "return_plenum": "EL6 WNW Perim Plnm (G.WNW9)"
-  },
-  {
-    "name": "EL6 Sys2 (PVVT) (G.ENE3)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 ENE Perim Spc (G.ENE3)"
-    ],
-    "return_plenum": "EL6 ENE Perim Plnm (G.ENE10)"
-  },
-  {
-    "name": "EL6 Sys2 (PVVT) (G.N4)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 North Perim Spc (G.N4)"
-    ],
-    "return_plenum": "EL6 North Perim Plnm (G.N11)"
-  },
-  {
     "name": "EL1 Sys3 (PVVT) (G.W3)",
     "type": "PSZ-AC",
     "operation_schedule": null,
@@ -94,19 +52,6 @@
     "supplemental_heating_type": "Gas",
     "space_names": [
       "EL1 West Perim Spc (G.W3)"
-    ]
-  },
-  {
-    "name": "EL5 Sys3 (PVVT) (G.N3)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL5 North Perim Spc (G.N3)"
     ]
   },
   {
@@ -192,88 +137,6 @@
     "return_plenum": "EL2 Core Plnm (G.C14)"
   },
   {
-    "name": "EL5 Sys6 (PVVT) (G.E1)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL5 East Perim Spc (G.E1)"
-    ]
-  },
-  {
-    "name": "EL5 Sys6 (PVVT) (G.W2)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL5 West Perim Spc (G.W2)"
-    ]
-  },
-  {
-    "name": "EL6 Sys6 (PVVT) (G.S1)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 South Perim Spc (G.S1)"
-    ],
-    "return_plenum": "EL6 South Perim Plnm (G.S8)"
-  },
-  {
-    "name": "EL6 Sys6 (PVVT) (G.W5)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 West Perim Spc (G.W5)"
-    ],
-    "return_plenum": "EL6 West Perim Plnm (G.W12)"
-  },
-  {
-    "name": "EL6 Sys6 (PVVT) (G.E6)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 East Perim Spc (G.E6)"
-    ],
-    "return_plenum": "EL6 East Perim Plnm (G.E13)"
-  },
-  {
-    "name": "EL6 Sys6 (PVVT) (G.C7)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL6 Core Spc (G.C7)"
-    ],
-    "return_plenum": "EL6 Core Plnm (G.C14)"
-  },
-  {
     "name": "EL4 Sys7 (PVVT) (G.W2)",
     "type": "PSZ-AC",
     "operation_schedule": null,
@@ -328,62 +191,6 @@
       "EL4 Core Spc (G.C5)"
     ],
     "return_plenum": "EL4 Core Plnm (G.C13)"
-  },
-  {
-    "name": "EL8 Sys8 (PVVT) (G.N2)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 North Perim Spc (G.N2)"
-    ],
-    "return_plenum": "EL8 North Perim Plnm (G.N10)"
-  },
-  {
-    "name": "EL8 Sys8 (PVVT) (G.E3)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 East Perim Spc (G.E3)"
-    ],
-    "return_plenum": "EL8 East Perim Plnm (G.E11)"
-  },
-  {
-    "name": "EL8 Sys8 (PVVT) (G.W4)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 West Perim Spc (G.W4)"
-    ],
-    "return_plenum": "EL8 West Perim Plnm (G.W12)"
-  },
-  {
-    "name": "EL8 Sys8 (PVVT) (G.C5)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 Core Spc (G.C5)"
-    ],
-    "return_plenum": "EL8 Core Plnm (G.C13)"
   },
   {
     "name": "EL4 Sys9 (PVVT) (G.E1)",
@@ -442,62 +249,6 @@
     "return_plenum": "EL4 Core Plnm (G.C16)"
   },
   {
-    "name": "EL8 Sys10 (PVVT) (G.S1)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 South Perim Spc (G.S1)"
-    ],
-    "return_plenum": "EL8 South Perim Plnm (G.S9)"
-  },
-  {
-    "name": "EL8 Sys10 (PVVT) (G.E6)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 East Perim Spc (G.E6)"
-    ],
-    "return_plenum": "EL8 East Perim Plnm (G.E14)"
-  },
-  {
-    "name": "EL8 Sys10 (PVVT) (G.W7)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 West Perim Spc (G.W7)"
-    ],
-    "return_plenum": "EL8 West Perim Plnm (G.W15)"
-  },
-  {
-    "name": "EL8 Sys10 (PVVT) (G.C8)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL8 Core Spc (G.C8)"
-    ],
-    "return_plenum": "EL8 Core Plnm (G.C16)"
-  },
-  {
     "name": "EL3 Sys11 (PVVT) (G.W2)",
     "type": "PSZ-AC",
     "operation_schedule": null,
@@ -552,61 +303,5 @@
       "EL3 Core Spc (G.C5)"
     ],
     "return_plenum": "EL3 Core Plnm (G.C13)"
-  },
-  {
-    "name": "EL7 Sys12 (PVVT) (G.N2)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL7 North Perim Spc (G.N2)"
-    ],
-    "return_plenum": "EL7 North Perim Plnm (G.N10)"
-  },
-  {
-    "name": "EL7 Sys12 (PVVT) (G.E3)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL7 East Perim Spc (G.E3)"
-    ],
-    "return_plenum": "EL7 East Perim Plnm (G.E11)"
-  },
-  {
-    "name": "EL7 Sys12 (PVVT) (G.W4)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL7 West Perim Spc (G.W4)"
-    ],
-    "return_plenum": "EL7 West Perim Plnm (G.W12)"
-  },
-  {
-    "name": "EL7 Sys12 (PVVT) (G.C5)",
-    "type": "PSZ-AC",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
-    "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
-    "space_names": [
-      "EL7 Core Spc (G.C5)"
-    ],
-    "return_plenum": "EL7 Core Plnm (G.C13)"
   }
 ]

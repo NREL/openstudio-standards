@@ -45,36 +45,6 @@
     ]
   },
   {
-    "name": "EL8 Sys2 (UVT) (G)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL8 West Perim Spc (G.W1)",
-      "EL8 South Perim Spc (G.S2)",
-      "EL8 East Perim Spc (G.E3)",
-      "EL8 North Perim Spc (G.N4)",
-      "EL8 Core Spc (G.C6)"
-    ]
-  },
-  {
-    "name": "EL8 Sys2 (UVT) (T)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL8 West Perim Spc (T.W13)",
-      "EL8 South Perim Spc (T.S14)",
-      "EL8 East Perim Spc (T.E15)",
-      "EL8 North Perim Spc (T.N16)",
-      "EL8 Core Spc (T.C18)"
-    ]
-  },
-  {
     "name": "EL3 Sys3 (UVT) (G.NE2)",
     "type": "UnitHeater",
     "heating_type": "Electric",
@@ -105,54 +75,6 @@
     "operation_schedule": null,
     "space_names": [
       "EL4 Core Spc (T.C17)"
-    ]
-  },
-  {
-    "name": "EL7 Sys3 (UVT) (G.SE2)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL7 SE Perim Spc (G.SE2)"
-    ]
-  },
-  {
-    "name": "EL8 Sys3 (UVT) (G.C5)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL8 Core Spc (G.C5)"
-    ]
-  },
-  {
-    "name": "EL8 Sys3 (UVT) (T.C17)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL8 Core Spc (T.C17)"
-    ]
-  },
-  {
-    "name": "S4 Sys (UVT)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL5 North Perim Spc (G.N1)",
-      "EL6 North Perim Spc (G.N1)",
-      "EL6 West Perim Spc (G.W2)",
-      "EL6 East Perim Spc (G.E3)",
-      "EL7 NW Perim Spc (G.NW1)"
     ]
   }
 ]
