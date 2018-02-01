@@ -6,6 +6,13 @@ class NECB2015 < NECB2011
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)
 
+
+  def initialize
+    super()
+    @template = self.class.name
+    @standards_data = self.load_standards_database_new()
+  end
+
   def load_standards_database_new()
     #load NECB2011 data.
     super()

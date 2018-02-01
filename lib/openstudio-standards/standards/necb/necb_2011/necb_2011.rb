@@ -65,6 +65,7 @@ class NECB2011 < Standard
 
   def initialize
     super()
+    @template = self.class.name
     @standards_data = self.load_standards_database_new()
   end
 

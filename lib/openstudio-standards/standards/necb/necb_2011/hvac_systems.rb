@@ -976,7 +976,7 @@ class NECB2011
     motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = template.dup
+    template_mod = @template
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
