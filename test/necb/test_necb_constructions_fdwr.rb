@@ -17,7 +17,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ] 
   #Set Compliance vintage
-  Templates = ['NECB2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011','NECB2015']
   
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
