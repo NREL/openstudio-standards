@@ -109,7 +109,7 @@ class NECB2011
     red_sh = wwr_sh > wwr_lim
 
     # NECB FDWR limit
-    hdd = self.get_necb_hdd18( model )
+    hdd = self.get_necb_hdd18(model)
     fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
@@ -240,7 +240,7 @@ class NECB2011
   # @return [Double] a constant float
   def max_fwdr(hdd)
     #get formula from json database.
-    return eval( self.get_standards_formula('fdwr_formula'))
+    return eval(self.get_standards_formula('fdwr_formula'))
   end
 
   # Go through the default construction sets and hard-assigned
@@ -304,20 +304,20 @@ class NECB2011
     end
 
     #Note:hdd needs to be defined for eval to work on table eval below.
-    hdd = self.get_necb_hdd18( model )
+    hdd = self.get_necb_hdd18(model)
 
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
 
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval( self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
+    wall_rsi = 1.0 / (scale_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
+    door_rsi = 1.0 / (scale_door * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
+    window_rsi = 1.0 / (scale_window * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
@@ -347,11 +347,11 @@ class NECB2011
 
       case surface.surfaceType.downcase
         when 'wall'
-          conductance_value = @standards_data['conductances']['Wall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'floor'
-          conductance_value = @standards_data['conductances']['Floor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'roofceiling'
-          conductance_value = @standards_data['conductances']['Roof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -362,11 +362,11 @@ class NECB2011
     if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
         when 'wall'
-          conductance_value = @standards_data['conductances']['GroundWall'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'floor'
-          conductance_value = @standards_data['conductances']['GroundFloor'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'roofceiling'
-          conductance_value = @standards_data['conductances']['GroundRoof'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -385,11 +385,406 @@ class NECB2011
     if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
         when /window/
-          conductance_value = @standards_data['conductances']['Window'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when /door/
-          conductance_value = @standards_data['conductances']['Door'].find { |i| i['hdd'] > hdd }['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       subsurface.setRSI(1 / conductance_value)
     end
   end
+
+
+  # Adds code-minimum constructions based on the building type
+  # as defined in the OpenStudio_Standards_construction_sets.json file.
+  # Where there is a separate construction set specified for the
+  # individual space type, this construction set will be created and applied
+  # to this space type, overriding the whole-building construction set.
+  #
+  # @param building_type [String] the type of building
+  # @param climate_zone [String] the name of the climate zone the building is in
+  # @return [Bool] returns true if successful, false if not
+  def model_add_constructions(model, building_type, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
+
+    # Assign construction to adiabatic construction
+    # Assign a material to all internal mass objects
+    assign_contruction_to_adiabatic_surfaces(model)
+    # The constructions lookup table uses a slightly different list of
+    # building types.
+    apply_building_default_constructionset(building_type, climate_zone, model)
+    # Make a construction set for each space type, if one is specified
+    #apply_default_constructionsets_to_spacetypes(climate_zone, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+    return true
+  end
+
+  def apply_building_default_constructionset(building_type, climate_zone, model)
+    @lookup_building_type = model_get_lookup_name(building_type)
+    # TODO: this is a workaround.  Need to synchronize the building type names
+    # across different parts of the code, including splitting of Office types
+    case building_type
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice'
+        new_lookup_building_type = building_type
+      else
+        new_lookup_building_type = model_get_lookup_name(building_type)
+    end
+    # Make the default construction set for the building
+    spc_type = 'WholeBuilding'
+    bldg_def_const_set = model_add_construction_set(model, climate_zone, new_lookup_building_type, spc_type)
+
+    if bldg_def_const_set.is_initialized
+      model.getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not create default construction set for the building.')
+      raise('hell')
+    end
+  end
+
+  def apply_default_constructionsets_to_spacetypes(climate_zone, model)
+    model.getSpaceTypes.sort.each do |space_type|
+      # Get the standards building type
+      stds_building_type = nil
+      if space_type.standardsBuildingType.is_initialized
+        stds_building_type = space_type.standardsBuildingType.get
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards building type.")
+      end
+
+      # Get the standards space type
+      stds_spc_type = nil
+      if space_type.standardsSpaceType.is_initialized
+        stds_spc_type = space_type.standardsSpaceType.get
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards space type.")
+      end
+
+      # If the standards space type is Attic,
+      # the building type should be blank.
+      if stds_spc_type == 'Attic'
+        stds_building_type = ''
+      end
+
+      # Attempt to make a construction set for this space type
+      # and assign it if it can be created.
+      spc_type_const_set = model_add_construction_set(model, climate_zone, stds_building_type, stds_spc_type)
+      if spc_type_const_set.is_initialized
+        space_type.setDefaultConstructionSet(spc_type_const_set.get)
+      end
+    end
+  end
+
+  # Create a construction set from the openstudio standards dataset.
+  # Returns an Optional DefaultConstructionSet
+  def model_add_construction_set(model, clim, building_type, spc_type, is_residential = 'No')
+    construction_set = OpenStudio::Model::OptionalDefaultConstructionSet.new
+
+    # Find the climate zone set that this climate zone falls into
+    climate_zone_set = model_find_climate_zone_set(model, clim)
+    unless climate_zone_set
+      return construction_set
+    end
+
+    # Get the object data
+    data = model_find_object(@standards_data['construction_sets'], 'template' => template, 'building_type' => building_type, 'space_type' => spc_type)
+    unless data
+      # if nothing matches say that we could not find it.
+      message = "Construction set for template =#{template}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model',message )
+      puts message
+      return construction_set
+    end
+
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
+
+    name = model_make_name(model, clim, building_type, spc_type)
+
+    # Create a new construction set and name it
+    construction_set = OpenStudio::Model::DefaultConstructionSet.new(model)
+    construction_set.setName(name)
+
+    # Exterior surfaces constructions
+    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
+    construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
+    if data['exterior_floor_standards_construction_type']
+      exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                             climate_zone_set,
+                                                                             'ExteriorFloor',
+                                                                             data['exterior_floor_standards_construction_type'],
+                                                                             data['exterior_floor_building_category']))
+    end
+    if data['exterior_wall_standards_construction_type'] && data['exterior_wall_building_category']
+      exterior_surfaces.setWallConstruction(model_find_and_add_construction(model,
+                                                                            climate_zone_set,
+                                                                            'ExteriorWall',
+                                                                            data['exterior_wall_standards_construction_type'],
+                                                                            data['exterior_wall_building_category']))
+    end
+    if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+      exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
+                                                                                   climate_zone_set,
+                                                                                   'ExteriorRoof',
+                                                                                   data['exterior_roof_standards_construction_type'],
+                                                                                   data['exterior_roof_building_category']))
+    end
+
+    # Interior surfaces constructions
+    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
+    construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
+    construction_name = data['interior_floors']
+    unless construction_name.nil?
+      interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
+    end
+    construction_name = data['interior_walls']
+    unless construction_name.nil?
+      interior_surfaces.setWallConstruction(model_add_construction(model, construction_name))
+    end
+    construction_name = data['interior_ceilings']
+    unless construction_name.nil?
+      interior_surfaces.setRoofCeilingConstruction(model_add_construction(model, construction_name))
+    end
+
+    # Ground contact surfaces constructions
+    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
+    construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
+    if data['ground_contact_floor_standards_construction_type'] && data['ground_contact_floor_building_category']
+      ground_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                           climate_zone_set,
+                                                                           'GroundContactFloor',
+                                                                           data['ground_contact_floor_standards_construction_type'],
+                                                                           data['ground_contact_floor_building_category']))
+    end
+    if data['ground_contact_wall_standards_construction_type'] && data['ground_contact_wall_building_category']
+      ground_surfaces.setWallConstruction(model_find_and_add_construction(model,
+                                                                          climate_zone_set,
+                                                                          'GroundContactWall',
+                                                                          data['ground_contact_wall_standards_construction_type'],
+                                                                          data['ground_contact_wall_building_category']))
+    end
+    if data['ground_contact_ceiling_standards_construction_type'] && data['ground_contact_ceiling_building_category']
+      ground_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
+                                                                                 climate_zone_set,
+                                                                                 'GroundContactRoof',
+                                                                                 data['ground_contact_ceiling_standards_construction_type'],
+                                                                                 data['ground_contact_ceiling_building_category']))
+
+    end
+
+    # Exterior sub surfaces constructions
+    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
+    construction_set.setDefaultExteriorSubSurfaceConstructions(exterior_subsurfaces)
+    if data['exterior_fixed_window_standards_construction_type'] && data['exterior_fixed_window_building_category']
+      exterior_subsurfaces.setFixedWindowConstruction(model_find_and_add_construction(model,
+                                                                                      climate_zone_set,
+                                                                                      'ExteriorWindow',
+                                                                                      data['exterior_fixed_window_standards_construction_type'],
+                                                                                      data['exterior_fixed_window_building_category']))
+    end
+    if data['exterior_operable_window_standards_construction_type'] && data['exterior_operable_window_building_category']
+      exterior_subsurfaces.setOperableWindowConstruction(model_find_and_add_construction(model,
+                                                                                         climate_zone_set,
+                                                                                         'ExteriorWindow',
+                                                                                         data['exterior_operable_window_standards_construction_type'],
+                                                                                         data['exterior_operable_window_building_category']))
+    end
+    if data['exterior_door_standards_construction_type'] && data['exterior_door_building_category']
+      exterior_subsurfaces.setDoorConstruction(model_find_and_add_construction(model,
+                                                                               climate_zone_set,
+                                                                               'ExteriorDoor',
+                                                                               data['exterior_door_standards_construction_type'],
+                                                                               data['exterior_door_building_category']))
+    end
+    construction_name = data['exterior_glass_doors']
+    unless construction_name.nil?
+      exterior_subsurfaces.setGlassDoorConstruction(model_add_construction(model, construction_name))
+    end
+    if data['exterior_overhead_door_standards_construction_type'] && data['exterior_overhead_door_building_category']
+      exterior_subsurfaces.setOverheadDoorConstruction(model_find_and_add_construction(model,
+                                                                                       climate_zone_set,
+                                                                                       'ExteriorDoor',
+                                                                                       data['exterior_overhead_door_standards_construction_type'],
+                                                                                       data['exterior_overhead_door_building_category']))
+    end
+    if data['exterior_skylight_standards_construction_type'] && data['exterior_skylight_building_category']
+      exterior_subsurfaces.setSkylightConstruction(model_find_and_add_construction(model,
+                                                                                   climate_zone_set,
+                                                                                   'Skylight',
+                                                                                   data['exterior_skylight_standards_construction_type'],
+                                                                                   data['exterior_skylight_building_category']))
+    end
+    if (construction_name = data['tubular_daylight_domes'])
+      exterior_subsurfaces.setTubularDaylightDomeConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['tubular_daylight_diffusers'])
+      exterior_subsurfaces.setTubularDaylightDiffuserConstruction(model_add_construction(model, construction_name))
+    end
+
+    # Interior sub surfaces constructions
+    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
+    construction_set.setDefaultInteriorSubSurfaceConstructions(interior_subsurfaces)
+    if (construction_name = data['interior_fixed_windows'])
+      interior_subsurfaces.setFixedWindowConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['interior_operable_windows'])
+      interior_subsurfaces.setOperableWindowConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['interior_doors'])
+      interior_subsurfaces.setDoorConstruction(model_add_construction(model, construction_name))
+    end
+
+    # Other constructions
+    if (construction_name = data['interior_partitions'])
+      construction_set.setInteriorPartitionConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['space_shading'])
+      construction_set.setSpaceShadingConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['building_shading'])
+      construction_set.setBuildingShadingConstruction(model_add_construction(model, construction_name))
+    end
+    if (construction_name = data['site_shading'])
+      construction_set.setSiteShadingConstruction(model_add_construction(model, construction_name))
+    end
+
+    # componentize the construction set
+    # construction_set_component = construction_set.createComponent
+
+    # Return the construction set
+    return OpenStudio::Model::OptionalDefaultConstructionSet.new(construction_set)
+  end
+
+  # Helper method to find a particular construction and add it to the model
+  # after modifying the insulation value if necessary.
+  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category)
+    # Get the construction properties,
+    # which specifies properties by construction category by climate zone set.
+    # AKA the info in Tables 5.5-1-5.5-8
+
+    props = model_find_object(standards_data['construction_properties'], 'template' => template,
+                              'climate_zone_set' => climate_zone_set,
+                              'intended_surface_type' => intended_surface_type,
+                              'standards_construction_type' => standards_construction_type,
+                              'building_category' => building_category)
+
+    if !props
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(model)
+      construction.setName('Could not find construction properties set to Adiabatic ')
+      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
+      construction.insertLayer(0, almost_adiabatic)
+      return construction
+    else
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+    end
+
+    # Make sure that a construction is specified
+    if props['construction'].nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
+      # Return an empty construction
+      construction = OpenStudio::Model::Construction.new(model)
+      construction.setName('No typical construction was specified')
+      return construction
+    end
+
+    # Add the construction, modifying properties as necessary
+    construction = model_add_construction(model, props['construction'], props)
+
+    return construction
+  end
+
+
+  def assign_contruction_to_adiabatic_surfaces(model)
+    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    cp02_carpet_pad.setName('CP02 CARPET PAD')
+    cp02_carpet_pad.setRoughness('VeryRough')
+    cp02_carpet_pad.setThermalResistance(0.21648)
+    cp02_carpet_pad.setThermalAbsorptance(0.9)
+    cp02_carpet_pad.setSolarAbsorptance(0.7)
+    cp02_carpet_pad.setVisibleAbsorptance(0.8)
+
+    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
+    normalweight_concrete_floor.setRoughness('MediumSmooth')
+    normalweight_concrete_floor.setThickness(0.1016)
+    normalweight_concrete_floor.setConductivity(2.31)
+    normalweight_concrete_floor.setDensity(2322)
+    normalweight_concrete_floor.setSpecificHeat(832)
+
+    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
+    nonres_floor_insulation.setRoughness('MediumSmooth')
+    nonres_floor_insulation.setThermalResistance(2.88291975297193)
+    nonres_floor_insulation.setThermalAbsorptance(0.9)
+    nonres_floor_insulation.setSolarAbsorptance(0.7)
+    nonres_floor_insulation.setVisibleAbsorptance(0.7)
+
+    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    floor_adiabatic_construction.setName('Floor Adiabatic construction')
+    floor_layers = OpenStudio::Model::MaterialVector.new
+    floor_layers << cp02_carpet_pad
+    floor_layers << normalweight_concrete_floor
+    floor_layers << nonres_floor_insulation
+    floor_adiabatic_construction.setLayers(floor_layers)
+
+    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
+    g01_13mm_gypsum_board.setRoughness('Smooth')
+    g01_13mm_gypsum_board.setThickness(0.0127)
+    g01_13mm_gypsum_board.setConductivity(0.1600)
+    g01_13mm_gypsum_board.setDensity(800)
+    g01_13mm_gypsum_board.setSpecificHeat(1090)
+    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
+    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
+    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
+
+    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    wall_adiabatic_construction.setName('Wall Adiabatic construction')
+    wall_layers = OpenStudio::Model::MaterialVector.new
+    wall_layers << g01_13mm_gypsum_board
+    wall_layers << g01_13mm_gypsum_board
+    wall_adiabatic_construction.setLayers(wall_layers)
+
+    m10_200mm_concrete_block_basement_wall = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
+    m10_200mm_concrete_block_basement_wall.setRoughness('MediumRough')
+    m10_200mm_concrete_block_basement_wall.setThickness(0.2032)
+    m10_200mm_concrete_block_basement_wall.setConductivity(1.326)
+    m10_200mm_concrete_block_basement_wall.setDensity(1842)
+    m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
+
+    basement_wall_construction = OpenStudio::Model::Construction.new(model)
+    basement_wall_construction.setName('Basement Wall construction')
+    basement_wall_layers = OpenStudio::Model::MaterialVector.new
+    basement_wall_layers << m10_200mm_concrete_block_basement_wall
+    basement_wall_construction.setLayers(basement_wall_layers)
+
+    basement_floor_construction = OpenStudio::Model::Construction.new(model)
+    basement_floor_construction.setName('Basement Floor construction')
+    basement_floor_layers = OpenStudio::Model::MaterialVector.new
+    basement_floor_layers << m10_200mm_concrete_block_basement_wall
+    basement_floor_layers << cp02_carpet_pad
+    basement_floor_construction.setLayers(basement_floor_layers)
+
+    model.getSurfaces.sort.each do |surface|
+      if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
+        if surface.surfaceType.to_s == 'Wall'
+          surface.setConstruction(wall_adiabatic_construction)
+        else
+          surface.setConstruction(floor_adiabatic_construction)
+        end
+      elsif surface.outsideBoundaryCondition.to_s == 'OtherSideCoefficients'
+        # Ground
+        if surface.surfaceType.to_s == 'Wall'
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_wall_construction)
+        else
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_floor_construction)
+        end
+      end
+    end
+  end
+
+
 end
