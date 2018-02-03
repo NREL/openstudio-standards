@@ -1,22 +1,5 @@
 [
   {
-    "name": "S1 Sys (UVT)",
-    "type": "UnitHeater",
-    "heating_type": "Electric",
-    "fan_type": "OnOff",
-    "fan_static_pressure": 1,
-    "operation_schedule": null,
-    "space_names": [
-      "EL1 West Perim Spc (G.W1)",
-      "EL1 West Perim Spc (G.W2)",
-      "EL1 East Perim Spc (G.E3)",
-      "EL2 North Perim Spc (G.N2)",
-      "EL2 West Perim Spc (G.W3)",
-      "EL3 South Perim Spc (G.S2)",
-      "EL3 West Perim Spc (G.W3)"
-    ]
-  },
-  {
     "name": "EL2 Sys3 (UVT) (G.S1)",
     "type": "UnitHeater",
     "heating_type": "Electric",

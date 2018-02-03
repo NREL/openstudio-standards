@@ -15,7 +15,7 @@
       "E2 North Perim Spc (G.N3)",
       "E3 South Perim Spc (G.S1)"
     ],
-    "return_plenum": "E2 Plnm (G.4)"
+    "return_plenum": "E2 South Perim Plnm (G.S5)"
   },
   {
     "name": "E4 Sys2 (VAVS) (G)",

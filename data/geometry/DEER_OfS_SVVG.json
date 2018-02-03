@@ -1,20 +1,3 @@
 [
-  {
-    "name": "EL1 Sys1 (VAVS) (G)",
-    "type": "VAV",
-    "operation_schedule": null,
-    "oa_damper_schedule": null,
-    "chw_pumping_type": "const_pri_var_sec",
-    "chiller_cooling_type": "AirCooled",
-    "chiller_condenser_type": "WithCondenser",
-    "chiller_compressor_type": null,
-    "space_names": [
-      "EL1 South Perim Spc (G.S1)",
-      "EL1 East Perim Spc (G.E2)",
-      "EL1 North Perim Spc (G.N3)",
-      "EL1 West Perim Spc (G.W4)",
-      "EL1 Core Spc (G.C5)"
-    ],
-    "return_plenum": "EL1 Plnm (G.6)"
-  }
+
 ]

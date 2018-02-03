@@ -8,7 +8,7 @@
     "space_names": [
       "E1 West Perim Spc (G.W1)"
     ],
-    "return_plenum": "E1 Plnm (G.2)"
+    "return_plenum": "E1 West Perim Plnm (G.W2)"
   },
   {
     "name": "E2 Sys1 (PVAVS) (G)",
@@ -21,7 +21,7 @@
       "E2 South Perim Spc (G.S2)",
       "E2 North Perim Spc (G.N3)"
     ],
-    "return_plenum": "E2 Plnm (G.4)"
+    "return_plenum": "E2 South Perim Plnm (G.S5)"
   },
   {
     "name": "E3 Sys1 (PVAVS) (G)",
