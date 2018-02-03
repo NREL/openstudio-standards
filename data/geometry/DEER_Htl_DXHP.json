@@ -1,0 +1,74 @@
+[
+  {
+    "name": "EL2 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL2 North Perim Spc (G.N2)",
+      "EL2 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
+  },
+  {
+    "name": "EL3 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL3 South Perim Spc (G.S2)",
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL3 South Perim Plnm (G.S5)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C10)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (M)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL4 Core Plnm (M.C20)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (T)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C30)"
+  }
+]

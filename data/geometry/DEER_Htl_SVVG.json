@@ -1,0 +1,29 @@
+[
+  {
+    "name": "EL4 Sys4 (FC) (G)",
+    "space_names": [
+      "EL4 North Perim Spc (G.N1)",
+      "EL4 SSW Perim Spc (G.SSW2)",
+      "EL4 NNE Perim Spc (G.NNE3)",
+      "EL4 South Perim Spc (G.S4)"
+    ]
+  },
+  {
+    "name": "EL4 Sys4 (FC) (M)",
+    "space_names": [
+      "EL4 North Perim Spc (M.N11)",
+      "EL4 SSW Perim Spc (M.SSW12)",
+      "EL4 NNE Perim Spc (M.NNE13)",
+      "EL4 South Perim Spc (M.S14)"
+    ]
+  },
+  {
+    "name": "EL4 Sys4 (FC) (T)",
+    "space_names": [
+      "EL4 North Perim Spc (T.N21)",
+      "EL4 SSW Perim Spc (T.SSW22)",
+      "EL4 NNE Perim Spc (T.NNE23)",
+      "EL4 South Perim Spc (T.S24)"
+    ]
+  }
+]
