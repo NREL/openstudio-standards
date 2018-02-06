@@ -4,6 +4,7 @@ require_relative '../helpers/compare_models_helper'
 require_relative './regression_helper'
 
 class TestNECBWarehouse < Minitest::Test
+
   def setup()
     @building_type = 'Warehouse'
     @gas_location = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
@@ -26,4 +27,8 @@ class TestNECBWarehouse < Minitest::Test
     assert(result, msg)
   end
 end
+
+
+
+
 
