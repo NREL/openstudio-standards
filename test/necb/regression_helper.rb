@@ -49,7 +49,7 @@ def create_model_and_regression_test(building_type, epw_file, template)
     msg = "There were #{diffs.size} differences/errors in #{building_type} #{template} #{epw_file} :\n#{diffs.join("\n")}"
     return false, msg
   else
-    return true, ''
+    return true, nil
   end
 end
 
