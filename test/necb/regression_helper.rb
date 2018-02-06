@@ -5,7 +5,7 @@ def create_model_and_regression_test(building_type, epw_files, templates)
   end
   templates.each do |template|
     epw_files.each do |epw_file|
-      model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
+      model_name = "#{building_type}-#{"NECB2011"}-#{File.basename(epw_file, '.epw')}"
       run_dir = "#{test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
@@ -14,7 +14,7 @@ def create_model_and_regression_test(building_type, epw_files, templates)
       model = Standard.build("#{template}_#{building_type}").model_create_prototype_model('NECB HDD Method', epw_file, run_dir)
 
       #Save osm file.
-      filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_expected_result.osm"
+      filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
       FileUtils.mkdir_p(File.dirname(filename))
       File.delete(filename) if File.exist?(filename)
       puts "Saving osm file to : #{filename}"
@@ -22,7 +22,7 @@ def create_model_and_regression_test(building_type, epw_files, templates)
 
       #old models
       # Load the geometry .osm
-      osm_file = filename
+      osm_file = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_expected_result.osm"
       unless File.exist?(osm_file)
         raise("The initial osm path: #{osm_file} does not exist.")
       end
