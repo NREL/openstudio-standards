@@ -20,7 +20,6 @@ class Standard
 
   # Add the standard to the STANDARDS_LIST.
   def self.register_standard(name)
-    puts "registering #{name}"
     STANDARDS_LIST[name] = self
   end
 

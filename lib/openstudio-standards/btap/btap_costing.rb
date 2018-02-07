@@ -1,12 +1,10 @@
 require "#{File.dirname(__FILE__)}/btap"
-require 'rubygems'
 require 'json'
-require 'roo'
 require 'rest-client'
 require 'openssl'
 require 'aes'
-require 'geocoder'
 require 'singleton'
+require 'roo'
 
 
 class BTAPCosting

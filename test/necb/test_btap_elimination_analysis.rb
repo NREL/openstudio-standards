@@ -1,5 +1,5 @@
-require_relative 'helpers/minitest_helper'
-require_relative 'helpers/create_doe_prototype_helper'
+require_relative '../helpers/minitest_helper'
+require_relative '../helpers/create_doe_prototype_helper'
 require 'json'
 require 'parallel'
 require 'etc'
@@ -46,10 +46,10 @@ class SingleTestNECBQAQC < CreateDOEPrototypeBuildingTest
     
     ]
 
-  templates =  'NECB2011'
-  climate_zones = 'NECB HDD Method'
+  template =  'NECB2011'
+  climate_zone = 'NECB HDD Method'
 
-  epw_files = [ 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+  epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
   start = Time.now
   run_argument_array = []
   building_types.each do |building|
@@ -85,9 +85,7 @@ class SingleTestNECBQAQC < CreateDOEPrototypeBuildingTest
         FileUtils.rm(model_out_path(test_name))
       end
       output_folder = "#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}/#{test_name}"
-      model = OpenStudio::Model::Model.new
-      model.create_prototype_building(info['building'], templates, climate_zones, info['epw'], output_folder)
-      BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
+      model = Standard.build("#{template}_#{info['building']}").model_create_prototype_model('NECB HDD Method', info['epw'], output_folder)
       puts model.perform_load_elimination_analysis
     end
     
