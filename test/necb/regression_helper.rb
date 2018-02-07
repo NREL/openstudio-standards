@@ -46,7 +46,7 @@ def create_model_and_regression_test(building_type, epw_file, template)
   diff_file = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_diffs.json"
   FileUtils.rm(diff_file) if File.exists?(diff_file)
   if diffs.size > 0
-    File.write(diff_file, diffs.to_json)
+    File.write(diff_file, JSON.pretty_generate(diffs))
     msg = "There were #{diffs.size} differences/errors in #{building_type} #{template} #{epw_file} :\n#{diffs.join("\n")}"
     return false, msg
   else
