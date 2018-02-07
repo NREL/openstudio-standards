@@ -1,7 +1,7 @@
 
 OS:Version,
-  {7c59b275-3a56-404c-b574-d5f0ae75bc31}, !- Handle
-  1.8.0;                                  !- Version Identifier
+  {ca7118ad-5891-4a12-8e85-c39333041b19}, !- Handle
+  2.2.1;                                  !- Version Identifier
 
 OS:Schedule:Constant,
   {cbae3349-f243-4796-a1cb-45c1100f2d2d}, !- Handle
@@ -12,8 +12,8 @@ OS:Schedule:Constant,
 OS:ScheduleTypeLimits,
   {d23a0215-1959-43c6-8323-c90266ba5d6f}, !- Handle
   Always On Discrete Limits,              !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  1,                                      !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
   Discrete,                               !- Numeric Type
   Availability;                           !- Unit Type
 
@@ -8665,6 +8665,36 @@ OS:SpaceType,
   {acce0ec6-cf3b-4ab1-a68c-d2481bf53df6}; ! Group Rendering Name
 
 OS:ThermostatSetpoint:DualSetpoint,
+  {280db209-ac4e-466a-bad2-fab852936c84}, ! Handle
+  Thermal Zone 1 Thermostat,              ! Name
+  {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
+  {fe7c0370-fe3c-43f4-913d-f1fdbd0358b4}; ! Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {3f006386-b64d-4ca4-bd7d-fc63cd016619}, ! Handle
+  Thermal Zone 2 Thermostat,              ! Name
+  {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
+  {fe7c0370-fe3c-43f4-913d-f1fdbd0358b4}; ! Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {ea93d619-8faa-4475-b71b-46894822d5d8}, ! Handle
+  Thermal Zone 3 Thermostat,              ! Name
+  {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
+  {fe7c0370-fe3c-43f4-913d-f1fdbd0358b4}; ! Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {cef81f2d-b59d-47b4-947a-81b683d12b80}, ! Handle
+  Thermal Zone 4 Thermostat,              ! Name
+  {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
+  {fe7c0370-fe3c-43f4-913d-f1fdbd0358b4}; ! Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {aee82399-b0f7-47f0-9e42-da6fd68c8b80}, ! Handle
+  Thermal Zone 5 Thermostat,              ! Name
+  {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
+  {fe7c0370-fe3c-43f4-913d-f1fdbd0358b4}; ! Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
   {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, ! Handle
   Small Office Thermostat,                ! Name
   {7ac82242-7555-49bc-8d94-163cc4fe9960}, ! Heating Setpoint Temperature Schedule Name
@@ -9884,7 +9914,7 @@ OS:SurfaceConvectionAlgorithm:Outside,
 OS:HeatBalanceAlgorithm,
   {380cb712-8a73-425e-bf74-9bb8f818e1ad}, !- Handle
   ConductionTransferFunction,             !- Algorithm
-  200;                                    !- Surface Temperature Upper Limit {F}
+  200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:ZoneAirHeatBalanceAlgorithm,
   {cf17e2f1-2737-4f22-b3f2-5f3c17858b2c}, !- Handle
@@ -10628,7 +10658,7 @@ OS:ThermalZone,
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   {efd42927-9aaf-4bf8-aef6-734678b7461d}, !- Group Rendering Name
-  {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, !- Thermostat Name
+  {280db209-ac4e-466a-bad2-fab852936c84}, !- Thermostat Name
   Yes;                                    !- Use Ideal Air Loads
 
 OS:Node,
@@ -10658,8 +10688,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {ad10ded1-87cb-42af-a51d-18c34a309522}, !- Handle
   {1a18f482-9322-4b26-909b-3771a680984f}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   ,                                       !- Zone Heating Sizing Factor
@@ -10675,7 +10709,11 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
   ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {42ceb292-a5ce-4a81-adef-30a08abd8ca3}, !- Handle
@@ -10709,7 +10747,7 @@ OS:ThermalZone,
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   {fa0547d6-35f3-49a8-bcfa-e7f8168092ab}, !- Group Rendering Name
-  {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, !- Thermostat Name
+  {3f006386-b64d-4ca4-bd7d-fc63cd016619}, !- Thermostat Name
   Yes;                                    !- Use Ideal Air Loads
 
 OS:Node,
@@ -10739,8 +10777,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {2418e97f-e0d9-490d-bd43-f4f57c471797}, !- Handle
   {786b3063-5ade-40ed-95e0-cc9adbe324c5}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   ,                                       !- Zone Heating Sizing Factor
@@ -10756,7 +10798,11 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
   ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {4c5f88a7-658c-44c5-ad91-44dc535dc5b6}, !- Handle
@@ -10790,7 +10836,7 @@ OS:ThermalZone,
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   {e426dc20-bd4c-410a-9b87-bf502eea1e70}, !- Group Rendering Name
-  {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, !- Thermostat Name
+  {ea93d619-8faa-4475-b71b-46894822d5d8}, !- Thermostat Name
   Yes;                                    !- Use Ideal Air Loads
 
 OS:Node,
@@ -10820,8 +10866,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {016fe5c3-76e5-4d8a-84ea-d80b0c84e5bf}, !- Handle
   {bf347082-b158-40c7-afea-384a770aa02a}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   ,                                       !- Zone Heating Sizing Factor
@@ -10837,7 +10887,11 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
   ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {82e4c6e8-467e-41fa-b60d-3e787883da18}, !- Handle
@@ -10871,7 +10925,7 @@ OS:ThermalZone,
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   {2957754d-f420-4eec-9763-7b6839ab4d30}, !- Group Rendering Name
-  {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, !- Thermostat Name
+  {cef81f2d-b59d-47b4-947a-81b683d12b80}, !- Thermostat Name
   Yes;                                    !- Use Ideal Air Loads
 
 OS:Node,
@@ -10901,8 +10955,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {fa9e5260-6d6a-4aae-8277-da4cb6436f07}, !- Handle
   {520c6106-2486-4b24-9fb0-9efdc71eeeff}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   ,                                       !- Zone Heating Sizing Factor
@@ -10918,7 +10976,11 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
   ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {70810fee-79e8-4a9a-bde6-eb6d1228677b}, !- Handle
@@ -10952,7 +11014,7 @@ OS:ThermalZone,
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   {197b01d0-753c-405d-87a3-acab2e8aee56}, !- Group Rendering Name
-  {5e792549-1e27-45eb-9fd5-0aacb071cbbe}, !- Thermostat Name
+  {aee82399-b0f7-47f0-9e42-da6fd68c8b80}, !- Thermostat Name
   Yes;                                    !- Use Ideal Air Loads
 
 OS:Node,
@@ -10982,8 +11044,12 @@ OS:PortList,
 OS:Sizing:Zone,
   {f71a9abf-cab0-445d-bd44-38204bc713f1}, !- Handle
   {07abe0b2-8661-4381-90d4-685f5047d22f}, !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
   40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
   0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
   ,                                       !- Zone Heating Sizing Factor
@@ -10999,7 +11065,11 @@ OS:Sizing:Zone,
   ,                                       !- Heating Maximum Air Flow {m3/s}
   ,                                       !- Heating Maximum Air Flow Fraction
   ,                                       !- Design Zone Air Distribution Effectiveness in Cooling Mode
-  ;                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                       !- Design Zone Air Distribution Effectiveness in Heating Mode
+  No,                                     !- Account for Dedicated Outdoor Air System
+  NeutralSupplyAir,                       !- Dedicated Outdoor Air System Control Strategy
+  Autosize,                               !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
+  Autosize;                               !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
 
 OS:ZoneHVAC:EquipmentList,
   {d13362b7-99b4-47b4-ba31-7aec9880dab6}, !- Handle
@@ -11056,20 +11126,6 @@ OS:LifeCycleCost:Parameters,
   ,                                       !- Depreciation Method
   Yes;                                    !- Use NIST Fuel Escalation Rates
 
-OS:WeatherFile,
-  {5d4a7fc6-ce02-4f74-ab6b-47b9aaf72d24}, !- Handle
-  Toronto Int'l,                          !- City
-  ON,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04714,                          !- Data Source
-  716240,                                 !- WMO Number
-  43.67,                                  !- Latitude {deg}
-  -79.63,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  173,                                    !- Elevation {m}
-  file:files/CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw, !- Url
-  3537CA94;                               !- Checksum
-
 OS:Site,
   {d0de4424-3945-41f1-8984-51fcf8f48718}, !- Handle
   Site 1,                                 !- Name
@@ -11084,7 +11140,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Clg .4% Condns DB=>MWB, !- Name
   31.2,                                   !- Maximum Dry-Bulb Temperature {C}
   10.2,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
-  22.2,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  22.2,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   5.8,                                    !- Wind Speed {m/s}
   270,                                    !- Wind Direction {deg}
@@ -11110,7 +11166,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Clg .4% Condns WB=>MDB, !- Name
   29,                                     !- Maximum Dry-Bulb Temperature {C}
   10.2,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
-  23.6,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  23.6,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   5.8,                                    !- Wind Speed {m/s}
   270,                                    !- Wind Direction {deg}
@@ -11136,7 +11192,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Clg .4% Condns Enth=>MDB, !- Name
   29.1,                                   !- Maximum Dry-Bulb Temperature {C}
   10.2,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
-  71300,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  71300,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   5.8,                                    !- Wind Speed {m/s}
   270,                                    !- Wind Direction {deg}
@@ -11162,7 +11218,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Htg 99.6% Condns DB,  !- Name
   -18.8,                                  !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -18.8,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -18.8,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   4.3,                                    !- Wind Speed {m/s}
   340,                                    !- Wind Direction {deg}
@@ -11184,7 +11240,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Clg .4% Condns DP=>MDB, !- Name
   26.5,                                   !- Maximum Dry-Bulb Temperature {C}
   10.2,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
-  21.9,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  21.9,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   5.8,                                    !- Wind Speed {m/s}
   270,                                    !- Wind Direction {deg}
@@ -11210,7 +11266,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Hum_n 99.6% Condns DP=>MCDB, !- Name
   -18.3,                                  !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -23.6,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -23.6,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   4.3,                                    !- Wind Speed {m/s}
   340,                                    !- Wind Direction {deg}
@@ -11232,7 +11288,7 @@ OS:SizingPeriod:DesignDay,
   Toronto Int'l Ann Htg Wind 99.6% Condns WS=>MCDB, !- Name
   -6.9,                                   !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -6.9,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -6.9,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
   99264,                                  !- Barometric Pressure {Pa}
   14,                                     !- Wind Speed {m/s}
   340,                                    !- Wind Direction {deg}
@@ -11248,4 +11304,2092 @@ OS:SizingPeriod:DesignDay,
   DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
   ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
   ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:StandardsInformation:Construction,
+  {9f8378b7-3988-48ef-bef2-174612e012e8}, !- Handle
+  {0066da78-26a9-4f5c-854f-d1ae374fe7b4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {953c1aa3-f4a5-4868-b11f-b08ec97388b4}, !- Handle
+  {00f65efe-2803-4ce4-9c98-c2e5df290808}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {f0cb9a68-2e6d-4acc-9dd4-fe695c819515}, !- Handle
+  {01832895-ded1-42d5-a406-508271d00d85}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {64de4999-88c5-4862-b022-142f5792dcf7}, !- Handle
+  {02e814f7-3428-47ab-a542-9baf6b227307}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {497f0681-7567-4cd3-9d2c-3be0914deef1}, !- Handle
+  {038d7cea-f583-45b2-a299-b20319ae4014}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {b4b8b8fe-5edc-4faa-881a-4d2a70f540b7}, !- Handle
+  {039aaef0-a65d-4334-8d93-8316f187c740}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {c425f487-3644-4060-862d-80a7ca10dfae}, !- Handle
+  {03da5c02-ea05-4288-aba8-7c78cb37f5e3}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {4f22c20b-65a2-4322-9292-205fc8d53d98}, !- Handle
+  {0551f43c-d056-42bd-8571-6ccf8ada30bb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4282b502-1810-4753-b6ae-4c37573502be}, !- Handle
+  {0582ccce-da08-4018-b265-81fb3ac2a162}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {1b7aaf8e-239d-42f9-8958-e9c6d6340478}, !- Handle
+  {06ac0603-f6f8-48ae-a531-99a15d8f50d1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {15d1a5b0-a0a7-46c4-954a-680458a2374d}, !- Handle
+  {06ad9acd-8854-4b6e-8583-73f499cea18e}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a0fdd952-83e7-4e8a-a6c6-6db05b1e203c}, !- Handle
+  {06c3223d-e5e6-45aa-b68b-df90233cbafa}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {bcff77db-e161-4b0f-adc3-7c4b6e89704b}, !- Handle
+  {0722fc37-55b7-4ea2-8dd4-c82ff31342a0}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5b5cd1d6-b7ec-4ba7-9060-805c8e8ad862}, !- Handle
+  {07f90d8e-6fab-4130-9723-a7c68c65581e}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {37a76329-a5c9-4c09-a5db-84d9e40e027e}, !- Handle
+  {08100b54-380e-435a-994f-9e2ffa617833}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f633bf19-0141-48e4-8fa3-5f0432e319ba}, !- Handle
+  {08141c1d-3989-4ab4-aa7a-ccbfcb1e5d6f}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {8c13f1d4-b819-46e1-b39b-9e25fd54e009}, !- Handle
+  {08adbeab-e303-4813-91ff-1e6a502afeec}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {5382f40f-d269-49a5-af07-b78150a6a228}, !- Handle
+  {0a52dda1-7b56-44d0-8861-bd7459f92e78}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {214cbfcf-2284-4a48-8b70-42607e5b8fd7}, !- Handle
+  {0a695406-26ac-424b-9d22-3e4a9190741b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {38f725f9-86d2-4992-b201-c51b0baf509d}, !- Handle
+  {0be923be-60ad-4a5c-aa33-49dc605d7efc}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7a289cbf-49f5-440c-92ab-a9b611fcfa3b}, !- Handle
+  {0c31bbea-7a06-486d-a0a7-78e1292d8a82}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {c0ac33fe-974c-4690-8003-a5bc619cd960}, !- Handle
+  {0c333582-bceb-48ae-a58e-4c934e3008fa}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {33b73616-f10b-4010-8215-8fcdbeef6d4d}, !- Handle
+  {0c6b0229-3cfc-447a-aa5e-406c1f98d0a2}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7ff7b941-3bdc-4311-9fda-9d1604ad3e65}, !- Handle
+  {0cb6bb43-65f1-4998-839d-4fe3c69f4d98}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {eef5bd4c-c6fb-4f12-95e0-3b16955b19c6}, !- Handle
+  {0ccfaed0-962e-40af-89d5-b9c70df29f7a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {51dc3149-98bd-4d43-9335-c07d49b29db8}, !- Handle
+  {0d33d654-5b1b-4758-a3f6-80ff27f2c230}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e2f2db81-0112-48c6-8402-4ad278b7e08f}, !- Handle
+  {0d344c92-4957-43db-ba1f-fa4530731c3e}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {02c5af09-a071-43ee-8514-0cda474874e3}, !- Handle
+  {0e81d457-94ce-4e91-ac22-5310cceb6e9a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {7bf5f746-cbdb-49d5-a24b-8f5ddeff5322}, !- Handle
+  {0ee1274c-8b77-44e9-8371-871685e356d7}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {d67a3812-23ee-4065-b187-ad75fb5793a0}, !- Handle
+  {0f0156ef-a494-473e-8640-5f0d884cbb4c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {92a784ee-c632-45b9-9f22-209e8c1c693a}, !- Handle
+  {0f5e9c3e-35e1-48a8-b655-91bb9fde843e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {d6a89644-082a-4576-a902-7dd0ab154107}, !- Handle
+  {0f7905ce-5dc9-4664-baa0-4bc01cf613a7}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {8cf7133e-6fd3-443a-9098-ec17dad5edfe}, !- Handle
+  {0f7ec2e7-bf94-4a22-a7bc-4e76b4f93ca3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {dd801df8-39cd-467a-a530-b46a2b64ff24}, !- Handle
+  {0fcb5a4c-aafc-4147-ae58-ad4ed080327e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f5be7cf9-e2fd-49c2-ae2c-f65f49cf9e57}, !- Handle
+  {0fe5da5d-c981-489a-b65c-94d1f55fa902}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9742c2d8-fc67-4036-a56e-96c8ffbda0d8}, !- Handle
+  {104bde1c-5ed8-492b-ba79-4f7c0b989084}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {0838fca9-d282-4d50-bcf8-a2866f3c9fc1}, !- Handle
+  {108df802-fee3-43e4-aa70-30afe6ce5034}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {1fc796c7-bbba-4f53-9a10-f41c462f6482}, !- Handle
+  {10cedc0a-bfb0-492d-a47d-6c95c6132f20}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {fd56103b-7bc1-4e46-b29c-f5340c60a543}, !- Handle
+  {116e2dd1-b5da-46bc-abf2-68bf727f9d8f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1e74c790-8759-4948-8f51-57542f739480}, !- Handle
+  {116edbe1-5b60-418c-8ad9-10bbdb47aec0}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2f3d1659-bacd-448d-b3a4-e6753596de12}, !- Handle
+  {11f729f7-29a6-473f-8514-bfb89ec5f065}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {fa8cf007-d30c-4aa8-aea1-078850d6cb66}, !- Handle
+  {12e09187-cfd6-4f81-a0e1-6274a1fa1903}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2fa6e8dd-5f59-4b85-8b97-7e2ade1e7b43}, !- Handle
+  {12e35b55-2f45-4623-a7c4-835751a6bcb9}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {bee4e768-a2d4-4767-90ad-71df638af632}, !- Handle
+  {1389a1a2-7505-47c9-8223-4dca599994b9}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {c937753c-9172-433e-9bcf-0e67ef12f3c7}, !- Handle
+  {13d96bf7-5b84-4454-8e17-142ec1823615}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1927536b-0e17-4a08-9ff3-b33bb37b5711}, !- Handle
+  {1526da99-8dd6-4d70-a4ea-ff56fea7b322}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e1e1cca9-76f4-4e66-98c0-26120f73efb2}, !- Handle
+  {16a579c2-0c2b-4abc-bcae-b76d2aea8091}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {c76dcb5f-3d5b-47cb-bf51-3628f5024872}, !- Handle
+  {18500b0b-6e4d-4a07-97d6-5354561581a3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9fdda51b-db48-4fcf-bf6b-ec53faaab7c8}, !- Handle
+  {186eab42-90d4-4e71-aafe-eedb7ec34f04}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {80f905b5-70fa-4196-8251-d8d56dc4010f}, !- Handle
+  {18c8bfa1-c3f1-4dc9-bc26-89add6109bcb}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7010176f-6979-4f6b-94c1-a6aa2dcc9a7b}, !- Handle
+  {18e06bd3-eb1d-4777-ad41-d8f703dc759a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {3c7316fd-5525-4959-a1ed-72f1f2ba0301}, !- Handle
+  {1a1268c0-4792-4f9a-87b6-d8639ea9e27a}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ea343bff-ab63-448c-90c2-ae8fd8b44b31}, !- Handle
+  {1a41001d-b63d-4379-94a2-200dc74ea0da}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {0f3631c9-7e2d-48b3-b56f-afc284f9ee36}, !- Handle
+  {1a46635b-1af8-47b8-9839-9b7f44736116}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a78feb9f-27d7-483e-b40e-9a938597b3cc}, !- Handle
+  {1ace4b46-f9a6-4b57-bf98-85fdfb395d1a}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {7d4a571d-57a7-4fd2-9ac9-397fdda1d317}, !- Handle
+  {1b03fd4d-7c18-417f-bc3f-3c4a231577bf}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {dfec9038-09e6-4520-a8a0-382c5c7f01b3}, !- Handle
+  {1d480373-cf2c-4af9-9879-9d6aa9733159}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {46166483-3ca0-4d1a-80d0-06ff72ac75bd}, !- Handle
+  {1d4b6987-fba4-4226-8597-34f1b53e714f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6002110b-24d4-4cfb-87b9-afdfecb72aae}, !- Handle
+  {1e06a9c5-20f2-439a-969f-02caf3bc2add}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ccd567f5-5ade-4690-9c0d-190f0ed70512}, !- Handle
+  {1e4bfa79-c0de-4d00-b547-ef34c6224794}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {fd7884c5-05eb-4644-a677-eb2dd05290ed}, !- Handle
+  {1eca6359-8ed8-41c5-b576-efab8e5fcb3d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {da9e8320-ef01-43dc-932b-d9656cc7dc4d}, !- Handle
+  {1f2080a8-6656-439e-9cb4-0cfebde43406}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0f829292-50de-4f7a-a97f-e7a6d52bc90f}, !- Handle
+  {1f8a756e-75d3-4ba0-a56a-2fc63005f5de}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8b96cdfa-6952-4c24-a4bc-aa7ccfca51b4}, !- Handle
+  {1fb27356-6254-4715-b9e7-26c729e5dd14}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {738243cb-1aeb-40b0-894d-e1144ea2cedf}, !- Handle
+  {1ff58fe6-710e-42db-91b9-c04b2783021f}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {dbab92da-981c-497c-9e3f-db9679aa7865}, !- Handle
+  {21aca9fa-48bc-4136-8993-2012f9ffbb47}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0f0ea749-d117-4054-95da-489c8d6b6362}, !- Handle
+  {2239eb43-be0d-40f9-9371-4572f034b6a1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {e8d1e256-9b32-47f9-893e-428acf9c78d4}, !- Handle
+  {229fe07a-4743-4bf7-b04f-c512f231891a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6b673332-aa04-41bf-814c-936af46a78dd}, !- Handle
+  {2453e249-ae1c-460b-aa60-7eb898f6a254}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {99cd3067-efcc-414c-9c6e-935cf0c76c93}, !- Handle
+  {250127bc-804c-4e2d-a1a8-a3728b1381a5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f6e0cea0-6a29-4429-a912-4c727badbc31}, !- Handle
+  {251ae3d9-3a4d-40d6-a4b3-75b3c7dea768}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {69962182-302b-43b1-abfb-b18aff352841}, !- Handle
+  {25760b38-3c52-4244-a95b-a249b612add5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9d9605b3-4842-48ec-9291-a5058f7c5759}, !- Handle
+  {267950c2-3d78-4ff0-bf40-9cb056395b5e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {f6064c63-b559-4452-824d-98e18751f9c3}, !- Handle
+  {26f40f8f-15d2-454f-9375-e6a4c4947744}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0dfbaee1-36a2-4fb8-ad40-b125bfafd1e2}, !- Handle
+  {27f6750f-61e9-44c1-98a5-3bec8870aaee}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {de7708da-86d0-4cce-a750-748eafd3226f}, !- Handle
+  {285c755e-83ad-4008-aab9-aaabfb52220a}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {32a066df-a556-4367-a3fa-aec502a6ced2}, !- Handle
+  {29a77cbd-2c26-4be4-8b73-024d7a11ce90}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {74229529-49aa-48f7-b3f4-126dba1c0625}, !- Handle
+  {2ab3fd95-296e-40e3-bb23-11b3ba00151b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6aff803d-10b4-4ace-a63a-846e854789c2}, !- Handle
+  {2b247104-34a3-4dfa-bdbc-84bdd6d83408}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {51140e8c-c6c2-4da0-9843-0a34a79ad88c}, !- Handle
+  {2b78a540-2896-42c9-88f8-1429b77ab0fb}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2b994995-7e1f-4c70-a865-f6a1f45e1fd1}, !- Handle
+  {2babb5aa-f8cd-449e-8f9c-d68bce8aeaef}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {13160867-0e30-4794-bf5a-fa0e0a19222d}, !- Handle
+  {2bc78f1d-a291-4253-8e84-fab9554b03be}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {b9749bca-29c3-48f8-8472-498aaa5674a2}, !- Handle
+  {2c3cf52e-4fb9-4c48-941f-e9119d43aa27}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7fd18b2d-d4a5-4209-b7e8-97eaba5e0790}, !- Handle
+  {2c80df77-ab3c-4105-b83d-b80435285ca3}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {d3d3890f-e5fe-47db-810b-5f822a1e6999}, !- Handle
+  {2ce0b8ea-9c08-4335-80f0-eebc31d68310}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9af18246-aa8b-4955-a33f-eb90cd32982c}, !- Handle
+  {2ceb298a-c68f-4557-b3f6-7e45e507b4a5}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7343f334-c1d0-4639-86ab-ef041f9c7341}, !- Handle
+  {2d2a5257-191a-4faa-bf05-2b8a9e356cad}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {b04dbf2f-6432-40d3-8b46-89b36d1ba4b7}, !- Handle
+  {2d626ab3-f818-48f3-9875-348b89541a0e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {59dbb5ab-22f2-4b96-810b-8c0ff56b4648}, !- Handle
+  {2d62cbe5-356f-40d3-9c14-873aedd01656}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2c7251de-269a-4e33-ad3a-c7e2ea1d574c}, !- Handle
+  {2d85e5ee-c941-4741-8c38-d9c86a8b0f88}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1c17ba63-d07e-4dc0-acb1-41df473d18e3}, !- Handle
+  {2df227ba-c555-4563-9ee6-1ca7f5daa477}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {18d9c9b7-99bc-4bc4-8f8a-da1585c7babf}, !- Handle
+  {2e2e1999-2af3-4929-92a5-5f99011c3f83}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ff4f2d95-e9b2-400f-b07b-d7e3c192585a}, !- Handle
+  {2e321670-4a1c-46ac-a21e-a291cff9bf26}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {e9470637-013a-4217-a7e0-186be6fedd31}, !- Handle
+  {2e5300b1-4145-4c66-abd8-a70d1ea83ee4}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {49d627c5-9571-42e8-b0eb-32fc249db0e0}, !- Handle
+  {2e7d6ea0-3a5d-4344-a646-dd597011b02e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {168697d0-74d6-41d3-b56b-b952deb1e9b2}, !- Handle
+  {2eaf7613-1aac-47eb-8045-4a170a0872f4}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2a1b374f-6e9c-4597-a07f-394c5dc0436d}, !- Handle
+  {2ebd3dda-1382-4da5-8989-78b613316d0b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6150feae-b150-4abc-b6cd-b7963ebe8a06}, !- Handle
+  {2f506cec-0ad4-4f15-a721-dc81052f09c3}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ae1b5e7c-6b28-4da1-82f8-4c554a872e08}, !- Handle
+  {2f5b9fc8-1bf3-49f8-9d1b-694ec6020681}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {e03b1826-8dd4-43d9-8030-f9e515036dc1}, !- Handle
+  {2fa39521-aa6d-4f63-96cd-b204e218fbd8}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ed362771-2ab5-4a58-b9ca-3c7bcdbb9ff3}, !- Handle
+  {30764fc6-f8f9-4256-b34e-8c93586ecd97}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {59186ad9-ee55-4aff-b0a8-33ebe21455de}, !- Handle
+  {310c8ddd-463d-44ad-91f1-7496b038f869}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d14c2bfa-a312-4790-97c2-288ff23174fe}, !- Handle
+  {3204b780-9e1c-409d-9649-f71d6cf80a7e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {65219104-eff9-49b3-b16f-2ea48fa179e2}, !- Handle
+  {3283864e-de5b-496b-88ec-0a5b8f38e5dc}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {744f75f1-43c4-437f-a242-b27abe47e323}, !- Handle
+  {3382b253-a54b-4d9f-8d4d-2264467816b6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {890ff0bb-8bd3-4d16-aab2-c3cfa808d039}, !- Handle
+  {352e28a8-b570-493a-8996-1ef906425be7}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9a1bb328-58f0-43ec-b2ea-a87771502a24}, !- Handle
+  {35c2b18e-9bbf-464d-9bc4-dc0b6db96010}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {99ed0080-57c2-409b-847e-fb6ea15ab1fe}, !- Handle
+  {36af3e7f-b317-4c1b-b27c-1df122751208}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {df9e008b-01ff-4961-8b49-dc214cf8c869}, !- Handle
+  {36b09411-6f7f-41cf-b929-e410025c0d35}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {14c27db2-2f5b-4aa9-80ef-e26e84817a9b}, !- Handle
+  {36cf36ce-7784-429a-8e85-e6adfd7e7a68}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {e715df1f-f53c-4ef4-a050-7e3655499313}, !- Handle
+  {3742782d-7a70-4ab1-b3f6-faa686ea3795}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {925b78e0-a037-4ae8-ab1c-3979cb833bc2}, !- Handle
+  {3742ba59-f4b8-4476-9327-1374b76ae341}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {4076d681-e039-4344-b962-194256883206}, !- Handle
+  {374a6bb5-714d-4439-93c2-ca71d2319bda}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {646d27e8-cc0c-4167-80c5-3771e3f7b12b}, !- Handle
+  {3798feef-e040-46d8-8383-4edbd7247e03}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {dad8ff1e-20b7-4c2d-a686-ca5102fa4fe8}, !- Handle
+  {37d4d4d7-9b56-4ed4-a862-c8f587759f06}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6fc2ae3e-341b-46c4-a5cb-6366f09e6a9e}, !- Handle
+  {38bf144d-5e68-44a4-af41-d7498ae39982}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {bd8779e6-8cbf-45ad-bc06-b097e4ceae42}, !- Handle
+  {3a8c7593-79fe-4bf3-91e6-e49840760f51}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8e701cd8-e204-422a-a376-12297c48ff56}, !- Handle
+  {3abd39e7-db00-4317-9662-ee4980ad7966}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e2f85258-692a-4f8f-af8d-b5cd730fb768}, !- Handle
+  {3aee06a8-195c-4d70-8ad8-413cdd12a1e8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {79396c8c-f295-440a-8145-8085bedd7367}, !- Handle
+  {3b21468b-c925-45ae-ab07-223778b83323}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6b75d707-5edb-4e7c-8a7a-d60f7811e2b0}, !- Handle
+  {3b88e271-8ae9-4bac-b696-a4a4b4754ed2}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ebd8bbb8-7f59-4387-a6b7-7fad8e0515ce}, !- Handle
+  {3bd3e906-e4a8-4f83-b54f-b535ba015e8f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6169765f-a18e-4713-8def-dd183d111c41}, !- Handle
+  {3c150716-117e-4d21-acb5-d080c06a5803}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2969bbc1-6585-4693-a743-2e27c78b8023}, !- Handle
+  {3c6f13cc-3935-4610-a6c1-614ef2d44ded}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {1bcc1fc5-47cc-461b-ad0d-6ef532aafc55}, !- Handle
+  {3cf16b7d-fe63-4419-ad11-5be27842d922}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {236dc1e4-26ad-4b9b-ae4e-a421df1d65a7}, !- Handle
+  {3e61609c-da4e-442b-a2c3-8ce608116f39}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6ce960c3-9b89-416d-bfcd-d59fee31f8f7}, !- Handle
+  {3ea07875-b6e2-4a1d-b5e0-fdf334dac5a4}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a07583f2-5cd7-46fd-89c0-40aa3bf04c6b}, !- Handle
+  {40186e99-548a-4aa7-aa6e-dbd360f94a46}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {379baec7-944f-4c8e-8cbf-41c679038cb1}, !- Handle
+  {403cfab3-e6c6-4c25-8b9c-0a03a2b4829d}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {cfd1d0dd-b2d2-4940-ba4d-b9c9de1beaf7}, !- Handle
+  {40a263cc-e7bc-4121-a356-b790201c1971}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {b4d12cfd-a6ea-4cf1-8c53-c97070f490e9}, !- Handle
+  {40d18374-172e-45d2-9242-8adeec900424}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6e921f66-7ef3-4eef-9ef8-e3a15d8f66c1}, !- Handle
+  {41759e2f-72a6-4fca-a9aa-05ad1695bc31}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {7ad933e7-8c1b-45f5-b66f-929e29a3c54f}, !- Handle
+  {421bfa74-8ca6-4ca8-b542-c34e1e21f2d1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {45a1a714-8543-4198-a6ec-1106cd848a92}, !- Handle
+  {4305f663-3413-4c5a-88bb-3582bc2b4737}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d5b13984-ed48-44aa-a5c6-06cd657abd77}, !- Handle
+  {43826cc3-a974-4260-b992-d3dce843c64e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {55911ccd-70a1-4cb0-8ddd-91ce132f761f}, !- Handle
+  {457ea523-ad7a-477d-9710-eb5f588d471c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e5cd7415-e843-4bb3-8f90-916a78d0ac66}, !- Handle
+  {45fb3ed8-736f-4917-8da1-66729810499b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {1390d0e2-4165-42a9-a8f0-31f37f003807}, !- Handle
+  {4633407f-29f4-4668-8e74-ee62c5606f8f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {cd89503c-f7fc-483b-974c-adfcf2e3daaf}, !- Handle
+  {466646b2-5dde-4034-87a5-71ddeaba4d17}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5fce2b48-ced2-4b9b-a690-37e20bd6cfcd}, !- Handle
+  {46a50861-4755-4d78-879b-77227ae4f0f5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {193f02d6-63b3-4dd0-8d2b-c9f93f02d164}, !- Handle
+  {47550165-0294-4c04-b5f1-16f83f496643}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {90117281-c9ae-44ed-aec6-5c1d210cb125}, !- Handle
+  {48641f8f-f958-44a6-bbc7-aece5052a151}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ab3a22d8-8783-4479-9d3f-e34911d7661b}, !- Handle
+  {487907f9-e900-4ee0-acff-8e287b84fd16}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {14e88603-f5ec-40a1-9d77-a02e3f2e9f3f}, !- Handle
+  {48b17c18-d74b-4952-9614-26d7d5cdbec7}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {738ebde7-08e4-4b03-9697-a466d7b4d04a}, !- Handle
+  {4a98993b-3f72-4d7f-9482-43cb2eac29f0}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f2277598-be3e-4ca7-ba50-61d57ff85cea}, !- Handle
+  {4b680e5e-03f1-4a58-9c53-2677d80908ec}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {97861f76-b3d0-41fd-9b90-a196b5b88567}, !- Handle
+  {4b98e947-c75b-4035-bc28-64d008ae900b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6bcfaf16-6ca1-424d-928c-621757ff1bb2}, !- Handle
+  {4ba843e6-bd47-4025-90d1-a0d1ae6ccd72}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {fa3499b6-bb55-4d4f-b638-65c516bdf1f6}, !- Handle
+  {4c514103-937e-4b44-9baf-bdaa13709d85}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2c74e304-2f5e-41b4-9c09-7091c26140d6}, !- Handle
+  {4cea9621-cd12-4584-9d39-b53c8fd35ccf}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ba2c8c06-6349-4fea-8f71-a4e637b03527}, !- Handle
+  {4e86956f-d871-4501-9327-ec0c1d0d265e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {3f8bd64e-af8f-41c0-bfde-b41f5b2773b5}, !- Handle
+  {4edd9dae-6bbc-451f-bedf-af0a3fa48913}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {4a61be8c-d2b5-45f0-917a-7cf3897c1eee}, !- Handle
+  {5022aca7-70a1-47d5-8448-87946c2c0d9e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6eddd949-d288-4e57-ac91-ba1aeaccff5a}, !- Handle
+  {507639c5-51b4-441e-a06f-ab1aeb78cb2e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {57477285-0e20-4914-b43a-19350ea07e97}, !- Handle
+  {51883d9a-dc3a-4004-a29c-db245a28da64}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {33d72016-9da0-48f7-8a07-5e7e5d10f6fa}, !- Handle
+  {5207ff92-bd6c-47c7-b97c-7272707c1e50}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a6763e45-a05d-4857-be87-20903151838d}, !- Handle
+  {521959d3-cf0c-4898-ba0d-e8ad5f099c9e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {072258eb-4a80-4d79-bf17-6be015e32882}, !- Handle
+  {5237a014-0a24-4c35-b581-be0bfae0158b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9a859cc5-0d37-45e7-b183-0e3e8ccf6834}, !- Handle
+  {526c9223-e9e0-4e16-8740-d0ba25ad2757}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d46ee420-74eb-4f50-b480-11e182c5f89c}, !- Handle
+  {5468c83f-b03f-4d18-a523-ac5b1ea1e9c6}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {78ad58b3-3be8-44e4-9407-cccf1be60496}, !- Handle
+  {54be85cf-6dcd-4ab6-8642-d69d8562add1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {88058079-961e-46a1-b2dd-be4ebfb50b89}, !- Handle
+  {554df0fb-ac73-4667-ad48-cb0c9ceea9ce}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {33c5927f-2815-4946-a61a-e70bfdd014ec}, !- Handle
+  {556ddb33-f7fe-4779-b39e-f73c228aab60}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {eddccf25-5b74-4012-8d27-8dfb4dc94b6e}, !- Handle
+  {56c4e536-897c-4a6a-8db5-fe89f72bcd36}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {c4842a18-e306-48a3-95a5-5b3e4d00f08d}, !- Handle
+  {573954b3-a148-43de-b588-4b32a9692d10}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2d3c7795-90ee-4d7b-93c2-0e9fb8962f7c}, !- Handle
+  {576fcd01-e02d-41e8-adb2-8261ecb52db5}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ac0268a8-81db-4f74-bcf4-630c94bbaa3c}, !- Handle
+  {577cb6f9-d3dc-40a5-a29c-35642cfa479d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {795d02b1-37e2-48cc-a86d-3726afa54e48}, !- Handle
+  {57e0e90f-829b-4442-b945-9c912d2fcdeb}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {3c2ed468-2ca3-40ec-8fa2-75ca9b9bb03e}, !- Handle
+  {586f1db6-48af-4c26-a107-4bf2935b1272}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {22427383-8a50-4890-86d5-e661683f2b6b}, !- Handle
+  {58a8b18f-4065-4772-b161-f70f0b12a01d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {b04e478c-bc6b-4e1e-91c7-4ba1a81b3b80}, !- Handle
+  {58e22e56-6c65-4a81-b37d-32864713c067}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2b292643-1b52-4c8d-b205-cd0978ca74eb}, !- Handle
+  {595128f1-45cc-4562-9c3f-6e6f22a45619}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6bfe0c28-8a7f-4073-bfa0-b33553fa2c83}, !- Handle
+  {59f81c33-d11b-41c0-ab16-231277612ad2}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {5b540aaf-703d-4212-9c20-1cc1a6289541}, !- Handle
+  {5a1cfb48-4c6b-4de5-8596-f6caa5fb32f5}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6932470a-73b8-4d9f-bda0-c11894215757}, !- Handle
+  {5a88eebd-7acb-4418-9e0f-74c8870ee754}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {991ebfee-ff42-4ab1-92e4-274a010f2402}, !- Handle
+  {5c0b6888-6b92-4e5f-b4cd-b322d3a309b4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {5a3fe3da-4dbb-4434-9262-5220a6cde83b}, !- Handle
+  {5cb894d1-2000-4b38-be1a-5e242227443f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {95653567-9a97-4e27-9c3e-4c08ec3b3b6a}, !- Handle
+  {5d572caf-cc14-4989-a3dd-bb5c75394398}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6f6f0ed5-5f92-476d-93bd-b4b3948f3395}, !- Handle
+  {5d67d707-dd00-426d-859f-9d43e04d0b52}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {38878455-9fdf-48f5-b390-ec214a1ff09d}, !- Handle
+  {5d87f774-1ae9-44e8-b865-03d9d452ab4e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {65927f89-267c-42cb-bd12-bad1b3650ef7}, !- Handle
+  {5da9bf47-edfc-4bf5-adb0-48d0e61c9c11}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {84edfa37-6a6e-47e2-be8c-8434caa84b56}, !- Handle
+  {5dee128b-d7ca-4940-9405-1e2673b368d8}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {295c2e54-0538-4fa4-8ac0-8462e7f80926}, !- Handle
+  {5e2d2fe9-81e8-47ab-a5d8-945ea59ac01b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {74e8ed40-1910-4c0c-9be5-d578479b63ca}, !- Handle
+  {5ea43ffa-d77d-45d4-87ca-09e4891fa817}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {bb1748a9-e1ff-4ccc-b628-ded349eb8ef5}, !- Handle
+  {5fa767d7-cc34-4f11-8188-01c59e207828}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {35176d9b-300f-40cd-95a5-cf8304b1347d}, !- Handle
+  {60008ac1-d4ee-4ee2-8542-a2c652b4a2fc}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {42a84f53-d484-40af-8017-70021c5702fd}, !- Handle
+  {60dd54cb-05f9-4d78-8f5f-5029ba4c42f3}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {522857ca-bd43-487b-9382-532d86f80c65}, !- Handle
+  {611b095f-a00c-4c25-9b10-a75bfa0d68f3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b928332e-73f9-4acd-84ca-efe1ce5f5fa7}, !- Handle
+  {61818b42-ed2d-469b-a939-fca2c0ce56b6}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {37c73844-e293-4de9-912e-0d8d12d4c0ff}, !- Handle
+  {61ceda32-f6d0-4706-8559-3d21c312ffd6}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {974ff185-b9ad-45e9-b504-c48312e31e16}, !- Handle
+  {61ed89a3-e128-4e4f-8a0c-4ff2f5aa17fb}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d8437085-fb63-41f9-9a85-4286821eb4b2}, !- Handle
+  {6203b789-b4b1-44ff-97b6-625c9291cfcf}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {e416f35b-2f66-4e58-9616-00d50eb17e40}, !- Handle
+  {622b339e-da2b-493c-9822-99eba6be292e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9efd579d-f444-4337-bee0-6cf5b52b4e15}, !- Handle
+  {62cd9cd4-fff8-4556-a4fe-a1f9e7d75d74}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {7548cb84-ad45-4235-bafd-c3dc68b5683f}, !- Handle
+  {63829d57-1648-4ca7-b003-631013a942e3}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {b00bb8c3-938f-4449-80a9-90cfee74893f}, !- Handle
+  {6459360a-39ae-45e3-bb7e-f31f7e4c3a26}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8474c0f0-fcf0-4591-a866-06ba66ba5242}, !- Handle
+  {64c8ae98-3b12-4ea6-8077-1d430a100c05}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {0c9bc4e9-cecb-40b2-81b2-6126df3d1f49}, !- Handle
+  {64f15765-f991-48a0-9ce5-8f8b356cfe37}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {53d08aef-0ca8-46bb-8a06-8be818cb62da}, !- Handle
+  {6602d9ac-c8a8-45a5-9351-1578477dec3c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ed014a7a-6dfe-4834-9e71-e4c3dbf97f4a}, !- Handle
+  {665f1008-76ba-4df3-a89d-a0cb3009b6b3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {26513138-9971-423f-897b-152be2717838}, !- Handle
+  {667ac566-3d51-47ec-89ee-102f3bdd0f81}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6d969cc1-cf8f-40e7-b4d7-abbbab895131}, !- Handle
+  {669033f3-0d50-445b-96a0-2732ad078ff3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ce8fd65b-8bff-4c9c-833e-98b976d1feb1}, !- Handle
+  {675b3bf7-30eb-4ff0-8ac3-939ef89adb8e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {3870df47-a5a0-4172-aec2-d3870749ad54}, !- Handle
+  {682b4713-b8b8-47d5-8081-635419d0e9c2}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {8d8d0906-9a6e-480e-8b43-22cfa06c1b6f}, !- Handle
+  {68ada42e-da1a-452c-928c-85754bff621e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {05882b54-1b6e-4a79-9184-a26317c24fa1}, !- Handle
+  {6959fb0b-2c57-4e3c-a594-54723a64d263}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {8dfdeef0-b043-46dc-9c43-32fef821d137}, !- Handle
+  {699b3530-fb2a-46fc-b17a-abdb65f5611c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {73c9cc8f-3be1-4184-891c-73d3fb22f6e6}, !- Handle
+  {6ad70edf-d21a-4412-bc1a-ed4241c7e01a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3318cad6-22af-4b16-be23-3d18a085edaf}, !- Handle
+  {6ae908d7-a764-4f19-b9b5-e132a0534541}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6b314b8e-a902-42ee-b45d-8d8654ab68f1}, !- Handle
+  {6afde2c2-12f3-4316-8386-45ce533e1d6b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f33c63b2-940a-4ce3-b887-7395cacee88d}, !- Handle
+  {6b566f4c-9961-4329-bd18-69b251702006}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {61474874-e263-4538-a027-6f014940cccf}, !- Handle
+  {6bc88261-3dc2-453d-a10e-d55872bda8aa}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8625d836-8d8b-4ff4-8457-7f32d04fc6d7}, !- Handle
+  {6cda1240-0a9d-440a-bc4a-3157f4d1f257}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8ddb7f66-5352-4252-acf8-f56e535396f2}, !- Handle
+  {6d48131d-e51a-45c6-9ef4-2f3111c0d744}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {57185268-7031-483c-9b0c-aa8e8a1ea49f}, !- Handle
+  {6d8b7e72-723f-48a0-b636-c662b76a1580}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6118853b-b5f2-4542-969f-962557f4bd64}, !- Handle
+  {6e1ea055-9c9a-4a34-b944-ccb83a0c6f36}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {81d3afe0-05fb-4652-9f08-707fb8e305c7}, !- Handle
+  {6e34a290-d46e-4857-acc4-a8633d9a4132}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {926b2125-ef0d-49b4-b753-b9bfe5348ea4}, !- Handle
+  {6e535b8c-5f4e-49b4-9c8c-53def4ee5b3e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {347c7796-efa2-4d97-8a6e-a239190d46a3}, !- Handle
+  {6e5454ed-6b69-4292-8129-2fe82ac13668}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {aca0932d-f9b1-4bbd-b423-25a4764c49e9}, !- Handle
+  {6f096622-fde6-4ee1-a796-f215fede3a87}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {427280ef-e2ee-4f57-8ce6-fb30f466fad7}, !- Handle
+  {700dd7d3-d8b2-4f85-943a-36af791c1a6d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f3bdfa28-68a8-429e-bd61-2136597c8c02}, !- Handle
+  {7089168a-67d3-42ce-87e5-96ea0ef5d558}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f6e7f8a2-3ae1-43d9-bcab-13ef69ea1010}, !- Handle
+  {709d09ee-eb77-48f4-a25d-789c1c2f6f3e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c0d9d8c2-a56c-4894-8365-552905af0e27}, !- Handle
+  {712c0657-5cf4-4727-9876-8067a8ab2d52}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {fd9854cf-cdc3-48b6-856c-01aafaabf24f}, !- Handle
+  {71fc821a-a0a0-4a71-a8cd-fabd047baaba}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ce708bf6-8202-4be8-8d5c-6480809a49eb}, !- Handle
+  {72275a73-e28f-4918-b3a0-84e006345cd1}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {1bc39d07-ecd2-4e74-b4e6-527d44feb9e8}, !- Handle
+  {730f7eba-0c3a-463a-8eeb-0021cd9139dc}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9f0fc066-a8d2-4d89-a85d-5c37da8d99c0}, !- Handle
+  {739dfbbb-38ee-46a0-bc5c-6231462a073e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0d1b7fd2-38fc-4c3f-8fa2-f66bb6dd5b53}, !- Handle
+  {74c178fd-0d40-4017-9362-43405deb126d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {655bbdaf-1e6c-44e2-a538-f6a277997d6a}, !- Handle
+  {75e6df43-8bdd-41f4-b584-1565fa1eaa92}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {631a155d-ca1d-4e07-9c8c-8e3fd7d64ae4}, !- Handle
+  {76769547-9c81-4bbf-9f2d-2cecfc59a70b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {d9daeb8c-5f59-4c7c-abdc-519f541ef0c1}, !- Handle
+  {768a136f-c767-4347-9c50-942c41532c56}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5156d470-6b4f-4ef2-b224-d128118fa342}, !- Handle
+  {76ae8b32-9a9b-45e2-a2ed-2a41e6747243}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {dab6a0c2-d57f-4eeb-80f7-439804b701a2}, !- Handle
+  {77f3687b-2f12-492b-b087-07d7e754a74a}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {571002c5-a079-4e7f-b843-f499392d4b48}, !- Handle
+  {7843db8a-1cea-41c1-aff4-4262ec063824}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {afaffbed-3d6c-43ff-859c-c64cb1d97879}, !- Handle
+  {786ea298-b54c-4b7c-9261-ff0bc94433cd}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f3b8cef9-78e0-4e3d-b7de-86d8fd8d8b29}, !- Handle
+  {7888a90e-7f9b-4b72-b1ef-43ae75af9487}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {371c80d9-e3a2-4cf8-b0a7-30fd331b2873}, !- Handle
+  {78b7b95f-9ce0-44dc-87c6-b9c7de34e775}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {f4590e04-0eb7-4e34-8ecf-65e8b3733782}, !- Handle
+  {78dc9de4-824c-4a33-8487-ab56b8a8b387}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {95d9bab6-8bcc-41ea-b29d-c91bb0fd6717}, !- Handle
+  {7954b1de-6a1c-40aa-8ff5-ebcc278e204b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {3ba24147-85f5-4a41-9bdd-e6f734966f5e}, !- Handle
+  {79b46406-c92d-4a92-b340-038c4e963e57}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f77ea7c8-ea6f-4bb1-af29-01be685eb337}, !- Handle
+  {7b1baf7a-5284-488e-a616-cd7a0e78eba0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {baf44c63-26e2-4ed6-b475-98bc94b238e4}, !- Handle
+  {7b1f2f18-b035-40ca-9837-4de4e5200c12}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6a2a309a-a2ae-4913-a903-6e8054347229}, !- Handle
+  {7b62572c-8b6d-419c-be9a-69b285f3cb20}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {287538ac-ea2d-4b22-888f-e5ef460cfc12}, !- Handle
+  {7bc65a4c-e445-44d6-95cb-0870e2668362}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {cc787672-781b-4ab7-92c0-79c92f05ca66}, !- Handle
+  {7db656c8-34d8-488e-8181-27beec5f738d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0f55db82-0006-4de7-8d9c-0ffb25a9aa2e}, !- Handle
+  {7dce1af4-9cea-4aac-b5e7-d16944c5f94f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {671bd12b-8fa8-4581-ac1f-3db7053a64bd}, !- Handle
+  {7edfbf18-0ec5-47eb-9293-bab785d767f5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c0aadb47-2d3d-4be5-8c1f-eda6b2449fb7}, !- Handle
+  {7f374163-eb1a-448f-b9ce-3a64653055b9}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {5818af2a-29fc-45b0-97a8-448a290c2080}, !- Handle
+  {7f9d9a25-3a06-4085-8e56-163a6b258511}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {929de3d9-5528-47bb-8bca-7ac162c36f6d}, !- Handle
+  {7fcaccc0-2813-4b61-b406-de3a4bec33ee}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {438f8958-0d36-4baf-80ca-993383b44fcb}, !- Handle
+  {7fec2da9-16cd-4a08-8da1-af3225845321}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {037f04c1-8a7e-43f7-9eb5-0b4cf18acea2}, !- Handle
+  {8019b5f5-adde-4511-9e5e-6b281149013f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0ebe453c-6873-4380-acb9-6cfefd97ae6c}, !- Handle
+  {808b6180-2f7b-4809-a027-bb4746344e2d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b507f27f-ab3f-4fae-86ae-72a781a09049}, !- Handle
+  {80b2e3ec-69a9-49a1-9793-7f1d0e532921}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {fa9b359a-71b7-4977-861f-f8e6839d0202}, !- Handle
+  {80d35209-1fc3-4c27-9b04-ea75e1ffd844}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5a2c9203-9a5b-4340-a2c3-1d5db46ac430}, !- Handle
+  {81a69226-adcb-4250-a9ee-6d43ac0beca5}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {df2f72e6-c66b-4a2e-9aea-961c9e40a250}, !- Handle
+  {823bb33c-58ec-4be8-a182-071aa7c28e77}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {46a66df8-3447-463f-aa2f-2f1e74e1f7ff}, !- Handle
+  {8272d738-83c0-4395-a4f3-5c712152b20c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {e9853e22-86e0-49d9-ab77-07321ff6d5b1}, !- Handle
+  {83088629-4598-4a88-9e3c-cbedee5e2f96}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {3d6e7639-05f8-478a-901c-fbe1dd9f759a}, !- Handle
+  {8359ac61-563d-47e8-b3c3-31dd372cb7c3}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {9d10f264-9122-4708-bd41-301e6dfb99ec}, !- Handle
+  {8385b02b-b035-414b-9c0e-e2483fea2627}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2e4916c6-5170-4f3d-b8a7-63d8cf34e262}, !- Handle
+  {83878fe1-cb57-4fea-8a35-f6bde8a197ba}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {eb9755c6-b0ef-4851-8c45-107dba409333}, !- Handle
+  {838fcc23-f739-4644-a761-77a891780368}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {3c6c0a35-0717-4ab4-8ed3-5021408fc4c5}, !- Handle
+  {84406085-1f05-4496-94d1-5b0214376c09}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f571cdfc-493d-44d9-aea2-ab7c68d2780b}, !- Handle
+  {84915ad3-2a9a-48cd-a706-b797e85900dd}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {200ea098-69eb-4edf-ac7a-4f052790302d}, !- Handle
+  {856e6c66-1481-4c35-8ac6-16bc3a0cf9d9}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {97f2b828-eafe-48c0-b746-aafc4e276495}, !- Handle
+  {872e448f-5384-458a-8a1a-e53ec084beb2}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {dd1c81c4-a0fb-42a5-9863-ae892f3b2b5e}, !- Handle
+  {878f6e82-d37d-447c-a3db-570cdfc4d8b4}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {4656b8e8-b8e6-488b-bf0d-1f0e046db415}, !- Handle
+  {87bdb3d7-967c-4ff5-b451-0f8cc8204348}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {5491f76c-a8a8-4bd5-9190-cbd883d7d339}, !- Handle
+  {88583124-3da5-474f-b8c8-af9358646da4}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3d20f9dd-0c92-4610-9d16-355443b10f45}, !- Handle
+  {890cbe88-1144-4305-b239-58770e428075}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a1fd5887-0224-43aa-a039-78bd9893be75}, !- Handle
+  {8a3846a1-93f5-4520-831f-ec7a4a41dd38}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {1ce5cade-1030-45d4-9393-dc669cabeb3f}, !- Handle
+  {8b31dcf8-a3df-4a61-910a-fe74e8c2705a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3be218af-da05-4e79-bfc8-0e6d4c13d435}, !- Handle
+  {8b47647d-1403-463f-b6dc-99511a6518bd}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {4d69dc40-9ea4-4cff-aa9a-a975831ef7ba}, !- Handle
+  {8b631329-3676-4170-985f-d6011db1a63f}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {96b5f5de-dc11-45f7-85d1-c1c1fd0f1f0c}, !- Handle
+  {8b984ee3-caee-43ca-9ae0-bfb6ab7e9e77}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {bd56325f-6d3e-40b9-806f-f6e951568319}, !- Handle
+  {8bc3b583-3d71-4bfc-9e85-f8afbd9da9b3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {5f16920f-139d-49df-8521-dbe1c141fc02}, !- Handle
+  {8bce72e5-a883-448e-8f2c-f32333efc0f9}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6b29b1c3-d22d-4eb3-8b27-f824bc510654}, !- Handle
+  {8c6e0c46-5eaf-435a-912e-beb3b78fd823}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {05a5eb78-8f88-4869-8357-9d86946f4fa4}, !- Handle
+  {8c7d5bce-c94e-4a30-ab3b-d0ce2c8eeb92}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {8ac1385a-e55f-4d95-9602-efdf27cbc13e}, !- Handle
+  {8c91a1df-6d1c-4bf2-a9a3-913459fe9444}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {185c396d-d770-4313-854c-8073b6b65c69}, !- Handle
+  {8cead91e-2c06-4b7d-ab2b-12413fb48a54}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a2b850e2-f224-4b07-97f7-89b1d70082c4}, !- Handle
+  {8d4bdeea-7187-4db5-a21e-7a7f538667e3}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {24fc460c-f254-43ec-831d-6075fe430af3}, !- Handle
+  {8db0fa48-aeac-40f3-a3d6-5071380806cd}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1a93528c-31bc-47cd-b3bd-027cedd29a95}, !- Handle
+  {8f503dad-bcbe-435d-884c-19aef92e9aef}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {439f6440-248d-4596-947e-0ba4d53d3615}, !- Handle
+  {8f75cc03-5336-4256-8c65-40f7ba765ac0}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {30e1ae64-0be7-4c9c-8239-a7466acadeb7}, !- Handle
+  {8fddf617-4223-4f1a-89f0-c3cf2cff2c91}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6373a263-f37c-44f7-878b-ca51f065c7bb}, !- Handle
+  {9037b711-37be-442d-b30c-72b89d553e70}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {50afddbd-be6c-4103-81cb-ff4ad81ef52e}, !- Handle
+  {90ac59bd-1fa3-448c-952d-33ec4d1fc21e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {692fd166-a710-4434-87b9-178b600e59e7}, !- Handle
+  {90e38fb9-1179-4372-870c-87eef6c3fdd1}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {45079e5f-c6fd-494c-ada1-e4f44277f92e}, !- Handle
+  {90e4e6bd-fc4a-4103-8813-87f951f6a4b8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {104a5fce-5f63-4338-ab14-451a7cd3adca}, !- Handle
+  {90f04158-e773-4256-9c5a-57ea2521c6b8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4ae5c693-0cb8-4df7-941f-d132f7091900}, !- Handle
+  {913f2de0-98e5-4bb0-bdf3-bd733e3a7853}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {102cb890-a19a-40e8-8e96-8bea6cfbc9eb}, !- Handle
+  {9351c31f-ad24-4cad-805b-1da48072bb45}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2d060262-dc10-428d-a21f-f71534a726d4}, !- Handle
+  {939c0e13-906f-41a7-958d-c2e1e0cfb6ae}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {19ae8ba5-cd8f-4dff-9b7a-79984ba01a60}, !- Handle
+  {93ec5ec1-fe7c-455f-a6af-1a60f1c2c9a7}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {18cd107b-dc4c-460a-9ffe-3f9d3f0a0794}, !- Handle
+  {943b8763-308b-4e37-94b0-b49824e855c1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {10edfdd6-90da-49f1-9410-6047d9049f36}, !- Handle
+  {945ade3a-95e7-40ab-a143-6b06da24f13c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {482e8ccf-9c38-44df-97b0-3e746420d8e0}, !- Handle
+  {94b7127c-10a1-4419-824e-51f81119da1b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {f0579006-2c98-476b-9adc-890577ae8c9b}, !- Handle
+  {953bc5c4-589f-4139-8cf4-d0acc3f80060}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {1e3c3810-1195-4fe4-a5cf-a36905702238}, !- Handle
+  {9541fd62-7565-4546-9a33-153e16123849}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {082930b8-50ad-416e-ba11-12db95f256e8}, !- Handle
+  {95c60f16-f983-44bf-ba48-52f499a7db6a}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c12c37b6-040e-4c69-bebb-fd149a71df33}, !- Handle
+  {9601ee66-15ef-4677-bd72-b4360495fd5c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e8662508-019e-48fc-a1f1-9c918b9be6d4}, !- Handle
+  {9678d402-6c08-4cb5-9702-8385222fba65}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {fde10f26-f314-4f94-b481-f54ca946e691}, !- Handle
+  {967dc359-58c0-4935-a00f-c59bc49a8407}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ada82d95-c048-4f26-836c-d8a91ebcfebf}, !- Handle
+  {9682a96c-9b34-4d99-a3cd-69c9d07cf472}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {dc93c24a-831b-4d6f-90bd-d7d57b39bce4}, !- Handle
+  {96e6891f-9edc-4b0d-82bc-853a9559ed17}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {d8c56424-0bb7-4186-a251-0263ae2ae48a}, !- Handle
+  {973c7925-0437-4d92-8d3b-2d021d1db2a8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3c45c318-5391-4420-9873-3684a66e7140}, !- Handle
+  {981e11d7-0cfa-4e3e-a3f3-daf296178568}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {70b02ce4-9ea7-404b-9e34-a2c18fa1ff76}, !- Handle
+  {98317850-8a75-45f7-a738-9adc3904a45a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {386c86d2-7120-465a-8dc2-116ee050841f}, !- Handle
+  {9891723f-0108-43d5-87b2-0771507e91fe}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3e7e0b9d-c65e-424b-b653-140159008183}, !- Handle
+  {9963262d-c087-46e4-b628-8e4ec9945054}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6ed07c02-2fd2-451d-b767-df4e5708c52f}, !- Handle
+  {99cb8625-3006-4803-88bd-d8c133119bbd}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9147482e-c407-49d2-be8f-12a536f1deae}, !- Handle
+  {99ce40c9-e898-451a-8dce-b039ece97a3c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {cd11346a-e253-40db-8d44-c8b0d8983d5f}, !- Handle
+  {9b210e9e-0158-4ce8-a634-bf8adac8c81a}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {b8dad88e-86f7-4f46-af5c-67dec36ef01a}, !- Handle
+  {9b817e38-7248-4c31-be6c-c4abec136789}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {53d34d4b-1a11-436f-ac97-45d223bd3843}, !- Handle
+  {9becd718-9e5c-4652-9892-f0f365da3d1b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {569be637-be8f-4cd8-a582-885c1342290e}, !- Handle
+  {9c26cc1e-a78b-46d1-9f8e-069033302b76}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {b0eecbb4-a009-4577-9be5-8799a8bd867d}, !- Handle
+  {9c5e01f4-5b9c-4ceb-9476-7669780e522b}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1b02689e-ade3-48c1-9673-8b0097fa4029}, !- Handle
+  {9d6cf257-e9bb-46eb-85fe-4be3cec28625}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9fba623d-06d0-4d52-a58e-f2d1c2762ebf}, !- Handle
+  {9d8ec867-1956-4dde-9d06-7bda0ce993a7}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {a8143005-99d4-4596-a43a-4f0cdb221515}, !- Handle
+  {9d955538-7f87-41b3-bfe3-974a2718d941}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {62e2036b-ce68-4f20-b41b-203b37a59091}, !- Handle
+  {9daacbbb-94ed-47b3-a12c-184df6f9fa6c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2e7b6bae-2aaa-4602-93a6-27828481e75c}, !- Handle
+  {9dfe3a75-f347-4e9d-953c-b8ef940d2211}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {34316300-7d49-40d9-976d-7d975427c163}, !- Handle
+  {9fcd03d8-7d87-4b34-9fe6-e95ee65bd596}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {af851cc2-6a04-4b8b-80b0-38022534a85f}, !- Handle
+  {9fce564f-9a88-493d-8d8e-8f3d6330946e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ad9bb8f2-d958-4aca-b34b-49266f67a3aa}, !- Handle
+  {a0217633-61e7-427b-ad78-1f3594ef66c3}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {1b61ed47-5d39-4be6-a79d-7c31ba27b542}, !- Handle
+  {a087a9a4-6104-4821-9b8a-a27bbd48935c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {4338aea6-807c-4f9a-8590-159d37bc1325}, !- Handle
+  {a0924b43-97ac-4adc-a37b-c41997c61175}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {aaba9236-acba-4f1a-935e-bb4ec9ebe927}, !- Handle
+  {a0c400d0-b164-4d7b-a1a5-4e7b35f85923}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b20f16b5-4eac-4297-b36b-e02a09badce3}, !- Handle
+  {a1e74e96-1549-49f7-9a98-9c85bd4b93b8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {843847fe-e0e1-42b6-b7d8-d55f5ed5c3a6}, !- Handle
+  {a32cd8ed-d7e2-4651-accf-387739c4a130}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {22446490-792f-48fa-aa5c-df93b8def357}, !- Handle
+  {a403f61c-9313-4b66-8628-1d1aec766e81}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e364630c-49e1-4963-9257-78aad4cba518}, !- Handle
+  {a437216f-900c-4107-a6c3-9c91ceb571a9}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {6a172ea5-c3bb-43da-a2fe-6a187fd002c9}, !- Handle
+  {a4e31fe0-5ad8-49af-9162-aa0b29edf904}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {11d6c0cf-f0b2-42b7-a2ba-5dafb58cbe58}, !- Handle
+  {a55e26f7-ab80-45b9-bf31-e949528509a1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {db30b0ff-d484-45b8-86cb-73609b156430}, !- Handle
+  {a561ac6a-7c62-4cfa-ba84-da6c93aea16c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6533cac7-b2ce-40b2-91a3-bd84e879888a}, !- Handle
+  {a608edf3-33c2-4c8b-b9a9-65bdf1c5b6d7}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {de41e6ed-23b2-46de-a8ea-ff290ce3d70c}, !- Handle
+  {a6591ec7-426d-4b3f-a63c-c363f8f99853}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f9124504-37f2-48dd-87c9-d901282933ac}, !- Handle
+  {a6cf43c9-c979-4a90-be60-82ef5610a225}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {021881e5-3f0b-477a-8845-8e59628e7cac}, !- Handle
+  {a6f43e42-c214-4d58-a48d-fa098c744db5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4b6d0b18-39d4-40d4-a96f-819f0f9c3eb7}, !- Handle
+  {a7bdbd48-1a2c-4b77-ac2e-1b72c4bce037}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8325267e-2703-4e5a-8def-a94be7a18591}, !- Handle
+  {a89adccd-c2d5-49a9-8b1f-db2ef9ce9b20}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {4f291bc4-af9e-47cb-bcb2-b2a91891d03f}, !- Handle
+  {a91c7699-1206-4273-89fc-8f76b9a3f3c3}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {26e49eeb-885d-408f-957d-5f063a365f2e}, !- Handle
+  {a9ac601d-ce75-4502-bd68-7c736c9cf8b3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b19fa957-fb1a-4cd0-84b8-25744e22368b}, !- Handle
+  {aa5c5fb4-5466-464f-bd8b-e93dd23b4bc5}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5fb5ad73-23c4-4dc6-9333-a34f5b9b8d6d}, !- Handle
+  {aac95d38-f409-497d-9216-9c05fb2a5207}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a451a223-1731-4bcb-936d-8ed028d7be4e}, !- Handle
+  {ab4c5ff1-9c4a-4f4e-8dc4-e3cb8bf26806}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {5436f819-e490-4dd4-b251-b1196c9cbcc0}, !- Handle
+  {acca82d0-c40f-4bfd-a589-cfcaf7a0ca1e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {20aa0929-75c1-43fb-8bdf-d1f540622735}, !- Handle
+  {ad759fb0-bcb6-418a-8a1f-416a0437e43b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b5fda589-fa94-4e41-bb19-18e9023582be}, !- Handle
+  {adc7c349-18e0-4477-b281-793bae7bf70c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {345d2305-0936-470c-8eac-6cf7f0380b92}, !- Handle
+  {ae0e1fc9-3aca-4e2b-bc23-a9d40dbdef20}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {0d6d7970-25f1-4c53-b774-20b3e254361c}, !- Handle
+  {ae17dcb4-6fa1-4cce-8d2d-1eecc31a1d2c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {79891e12-97d8-401d-9416-30c0f43ce68d}, !- Handle
+  {ae52f53f-2ebb-4f0a-bc0c-d03c3afed615}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {4bdefb3f-c393-46d4-b037-b19182da0a88}, !- Handle
+  {af28e15b-7a3f-435d-80c4-d7343dd0fa4c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d1585c9f-7f19-4b1c-ad85-ce8f5e3b3407}, !- Handle
+  {af3f9728-8508-4f00-b4a2-3c2795cf8c25}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f3c5f396-54bd-4e35-afb8-1405cafa7853}, !- Handle
+  {af41df9c-17d9-4722-bff9-31e6e7c27755}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {c8966274-5f69-40cf-8de5-89a9d9284638}, !- Handle
+  {af53cfa8-f6be-4310-a096-257c6afd3f7f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ec1fc264-72c6-4608-a5dc-f1e8d1c166d9}, !- Handle
+  {b0d7091b-dfa7-481a-ba77-9ece60b34434}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {0c72037c-303e-417a-98ef-923e919f32c0}, !- Handle
+  {b12c800e-1c27-4b65-bb31-186f12a13be6}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {bccb4181-05fd-48a4-a5bd-5e938509de5c}, !- Handle
+  {b1624cb3-2cfc-4b99-9e42-3ce14abf69cd}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {1cb1d791-8123-4d78-ac10-5f210a17bb4f}, !- Handle
+  {b18208ba-f4a1-43a8-9334-a433d4cc596e}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2e793bde-2996-440c-b271-b85e1463c12b}, !- Handle
+  {b1842204-3a9d-4470-8256-10ef88e1cc58}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1bd0c84c-2b58-41fd-aad9-f7c810dc4f55}, !- Handle
+  {b1f84594-87bd-4d3e-8db8-93465b75acca}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {cb3357c9-de19-4abf-aa66-186c440c479c}, !- Handle
+  {b30104b0-7d85-4e98-b1b7-048be9d13edc}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {14ecc70d-c4d8-4917-bcbb-7f01b003a627}, !- Handle
+  {b3565d69-8bb3-4138-ba7d-e8763beec286}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {7b4bab42-1c19-4cbe-8ce5-96c7dff13539}, !- Handle
+  {b366dba4-4560-4706-97c9-89dc11f20d25}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {23f9a1bc-bb27-4bd3-a159-53d7db970c0e}, !- Handle
+  {b4a6c3fb-04e7-42ed-90a7-f1afc8ca3242}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ac68af05-411d-4590-b825-264eb833224f}, !- Handle
+  {b4ed03e6-7c25-47fc-b8bd-2e7da6b0402c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d5758376-30e4-4ef2-bb50-7b1463ac7208}, !- Handle
+  {b5dae480-0a99-45bb-b698-0ec24e6afd9a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {7e7821e7-5f00-42e1-8edf-8f88657d92b6}, !- Handle
+  {b5fff6ff-ceb4-455b-a317-2d6559ce68c7}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2cf3a92f-0fcf-4fe0-ae64-2310088ffd18}, !- Handle
+  {b64bcac2-791e-4ca2-91e7-799c914ae00f}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0d5541b5-f438-485f-846b-28c8879414e0}, !- Handle
+  {b66bc3bc-7965-41d0-a29f-cda677a84a89}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {90c2f0b2-b5c8-4fe1-a009-63e1cce98cec}, !- Handle
+  {b6865a52-4eeb-416e-a79c-a852086d633a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {dcbbf6ea-67e2-4bc7-af25-61b1aa28876a}, !- Handle
+  {b6efdc79-56db-4be7-bd69-ac4387bf2fb5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {eafc2377-de2e-4359-8c42-30f6e78ae081}, !- Handle
+  {b84226dc-387a-4788-ab5a-47a5230a5bc7}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2a499de5-e7d0-49f0-805a-dcf68d29365f}, !- Handle
+  {b849113c-659f-4fa0-9724-1f278f1643ea}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2731b58e-2623-4757-b0e7-542cb671fd12}, !- Handle
+  {b85a45ca-c02a-4605-b817-8e6579bc86df}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a28535aa-8195-4905-a5e4-1f9fa7457598}, !- Handle
+  {b9148d14-0982-44e3-a597-0ab667f7ef42}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {0bc3d81d-a52e-4852-88eb-05f8f5e7297d}, !- Handle
+  {bab7fb45-4b4b-48e9-bcd5-89b6eec2e946}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2bd98062-f279-4c7e-b47f-5da14724107a}, !- Handle
+  {bb1323de-f624-47ba-91f5-82f1481b3634}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2956b7eb-8282-4761-86f0-d0c0095cbb0a}, !- Handle
+  {bb1c2a17-dad4-4490-9b1d-4d325fa57b8b}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {869cbbba-a68b-4810-af6f-3bce33bd7d09}, !- Handle
+  {bbd4dcfc-de7a-4231-9d67-b5717024f26d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {859897e4-909b-4e90-b70f-ec33afa4f1c7}, !- Handle
+  {bbd88dab-e1a0-44fe-862d-2c761df769bd}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {cc7f7c99-4011-451e-9020-ba604a1249d6}, !- Handle
+  {bc3711a2-af11-43c4-b16f-cf95f09915fb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9f96430b-436a-43c6-9794-f1b8dd8d95e0}, !- Handle
+  {bc451e37-ab96-4e32-85b8-060b14dd1ffa}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9db3bd0e-fca2-4729-979a-a6107fb6283c}, !- Handle
+  {bc4621a8-bee8-402c-a136-52e753af2ce0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a4a4b93a-e864-4635-aa37-a3ff3c0fd6dd}, !- Handle
+  {bd3b90fd-22d8-4c5a-9751-f885d724acc0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {054cf9eb-8813-4c22-846f-0c660ea06dab}, !- Handle
+  {bd7c36c6-366a-4037-a37e-c3821f01a4ba}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9aecae08-941a-4d42-9e7a-0510cb3bcf29}, !- Handle
+  {bde9509c-dc94-4806-b3ec-7388ba721335}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {e7beffde-b9ee-4f25-9346-574f9ca036a7}, !- Handle
+  {be6d18fc-a9f7-406d-a7cf-fbf8f0271a4d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {4fea3c94-aa4d-4c60-a605-c55b6d08dae9}, !- Handle
+  {bec28989-f033-4c43-8136-7188711452ed}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {2f0ca3dc-37fe-4d99-8660-fe3c3e96c9b3}, !- Handle
+  {bf9eae5f-0699-4eda-9bac-ca2de10990aa}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {8fd8d1ba-9457-4667-88b0-fad5cd9dba54}, !- Handle
+  {bfcf9cfd-6417-4f95-9398-59defaf81251}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {063bb317-eee1-4d28-b3e2-f601e533a6d0}, !- Handle
+  {c0195120-6c7d-4481-9075-d8c974d36fb0}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {478ec70e-1845-487a-9a15-8490dc4f6789}, !- Handle
+  {c0c8a043-d913-4d04-a9b9-c35530422810}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9130aee6-abde-4a4a-be3f-56d278bf69ae}, !- Handle
+  {c153e719-1dbd-4eeb-976d-73d92bfd184f}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {4b854260-29d2-485a-afdd-5bb8bf0dd768}, !- Handle
+  {c1ae9550-361c-4bb0-a84e-ac6b41c9f162}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f37a7db4-47a9-430d-bd54-b517c099e263}, !- Handle
+  {c1bc10b2-c86d-4bb4-8ed8-31ebcaec9fe4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f876e9c7-32ad-4aa6-9e0c-f0a30eb9e01a}, !- Handle
+  {c33c674a-38e0-48b8-9815-248e025dffc2}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {59948c93-16d7-4637-b52a-35f76ea121c3}, !- Handle
+  {c4811841-8a0e-4240-bfb1-1258b6953631}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {21c5a616-773e-44a9-9e6f-f9687a46bc5f}, !- Handle
+  {c53559c6-bddd-49c5-8e6f-e741e71328a7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {cf7e4d09-c6b9-4ec2-9bcb-f28fa69473ee}, !- Handle
+  {c5b2393c-7c58-4654-8461-17424cb40558}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {98c17abb-97a1-49e7-8d87-b2d0888bd8bb}, !- Handle
+  {c645d3c0-aa53-4872-8f6b-41a6b7046518}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {1d40a187-ec0e-4a50-9e45-536ef31f8e48}, !- Handle
+  {c693c3a0-ef7d-4029-adb5-d3e1c72f1abe}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c88669e0-9d39-45bd-aeb8-8181ae2489f1}, !- Handle
+  {c703bb29-7f9e-46c2-b30e-f219dacbb8c0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d88caa16-4b82-4e05-8a1b-89462d37d294}, !- Handle
+  {c7b18a52-4ef4-4a4f-86dc-e65807b1267d}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {5010dd58-dc95-4da1-9f40-467e96795a26}, !- Handle
+  {c7c5ff93-c3b7-41cc-9f08-79fa3978a81a}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {c245dfe2-486c-4f44-8869-85a5624047ae}, !- Handle
+  {c7fc9b61-e684-4d74-a461-b4e1255f8c7b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {9ece6bee-9914-49fa-87e9-b6b4101c4ce3}, !- Handle
+  {c883b933-f9eb-4848-baf1-3e602a7668c8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a34617aa-4141-46b3-9128-80499cc87271}, !- Handle
+  {c935925d-6e6f-4bfc-aa38-94a4f1663841}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {b6a08e18-87d7-48b1-ab8e-49d1c3b69df9}, !- Handle
+  {c9b7085a-d129-472e-a245-544f44535cb9}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {22f94f9f-4c27-4e15-9406-2c5249d93b3f}, !- Handle
+  {ca136b8d-1591-4a09-a215-ab7406496e5d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {95c20faf-084a-4b4a-837a-b36e654b72f4}, !- Handle
+  {ca6ae5e9-7c2c-4ff6-804e-4fdd87faf429}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {707fd4bd-f616-431e-a552-b216498cf507}, !- Handle
+  {cab40bf1-dbb4-4c48-814b-7d450f19ad55}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9746c7cb-a4bc-4095-997a-ef754b344178}, !- Handle
+  {cb0a7ea7-ede4-4d0a-878c-4ecb7a1a910b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {cd4c91a8-b388-4566-91ce-92034be2c78a}, !- Handle
+  {cb2f878d-8d21-4b38-827f-13cd602257d0}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {31bf895f-4bcb-4018-95dd-e84cba608391}, !- Handle
+  {cba19a56-e741-4a94-8d08-aecc13ceed76}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {11d37219-be71-41ab-b077-558b56731b1d}, !- Handle
+  {cc0c49e9-fe73-4fad-86b0-bc260b9d209c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e1a4bfb4-3bba-4c92-9596-8c28815da317}, !- Handle
+  {cc27009f-bd09-465f-8e28-fcd24f62cb42}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ee6731e6-b0e5-4c3e-85d2-ec72e41d6bde}, !- Handle
+  {cc644156-c0c5-4345-94d5-80fc25b00407}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d074b96f-c778-43d1-9c67-c862302a213c}, !- Handle
+  {ccaf9ff5-0fb0-4f5f-a8bc-fd76d841a11c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {540a66e5-fe70-4eb5-8eb0-73d975cc5d85}, !- Handle
+  {cd191120-0915-48ac-93ab-49540cb6b089}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {411ee55f-a66f-4707-a121-1b7485ac79d3}, !- Handle
+  {ce753f80-0674-44ac-b7f1-3792a561f554}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6c10bba5-1a80-433d-af4a-ae46962e13e2}, !- Handle
+  {cf002c97-4be5-4ad9-a778-f2dda4f10437}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ee238d99-53fb-4ee8-85c5-ac7f52d9f86e}, !- Handle
+  {d062460b-883c-4218-85ea-0572987e81d8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {40b9e3ec-2b7d-41ed-9f7b-4a05517738fe}, !- Handle
+  {d132f1b9-bb9b-4f5d-9fa3-504dd7d64a47}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ff8091ba-faf3-4b61-9f57-8243a6dc0503}, !- Handle
+  {d23a6655-5e1f-4dbe-bde9-94663990aa72}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9f90b774-793d-4e1e-a771-b380037ace3f}, !- Handle
+  {d3021724-86f8-448c-85a9-731666ee2d20}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {99eb337f-0b46-4cd3-b6bc-b045eefb7ac6}, !- Handle
+  {d36f4c77-c617-4cdc-b875-b3ced6a7ca2c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6b2b0dec-f5aa-42e2-a639-0740a20d954d}, !- Handle
+  {d3f8ba79-b3d9-49ce-81e5-14f3af4d6cf5}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {f604a2b5-aac3-4cc6-8171-0d255cfe06d0}, !- Handle
+  {d55663d0-6f58-473b-be76-02e9c5b26de9}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {52438294-95fa-4973-a46d-5a28442b3d88}, !- Handle
+  {d717f9eb-1507-41ef-804a-5631ff7f92b3}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3d000ae4-77b1-444f-a503-3dafd6255b20}, !- Handle
+  {d8b1d0c0-66f0-4a0e-bc7d-abc8fda31c29}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {23135be5-72d7-4694-94d7-651b80766a14}, !- Handle
+  {d8bca767-2e8f-427f-863b-d3a4811e7232}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {67bd23e5-f185-49b4-8a1b-1db007c038bc}, !- Handle
+  {d8d60798-7e75-4d4c-ac6b-ee65b1089c43}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {68a31fd4-333e-43e8-a6ce-f6b4ee4f8856}, !- Handle
+  {d8d888bb-0b8f-45ab-8039-ac7cf86c1ab1}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2a0b1248-a1d7-4f4c-a21c-11ea6f5377a2}, !- Handle
+  {d8dc517a-2522-43c1-9a98-d4dd00457e6a}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f33bf13d-bcdf-4e68-9792-5170c104ae30}, !- Handle
+  {d96dbd4f-81b7-46d0-9df1-f158d095908f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {138b7704-3801-4ee1-b7fe-91a8012e85f6}, !- Handle
+  {d9a702c4-c534-424c-9bc3-b5d7bf39870f}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {fbbfd866-8b57-48f8-9185-c469cb1b44a7}, !- Handle
+  {da0ba53d-4ecb-4012-8e86-b845d45ad94c}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3ee04755-257e-4b06-bf90-ac9c1f689f21}, !- Handle
+  {da20368e-7d0d-482f-a2d5-4594a6f07f95}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {53ac2d23-fbf1-45c5-85e1-e484730ed379}, !- Handle
+  {da773a3e-5098-4022-b781-1da98e71181a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ca96e7b5-4255-48c5-9e17-52321edf6aca}, !- Handle
+  {da8c3473-844d-4d9b-8588-02dee8b807d8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {1380699f-3883-43f8-a410-4bbe20d355b1}, !- Handle
+  {daae073b-5b6a-4eab-9c37-1f5478553ecb}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {28736de7-406d-41a1-9984-f022e7d246c1}, !- Handle
+  {db11e827-6185-4587-9ec0-ccc086ecf0e9}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {46bb7180-7b3a-4034-ad00-490019aebea0}, !- Handle
+  {dbe21b8d-3043-47d9-b10e-563516c9a626}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {8de086a1-d9f2-4052-a7e9-0c656ea2a9f8}, !- Handle
+  {dc7cc868-8241-43c9-8c61-bebd3fcd861d}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {351b6931-8406-49ed-b190-c95fbb17c0df}, !- Handle
+  {dd2b1185-7369-43cd-95d0-13dd0243dc43}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3e3486f9-7fcc-4742-99da-6dc881876821}, !- Handle
+  {dd61f600-cba1-40d0-906e-87b58459fe54}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0458c40a-32c2-4c8b-b3fe-cacb47444a33}, !- Handle
+  {dd852541-9228-41ef-bb67-7c2d03c3566d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {148e08bb-9b95-45a0-920a-b0da41945c5f}, !- Handle
+  {dea13a44-db8c-460b-974f-f0f996d767f3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6db8fecb-acb0-493c-ab20-5d87464a15c0}, !- Handle
+  {debccd2f-5df7-4692-9b96-9b9f4207ef23}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a815e429-dedd-4a1f-acea-f9a5211a44b6}, !- Handle
+  {deef944c-116a-41a6-b6dd-55bf6c6ecd69}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {49923d70-8aeb-47b5-862d-7d70c997f38c}, !- Handle
+  {dffa7b1a-e94c-48c9-92d3-cb71258ba1a3}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {b85d2ddc-e699-49b6-b5b2-8e18e25cb520}, !- Handle
+  {e064d673-1ebf-4c42-b6e1-714de209400c}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9a98fc48-e15e-45aa-aebb-5013b25df86f}, !- Handle
+  {e0691f32-cbf6-4606-bae6-5570cc69b2fb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0a88a73f-2c78-4d50-8fba-faeb30fcf839}, !- Handle
+  {e0af98b1-73c9-49d7-8fb1-e34644fbea86}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9d48f54b-ec38-4fe2-9cb3-77fb339b1dd5}, !- Handle
+  {e0eb2049-034e-4c37-a7fe-b94a26f2cc16}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {da03f379-8ce3-48ff-9f3d-5f5720a4e7f8}, !- Handle
+  {e1e7c8e0-4fcc-4f85-99fd-739c71e34bb3}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {dce648fe-9996-48f0-970f-2ceb13f618c1}, !- Handle
+  {e27a20f3-2c6d-455f-80d2-b4ca3476e354}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {ea880128-3b95-49ce-b49f-fd9ab91d2b24}, !- Handle
+  {e2ddbbd2-349f-4ce2-91ce-edbab7c1638f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {b1e4af45-cf2f-4f81-8cbc-e0e7a619638c}, !- Handle
+  {e3a04909-c395-4866-9b8c-46362bc2ba02}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b04aa51c-8689-4c50-9f2e-45d5077b8f12}, !- Handle
+  {e4631c87-dda8-493f-97b4-c6db2cb6dff4}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {338fc44e-4fea-4770-acc6-bb5c29b8d0aa}, !- Handle
+  {e4a8521a-c5e5-4d7c-bedb-77efdc74bdcc}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {60f976be-357b-4ca2-a8cf-0b07a6095f92}, !- Handle
+  {e52d4737-c9f3-47c4-9fdd-52490c34d3f7}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {a7a1bc49-9dc2-48a5-b87b-a0ead2acab06}, !- Handle
+  {e557ae47-dfab-42ae-9f08-204608b08def}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {551297c5-c59d-4f08-9bf7-2606c0e4d4c4}, !- Handle
+  {e61bd81b-2c14-4e06-bf77-aea511b22e09}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6b4a88b4-c34c-4a12-bed4-63e0a3ecd609}, !- Handle
+  {e7beb317-ec91-4fa3-b090-a95bcc7e39e0}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {78caa5c8-b135-4b56-98e4-7afbf55f1237}, !- Handle
+  {e802aada-f9bd-458f-b313-158e6fdb7f82}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {dd3da67e-a186-4644-a7be-88b006a6106e}, !- Handle
+  {e8caa103-647d-4c53-b40e-a2f52eaee991}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e491d111-b7f8-42db-ae27-86007260703a}, !- Handle
+  {e8fdad99-e540-4bca-ba54-6717662224d9}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {33a7bbac-efa1-49b9-ac70-1c9767f45705}, !- Handle
+  {e91982eb-8bd6-406c-b6b3-6a09de39a71c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {8701cea8-677d-49ee-aef4-0e7d5324d530}, !- Handle
+  {e978a86e-6b65-4c11-9bf6-ea1654515135}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {e04244ff-2957-40bc-805b-8352308f6900}, !- Handle
+  {e9e3dc76-9715-48e1-a8f1-eb0e0fcc1768}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e25b1d7d-b4e1-4198-8f2f-feece20e46b4}, !- Handle
+  {e9f190c2-fcfd-4804-924a-d8bc6bff3b0d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6e3c4c08-2aec-468c-9abf-1f7fd5be085c}, !- Handle
+  {ea155f1f-d9d9-4bda-aca2-5a2dcba0853f}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {0cb188f3-d4b0-417f-98bc-9acf66cd75ac}, !- Handle
+  {ea7408c1-eb40-4f39-bf5c-eced4c5bf92d}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {313e1074-0bb6-4cae-a319-56bf4588e3df}, !- Handle
+  {ea8476c2-45cc-4ed4-a6ad-aea710690c18}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {efe48a56-c52d-40f2-b41d-a9df71bb5f1c}, !- Handle
+  {ec09d094-ecf7-46e5-a3e0-ee0d17bea43e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ae606c3f-3534-48b0-b538-0ba4c3939cc1}, !- Handle
+  {ecf20084-8b50-4aac-a0ce-f0223323f084}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ac83efd4-6e73-4be7-bc44-c9cc77fd4c29}, !- Handle
+  {ed10a837-0834-4990-aa4d-d9b41d148c7c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ed178b20-3160-42ad-ad44-2aae69ee7d93}, !- Handle
+  {ed5b48d4-c625-4146-9858-00a493f1f9b5}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {70c65d07-3cfc-4dd2-9617-07e5d663e8d4}, !- Handle
+  {ef279216-3fca-4756-a196-b9f1f20b56ca}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9b18a5f5-2859-4b96-91af-3be6752853d4}, !- Handle
+  {ef5a273e-d59a-47ad-b451-6e0daac704fa}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a8d4623d-7792-4b21-83fe-68c3dbf8cce7}, !- Handle
+  {f0754399-c24f-4bf8-a207-c5de50825dac}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a835526e-77b5-4727-bbdc-6b9fa9cb1238}, !- Handle
+  {f117d116-5a6c-445e-bdac-34a2f70e2df1}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f5fa6cd7-a878-455f-a1a6-7c4ef4dd4214}, !- Handle
+  {f11c92cb-f897-47e7-9be6-0b90c6f1a9ec}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {d0332265-70be-431b-8e09-454c3f6c1413}, !- Handle
+  {f12d78e3-af93-46fb-82de-36cf2cb73efe}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3ed54a8f-7a17-4bd2-b8ce-efaa23903fae}, !- Handle
+  {f1bc2e18-140d-414f-802c-871f19a7f8d6}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {dbf389a7-fb46-467c-a527-535d65e66491}, !- Handle
+  {f1c3b110-fbab-4dbd-b389-3a77d1182860}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {24e10332-b777-4ad3-85f9-835757b4560a}, !- Handle
+  {f1da23b8-cebc-4cd9-8015-4d83a2e3d1b8}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {f1494f71-f063-4541-b150-3db07cf6c610}, !- Handle
+  {f215acac-83ba-459c-9fdf-15438ecfd0df}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {71acc7db-ce61-448f-b468-a95b3939dbe6}, !- Handle
+  {f21d6227-bebc-4cf3-a9a7-56a1d4f637f6}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {846d28f8-76a2-4b8a-b57f-9927da198cce}, !- Handle
+  {f3866942-92b2-495c-8c09-2042d7ec8e90}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {2c1da9d9-efa4-47e7-a778-a14db2efd88e}, !- Handle
+  {f45c2bda-12b7-4954-983b-160c768bd608}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {60b4f4bf-42e4-4776-8034-f61024c3283b}, !- Handle
+  {f51b9824-639c-40e9-a163-b58b5633723e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {9d281bc4-25ef-49fb-a320-d90cf7062e6a}, !- Handle
+  {f55ad287-8d44-412b-936a-2bd21ec3c091}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {42ed98c0-ef5c-491c-85ef-b0cd7d7d9ea4}, !- Handle
+  {f63fc01e-b028-4239-89cf-15f7538914a5}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {6b37b972-1e08-4891-8719-3281934e3c07}, !- Handle
+  {f678c0f3-adc9-41a6-b8ce-5efc546d74c4}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {32d3a25d-f93c-4e29-a7af-48750c47c19d}, !- Handle
+  {f67e8807-8eb8-48a6-b543-f104f23a9857}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {7a356ce2-e89a-43c3-8dff-0bd5102702d0}, !- Handle
+  {f88cd590-2a73-4a9c-b890-b72075a785b9}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {ec9e7a32-5997-445b-b2be-3bdd68db9007}, !- Handle
+  {f9237654-1cd8-41da-8bf2-34d05bb66e2f}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {d58b197d-77f1-4119-8110-69ad256c67d4}, !- Handle
+  {f9280099-8a49-43b8-bf0a-dcca29ccbb95}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8b26a100-d58c-47ee-9d6e-f0a7dca77dcc}, !- Handle
+  {f929ac95-3f64-452b-a231-c13da7165cd7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {55a4c337-d759-4ed8-8cbf-56f1babc7d1f}, !- Handle
+  {f9c98b88-6047-4d6a-842b-b37ac8debd7e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {bf22be3a-d76d-4192-9135-569bad6299cd}, !- Handle
+  {f9ecd35a-873c-439f-8c2f-0290622ea898}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {a80d719f-be1a-4c37-8a1b-0b5efe2dd3d6}, !- Handle
+  {fabf9ece-7afb-4152-b53b-c168ecf0ae77}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {001721ad-f4ae-44e2-88d2-4ecc5d1a6c3f}, !- Handle
+  {fae3439f-eff2-498e-9932-8aab0b48374d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {9914ba43-98b7-4579-86c0-3a317ac4445f}, !- Handle
+  {fae863d9-5570-4c00-a97b-8a237473c89e}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {fb8dab4f-7b40-4a72-8d0a-c4ca0dcb3fce}, !- Handle
+  {faf4e3e4-04fe-42fa-ae39-8b2957eb75d2}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {3a1f1112-8ab8-4b3d-86d5-bfecaa18c2eb}, !- Handle
+  {fb09dc21-5f26-4a7e-be80-823fdad7349a}; !- Construction Name
+
+OS:StandardsInformation:Construction,
+  {a2b67bb7-81df-4ccb-9925-3216542867e1}, !- Handle
+  {fb12c003-ed66-4961-b04c-24808b70c2d4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {a83d90fe-b296-4061-8e8f-0c505c23d9fb}, !- Handle
+  {fb3b9696-9ad5-4848-80be-7aedfe68d70b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {360d96b7-7a25-4aaf-a954-1f833fac612a}, !- Handle
+  {fb6c3304-4070-48f2-81f3-a887a088f7d4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {18f35a17-863e-448b-b162-e6358d3c3aad}, !- Handle
+  {fbc3249d-2131-4727-aa01-fdf67749c734}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {79d1834b-e701-4f47-9791-825613fc58e5}, !- Handle
+  {fbee9b4e-a7ec-4221-9cfd-885529c6501e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {0b4176ad-2f8c-4813-8edb-96b4d2cdcb41}, !- Handle
+  {fc6c0b3d-bad2-4fd2-87fe-e62b941dc03d}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {838c6fd7-f70f-476f-9fff-e0eebfe2aedc}, !- Handle
+  {fd116904-4b29-4329-a874-3c59b81dc575}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {bd1e55d8-e29c-456e-a1a2-603ff697e0ed}, !- Handle
+  {fd9ae786-e7ac-429c-a672-def9489f8880}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e06144f9-e98e-428d-957b-c374a0b03922}, !- Handle
+  {fed678a4-65fc-42d6-8a3d-5298af0c87cc}; !- Construction Name
 
