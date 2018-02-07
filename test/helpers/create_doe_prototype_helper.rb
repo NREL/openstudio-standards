@@ -14,6 +14,7 @@ end
 
 # Create a base class for testing doe prototype buildings
 class CreateDOEPrototypeBuildingTest < Minitest::Test
+  attr_accessor :current_model
 
   def setup
     # Make a directory to save the resulting models
@@ -119,13 +120,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       idf_path = OpenStudio::Path.new(idf_path_string)            
       osm_path_string = "#{run_dir}/final.osm"
       output_path = OpenStudio::Path.new(run_dir)
-            
+
       model = nil
             
       # Create the model, if requested
       if create_models
         prototype_creator = Standard.build("#{template}_#{building_type}")
         model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+        @current_model = model
+        puts model.class
         output_variable_array =
           [
           "Facility Total Electric Demand Power",
