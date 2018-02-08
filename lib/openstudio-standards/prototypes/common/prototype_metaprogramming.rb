@@ -182,8 +182,9 @@ end
       if @standards_data['prototype_inputs'].nil?
         raise (\"could not find prototype_inputs in standards_data these tables were loaded only. \#{@standards_data.keys} \")
       else
-     puts \"these table are present in meta......\"
-     puts @standards_data.keys
+        puts \"loaded these tables in child...\"
+        puts @standards_data.keys.size
+        raise(\"tables not all loaded in parent \#{@standards_data.keys}\") if @standards_data.keys.size < 24
      end
       @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
       if @prototype_input.nil?

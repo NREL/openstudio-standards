@@ -23,8 +23,6 @@ class NECB2011 < Standard
     @standards_data['tables'].each do |table|
       @standards_data[table['name']] = table
     end
-    puts "loaded these tables..."
-    puts @standards_data.keys
     return @standards_data
   end
 
@@ -69,6 +67,9 @@ class NECB2011 < Standard
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    puts "loaded these tables..."
+    puts @standards_data.keys.size
+    raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
   end
 
   def get_all_spacetype_names
