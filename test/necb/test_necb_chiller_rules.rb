@@ -37,7 +37,7 @@ class HVACEfficienciesTest < MiniTest::Test
     # Use the expected chiller cop data to generate suitable equipment capacities for the test to cover all
     # the relevant equipment capacity ranges
     # This implementation assumed a max of 3 capacity intervals for chillers where in reality only one range is needed
-    # for NECB 2011
+    # for NECB2011
     chiller_type_cap = {}
     chiller_type_cap['Rotary Screw'] = []
     chiller_type_cap['Reciprocating'] = []
@@ -128,7 +128,7 @@ class HVACEfficienciesTest < MiniTest::Test
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity. 
-  # NECB 2011 rule for number of chillers is:
+  # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
   def test_number_of_chillers
@@ -307,7 +307,7 @@ class HVACEfficienciesTest < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

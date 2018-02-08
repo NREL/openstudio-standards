@@ -83,7 +83,7 @@ data_hash = JSON.parse(File.read("#{File.dirname(__FILE__)}/../refactor/prototyp
 
 data_hash.each do |info|
   info.delete('geometry')
-  #   if info['template'] == 'NECB 2011'
+  #   if info['template'] == 'NECB2011'
   #     puts "fudsfadfas"
   #     info.delete("system_to_space_map")
   #

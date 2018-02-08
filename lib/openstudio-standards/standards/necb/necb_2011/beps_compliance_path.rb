@@ -30,9 +30,15 @@ class NECB2011
     end
 
     # Get the space Type data from @standards data
+    spacetype_data = nil
+    if @standards_data['space_types'].is_a?(Hash) == true
+      spacetype_data = @standards_data['space_types']['table']
+    else
+      spacetype_data = @standards_data['space_types']
+    end
     standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
-    space_type_properties = @standards_data['space_types'].select { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }[0]
+    space_type_properties = spacetype_data.select { |s| (s['building_type'] == standards_building_type) && (s['space_type'] == standards_space_type) }[0]
 
     # Need to add a check, or it'll crash on space_type_properties['occupancy_per_area'].to_f below
     if space_type_properties.nil?

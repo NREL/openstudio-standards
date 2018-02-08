@@ -162,7 +162,7 @@ class NECB2011
     # Calculate the percent OA at design airflow
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
-    # The NECB 2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
+    # The NECB2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
     # The calculation for this is done below, to modify erv_required
     # erv_cfm set to nil here as placeholder, will lead to erv_required = false
     erv_cfm = nil
@@ -180,7 +180,7 @@ class NECB2011
       erv_required = true
     end
 
-    # This code modifies erv_required for NECB 2011
+    # This code modifies erv_required for NECB2011
     # Calculation of exhaust heat content and check whether it is > 150 kW
 
     # get all zones in the model
@@ -234,7 +234,7 @@ class NECB2011
     weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
 
     # get winter(heating) design temp stored in array
-    # Note that the NECB 2011 specifies using the 2.5% january design temperature
+    # Note that the NECB2011 specifies using the 2.5% january design temperature
     # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
     outdoor_temp = weather_file.heating_design_info[1]
 
@@ -976,7 +976,7 @@ class NECB2011
     motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = template.dup
+    template_mod = @template
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
@@ -1068,13 +1068,13 @@ class NECB2011
   end
 
   def model_apply_sizing_parameters(model)
-    model.getSizingParameters.setHeatingSizingFactor(@standards_data['sizing_factor_max_heating']['value'])
-    model.getSizingParameters.setCoolingSizingFactor(@standards_data['sizing_factor_max_cooling']['value'])
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{@standards_data['sizing_factor_max_heating']['value']} for heating and #{@standards_data['sizing_factor_max_cooling']['value']} for cooling.")
+    model.getSizingParameters.setHeatingSizingFactor(self.get_standards_constant('sizing_factor_max_heating'))
+    model.getSizingParameters.setCoolingSizingFactor(self.get_standards_constant('sizing_factor_max_cooling'))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{self.get_standards_constant('sizing_factor_max_heating')} for heating and #{self.get_standards_constant('sizing_factor_max_heating')} for cooling.")
   end
 
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    fan_constant_volume.setPressureRise(@standards_data['fan_constant_volume_pressure_rise_value']['value'])
+    fan_constant_volume.setPressureRise( self.get_standards_constant('fan_constant_volume_pressure_rise_value'))
     return true
   end
 
@@ -1083,12 +1083,12 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise_value']['value'])
+    fan_variable_volume.setPressureRise(self.get_standards_constant('fan_variable_volume_pressure_rise_value'))
     return true
   end
 
   def apply_economizers(climate_zone, model)
-    # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
+    # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
     econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
     econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
@@ -1183,29 +1183,7 @@ class NECB2011
   # Helper method to find out which climate zone set contains a specific climate zone.
   # Returns climate zone set name as String if success, nil if not found.
   def model_find_climate_zone_set(model, clim)
-    result = nil
-
-    possible_climate_zones = []
-    standards_data['climate_zone_sets'].each do |climate_zone_set|
-      if climate_zone_set['climate_zones'].include?(clim)
-        possible_climate_zones << climate_zone_set['name']
-      end
-    end
-
-    # Check the results
-    if possible_climate_zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
-    elsif possible_climate_zones.size > 2
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
-    end
-    result = possible_climate_zones.sort.first
-
-    # Check that a climate zone set was found
-    if result.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
-    end
-
-    return result
+    return "NECB-CNEB ClimatZone 4-8"
   end
 
   def add_sys1_unitary_ac_baseboard_heating(model, zones, boiler_fueltype, mau, mau_heating_coil_type, baseboard_type, hw_loop)
@@ -2375,7 +2353,7 @@ class NECB2011
 
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
-          # NECB 2011 minimum zone airflow setting
+          # NECB2011 minimum zone airflow setting
           min_flow_rate = 0.002 * zone.floorArea
           vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate)
           vav_terminal.setMaximumReheatAirTemperature(43.0)
@@ -2560,7 +2538,6 @@ class NECB2011
     # Array to store schedule objects
     schedule_type_array = []
 
-    standard = Standard.build('NECB 2011')
 
     # find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
@@ -2581,7 +2558,7 @@ class NECB2011
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        space_type_property = standard.model_find_object(standards_data['space_types'], 'template' => 'NECB 2011', 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
+        space_type_property = model_find_object(standards_data['space_types'], 'template' => @template, 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
@@ -2696,7 +2673,7 @@ class NECB2011
     return schedule_type_array.uniq!, space_zoning_data_array
   end
 
-  # This method will take a model that uses NECB 2011 spacetypes , and..
+  # This method will take a model that uses NECB2011 spacetypes , and..
   # 1. Create a building story schema.
   # 2. Remove all existing Thermal Zone defintions.
   # 3. Create new thermal zones based on the following definitions.
@@ -2951,4 +2928,49 @@ class NECB2011
       raise(" #{errors}")
     end
   end
+
+  # Creates thermal zones to contain each space, as defined for each building in the
+  # system_to_space_map inside the Prototype.building_name
+  # e.g. (Prototype.secondary_school.rb) file.
+  #
+  # @param (see #add_constructions)
+  # @return [Bool] returns true if successful, false if not
+  def model_create_thermal_zones(model, space_multiplier_map = nil)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
+    space_multiplier_map = {} if space_multiplier_map.nil?
+
+    # Remove any Thermal zones assigned
+    model.getThermalZones.each(&:remove)
+
+    # Create a thermal zone for each space in the self
+    model.getSpaces.sort.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      if thermostat.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
+      else
+        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+          # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+          ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+          ideal_loads.addToThermalZone(zone)
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+  end
+
+
 end

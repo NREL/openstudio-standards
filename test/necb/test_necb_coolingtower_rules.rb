@@ -8,7 +8,7 @@ class HVACEfficienciesTest < MiniTest::Test
   #set to true to run the simulations.
   FULL_SIMULATIONS = false
 
-  # Test to validate NECB 2011 rules for cooling tower:
+  # Test to validate NECB2011 rules for cooling tower:
   # "if capacity <= 1750 kW ---> one cell
   # if capacity > 1750 kW ---> number of cells = capacity/1750 rounded up"
   # power = 0.015 x capacity in kW
@@ -76,13 +76,13 @@ class HVACEfficienciesTest < MiniTest::Test
           necb2011_num_cells = (tower_cap/first_cutoff_twr_cap + 0.5).round
         end
         if tower.numberofCells == necb2011_num_cells then num_of_cells_is_correct = true end
-        assert(num_of_cells_is_correct, 'Tower number of cells is not correct based on NECB 2011')
+        assert(num_of_cells_is_correct, 'Tower number of cells is not correct based on NECB2011')
         # compare the fan power to expected value
         necb2011_fan_power = 0.015 * tower_cap
         tower_fan_power_is_correct = false
         rel_diff = (necb2011_fan_power - tower.fanPoweratDesignAirFlowRate.to_f).abs/necb2011_fan_power
         if rel_diff < tol then tower_fan_power_is_correct = true end
-        assert(tower_fan_power_is_correct, 'Tower fan power is not correct based on NECB 2011')
+        assert(tower_fan_power_is_correct, 'Tower fan power is not correct based on NECB2011')
       end
     end
   end
@@ -107,7 +107,7 @@ class HVACEfficienciesTest < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)
