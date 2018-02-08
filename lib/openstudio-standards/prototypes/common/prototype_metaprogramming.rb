@@ -62,7 +62,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
+    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
@@ -179,11 +179,11 @@ end
       @building_type = BUILDING_TYPE
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
-      @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @building_type }, nil)
+      @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
       if @prototype_input.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @building_type }}, cannot create model.\")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => \"#{template}\",'building_type' => \"#{name}\" }}, cannot create model.\")
         #puts JSON.pretty_generate(standards_data['prototype_inputs'])
-        raise(\"Could not find prototype inputs for \#{@template}\#{@name}, cannot create model.\")
+        raise(\"Could not find prototype inputs for #{template} #{name}, cannot create model.\")
         return false
       end
       @lookup_building_type = self.model_get_lookup_name(@building_type)
@@ -199,9 +199,6 @@ end
   # has its own set of methods that change things which are not
   # common across all prototype buildings, even within a given Standard.
     def set_variables()
-      # Will be overwritten in class reopen file.
-      # add all building methods for now.
-      self.extend(#{name}) unless @template == 'NECB2011'
     end
 
   # Returns the mapping between the names of the spaces
