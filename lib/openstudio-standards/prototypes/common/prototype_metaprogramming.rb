@@ -180,10 +180,11 @@ end
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
       if @standards_data['prototype_inputs'].nil?
-        raise (\"could not find prototype_inputs in standards_data \#{JSON.pretty_generate(@standards_data)} \")
-
-
-      end
+        raise (\"could not find prototype_inputs in standards_data these tables were loaded only. \#{@standards_data.keys} \")
+      else
+     puts \"these table are present in meta......\"
+     puts @standards_data.keys
+     end
       @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
       if @prototype_input.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => \"#{template}\",'building_type' => \"#{name}\" }}, cannot create model.\")

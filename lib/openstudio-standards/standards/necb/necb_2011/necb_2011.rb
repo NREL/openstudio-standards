@@ -17,11 +17,14 @@ class NECB2011 < Standard
     @standards_data = {}
     files.each do |file|
       @standards_data = @standards_data.deep_merge (JSON.parse(File.read(file)))
+      puts "loading standards data from #{file}"
     end
     #needed for compatibility of standards database format
     @standards_data['tables'].each do |table|
       @standards_data[table['name']] = table
     end
+    puts "loaded these tables..."
+    puts @standards_data.keys
     return @standards_data
   end
 
