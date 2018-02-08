@@ -7,7 +7,7 @@ class WeatherTests < Minitest::Test
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development. This will compare
   # to values in an excel/csv file stored in the weather folder.
-  # NECB 2011 8.4.2.3 
+  # NECB2011 8.4.2.3
   # @return [Bool] true if successful. 
   def test_weather_reading()
     #todo Must deal with ground temperatures..They are currently not correct for NECB.

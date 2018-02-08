@@ -1,245 +1,76 @@
-# This class holds methods that apply NECB 2011 rules.
+# This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 require 'rubyXL'
+require 'deep_merge'
 class NECB2011 < Standard
-  @@template = 'NECB 2011' # rubocop:disable Style/ClassVars
-  register_standard @@template
+  @template = self.new.class.name # rubocop:disable Style/ClassVars
+  register_standard( @template )
   attr_reader :template
+  attr_accessor :necb_standards_data
+  attr_accessor :used_standards_data
+
+
+  def load_standards_database_new()
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/"
+    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+    @standards_data = {}
+    files.each do |file|
+      @standards_data = @standards_data.deep_merge (JSON.parse(File.read(file)))
+    end
+    #needed for compatibility of standards database format
+    @standards_data['tables'].each do |table|
+      @standards_data[table['name']] = table
+    end
+    return @standards_data
+  end
+
+
+  # Create a schedule from the openstudio standards dataset and
+  # add it to the model.
+  #
+  # @param schedule_name [String} name of the schedule
+  # @return [ScheduleRuleset] the resulting schedule ruleset
+  # @todo make return an OptionalScheduleRuleset
+  def model_add_schedule(model, schedule_name)
+
+    super(model, schedule_name)
+  end
+
+  def get_standards_constant(name)
+    object = @standards_data['constants'].detect {|constant| constant['name'] == name}
+    raise("could not find #{name} in standards constants database. ") if object.nil? or object['value'].nil?
+    return object['value']
+  end
+
+  def get_standards_formula(name)
+    object = @standards_data['formulas'].detect {|formula| formula['name'] == name}
+    raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
+    return object['value']
+  end
+
+  def get_standards_table(table_name, search_criteria = nil)
+    return_objects = nil
+    object = @standards_data['tables'].detect {|table| table['name'] == table_name}
+    raise("could not find #{table_name} in standards table database. ") if object.nil? or object['table'].nil?
+    if search_criteria.nil?
+      return object['table']
+    else
+      return_objects = model_find_objects(object['table'], search_criteria)
+      return return_objects
+    end
+  end
+
 
   def initialize
     super()
-    @template = @@template
-    load_standards_database
-    @necb_standards_data = Hash.new
-
-    #load NECB 2015 Table C1 for NECB 2011 work
-    file = "#{File.dirname(__FILE__)}/data/necb_2015_table_c1.json"
-    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
-
-    file = "#{File.dirname(__FILE__)}/data/regional_fuel_use.json"
-    @necb_standards_data = @necb_standards_data.merge ( JSON.parse(File.read(file)))
-
-
-    # Surfaces
-    @necb_standards_data['surface_thermal_transmittance'] = {
-        'data_type' => 'table',
-        'refs' => ['NECB2011_S_3.2.2.2', 'NECB2011_S_3.2.2.3', 'NECB2011_S_3.2.2.4', 'NECB2011_S_3.2.3.1'],
-        'units' => 'W_per_m2_K',
-        'formula_variable_ranges' => {
-            'hdd' => [0.0, 10000.0]
-        },
-        'table' => [
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.315 : ( hdd < 4000) ? 0.278 : ( hdd < 5000 ) ? 0.247 : ( hdd < 6000) ? 0.210 :( hdd < 7000) ? 0.210 : 0.183"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'formula' => "( hdd < 3000) ? 0.227 : ( hdd < 4000) ? 0.183 : ( hdd < 5000 ) ? 0.183 : ( hdd < 6000) ? 0.162 :( hdd < 7000) ? 0.162 : 0.142"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'formula' => "( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
-            {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'formula' => "( hdd < 3000) ? 2.400 : ( hdd < 7000) ? 2.200 : 1.600"},
-            {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
-            {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'formula' => "( hdd < 3000) ? 0.568 : ( hdd < 4000) ? 0.379 : ( hdd < 7000) ? 0.284 : 0.210"},
-            {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'formula' => "( hdd < 7000) ? 0.757 : 0.379"}
-        ],
-        'notes' => 'Requires hdd to be defined to be evaluated in code. Never have ground windows or doors.'
-    }
-
-    @necb_standards_data['fdwr_formula'] = {
-        'data_type' => 'formula',
-        'refs' => ['NECB2011_S_3.2.1.4(1)'],
-        'formula_variable_ranges' => {
-            'hdd' => [0.0, 10000.0]
-        },
-        'formula' => "( hdd < 4000.0) ? 0.4 : ( hdd >= 4000.0 and hdd < 7000.0 ) ? ( (2000.0 - 0.2 * hdd) / 3000.00) : 0.2;",
-        'units' => 'ratio',
-        'notes' => 'Requires hdd to be defined to be evaluated in code.'
-    }
-
-    @necb_standards_data['skylight_to_roof_ratio_max_value'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_3.2.1.4(2)'],
-        'value' => 0.05,
-        'units' => 'ratio'
-    }
-
-    @necb_standards_data['sizing_factor_max_cooling'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_8.4.4.9(1)'],
-        'unit' => 'ratio',
-        'value' => 1.10
-    }
-
-    @necb_standards_data['sizing_factor_max_heating'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_8.4.4.9(2)'],
-        'unit' => 'ratio',
-        'value' => 1.30
-    }
-
-
-    @necb_standards_data['occupancy_sensors_space_types_formula'] = {
-        'data_type' => 'formula',
-        'refs' => ['NECB2011_S_8.4.4.6(3)'],
-        'formula_variable_ranges' => {
-            'standard_space_type_name' => ["String"],
-            'floor_area' => [0.0, 9999999999.9]
-        },
-        'formula' => " ( [ 'Storage area','Storage area - refrigerated','Hospital - medical supply'].include?(standard_space_type_name) and floor_area < 100.0) or ( 'Office - enclosed' == standard_space_type_name and floor_area < 25.0) ? true : false ",
-        'units' => 'bool',
-        'notes' => ''
-    }
-
-    #Fan Information
-    @necb_standards_data['fan_constant_volume_pressure_rise_value'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 640.00,
-        'units' => 'Pa'
-    }
-
-    @necb_standards_data['fan_variable_volume_pressure_rise_value'] = {
-        'data_type' => 'value',
-        'ref' => ['NECB2011_S_5.Assumption'],
-        'value' => 1458.33,
-        'units' => 'Pa',
-        'notes' => 'Sets the fan pressure rise based on the Prototype buildings inputs which are governed by the flow rate coming through the fan and whether the fan lives inside a unit heater, PTAC, etc. 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)'
-    }
-
-
-    # NECB Infiltration rate information for standard.
-    @necb_standards_data['infiltration_rate_m3_per_s_per_m2'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.25 * 0.001, # m3/s/m2,
-        'units' => 'm3/s/m2',
-        'notes' => ''
-    }
-
-    @necb_standards_data['infiltration_constant_term_coefficient'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['infiltration_temperature_term_coefficient'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_5.Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['infiltration_velocity_term_coefficient'] = {
-        'data_type' => 'value',
-        'refs' => ['Assumption'],
-        'value' => 0.224,
-        'units' => '',
-        'notes' => ''
-    }
-    @necb_standards_data['infiltration_velocity_squared_term_coefficient'] = {
-        'data_type' => 'value',
-        'refs' => ['Assumption'],
-        'value' => 0.00,
-        'units' => '',
-        'notes' => ''
-    }
-
-    @necb_standards_data['skylight_to_roof_ratio'] = {
-        'data_type' => 'value',
-        'refs' => ['NECB2011_S_3.2.1.4(2)'],
-        'value' => 0.05,
-        'units' => '',
-        'notes' => ''
-    }
-
-    @necb_standards_data['necb_hvac_system_selection_type'] = {
-        'data_type' => 'table',
-        'table' => [
-            {'necb_hvac_system_selection_type' => '- undefined -', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 0, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 0, 'max_stories' => 4, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Assembly Area', 'min_stories' => 4, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Automotive Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 19.999, 'system_type' => 1, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Data Processing Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 2, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'General Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 6, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Historical Collections Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 2, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Hospital Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Indoor Arena', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 7, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Industrial Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Residential/Accomodation Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 1, 'dwelling' => true},
-            {'necb_hvac_system_selection_type' => 'Sleeping Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => true},
-            {'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 3, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Supermarket/Food Services Area - vented', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Warehouse Area', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 4, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Warehouse Area - refrigerated', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => 5, 'dwelling' => false},
-            {'necb_hvac_system_selection_type' => 'Wildcard', 'min_stories' => 0, 'max_stories' => 99999, 'max_cooling_capacity_kw' => 99999, 'system_type' => nil, 'dwelling' => false}
-        ]
-    }
-
-
-    @standards_data = @standards_data.merge(@necb_standards_data)
-
-    #@standards_data['schedules'] = standards_data['schedules'].select {|s| s['name'].to_s.match(/NECB.*/)}
+    @template = self.class.name
+    @standards_data = self.load_standards_database_new()
   end
 
-  def save_standards_database()
-    necb_2011_workbook = RubyXL::Workbook.new
-
-    #Values
-    values_sheet = necb_2011_workbook.add_worksheet('Values')
-    values_array = @necb_standards_data.select {|key, value| value['data_type'] == 'value'}
-    header_row = 0
-    ['key', 'value', 'units', 'refs', 'notes'].each_with_index do |header, index|
-      values_sheet.add_cell(header_row, index, header).change_font_bold(true)
-    end
-    row = 1
-    values_array.each_pair do |key, value|
-      values_sheet.add_cell(row, 0, key)
-      values_sheet.add_cell(row, 1, value['value'])
-      values_sheet.add_cell(row, 2, value['units'])
-      values_sheet.add_cell(row, 3, value['refs'].to_s)
-      values_sheet.add_cell(row, 4, value['notes'])
-      row += 1
-    end
-
-    #Formulas
-    formula_sheet = necb_2011_workbook.add_worksheet('Formulas')
-    formula_array = @necb_standards_data.select {|key, value| value['data_type'] == 'formula'}
-    row = 0
-    formula_array.each_pair do |key, value|
-      formula_sheet.add_cell(row, 0, key)
-      formula_sheet.add_cell(row, 1, value['formula'])
-      formula_sheet.add_cell(row, 2, value['refs'])
-      formula_sheet.add_cell(row, 3, value['units'].to_s)
-      formula_sheet.add_cell(row, 3, value['notes'])
-      row += 1
-    end
-
-    #Tables
-
-    table_array = @necb_standards_data.select {|key, value| value['data_type'] == 'table'}
-
-    row = 0
-    table_array.each_pair do |key, value|
-      sheet = necb_2011_workbook.add_worksheet(key)
-      sheet.add_cell(0, 0, 'refs').change_font_bold(true)
-      sheet.add_cell(0, 1, value['refs'])
-      sheet.add_cell(1, 0, 'units').change_font_bold(true)
-      sheet.add_cell(1, 1, value['units'].to_s)
-      sheet.add_cell(2, 0, 'notes').change_font_bold(true)
-      sheet.add_cell(2, 1, value['notes'])
-      header_row = 3
-      value['table'].first.keys().each_with_index do |header, index|
-        sheet.add_cell(header_row, index, header).change_font_bold(true)
-      end
-      #table header
-      table_row = header_row + 1
-      value['table'].each do |row|
-        row.keys.each_with_index do |item, index|
-          sheet.add_cell(table_row, index, row[item])
-        end
-        table_row += 1
-      end
-    end
-    necb_2011_workbook.write("/home/osdev/windows-host/projects/file.xlsx")
+  def get_all_spacetype_names
+    return @standards_data['space_types']['table'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -260,10 +91,10 @@ class NECB2011 < Standard
   end
 
   # this method returns the default system fuel types by epw_file.
-  def get_canadian_system_defaults_by_weatherfile_name( model )
+  def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data["regional_fuel_use"]["table"].detect{|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }
+    fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
@@ -273,7 +104,9 @@ class NECB2011 < Standard
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    @standards_data['necb_2015_table_c1']['table'].each do |necb|
+    #this extracts the table from the json database.
+    necb_2015_table_c1 = @standards_data['tables'].detect {|table| table['name'] == 'necb_2015_table_c1'}['table']
+    necb_2015_table_c1.each do |necb|
       next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
       dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
       if min_distance > dist
@@ -314,7 +147,9 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map) # standards candidate
     # For some building types, stories are defined explicitly
 
-    return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
+      raise("sizing run 0 failed!")
+    end
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
@@ -323,8 +158,11 @@ class NECB2011 < Standard
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
     model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
-    return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-    # This is needed for NECB 2011 as a workaround for sizing the reheat boxes
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+      raise("sizing run 1 failed!")
+    end
+
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
@@ -455,9 +293,15 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
+    spacetype_data = nil
+    if @standards_data['space_types'].is_a?(Hash) == true
+      spacetype_data = @standards_data['space_types']['table']
+    else
+      spacetype_data = @standards_data['space_types']
+    end
     raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-    space_type_properties = @standards_data['space_types'].detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
+    space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
   end
 
@@ -488,9 +332,9 @@ class NECB2011 < Standard
     end
     # Calculate the total infiltration, assuming
     # that it only occurs through exterior walls and roofs (not floors as
-    # explicit stated in the NECB 2011 so overhang/cantilevered floors will
+    # explicit stated in the NECB2011 so overhang/cantilevered floors will
     # have no effective infiltration)
-    tot_infil_m3_per_s = @standards_data['infiltration_rate_m3_per_s_per_m2']['value'] * exterior_wall_and_roof_and_subsurface_area
+    tot_infil_m3_per_s = self.get_standards_constant('infiltration_rate_m3_per_s_per_m2') * exterior_wall_and_roof_and_subsurface_area
     # Now spread the total infiltration rate over all
     # exterior surface area (for the E+ input field) this will include the exterior floor if present.
     all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
@@ -526,10 +370,10 @@ class NECB2011 < Standard
     infiltration.setName("#{space.name} Infiltration")
     infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
     infiltration.setSchedule(infil_sch)
-    infiltration.setConstantTermCoefficient(@standards_data['infiltration_constant_term_coefficient']['value'])
-    infiltration.setTemperatureTermCoefficient(@standards_data['infiltration_constant_term_coefficient']['value'])
-    infiltration.setVelocityTermCoefficient(@standards_data['infiltration_velocity_term_coefficient']['value'])
-    infiltration.setVelocitySquaredTermCoefficient(@standards_data['infiltration_velocity_squared_term_coefficient']['value'])
+    infiltration.setConstantTermCoefficient(self.get_standards_constant('infiltration_constant_term_coefficient'))
+    infiltration.setTemperatureTermCoefficient(self.get_standards_constant('infiltration_constant_term_coefficient'))
+    infiltration.setVelocityTermCoefficient(self.get_standards_constant('infiltration_velocity_term_coefficient'))
+    infiltration.setVelocitySquaredTermCoefficient(self.get_standards_constant('infiltration_velocity_squared_term_coefficient'))
     infiltration.setSpace(space)
 
     return true
@@ -544,7 +388,7 @@ class NECB2011 < Standard
         next if space.empty?
         space = space.get
 
-        # Check if space type for this space matches NECB 2011 specific space type
+        # Check if space type for this space matches NECB2011 specific space type
         # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
 
         if (space_type_name == 'Storage area' && space.floorArea < 100) ||
@@ -553,7 +397,7 @@ class NECB2011 < Standard
             (space_type_name == 'Office - enclosed' && space.floorArea < 25)
           # If there is only one space assigned to this space type, then reassign this stub
           # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
-          # for this space. Required to use reduced LPD by NECB 2011 0.9 factor.
+          # for this space. Required to use reduced LPD by NECB2011 0.9 factor.
           space_type_name_occsens = space_type_name + ' - occsens'
           stub_space_type_occsens = model.getSpaceTypeByName("#{building_type} #{space_type_name_occsens}")
 
@@ -575,4 +419,6 @@ class NECB2011 < Standard
     end
     return true
   end
+
+
 end

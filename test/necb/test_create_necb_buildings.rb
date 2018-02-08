@@ -13,7 +13,7 @@ NECB_epw_files_for_cdn_climate_zones = [
     'CAN_NU_Resolute.AP.719240_CWEC2016.epw']
 
 NECB_climate_zone = ['NECB HDD Method']
-NECB_templates = [ 'NECB 2011']
+NECB_templates = ['NECB2011','NECB2015']
 CREATE_MODELS = true
 RUN_MODELS = false
 COMPARE_RESULTS = false

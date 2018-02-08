@@ -9,7 +9,7 @@ class NECB2011
       swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
       # Add the main service water loop
-      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && ( template != 'NECB2011' &&  template != 'NECB2015')
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
                                            nil,
@@ -45,7 +45,6 @@ class NECB2011
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
         building_type = 'Space Function'
-        puts 'here'
         puts space_type_map
 
         space_type_map.sort.each do |space_type_name, space_names|

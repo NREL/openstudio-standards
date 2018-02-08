@@ -48,7 +48,7 @@ class SingleTestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   ]
 
-  templates = 'NECB 2011'
+  templates = 'NECB2011'
   climate_zones = 'NECB HDD Method'
 
   epw_files = [

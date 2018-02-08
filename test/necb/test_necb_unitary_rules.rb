@@ -15,7 +15,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_efficiencies_expected_results.csv')
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
     
     # Initialize hashes for storing expected unitary efficiency data from file
     heating_type_min_cap = {}
@@ -223,7 +223,7 @@ class HVACEfficienciesTest < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

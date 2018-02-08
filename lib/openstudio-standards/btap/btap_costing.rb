@@ -1,14 +1,11 @@
 require "#{File.dirname(__FILE__)}/btap"
-require 'rubygems'
 require 'json'
-require 'roo'
 require 'rest-client'
 require 'openssl'
 require 'aes'
-require 'geocoder'
 require 'singleton'
-require "highline/import"
-require 'launchy'
+require 'roo'
+
 
 class BTAPCosting
 
@@ -131,6 +128,7 @@ class BTAPCosting
   end
 
   def load_data_from_excel
+    @costing_database = {} if @costing_database.nil?
     unless File.exist?(@xlsx_path)
       raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
     end

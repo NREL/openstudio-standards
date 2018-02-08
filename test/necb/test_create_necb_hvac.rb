@@ -280,11 +280,11 @@ class FullHVACTest < MiniTest::Test
     
   
   #  System #6 Todo
-  #•	Set_vav_damper_action for NECB was quick fixed..needs to be review if this is appropriate for NECB 2011 see git log for 
+  #•	Set_vav_damper_action for NECB was quick fixed..needs to be review if this is appropriate for NECB2011 see git log for
   #         def set_vav_damper_action(template, climate_zone)
   #          damper_action = nil
   #          case template       
-  #          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB 2011'
+  #          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'NECB2011'
   #            damper_action = 'Single Maximum'
   #          when '90.1-2007', '90.1-2010', '90.1-2013'
   #            damper_action = 'Dual Maximum'
@@ -398,7 +398,7 @@ class FullHVACTest < MiniTest::Test
   def run_the_measure(model, sizing_dir) 
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

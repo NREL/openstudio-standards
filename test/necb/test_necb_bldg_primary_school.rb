@@ -14,7 +14,7 @@ class TestNECBPrimarySchool < Minitest::Test
   def test_regression_natural_gas()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @gas_location,
-                                                   'NECB 2011'
+                                                   'NECB2011'
     )
     assert(result, msg)
   end
@@ -22,7 +22,7 @@ class TestNECBPrimarySchool < Minitest::Test
   def test_regression_electric()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
-                                                   'NECB 2011'
+                                                   'NECB2011'
     )
     assert(result, msg)
   end
