@@ -4,17 +4,9 @@ class Standard
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
-
-      if template == 'NECB 2011'
-        # vars x1..x10 not required here, only service water heating fuel type, which is
-        # weather file dependent for NECB 2011
-        x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      else
-        swh_fueltype = prototype_input['main_water_heater_fuel']
-      end
-
+      swh_fueltype = prototype_input['main_water_heater_fuel']
       # Add the main service water loop
-      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && template != 'NECB2011'
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
                                            nil,
@@ -32,7 +24,7 @@ class Standard
       # TODO remove special logic for large office SWH end uses
       # TODO remove special logic for stripmall SWH end uses and service water loops
       # TODO remove special logic for large hotel SWH end uses
-      if building_type == 'LargeOffice' && template != 'NECB 2011'
+      if building_type == 'LargeOffice' && template != 'NECB2011'
 
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
@@ -46,7 +38,7 @@ class Standard
                                  space_name,
                                  building_type)
         end
-      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1', 'Mechanical_Mid_ZN_1', 'Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
@@ -59,7 +51,7 @@ class Standard
                                  space_name,
                                  building_type)
         end
-      elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
+      elsif building_type == 'RetailStripmall' && template != 'NECB2011'
 
         return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
 
@@ -113,15 +105,15 @@ class Standard
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
 
-        if template == 'NECB 2011'
+        if template == 'NECB2011'
           building_type = 'Space Function'
         end
 
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
-            'template' => template,
-            'building_type' => model_get_lookup_name(building_type),
-            'space_type' => space_type_name
+              'template' => template,
+              'building_type' => model_get_lookup_name(building_type),
+              'space_type' => space_type_name
           }
           data = model_find_object(standards_data['space_types'], search_criteria)
 
@@ -129,18 +121,18 @@ class Standard
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
           space_names.sort.each do |space_name|
             space = model.getSpaceByName(space_name).get
             space_multiplier = nil
             space_multiplier = case template
-            when 'NECB 2011'
-              # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
-              1
-            else
-              space.multiplier
+                                 when 'NECB2011'
+                                   # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
+                                   1
+                                 else
+                                   space.multiplier
                                end
 
             model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
@@ -211,7 +203,9 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
 
     return true
-  end # add swh
+  end
+
+  # add swh
 
   # add typical swh demand and supply to model
   #
@@ -565,18 +559,30 @@ class Standard
       if ['Office', 'PrimarySchool', 'Outpatient', 'Hospital', 'SmallHotel', 'LargeHotel', 'FullServiceRestaurant', 'HighriseApartment'].include?(stds_bldg_type)
         service_water_pump_head = OpenStudio.convert(10.0, 'ftH_{2}O', 'Pa').get
         service_water_pump_motor_efficiency = 0.3
-        if circulating.nil? then irculating = true end
-        if pipe_insul_in.nil? then pipe_insul_in = 0.5 end
+        if circulating.nil? then
+          irculating = true
+        end
+        if pipe_insul_in.nil? then
+          pipe_insul_in = 0.5
+        end
       elsif ['SecondarySchool'].include?(stds_bldg_type)
         service_water_pump_head = OpenStudio.convert(11.4, 'ftH_{2}O', 'Pa').get
         service_water_pump_motor_efficiency = 0.3
-        if circulating.nil? then irculating = true end
-        if pipe_insul_in.nil? then pipe_insul_in = 0.5 end
+        if circulating.nil? then
+          irculating = true
+        end
+        if pipe_insul_in.nil? then
+          pipe_insul_in = 0.5
+        end
       else # values for non-circulating pump
         service_water_pump_head = 0.01
         service_water_pump_motor_efficiency = 1.0
-        if circulating.nil? then irculating = false end
-        if pipe_insul_in.nil? then pipe_insul_in = 0.0 end
+        if circulating.nil? then
+          irculating = false
+        end
+        if pipe_insul_in.nil? then
+          pipe_insul_in = 0.0
+        end
       end
 
       # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)

@@ -620,7 +620,7 @@ module BTAP
       time_series_array = []
       puts env_period.class
       if env_period.nil?
-        puts "here"
+
         time_series_array = [nil]
         return time_series_array
       end

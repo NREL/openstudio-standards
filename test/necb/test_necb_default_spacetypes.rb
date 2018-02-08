@@ -6,7 +6,7 @@ require_relative '../helpers/minitest_helper'
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class NECB2011DefaultSpaceTypesTests < Minitest::Test
   #Standards
-  Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
@@ -18,7 +18,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
 
     header_output = ""
     output = ""
@@ -56,8 +56,8 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         total_lpd = []
         lpd_sched = []
         occSensLPDfactor = 1.0
-        if template == "NECB 2011"
-          # NECB 2011 space types that require a reduction in the LPD to account for 
+        if template == "NECB2011"
+          # NECB2011 space types that require a reduction in the LPD to account for
           # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
           reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
             "Conf./meet./multi-purpose", "Washroom-sch-A",

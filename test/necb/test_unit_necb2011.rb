@@ -5,9 +5,9 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestNECBLargeOffice < CreateDOEPrototypeBuildingTest
   building_type = 'LargeOffice'
 
-  template = 'NECB 2011'
+  template = 'NECB2011'
   climate_zone = 'NECB HDD Method'
-  epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
+  epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
 
 
   model = NECB2011.new()

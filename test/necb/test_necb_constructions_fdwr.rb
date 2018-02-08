@@ -9,15 +9,15 @@ require_relative '../helpers/minitest_helper'
 class NECB_Constructions_FDWR_Tests < Minitest::Test
   #set global weather files sample
   NECB_epw_files_for_cdn_climate_zones = [
-    'CAN_BC_Vancouver.718920_CWEC.epw',#  CZ 4 HDD = 2932
-    'CAN_BC_Kamloops.718870_CWEC.epw',#    CZ 5 HDD = 3567
-    'CAN_ON_Ottawa.716280_CWEC.epw', #CZ 6 HDD = 4563
-    'CAN_PQ_Ste.Agathe.des.Monts.717200_CWEC.epw', #CZ 7aHDD = 5501
-    'CAN_MB_The.Pas.718670_CWEC.epw', #CZ 7b HDD = 6572
-    'CAN_NU_Resolute.719240_CWEC.epw' # CZ 8HDD = 12570
+    'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw',#  CZ 4 HDD = 2932
+    'CAN_BC_Kamloops.AP.718870_CWEC2016.epw',#    CZ 5 HDD = 3567
+    'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw', #CZ 6 HDD = 4563
+    'CAN_AB_Banff.CS.711220_CWEC2016.epw', #CZ 7aHDD = 5501
+    'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
+    'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ] 
   #Set Compliance vintage
-  Templates = ['NECB 2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011','NECB2015']
   
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -82,7 +82,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end
     end
     
-    standard = Standard.build("NECB 2011")
+    standard = Standard.build("NECB2011")
     standard.model_clear_and_set_example_constructions(@model)
     #Ensure that building is Conditioned add spacetype to each space. 
     
@@ -95,7 +95,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # Tests to ensure that the U-Values of the construction are set correctly. This 
   # test will set up  
   # for all HDDs 
-  # NECB 2011 8.4.4.1
+  # NECB2011 8.4.4.1
   # @return [Bool] true if successful. 
   def test_necb_hdd_envelope_rules()
     # Todo - Define a construction directly to a surface. 
@@ -109,7 +109,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     
     
     #Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditions spaces.. So we need conditioning data.  
-    template = "NECB 2011"
+    template = "NECB2011"
     building_type = "Office"
     space_type = "WholeBuilding"
     climate_zone = 'NECB HDD Method'
@@ -133,13 +133,14 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     
     #Iterate through the weather files. 
     NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
-      @hdd = BTAP::Environment::WeatherFile.new(weather_file).hdd18
-      #Iterate through the vintage templates 'NECB 2011', etc..
+
+      #Iterate through the vintage templates 'NECB2011', etc..
       Templates.each do |template|
             
         #Add weather file, HDD.
         standard.model_add_design_days_and_weather_file(@model, 'NECB HDD Method', File.basename(weather_file))
         standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
+        @hdd = standard.get_necb_hdd18( @model )
 
 
         standard.apply_standard_construction_properties(@model) # standards candidate

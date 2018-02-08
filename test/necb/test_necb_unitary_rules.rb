@@ -15,7 +15,7 @@ class HVACEfficienciesTest < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_efficiencies_expected_results.csv')
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
     
     # Initialize hashes for storing expected unitary efficiency data from file
     heating_type_min_cap = {}
@@ -59,7 +59,7 @@ class HVACEfficienciesTest < MiniTest::Test
     baseboard_type = 'Hot Water'
     unitary_heating_types = ['Electric Resistance','All Other']
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     unitary_heating_types.each do |heating_type|
@@ -72,7 +72,7 @@ class HVACEfficienciesTest < MiniTest::Test
         name = "sys3_MuaHtgCoilType~#{heating_coil_type}_UnitaryCap~#{unitary_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule	
         BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -144,7 +144,7 @@ class HVACEfficienciesTest < MiniTest::Test
     chiller_type = 'Scroll'
     mua_cooling_type = 'DX'
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "sys2_CoolingType~#{mua_cooling_type}"
@@ -223,7 +223,7 @@ class HVACEfficienciesTest < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

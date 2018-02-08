@@ -1,7 +1,7 @@
 {
   "heat_pumps_heating": [
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Single Package",
       "minimum_capacity": 0.0,
@@ -21,7 +21,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
       "minimum_capacity": 0.0,
@@ -41,7 +41,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Single Package",
       "minimum_capacity": 65001.0,
@@ -61,7 +61,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
       "minimum_capacity": 65001.0,
@@ -81,7 +81,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Single Package",
       "minimum_capacity": 238841.0,
@@ -101,7 +101,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "cooling_type": "AirCooled",
       "subcategory": "Split System",
       "minimum_capacity": 238841.0,

@@ -1,12 +1,9 @@
-
 class NECB2011
   def model_add_hvac(model, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
-    boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-    necb_autozone_and_autosystem(model, nil, false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype)
-
+    system_fuel_defaults = self.get_canadian_system_defaults_by_weatherfile_name(model)
+    necb_autozone_and_autosystem(model, nil, false, system_fuel_defaults)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
-
     return true
   end
 
@@ -165,7 +162,7 @@ class NECB2011
     # Calculate the percent OA at design airflow
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
-    # The NECB 2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
+    # The NECB2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
     # The calculation for this is done below, to modify erv_required
     # erv_cfm set to nil here as placeholder, will lead to erv_required = false
     erv_cfm = nil
@@ -183,7 +180,7 @@ class NECB2011
       erv_required = true
     end
 
-    # This code modifies erv_required for NECB 2011
+    # This code modifies erv_required for NECB2011
     # Calculation of exhaust heat content and check whether it is > 150 kW
 
     # get all zones in the model
@@ -237,7 +234,7 @@ class NECB2011
     weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
 
     # get winter(heating) design temp stored in array
-    # Note that the NECB 2011 specifies using the 2.5% january design temperature
+    # Note that the NECB2011 specifies using the 2.5% january design temperature
     # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
     outdoor_temp = weather_file.heating_design_info[1]
 
@@ -381,7 +378,7 @@ class NECB2011
       # For versions of OpenStudio using E+ 8.6 or lower
       damper_action_eplus = if air_loop_hvac.model.version < OpenStudio::VersionString.new('2.0.5')
                               'Reverse'
-                            # For versions of OpenStudio using E+ 8.7 or higher
+                              # For versions of OpenStudio using E+ 8.7 or higher
                             else
                               'ReverseWithLimits'
                             end
@@ -979,7 +976,7 @@ class NECB2011
     motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = template.dup
+    template_mod = @template
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
@@ -1007,9 +1004,9 @@ class NECB2011
     end
 
     search_criteria = {
-      'template' => template_mod,
-      'number_of_poles' => 4.0,
-      'type' => 'Enclosed'
+        'template' => template_mod,
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
     }
 
     # Exception for small fans, including
@@ -1071,13 +1068,13 @@ class NECB2011
   end
 
   def model_apply_sizing_parameters(model)
-    model.getSizingParameters.setHeatingSizingFactor(@standards_data['coolingSizingFactor'])
-    model.getSizingParameters.setCoolingSizingFactor(@standards_data['heatingSizingFactor'])
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{@standards_data['heatingSizingFactor']} for heating and #{@standards_data['coolingSizingFactor']} for cooling.")
+    model.getSizingParameters.setHeatingSizingFactor(self.get_standards_constant('sizing_factor_max_heating'))
+    model.getSizingParameters.setCoolingSizingFactor(self.get_standards_constant('sizing_factor_max_cooling'))
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{self.get_standards_constant('sizing_factor_max_heating')} for heating and #{self.get_standards_constant('sizing_factor_max_heating')} for cooling.")
   end
 
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    fan_constant_volume.setPressureRise(@standards_data['fan_constant_volume_pressure_rise'])
+    fan_constant_volume.setPressureRise( self.get_standards_constant('fan_constant_volume_pressure_rise_value'))
     return true
   end
 
@@ -1086,12 +1083,12 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(@standards_data['fan_variable_volume_pressure_rise'])
+    fan_variable_volume.setPressureRise(self.get_standards_constant('fan_variable_volume_pressure_rise_value'))
     return true
   end
 
   def apply_economizers(climate_zone, model)
-    # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
+    # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
     econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
     econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
@@ -1186,29 +1183,7 @@ class NECB2011
   # Helper method to find out which climate zone set contains a specific climate zone.
   # Returns climate zone set name as String if success, nil if not found.
   def model_find_climate_zone_set(model, clim)
-    result = nil
-
-    possible_climate_zones = []
-    standards_data['climate_zone_sets'].each do |climate_zone_set|
-      if climate_zone_set['climate_zones'].include?(clim)
-        possible_climate_zones << climate_zone_set['name']
-      end
-    end
-
-    # Check the results
-    if possible_climate_zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
-    elsif possible_climate_zones.size > 2
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
-    end
-    result = possible_climate_zones.sort.first
-
-    # Check that a climate zone set was found
-    if result.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
-    end
-
-    return result
+    return "NECB-CNEB ClimatZone 4-8"
   end
 
   def add_sys1_unitary_ac_baseboard_heating(model, zones, boiler_fueltype, mau, mau_heating_coil_type, baseboard_type, hw_loop)
@@ -2378,7 +2353,7 @@ class NECB2011
 
           vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, always_on, reheat_coil)
           air_loop.addBranchForZone(zone, vav_terminal.to_StraightComponent)
-          # NECB 2011 minimum zone airflow setting
+          # NECB2011 minimum zone airflow setting
           min_flow_rate = 0.002 * zone.floorArea
           vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate)
           vav_terminal.setMaximumReheatAirTemperature(43.0)
@@ -2544,26 +2519,25 @@ class NECB2011
 
   def necb_spacetype_system_selection(model, heating_design_load = nil, cooling_design_load = nil)
     spacezoning_data = Struct.new(
-      :space, # the space object
-      :space_name, # the space name
-      :building_type_name, # space type name
-      :space_type_name, # space type name
-      :necb_hvac_system_selection_type, #
-      :system_number, # the necb system type
-      :number_of_stories, # number of stories
-      :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-      :vertical_placment, # the vertical placement ( ground, top, both, middle )
-      :people_obj, # Spacetype people object
-      :heating_capacity,
-      :cooling_capacity,
-      :is_dwelling_unit, # Checks if it is a dwelling unit.
-      :is_wildcard
+        :space, # the space object
+        :space_name, # the space name
+        :building_type_name, # space type name
+        :space_type_name, # space type name
+        :necb_hvac_system_selection_type, #
+        :system_number, # the necb system type
+        :number_of_stories, # number of stories
+        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
+        :vertical_placment, # the vertical placement ( ground, top, both, middle )
+        :people_obj, # Spacetype people object
+        :heating_capacity,
+        :cooling_capacity,
+        :is_dwelling_unit, # Checks if it is a dwelling unit.
+        :is_wildcard
     )
 
     # Array to store schedule objects
     schedule_type_array = []
 
-    standard = Standard.build('NECB 2011')
 
     # find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
@@ -2584,7 +2558,7 @@ class NECB2011
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        space_type_property = standard.model_find_object(standards_data['space_types'], 'template' => 'NECB 2011', 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
+        space_type_property = model_find_object(standards_data['space_types'], 'template' => @template, 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
@@ -2699,7 +2673,7 @@ class NECB2011
     return schedule_type_array.uniq!, space_zoning_data_array
   end
 
-  # This method will take a model that uses NECB 2011 spacetypes , and..
+  # This method will take a model that uses NECB2011 spacetypes , and..
   # 1. Create a building story schema.
   # 2. Remove all existing Thermal Zone defintions.
   # 3. Create new thermal zones based on the following definitions.
@@ -2716,78 +2690,68 @@ class NECB2011
       model = nil,
       runner = nil,
       use_ideal_air_loads = false,
-      boiler_fueltype = 'NaturalGas',
-      mau_type = true,
-      mau_heating_coil_type = 'Hot Water',
-      baseboard_type = 'Hot Water',
-      chiller_type = 'Scroll',
-      mua_cooling_type = 'DX',
-      heating_coil_types_sys3 = 'Gas',
-      heating_coil_types_sys4 = 'Gas',
-      heating_coil_types_sys6 = 'Hot Water',
-      fan_type = 'AF_or_BI_rdg_fancurve',
-      swh_fueltype = 'NaturalGas'
+      system_fuel_defaults
   )
 
     # Create a data struct for the space to system to placement information.
 
     # system assignment.
-    unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(boiler_fueltype)
-      BTAP.runner_register('ERROR', "boiler_fueltype = #{boiler_fueltype}", runner)
+    unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(system_fuel_defaults['boiler_fueltype'])
+      BTAP.runner_register('ERROR', "boiler_fueltype = #{system_fuel_defaults['boiler_fueltype']}", runner)
       return
     end
 
-    unless [true, false].include?(mau_type)
-      BTAP.runner_register('ERROR', "mau_type = #{mau_type}", runner)
+    unless [true, false].include?(system_fuel_defaults['mau_type'])
+      BTAP.runner_register('ERROR', "mau_type = #{system_fuel_defaults['mau_type']}", runner)
       return
     end
 
-    unless ['Hot Water', 'Electric'].include?(mau_heating_coil_type)
-      BTAP.runner_register('ERROR', "mau_heating_coil_type = #{mau_heating_coil_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['mau_heating_coil_type'])
+      BTAP.runner_register('ERROR', "mau_heating_coil_type = #{system_fuel_defaults['mau_heating_coil_type']}", runner)
       return false
     end
 
-    unless ['Hot Water', 'Electric'].include?(baseboard_type)
-      BTAP.runner_register('ERROR', "baseboard_type = #{baseboard_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['baseboard_type'])
+      BTAP.runner_register('ERROR', "baseboard_type = #{system_fuel_defaults['baseboard_type']}", runner)
       return false
     end
 
-    unless ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'].include?(chiller_type)
-      BTAP.runner_register('ERROR', "chiller_type = #{chiller_type}", runner)
+    unless ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'].include?(system_fuel_defaults['chiller_type'])
+      BTAP.runner_register('ERROR', "chiller_type = #{system_fuel_defaults['chiller_type']}", runner)
       return false
     end
-    unless ['DX', 'Hydronic'].include?(mua_cooling_type)
-      BTAP.runner_register('ERROR', "mua_cooling_type = #{mua_cooling_type}", runner)
-      return false
-    end
-
-    unless ['Electric', 'Gas', 'DX'].include?(heating_coil_types_sys3)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys3 = #{heating_coil_types_sys3}", runner)
+    unless ['DX', 'Hydronic'].include?(system_fuel_defaults['mau_cooling_type'])
+      BTAP.runner_register('ERROR', "mau_cooling_type = #{system_fuel_defaults['mau_cooling_type']}", runner)
       return false
     end
 
-    unless ['Electric', 'Gas', 'DX'].include?(heating_coil_types_sys4)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys4 = #{heating_coil_types_sys4}", runner)
+    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys3'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys3 = #{system_fuel_defaults['heating_coil_type_sys3']}", runner)
       return false
     end
 
-    unless ['Hot Water', 'Electric'].include?(heating_coil_types_sys6)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys6 = #{heating_coil_types_sys6}", runner)
+    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys4'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
       return false
     end
 
-    unless ['AF_or_BI_rdg_fancurve', 'AF_or_BI_inletvanes', 'fc_inletvanes', 'var_speed_drive'].include?(fan_type)
-      BTAP.runner_register('ERROR', "fan_type = #{fan_type}", runner)
+    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['heating_coil_type_sys6'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
+      return false
+    end
+
+    unless ['AF_or_BI_rdg_fancurve', 'AF_or_BI_inletvanes', 'fc_inletvanes', 'var_speed_drive'].include?(system_fuel_defaults['fan_type'])
+      BTAP.runner_register('ERROR', "fan_type = #{system_fuel_defaults['fan_type']}", runner)
       return false
     end
     # REPEATED CODE!!
-    unless ['Electric', 'Hot Water'].include?(heating_coil_types_sys6)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys6 = #{heating_coil_types_sys6}", runner)
+    unless ['Electric', 'Hot Water'].include?(system_fuel_defaults['heating_coil_type_sys6'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
       return false
     end
     # REPEATED CODE!!
-    unless ['Electric', 'Gas'].include?(heating_coil_types_sys4)
-      BTAP.runner_register('ERROR', "heating_coil_types_sys4 = #{heating_coil_types_sys4}", runner)
+    unless ['Electric', 'Gas'].include?(system_fuel_defaults['heating_coil_type_sys4'])
+      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
       return false
     end
 
@@ -2812,7 +2776,7 @@ class NECB2011
         adj_spaces.sort.each do |adj_space|
           # if there are no adjacent spaces. Raise an error.
           raise "Could not determine adj space to space #{space_zone_data.space.name.get}" if adj_space.nil?
-          adj_space_data = space_zoning_data_array.find { |data| data.space == adj_space[0] }
+          adj_space_data = space_zoning_data_array.find {|data| data.space == adj_space[0]}
           if adj_space_data.system_number.nil?
             next
           else
@@ -2856,10 +2820,10 @@ class NECB2011
               space_zoning_data_array.each do |space_info|
                 # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
                 if (space_info.system_number == system_number) &&
-                   (space_info.space.buildingStory.get == story) &&
-                   (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
-                   (space_info.horizontal_placement == horizontal_placement) &&
-                   (space_info.is_dwelling_unit == is_dwelling_unit)
+                    (space_info.space.buildingStory.get == story) &&
+                    (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
+                    (space_info.horizontal_placement == horizontal_placement) &&
+                    (space_info.is_dwelling_unit == is_dwelling_unit)
                   space_array << space_info.space
                 end
               end
@@ -2912,13 +2876,13 @@ class NECB2011
       hw_loop_needed = false
       system_zone_array.each_with_index do |zones, system_index|
         next if zones.empty?
-        if system_index == 1 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water')
+        if system_index == 1 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
           hw_loop_needed = true
         elsif system_index == 2 || system_index == 5 || system_index == 7
           hw_loop_needed = true
-        elsif (system_index == 3 || system_index == 4) && baseboard_type == 'Hot Water'
+        elsif (system_index == 3 || system_index == 4) && system_fuel_defaults['baseboard_type'] == 'Hot Water'
           hw_loop_needed = true
-        elsif system_index == 6 && (mau_heating_coil_type == 'Hot Water' || baseboard_type == 'Hot Water')
+        elsif system_index == 6 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
           hw_loop_needed = true
         end
         if hw_loop_needed
@@ -2928,7 +2892,7 @@ class NECB2011
       if hw_loop_needed
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        setup_hw_loop_with_components( model, hw_loop, system_fuel_defaults['boiler_fueltype'], always_on )
       end
       system_zone_array.each_with_index do |zones, system_index|
         # skip if no thermal zones for this system.
@@ -2937,20 +2901,19 @@ class NECB2011
           when 0, nil
             # Do nothing no system assigned to zone. Used for Unconditioned spaces
           when 1
-
-            add_sys1_unitary_ac_baseboard_heating(model, zones, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, hw_loop)
+            add_sys1_unitary_ac_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['mau_type'], system_fuel_defaults['mau_heating_coil_type'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 2
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'FPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
           when 3
-            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, boiler_fueltype, heating_coil_types_sys3, baseboard_type, hw_loop)
+            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys3'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 4
-            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, boiler_fueltype, heating_coil_types_sys4, baseboard_type, hw_loop)
+            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys4'], system_fuel_defaults['baseboard_type'], hw_loop)
           when 5
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'TPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'TPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
           when 6
-            add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, boiler_fueltype, heating_coil_types_sys6, baseboard_type, chiller_type, fan_type, hw_loop)
+            add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys6'], system_fuel_defaults['baseboard_type'], system_fuel_defaults['chiller_type'], system_fuel_defaults['fan_type'], hw_loop)
           when 7
-            add_sys2_FPFC_sys5_TPFC(model, zones, boiler_fueltype, chiller_type, 'FPFC', mua_cooling_type, hw_loop)
+            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
         end
       end
     end
@@ -2965,4 +2928,49 @@ class NECB2011
       raise(" #{errors}")
     end
   end
+
+  # Creates thermal zones to contain each space, as defined for each building in the
+  # system_to_space_map inside the Prototype.building_name
+  # e.g. (Prototype.secondary_school.rb) file.
+  #
+  # @param (see #add_constructions)
+  # @return [Bool] returns true if successful, false if not
+  def model_create_thermal_zones(model, space_multiplier_map = nil)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
+    space_multiplier_map = {} if space_multiplier_map.nil?
+
+    # Remove any Thermal zones assigned
+    model.getThermalZones.each(&:remove)
+
+    # Create a thermal zone for each space in the self
+    model.getSpaces.sort.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      if thermostat.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
+      else
+        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+          # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+          ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+          ideal_loads.addToThermalZone(zone)
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
+  end
+
+
 end

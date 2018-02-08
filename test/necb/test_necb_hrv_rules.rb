@@ -12,11 +12,11 @@ class HRVTests < MiniTest::Test
   def test_hrv_eff
     output_folder = "#{File.dirname(__FILE__)}/output/hrv_eff"
     FileUtils.rm_rf(output_folder)
-    standard = Standard.build('NECB 2011')
+    standard = Standard.build('NECB2011')
  
     # Generate the osm files for all relevant cases to generate the test data
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.716240_CWEC.epw').set_weather_file(model)
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "hrv"
@@ -96,7 +96,7 @@ class HRVTests < MiniTest::Test
   def run_the_measure(model, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB 2011'
+      building_vintage = 'NECB2011'
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)
