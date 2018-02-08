@@ -6,8 +6,7 @@ class NECB2011 < Standard
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard( @template )
   attr_reader :template
-  attr_accessor :necb_standards_data
-  attr_accessor :used_standards_data
+  attr_accessor :standards_data
 
 
   def load_standards_database_new()

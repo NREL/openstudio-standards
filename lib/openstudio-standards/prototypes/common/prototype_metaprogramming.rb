@@ -179,6 +179,10 @@ end
       @building_type = BUILDING_TYPE
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
+      if @standards_data['prototype_inputs'].nil?
+      puts \"could not find prototype_inputs in standards_data\"
+      puts @standards_data
+      end
       @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
       if @prototype_input.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => \"#{template}\",'building_type' => \"#{name}\" }}, cannot create model.\")
