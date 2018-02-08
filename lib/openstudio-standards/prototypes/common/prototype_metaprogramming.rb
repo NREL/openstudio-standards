@@ -62,7 +62,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
+    @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
