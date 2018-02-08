@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
+  spec.add_runtime_dependency 'deep_merge'
   spec.add_development_dependency 'minitest-reporters'
-  spec.add_development_dependency 'deep_merge'
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
