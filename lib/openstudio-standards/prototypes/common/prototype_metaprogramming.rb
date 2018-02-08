@@ -180,8 +180,9 @@ end
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
       if @standards_data['prototype_inputs'].nil?
-      puts \"could not find prototype_inputs in standards_data\"
-      puts @standards_data
+        raise (\"could not find prototype_inputs in standards_data \#{JSON.pretty_generate(@standards_data)} \")
+
+
       end
       @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
       if @prototype_input.nil?
