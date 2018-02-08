@@ -2060,7 +2060,7 @@ class Standard
     end
 
     if hash_of_objects.nil?
-      return nil
+      raise("Passed a nil hash_of_objects when searching for #{search_criteria}. Cannot Continue. ")
     end
     desired_object = nil
     search_criteria_matching_objects = []
