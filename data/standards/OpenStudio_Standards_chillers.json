@@ -3435,7 +3435,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3453,7 +3453,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3471,7 +3471,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3525,7 +3525,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3543,7 +3543,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3561,7 +3561,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3615,7 +3615,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3633,7 +3633,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3651,7 +3651,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3705,7 +3705,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3723,7 +3723,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3741,7 +3741,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3795,7 +3795,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3813,7 +3813,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3831,7 +3831,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3885,7 +3885,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3903,7 +3903,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3921,7 +3921,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3975,7 +3975,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -3993,7 +3993,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -4011,7 +4011,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -4065,7 +4065,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -4083,7 +4083,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -4101,7 +4101,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5829,7 +5829,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "RecipH2O-Cap-fCHWT&ECT",
       "eirft": "RecipH2O-EIR-fCHWT&ECT",
-      "eirfplr": "RecipH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "RecipRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5847,7 +5847,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "RecipH2O-Cap-fCHWT&ECT",
       "eirft": "RecipH2O-EIR-fCHWT&ECT",
-      "eirfplr": "RecipH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "RecipRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5865,7 +5865,7 @@
       "minimum_integrated_part_load_value": 3.934,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5883,7 +5883,7 @@
       "minimum_integrated_part_load_value": 0.84,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5901,7 +5901,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5919,7 +5919,7 @@
       "minimum_integrated_part_load_value": 0.8,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5937,7 +5937,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5955,7 +5955,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5973,7 +5973,7 @@
       "minimum_integrated_part_load_value": 0.75,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -5991,7 +5991,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6009,7 +6009,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewAir-Cap-fCHWT&DBT",
       "eirft": "ScrewAir-EIR-fCHWT&DBT",
-      "eirfplr": "ScrewAir-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6027,7 +6027,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6045,7 +6045,7 @@
       "minimum_integrated_part_load_value": 0.408,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6063,7 +6063,7 @@
       "minimum_integrated_part_load_value": 0.502,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6081,7 +6081,7 @@
       "minimum_integrated_part_load_value": 0.628,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6099,7 +6099,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6117,7 +6117,7 @@
       "minimum_integrated_part_load_value": 0.372,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6135,7 +6135,7 @@
       "minimum_integrated_part_load_value": 0.515,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6153,7 +6153,7 @@
       "minimum_integrated_part_load_value": 0.572,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6171,7 +6171,7 @@
       "minimum_integrated_part_load_value": null,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6189,7 +6189,7 @@
       "minimum_integrated_part_load_value": 0.439,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6207,7 +6207,7 @@
       "minimum_integrated_part_load_value": 0.541,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     },
     {
@@ -6225,7 +6225,7 @@
       "minimum_integrated_part_load_value": 0.676,
       "capft": "ScrewH2O-Cap-fCHWT&ECT",
       "eirft": "ScrewH2O-EIR-fCHWT&ECT",
-      "eirfplr": "ScrewH2O-EIR-fPLR&dT-2Comp/Ckt",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
       "notes": "From MASControl 2"
     }
   ]
