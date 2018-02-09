@@ -1,7 +1,6 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 require 'rubyXL'
-require 'deep_merge'
 class NECB2015 < NECB2011
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)
