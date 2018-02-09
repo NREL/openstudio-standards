@@ -1,10 +1,9 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 require 'rubyXL'
-require 'deep_merge'
 class NECB2011 < Standard
   @template = self.new.class.name # rubocop:disable Style/ClassVars
-  register_standard( @template )
+  register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
 
@@ -15,9 +14,15 @@ class NECB2011 < Standard
     standards_data_dir = "#{top_dir}/data/"
     files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
     @standards_data = {}
+    @standards_data["tables"] = []
     files.each do |file|
-      @standards_data = @standards_data.deep_merge (JSON.parse(File.read(file)))
       puts "loading standards data from #{file}"
+      data = JSON.parse(File.read(file))
+      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        @standards_data["tables"] << data["tables"].first
+      else
+        @standards_data[data.keys.first] = data[data.keys.first]
+      end
     end
     #needed for compatibility of standards database format
     @standards_data['tables'].each do |table|
@@ -69,7 +74,7 @@ class NECB2011 < Standard
     @standards_data = self.load_standards_database_new()
     puts "loaded these tables..."
     puts @standards_data.keys.size
-    raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
+    #raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
   end
 
   def get_all_spacetype_names
