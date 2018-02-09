@@ -2058,15 +2058,11 @@ class Standard
     if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
     end
-
-    if hash_of_objects.nil?
-      raise("Passed a nil hash_of_objects when searching for #{search_criteria}. Cannot Continue. ")
-    end
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
 
-    # Compare each of the objects against the search criteriaz
+    # Compare each of the objects against the search criteria
     hash_of_objects.each do |object|
       meets_all_search_criteria = true
       search_criteria.each do |key, value|
