@@ -62,7 +62,7 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
@@ -70,10 +70,10 @@ class Standard
     # Get the minimum efficiency standards
     cop = nil
 
-    # If PTHP, use equations
-    if sub_category == 'PTHP'
-      pthp_eer_coeff_1 = ac_props['pthp_eer_coefficient_1']
-      pthp_eer_coeff_2 = ac_props['pthp_eer_coefficient_2']
+    # If PTHP, use equations if coefficients are specified
+    pthp_eer_coeff_1 = ac_props['pthp_eer_coefficient_1']
+    pthp_eer_coeff_2 = ac_props['pthp_eer_coefficient_2']
+    if sub_category == 'PTHP' && !pthp_eer_coeff_1.nil? && !pthp_eer_coeff_2.nil?
       # TABLE 6.8.1D
       # EER = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
@@ -88,10 +88,10 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{pthp_eer.round(1)}")
     end
 
-    # If PTAC, use equations
-    if sub_category == 'PTAC'
-      ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
-      ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
+    # If PTAC, use equations if coefficients are specified
+    ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
+    ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
+    if sub_category == 'PTAC' && !ptac_eer_coeff_1.nil? && !ptac_eer_coeff_2.nil?
       # TABLE 6.8.1D
       # EER = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
@@ -170,7 +170,7 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return sql_db_vars_map
     end
