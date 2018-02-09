@@ -324,7 +324,7 @@ class Standard
 
       else
 
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type #{system['type']} is not recognized.  This system will not be added.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type '#{system['type']}' is not recognized for system named '#{system['name']}'.  This system will not be added.")
 
       end
     end
