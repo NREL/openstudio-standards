@@ -13,6 +13,13 @@ module CoilDX
   def coil_dx_subcategory(coil_dx)
     sub_category = 'Single Package'
 
+    # Fallback to the name, mainly for library export
+    if coil_dx.name.get.to_s.include?('Single Package')
+      sub_category = 'Single Package'
+    elsif coil_dx.name.get.to_s.include?('Split System')
+      sub_category = 'Split System'
+    end
+
     if coil_dx.airLoopHVAC.empty?
       if coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
