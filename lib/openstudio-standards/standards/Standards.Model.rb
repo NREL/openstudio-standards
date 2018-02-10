@@ -221,9 +221,9 @@ class Standard
 
     # Delete all the unused curves
     model.getCurves.sort.each do |curve|
-      if curve.parent.empty?
-        # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
-        curve.remove
+      if curve.directUseCount == 0
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
+        model.removeObject(curve.handle)
       end
     end
 
