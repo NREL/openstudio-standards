@@ -57,7 +57,6 @@ def export_openstudio_libraries
                                                                   props['space_type'],
                                                                   props['is_residential'])
       end
-      break
     end
   end
 
@@ -199,8 +198,8 @@ def export_openstudio_libraries
         new_name = old_name.gsub(old_type, new_type)
         # Swap out the capacity number for a range
         old_cap = m[1]
-        if max_cap_tons == 1_000 # Value representing infinity
-          new_cap = "> #{max_cap_tons.round}"
+        if max_cap_tons == 10_000 # Value representing infinity
+          new_cap = "> #{min_cap_tons.round}"
         else
           new_cap = "#{min_cap_tons.round}-#{max_cap_tons.round}"
         end
@@ -233,6 +232,10 @@ def export_openstudio_libraries
       mid_cap_btu_per_hr = (min_cap_btu_per_hr + max_cap_btu_per_hr) / 2
       mid_cap_w = OpenStudio.convert(mid_cap_btu_per_hr, 'Btu/hr', 'W').get
       dx_coil.setRatedTotalCoolingCapacity(mid_cap_w)
+
+      # Add the subcategory to the name so that it
+      # can be used by the efficiency lookup
+      dx_coil.setName("#{dx_coil.name} #{props['subcategory']}")
 
       # If it is a PTAC coil, add to PTAC
       if props['subcategory'] == 'PTAC'
@@ -268,13 +271,13 @@ def export_openstudio_libraries
       m = old_name.match(/(\d+)kBtu\/hr/)
       if m
         # Put the fuel type into the name
-        old_type = 'Coil Cooling DX Single Speed 1'
+        old_type = "Coil Cooling DX Single Speed 1 #{props['subcategory']}"
         new_type = "#{props['cooling_type']} #{props['heating_type']} #{props['subcategory']} DX"
         new_name = old_name.gsub(old_type, new_type)
         # Swap out the capacity number for a range
         old_cap = m[1]
         if max_cap_kbtu_per_hr ==  10_000 # Value representing infinity
-          new_cap = "> #{max_cap_kbtu_per_hr}"
+          new_cap = "> #{min_cap_kbtu_per_hr}"
         else
           new_cap = "#{min_cap_kbtu_per_hr}-#{max_cap_kbtu_per_hr}"
         end
@@ -381,7 +384,7 @@ def export_openstudio_libraries
         # Swap out the capacity number for a range
         old_cap = m[1]
         if max_clg_cap_kbtu_per_hr ==  10_000 # Value representing infinity
-          new_cap = "> #{max_clg_cap_kbtu_per_hr}"
+          new_cap = "> #{min_clg_cap_kbtu_per_hr}"
         else
           new_cap = "#{min_clg_cap_kbtu_per_hr}-#{max_clg_cap_kbtu_per_hr}"
         end
@@ -411,15 +414,14 @@ def export_openstudio_libraries
   end
 
   # Delete all the unused curves
-  # # TODO fix code to remove unused curves, not sure why it isn't working now
   puts 'Cleaning up the unused curves'
   template_to_lib_models.each do |template, data|
     puts ''
     puts "***#{template}***"
     data['model'].getCurves.sort.each do |curve|
-      if curve.parent.empty?
-        puts "    #{curve.name} is unused; it will be removed."
-        curve.remove
+      if curve.directUseCount == 0
+        puts "    #{curve.name} is unused; successfully removed? #{data['model'].removeObject(curve.handle)}."
+        # curve.remove # For some reason curve.remove doesn't work properly
       end
     end
   end
@@ -428,7 +430,9 @@ def export_openstudio_libraries
   osm_lib_dir = "#{__dir__}/../../pkg/libraries"
   Dir.mkdir(osm_lib_dir) unless Dir.exists?(osm_lib_dir)
   template_to_lib_models.each do |template, data|
-    data['model'].save(OpenStudio::Path.new("#{osm_lib_dir}/#{template.gsub(/\W/,'_')}.osm"), true)
+    library_path = "#{osm_lib_dir}/#{template.gsub(/\W/,'_')}.osm"
+    puts "Saving library #{library_path}"
+    data['model'].save(OpenStudio::Path.new(library_path), true)
   end
 
 end
