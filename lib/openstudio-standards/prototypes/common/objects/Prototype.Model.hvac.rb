@@ -322,6 +322,40 @@ class Standard
                                        system['walkins'],
                                        thermal_zones[0])
 
+      when 'WSHP'
+        condenser_loop = case system['heating_type']
+                         when 'Gas'
+                           model_get_or_add_heat_pump_loop(model)
+                         else
+                           model_get_or_add_ambient_water_loop(model)
+                         end
+
+        model_add_water_source_hp(model,
+                                  condenser_loop,
+                                  thermal_zones,
+                                  ventilation=true)
+
+      when 'Fan Coil'
+        case system['heating_type']
+        when 'Gas', 'DistrictHeating', 'Electricity'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, system['heating_type'])
+        when nil
+          hot_water_loop = nil
+        end
+
+        case system['cooling_type']
+        when 'Electricity', 'DistrictCooling'
+          chilled_water_loop = model_get_or_add_chilled_water_loop(model, system['cooling_type'], air_cooled = true)
+        when nil
+          chilled_water_loop = nil
+        end
+
+        model_add_four_pipe_fan_coil(model,
+                                     hot_water_loop,
+                                     chilled_water_loop,
+                                     thermal_zones,
+                                     ventilation=true)
+
       else
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type '#{system['type']}' is not recognized for system named '#{system['name']}'.  This system will not be added.")
