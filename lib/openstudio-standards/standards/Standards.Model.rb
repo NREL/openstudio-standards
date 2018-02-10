@@ -2433,6 +2433,8 @@ class Standard
       target_f_factor_ip = construction_props['assembly_maximum_f_factor']
       target_c_factor_ip = construction_props['assembly_maximum_c_factor']
       target_shgc = construction_props['assembly_maximum_solar_heat_gain_coefficient']
+      u_includes_int_film = construction_props['u_value_includes_interior_film_coefficient']
+      u_includes_ext_film = construction_props['u_value_includes_exterior_film_coefficient']
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
 
@@ -2441,11 +2443,11 @@ class Standard
         # Handle Opaque and Fenestration Constructions differently
         if construction.isFenestration && construction_simple_glazing?(construction)
           # Set the U-Value and SHGC
-          construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], true)
+          construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
           construction_set_glazing_shgc(construction, target_shgc.to_f)
         else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
           # Set the U-Value
-          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], true)
+          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
         # else
           # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
         end
@@ -2455,14 +2457,14 @@ class Standard
         # Set the F-Factor (only applies to slabs on grade)
         # TODO figure out what the prototype buildings did about ground heat transfer
         # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], true)
+        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
       elsif target_c_factor_ip && data['intended_surface_type'] == 'GroundContactWall'
 
         # Set the C-Factor (only applies to underground walls)
         # TODO figure out what the prototype buildings did about ground heat transfer
         # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], true)
+        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], construction_set_u_value, construction_set_u_value)
 
       end
 
@@ -2519,7 +2521,7 @@ class Standard
       construction.insertLayer(0, almost_adiabatic)
       return construction
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
     # Make sure that a construction is specified

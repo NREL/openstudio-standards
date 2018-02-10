@@ -492,9 +492,14 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
+  # @param int_film [Bool] if true, interior film coefficient will be included in result
+  # @param ext_film [Bool] if true, exterior film coefficient will be included in result
   # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
   # @ref [References::ASHRAE9012010] A9.4.1 Air Films
-  def film_coefficients_r_value(intended_surface_type)
+  def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
+    # Return zero if both interior and exterior are false
+    return 0.0 if !int_film && !ext_film
+
     # Film values from 90.1-2010 A9.4.1 Air Films
     film_ext_surf_r_ip = 0.17
     film_semi_ext_surf_r_ip = 0.46
@@ -511,35 +516,35 @@ class Standard
     film_r_si = 0.0
     case intended_surface_type
     when 'AtticFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si # Outside
-      film_r_si += film_semi_ext_surf_r_si # Inside
+      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
     when 'AtticWall', 'AtticRoof'
-      film_r_si += film_ext_surf_r_si # Outside
-      film_r_si += film_semi_ext_surf_r_si # Inside
+      film_r_si += film_ext_surf_r_si if ext_film # Outside
+      film_r_si += film_semi_ext_surf_r_si if int_film# Inside
     when 'DemisingFloor', 'InteriorFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si # Inside
+      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
+      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
     when 'InteriorCeiling'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si # Inside
+      film_r_si += film_int_surf_ht_flow_dwn_r_si if ext_film # Outside
+      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-      film_r_si += fil_int_surf_vertical_r_si # Outside
-      film_r_si += fil_int_surf_vertical_r_si # Inside
+      film_r_si += fil_int_surf_vertical_r_si if ext_film # Outside
+      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
     when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-      film_r_si += film_ext_surf_r_si # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si # Inside
+      film_r_si += film_ext_surf_r_si if ext_film # Outside
+      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     when 'ExteriorFloor'
-      film_r_si += film_ext_surf_r_si # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si # Inside
+      film_r_si += film_ext_surf_r_si if ext_film # Outside
+      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
     when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-      film_r_si += film_ext_surf_r_si # Outside
-      film_r_si += fil_int_surf_vertical_r_si # Inside
+      film_r_si += film_ext_surf_r_si if ext_film # Outside
+      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
     when 'GroundContactFloor'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si # Inside
+      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
     when 'GroundContactWall'
-      film_r_si += fil_int_surf_vertical_r_si # Inside
+      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
     when 'GroundContactRoof'
-      film_r_si += film_int_surf_ht_flow_up_r_si # Inside
+      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     end
     return film_r_si
   end
