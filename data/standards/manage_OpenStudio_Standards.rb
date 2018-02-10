@@ -205,6 +205,8 @@ def export_spreadsheet_to_json
   bool_cols = []
   bool_cols << 'hx'
   bool_cols << 'data_center'
+  bool_cols << 'u_value_includes_interior_film_coefficient'
+  bool_cols << 'u_value_includes_exterior_film_coefficient'
 
   # Open workbook
   workbook = RubyXL::Parser.parse(xlsx_path)
