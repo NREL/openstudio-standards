@@ -1,6 +1,10 @@
 [
   {
     "name": "EL1 Sys1 (PVVT) (G.S1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 South Perim Spc (G.S1)"
     ],
@@ -8,6 +12,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.E2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 East Perim Spc (G.E2)"
     ],
@@ -15,6 +23,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 North Perim Spc (G.N3)"
     ],
@@ -22,6 +34,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 West Perim Spc (G.W4)"
     ],
@@ -29,6 +45,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (G.C5)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 Core Spc (G.C5)"
     ],
@@ -36,6 +56,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.S11)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 South Perim Spc (T.S11)"
     ],
@@ -43,6 +67,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.E12)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 East Perim Spc (T.E12)"
     ],
@@ -50,6 +78,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.N13)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 North Perim Spc (T.N13)"
     ],
@@ -57,6 +89,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.W14)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 West Perim Spc (T.W14)"
     ],
@@ -64,6 +100,10 @@
   },
   {
     "name": "EL1 Sys1 (PVVT) (T.C15)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "space_names": [
       "EL1 Core Spc (T.C15)"
     ],

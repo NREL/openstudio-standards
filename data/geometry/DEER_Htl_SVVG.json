@@ -1,6 +1,31 @@
 [
   {
+    "name": "S1 Sys (VAVS)",
+    "type": "VAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)",
+      "EL1 West Perim Spc (G.W2)",
+      "EL1 East Perim Spc (G.E3)",
+      "EL2 North Perim Spc (G.N2)",
+      "EL2 West Perim Spc (G.W3)",
+      "EL3 South Perim Spc (G.S2)",
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
+  },
+  {
     "name": "EL4 Sys4 (FC) (G)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "EL4 North Perim Spc (G.N1)",
       "EL4 SSW Perim Spc (G.SSW2)",
@@ -10,6 +35,11 @@
   },
   {
     "name": "EL4 Sys4 (FC) (M)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "EL4 North Perim Spc (M.N11)",
       "EL4 SSW Perim Spc (M.SSW12)",
@@ -19,6 +49,11 @@
   },
   {
     "name": "EL4 Sys4 (FC) (T)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "EL4 North Perim Spc (T.N21)",
       "EL4 SSW Perim Spc (T.SSW22)",

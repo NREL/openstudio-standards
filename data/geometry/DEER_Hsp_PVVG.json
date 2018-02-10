@@ -27,6 +27,11 @@
   },
   {
     "name": "EL3 Sys4 (FC) (G)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "EL3 East Perim Spc (G.E1)",
       "EL3 North Perim Spc (G.N6)",

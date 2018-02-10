@@ -73,6 +73,11 @@
   },
   {
     "name": "E9 Sys6 (FC) (G)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "E9 North Perim Spc (G.N1)",
       "E9 South Perim Spc (G.S2)"
@@ -80,6 +85,11 @@
   },
   {
     "name": "E9 Sys6 (FC) (M)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "E9 North Perim Spc (M.N4)",
       "E9 South Perim Spc (M.S5)"
@@ -87,6 +97,11 @@
   },
   {
     "name": "E9 Sys6 (FC) (T)",
+    "type": "Fan Coil",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Electricity",
     "space_names": [
       "E9 North Perim Spc (T.N7)",
       "E9 South Perim Spc (T.S8)"

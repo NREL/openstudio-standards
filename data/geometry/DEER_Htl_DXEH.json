@@ -1,5 +1,21 @@
 [
   {
+    "name": "EL1 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)",
+      "EL1 West Perim Spc (G.W2)",
+      "EL1 East Perim Spc (G.E3)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W5)"
+  },
+  {
     "name": "EL2 Sys1 (PVVT) (G)",
     "type": "PSZ-AC",
     "operation_schedule": null,
