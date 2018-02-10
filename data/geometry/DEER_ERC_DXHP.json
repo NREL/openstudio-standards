@@ -10,7 +10,7 @@
     "supplemental_heating_type": "Gas",
     "space_names": [
       "EL1 Spc (G.1)",
-      "EL1 CrZ (G.1)"
+      "EL1 CrS (G.1)"
     ],
     "return_plenum": "EL1 Plnm (G.2)"
   }
