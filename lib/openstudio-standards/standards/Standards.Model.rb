@@ -2464,7 +2464,7 @@ class Standard
         # Set the C-Factor (only applies to underground walls)
         # TODO figure out what the prototype buildings did about ground heat transfer
         # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], construction_set_u_value, construction_set_u_value)
+        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
       end
 
