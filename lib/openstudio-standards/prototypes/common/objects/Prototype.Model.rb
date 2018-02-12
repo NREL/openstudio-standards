@@ -83,29 +83,21 @@ Standard.class_eval do
     end
   end
 
-
-  def model_replace_model(model, new_model, runner = nil)
-
-    # pull original design days over
-    new_model.getDesignDays.sort.each {|designDay|
-      designDay.remove
-    }
-    model.getDesignDays.sort.each {|designDay|
-      designDay.clone(new_model)
-    }
-
-    # swap underlying data in model with underlying data in new_model
+  # Replaces the contents of 'model_to_replace' with the contents of 'new_model.'
+  # This method can be used when the memory location of model_to_replace needs
+  # to be preserved, for example, when a measure is passed.
+  def model_replace_model(model_to_replace, new_model, runner = nil)
     # remove existing objects from model
     handles = OpenStudio::UUIDVector.new
-    model.objects.each do |obj|
+    model_to_replace.objects.each do |obj|
       handles << obj.handle
     end
-    model.removeObjects(handles)
-    # add new file to empty model
-    model.addObjects(new_model.toIdfFile.objects)
-    BTAP::runner_register("Info", "Model name is now #{model.building.get.name}.", runner)
-  end
+    model_to_replace.removeObjects(handles)
 
+    # put contents of new_model into model_to_replace
+    model_to_replace.addObjects(new_model.toIdfFile.objects)
+    BTAP::runner_register("Info", "Model name is now #{model_to_replace.building.get.name}.", runner)
+  end
 
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
@@ -128,25 +120,25 @@ Standard.class_eval do
       puts geom_model_string
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
-      model = version_translator.loadModelFromString(geom_model_string)
+      geom_model = version_translator.loadModelFromString(geom_model_string)
 
     else
       abs_path = File.join(File.dirname(__FILE__), rel_path_to_osm)
 
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
-      model = version_translator.loadModel(abs_path)
+      geom_model = version_translator.loadModel(abs_path)
       raise
     end
 
-    if model.empty?
+    if geom_model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{rel_path_to_osm}")
       return false
     end
-    model = model.get
+    geom_model = geom_model.get
 
     # Add the objects from the geometry model to the working model
-    model.addObjects(model.toIdfFile.objects)
+    model.addObjects(geom_model.toIdfFile.objects)
     return true
   end
 
