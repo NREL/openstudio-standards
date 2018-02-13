@@ -199,6 +199,9 @@ def export_spreadsheet_to_json
   # cols_to_skip << 'exhaust_per_area'
   cols_to_skip << 'exhaust_per_unit'
   cols_to_skip << 'exhaust_fan_power_per_area'
+  cols_to_skip << 'occupancy_standard'
+  cols_to_skip << 'occupancy_primary_space_type'
+  cols_to_skip << 'occupancy_secondary_space_type'
 
   # List of columns that are boolean
   # (rubyXL returns 0 or 1, will translate to true/false)
