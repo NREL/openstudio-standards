@@ -1,14 +1,11 @@
 require "#{File.dirname(__FILE__)}/btap"
-require 'rubygems'
 require 'json'
+require 'singleton'
 require 'roo'
-require 'rest-client'
 require 'openssl'
 require 'aes'
-require 'geocoder'
-require 'singleton'
-require "highline/import"
-require 'launchy'
+require 'rest-client'
+
 
 class BTAPCosting
 
@@ -131,6 +128,7 @@ class BTAPCosting
   end
 
   def load_data_from_excel
+    @costing_database = {} if @costing_database.nil?
     unless File.exist?(@xlsx_path)
       raise("could not find the national_average_cost_information.xlsm in location #{@xlsx_path}. This is a proprietary file manage by Natural resources Canada.")
     end
@@ -148,7 +146,9 @@ class BTAPCosting
      'constructions_glazing',
      'materials_glazing',
      'Constructions',
-     'ConstructionProperties'
+     'ConstructionProperties',
+     'lighting',
+     'materials_lighting'
     ].each do |sheet|
       @costing_database['raw'][sheet] = convert_workbook_sheet_to_array_of_hashes(@xlsx_path, sheet)
     end
@@ -157,8 +157,7 @@ class BTAPCosting
 
   def generate_materials_cost_database
 
-    [
-        @costing_database['raw']['materials_glazing'], @costing_database['raw']['materials_opaque']].each do |mat_lib|
+    [@costing_database['raw']['materials_glazing'], @costing_database['raw']['materials_opaque'], @costing_database['raw']['materials_lighting']].each do |mat_lib|
       [mat_lib].each do |materials|
 
         lookup_list = materials.map {|material|
@@ -168,7 +167,7 @@ class BTAPCosting
         }
 
         lookup_list.each do |material|
-          #check if it's already in our database with right catalog year.
+          # check if it's already in our database with right catalog year.
           api_return = @costing_database['rsmean_api_data'].detect {|rs_means|
             rs_means['id'] == material['id'] and rs_means['catalog']['id'] == material['catalog_id']
           }
@@ -210,33 +209,79 @@ class BTAPCosting
       @costing_database["raw"]['constructions_opaque'].each do |construction|
         cost_construction(construction, counter, location, 'opaque')
       end
-
       @costing_database["raw"]['constructions_glazing'].each do |construction|
         cost_construction(construction, counter, location, 'glazing')
       end
-
     end
   end
 
-  def cost_audit_envelope(model)
-    #Creates a Hash to collect costing data.
+  def cost_audit_all(model)
+    # JTB: This procedure in progress and not yet fully developed (or called)
+
+
+    # Create a Hash to collect costing data.
     costing_report = {}
-    #Creates a Hash in the hash for envelope costing.
+    # Create a Hash in the hash for categories of costing.
     costing_report["Building"] = {}
     costing_report["Envelope"] = {}
-    totEnvCost = 0
+    costing_report["Lighting"] = {}
+    costing_report["HVAC"] = {}
+    costing_report["Totals"] = {}
 
-    #Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
+    # Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
     if model.getBuilding.standardsBuildingType.empty? or model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
     end
 
-    #store number of stories. Required for envelope costing logic.
+    # Store number of stories. Required for envelope costing logic.
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
+
+    closest_loc = get_closest_cost_location(model.getWeatherFile.latitude, model.getWeatherFile.longitude)
+    closest_city = closest_loc['city']
+    closest_prov = closest_loc['province-state']
 
     costing_report["Building"]["BuildingType"] = model.getBuilding.standardsBuildingType.to_s
     costing_report["Building"]["WeatherProv"] = model.getWeatherFile.stateProvinceRegion
     costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
+    costing_report["Building"]["ClosestProv"] = closest_prov
+    costing_report["Building"]["ClosestCity"] = closest_city
+
+    #envelope_cost = cost_audit_envelope(model, costing_report)
+
+    #lighting_cost = cost_audit_lighting(model, costing_report)
+
+  end
+
+  def cost_audit_envelope(model)
+
+    # Create a Hash to collect costing data.
+    costing_report = {}
+    # Create a Hash in the hash for categories of costing.
+    costing_report["Building"] = {}
+    costing_report["Envelope"] = {}
+    costing_report["Lighting"] = {}
+    costing_report["HVAC"] = {}
+    costing_report["Totals"] = {}
+
+    # Check to see if standards building type and the number of stories has been defined.  The former may be omitted in the future.
+    if model.getBuilding.standardsBuildingType.empty? or model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      raise("Building information is not complete, please ensure that the standardsBuildingType and standardsNumberOfAboveGroundStories are entered in the model. ")
+    end
+
+    # Store number of stories. Required for envelope costing logic.
+    num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
+
+    closest_loc = get_closest_cost_location(model.getWeatherFile.latitude, model.getWeatherFile.longitude)
+    closest_city = closest_loc['city']
+    closest_prov = closest_loc['province-state']
+
+    costing_report["Building"]["BuildingType"] = model.getBuilding.standardsBuildingType.to_s
+    costing_report["Building"]["WeatherProv"] = model.getWeatherFile.stateProvinceRegion
+    costing_report["Building"]["WeatherCity"] = model.getWeatherFile.city
+    costing_report["Building"]["ClosestProv"] = closest_prov
+    costing_report["Building"]["ClosestCity"] = closest_city
+
+    totEnvCost = 0
 
     # Iterate through the thermal zones.
     model.getThermalZones.each do |zone|
@@ -261,14 +306,14 @@ class BTAPCosting
         }.first
 
 
-        #Create Hash to store surfaces for this space by surface type
+        # Create Hash to store surfaces for this space by surface type
         surfaces = {}
         #Exterior
         exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Outdoors")
         surfaces["ExteriorWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Wall")
         surfaces["ExteriorRoof"]= BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "RoofCeiling")
         surfaces["ExteriorFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Floor")
-        #Exterior Subsurface
+        # Exterior Subsurface
         exterior_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(exterior_surfaces)
         surfaces["ExteriorFixedWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"])
         surfaces["ExteriorOperableWindow"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"])
@@ -279,13 +324,13 @@ class BTAPCosting
         surfaces["ExteriorGlassDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"])
         surfaces["ExteriorOverheadDoor"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"])
 
-        #Ground Surfaces
+        # Ground Surfaces
         ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Ground")
         surfaces["GroundContactWall"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
         surfaces["GroundContactRoof"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         surfaces["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        #These are the only envelope costing items we are considering right now..
+        # These are the only envelope costing items we are considering for envelopes..
         costed_surfaces = [
             "ExteriorWall",
             "ExteriorRoof",
@@ -303,21 +348,29 @@ class BTAPCosting
             "GroundContactFloor"
         ]
 
-        #Iterate through
+        # Iterate through
         costed_surfaces.each do |surface_type|
-          #Get Costs for this construction type. This will get the cost for the particular construction type for all rsi
-          # levels for that city. This has been collected by RS means.
-          cost_range_hash = @costing_database['constructions_costs'].select {|construction|
-            construction['construction_type_name'] == construction_set[surface_type] and
-                construction['province-state'] == expandProvAbbrev(model.getWeatherFile.stateProvinceRegion) and
-                 model.getWeatherFile.city.upcase.include?(construction['city'])
-          }
+          # Get Costs for this construction type. This will get the cost for the particular construction type
+          # for all rsi levels for this location. This has been collected by RS means. Note that a space_type
+          # of "- undefined -" will create a nil construction_set!
+          if construction_set.nil?
+            cost_range_hash = {}
+          else
+            cost_range_hash = @costing_database['constructions_costs'].select {|construction|
+              construction['construction_type_name'] == construction_set[surface_type] &&
+                  construction['province-state'] == closest_prov &&
+                  construction['city'] == closest_city
+            }
+          end
 
-          #We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
-          if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
+          # We don't need all the information, just the rsi and cost. However, for windows rsi = 1/u_w_per_m2_k
+          surfaceIsGlazing = (surface_type == 'ExteriorFixedWindow' || surface_type == 'ExteriorOperableWindow' ||
+                          surface_type == 'ExteriorSkylight' || surface_type == 'ExteriorTubularDaylightDiffuser' ||
+                          surface_type == 'ExteriorTubularDaylightDome' || surface_type == 'ExteriorGlassDoor')
+          if surfaceIsGlazing
             cost_range_array = cost_range_hash.map {|cost|
               [
-                  (1.0/cost['u_w_per_m2_k'].to_f).to_s,
+                  (1.0/cost['u_w_per_m2_k'].to_f),
                   cost['total_cost_with_op']
               ]
             }
@@ -329,29 +382,23 @@ class BTAPCosting
               ]
             }
           end
-          #Sorted based on rsi.
+          # Sorted based on rsi.
           cost_range_array.sort! {|a, b| a[0] <=> b[0]}
 
-          #Iterate through actual surfaces in the model of surface_type.
+          # Iterate through actual surfaces in the model of surface_type.
           numSurfType = 0
           surfaces[surface_type].each do |surface|
             numSurfType = numSurfType + 1
 
-            # get RSI of existing model surface.
+            # Get RSI of existing model surface (actually returns rsi for glazings too!).
             rsi = BTAP::Resources::Envelope::Constructions::get_rsi(OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get)
 
             # Use the cost_range_array to interpolate the estimated cost for the given rsi.
-            # Note that window costs in RS Means use U val (1/rsi)!
-            if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
-              if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
-            end
+            # Note that window costs in RS Means use U-value, which was converted to rsi for cost_range_array above
             cost = interpolate(cost_range_array, rsi)
 
-            # If the cost is nil, that means the rsi is out of range. This should be flagged in the report.
+            # If the cost is nil, that means the rsi is out of range. Flag in the report.
             if cost.nil?
-              if surface_type == "ExteriorFixedWindow" or surface_type == "ExteriorOperableWindow" or surface_type == "ExteriorSkylight"
-                if rsi > 0.0 then rsi = 1.0/rsi else 0.0 end
-              end
               if !cost_range_array.empty?
                 notes = "RSI out of the range (#{'%.2f' % rsi}) or cost is 0!. Range for #{construction_set[surface_type]} is #{'%.2f' % cost_range_array.first[0]}-#{'%.2f' % cost_range_array.last[0]}."
                 cost = 0.0
@@ -368,20 +415,26 @@ class BTAPCosting
             totEnvCost = totEnvCost + surfCost
 
             # Bin the costing by construction standard type and rsi
-            name = "#{construction_set[surface_type]}_#{rsi}"
-            if costing_report["Envelope"].has_key?(name)
-              costing_report["Envelope"][name]['area'] += surfArea
-              costing_report["Envelope"][name]['total_cost'] += surfCost
-              costing_report["Envelope"][name]['note'] += " / #{numSurfType}: #{notes}"
+            if construction_set.nil?
+              name = "undefined space type_#{rsi}"
             else
-              costing_report["Envelope"][name]={'area' => surfArea,
-                                                'total_cost' => surfCost}
-              costing_report["Envelope"][name]['note'] = "Surf ##{numSurfType}: #{notes}"
+              name = "#{construction_set[surface_type]}_#{rsi}"
+            end
+            if costing_report['Envelope'].has_key?(name)
+              costing_report['Envelope'][name]['area'] += surfArea
+              costing_report['Envelope'][name]['cost'] += surfCost
+              costing_report['Envelope'][name]['note'] += " / #{numSurfType}: #{notes}"
+            else
+              costing_report['Envelope'][name]={'area' => surfArea,
+                                                'cost' => surfCost}
+              costing_report['Envelope'][name]['note'] = "Surf ##{numSurfType}: #{notes}"
             end
           end # surfaces of surface type
         end # surface_type
       end # spaces
     end # thermalzone
+
+    costing_report['Envelope']['TotalEnvelopeCost'] = totEnvCost
 
     # Save the costing_report to a file.
     File.open(@cost_output_file, "w") do |f|
@@ -394,25 +447,10 @@ class BTAPCosting
 
   end
 
-  #This will expand the two letter province abbreviation to a full uppercase province name
-  def expandProvAbbrev(abbrev)
+  def cost_audit_lighting(model, costing_report)
 
-    # Note that the proper abbreviation for Quebec is QC not PQ. However, we've used PQ!
-    Hash provAbbrev = {"AB" => "ALBERTA",
-                       "BC" => "BRITISH COLUMBIA",
-                       "MB" => "MANITOBA",
-                       "NB" => "NEW BRUNSWICK",
-                       "NL" => "NEWFOUNDLAND AND LABRADOR",
-                       "NT" => "NORTHWEST TERRITORIES",
-                       "NS" => "NOVA SCOTIA",
-                       "NU" => "NUNAVUT",
-                       "ON" => "ONTARIO",
-                       "PE" => "PRINCE EDWARD ISLAND",
-                       "PQ" => "QUEBEC",
-                       "SK" => "SASKATCHEWAN",
-                       "YK" => "YUKON"
-                       }
-    return provAbbrev[abbrev]
+
+
   end
 
 
@@ -433,7 +471,7 @@ class BTAPCosting
     total_with_op = 0.0
     material_cost_pairs = []
     construction[material_layers].split(',').reject {|c| c.empty?}.each do |material_index|
-      material = materials_database.find {|data| data[material_id].to_s == material_index.to_s}
+      material = materials_database.find { |data| data[material_id].to_s == material_index.to_s }
       if material.nil?
         puts "material error..could not find material #{material_index} in #{materials_database}"
         raise()
@@ -444,7 +482,13 @@ class BTAPCosting
           raise()
         else
           regional_material, regional_installation = get_regional_cost_factors(location['province-state'], location['city'], material)
-          #Get RSMeans cost information from lookup.
+
+          # Get RSMeans cost information from lookup.
+          # Note that "glazing" types don't have a 'quantity' hash entry!
+          # Don't need "and" below but using in-case this hash field is added in the future.
+          if type == 'glazing' and material['quantity'].to_f == 0.0
+            material['quantity'] = '1.0'
+          end
           material_cost = rs_means_data['baseCosts']['materialOpCost'].to_f * material['quantity'].to_f * material['material_mult'].to_f
           labour_cost = rs_means_data['baseCosts']['labourOpCost'].to_f * material['labour_mult'].to_f
           equipment_cost = rs_means_data['baseCosts']['equipmentOpCost'].to_f
@@ -473,18 +517,18 @@ class BTAPCosting
     @costing_database['constructions_costs'] << new_construction
   end
 
-  def get_regional_cost_factors(provincestate, city, material)
-    @costing_database['raw']['rsmeans_local_factors'].select {|code| code['province-state'] == provincestate and code['city'] == city}.each do |code|
+  def get_regional_cost_factors(provinceState, city, material)
+    @costing_database['raw']['rsmeans_local_factors'].select { |code|
+      code['province-state'] == provinceState && code['city'] == city }.each do |code|
       id = material['id'].to_s
-      prefixes = code["code_prefixes"].split(',')
+      prefixes = code['code_prefixes'].split(',')
       prefixes.each do |prefix|
-        # puts " #{id} == #{prefix}"
         if id.start_with?(prefix.strip)
-          return code["material"].to_f, code["installation"].to_f
+          return code['material'].to_f, code['installation'].to_f
         end
       end
     end
-    error = [material, "Could not find regional adjustment factor for rs-means material"]
+    error = [material, "Could not find regional adjustment factor for rs-means material used in #{city}, #{provinceState}."]
     @costing_database['rs_mean_errors'] << error unless @costing_database['rs_mean_errors'].include?(error)
     return 100.0, 100.0
   end
@@ -516,40 +560,46 @@ class BTAPCosting
     return json
   end
 
-  # Brute force interpolation...Could be improved easily. Only use for small amount of points.
+  # Interpolate array of hashes that contain 2 values (key=rsi, data=cost)
   def interpolate(x_y_array, x2)
-    array = x_y_array.sort {|a, b| a[0] <=> b[0]}
-    if array.empty? or x2 < array.first[0].to_f or x2 > array.last[0].to_f
+    array = x_y_array.sort { |a, b| a[0] <=> b[0] }
+
+    # Check if value x2 is within range of array for interpolation
+    # Extrapolate when x2 is out-of-range by +/- 10% of end values.
+    if array.empty? || x2 < (0.9 * array.first[0].to_f) || x2 > (1.1 * array.last[0].to_f)
       return nil
+    elsif x2 < array.first[0].to_f
+      # Extrapolate down using first cost value to this out-of-range input
+      return array.first[1].to_f
+    elsif x2 > array.last[0].to_f
+      # Extrapolate up using last cost value to this out-of-range input
+      return array.last[1].to_f
     else
-      # ugly hack to interpolate...but it works.
       array.each_index do |counter|
 
-        #skip last value.
+        # skip last value.
         next if array[counter] == array.last
 
         x0 = array[counter][0]
         y0 = array[counter][1]
-        x1 = array[counter+1][0]
-        y1 = array[counter+1][1]
+        x1 = array[counter + 1][0]
+        y1 = array[counter + 1][1]
 
-        # skip if x2 is not between x0 and x1
-        next if x2 < x0 and x2 > x1
+        # skip to next if x2 is not between x0 and x1
+        next if x2 < x0 || x2 > x1
 
         # Do interpolation
-        y2 = 0
-        if((x1-x0)>0.0)
-          y2 = y0.to_f + ((y1-y0).to_f*(x2-x0).to_f/(x1-x0).to_f)
-          #log ("y2 = #{y2}")
-          y2 = y2.ceil
+        y2 = y0 # just in-case x0, x1 and x2 are identical!
+        if(x1 - x0) > 0.0
+          y2 = y0.to_f + ((y1 - y0).to_f * (x2 - x0).to_f / (x1 - x0).to_f)
         end
         return y2
       end
     end
   end
 
-  # Enter in [latitude, logitude] for each loc and this method will return the distance.
-  def distance (loc1, loc2)
+  # Enter in [latitude, longitude] for each loc and this method will return the distance.
+  def distance(loc1, loc2)
     rad_per_deg = Math::PI/180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
     rm = rkm * 1000 # Radius in meters
@@ -565,19 +615,39 @@ class BTAPCosting
     rm * c # Delta in meters
   end
 
-  def get_closest_cost_city(lat, long)
+  def get_closest_cost_location(lat, long)
     dist = 1000000000000000000000.0
-    closest_city = nil
-    #province-state	city	latitude	longitude	source
+    closest_loc = nil
+    # province-state	city	latitude	longitude	source
     @costing_database['raw']['rsmeans_locations'].each do |location|
       if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
-        closest_city = location
+        closest_loc = location
         dist = distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f])
       end
     end
-    return closest_city
+    return closest_loc
   end
 
+  # This will expand the two letter province abbreviation to a full uppercase province name
+  def expandProvAbbrev(abbrev)
+
+    # Note that the proper abbreviation for Quebec is QC not PQ. However, we've used PQ in openstudio-standards!
+    Hash provAbbrev = {"AB" => "ALBERTA",
+                       "BC" => "BRITISH COLUMBIA",
+                       "MB" => "MANITOBA",
+                       "NB" => "NEW BRUNSWICK",
+                       "NL" => "NEWFOUNDLAND AND LABRADOR",
+                       "NT" => "NORTHWEST TERRITORIES",
+                       "NS" => "NOVA SCOTIA",
+                       "NU" => "NUNAVUT",
+                       "ON" => "ONTARIO",
+                       "PE" => "PRINCE EDWARD ISLAND",
+                       "PQ" => "QUEBEC",
+                       "SK" => "SASKATCHEWAN",
+                       "YT" => "YUKON"
+    }
+    return provAbbrev[abbrev]
+  end
 
 end
 

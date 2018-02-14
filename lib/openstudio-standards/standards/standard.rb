@@ -11,8 +11,8 @@ class Standard
   # https://stackoverflow.com/questions/1515577/factory-methods-in-ruby and clakes post. Which I think is the cleanest
   # implementation.
   # This creates a constant HASH to be set  during class instantiation.
-  # When adding standards you must register the class by invoking 'register_standard ('NECB 2011')' for example for
-  # NECB 2011.
+  # When adding standards you must register the class by invoking 'register_standard ('NECB2011')' for example for
+  # NECB2011.
 
   # A list of available Standards subclasses that can
   # be created using the Standard.build() method.
@@ -27,9 +27,9 @@ class Standard
   #
   # @param name [String] the name of the Standard to build.
   #   valid choices are: DOE Pre-1980, DOE 1980-2004, 90.1-2004,
-  #   90.1-2007, 90.1-2010, 90.1-2013, NREL ZNE Ready 2017, NECB 2011
+  #   90.1-2007, 90.1-2010, 90.1-2013, NREL ZNE Ready 2017, NECB2011
   # @example Create a new Standard object by name
-  #   standard = Standard.build('NECB 2011')
+  #   standard = Standard.build('NECB2011')
   def self.build(name)
     if STANDARDS_LIST[name].nil?
       raise "ERROR: Did not find a class called '#{name}' to create in #{JSON.pretty_generate(STANDARDS_LIST)}"
@@ -41,6 +41,33 @@ class Standard
   def intialize
     super()
   end
+
+  # Get the name of the building type used in lookups
+  #
+  # @param building_type [String] the building type
+  # @return [String] returns the lookup name as a string
+  # @todo Unify the lookup names and eliminate this method
+  def model_get_lookup_name(building_type)
+    lookup_name = building_type
+    case building_type
+      when 'SmallOffice'
+        lookup_name = 'Office'
+      when 'MediumOffice'
+        lookup_name = 'Office'
+      when 'LargeOffice'
+        lookup_name = 'Office'
+      when 'LargeOfficeDetail'
+        lookup_name = 'Office'
+      when 'RetailStandalone'
+        lookup_name = 'Retail'
+      when 'RetailStripmall'
+        lookup_name = 'StripMall'
+      when 'Office'
+        lookup_name = 'Office'
+    end
+    return lookup_name
+  end
+
 
   # Loads the default openstudio standards dataset.
   #

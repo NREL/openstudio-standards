@@ -1955,6 +1955,10 @@ class Standard
     search_criteria_matching_objects = []
     matching_objects = []
 
+    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
+      hash_of_objects = hash_of_objects['table']
+    end
+
     # Compare each of the objects against the search criteria
     hash_of_objects.each do |object|
       meets_all_search_criteria = true
@@ -2052,6 +2056,9 @@ class Standard
   def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
     #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
 
+    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
+      hash_of_objects = hash_of_objects['table']
+    end
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
@@ -2157,7 +2164,6 @@ class Standard
       schedule.defaultDaySchedule.setName("#{name} Default")
     end
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
-
     return schedule
   end
 
@@ -2191,7 +2197,7 @@ class Standard
     end
 
     # Make a schedule ruleset
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new( model )
     sch_ruleset.setName(schedule_name.to_s)
 
     # Loop through the rules, making one for each row in the spreadsheet
@@ -2203,7 +2209,6 @@ class Standard
       values = rule['values']
 
       # Day Type choices: Wkdy, Wknd, Mon, Tue, Wed, Thu, Fri, Sat, Sun, WntrDsn, SmrDsn, Hol
-
       # Default
       if day_types.include?('Default')
         day_sch = sch_ruleset.defaultDaySchedule
@@ -2272,10 +2277,8 @@ class Standard
         sch_rule.setApplyFriday(true) if day_types.include?('Fri')
         sch_rule.setApplySaturday(true) if day_types.include?('Sat')
         sch_rule.setApplySunday(true) if day_types.include?('Sun')
-
       end
     end # Next rule
-
     return sch_ruleset
   end
 

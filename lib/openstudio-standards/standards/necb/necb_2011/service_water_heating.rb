@@ -5,12 +5,11 @@ class NECB2011
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
-      # vars x1..x10 not required here, only service water heating fuel type, which is
-      # weather file dependent for NECB 2011
-      x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
+
+      swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
       # Add the main service water loop
-      unless building_type == 'RetailStripmall' && template != 'NECB 2011'
+      unless building_type == 'RetailStripmall' && ( template != 'NECB2011' &&  template != 'NECB2015')
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
                                            nil,
@@ -46,7 +45,6 @@ class NECB2011
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
         building_type = 'Space Function'
-        puts 'here'
         puts space_type_map
 
         space_type_map.sort.each do |space_type_name, space_names|

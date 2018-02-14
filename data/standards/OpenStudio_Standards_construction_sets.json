@@ -17851,7 +17851,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "FullServiceRestaurant",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -17893,7 +17893,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "HighriseApartment",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -17935,7 +17935,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "Hospital",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -17977,7 +17977,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "LargeHotel",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18019,7 +18019,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "LargeOffice",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18061,7 +18061,7 @@
       "notes": "listed as \"Crawl\" (crawlspace) in DEER"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "MediumOffice",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18103,7 +18103,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "MidriseApartment",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18145,7 +18145,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "Office",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18187,7 +18187,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "Outpatient",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18229,7 +18229,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "PrimarySchool",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18271,7 +18271,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "QuickServiceRestaurant",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18313,7 +18313,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "Retail",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18355,7 +18355,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "RetailStandalone",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18397,7 +18397,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "RetailStripmall",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18439,7 +18439,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "SecondarySchool",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18481,7 +18481,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "SmallHotel",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18523,7 +18523,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "SmallOffice",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18565,7 +18565,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "StripMall",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18607,7 +18607,7 @@
       "notes": "Note \"occupied' as default spacetype"
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "SuperMarket",
       "space_type": "WholeBuilding",
       "is_residential": "No",
@@ -18649,7 +18649,7 @@
       "notes": null
     },
     {
-      "template": "NECB 2011",
+      "template": "NECB2011",
       "building_type": "Warehouse",
       "space_type": "WholeBuilding",
       "is_residential": "No",

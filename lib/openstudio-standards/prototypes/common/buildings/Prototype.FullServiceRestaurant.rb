@@ -28,7 +28,7 @@ module FullServiceRestaurant
 
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
-    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB 2011'
+    unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB2011'
       dining_space = model.getSpaceByName('Dining').get
       attic_space = model.getSpaceByName('Attic').get
       infiltration_diningdoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
@@ -209,7 +209,7 @@ module FullServiceRestaurant
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           if water_heater.name.to_s.include?('Booster')
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)

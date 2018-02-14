@@ -5,7 +5,7 @@ Standard.class_eval do
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
-    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB 2011. This is a quick check.
+    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB2011. This is a quick check.
     if @instvarbuilding_type == 'HighriseApartment'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
@@ -171,7 +171,7 @@ Standard.class_eval do
   end
 
   def model_add_full_space_type_libs(model)
-    space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB 2011')
+    space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB2011')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
@@ -352,7 +352,7 @@ Standard.class_eval do
 
     # Make the default construction set for the building
     spc_type = nil
-    spc_type = 'WholeBuilding' if template == 'NECB 2011'
+    spc_type = 'WholeBuilding' if template == 'NECB2011'
     bldg_def_const_set = model_add_construction_set(model, climate_zone, new_lookup_building_type, spc_type, is_residential)
 
     if bldg_def_const_set.is_initialized
@@ -395,7 +395,7 @@ Standard.class_eval do
     end
 
     # Add construction from story level, especially for the case when there are residential and nonresidential construction in the same building
-    if new_lookup_building_type == 'SmallHotel' && template != 'NECB 2011'
+    if new_lookup_building_type == 'SmallHotel' && template != 'NECB2011'
       model.getBuildingStorys.sort.each do |story|
         next if story.name.get == 'AtticStory'
         # puts "story = #{story.name}"
@@ -461,14 +461,14 @@ Standard.class_eval do
 
     # get all the space types that are conditioned
 
-    # not required for NECB 2011
-    unless template == 'NECB 2011'
+    # not required for NECB2011
+    unless template == 'NECB2011'
       conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
     end
 
     # add internal mass
-    # not required for NECB 2011
-    unless (template == 'NECB 2011') ||
+    # not required for NECB2011
+    unless (template == 'NECB2011') ||
         ((building_type == 'SmallHotel') &&
             (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
@@ -540,7 +540,7 @@ Standard.class_eval do
       else
         thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-        if template == 'NECB 2011'
+        if template == 'NECB2011'
           # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
@@ -1034,7 +1034,7 @@ Standard.class_eval do
             clg = 1.0
             htg = 1.0
         end
-      when 'NECB 2011'
+      when 'NECB2011'
         raise('do not use this method for NECB')
       else
         # Use the sizing factors from 90.1 PRM
@@ -1564,7 +1564,7 @@ Standard.class_eval do
   # end reduce schedule
 
   def apply_economizers(climate_zone, model)
-    if template != 'NECB 2011'
+    if template != 'NECB2011'
       # Create an economizer maximum OA fraction of 70%
       # to reflect damper leakage per PNNL
       econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -1572,7 +1572,7 @@ Standard.class_eval do
       econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
       econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
     else
-      # NECB 2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
+      # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
       econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
       econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
       econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
@@ -1598,7 +1598,7 @@ Standard.class_eval do
               else
                 economizer_type = 'DifferentialDryBulb'
             end
-          when 'NECB 2011'
+          when 'NECB2011'
             # NECB 5.2.2.8 states that economizer can be controlled based on difference betweeen
             # return air temperature and outside air temperature OR return air enthalpy
             # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
@@ -1616,7 +1616,7 @@ Standard.class_eval do
         end
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
-        if template != 'NECB 2011'
+        if template != 'NECB2011'
           # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
         end
 

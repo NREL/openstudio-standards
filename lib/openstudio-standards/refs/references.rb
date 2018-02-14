@@ -36,7 +36,7 @@ module References
   # as of 2017.
   class NRELZNEReady2017; end
 
-  # NECB 2011
+  # NECB2011
   # @see https://www.nrc-cnrc.gc.ca/eng/publications/codes_centre/2011_national_energy_code_buildings.html Purchase in the NRC Virtual Store
   class NECB2011; end
 
