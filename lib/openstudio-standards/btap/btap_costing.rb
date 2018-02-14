@@ -1,10 +1,10 @@
 require "#{File.dirname(__FILE__)}/btap"
 require 'json'
-require 'rest-client'
-require 'openssl'
-require 'aes'
 require 'singleton'
 require 'roo'
+require 'openssl'
+require 'aes'
+require 'rest-client'
 
 
 class BTAPCosting
