@@ -85,7 +85,7 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
       # Create the model, if requested
       if create_models
         prototype_creator = Standard.build("#{template}_#{building_type}_#{hvac_system}")
-        model = prototype_creator.model_create_prototype_model(climate_zone, nil, run_dir)
+        model = prototype_creator.model_create_prototype_model(climate_zone, nil, run_dir, debug)
 
         # If the model was not created successfully,
         # create and save an empty model. Tests will fail
