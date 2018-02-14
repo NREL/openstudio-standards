@@ -14,6 +14,7 @@ end
 
 # Create a base class for testing doe prototype buildings
 class CreateDOEPrototypeBuildingTest < Minitest::Test
+  attr_accessor :current_model
 
   def setup
     # Make a directory to save the resulting models
@@ -53,7 +54,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     building_types.each do |building_type|
       templates.each do |template|
         climate_zones.each do |climate_zone|
-          #need logic to go through weather files only for Canada's NECB 2011. It will ignore the ASHRAE climate zone. 
+          #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
               create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
@@ -82,7 +83,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
     method_name = nil
     case template
-    when 'NECB 2011'
+    when 'NECB2011'
 
       method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{File.basename(epw_file.to_s,'.epw')}".gsub(' ','_').gsub('.','_')
       
@@ -103,7 +104,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       
     model_name = nil
     case template
-    when 'NECB 2011'
+    when 'NECB2011'
       model_name = "#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
     else
       model_name = "#{building_type}-#{template}-#{climate_zone}"
@@ -119,13 +120,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       idf_path = OpenStudio::Path.new(idf_path_string)            
       osm_path_string = "#{run_dir}/final.osm"
       output_path = OpenStudio::Path.new(run_dir)
-            
+
       model = nil
             
       # Create the model, if requested
       if create_models
         prototype_creator = Standard.build("#{template}_#{building_type}")
         model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+        @current_model = model
+        puts model.class
         output_variable_array =
           [
           "Facility Total Electric Demand Power",

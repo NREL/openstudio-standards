@@ -46,7 +46,7 @@ module LargeOffice
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)

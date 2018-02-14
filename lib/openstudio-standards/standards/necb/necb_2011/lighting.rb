@@ -35,7 +35,7 @@ class NECB2011
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occ_sens_lpd_frac = 1.0
-          # NECB 2011 space types that require a reduction in the LPD to account for
+          # NECB2011 space types that require a reduction in the LPD to account for
           # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
           reduce_lpd_spaces = ['Classroom/lecture/training', 'Conf./meet./multi-purpose', 'Lounge/recreation',
                              'Conf./meet./multi-purpose', 'Washroom-sch-A', 'Washroom-sch-B', 'Washroom-sch-C', 'Washroom-sch-D',

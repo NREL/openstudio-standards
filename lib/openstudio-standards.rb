@@ -57,6 +57,7 @@ module OpenstudioStandards
   # Standards classes
   require_relative "#{stds}/standard"
   require_relative "#{stds}/necb/necb_2011/necb_2011"
+  require_relative "#{stds}/necb/necb_2015/necb_2015"
   require_relative "#{stds}/necb/necb_2011/building_envelope"
   require_relative "#{stds}/necb/necb_2011/lighting"
   require_relative "#{stds}/necb/necb_2011/hvac_systems"

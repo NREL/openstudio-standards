@@ -3535,7 +3535,7 @@ module BTAP
                   
                   vav_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model,always_on,reheat_coil)
                   air_loop.addBranchForZone(zone,vav_terminal.to_StraightComponent)
-				  # NECB 2011 minimum zone airflow setting 
+				  # NECB2011 minimum zone airflow setting 
                   min_flow_rate = 0.002 * zone.floorArea
                   vav_terminal.setFixedMinimumAirFlowRate(min_flow_rate) 
 	              vav_terminal.setMaximumReheatAirTemperature(43.0)

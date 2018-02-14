@@ -9,6 +9,8 @@
       3. **On Windows**:
       4. Install [Ruby 2.2.6](http://rubyinstaller.org/downloads/) (`ruby -v` from command prompt to check installed version).
       5. Install [Ruby DevKit](http://rubyinstaller.org/downloads/) by following [these installation instructions](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit)
+      6. **Using BTAP development Environment**
+      7. Do nothing.
 
 4. Connect Ruby to OpenStudio:
 	1. **On Mac**:
@@ -20,6 +22,8 @@
 	7. Contents: `require "C:/openstudio-2.1.0/Ruby/openstudio.rb"`  Modify `2.1.0` to the version you installed.
 	8. Save it here: `C:/Ruby22-x64/lib/ruby/site_ruby/openstudio.rb`
 	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
+	10. **Using BTAP development Environment**
+	11.  Do nothing.
 
 5. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
 6. Install the `json` ruby gem. (`gem install json` from command prompt)
@@ -29,6 +33,7 @@
 9. Run all commands below from the `/openstudio-standards/openstudio-standards` directory 
 10. **On Windows**, use the Git Bash instead of the default command prompt.
 11. **On Mac** the default terminal is fine.
+12. **Using BTAP development Environment** use the terminator terminal ideally.
 11. Navigate to the `openstudio-standards` directory.
 12. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
 13. Sign up for an account at [CircleCI](https://circleci.com/) and follow the `NREL/openstudio-standards` project.
@@ -50,23 +55,28 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
 
 `rake -T`: List all available commands
 
-- `rake build`: builds the gem
-- `rake clean`: don't use this
-- `rake clobber`: don't use this either
-- `rake data:update`: downloads and exports OpenStudio_Standards Google Spreadsheet
-- `rake data:update:manual`: exports OpenStudio_Standards Google Spreadsheet
-- `rake doc`: generates the documentation
-- `rake doc:show`: generates and shows the documentation
-- `rake install`: installs the gem
-- `rake install:local`: installs the gem locally
-- `rake release`: pushes the code to RubyGems.org. Don't use this without asking!
-- `rake rubocop`: checks the code syntax
-- `rake rubocop`: checks the code syntax and shows the report
-- `rake rubocop:auto_correct`: fixes mistakes in code syntax
-- `rake test:compliance`: runs tests for NECB compliance (Canadian)
-- `rake test:necb-buildings`: runs tests for NECB buildings (Canadian)
-- `rake test:necb-hvac`: runs tests for NECB hvac (Canadian)
-- `rake test:compliance`: runs tests for NECB weather (Canadian)
+- `rake build`                    # Build openstudio-standards-0.1.15.gem into the pkg directory
+- `rake clean`                    # Remove any temporary products
+- `rake clobber`                  # Remove any generated files
+- `rake data:update`              # Download OpenStudio_Standards from Google & export JSONs
+- `rake data:update:costing`      # Update RS-Means Database
+- `rake data:update:manual`       # Export JSONs from OpenStudio_Standards
+- `rake doc`                      # Generate the documentation
+- `rake doc:show`                 # Show the documentation in a web browser
+- `rake install`                  # Build and install openstudio-standards-0.1.15.gem into system gems
+- `rake install:local`            # Build and install openstudio-standards-0.1.15.gem into system gems without network access
+- `rake release[remote`]          # Create tag v0.1.15 and build and push openstudio-standards-0.1.15.gem to Rubygems
+- `rake rubocop`                  # Check the code for style consistency
+- `rake rubocop:auto_correct`     # Auto-correct RuboCop offenses
+- `rake rubocop:show`             # Show the rubocop output in a web browser
+- `rake test:btap_json_test`      # Run tests for btap_json_test
+- `rake test:circ-90_1_general`   # Run tests for circ-90_1_general
+- `rake test:circ-90_1_prm`       # Run tests for circ-90_1_prm
+- `rake test:circ-all-tests`      # Run tests for circ-all-tests
+- `rake test:circ-doe_prototype`  # Run tests for circ-doe_prototype
+- `rake test:circ-necb`           # Run tests for circ-necb
+- `rake test:circ-necb_bldg`      # Run tests for circ-necb_bldg
+
  
 ### Modify the code
 

@@ -40,7 +40,7 @@ require_relative 'utilities'
 require_relative 'reporting'
 require_relative 'equest'
 require_relative 'btap_result'
-require_relative 'btap_costing'
+#require_relative 'btap_costing'
 #require_relative 'btap.space'
 #require_relative 'btap.model'
 class String

@@ -29,15 +29,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yard', '~> 0.8'
   spec.add_development_dependency 'rubocop', '~> 0.50'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'
-  spec.add_development_dependency 'minitest-ci'
+  spec.add_development_dependency 'minitest-ci', '<= 5.10.3'
   spec.add_development_dependency 'rubyXL', '3.3.8' # install rubyXL gem to export excel files to json
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
   spec.add_development_dependency 'codecov' # to perform code coverage checking
-  spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
-  spec.add_development_dependency 'geocoder', '1.4.4'
-  spec.add_development_dependency 'highline'
-  spec.add_development_dependency 'launchy'
+  spec.add_development_dependency 'roo'
+
 end

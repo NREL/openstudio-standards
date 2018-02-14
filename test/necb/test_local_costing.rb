@@ -4,15 +4,15 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestCosting < NECB2011
 
   #create model
-  template = 'NECB 2011'
-  building_type = 'FullServiceRestaurant'
+  template = 'NECB2011'
+
+  #building_type = 'FullServiceRestaurant'
+  #building_type ='SmallOffice'
+  #building_type ='MediumOffice'
+  building_type ='LargeOffice'
+
   climate_zone = 'NECB HDD Method'
-  #epw_file = 'CAN_AB_Edmonton.711230_CWEC.epw'
-  #epw_file = 'CAN_AB_Calgary.718770_CWEC.epw'
-  epw_file = 'CAN_AB_Grande.Prairie.719400_CWEC.epw'
-  #epw_file = 'CAN_ON_Toronto.716240_CWEC.epw'
-  #epw_file = 'CAN_BC_Vancouver.718920_CWEC.epw'
-  #epw_file = 'CAN_PQ_Sherbrooke.716100_CWEC.epw'
+  epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
 
   model = nil
 
