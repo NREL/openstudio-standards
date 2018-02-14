@@ -1355,13 +1355,13 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {23ae3417-1073-4da8-ae80-510c0d350efa}, !- Handle
-  RefWalkinCool,                          !- Name
+  RefWalkInCool,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {de19653f-b8b1-45ba-8c3e-24ded3b846f7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Gro,                                    !- Standards Building Type
-  RefWalkinCool;                          !- Standards Space Type
+  RefWalkInCool;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {de19653f-b8b1-45ba-8c3e-24ded3b846f7}, !- Handle
@@ -1373,13 +1373,13 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {4e107692-35a8-4370-b02f-654551820afb}, !- Handle
-  RefWalkinFreeze,                        !- Name
+  RefWalkInFreeze,                        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {b7815105-fd14-4ba1-a7f4-8e3c0b27696b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Gro,                                    !- Standards Building Type
-  RefWalkinFreeze;                        !- Standards Space Type
+  RefWalkInFreeze;                        !- Standards Space Type
 
 OS:Rendering:Color,
   {b7815105-fd14-4ba1-a7f4-8e3c0b27696b}, !- Handle
