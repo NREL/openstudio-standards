@@ -1563,47 +1563,39 @@ Standard.class_eval do
 
   # end reduce schedule
 
+  # Determine the prototypical economizer type for the model.
+  # Defaults to the pre-90.1-2010 assumption of DifferentialDryBulb.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param climate_zone [String] the climate zone
+  # @return [String] the economizer type.  Possible values are:
+  # 'NoEconomizer'
+  # 'FixedDryBulb'
+  # 'FixedEnthalpy'
+  # 'DifferentialDryBulb'
+  # 'DifferentialEnthalpy'
+  # 'FixedDewPointAndDryBulb'
+  # 'ElectronicEnthalpy'
+  # 'DifferentialDryBulbAndEnthalpy'
+  def model_economizer_type(model, climate_zone)
+    economizer_type = 'DifferentialDryBulb'
+    return economizer_type
+  end
+
   def apply_economizers(climate_zone, model)
-    if template != 'NECB2011'
-      # Create an economizer maximum OA fraction of 70%
-      # to reflect damper leakage per PNNL
-      econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
-    else
-      # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
-      econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
-    end
+    # Create an economizer maximum OA fraction of 70%
+    # to reflect damper leakage per PNNL
+    econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
+    econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
+    econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
 
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
-        economizer_type = nil
-        case template
-          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-            economizer_type = 'DifferentialDryBulb'
-          when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-            case climate_zone
-              when 'ASHRAE 169-2006-1A',
-                  'ASHRAE 169-2006-2A',
-                  'ASHRAE 169-2006-3A',
-                  'ASHRAE 169-2006-4A'
-                economizer_type = 'DifferentialEnthalpy'
-              else
-                economizer_type = 'DifferentialDryBulb'
-            end
-          when 'NECB2011'
-            # NECB 5.2.2.8 states that economizer can be controlled based on difference betweeen
-            # return air temperature and outside air temperature OR return air enthalpy
-            # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
-            economizer_type = 'DifferentialEnthalpy'
-        end
+        economizer_type = model_economizer_type(model, climate_zone)
 
         # Set the economizer type
         # Get the OA system and OA controller
@@ -1616,9 +1608,7 @@ Standard.class_eval do
         end
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
-        if template != 'NECB2011'
-          # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
-        end
+        # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.

@@ -195,6 +195,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
+  require_relative "#{stds}/deer/deer.AirLoopHVAC"
 
   ### Prototypes ###
   # Building Types
@@ -249,12 +250,14 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
   # 90.1-2013
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
@@ -274,6 +277,9 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
+  # DEER
+  require_relative "#{proto}/deer/deer.Model"
 end
