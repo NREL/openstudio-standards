@@ -1,7 +1,7 @@
 
 OS:Version,
-  {cc446c87-bf77-4fff-a0bd-cab0bc43aff3}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {1b9a1229-7322-4143-ae8b-42319c117290}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:BuildingStory,
   {ea4a1b6e-0c84-4f5b-aaa2-68e16ee1b95d}, !- Handle
@@ -28,7 +28,7 @@ OS:Space,
 OS:Space,
   {cd2dea42-f3d3-4171-a5a6-faf3b5d6bdd2}, !- Handle
   EL1 CrS (G.1),                          !- Name
-  ,                                       !- Space Type Name
+  {f5b85e66-f459-40fe-bc20-e617bffa7680}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
