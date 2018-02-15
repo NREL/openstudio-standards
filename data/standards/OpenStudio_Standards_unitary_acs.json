@@ -3257,7 +3257,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -3279,7 +3279,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -3301,7 +3301,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -3323,7 +3323,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -3345,7 +3345,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -3367,7 +3367,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -3389,7 +3389,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -3411,7 +3411,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -3433,7 +3433,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -3455,7 +3455,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1: CHECK THIS"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -3477,7 +3477,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1: CHECK THIS"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -3499,7 +3499,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1: CHECK THIS"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -3521,7 +3521,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1: CHECK THIS"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -3543,7 +3543,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -3565,7 +3565,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -3587,7 +3587,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -3609,7 +3609,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -3631,7 +3631,7 @@
       "notes": "From NECB 2011, Table 5.2.12.1"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",

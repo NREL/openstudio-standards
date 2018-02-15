@@ -2593,7 +2593,7 @@
       "notes": "From DOE Reference Buildings"
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Scroll",
@@ -2611,7 +2611,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Scroll",
@@ -2629,7 +2629,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Scroll",
@@ -2647,7 +2647,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Scroll",
@@ -2665,7 +2665,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Reciprocating",
@@ -2683,7 +2683,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Reciprocating",
@@ -2701,7 +2701,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Reciprocating",
@@ -2719,7 +2719,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Reciprocating",
@@ -2737,7 +2737,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Rotary Screw",
@@ -2755,7 +2755,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Rotary Screw",
@@ -2773,7 +2773,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Rotary Screw",
@@ -2791,7 +2791,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Rotary Screw",
@@ -2809,7 +2809,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Centrifugal",
@@ -2827,7 +2827,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Centrifugal",
@@ -2845,7 +2845,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Centrifugal",
@@ -2863,7 +2863,7 @@
       "notes": null
     },
     {
-      "template": "NECB2011",
+      "template": "NECB 2011",
       "cooling_type": "WaterCooled",
       "condenser_type": null,
       "compressor_type": "Centrifugal",
