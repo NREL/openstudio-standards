@@ -23,7 +23,8 @@ def compare_osm_files(model_true, model_compare)
     'OS:EnergyManagementSystem:Actuator', # Names are UIDs
     'OS:Connection', # Names are UIDs
     'OS:PortList', # Names are UIDs
-    'OS:Building' # Name includes timestamp of creation
+    'OS:Building', # Name includes timestamp of creation
+    'OS:ModelObjectList' # Names are UIDs
   ]
   
   # Find objects in the true model only or in both models
