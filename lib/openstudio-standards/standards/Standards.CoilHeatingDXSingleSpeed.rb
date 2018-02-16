@@ -118,7 +118,7 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       return cop # value of nil
     end
 
@@ -190,7 +190,7 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return sql_db_vars_map
     end

@@ -1,0 +1,141 @@
+[
+  {
+    "name": "S1 Sys (VAVS)",
+    "type": "VAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)",
+      "EL1 West Perim Spc (G.W2)",
+      "EL1 East Perim Spc (G.E3)",
+      "EL2 North Perim Spc (G.N2)",
+      "EL2 West Perim Spc (G.W3)",
+      "EL3 South Perim Spc (G.S2)",
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
+  },
+  {
+    "name": "EL2 Sys3 (SZRH) (G.S1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL2 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL2 South Perim Plnm (G.S4)"
+  },
+  {
+    "name": "EL3 Sys3 (SZRH) (G.N1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL3 North Perim Plnm (G.N4)"
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (G.C5)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C10)"
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (M.C15)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL4 Core Plnm (M.C20)"
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (T.C25)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C30)"
+  },
+  {
+    "name": "EL4 Sys4 (SZRH) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 North Perim Spc (G.N1)",
+      "EL4 SSW Perim Spc (G.SSW2)",
+      "EL4 NNE Perim Spc (G.NNE3)",
+      "EL4 South Perim Spc (G.S4)"
+    ]
+  },
+  {
+    "name": "EL4 Sys4 (SZRH) (M)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 North Perim Spc (M.N11)",
+      "EL4 SSW Perim Spc (M.SSW12)",
+      "EL4 NNE Perim Spc (M.NNE13)",
+      "EL4 South Perim Spc (M.S14)"
+    ]
+  },
+  {
+    "name": "EL4 Sys4 (SZRH) (T)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 North Perim Spc (T.N21)",
+      "EL4 SSW Perim Spc (T.SSW22)",
+      "EL4 NNE Perim Spc (T.NNE23)",
+      "EL4 South Perim Spc (T.S24)"
+    ]
+  }
+]

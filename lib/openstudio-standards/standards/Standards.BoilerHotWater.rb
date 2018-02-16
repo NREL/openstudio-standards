@@ -135,13 +135,15 @@ class Standard
       return successfully_set_all_properties
     end
 
-    # Make the EFFFPLR curve
-    eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
-    if eff_fplr
-      boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
-      successfully_set_all_properties = false
+    # Make the EFFFPLR curve (not all boilers will have one)
+    if blr_props['efffplr']
+      eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
+      if eff_fplr
+        boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
+        successfully_set_all_properties = false
+      end
     end
 
     # Get the minimum efficiency standards

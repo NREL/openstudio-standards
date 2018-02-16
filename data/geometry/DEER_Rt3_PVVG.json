@@ -1,0 +1,17 @@
+[
+  {
+    "name": "EL1 Sys1 (PVAVS) (G)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)",
+      "EL1 East Perim Spc (G.E2)",
+      "EL1 North Perim Spc (G.N3)",
+      "EL1 West Perim Spc (G.W4)",
+      "EL1 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C10)"
+  }
+]

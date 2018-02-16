@@ -22,27 +22,27 @@
     },
     {
       "name": "CEC Pre-1978",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards and the Database for Energy Efficiency Resources."
     },
     {
       "name": "CEC T24 1978",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards Title 24 1978 and the Database for Energy Efficiency Resources."
     },
     {
       "name": "CEC T24 1992",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards Title 24 1992 and the Database for Energy Efficiency Resources."
     },
     {
       "name": "CEC T24 2001",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards Title 24 2001 and the Database for Energy Efficiency Resources."
     },
     {
       "name": "CEC T24 2005",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards Title 24 2005 and the Database for Energy Efficiency Resources."
     },
     {
       "name": "CEC T24 2008",
-      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype model"
+      "notes": "Data taken from the LBNL Commercial Building Energy Saver (CBES) prototype models, which are based on the California Building Energy Efficiency Standards Title 24 2008 and the Database for Energy Efficiency Resources."
     },
     {
       "name": "DEER 1985",
@@ -97,7 +97,7 @@
       "notes": "International Code Council 2015 International \nEnergy Conservation Code"
     },
     {
-      "name": "NECB2011",
+      "name": "NECB 2011",
       "notes": "Taken from the Canadian NECB 2011"
     },
     {

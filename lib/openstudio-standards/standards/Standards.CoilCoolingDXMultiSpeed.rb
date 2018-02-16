@@ -91,7 +91,7 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find efficiency info, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end

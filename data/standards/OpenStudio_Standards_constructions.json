@@ -5,6 +5,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [167]"
       ]
@@ -14,6 +15,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [197]"
       ]
@@ -23,6 +25,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [202]"
       ]
@@ -32,6 +35,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [207]"
       ]
@@ -41,6 +45,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [216]"
       ]
@@ -50,6 +55,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [221]"
       ]
@@ -59,6 +65,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass [216]"
       ]
@@ -68,6 +75,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "12 in. Normalweight Concrete Floor",
@@ -79,6 +87,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "4 in. Normalweight Concrete Floor",
@@ -90,6 +99,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "6 in. Normalweight Concrete Floor",
@@ -98,101 +108,156 @@
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Mass Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Mass Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "8 in. Concrete Block Wall",
+        "Typical Insulation"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Metal Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Metal Framed Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Wood Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "IEAD",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Wood Framed Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "WoodFramed",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Insulated Exterior Mass Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "8 in. Concrete Block Wall",
+        "Typical Insulation"
       ]
     },
     {
       "name": "DEER Insulated Steel Framed Exterior Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Insulated Wood Framed Exterior Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "WoodFramed",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Mass Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER Metal Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
+      ]
+    },
+    {
+      "name": "DEER Metal Framed Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": "Simple Glazing",
+      "skylight_framing": null,
+      "materials": [
+        "Simple Glazing"
+      ]
+    },
+    {
+      "name": "DEER Skylight",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": "Simple Glazing",
+      "skylight_framing": null,
+      "materials": [
+        "Simple Glazing"
       ]
     },
     {
@@ -200,6 +265,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "12 in. Normalweight Concrete Floor"
@@ -210,6 +276,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "4 in. Normalweight Concrete Floor"
@@ -220,6 +287,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "6 in. Normalweight Concrete Floor"
@@ -227,11 +295,14 @@
     },
     {
       "name": "DEER Wood Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "IEAD",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
@@ -239,6 +310,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Ground_Floor_R11_T2013",
         "Plywood - 5/8 in. CBES",
@@ -250,6 +322,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Ground_Floor_R17_T2013",
         "Plywood - 5/8 in. CBES",
@@ -261,6 +334,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Ground_Floor_R22_T2013",
         "Plywood - 5/8 in. CBES",
@@ -272,6 +346,7 @@
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "CP02 CARPET PAD",
         "100mm Normalweight concrete floor",
@@ -283,6 +358,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Nonres_Floor_Insulation",
         "100mm Normalweight concrete floor",
@@ -294,6 +370,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "G01 13mm gypsum board",
         "G01 13mm gypsum board"
@@ -304,6 +381,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W1_R8.60",
@@ -316,6 +394,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W2_R11.13",
@@ -328,6 +407,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W3_R11.36",
@@ -340,6 +420,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W4_R12.62",
@@ -352,6 +433,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W_T24_2013_R13.99",
@@ -364,6 +446,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W_m1_R15",
@@ -376,6 +459,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W_m2_R19",
@@ -388,6 +472,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Stucco - 7/8 in. CBES",
         "W_m3_R21",
@@ -400,6 +485,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R1_R14.20"
@@ -410,6 +496,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R2_R12.90"
@@ -420,6 +507,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R3_R17.74"
@@ -430,6 +518,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R4_R20.28"
@@ -440,6 +529,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R_R30"
@@ -450,6 +540,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R_R38"
@@ -460,6 +551,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in. CBES",
         "R_T24_2013_24.86"
@@ -470,6 +562,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "NACM_Carpet 3/4in"
       ]
@@ -479,6 +572,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "NACM_Gypsum Board 5/8in",
         "NACM_Gypsum Board 5/8in"
@@ -489,6 +583,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "8 in. Normalweight Concrete Floor",
         "CP02 CARPET PAD"
@@ -499,6 +594,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "1/2IN Gypsum",
         "Typical Insulation",
@@ -510,6 +606,7 @@
       "intended_surface_type": "AtticWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "5/8 in. Plywood"
       ]
@@ -519,6 +616,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Built-up Roofing",
         "Typical Insulation",
@@ -530,6 +628,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Built-up Roofing - Highly Reflective",
         "Typical Insulation",
@@ -541,6 +640,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "MAT-CC05 4 HW CONCRETE",
         "Typical Carpet Pad"
@@ -551,6 +651,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "6 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
@@ -561,6 +662,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "8 in. Concrete Block Basement Wall",
         "Typical Carpet Pad"
@@ -571,6 +673,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Roof Membrane",
         "Typical Insulation",
@@ -582,6 +685,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Roof Membrane - Highly Reflective",
         "Typical Insulation",
@@ -593,6 +697,7 @@
       "intended_surface_type": "GroundContactWall",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "8 in. Concrete Block Basement Wall"
@@ -603,6 +708,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "MAT-CC05 4 HW CONCRETE",
@@ -614,6 +720,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "6 in. Normalweight Concrete Floor",
@@ -625,6 +732,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "8 in. Normalweight Concrete Floor",
@@ -636,6 +744,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "4 in. Normalweight Concrete Floor",
@@ -647,6 +756,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Carpet Pad",
         "4 in. Normalweight Concrete Floor",
@@ -658,6 +768,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Mass",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "1IN Stucco",
         "8IN CONCRETE HW RefBldg",
@@ -670,6 +781,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -683,6 +795,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Roof Surface",
         "Typical Insulation"
@@ -693,6 +806,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Roof Surface - Highly Reflective",
         "Typical Insulation"
@@ -703,6 +817,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Metal",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Metal Siding",
         "Typical Insulation",
@@ -714,6 +829,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": null,
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "F08 Metal surface",
         "Typical Insulation"
@@ -724,6 +840,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -737,6 +854,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -749,6 +867,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -762,6 +881,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "25mm Stucco",
         "5/8 in. Gypsum Board",
@@ -774,6 +894,7 @@
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "CP02 CARPET PAD",
         "100mm Normalweight concrete floor"
@@ -784,6 +905,7 @@
       "intended_surface_type": "InteriorDoor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "G05 25mm wood"
       ]
@@ -793,6 +915,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "100mm Normalweight concrete floor",
         "CP02 CARPET PAD"
@@ -803,6 +926,7 @@
       "intended_surface_type": "InteriorPartition",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "G05 25mm wood"
       ]
@@ -812,6 +936,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "4 in. Normalweight Concrete Floor",
         "Typical Carpet Pad"
@@ -822,6 +947,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "G01 13mm gypsum board",
         "G01 13mm gypsum board"
@@ -832,6 +958,7 @@
       "intended_surface_type": "InteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Clear 3mm"
       ]
@@ -841,6 +968,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": "RollUp",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation"
       ]
@@ -850,6 +978,7 @@
       "intended_surface_type": "ExteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "MAT-CC05 4 HW CONCRETE"
       ]
@@ -859,6 +988,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "6 in. Normalweight Concrete Floor"
       ]
@@ -868,6 +998,7 @@
       "intended_surface_type": "GroundContactWall",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "8 in. Concrete Block Basement Wall"
       ]
@@ -877,6 +1008,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "1IN Stucco",
         "8IN CONCRETE HW RefBldg",
@@ -888,6 +1020,7 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
@@ -898,6 +1031,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Metal Roofing"
       ]
@@ -907,6 +1041,7 @@
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Metal Roofing - Highly Reflective"
       ]
@@ -916,6 +1051,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "Metal",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Metal Siding",
         "1/2IN Gypsum"
@@ -926,6 +1062,7 @@
       "intended_surface_type": "AtticRoof",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Roof Membrane",
         "Metal Decking"
@@ -936,6 +1073,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Wood Siding",
         "1/2IN Gypsum"
@@ -946,6 +1084,7 @@
       "intended_surface_type": "ExteriorDoor",
       "standards_construction_type": "Swinging",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation"
       ]
@@ -955,6 +1094,7 @@
       "intended_surface_type": "AtticRoof",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Asphalt Shingles",
         "5/8 in. Plywood"
@@ -965,6 +1105,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
       "materials": [
         "5/8 in. Gypsum Board",
         "Typical Insulation"
@@ -975,6 +1116,7 @@
       "intended_surface_type": "AtticFloor",
       "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Typical Insulation",
         "5/8 in. Gypsum Board"
@@ -985,6 +1127,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "BRONZE 6MM",
         "AIR 13MM",
@@ -998,6 +1141,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "ARGON 13MM",
@@ -1009,6 +1153,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "ARGON 13MM",
@@ -1020,6 +1165,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "ARGON 13MM",
@@ -1031,6 +1177,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "ARGON 13MM",
@@ -1042,6 +1189,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECREF-2 COLORED 6MM",
         "AIR 13MM",
@@ -1053,6 +1201,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECABS-2 COLORED 6MM",
         "AIR 13MM",
@@ -1064,6 +1213,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "BRONZE 6MM",
         "AIR 6MM",
@@ -1077,6 +1227,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -1088,6 +1239,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECREF-2 COLORED 6MM",
         "AIR 13MM",
@@ -1099,6 +1251,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -1110,6 +1263,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "CLEAR 3MM",
         "AIR 6MM",
@@ -1123,6 +1277,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -1134,6 +1289,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "PYR B CLEAR 6MM",
         "AIR 13MM",
@@ -1145,6 +1301,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR MID 6MM",
         "ARGON 13MM",
@@ -1156,6 +1313,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 13MM",
@@ -1167,6 +1325,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "AIR 6MM",
@@ -1178,6 +1337,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B TINT HI 6MM",
         "ARGON 13MM",
@@ -1189,6 +1349,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM",
         "ARGON 13MM",
@@ -1200,6 +1361,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass 347"
       ]
@@ -1209,6 +1371,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Theoretical Glass 297"
       ]
@@ -1218,6 +1381,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE SPEC SEL CLEAR 3MM",
         "AIR 6MM",
@@ -1229,6 +1393,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECABS-2 BLEACHED 6MM",
         "AIR 6MM",
@@ -1240,6 +1405,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 6MM",
@@ -1251,6 +1417,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE TINT 6MM",
         "AIR 6MM",
@@ -1262,6 +1429,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM",
         "ARGON 13MM",
@@ -1273,6 +1441,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -1284,6 +1453,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "LoE SPEC SEL TINT 6MM",
         "AIR 6MM",
@@ -1295,6 +1465,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B TINT HI 6MM",
         "AIR 13MM",
@@ -1306,6 +1477,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -1317,6 +1489,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM",
         "AIR 13MM",
@@ -1328,6 +1501,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "GREY 6MM",
         "AIR 13MM",
@@ -1339,6 +1513,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 13MM",
@@ -1350,6 +1525,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR LO 6MM",
         "AIR 6MM",
@@ -1361,6 +1537,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.52 SHGC 0.39 Simple Glazing"
       ]
@@ -1370,6 +1547,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 13MM",
@@ -1381,6 +1559,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.52 SHGC 0.49 Simple Glazing"
       ]
@@ -1390,6 +1569,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.52 SHGC 0.615 Simple Glazing"
       ]
@@ -1399,6 +1579,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF A CLEAR LO 6MM",
         "AIR 13MM",
@@ -1410,6 +1591,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF A TINT MID 6MM",
         "AIR 6MM",
@@ -1421,6 +1603,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1432,6 +1615,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Glass_2175_LayerAvg",
         "Gap_1_W_0_0032",
@@ -1443,6 +1627,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D TINT 6MM",
         "AIR 6MM",
@@ -1454,6 +1639,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D TINT 6MM",
         "AIR 6MM",
@@ -1465,6 +1651,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "CLEAR 3MM",
         "AIR 6MM",
@@ -1476,6 +1663,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1487,6 +1675,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 6MM",
@@ -1498,6 +1687,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "BLUE 6MM",
         "AIR 6MM",
@@ -1509,6 +1699,7 @@
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.58 SHGC 0.19 Simple Glazing"
       ]
@@ -1518,6 +1709,7 @@
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.58 SHGC 0.36 Simple Glazing"
       ]
@@ -1527,6 +1719,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.59 SHGC 0.36 Simple Glazing"
       ]
@@ -1536,6 +1729,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.59 SHGC 0.39 Simple Glazing"
       ]
@@ -1545,6 +1739,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Glass_2175_LayerAvg",
         "Gap_1_W_0_0025",
@@ -1556,6 +1751,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.61 SHGC 0.77 Simple Glazing"
       ]
@@ -1565,6 +1761,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1576,6 +1773,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM",
         "AIR 6MM",
@@ -1587,6 +1785,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.62 SHGC 0.41 Simple Glazing"
       ]
@@ -1596,6 +1795,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "BLUE 6MM",
         "AIR 6MM",
@@ -1607,6 +1807,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1618,6 +1819,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.65 SHGC 0.35 Simple Glazing"
       ]
@@ -1627,6 +1829,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "PYR B CLEAR 3MM"
       ]
@@ -1636,6 +1839,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.19 Simple Glazing"
       ]
@@ -1645,6 +1849,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.36 Simple Glazing"
       ]
@@ -1654,6 +1859,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.39 Simple Glazing"
       ]
@@ -1663,6 +1869,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.49 Simple Glazing"
       ]
@@ -1672,6 +1879,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.64 Simple Glazing"
       ]
@@ -1681,6 +1889,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.69 SHGC 0.68 Simple Glazing"
       ]
@@ -1690,6 +1899,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM",
         "AIR 6MM",
@@ -1701,6 +1911,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B TINT MID 6MM"
       ]
@@ -1710,6 +1921,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.72 SHGC 0.25 Simple Glazing"
       ]
@@ -1719,6 +1931,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.72 SHGC 0.36 Simple Glazing"
       ]
@@ -1728,6 +1941,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.72 SHGC 0.39 Simple Glazing"
       ]
@@ -1737,6 +1951,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.74 SHGC 0.55 Simple Glazing"
       ]
@@ -1746,6 +1961,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.74 SHGC 0.65 Simple Glazing"
       ]
@@ -1755,6 +1971,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.75 SHGC 0.35 Simple Glazing"
       ]
@@ -1764,6 +1981,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "PYR B CLEAR 6MM"
       ]
@@ -1773,6 +1991,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.81 SHGC 0.65 Simple Glazing"
       ]
@@ -1782,6 +2001,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.85 SHGC 0.65 Simple Glazing"
       ]
@@ -1791,6 +2011,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.87 SHGC 0.58 Simple Glazing"
       ]
@@ -1800,6 +2021,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.87 SHGC 0.71 Simple Glazing"
       ]
@@ -1809,6 +2031,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.87 SHGC 0.77 Simple Glazing"
       ]
@@ -1818,6 +2041,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF A CLEAR LO 6MM"
       ]
@@ -1827,6 +2051,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECREF-1 COLORED 6MM"
       ]
@@ -1836,6 +2061,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.98 SHGC 0.19 Simple Glazing"
       ]
@@ -1845,6 +2071,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 0.98 SHGC 0.36 Simple Glazing"
       ]
@@ -1854,6 +2081,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1863,6 +2091,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1872,6 +2101,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.10 SHGC 0.62 Simple Glazing"
       ]
@@ -1881,6 +2111,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.10 SHGC 0.77 Simple Glazing"
       ]
@@ -1890,6 +2121,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.15 SHGC 0.77 Simple Glazing"
       ]
@@ -1899,6 +2131,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.19 Simple Glazing"
       ]
@@ -1908,6 +2141,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.36 Simple Glazing"
       ]
@@ -1917,6 +2151,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -1926,6 +2161,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.39 Simple Glazing"
       ]
@@ -1935,6 +2171,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF D CLEAR 6MM"
       ]
@@ -1944,6 +2181,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.49 Simple Glazing"
       ]
@@ -1953,6 +2191,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.64 Simple Glazing"
       ]
@@ -1962,6 +2201,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "GREEN 3MM"
       ]
@@ -1971,6 +2211,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.17 SHGC 0.68 Simple Glazing"
       ]
@@ -1980,6 +2221,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "ECREF-1 COLORED 6MM"
       ]
@@ -1989,6 +2231,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.22 SHGC 0.25 Simple Glazing"
       ]
@@ -1998,6 +2241,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF C CLEAR HI 6MM"
       ]
@@ -2007,6 +2251,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -2016,6 +2261,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.22 SHGC 0.54 Simple Glazing"
       ]
@@ -2025,6 +2271,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "GREEN 6MM"
       ]
@@ -2034,6 +2281,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.30 SHGC 0.27 Simple Glazing"
       ]
@@ -2043,6 +2291,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.30 SHGC 0.34 Simple Glazing"
       ]
@@ -2052,6 +2301,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.30 SHGC 0.62 Simple Glazing"
       ]
@@ -2061,6 +2311,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.30 SHGC 0.65 Simple Glazing"
       ]
@@ -2070,6 +2321,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.36 SHGC 0.19 Simple Glazing"
       ]
@@ -2079,6 +2331,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.36 SHGC 0.36 Simple Glazing"
       ]
@@ -2088,6 +2341,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.36 SHGC 0.39 Simple Glazing"
       ]
@@ -2097,6 +2351,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.36 SHGC 0.61 Simple Glazing"
       ]
@@ -2106,6 +2361,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.70 SHGC 0.36 Simple Glazing"
       ]
@@ -2115,6 +2371,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.80 SHGC 0.36 Simple Glazing"
       ]
@@ -2124,6 +2381,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.90 SHGC 0.27 Simple Glazing"
       ]
@@ -2133,6 +2391,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.90 SHGC 0.34 Simple Glazing"
       ]
@@ -2142,6 +2401,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.90 SHGC 0.39 Simple Glazing"
       ]
@@ -2151,6 +2411,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.90 SHGC 0.65 Simple Glazing"
       ]
@@ -2160,6 +2421,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.98 SHGC 0.16 Simple Glazing"
       ]
@@ -2169,6 +2431,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.98 SHGC 0.19 Simple Glazing"
       ]
@@ -2178,6 +2441,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "REF B CLEAR HI 6MM"
       ]
@@ -2187,6 +2451,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.98 SHGC 0.36 Simple Glazing"
       ]
@@ -2196,6 +2461,7 @@
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.98 SHGC 0.39 Simple Glazing"
       ]
@@ -2205,6 +2471,7 @@
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "GREEN 6MM"
       ]
@@ -2214,143 +2481,201 @@
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "U 1.98 SHGC 0.61 Simple Glazing"
       ]
     },
     {
-      "name": "Window10",
+      "name": "U0.47_SHGC0.46_SimpleGlazing_Window_07",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window10"
+        "U0.47_SHGC0.46_SimpleGlazing_Window_07"
       ]
     },
     {
-      "name": "Window11",
+      "name": "U0.47_SHGC0.47_SimpleGlazing_Window_06",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window11"
+        "U0.47_SHGC0.47_SimpleGlazing_Window_06"
       ]
     },
     {
-      "name": "Window12",
+      "name": "U0.47_SHGC0.47_SimpleGlazing_Window_11",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window12"
+        "U0.47_SHGC0.47_SimpleGlazing_Window_11"
       ]
     },
     {
-      "name": "Window2",
+      "name": "U0.47_SHGC0.5_SimpleGlazing_Window_03",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window2"
+        "U0.47_SHGC0.5_SimpleGlazing_Window_03"
       ]
     },
     {
-      "name": "Window3",
+      "name": "U0.47_SHGC_0.49_SimpleGlazing_Window_05",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window3"
+        "U0.47_SHGC_0.49_SimpleGlazing_Window_05"
       ]
     },
     {
-      "name": "Window4",
+      "name": "U0.77_SHGC0.5_SimpleGlazing_Window_09",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window4"
+        "U0.77_SHGC0.5_SimpleGlazing_Window_09"
       ]
     },
     {
-      "name": "Window5",
+      "name": "U0.77_SHGC0.61_SimpleGlazing_Window_08",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window5"
+        "U0.77_SHGC0.61_SimpleGlazing_Window_08"
       ]
     },
     {
-      "name": "Window6",
+      "name": "U0.77_SHGC0.62_SimpleGlazing_Window_04",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window6"
+        "U0.77_SHGC0.62_SimpleGlazing_Window_04"
       ]
     },
     {
-      "name": "Window7",
+      "name": "U0.77_SHGC_0.77_SimpleGlazing_Window_02",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window7"
+        "U0.77_SHGC_0.77_SimpleGlazing_Window_02"
       ]
     },
     {
-      "name": "Window8",
+      "name": "U1.23_SHGC0.5_SimpleGlazing_Window_12",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window8"
+        "U1.23_SHGC0.5_SimpleGlazing_Window_12"
       ]
     },
     {
-      "name": "Window9",
+      "name": "U1.23_SHGC0.82_SimpleGlazing_Window_01",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
-        "Window9"
+        "U1.23_SHGC0.82_SimpleGlazing_Window_01"
       ]
     },
     {
-      "name": "Window_Skylt_T24_2013",
+      "name": "U1.23_SHGC0.82_SimpleGlazing_Window_10",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U1.23_SHGC0.82_SimpleGlazing_Window_10"
+      ]
+    },
+    {
+      "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.000_in",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_0.000_in",
       "materials": [
-        "Window_Skylt_T24_2013"
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0038",
+        "Glass_2027F_LayerAvg"
       ]
     },
     {
-      "name": "Window_m1",
-      "intended_surface_type": "ExteriorWindow",
+      "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.334_in",
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_0.334_in",
       "materials": [
-        "Window_m1"
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0038",
+        "Glass_2027F_LayerAvg"
       ]
     },
     {
-      "name": "Window_m2",
-      "intended_surface_type": "ExteriorWindow",
+      "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.430_in",
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_0.430_in",
       "materials": [
-        "Window_m2"
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0038",
+        "Glass_2027F_LayerAvg"
       ]
     },
     {
-      "name": "Window_u2_T24_2013",
-      "intended_surface_type": "ExteriorWindow",
+      "name": "Window_U_0.55_SHGC_0.35_Skylight_Frame_Width_0.709_in",
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_0.709_in",
       "materials": [
-        "Window_u2_T24_2013"
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0038",
+        "Glass_2027F_LayerAvg"
+      ]
+    },
+    {
+      "name": "Window_U_0.65_SHGC_0.35_Skylight_Frame_Width_2.339_in",
+      "intended_surface_type": "Skylight",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_2.339_in",
+      "materials": [
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0024",
+        "Glass_2027F_LayerAvg"
+      ]
+    },
+    {
+      "name": "Window_U_0.75_SHGC_0.35_Skylight_Frame_Width_2.339_in",
+      "intended_surface_type": "Skylight",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": "Skylight_Frame_Width_2.339_in",
+      "materials": [
+        "Glass_2052_LayerAvg",
+        "Gap_1_W_0_0018",
+        "Glass_2027F_LayerAvg"
       ]
     },
     {
@@ -2358,6 +2683,7 @@
       "intended_surface_type": "ExteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Plywood - 5/8 in.",
         "Compliance Insulation R6.46",
@@ -2370,6 +2696,7 @@
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "Metal Standing Seam - 1/16 in.",
         "ceiling_2_Insulation"
@@ -2380,6 +2707,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "6 in. Normalweight Concrete Floor"
       ]
@@ -2389,6 +2717,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": "CP02 CARPET PAD",
+      "skylight_framing": null,
       "materials": [
         "HW CONCRETE",
         "CP02 CARPET PAD"
@@ -2399,6 +2728,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Metal Building",
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "HW CONCRETE 8 in"
       ]
@@ -2408,6 +2738,7 @@
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "SteelFramed",
       "insulation_layer": "CP02 CARPET PAD",
+      "skylight_framing": null,
       "materials": [
         "HW CONCRETE 8 in",
         "CP02 CARPET PAD"
@@ -2418,6 +2749,7 @@
       "intended_surface_type": "InteriorCeiling",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "CP02 CARPET PAD",
         "4 in. Normalweight Concrete Floor"
@@ -2428,6 +2760,7 @@
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "4 in. Normalweight Concrete Floor",
         "CP02 CARPET PAD"
@@ -2438,18 +2771,10 @@
       "intended_surface_type": "InteriorWall",
       "standards_construction_type": null,
       "insulation_layer": null,
+      "skylight_framing": null,
       "materials": [
         "1/2 in. Gypsum Board",
         "1/2 in. Gypsum Board"
-      ]
-    },
-    {
-      "name": "window1",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": null,
-      "insulation_layer": null,
-      "materials": [
-        "window1"
       ]
     }
   ]

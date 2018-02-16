@@ -164,6 +164,16 @@ namespace :data do
   end
 end
 
+# Tasks to export libraries packaged with
+# the OpenStudio installer
+namespace :library do
+  require "#{File.dirname(__FILE__)}/data/standards/export_OpenStudio_libraries.rb"
+  desc 'Export libraries for OpenStudio installer'
+  task 'export' do
+    export_openstudio_libraries
+  end
+end
+
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|

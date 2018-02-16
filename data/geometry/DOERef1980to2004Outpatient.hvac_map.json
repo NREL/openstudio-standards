@@ -2,6 +2,9 @@
   {
     "type": "PVAV",
     "name": "PVAV Outpatient F1",
+    "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
+    "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH_Pre2004",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 Bio Haz",
@@ -53,6 +56,9 @@
   {
     "type": "PVAV",
     "name": "PVAV Outpatient F2 F3",
+    "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
+    "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH_Pre2004",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 2 Conference",
       "Floor 2 Dictation",
@@ -100,7 +106,6 @@
   {
     "type": "Exhaust Fan",
     "name": "Outpatient AHU1 Exhaust Fans",
-    "availability_sch_name": "OutPatientHealthCare AHU1-Fan_Pre2004",
     "flow_rate": [
       0.068,
       0.0793,
@@ -109,8 +114,9 @@
       0.044,
       0.1416
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
+    "operation_schedule": "OutPatientHealthCare AHU1-Fan_Pre2004",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 MRI Control Room",

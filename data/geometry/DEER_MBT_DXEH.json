@@ -1,0 +1,156 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.S1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (G.S12)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E13)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (G.N14)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W15)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C5)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C16)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C6)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C6)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C17)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C7)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C7)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C18)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C8)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C8)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C19)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C9)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C9)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C20)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C10)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C10)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C21)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C11)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C11)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C22)"
+  }
+]

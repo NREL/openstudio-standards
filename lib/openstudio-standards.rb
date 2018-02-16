@@ -73,6 +73,18 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
+
+  require_relative "#{stds}/deer/deer"
+  require_relative "#{stds}/deer/deer_pre_1975/deer_pre_1975"
+  require_relative "#{stds}/deer/deer_1985/deer_1985"
+  require_relative "#{stds}/deer/deer_1996/deer_1996"
+  require_relative "#{stds}/deer/deer_2003/deer_2003"
+  require_relative "#{stds}/deer/deer_2007/deer_2007"
+  require_relative "#{stds}/deer/deer_2011/deer_2011"
+  require_relative "#{stds}/deer/deer_2014/deer_2014"
+  require_relative "#{stds}/deer/deer_2015/deer_2015"
+  require_relative "#{stds}/deer/deer_2017/deer_2017"
+
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"
@@ -181,6 +193,9 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
+  # DEER Common
+  require_relative "#{stds}/deer/deer.Model"
+  require_relative "#{stds}/deer/deer.AirLoopHVAC"
 
   ### Prototypes ###
   # Building Types
@@ -235,12 +250,14 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
   # 90.1-2013
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
@@ -260,6 +277,9 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
+  # DEER
+  require_relative "#{proto}/deer/deer.Model"
 end

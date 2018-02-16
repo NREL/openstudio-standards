@@ -11,9 +11,9 @@ class Standard
 
     # Determine if WaterCooled or AirCooled by
     # checking if the chiller is connected to a condenser
-    # water loop or not.
+    # water loop or not.  Use name as fallback for exporting HVAC library.
     cooling_type = 'AirCooled'
-    if chiller_electric_eir.secondaryPlantLoop.is_initialized
+    if chiller_electric_eir.secondaryPlantLoop.is_initialized || chiller_electric_eir.name.get.to_s.include?('WaterCooled')
       cooling_type = 'WaterCooled'
     end
 
@@ -114,7 +114,7 @@ class Standard
     # Get the chiller properties
     chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
     unless chlr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties using #{search_criteria}, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end

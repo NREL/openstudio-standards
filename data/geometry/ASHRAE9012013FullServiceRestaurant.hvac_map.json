@@ -1,6 +1,12 @@
 [
   {
     "type": "PSZ-AC",
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "oa_damper_schedule": "RestaurantSitDown MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
     "space_names": [
       "Dining",
       "Kitchen"
@@ -9,10 +15,10 @@
   {
     "type": "Exhaust Fan",
     "name": "Dining Exhaust Fan",
-    "availability_sch_name": "RestaurantSitDown HVACOperationSchd",
     "flow_rate": 1.331432,
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Dining"
     ]
@@ -20,10 +26,10 @@
   {
     "type": "Exhaust Fan",
     "name": "Kitchen Exhaust Fan",
-    "availability_sch_name": "RestaurantSitDown HVACOperationSchd",
     "flow_rate": 2.548516,
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
+    "operation_schedule": "RestaurantSitDown HVACOperationSchd",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Kitchen"
     ]
@@ -35,13 +41,13 @@
     "length": 2.44,
     "evaporator_fan_pwr_per_length": 21.14286,
     "lighting_per_length": 33,
-    "lighting_sch_name": "RestaurantSitDown walkin_occ_lght_SCH",
     "defrost_pwr_per_length": 820,
-    "restocking_sch_name": "RestaurantSitDown Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
     "cop": 1.5,
     "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
     "condenser_fan_pwr": 330,
     "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
+    "lighting_schedule": "RestaurantSitDown walkin_occ_lght_SCH",
+    "restocking_schedule": "RestaurantSitDown Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
     "space_names": [
       "Kitchen"
     ]
@@ -53,13 +59,13 @@
     "length": 3.05,
     "evaporator_fan_pwr_per_length": 18.85714,
     "lighting_per_length": 33.0,
-    "lighting_sch_name": "RestaurantSitDown walkin_occ_lght_SCH",
     "defrost_pwr_per_length": 0.0,
-    "restocking_sch_name": "RestaurantSitDown Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
     "cop": 3.0,
     "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
     "condenser_fan_pwr": 330,
     "condenser_fan_pwr_curve_name": null,
+    "lighting_schedule": "RestaurantSitDown walkin_occ_lght_SCH",
+    "restocking_schedule": "RestaurantSitDown Kitchen_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
     "space_names": [
       "Kitchen"
     ]

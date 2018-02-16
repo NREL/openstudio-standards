@@ -1,0 +1,76 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL2 Core Spc (G.C1)",
+      "EL2 South Perim Spc (G.S2)",
+      "EL2 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL2 Core Plnm (G.4)"
+  },
+  {
+    "name": "EL3 Sys1 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL3 West Perim Spc (G.W1)",
+      "EL3 South Perim Spc (G.S2)",
+      "EL3 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL3 West Plnm (G.4)"
+  },
+  {
+    "name": "EL1 Sys3 (PVVT) (G.E2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ]
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 North Perim Spc (G.N1)",
+      "EL4 South Perim Spc (G.S2)",
+      "EL4 Core Spc (G.C3)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.4)"
+  }
+]
