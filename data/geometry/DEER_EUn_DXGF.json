@@ -176,6 +176,66 @@
     ]
   },
   {
+    "name": "E9 Sys7 (PTAC) (G.N1)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (G.N1)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (G.S2)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 South Perim Spc (G.S2)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (M.N4)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (M.N4)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (M.S5)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 South Perim Spc (M.S5)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (T.N7)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (T.N7)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (T.S8)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 South Perim Spc (T.S8)"
+    ]
+  },
+  {
     "name": "E9 Sys8 (PVVT) (G.C3)",
     "type": "PSZ-AC",
     "operation_schedule": null,

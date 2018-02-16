@@ -4,6 +4,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -22,6 +23,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -40,6 +42,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Electricity",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -52,5 +55,46 @@
       "EL4 Core Spc (T.C18)"
     ],
     "return_plenum": "EL4 Core Plnm (T.C24)"
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (G.C5)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C11)"
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (T.C17)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL4 Core Spc (T.C17)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C23)"
+  },
+  {
+    "name": "EL3 Sys4 (SZRH) (G.NE2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL3 NE Perim Spc (G.NE2)"
+    ]
   }
 ]

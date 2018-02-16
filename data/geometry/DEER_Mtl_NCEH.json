@@ -1,3 +1,178 @@
 [
-
+  {
+    "name": "EL1 Sys1 (UVT) (G.NNE1)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 NNE Perim Spc (G.NNE1)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.S2)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S2)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.N3)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.N4)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N4)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C5)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C5)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.SE6)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 SE Perim Spc (G.SE6)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.S7)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S7)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.SSW8)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 SSW Perim Spc (G.SSW8)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.S9)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S9)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.N1)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 North Perim Spc (G.N1)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.SSW2)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 SSW Perim Spc (G.SSW2)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.N3)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 North Perim Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.NNE4)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 NNE Perim Spc (G.NNE4)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.C5)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 Core Spc (G.C5)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.S6)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 South Perim Spc (G.S6)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (UVT) (G.S7)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 South Perim Spc (G.S7)"
+    ]
+  }
 ]

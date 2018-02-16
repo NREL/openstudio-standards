@@ -121,6 +121,58 @@
     "return_plenum": "E4 Core Plnm (T.C35)"
   },
   {
+    "name": "E3 Sys6 (PSZ) (G.N2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E3 North Perim Spc (G.N2)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (G)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Single Speed DX AC",
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (G.N1)",
+      "E9 South Perim Spc (G.S2)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (M)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Single Speed DX AC",
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (M.N4)",
+      "E9 South Perim Spc (M.S5)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (PTAC) (T)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Single Speed DX AC",
+    "fan_type": "Cycling",
+    "space_names": [
+      "E9 North Perim Spc (T.N7)",
+      "E9 South Perim Spc (T.S8)"
+    ]
+  },
+  {
     "name": "E9 Sys8 (PVVT) (G.C3)",
     "type": "PSZ-AC",
     "operation_schedule": null,

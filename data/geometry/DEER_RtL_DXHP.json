@@ -4,10 +4,10 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 South Perim Spc (G.S1)"
     ]
@@ -17,10 +17,10 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 North Perim Spc (G.N2)"
     ]
@@ -30,10 +30,10 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 East Perim Spc (G.E3)"
     ]
@@ -43,10 +43,10 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 East Perim Spc (G.E4)"
     ]
@@ -56,10 +56,10 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 WSW Perim Spc (G.WSW7)"
     ]
@@ -69,12 +69,38 @@
     "type": "PSZ-AC",
     "operation_schedule": null,
     "oa_damper_schedule": null,
-    "cooling_type": "Single Speed DX AC",
-    "heating_type": "Gas",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
     "fan_type": "ConstantVolume",
-    "supplemental_heating_type": "Gas",
+    "supplemental_heating_type": "Electricity",
     "space_names": [
       "EL1 Core Spc (G.C8)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (PSZ) (G.W5)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W5)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (PSZ) (G.W6)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W6)"
     ]
   }
 ]

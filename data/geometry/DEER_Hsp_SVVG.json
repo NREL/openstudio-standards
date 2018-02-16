@@ -4,6 +4,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -14,6 +15,16 @@
       "EL2 West Perim Spc (G.W4)"
     ],
     "return_plenum": "EL2 West Perim Plnm (G.W11)"
+  },
+  {
+    "name": "EL1 Sys3 (SZRH) (G.W3)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (G.W3)"
+    ]
   },
   {
     "name": "EL3 Sys4 (FC) (G)",
@@ -34,6 +45,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -53,6 +65,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -70,6 +83,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -87,6 +101,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",

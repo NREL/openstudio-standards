@@ -88,6 +88,34 @@
     "return_plenum": "EL4 Core Plnm (T.C30)"
   },
   {
+    "name": "EL2 Sys4 (PSZ) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL2 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL2 South Perim Plnm (G.S4)"
+  },
+  {
+    "name": "EL3 Sys4 (PSZ) (G)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL3 North Perim Plnm (G.N4)"
+  },
+  {
     "name": "EL4 Sys5 (PVVT) (G)",
     "type": "PSZ-AC",
     "operation_schedule": null,

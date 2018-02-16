@@ -26,6 +26,21 @@
     ]
   },
   {
+    "name": "EL3 Sys4 (PTAC) (G)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Single Speed DX AC",
+    "fan_type": "Cycling",
+    "space_names": [
+      "EL3 East Perim Spc (G.E1)",
+      "EL3 North Perim Spc (G.N6)",
+      "EL3 South Perim Spc (G.S7)",
+      "EL3 Core Spc (G.C8)"
+    ]
+  },
+  {
     "name": "S5 Sys (PVAVS)",
     "type": "PVAV",
     "operation_schedule": null,

@@ -4,6 +4,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",

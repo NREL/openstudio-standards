@@ -4,6 +4,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -18,6 +19,56 @@
       "EL3 West Perim Spc (G.W3)"
     ],
     "return_plenum": "EL2 North Perim Plnm (G.N5)"
+  },
+  {
+    "name": "EL2 Sys3 (SZRH) (G.S1)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL2 South Perim Spc (G.S1)"
+    ]
+  },
+  {
+    "name": "EL3 Sys3 (SZRH) (G.N1)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)"
+    ]
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (G.C5)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (G.C5)"
+    ]
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (M.C15)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (M.C15)"
+    ]
+  },
+  {
+    "name": "EL4 Sys3 (SZRH) (T.C25)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (T.C25)"
+    ]
   },
   {
     "name": "EL4 Sys4 (FC) (G)",

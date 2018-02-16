@@ -80,5 +80,18 @@
     "space_names": [
       "EL2 North Perim Spc (G.N2)"
     ]
+  },
+  {
+    "name": "EL2 Sys2 (PSZ) (G.E3)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL2 East Perim Spc (G.E3)"
+    ]
   }
 ]

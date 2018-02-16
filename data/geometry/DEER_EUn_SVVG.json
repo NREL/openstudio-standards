@@ -4,6 +4,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -22,6 +23,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -40,6 +42,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -58,6 +61,7 @@
     "type": "VAV",
     "operation_schedule": null,
     "oa_damper_schedule": null,
+    "heating_type": "Gas",
     "chw_pumping_type": "const_pri_var_sec",
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
@@ -70,6 +74,46 @@
       "E4 Core Spc (T.C30)"
     ],
     "return_plenum": "E4 Core Plnm (T.C36)"
+  },
+  {
+    "name": "E3 Sys5 (SZRH) (G.N2)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E3 North Perim Spc (G.N2)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (SZRH) (G.C5)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (G.C5)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (SZRH) (M.C17)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (M.C17)"
+    ]
+  },
+  {
+    "name": "E4 Sys5 (SZRH) (T.C29)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E4 Core Spc (T.C29)"
+    ]
   },
   {
     "name": "E9 Sys6 (FC) (G)",
@@ -105,6 +149,36 @@
     "space_names": [
       "E9 North Perim Spc (T.N7)",
       "E9 South Perim Spc (T.S8)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (SZRH) (G.C3)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (G.C3)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (SZRH) (M.C6)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (M.C6)"
+    ]
+  },
+  {
+    "name": "E9 Sys7 (SZRH) (T.C9)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "E9 Core Spc (T.C9)"
     ]
   }
 ]
