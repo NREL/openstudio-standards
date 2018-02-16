@@ -280,6 +280,13 @@ class Standard
                        system['cooling_type'],
                        building_type)
 
+      when 'PTHP'
+
+          model_add_pthp(model,
+                         nil,
+                         thermal_zones,
+                         system['fan_type'])
+
       when 'Exhaust Fan'
 
         model_add_exhaust_fan(model, system['operation_schedule'],
