@@ -1,7 +1,7 @@
 
 OS:Version,
-  {682daf9e-c940-4654-b799-9bd269b1170d}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {c0e2d383-b644-4c72-b3ed-e63978636e25}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:BuildingStory,
   {ff3af51f-045c-4c90-bab9-13e6536ee5c2}, !- Handle
@@ -39,7 +39,10 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {ff3af51f-045c-4c90-bab9-13e6536ee5c2}, !- Building Story Name
-  {0ae5351c-7c4c-44a2-b168-c43c80f37058}; !- Thermal Zone Name
+  {0ae5351c-7c4c-44a2-b168-c43c80f37058}, !- Thermal Zone Name
+  ,                                       !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Space,
   {506416dc-4b51-414d-b52d-757cabbd98dd}, !- Handle
@@ -168,25 +171,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.17365249648012e-15, 13.63218, 3.048,  !- X,Y,Z Vertex 1 {m}
   4.17365249648012e-15, 13.63218, 0,      !- X,Y,Z Vertex 2 {m}
-  -1.66945946436009e-15, 2.74829295516222e-46, 0, !- X,Y,Z Vertex 3 {m}
-  -1.66945946436009e-15, 2.74829295516222e-46, 3.048; !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {2e0799e1-60c0-46b5-bbc9-8834d7c696f2}, !- Handle
-  EL1 West Win (G.S1.E4.W1),              !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  {c733168d-a1a9-44fc-a800-4cba2d0ee210}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -0.914399999999976, 11.7518688, 3.048,  !- X,Y,Z Vertex 1 {m}
-  -0.914400000000003, 2.12821835886074e-15, 3.048, !- X,Y,Z Vertex 2 {m}
-  -2.505456, 5.83131830327843e-15, 3.048, !- X,Y,Z Vertex 3 {m}
-  -2.50545599999997, 11.7518688, 3.048;   !- X,Y,Z Vertex 4 {m}
+  -1.66945946436009e-15, 4.12243943274333e-46, 0, !- X,Y,Z Vertex 3 {m}
+  -1.66945946436009e-15, 4.12243943274333e-46, 3.048; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {519182a2-48a3-4233-a289-d0813681f826}, !- Handle
@@ -554,8 +540,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.17365249648012e-15, 13.63218, 3.6576, !- X,Y,Z Vertex 1 {m}
   4.17365249648012e-15, 13.63218, 3.048,  !- X,Y,Z Vertex 2 {m}
-  -1.66945946436009e-15, -1.37414647758111e-46, 3.048, !- X,Y,Z Vertex 3 {m}
-  -1.66945946436009e-15, -1.37414647758111e-46, 3.6576; !- X,Y,Z Vertex 4 {m}
+  -1.66945946436009e-15, -2.74829295516222e-46, 3.048, !- X,Y,Z Vertex 3 {m}
+  -1.66945946436009e-15, -2.74829295516222e-46, 3.6576; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {632c13ed-d85e-4486-a2af-f87e7fd84f82}, !- Handle
@@ -782,57 +768,6 @@ OS:Surface,
   13.63218, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
   13.63218, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {6a2693d8-0819-4cd1-96fc-9bb30ffad914}, !- Handle
-  EL2 North Win (G.W1.E4.W1),             !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  11.7518688, 99.538536, 3.048,           !- X,Y,Z Vertex 1 {m}
-  11.7518688, 97.94748, 3.048,            !- X,Y,Z Vertex 2 {m}
-  6.71890219884202e-16, 97.94748, 3.048,  !- X,Y,Z Vertex 3 {m}
-  1.84097920248273e-15, 99.538536, 3.048; !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {c3cd7a7a-790b-4f42-872f-e0301fa6c2ce}, !- Handle
-  EL3 East Win (G.N1.E4.W1),              !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -46.430184, 97.03308, 3.048,            !- X,Y,Z Vertex 1 {m}
-  -46.430184, 85.2812112, 3.048,          !- X,Y,Z Vertex 2 {m}
-  -48.02124, 85.2812112, 3.048,           !- X,Y,Z Vertex 3 {m}
-  -48.02124, 97.03308, 3.048;             !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {d0a7820d-ddf2-4628-aae2-259361b10d20}, !- Handle
-  EL4 South Win (G.E1.E4.W1),             !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -48.93564, -0.914400000000003, 3.048,   !- X,Y,Z Vertex 1 {m}
-  -48.93564, -2.505456, 3.048,            !- X,Y,Z Vertex 2 {m}
-  -60.6875088, -2.50545599999999, 3.048,  !- X,Y,Z Vertex 3 {m}
-  -60.6875088, -0.914399999999994, 3.048; !- X,Y,Z Vertex 4 {m}
-
 OS:Facility,
   {deee7c3b-5120-4b61-8ce5-8a6455de1dc9}; !- Handle
 
@@ -1009,7 +944,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {fbbca346-2721-45c1-9334-4ac4eda5e763}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1091,7 +1026,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {3bfed0c6-9858-4bca-87d6-867e020fd94d}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1173,7 +1108,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {de655d95-ef9a-4ae6-bc8d-d67e0b6f1c04}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1255,7 +1190,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {9edc169a-76f8-4bfa-9584-dc5bca0b4eaf}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1323,8 +1258,43 @@ OS:SpaceType,
   Plenum,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Group Rendering Name
+  {9475cba9-76ac-4ac8-b8ea-97921fad786d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
   Plenum;                                 !- Standards Space Type
+
+OS:Rendering:Color,
+  {9edc169a-76f8-4bfa-9584-dc5bca0b4eaf}, !- Handle
+  Rendering Color 7,                      !- Name
+  248,                                    !- Rendering Red Value
+  248,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3bfed0c6-9858-4bca-87d6-867e020fd94d}, !- Handle
+  Rendering Color 8,                      !- Name
+  238,                                    !- Rendering Red Value
+  232,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {de655d95-ef9a-4ae6-bc8d-d67e0b6f1c04}, !- Handle
+  Rendering Color 9,                      !- Name
+  175,                                    !- Rendering Red Value
+  238,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {fbbca346-2721-45c1-9334-4ac4eda5e763}, !- Handle
+  Rendering Color 10,                     !- Name
+  250,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  114;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {9475cba9-76ac-4ac8-b8ea-97921fad786d}, !- Handle
+  Rendering Color 11,                     !- Name
+  50,                                     !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
 
