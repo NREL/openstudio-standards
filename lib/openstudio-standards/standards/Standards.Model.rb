@@ -4011,7 +4011,7 @@ class Standard
 
     parts = [template]
 
-    unless building_type.empty?
+    unless building_type.nil?
       parts << building_type
     end
 
