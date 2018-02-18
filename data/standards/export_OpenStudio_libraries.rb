@@ -21,7 +21,6 @@ def export_openstudio_libraries
   template_names = std.standards_data["templates"].sort_by { |t| t['name'] }
   Parallel.each(template_names, in_threads: 7) do |template|
     template_name = template['name']
-    next unless template_name.include?('DEER')
     # Call ruby via command line to parallelize library creation
     puts("export_openstudio_library(#{template_name}) started:")
     command = "ruby -r \"#{__FILE__}\" -e \"export_openstudio_library '#{template_name}'\""
