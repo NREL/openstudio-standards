@@ -18,7 +18,6 @@ class NECB2015 < NECB2011
     #replace template to 2015 for all tables.
     #puts JSON.pretty_generate( @standards_data['tables'] )
     @standards_data['tables'].each do |table|
-      puts table['name']
       table['table'].each do |row|
         ["lighting_standard", "ventilation_standard", "template"].each do |item|
           row[item].gsub!('NECB2011', 'NECB2015') unless row[item].nil?
