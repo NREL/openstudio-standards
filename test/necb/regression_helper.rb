@@ -8,7 +8,7 @@ class NECBRegressionHelper < Minitest::Test
     @electric_location = 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw'
   end
 
-=begin
+
   def test_necb_2011_regression_natural_gas()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @gas_location,
@@ -24,7 +24,6 @@ class NECBRegressionHelper < Minitest::Test
     )
     assert(result, msg)
   end
-=end
 
   def test_necb_2015_regression_natural_gas()
     result, msg = create_model_and_regression_test(@building_type,
@@ -35,7 +34,6 @@ class NECBRegressionHelper < Minitest::Test
   end
 
 
-
   def test_necb_2015_regression_electric()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
@@ -43,7 +41,6 @@ class NECBRegressionHelper < Minitest::Test
     )
     assert(result, msg)
   end
-
 
 
   def create_model_and_regression_test(building_type, epw_file, template)
