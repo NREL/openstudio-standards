@@ -221,9 +221,9 @@ class Standard
 
     # Delete all the unused curves
     model.getCurves.sort.each do |curve|
-      if curve.parent.empty?
-        # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
-        curve.remove
+      if curve.directUseCount == 0
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
+        model.removeObject(curve.handle)
       end
     end
 
@@ -1966,7 +1966,8 @@ class Standard
         # Don't check non-existent search criteria
         next unless object.key?(key)
         # Stop as soon as one of the search criteria is not met
-        if object[key] != value
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
           meets_all_search_criteria = false
           break
         end
@@ -2069,7 +2070,8 @@ class Standard
         # Don't check non-existent search criteria
         next unless object.key?(key)
         # Stop as soon as one of the search criteria is not met
-        if object[key] != value
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
           meets_all_search_criteria = false
           break
         end
@@ -2188,8 +2190,10 @@ class Standard
     # Find all the schedule rules that match the name
     rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-      return false # TODO: change to return empty optional schedule:ruleset?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+      sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+      sch_ruleset.setName("NOT ACTUALLY #{schedule_name}")
+      return sch_ruleset
     end
 
     # Make a schedule ruleset
@@ -2431,27 +2435,39 @@ class Standard
       target_u_value_ip = construction_props['assembly_maximum_u_value']
       target_f_factor_ip = construction_props['assembly_maximum_f_factor']
       target_c_factor_ip = construction_props['assembly_maximum_c_factor']
+      target_shgc = construction_props['assembly_maximum_solar_heat_gain_coefficient']
+      u_includes_int_film = construction_props['u_value_includes_interior_film_coefficient']
+      u_includes_ext_film = construction_props['u_value_includes_exterior_film_coefficient']
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
 
-      if target_u_value_ip && !(data['intended_surface_type'] == 'ExteriorWindow' || data['intended_surface_type'] == 'Skylight')
+      if target_u_value_ip
 
-        # Set the U-Value
-        construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], true)
+        # Handle Opaque and Fenestration Constructions differently
+        if construction.isFenestration && construction_simple_glazing?(construction)
+          # Set the U-Value and SHGC
+          construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+          construction_set_glazing_shgc(construction, target_shgc.to_f)
+        else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
+          # Set the U-Value
+          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+        # else
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
+        end
 
       elsif target_f_factor_ip && data['intended_surface_type'] == 'GroundContactFloor'
 
         # Set the F-Factor (only applies to slabs on grade)
         # TODO figure out what the prototype buildings did about ground heat transfer
         # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], true)
+        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
       elsif target_c_factor_ip && data['intended_surface_type'] == 'GroundContactWall'
 
         # Set the C-Factor (only applies to underground walls)
         # TODO figure out what the prototype buildings did about ground heat transfer
         # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], true)
+        construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
       end
 
@@ -2508,7 +2524,7 @@ class Standard
       construction.insertLayer(0, almost_adiabatic)
       return construction
     else
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
+      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
     end
 
     # Make sure that a construction is specified
@@ -2709,8 +2725,21 @@ class Standard
 
   # Adds a curve from the OpenStudio-Standards dataset to the model
   # based on the curve name.
-  # @todo Check for curve already in model before re-adding?
   def model_add_curve(model, curve_name)
+    # First check model and return curve if it already exists
+    existing_curves = []
+    existing_curves += model.getCurveLinears
+    existing_curves += model.getCurveCubics
+    existing_curves += model.getCurveQuadratics
+    existing_curves += model.getCurveBicubics
+    existing_curves += model.getCurveBiquadratics
+    existing_curves.sort.each do |curve|
+      if curve.name.get.to_s == curve_name
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
+        return curve
+      end
+    end
+
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
@@ -4414,23 +4443,24 @@ class Standard
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     model = version_translator.loadModel(osm_model_path).get
     if model.getBuildingStorys.empty?
-      raise("Building Storeys are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
     end
     if model.getThermalZones.empty?
-      raise("ThermalZones are not set in the model #{osm_model_path}. \n Please define the building stories and the spaces associated with them before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
     end
     if model.getBuilding.standardsNumberOfStories.empty?
-      raise("standardsNumberOfStories are not set in the model #{osm_model_path}. \n Please define the stndards number of stories  before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
     end
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
-      raise("standardsNumberOfAboveStories are not set in the model#{osm_model_path}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
     end
 
     if @space_type_map.nil? || @space_type_map.empty?
-      @space_type_map = get_space_type_maps_from_model(model).sort.to_h
+      @space_type_map = get_space_type_maps_from_model(model)
       if @space_type_map.nil? || @space_type_map.empty?
-        raise("space_type_maps are not set in the model#{osm_model_path}, or in standards database#{@space_type_map}. \n Please define the standardsNumberOfAboveStories  before running in standards.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
       else
+        @space_type_map = @space_type_map.sort.to_h
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
       end
     end

@@ -13,16 +13,18 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_film_coefficients [Bool] if true, subtracts off standard film coefficients from your
+  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
+  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
   # @return [Bool] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
-  def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_film_coefficients = true)
+  def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
 
-    # Skip fenestration constructions
+    # Skip layer-by-layer fenestration constructions
     if construction.isFenestration
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions. #{construction.name} is not opaque.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions or simple glazing. #{construction.name} is not opaque or simple glazing.")
       return false
     end
 
@@ -66,55 +68,8 @@ class Standard
       other_layer_r_value_si += layer.to_OpaqueMaterial.get.thermalResistance
     end
 
-    # TODO: - remove code below and use film_coefficients_u_value method instead
     # Determine the R-value of the air films, if requested
-    # Film values from 90.1-2010 A9.4.1 Air Films
-    if target_includes_film_coefficients
-      film_ext_surf_r_ip = 0.17
-      film_semi_ext_surf_r_ip = 0.46
-      film_int_surf_ht_flow_up_r_ip = 0.61
-      film_int_surf_ht_flow_dwn_r_ip = 0.92
-      fil_int_surf_vertical_r_ip = 0.68
-
-      film_ext_surf_r_si = OpenStudio.convert(film_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-      film_semi_ext_surf_r_si = OpenStudio.convert(film_semi_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-      film_int_surf_ht_flow_up_r_si = OpenStudio.convert(film_int_surf_ht_flow_up_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-      film_int_surf_ht_flow_dwn_r_si = OpenStudio.convert(film_int_surf_ht_flow_dwn_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-      fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-
-      case intended_surface_type
-      when 'AtticFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-        other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-      when 'AtticWall', 'AtticRoof'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-      when 'DemisingFloor', 'InteriorFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'InteriorCeiling'
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-      when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Outside
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-      when 'ExteriorFloor'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-        other_layer_r_value_si += film_ext_surf_r_si # Outside
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'GroundContactFloor'
-        other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-      when 'GroundContactWall'
-        other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-      when 'GroundContactRoof'
-        other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-      end
-    end
+    other_layer_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
 
     # Determine the difference between the desired R-value
     # and the R-value of the non-insulation layers and air films.
@@ -154,6 +109,114 @@ class Standard
     return true
   end
 
+  # Sets the U-value of a construction to a specified value
+  # by modifying the thickness of the insulation layer.
+  #
+  # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
+  # @param intended_surface_type [String]
+  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
+  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
+  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
+  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
+  #   'GroundContactWall', 'GroundContactRoof'
+  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
+  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
+  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
+
+    # Skip layer-by-layer fenestration constructions
+    unless construction_simple_glazing?(construction)
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
+      return false
+    end
+
+    # Convert the target U-value to SI
+    target_u_value_ip = target_u_value_ip.to_f
+    target_r_value_ip = 1.0 / target_u_value_ip
+
+    target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
+    target_r_value_si = 1.0 / target_u_value_si
+
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "#{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
+
+    # Determine the R-value of the air films, if requested
+    film_coeff_r_value_si = 0.0
+    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
+    film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+
+    # Determine the difference between the desired R-value
+    # and the R-value of the and air films.
+    # This is the desired R-value of the insulation.
+    ins_r_value_si = target_r_value_si - film_coeff_r_value_si
+    if ins_r_value_si <= 0.0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; U-value will not be modified.")
+      return false
+    end
+    ins_u_value_si = 1.0 / ins_r_value_si
+    ins_u_value_ip = OpenStudio.convert(ins_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+
+    # Set the U-value of the insulation layer
+    glass_layer = construction.layers.first.to_SimpleGlazing.get
+    glass_layer.setUFactor(ins_u_value_si)
+    glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
+
+    # Modify the construction name
+    construction.setName("#{construction.name} U-#{target_u_value_ip.round(2)}")
+
+    return true
+  end
+
+  # Sets the U-value of a construction to a specified value
+  # by modifying the thickness of the insulation layer.
+  #
+  # @param target_shgc [Double] Solar Heat Gain Coefficient
+  # @return [Bool] returns true if successful, false if not
+  def construction_set_glazing_shgc(construction, target_shgc)
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting SHGC for #{construction.name}.")
+
+    # Skip layer-by-layer fenestration constructions
+    unless construction_simple_glazing?(construction)
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the SHGC of simple glazing. #{construction.name} is not simple glazing.")
+      return false
+    end
+
+    # Set the SHGC
+    glass_layer = construction.layers.first.to_SimpleGlazing.get
+    glass_layer.setSolarHeatGainCoefficient(target_shgc)
+    glass_layer.setName("#{glass_layer.name} SHGC #{target_shgc.round(2)}")
+
+    # Modify the construction name
+    construction.setName("#{construction.name} SHGC #{target_shgc.round(2)}")
+
+    return true
+  end
+
+  # Determines if the construction is a simple glazing construction,
+  # as indicated by having a single layer of type SimpleGlazing.
+  # @return [Bool] returns true if it is a simple glazing, false if not.
+  def construction_simple_glazing?(construction)
+    # Not simple if more than 1 layer
+    if construction.layers.length > 1
+      return false
+    end
+
+    # Not simple unless the layer is a SimpleGlazing material
+    if construction.layers.first.to_SimpleGlazing.empty?
+      return false
+    end
+
+    # If here, must be simple glazing
+    return true
+  end
+
   # Set the F-Factor of a slab to a specified value.
   # Assumes an unheated, fully insulated slab, and modifies
   # the insulation layer according to the values from 90.1-2004
@@ -168,7 +231,7 @@ class Standard
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true)
+    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true, true)
 
     # Modify the construction name
     construction.setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
@@ -190,7 +253,7 @@ class Standard
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true)
+    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true, true)
 
     # Modify the construction name
     construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
@@ -346,67 +409,5 @@ class Standard
     end
 
     return u_factor_w_per_m2_k
-  end
-
-  # Returns the R-value of the combined inside and outside
-  # air film values from 90.1-2010 A9.4.1 Air Films
-  # @param intended_surface_type [String]
-  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
-  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
-  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
-  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
-  #   'GroundContactWall', 'GroundContactRoof'
-  # @return [double] r-value in m^2*K/W.
-  def construction_film_coefficients_r_value(construction, intended_surface_type)
-    other_layer_r_value_si = 0.0
-
-    # Determine the R-value of the air films, if requested
-    # Film values from 90.1-2010 A9.4.1 Air Films
-    film_ext_surf_r_ip = 0.17
-    film_semi_ext_surf_r_ip = 0.46
-    film_int_surf_ht_flow_up_r_ip = 0.61
-    film_int_surf_ht_flow_dwn_r_ip = 0.92
-    fil_int_surf_vertical_r_ip = 0.68
-
-    film_ext_surf_r_si = OpenStudio.convert(film_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_semi_ext_surf_r_si = OpenStudio.convert(film_semi_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_up_r_si = OpenStudio.convert(film_int_surf_ht_flow_up_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_dwn_r_si = OpenStudio.convert(film_int_surf_ht_flow_dwn_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-
-    case intended_surface_type
-    when 'AtticFloor'
-      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-      other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-    when 'AtticWall', 'AtticRoof'
-      other_layer_r_value_si += film_ext_surf_r_si # Outside
-      other_layer_r_value_si += film_semi_ext_surf_r_si # Inside
-    when 'DemisingFloor', 'InteriorFloor'
-      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Outside
-      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-    when 'InteriorCeiling'
-      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Outside
-      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-    when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-      other_layer_r_value_si += fil_int_surf_vertical_r_si # Outside
-      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-    when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-      other_layer_r_value_si += film_ext_surf_r_si # Outside
-      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-    when 'ExteriorFloor'
-      other_layer_r_value_si += film_ext_surf_r_si # Outside
-      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-    when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-      other_layer_r_value_si += film_ext_surf_r_si # Outside
-      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-    when 'GroundContactFloor'
-      other_layer_r_value_si += film_int_surf_ht_flow_dwn_r_si # Inside
-    when 'GroundContactWall'
-      other_layer_r_value_si += fil_int_surf_vertical_r_si # Inside
-    when 'GroundContactRoof'
-      other_layer_r_value_si += film_int_surf_ht_flow_up_r_si # Inside
-    end
-
-    return other_layer_r_value_si
   end
 end

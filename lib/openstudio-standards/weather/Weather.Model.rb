@@ -4,6 +4,7 @@ class Standard
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
   def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+    success = true
     require_relative 'Weather.stat_file'
 
     # Remove any existing Design Day objects that are in the file
@@ -39,7 +40,24 @@ class Standard
         'NECB-CNEB-6'  => epw_file.to_s,
         'NECB-CNEB-7a' => epw_file.to_s,
         'NECB-CNEB-7b' => epw_file.to_s,
-        'NECB-CNEB-8'  => epw_file.to_s
+        'NECB-CNEB-8'  => epw_file.to_s,
+        # For DEER
+        'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
+        'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
+        'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
+        'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
+        'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
+        'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
+        'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
+        'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
+        'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
+        'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
+        'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
+        'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
+        'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
+        'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
+        'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
+        'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
     }
 
     # Get the weather file name from the hash
@@ -50,7 +68,7 @@ class Standard
                         end
     if weather_file_name.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}.")
-      return false
+      success = false
     end
 
     # Define where the weather files lives
@@ -109,8 +127,8 @@ class Standard
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Mean dry bulb is #{stat_file.mean_dry_bulb}")
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Delta dry bulb is #{stat_file.delta_dry_bulb}")
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .stat file for: #{stat_filename}.")
-      return false
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not find .stat file for weather, will use default water mains temperatures which may be inaccurate for the location.")
+      success = false
     end
 
     # Load in the ddy file based on convention that it is in
@@ -126,13 +144,17 @@ class Standard
           # OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
       end
+      # Check to ensure that some design days were added
+      if model.getDesignDays.size.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "No design days were loaded, check syntax of .ddy file: #{ddy_file}.")
+      end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
       puts "Could not find .ddy file for: #{ddy_file}."
-      return false
+      success = false
     end
 
-    return true
+    return success
   end
 
   def model_add_ground_temperatures(model, building_type, climate_zone)

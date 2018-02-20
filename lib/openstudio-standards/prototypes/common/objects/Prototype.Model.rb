@@ -83,29 +83,21 @@ Standard.class_eval do
     end
   end
 
-
-  def model_replace_model(model, new_model, runner = nil)
-
-    # pull original design days over
-    new_model.getDesignDays.sort.each {|designDay|
-      designDay.remove
-    }
-    model.getDesignDays.sort.each {|designDay|
-      designDay.clone(new_model)
-    }
-
-    # swap underlying data in model with underlying data in new_model
+  # Replaces the contents of 'model_to_replace' with the contents of 'new_model.'
+  # This method can be used when the memory location of model_to_replace needs
+  # to be preserved, for example, when a measure is passed.
+  def model_replace_model(model_to_replace, new_model, runner = nil)
     # remove existing objects from model
     handles = OpenStudio::UUIDVector.new
-    model.objects.each do |obj|
+    model_to_replace.objects.each do |obj|
       handles << obj.handle
     end
-    model.removeObjects(handles)
-    # add new file to empty model
-    model.addObjects(new_model.toIdfFile.objects)
-    BTAP::runner_register("Info", "Model name is now #{model.building.get.name}.", runner)
-  end
+    model_to_replace.removeObjects(handles)
 
+    # put contents of new_model into model_to_replace
+    model_to_replace.addObjects(new_model.toIdfFile.objects)
+    BTAP::runner_register("Info", "Model name is now #{model_to_replace.building.get.name}.", runner)
+  end
 
   # Replaces all objects in the current model
   # with the objects in the .osm.  Typically used to
@@ -128,25 +120,25 @@ Standard.class_eval do
       puts geom_model_string
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
-      model = version_translator.loadModelFromString(geom_model_string)
+      geom_model = version_translator.loadModelFromString(geom_model_string)
 
     else
       abs_path = File.join(File.dirname(__FILE__), rel_path_to_osm)
 
       # version translate from string
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
-      model = version_translator.loadModel(abs_path)
+      geom_model = version_translator.loadModel(abs_path)
       raise
     end
 
-    if model.empty?
+    if geom_model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{rel_path_to_osm}")
       return false
     end
-    model = model.get
+    geom_model = geom_model.get
 
     # Add the objects from the geometry model to the working model
-    model.addObjects(model.toIdfFile.objects)
+    model.addObjects(geom_model.toIdfFile.objects)
     return true
   end
 
@@ -164,6 +156,7 @@ Standard.class_eval do
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name} does not have a Space Type assigned.")
       else
         if space.spaceType.get.standardsSpaceType.empty?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "SpaceType #{space.spaceType.get.name} does not have a standardsSpaceType assigned.")
           all_space_types_have_standard_space_types = false
         else
           space_type_map[space.spaceType.get.standardsSpaceType.get.to_s] = [] if space_type_map[space.spaceType.get.standardsSpaceType.get.to_s].nil?
@@ -1570,47 +1563,39 @@ Standard.class_eval do
 
   # end reduce schedule
 
+  # Determine the prototypical economizer type for the model.
+  # Defaults to the pre-90.1-2010 assumption of DifferentialDryBulb.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param climate_zone [String] the climate zone
+  # @return [String] the economizer type.  Possible values are:
+  # 'NoEconomizer'
+  # 'FixedDryBulb'
+  # 'FixedEnthalpy'
+  # 'DifferentialDryBulb'
+  # 'DifferentialEnthalpy'
+  # 'FixedDewPointAndDryBulb'
+  # 'ElectronicEnthalpy'
+  # 'DifferentialDryBulbAndEnthalpy'
+  def model_economizer_type(model, climate_zone)
+    economizer_type = 'DifferentialDryBulb'
+    return economizer_type
+  end
+
   def apply_economizers(climate_zone, model)
-    if template != 'NECB2011'
-      # Create an economizer maximum OA fraction of 70%
-      # to reflect damper leakage per PNNL
-      econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
-      econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
-    else
-      # NECB2011 prescribes ability to provide 100% OA (5.2.2.7-5.2.2.9)
-      econ_max_100_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      econ_max_100_pct_oa_sch.setName('Economizer Max OA Fraction 100 pct')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 100 pct Default')
-      econ_max_100_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
-    end
+    # Create an economizer maximum OA fraction of 70%
+    # to reflect damper leakage per PNNL
+    econ_max_70_pct_oa_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    econ_max_70_pct_oa_sch.setName('Economizer Max OA Fraction 70 pct')
+    econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
+    econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
 
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
-        economizer_type = nil
-        case template
-          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007'
-            economizer_type = 'DifferentialDryBulb'
-          when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-            case climate_zone
-              when 'ASHRAE 169-2006-1A',
-                  'ASHRAE 169-2006-2A',
-                  'ASHRAE 169-2006-3A',
-                  'ASHRAE 169-2006-4A'
-                economizer_type = 'DifferentialEnthalpy'
-              else
-                economizer_type = 'DifferentialDryBulb'
-            end
-          when 'NECB2011'
-            # NECB 5.2.2.8 states that economizer can be controlled based on difference betweeen
-            # return air temperature and outside air temperature OR return air enthalpy
-            # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
-            economizer_type = 'DifferentialEnthalpy'
-        end
+        economizer_type = model_economizer_type(model, climate_zone)
 
         # Set the economizer type
         # Get the OA system and OA controller
@@ -1623,9 +1608,7 @@ Standard.class_eval do
         end
         oa_control = oa_sys.getControllerOutdoorAir
         oa_control.setEconomizerControlType(economizer_type)
-        if template != 'NECB2011'
-          # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
-        end
+        # oa_control.setMaximumFractionofOutdoorAirSchedule(econ_max_70_pct_oa_sch)
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.

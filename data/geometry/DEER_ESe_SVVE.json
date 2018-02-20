@@ -1,0 +1,104 @@
+[
+  {
+    "name": "E2 Sys1 (VAVS) (G)",
+    "type": "VAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "E2 West Perim Spc (G.W1)",
+      "E2 South Perim Spc (G.S2)",
+      "E2 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "E2 West Perim Plnm (G.W4)"
+  },
+  {
+    "name": "E4 Sys1 (VAVS) (G)",
+    "type": "VAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "AirCooled",
+    "chiller_condenser_type": "WithCondenser",
+    "chiller_compressor_type": null,
+    "space_names": [
+      "E4 South Perim Spc (G.S1)",
+      "E4 East Perim Spc (G.E2)",
+      "E4 North Perim Spc (G.N3)",
+      "E4 West Perim Spc (G.W4)",
+      "E4 Core Spc (G.C6)"
+    ],
+    "return_plenum": "E4 South Perim Plnm (G.S7)"
+  },
+  {
+    "name": "E1 Sys2 (SZRH) (G.W1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E1 West Perim Spc (G.W1)"
+    ]
+  },
+  {
+    "name": "E3 Sys2 (SZRH) (G.SW1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E3 SW Perim Spc (G.SW1)"
+    ]
+  },
+  {
+    "name": "E3 Sys2 (SZRH) (G.NE2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E3 NE Perim Spc (G.NE2)"
+    ]
+  },
+  {
+    "name": "E4 Sys2 (SZRH) (G.C5)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "E4 Core Plnm (G.C11)"
+  },
+  {
+    "name": "E17 Sys2 (SZRH) (G.W1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "E17 West Perim Spc (G.W1)"
+    ]
+  }
+]

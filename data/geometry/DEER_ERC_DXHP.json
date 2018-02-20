@@ -1,0 +1,16 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 Spc (G.1)"
+    ],
+    "return_plenum": "EL1 Plnm (G.2)"
+  }
+]

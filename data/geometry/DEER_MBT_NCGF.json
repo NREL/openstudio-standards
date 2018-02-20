@@ -1,0 +1,134 @@
+[
+  {
+    "name": "EL1 Sys1 (PSZ) (G.S1)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (G.S12)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.E2)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E13)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.N3)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (G.N14)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.W4)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W15)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C5)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C16)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C6)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C6)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C17)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C7)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C7)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C18)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C8)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C8)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C19)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C9)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C9)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C20)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C10)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C10)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C21)"
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.C11)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C11)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C22)"
+  }
+]

@@ -199,12 +199,17 @@ def export_spreadsheet_to_json
   # cols_to_skip << 'exhaust_per_area'
   cols_to_skip << 'exhaust_per_unit'
   cols_to_skip << 'exhaust_fan_power_per_area'
+  cols_to_skip << 'occupancy_standard'
+  cols_to_skip << 'occupancy_primary_space_type'
+  cols_to_skip << 'occupancy_secondary_space_type'
 
   # List of columns that are boolean
   # (rubyXL returns 0 or 1, will translate to true/false)
   bool_cols = []
   bool_cols << 'hx'
   bool_cols << 'data_center'
+  bool_cols << 'u_value_includes_interior_film_coefficient'
+  bool_cols << 'u_value_includes_exterior_film_coefficient'
 
   # Open workbook
   workbook = RubyXL::Parser.parse(xlsx_path)
@@ -280,6 +285,19 @@ def export_spreadsheet_to_json
             val = nil
           end
         end
+        # Convert date columns to standard format
+        if headers[j]['name'].include?('_date')
+          if val.is_a?(DateTime)
+            val = val.to_s
+          else
+            begin
+              val = DateTime.parse(val).to_s
+            rescue ArgumentError
+              puts "ERROR - value '#{val}', class #{val.class} in #{sheet_name}, row #{i}, col #{j} is not a valid date"
+            end
+          end
+        end
+
         # Record the value
         obj[headers[j]['name']] = val
         # Skip recording units for unitless values

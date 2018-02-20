@@ -23,7 +23,8 @@ def compare_osm_files(model_true, model_compare)
     'OS:EnergyManagementSystem:Actuator', # Names are UIDs
     'OS:Connection', # Names are UIDs
     'OS:PortList', # Names are UIDs
-    'OS:Building' # Name includes timestamp of creation
+    'OS:Building', # Name includes timestamp of creation
+    'OS:ModelObjectList' # Names are UIDs
   ]
   
   # Find objects in the true model only or in both models
@@ -99,7 +100,10 @@ def compare_osm_files(model_true, model_compare)
       next if field_name.include?('Inlet Node')
       next if field_name.include?('Outlet Node')
       next if field_name.include?('Port List')
-      
+      next if field_name.include?('Cooling Control Zone or Zone List Name')
+      next if field_name.include?('Heating Control Zone or Zone List Name')
+      next if field_name.include?('Heating Zone Fans Only Zone or Zone List Name')
+
       # Don't compare the names of schedule type limits
       # because they appear to be created non-deteministically
       next if field_name.include?('Schedule Type Limits Name')

@@ -2,6 +2,9 @@
   {
     "type": "PVAV",
     "name": "PVAV Outpatient F1",
+    "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
+    "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 Bio Haz",
@@ -63,6 +66,9 @@
   {
     "type": "PVAV",
     "name": "PVAV Outpatient F2 F3",
+    "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
+    "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "heating_type": "Gas",
     "space_names": [
       "Floor 2 Conference",
       "Floor 2 Conference Toilet",
@@ -132,7 +138,6 @@
   {
     "type": "Exhaust Fan",
     "name": "Outpatient AHU1 Exhaust Fans",
-    "availability_sch_name": "OutPatientHealthCare Hours_of_operation",
     "flow_rate": [
       0.0679561743,
       0.0424726077,
@@ -145,8 +150,9 @@
       0.0440456672,
       0.141575359
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
+    "operation_schedule": "OutPatientHealthCare Hours_of_operation",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 1 Anesthesia",
       "Floor 1 Lobby Toilet",
@@ -163,7 +169,6 @@
   {
     "type": "Exhaust Fan",
     "name": "Outpatient AHU2&3 Exhaust Fans",
-    "availability_sch_name": "OutPatientHealthCare BLDG_OA_SCH",
     "flow_rate": [
       0.0503379054,
       0.0991027512,
@@ -173,8 +178,9 @@
       0.0424726077,
       0.0660685008
     ],
-    "flow_fraction_schedule_name": null,
-    "balanced_exhaust_fraction_schedule_name": null,
+    "operation_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
     "space_names": [
       "Floor 2 Conference Toilet",
       "Floor 2 Reception Toilet",

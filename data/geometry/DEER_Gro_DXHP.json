@@ -1,0 +1,41 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.SW2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 SW Perim Spc (G.SW2)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (PVVT) (G.SSE1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 SSE Perim Spc (G.SSE1)"
+    ]
+  }
+]

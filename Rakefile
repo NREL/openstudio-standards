@@ -21,9 +21,17 @@ namespace :test do
     return false
   end
 
+  desc 'Parallel Run Locally NECB bldgs regression tests'
+  Rake::TestTask.new(:necb_local_bldgs_regression_tests) do |t|
+    file_list = FileList.new('test/necb/test_all_buildings_locally.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = true
+  end
+
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
-    file_list = FileList.new('test/test_necb_qaqc.rb')
+    file_list = FileList.new('test/necb/test_necb_qaqc.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = true
@@ -161,6 +169,16 @@ namespace :data do
       puts 'Using installed openstudio-standards gem.'
     end
     BTAPCosting.instance
+  end
+end
+
+# Tasks to export libraries packaged with
+# the OpenStudio installer
+namespace :library do
+  require "#{File.dirname(__FILE__)}/data/standards/export_OpenStudio_libraries.rb"
+  desc 'Export libraries for OpenStudio installer'
+  task 'export' do
+    export_openstudio_libraries
   end
 end
 

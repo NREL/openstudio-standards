@@ -4,7 +4,7 @@
       "template": "DOE Ref Pre-1980",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -13,7 +13,7 @@
       "template": "DOE Ref Pre-1980",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -22,7 +22,7 @@
       "template": "DOE Ref Pre-1980",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -31,7 +31,7 @@
       "template": "DOE Ref Pre-1980",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -40,7 +40,7 @@
       "template": "DOE Ref 1980-2004",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -49,7 +49,7 @@
       "template": "DOE Ref 1980-2004",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -58,7 +58,7 @@
       "template": "DOE Ref 1980-2004",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -67,7 +67,7 @@
       "template": "DOE Ref 1980-2004",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -76,7 +76,7 @@
       "template": "90.1-2004",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -85,7 +85,7 @@
       "template": "90.1-2004",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -94,7 +94,7 @@
       "template": "90.1-2004",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -103,7 +103,7 @@
       "template": "90.1-2004",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
@@ -112,7 +112,7 @@
       "template": "90.1-2007",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2007 Table 6.8.1G"
@@ -121,7 +121,7 @@
       "template": "90.1-2007",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2007 Table 6.8.1G"
@@ -130,7 +130,7 @@
       "template": "90.1-2007",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2007 Table 6.8.1G"
@@ -139,7 +139,7 @@
       "template": "90.1-2007",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2007 Table 6.8.1G"
@@ -148,7 +148,7 @@
       "template": "90.1-2010",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2010 Table 6.8.1 G"
@@ -157,7 +157,7 @@
       "template": "90.1-2010",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
       "notes": "From 90.1-2010 Table 6.8.1 G"
@@ -166,7 +166,7 @@
       "template": "90.1-2010",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 7.0,
       "notes": "From 90.1-2010 Table 6.8.1 G"
@@ -175,7 +175,7 @@
       "template": "90.1-2010",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 14.0,
       "notes": "From 90.1-2010 Table 6.8.1 G"
@@ -184,7 +184,7 @@
       "template": "90.1-2013",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 20.0,
       "notes": "From 90.1-2013 Table 6.8.1-7"
@@ -193,7 +193,7 @@
       "template": "90.1-2013",
       "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 40.2,
       "notes": "From 90.1-2013 Table 6.8.1-7"
@@ -202,7 +202,7 @@
       "template": "90.1-2013",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 7.0,
       "notes": "From 90.1-2013 Table 6.8.1-7"
@@ -211,7 +211,7 @@
       "template": "90.1-2013",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
-      "start_date": "9/9/1919",
+      "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 14.0,
       "notes": "From 90.1-2013 Table 6.8.1-7"

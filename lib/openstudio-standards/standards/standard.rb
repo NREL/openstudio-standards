@@ -32,7 +32,7 @@ class Standard
   #   standard = Standard.build('NECB2011')
   def self.build(name)
     if STANDARDS_LIST[name].nil?
-      raise "ERROR: Did not find a class called '#{name}' to create in #{STANDARDS_LIST}"
+      raise "ERROR: Did not find a class called '#{name}' to create in #{JSON.pretty_generate(STANDARDS_LIST)}"
     end
     return STANDARDS_LIST[name].new
   end
