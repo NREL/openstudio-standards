@@ -396,7 +396,7 @@ class Standard
     # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = heating_fuels
+    htg_fuels = thermal_zone.heating_fuels
 
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
@@ -498,7 +498,7 @@ class Standard
     # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = heating_fuels
+    htg_fuels = thermal_zone.heating_fuels
 
     # Includes fossil
     fossil = false
@@ -576,7 +576,7 @@ class Standard
     has_ptac = false
     has_pthp = false
     has_unitheater = false
-    equipment.each do |equip|
+    thermal_zone.equipment.each do |equip|
       # Skip HVAC components
       next unless equip.to_HVACComponent.is_initialized
       equip = equip.to_HVACComponent.get
@@ -601,8 +601,8 @@ class Standard
     end
 
     # Get the zone heating and cooling fuels
-    htg_fuels = heating_fuels
-    clg_fuels = cooling_fuels
+    htg_fuels = thermal_zone.heating_fuels
+    clg_fuels = thermal_zone.cooling_fuels
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
@@ -615,7 +615,7 @@ class Standard
         # Air Loop
         if has_air_loop
           # Gas_Furnace (as air loop)
-          sys_type = if cooling_fuels.size.zero?
+          sys_type = if clg_fuels.size.zero?
                        'Gas_Furnace'
                      # PSZ_AC
                      else
@@ -637,7 +637,7 @@ class Standard
         # Air Loop
         if has_air_loop
           # Electric_Furnace (as air loop)
-          sys_type = if cooling_fuels.size.zero?
+          sys_type = if clg_fuels.size.zero?
                        'Electric_Furnace'
                      # PSZ_HP
                      else
