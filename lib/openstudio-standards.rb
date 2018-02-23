@@ -85,6 +85,12 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer_2015/deer_2015"
   require_relative "#{stds}/deer/deer_2017/deer_2017"
 
+  require_relative "#{stds}/oeesc/oeesc"
+  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"  
+
+  require_relative "#{stds}/icc_iecc/icc_iecc"
+  require_relative "#{stds}/icc_iecc/icc_iecc_2015/icc_iecc_2015"
+
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"

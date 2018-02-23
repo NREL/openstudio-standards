@@ -78,4 +78,17 @@ module References
   # @see http://deeresources.com/index.php/deer-versions
   class DEERMASControl; end
 
+  # OEESC 2014
+  # The Oregon Energy Efficiency Specialty Code is the building energy code for the
+  # state of Oregon.  It is very similar to ASHRAE 90.1-2013, but has been tailored
+  # to meet the needs of Oregon.
+  # @see http://www.oregon.gov/bcd/codes-stand/Pages/energy-efficiency.aspx
+  class OEESC2014; end
+
+  # ICC IECC 2015
+  # The International Code Council's International Energy Conservation Code is widely
+  # used across the United States.
+  # @see https://codes.iccsafe.org/public/document/toc/545/
+  class ICCIECC2015; end  
+
 end
