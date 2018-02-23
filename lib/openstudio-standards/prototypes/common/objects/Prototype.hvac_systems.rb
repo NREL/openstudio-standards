@@ -4508,9 +4508,10 @@ class Standard
   # if the it will return a water fixture object, or NIL if there is no water load at all.
   def model_add_swh_end_uses_by_space(model, building_type, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
     # find the specific space_type properties from standard.json
-    search_criteria = {
+
+	search_criteria = {
       'template' => template,
-      'building_type' => building_type,
+	  'building_type' => building_type,
       'space_type' => space_type_name
     }
     data = model_find_object(standards_data['space_types'], search_criteria)

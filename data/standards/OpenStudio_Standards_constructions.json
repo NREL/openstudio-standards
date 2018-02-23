@@ -108,112 +108,156 @@
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Mass Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Mass Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "8 in. Concrete Block Wall",
+        "Typical Insulation"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Metal Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Metal Framed Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Wood Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "IEAD",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER HiRiseResHtlMtl Exterior Wood Framed Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "WoodFramed",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Insulated Exterior Mass Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "8 in. Concrete Block Wall",
+        "Typical Insulation"
       ]
     },
     {
       "name": "DEER Insulated Steel Framed Exterior Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Insulated Wood Framed Exterior Wall",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorWall",
+      "standards_construction_type": "WoodFramed",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "25mm Stucco",
+        "5/8 in. Gypsum Board",
+        "Typical Insulation",
+        "5/8 in. Gypsum Board"
       ]
     },
     {
       "name": "DEER Mass Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
       "name": "DEER Metal Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "Metal",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
+      ]
+    },
+    {
+      "name": "DEER Metal Framed Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": "Simple Glazing",
+      "skylight_framing": null,
+      "materials": [
+        "Simple Glazing"
+      ]
+    },
+    {
+      "name": "DEER Skylight",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": "Simple Glazing",
+      "skylight_framing": null,
+      "materials": [
+        "Simple Glazing"
       ]
     },
     {
@@ -251,12 +295,14 @@
     },
     {
       "name": "DEER Wood Framed Roof",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
-      "insulation_layer": null,
+      "intended_surface_type": "ExteriorRoof",
+      "standards_construction_type": "IEAD",
+      "insulation_layer": "Typical Insulation",
       "skylight_framing": null,
       "materials": [
-
+        "Roof Membrane",
+        "Typical Insulation",
+        "Metal Roof Surface"
       ]
     },
     {
@@ -2562,7 +2608,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.000_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.000_in",
@@ -2574,7 +2620,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.334_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.334_in",
@@ -2586,7 +2632,7 @@
     },
     {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.430_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.430_in",
@@ -2598,7 +2644,7 @@
     },
     {
       "name": "Window_U_0.55_SHGC_0.35_Skylight_Frame_Width_0.709_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_0.709_in",
@@ -2610,7 +2656,7 @@
     },
     {
       "name": "Window_U_0.65_SHGC_0.35_Skylight_Frame_Width_2.339_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_2.339_in",
@@ -2622,7 +2668,7 @@
     },
     {
       "name": "Window_U_0.75_SHGC_0.35_Skylight_Frame_Width_2.339_in",
-      "intended_surface_type": null,
+      "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
       "skylight_framing": "Skylight_Frame_Width_2.339_in",

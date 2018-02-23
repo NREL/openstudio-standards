@@ -1,7 +1,7 @@
 
 OS:Version,
-  {51574489-a75c-4d9d-83e9-5524ae7dbed1}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {c3296fbf-e2c2-46cc-be09-65192303ea2a}, !- Handle
+  2.3.0;                                  !- Version Identifier
 
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
@@ -16790,4 +16790,45 @@ OS:Rendering:Color,
   136,                                    !- Rendering Red Value
   78,                                     !- Rendering Green Value
   222;                                    !- Rendering Blue Value
+
+OS:Site,
+  {92a43a19-afef-409e-8f39-4022da4da3c2}, !- Handle
+  Site 1,                                 !- Name
+  ,                                       !- Latitude {deg}
+  ,                                       !- Longitude {deg}
+  ,                                       !- Time Zone {hr}
+  ,                                       !- Elevation {m}
+  ;                                       !- Terrain
+
+OS:SimulationControl,
+  {3a642d51-3222-4732-91cc-63d36aa973fb}; !- Handle
+
+OS:Sizing:Parameters,
+  {fe3b24a9-9370-44c0-ba11-d36d27f1474a}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {8bb818c5-1153-42be-8522-fe0cbff31d73}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:HeatBalanceAlgorithm,
+  {ec8b6a52-af6f-4e6f-92fc-ea8d25be9010}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:RunPeriod,
+  {e174c44e-1f9e-4d31-bfb5-adf3e8a163cf}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  ,                                       !- Use Weather File Holidays and Special Days
+  ,                                       !- Use Weather File Daylight Saving Period
+  ,                                       !- Apply Weekend Holiday Rule
+  ,                                       !- Use Weather File Rain Indicators
+  ,                                       !- Use Weather File Snow Indicators
+  ;                                       !- Number of Times Runperiod to be Repeated
 

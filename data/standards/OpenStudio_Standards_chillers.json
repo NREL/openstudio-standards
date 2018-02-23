@@ -3397,10 +3397,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER Pre-1975",
@@ -3409,16 +3409,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.676,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER Pre-1975",
@@ -3433,10 +3433,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.406,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER Pre-1975",
@@ -3451,10 +3451,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER Pre-1975",
@@ -3469,10 +3469,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1985",
@@ -3487,10 +3487,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1985",
@@ -3499,16 +3499,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.676,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1985",
@@ -3523,10 +3523,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.406,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1985",
@@ -3541,10 +3541,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1985",
@@ -3559,10 +3559,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1996",
@@ -3577,10 +3577,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1996",
@@ -3589,16 +3589,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.676,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1996",
@@ -3613,10 +3613,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.406,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1996",
@@ -3631,10 +3631,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 1996",
@@ -3649,10 +3649,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2003",
@@ -3667,10 +3667,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2003",
@@ -3679,16 +3679,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2003",
@@ -3703,10 +3703,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2003",
@@ -3721,10 +3721,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2003",
@@ -3739,10 +3739,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.718,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2007",
@@ -3757,10 +3757,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2007",
@@ -3769,16 +3769,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2007",
@@ -3793,10 +3793,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2007",
@@ -3811,10 +3811,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2007",
@@ -3829,10 +3829,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.639,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2011",
@@ -3847,10 +3847,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2011",
@@ -3859,16 +3859,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2011",
@@ -3883,10 +3883,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2011",
@@ -3901,10 +3901,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2011",
@@ -3919,10 +3919,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.639,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2014",
@@ -3937,10 +3937,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2014",
@@ -3949,16 +3949,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2014",
@@ -3973,10 +3973,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2014",
@@ -3991,10 +3991,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2014",
@@ -4009,10 +4009,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.68,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2015",
@@ -4027,10 +4027,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2015",
@@ -4039,16 +4039,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2015",
@@ -4063,10 +4063,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2015",
@@ -4081,10 +4081,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.255,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER 2015",
@@ -4099,10 +4099,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.68,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4117,10 +4117,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4135,10 +4135,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4153,10 +4153,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4171,10 +4171,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4189,10 +4189,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4207,10 +4207,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4225,10 +4225,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4243,10 +4243,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4261,10 +4261,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4279,10 +4279,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4297,10 +4297,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4309,16 +4309,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4327,16 +4327,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4345,16 +4345,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4363,16 +4363,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4381,16 +4381,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4399,16 +4399,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4417,16 +4417,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4435,16 +4435,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4453,16 +4453,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4471,16 +4471,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4489,16 +4489,16 @@
       "compressor_type": "Centrifugal",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4513,10 +4513,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4531,10 +4531,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4549,10 +4549,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4567,10 +4567,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4585,10 +4585,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4603,10 +4603,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4621,10 +4621,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4639,10 +4639,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4657,10 +4657,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4675,10 +4675,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4693,10 +4693,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4711,10 +4711,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Open-Cent-Cap-fCHWT&ECT",
+      "eirft": "Open-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Open-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4729,10 +4729,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.004856808,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4747,10 +4747,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.004856808,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4765,10 +4765,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4783,10 +4783,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4801,10 +4801,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4819,10 +4819,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4831,16 +4831,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.004856808,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4849,16 +4849,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.004856808,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4867,16 +4867,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4885,16 +4885,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4903,16 +4903,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4921,16 +4921,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4939,34 +4939,34 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 149.99,
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_full_load_efficiency": 1.004856808,
-      "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
-    },
-    {
-      "template": "DEER High Perf",
-      "cooling_type": "AirCooled",
-      "condenser_type": "WithoutCondenser",
-      "compressor_type": "Centrifugal Frictionless",
-      "absorption_type": null,
-      "variable_speed_drive": 1,
       "minimum_capacity": 0,
       "maximum_capacity": 149.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.004856808,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
+    },
+    {
+      "template": "DEER High Perf",
+      "cooling_type": "AirCooled",
+      "condenser_type": "WithoutCondenser",
+      "compressor_type": "Centrifugal Frictionless",
+      "absorption_type": null,
+      "variable_speed_drive": 1,
+      "minimum_capacity": 0,
+      "maximum_capacity": 149.99,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_full_load_efficiency": 1.004856808,
+      "minimum_integrated_part_load_value": null,
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4981,10 +4981,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -4999,10 +4999,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.25607101,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5017,10 +5017,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5035,10 +5035,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.302592158,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5053,10 +5053,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5071,10 +5071,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5089,10 +5089,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5107,10 +5107,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.5072,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5125,10 +5125,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5143,10 +5143,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5161,10 +5161,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5179,10 +5179,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.634,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5197,10 +5197,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5215,10 +5215,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5233,10 +5233,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5251,10 +5251,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5263,16 +5263,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5281,16 +5281,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5299,16 +5299,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5317,16 +5317,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.4608,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5335,16 +5335,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5353,16 +5353,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5371,16 +5371,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5389,16 +5389,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.576,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5407,16 +5407,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5425,16 +5425,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5443,16 +5443,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5461,16 +5461,16 @@
       "compressor_type": "Centrifugal Frictionless",
       "absorption_type": null,
       "variable_speed_drive": 1,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5485,10 +5485,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5503,10 +5503,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5521,10 +5521,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5539,10 +5539,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.56,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5557,10 +5557,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5575,10 +5575,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5593,10 +5593,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5611,10 +5611,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.7,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5629,10 +5629,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5647,10 +5647,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5665,10 +5665,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5683,10 +5683,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.75,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "Herm-Cent-Cap-fCHWT&ECT",
+      "eirft": "Herm-Cent-EIR-fCHWT&ECT",
+      "eirfplr": "Herm-Cent-EIR-fPLR",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5701,10 +5701,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.008,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5719,10 +5719,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.04,
       "minimum_integrated_part_load_value": 16,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5737,10 +5737,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.074,
       "minimum_integrated_part_load_value": 15,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5755,10 +5755,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.1,
       "minimum_integrated_part_load_value": 15,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5773,10 +5773,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.157,
       "minimum_integrated_part_load_value": 14.29,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5791,10 +5791,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.19,
       "minimum_integrated_part_load_value": 14.29,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5809,10 +5809,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.26,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipAir-Cap-fCHWT&DBT",
+      "eirft": "RecipAir-EIR-fCHWT&DBT",
+      "eirfplr": "RecipAir-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5827,10 +5827,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.672,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipH2O-Cap-fCHWT&ECT",
+      "eirft": "RecipH2O-EIR-fCHWT&ECT",
+      "eirfplr": "RecipRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5845,10 +5845,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.837,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "RecipH2O-Cap-fCHWT&ECT",
+      "eirft": "RecipH2O-EIR-fCHWT&ECT",
+      "eirfplr": "RecipRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5863,10 +5863,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.257,
       "minimum_integrated_part_load_value": 3.934,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5881,10 +5881,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.192,
       "minimum_integrated_part_load_value": 0.84,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5899,10 +5899,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.157,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5917,10 +5917,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.101,
       "minimum_integrated_part_load_value": 0.8,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5935,10 +5935,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.074,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5953,10 +5953,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.04,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5971,10 +5971,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.043,
       "minimum_integrated_part_load_value": 0.75,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -5989,10 +5989,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.008,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6007,10 +6007,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 1.26,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewAir-Cap-fCHWT&DBT",
+      "eirft": "ScrewAir-EIR-fCHWT&DBT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6025,10 +6025,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.574,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6043,10 +6043,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.646,
       "minimum_integrated_part_load_value": 0.408,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6061,10 +6061,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.718,
       "minimum_integrated_part_load_value": 0.502,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6079,10 +6079,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.718,
       "minimum_integrated_part_load_value": 0.628,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6091,16 +6091,16 @@
       "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.511,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6109,16 +6109,16 @@
       "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.575,
       "minimum_integrated_part_load_value": 0.372,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6127,16 +6127,16 @@
       "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.639,
       "minimum_integrated_part_load_value": 0.515,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6145,16 +6145,16 @@
       "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "variable_speed_drive": 0,
-      "minimum_capacity": 0,
-      "maximum_capacity": 299.99,
+      "minimum_capacity": 300,
+      "maximum_capacity": 9999.99,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.639,
       "minimum_integrated_part_load_value": 0.572,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6169,10 +6169,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.632,
       "minimum_integrated_part_load_value": null,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6187,10 +6187,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.711,
       "minimum_integrated_part_load_value": 0.439,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6205,10 +6205,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.79,
       "minimum_integrated_part_load_value": 0.541,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     },
     {
       "template": "DEER High Perf",
@@ -6223,10 +6223,10 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_full_load_efficiency": 0.79,
       "minimum_integrated_part_load_value": 0.676,
-      "capft": null,
-      "eirft": null,
-      "eirfplr": null,
-      "notes": null
+      "capft": "ScrewH2O-Cap-fCHWT&ECT",
+      "eirft": "ScrewH2O-EIR-fCHWT&ECT",
+      "eirfplr": "ScrewRemote-EIR-fPLR-2Comp/Ckt",
+      "notes": "From MASControl 2"
     }
   ]
 }
