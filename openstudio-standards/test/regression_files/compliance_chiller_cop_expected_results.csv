@@ -1,5 +1,0 @@
-Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),COP
-Scroll,0,9999999999,2.5
-Centrifugal,0,9999999999,2.5
-Rotary Screw,0,9999999999,2.5
-Reciprocating,0,9999999999,2.5

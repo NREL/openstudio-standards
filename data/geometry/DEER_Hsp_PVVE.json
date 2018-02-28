@@ -1,0 +1,101 @@
+[
+  {
+    "name": "EL2 Sys1 (PVAVS) (G)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL2 SSW Perim Spc (G.SSW2)",
+      "EL2 NNW Perim Spc (G.NNW3)",
+      "EL2 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL2 West Perim Plnm (G.W11)"
+  },
+  {
+    "name": "EL1 Sys3 (PVVT) (G.W3)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electricity",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W3)"
+    ]
+  },
+  {
+    "name": "EL3 Sys4 (PTAC) (G)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "cooling_type": "Single Speed DX AC",
+    "fan_type": "Cycling",
+    "space_names": [
+      "EL3 East Perim Spc (G.E1)",
+      "EL3 North Perim Spc (G.N6)",
+      "EL3 South Perim Spc (G.S7)",
+      "EL3 Core Spc (G.C8)"
+    ]
+  },
+  {
+    "name": "S5 Sys (PVAVS)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 North Perim Spc (G.N1)",
+      "EL1 South Perim Spc (G.S2)",
+      "EL2 East Perim Spc (G.E1)",
+      "EL2 South Perim Spc (G.S5)",
+      "EL2 North Perim Spc (G.N6)",
+      "EL2 Core Spc (G.C7)"
+    ],
+    "return_plenum": "EL2 Core Plnm (G.C14)"
+  },
+  {
+    "name": "S7 Sys (PVAVS)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL4 West Perim Spc (G.W2)",
+      "EL4 North Perim Spc (G.N3)",
+      "EL4 South Perim Spc (G.S4)",
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C13)"
+  },
+  {
+    "name": "EL4 Sys9 (PVAVS) (G)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL4 East Perim Spc (G.E1)",
+      "EL4 North Perim Spc (G.N6)",
+      "EL4 South Perim Spc (G.S7)",
+      "EL4 Core Spc (G.C8)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C16)"
+  },
+  {
+    "name": "EL3 Sys11 (PVAVS) (G)",
+    "type": "PVAV",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL3 West Perim Spc (G.W2)",
+      "EL3 North Perim Spc (G.N3)",
+      "EL3 South Perim Spc (G.S4)",
+      "EL3 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL3 Core Plnm (G.C13)"
+  }
+]

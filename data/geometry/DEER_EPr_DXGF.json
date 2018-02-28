@@ -1,0 +1,95 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 East Perim Spc (G.E1)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E5)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.NNE2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 NNE Perim Spc (G.NNE2)"
+    ],
+    "return_plenum": "EL1 NNE Perim Plnm (G.NNE6)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.SSE3)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 SSE Perim Spc (G.SSE3)"
+    ],
+    "return_plenum": "EL1 SSE Perim Plnm (G.SSE7)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W8)"
+  },
+  {
+    "name": "EL2 Sys1 (PVVT) (G.SSW1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL2 SSW Perim Spc (G.SSW1)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (PVVT) (G.N2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL2 North Perim Spc (G.N2)"
+    ]
+  },
+  {
+    "name": "EL2 Sys2 (PSZ) (G.E3)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL2 East Perim Spc (G.E3)"
+    ]
+  }
+]

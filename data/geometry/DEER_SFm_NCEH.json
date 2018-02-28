@@ -1,0 +1,50 @@
+[
+  {
+    "name": "EL1 Sys1 (UHT) (G.1)",
+    "space_names": [
+      "EL1 Spc (G.1)"
+    ]
+  },
+  {
+    "name": "EL3 Sys1 (UHT) (G.1)",
+    "space_names": [
+      "EL3 Spc (G.1)"
+    ]
+  },
+  {
+    "name": "EL7 Sys2 (UHT) (G.S3)",
+    "space_names": [
+      "EL7 South Perim Spc (G.S3)"
+    ]
+  },
+  {
+    "name": "EL7 Sys2 (UHT) (G.N4)",
+    "space_names": [
+      "EL7 North Perim Spc (G.N4)"
+    ]
+  },
+  {
+    "name": "EL4 Sys3 (UHT) (G.1)",
+    "space_names": [
+      "EL4 Spc (G.1)"
+    ]
+  },
+  {
+    "name": "EL6 Sys3 (UHT) (G.1)",
+    "space_names": [
+      "EL6 Spc (G.1)"
+    ]
+  },
+  {
+    "name": "EL8 Sys4 (UHT) (G.W3)",
+    "space_names": [
+      "EL8 West Perim Spc (G.W3)"
+    ]
+  },
+  {
+    "name": "EL8 Sys4 (UHT) (G.E4)",
+    "space_names": [
+      "EL8 East Perim Spc (G.E4)"
+    ]
+  }
+]

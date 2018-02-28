@@ -1,0 +1,266 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W4)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (G.W2)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W5)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 East Perim Spc (G.E3)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E6)"
+  },
+  {
+    "name": "EL2 Sys1 (PVVT) (G.N2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL2 North Perim Spc (G.N2)"
+    ],
+    "return_plenum": "EL2 North Perim Plnm (G.N5)"
+  },
+  {
+    "name": "EL2 Sys1 (PVVT) (G.W3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL2 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL2 West Perim Plnm (G.W6)"
+  },
+  {
+    "name": "EL3 Sys1 (PVVT) (G.S2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL3 South Perim Spc (G.S2)"
+    ],
+    "return_plenum": "EL3 South Perim Plnm (G.S5)"
+  },
+  {
+    "name": "EL3 Sys1 (PVVT) (G.W3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL3 West Perim Spc (G.W3)"
+    ],
+    "return_plenum": "EL3 West Perim Plnm (G.W6)"
+  },
+  {
+    "name": "EL2 Sys3 (PVVT) (G.S1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL2 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL2 South Perim Plnm (G.S4)"
+  },
+  {
+    "name": "EL3 Sys3 (PVVT) (G.N1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL3 North Perim Plnm (G.N4)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (G.C5)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL4 Core Plnm (G.C10)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (M.C15)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL4 Core Plnm (M.C20)"
+  },
+  {
+    "name": "EL4 Sys3 (PVVT) (T.C25)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL4 Core Plnm (T.C30)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (G.N1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 North Perim Spc (G.N1)"
+    ],
+    "return_plenum": "EL4 North Perim Plnm (G.N6)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (G.SSW2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 SSW Perim Spc (G.SSW2)"
+    ],
+    "return_plenum": "EL4 SSW Perim Plnm (G.SSW7)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (G.NNE3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 NNE Perim Spc (G.NNE3)"
+    ],
+    "return_plenum": "EL4 NNE Perim Plnm (G.NNE8)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (G.S4)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 South Perim Spc (G.S4)"
+    ],
+    "return_plenum": "EL4 South Perim Plnm (G.S9)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (M.N11)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 North Perim Spc (M.N11)"
+    ],
+    "return_plenum": "EL4 North Perim Plnm (M.N16)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (M.SSW12)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 SSW Perim Spc (M.SSW12)"
+    ],
+    "return_plenum": "EL4 SSW Perim Plnm (M.SSW17)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (M.NNE13)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 NNE Perim Spc (M.NNE13)"
+    ],
+    "return_plenum": "EL4 NNE Perim Plnm (M.NNE18)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (M.S14)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 South Perim Spc (M.S14)"
+    ],
+    "return_plenum": "EL4 South Perim Plnm (M.S19)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (T.N21)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 North Perim Spc (T.N21)"
+    ],
+    "return_plenum": "EL4 North Perim Plnm (T.N26)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (T.SSW22)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 SSW Perim Spc (T.SSW22)"
+    ],
+    "return_plenum": "EL4 SSW Perim Plnm (T.SSW27)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (T.NNE23)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 NNE Perim Spc (T.NNE23)"
+    ],
+    "return_plenum": "EL4 NNE Perim Plnm (T.NNE28)"
+  },
+  {
+    "name": "EL4 Sys4 (PVVT) (T.S24)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL4 South Perim Spc (T.S24)"
+    ],
+    "return_plenum": "EL4 South Perim Plnm (T.S29)"
+  }
+]

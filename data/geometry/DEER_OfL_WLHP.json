@@ -1,0 +1,167 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.S1)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (G.S6)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.E2)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (G.E7)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.N3)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (G.N8)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.W4)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (G.W9)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (G.C5)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 Core Spc (G.C5)"
+    ],
+    "return_plenum": "EL1 Core Plnm (G.C10)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (M.S11)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 South Perim Spc (M.S11)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (M.S16)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (M.E12)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 East Perim Spc (M.E12)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (M.E17)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (M.N13)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 North Perim Spc (M.N13)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (M.N18)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (M.W14)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (M.W14)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (M.W19)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (M.C15)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 Core Spc (M.C15)"
+    ],
+    "return_plenum": "EL1 Core Plnm (M.C20)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.S21)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 South Perim Spc (T.S21)"
+    ],
+    "return_plenum": "EL1 South Perim Plnm (T.S26)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.E22)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 East Perim Spc (T.E22)"
+    ],
+    "return_plenum": "EL1 East Perim Plnm (T.E27)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.N23)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 North Perim Spc (T.N23)"
+    ],
+    "return_plenum": "EL1 North Perim Plnm (T.N28)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.W24)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 West Perim Spc (T.W24)"
+    ],
+    "return_plenum": "EL1 West Perim Plnm (T.W29)"
+  },
+  {
+    "name": "EL1 Sys1 (PVVT) (T.C25)",
+    "type": "WSHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "heating_type": "Gas",
+    "space_names": [
+      "EL1 Core Spc (T.C25)"
+    ],
+    "return_plenum": "EL1 Core Plnm (T.C30)"
+  }
+]

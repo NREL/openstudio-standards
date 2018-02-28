@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/openstudio-standards
+    docker:
+      - image: nrel/openstudio
+    parallelism: 7
+    steps:
+      - checkout
+      - run:
+          name: Install openstudio-standards test dependencies
+          command: |
+            ~/.rbenv/shims/bundle install
+      - run:
+          name: Parallelize Tests
+          command: |
+            >node_tests.txt
+            circleci tests split --split-by=timings test/circleci_tests.txt > node_tests.txt
+            cat node_tests.txt
+      - run:
+          name: Run tests
+          command: |
+            ~/.rbenv/shims/bundle exec rake test:circleci
+      - run:
+          name: Summarize test times
+          command: |
+            ~/.rbenv/shims/bundle exec rake test:times
+      - store_test_results:
+          path: test/reports/
+      - store_artifacts:
+          path: timing/
+          destination: test_timing_summary

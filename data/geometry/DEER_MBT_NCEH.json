@@ -1,0 +1,123 @@
+[
+  {
+    "name": "EL1 Sys1 (UVT) (G.S1)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.E2)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.N3)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.W4)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 West Perim Spc (G.W4)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C5)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C5)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C6)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C6)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C7)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C7)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C8)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C8)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C9)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C9)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C10)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C10)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.C11)",
+    "type": "UnitHeater",
+    "heating_type": "Electric",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 Core Spc (G.C11)"
+    ]
+  }
+]
