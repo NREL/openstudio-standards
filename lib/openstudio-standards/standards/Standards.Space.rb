@@ -1065,11 +1065,6 @@ class Standard
 
     # Ensure that total controlled fraction
     # is never set above 1 (100%)
-    sensor_1_frac = sensor_1_frac.round(3)
-    sensor_2_frac = sensor_2_frac.round(3)
-    if sensor_1_frac >= 1.0
-      sensor_1_frac = 1.0 - 0.001
-    end
     if sensor_1_frac + sensor_2_frac >= 1.0
       # Lower sensor_2_frac so that the total
       # is just slightly lower than 1.0

@@ -1234,21 +1234,6 @@ class Standard
       end
     end
 
-    # If there is a waterheater on the demand side,
-    # check if the loop connected to that waterheater's
-    # demand side is an swh loop itself
-    plant_loop.demandComponents.each do |comp|
-      if comp.to_WaterHeaterMixed.is_initialized
-        comp = comp.to_WaterHeaterMixed.get
-        if comp.plantLoop.is_initialized
-          if plant_loop_swh_loop?(comp.plantLoop.get)
-            serves_swh = true
-            break
-          end
-        end
-      end
-    end
-
     return serves_swh
   end
 

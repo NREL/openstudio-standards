@@ -16,7 +16,7 @@ class NECB2011 < Standard
     @standards_data = {}
     @standards_data["tables"] = []
     files.each do |file|
-      #puts "loading standards data from #{file}"
+      puts "loading standards data from #{file}"
       data = JSON.parse(File.read(file))
       if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
         @standards_data["tables"] << data["tables"].first
@@ -72,8 +72,8 @@ class NECB2011 < Standard
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
-    #puts "loaded these tables..."
-    #puts @standards_data.keys.size
+    puts "loaded these tables..."
+    puts @standards_data.keys.size
     #raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
   end
 

@@ -46,14 +46,7 @@ class OpenStudio::Model::CoilHeatingWater
  # returns the autosized rated capacity as an optional double
   def autosizedRatedCapacity
 
-    # In E+ 8.8, (OS 2.2.2 onward) the field name changed
-    if self.model.version < OpenStudio::VersionString.new('2.2.2')
-      field = 'Design Size Design Coil Load'
-    else
-      field = 'Design Size Rated Capacity'
-    end
-
-    return self.model.getAutosizedValue(self, field, 'W')
+    return self.model.getAutosizedValue(self, 'Design Size Design Coil Load', 'W')
     
   end  
   
