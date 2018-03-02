@@ -1,4 +1,4 @@
-require 'minitest/unit.rb'
+require 'minitest/unit'
 
 def create_model_and_regression_test(building_type, epw_file, template)
   begin
