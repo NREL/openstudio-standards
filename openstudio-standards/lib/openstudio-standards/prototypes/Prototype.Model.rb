@@ -341,7 +341,7 @@ class OpenStudio::Model::Model
                         'Geometry.primary_school.osm'
                       end
     when 'SmallOffice'
-      geometry_file = if template == 'DOE Ref Pre-1980' || template == 'CEC Pre-1978' || template == 'CEC T24 1978'
+      geometry_file = if template == 'DOE Ref Pre-1980'
                         'Geometry.small_office_pre_1980.osm'
                       else
                         'Geometry.small_office.osm'
