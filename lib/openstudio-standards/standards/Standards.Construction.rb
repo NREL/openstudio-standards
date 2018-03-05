@@ -315,7 +315,7 @@ class Standard
   # Only applies to fenestration constructions.
   # @return [Double] the visible transmittance as a decimal.
   def construction_calculated_visible_transmittance(construction)
-    construction_name = name.get.to_s
+    construction_name = construction.name.get.to_s
 
     vt = nil
 
