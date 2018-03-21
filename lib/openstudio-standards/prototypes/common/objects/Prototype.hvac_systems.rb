@@ -6309,7 +6309,7 @@ class Standard
                       else
                         'res_med'
                       end
-    when 'nonresidential'
+    when 'nonresidential', 'retail', 'publicassembly', 'heatedonly'
       # nonresidential and 3 floors or less and < 75,000 ft2
       if num_stories <= 3 && area_ft2 < 75_000
         size_category = 'nonres_small'
@@ -6429,7 +6429,7 @@ class Standard
     # Get the system type
     system_type = syts[heating_source][cooling_source][delivery_type][size_category]
 
-    if system_type.nil?
+    if system_type.nil? || system_type.empty?
       system_type = [nil, nil, nil, nil]
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not determine system type for #{template}, #{area_type}, #{heating_source} heating, #{cooling_source} cooling, #{delivery_type} delivery, #{area_ft2.round} ft^2, #{num_stories} stories.")
     else
