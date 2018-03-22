@@ -1,7 +1,7 @@
 
 OS:Version,
-  {3f518396-9b5a-4293-8082-3b5babf0212a}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {659472a6-bad5-484e-82f7-78493d0bbcf5}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {e4e0cf83-aa67-462b-ac86-dd69d24de0d1}, !- Handle
@@ -1204,7 +1204,7 @@ OS:SubSurface,
 
 OS:Building,
   {6b25c3c7-39e4-4be7-84a9-17e80feecaf5}, !- Handle
-  NECB_2011SmallOffice,                   !- Name
+  NECB_2015SmallOffice,                   !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1830,20 +1830,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 6,             !- Name
   {761af5ec-0e7c-4fea-81cc-7d7860391e92}; !- Thermal Zone
 
-OS:WeatherFile,
-  {d74ddd58-1ecb-4ce9-8b05-3fe0526b135e}, !- Handle
-  Kuujjuarapik,                           !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-15701,                          !- Data Source
-  719050,                                 !- WMO Number
-  55.28,                                  !- Latitude {deg}
-  -77.77,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  12,                                     !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Kuujjuarapik.719050_CWEC.epw, !- Url
-  010D2BDA;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {5ae59639-00db-480b-9cb8-551de19b1c7d}, !- Handle
   Correlation,                            !- Calculation Method
@@ -1933,18 +1919,50 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {9bb5443a-6c0e-4398-ae7e-487262d68794}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {729fbfdc-d785-4b71-be84-c8ad98d5e690}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2; !- Standards Space Type
 
 OS:Rendering:Color,
   {729fbfdc-d785-4b71-be84-c8ad98d5e690}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {2570a7b2-587a-4330-b998-f91b79c7616d}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {3500aed0-1a2f-4bf9-9d76-9196a82b3e9c}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {2106ab5f-99f6-4339-b9d2-422181137920}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 

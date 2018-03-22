@@ -1,7 +1,7 @@
 
 OS:Version,
-  {513cb3bf-d0c9-4817-8964-d32278a37bcc}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {4b1a206d-f1b0-4e52-9341-739aceeb5d3f}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {60c4cd85-d64b-4e19-b936-8f6a234d9ff1}, !- Handle
@@ -73,7 +73,7 @@ OS:Space,
 OS:Space,
   {2ae91237-f2ec-4554-9207-69fae185a701}, !- Handle
   Floor 1 Sterile Storage,                !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -152,7 +152,7 @@ OS:Surface,
 OS:Space,
   {006af7b5-d11d-4fe8-af64-4fc32747ca2c}, !- Handle
   Floor 1 Clean,                          !- Name
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
+  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -287,7 +287,7 @@ OS:Space,
 OS:Space,
   {985c61fb-783a-4b92-a34d-235dbff8ebc0}, !- Handle
   Floor 1 Utility Room,                   !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -301,7 +301,7 @@ OS:Space,
 OS:Space,
   {59deb157-6cde-47ae-9c2a-6fc9e3049325}, !- Handle
   Floor 1 Nurse Janitor,                  !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -560,7 +560,7 @@ OS:Surface,
 OS:Space,
   {e1357eb6-9f26-418a-99d4-975b8d640bdd}, !- Handle
   Floor 2 Janitor,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -797,7 +797,7 @@ OS:Surface,
 OS:Space,
   {63a04e9f-f484-4770-a926-241efca4ee9b}, !- Handle
   Floor 1 Soil,                           !- Name
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
+  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1062,7 +1062,7 @@ OS:Surface,
 OS:Space,
   {e783f303-25b1-454b-be2a-838f6fae1447}, !- Handle
   Floor 3 Storage 1,                      !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1265,7 +1265,7 @@ OS:Surface,
 OS:Space,
   {9a1e77bf-e7d0-445c-83eb-a99775b89fce}, !- Handle
   Floor 3 Utility,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1296,7 +1296,7 @@ OS:Surface,
 OS:Space,
   {2c44660e-7bcb-498f-b7cc-064883bf6c6b}, !- Handle
   Floor 1 Utility Janitor,                !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1561,7 +1561,7 @@ OS:Space,
 OS:Space,
   {d98391c8-8cf0-480c-bcd2-1e0d600b9232}, !- Handle
   Floor 1 Storage,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2001,7 +2001,7 @@ OS:Surface,
 OS:Space,
   {2a5880a9-13a4-4de2-ae37-5f659b4768e3}, !- Handle
   Floor 2 Storage 3,                      !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2385,7 +2385,7 @@ OS:Surface,
 OS:Space,
   {9fb7b410-03b0-461a-8356-5933393987c6}, !- Handle
   Floor 2 Storage 2,                      !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2532,7 +2532,7 @@ OS:Surface,
 OS:Space,
   {34fb3292-2238-451a-8c49-9d26eb632d3f}, !- Handle
   Floor 1 Sub-Sterile,                    !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3557,7 +3557,7 @@ OS:Surface,
 OS:Space,
   {6a8f24be-4b26-450a-b495-5ac986713549}, !- Handle
   Floor 1 Soil Hold,                      !- Name
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
+  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3909,7 +3909,7 @@ OS:Surface,
 OS:Space,
   {b6f2af45-4490-4dd9-8adc-97ed875fb0f7}, !- Handle
   Floor 3 Janitor,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3923,7 +3923,7 @@ OS:Space,
 OS:Space,
   {a2b498c9-754b-443d-a6bf-5a11e7a517fd}, !- Handle
   Floor 2 Utility,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4381,7 +4381,7 @@ OS:Surface,
 OS:Space,
   {4769a9b6-c376-481c-a6b8-b4ab698133f7}, !- Handle
   Floor 1 Bio Haz,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4607,7 +4607,7 @@ OS:Surface,
 OS:Space,
   {dd27b62c-190b-46a8-86fd-b911665284a6}, !- Handle
   Floor 1 Clean Work,                     !- Name
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
+  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5325,7 +5325,7 @@ OS:Surface,
 OS:Space,
   {4ebe8e01-c248-4310-83e3-6e5a2e6a830a}, !- Handle
   Floor 1 Soil Work,                      !- Name
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
+  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5390,7 +5390,7 @@ OS:Surface,
 OS:Space,
   {78712088-4aac-490a-995d-fa28ef6168ab}, !- Handle
   Floor 2 Storage 1,                      !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5659,7 +5659,7 @@ OS:Surface,
 OS:Space,
   {c8ba28a8-9bf5-4506-ad6c-03ce53868d07}, !- Handle
   Floor 1 Med Gas,                        !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -6812,7 +6812,7 @@ OS:Surface,
 OS:Space,
   {e3d92588-22fa-4fcc-97aa-77385b24bd01}, !- Handle
   Floor 3 Storage 2,                      !- Name
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
+  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -32937,20 +32937,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 118,           !- Name
   {8829335a-763f-4d0a-9e7d-bcc6fe199ccf}; !- Thermal Zone
 
-OS:WeatherFile,
-  {dae5a437-5e4f-44ff-9d27-ffed0b3e2c48}, !- Handle
-  Whitehorse,                             !- City
-  YT,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-26316,                          !- Data Source
-  719640,                                 !- WMO Number
-  60.72,                                  !- Latitude {deg}
-  -135.07,                                !- Longitude {deg}
-  -8,                                     !- Time Zone {hr}
-  703,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_YT_Whitehorse.719640_CWEC.epw, !- Url
-  D5EA4C49;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {4405ffcf-bdd4-482b-98e4-d73d2131dacc}, !- Handle
   Correlation,                            !- Calculation Method
@@ -33023,119 +33009,119 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {3a74c0ed-cf62-40a9-a377-718b7362fc47}, !- Handle
-  Space Function Hospital - operating room, !- Name
+  Space Function Health care facility operating room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {fe305278-2494-45bd-b9ca-875603bd6f79}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - operating room;              !- Standards Space Type
+  Health care facility operating room;    !- Standards Space Type
 
 OS:Rendering:Color,
   {fe305278-2494-45bd-b9ca-875603bd6f79}, !- Handle
-  Space Function Hospital - operating room, !- Name
+  Space Function Health care facility operating room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {53c7fd92-c46f-4c76-a145-918f0751618f}, !- Handle
-  Space Function Hospital - patient room, !- Name
+  Space Function Health care facility patient room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {0bd54ead-7630-421b-af3f-bab15e87570e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - patient room;                !- Standards Space Type
+  Health care facility patient room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0bd54ead-7630-421b-af3f-bab15e87570e}, !- Handle
-  Space Function Hospital - patient room, !- Name
+  Space Function Health care facility patient room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {d240e9f9-b8ba-43b4-8def-ece8d2f70216}, !- Handle
-  Space Function Hospital - exam,         !- Name
+  Space Function Health care facility exam/treatment room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {26cdfeec-fc67-4bbc-9c3d-ca1021636065}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - exam;                        !- Standards Space Type
+  Health care facility exam/treatment room; !- Standards Space Type
 
 OS:Rendering:Color,
   {26cdfeec-fc67-4bbc-9c3d-ca1021636065}, !- Handle
-  Space Function Hospital - exam,         !- Name
+  Space Function Health care facility exam/treatment room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {824df8f7-e9fd-4305-beb4-34c0d6794334}, !- Handle
-  Space Function Hospital corr. >= 2.4m-sch-H, !- Name
+  Space Function Corridor/Transition area - hospital-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {c4f53260-450f-472d-b04b-c35e62ef7d12}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital corr. >= 2.4m-sch-H;           !- Standards Space Type
+  Corridor/Transition area - hospital-sch-H; !- Standards Space Type
 
 OS:Rendering:Color,
   {c4f53260-450f-472d-b04b-c35e62ef7d12}, !- Handle
-  Space Function Hospital corr. >= 2.4m-sch-H, !- Name
+  Space Function Corridor/Transition area - hospital-sch-H, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {fe6c1bb4-e00c-4f4f-aa89-7ccfde0ca752}, !- Handle
-  Space Function Hospital - lounge/recreation, !- Name
+  Space Function Lounge/Break room - health care facility, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {83c8a74a-0dec-46a3-95c0-e54c5a3d48b8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - lounge/recreation;           !- Standards Space Type
+  Lounge/Break room - health care facility; !- Standards Space Type
 
 OS:Rendering:Color,
   {83c8a74a-0dec-46a3-95c0-e54c5a3d48b8}, !- Handle
-  Space Function Hospital - lounge/recreation, !- Name
+  Space Function Lounge/Break room - health care facility, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b003bb07-9b63-49cb-a76e-56ffbda01639}, !- Handle
-  Space Function Hospital - nurses' station, !- Name
+  Space Function Health care facility nurses station, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {98167d41-e1e4-49cb-8ad2-915f34083c42}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - nurses' station;             !- Standards Space Type
+  Health care facility nurses station;    !- Standards Space Type
 
 OS:Rendering:Color,
   {98167d41-e1e4-49cb-8ad2-915f34083c42}, !- Handle
-  Space Function Hospital - nurses' station, !- Name
+  Space Function Health care facility nurses station, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {931efada-9c2a-4700-9593-e3140f08a63d}, !- Handle
-  Space Function Hospital - radiology/imaging, !- Name
+  Space Function Health care facility imaging room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {e7dc5407-b061-4ecc-a9b4-2fd8463212d2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - radiology/imaging;           !- Standards Space Type
+  Health care facility imaging room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e7dc5407-b061-4ecc-a9b4-2fd8463212d2}, !- Handle
-  Space Function Hospital - radiology/imaging, !- Name
+  Space Function Health care facility imaging room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -33176,188 +33162,186 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {55eace9e-7864-4483-9b67-32a949a91db4}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {1edbb926-1515-4d4e-b03b-0d5500340df4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2;                !- Standards Space Type
 
 OS:Rendering:Color,
   {1edbb926-1515-4d4e-b03b-0d5500340df4}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {90998f66-fb33-465c-a2b4-6c08b0277f8e}, !- Handle
-  Space Function Stairway-sch-H,          !- Name
+  Space Function Stairway/Stairwell-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {c72133d5-f7ef-4718-bd83-21070bbdaf83}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Stairway-sch-H;                         !- Standards Space Type
+  Stairway/Stairwell-sch-H;               !- Standards Space Type
 
 OS:Rendering:Color,
   {c72133d5-f7ef-4718-bd83-21070bbdaf83}, !- Handle
-  Space Function Stairway-sch-H,          !- Name
+  Space Function Stairway/Stairwell-sch-H, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Handle
-  Space Function Washroom-sch-H,          !- Name
+  Space Function Washroom - other-sch-H,  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {38183595-e1b4-456c-b8e6-7201a6a28741}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Washroom-sch-H;                         !- Standards Space Type
+  Washroom - other-sch-H;                 !- Standards Space Type
 
 OS:Rendering:Color,
   {38183595-e1b4-456c-b8e6-7201a6a28741}, !- Handle
-  Space Function Washroom-sch-H,          !- Name
+  Space Function Washroom - other-sch-H,  !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Handle
-  Space Function Storage area,            !- Name
+  Space Function Storage room <= 5 m2 <= 100 m2-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {325aa6a2-ad0f-43a3-ac42-04c96dbefecc}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Storage area;                           !- Standards Space Type
+  Storage room <= 5 m2 <= 100 m2-sch-H;   !- Standards Space Type
 
 OS:Rendering:Color,
   {325aa6a2-ad0f-43a3-ac42-04c96dbefecc}, !- Handle
-  Space Function Storage area,            !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Handle
-  Space Function Storage area - occsens,  !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {36b0760d-0877-40f2-9bf2-97d2e4bf2c8b}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Storage area - occsens;                 !- Standards Space Type
-
-OS:Rendering:Color,
-  {36b0760d-0877-40f2-9bf2-97d2e4bf2c8b}, !- Handle
-  Space Function Storage area - occsens,  !- Name
+  Space Function Storage room <= 5 m2 <= 100 m2-sch-H, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {76110c72-13a5-4925-839e-cb63f76c1fd8}, !- Handle
-  Space Function Hospital - physical therapy, !- Name
+  Space Function Health care facility physical therapy room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {f37169c3-c9ef-456c-9c24-1dbed384b669}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - physical therapy;            !- Standards Space Type
+  Health care facility physical therapy room; !- Standards Space Type
 
 OS:Rendering:Color,
   {f37169c3-c9ef-456c-9c24-1dbed384b669}, !- Handle
-  Space Function Hospital - physical therapy, !- Name
+  Space Function Health care facility physical therapy room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {51f724a8-268e-48c4-a6e7-261a91fcea33}, !- Handle
-  Space Function Hospital - recovery,     !- Name
+  Space Function Health care facility recovery room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {0274a213-0d65-485a-8e70-388dcb7014bf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - recovery;                    !- Standards Space Type
+  Health care facility recovery room;     !- Standards Space Type
 
 OS:Rendering:Color,
   {0274a213-0d65-485a-8e70-388dcb7014bf}, !- Handle
-  Space Function Hospital - recovery,     !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Handle
-  Space Function Hospital - laundry/washing, !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {f4c0af8f-5ca5-40ac-8756-73864eb43fda}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Hospital - laundry/washing;             !- Standards Space Type
-
-OS:Rendering:Color,
-  {f4c0af8f-5ca5-40ac-8756-73864eb43fda}, !- Handle
-  Space Function Hospital - laundry/washing, !- Name
+  Space Function Health care facility recovery room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {415e8628-3cb9-47af-80d5-ea697667ea4a}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {8996e284-944e-40ab-8a79-7f3048d35d11}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Conference/Meeting/Multi-purpose room;  !- Standards Space Type
 
 OS:Rendering:Color,
   {8996e284-944e-40ab-8a79-7f3048d35d11}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {72462bba-6089-4d85-88b6-dffd519d4efe}, !- Handle
-  Space Function Electrical/Mechanical-sch-H, !- Name
+  Space Function Electrical/Mechanical room-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {ca1614a8-d0ed-4719-a008-164cf2db29da}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-H;            !- Standards Space Type
+  Electrical/Mechanical room-sch-H;       !- Standards Space Type
 
 OS:Rendering:Color,
   {ca1614a8-d0ed-4719-a008-164cf2db29da}, !- Handle
-  Space Function Electrical/Mechanical-sch-H, !- Name
+  Space Function Electrical/Mechanical room-sch-H, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {e83f9e85-d63a-47d7-9071-1c7e037bac6f}, !- Handle
-  Space Function Dining - bar lounge/leisure, !- Name
+  Space Function Dining area - bar lounge/leisure dining, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {559fdd84-eac8-42f8-8bcd-933c011952c7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Dining - bar lounge/leisure;            !- Standards Space Type
+  Dining area - bar lounge/leisure dining; !- Standards Space Type
 
 OS:Rendering:Color,
   {559fdd84-eac8-42f8-8bcd-933c011952c7}, !- Handle
-  Space Function Dining - bar lounge/leisure, !- Name
+  Space Function Dining area - bar lounge/leisure dining, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {f08e9b61-570a-43d3-b1fd-8d0ef99a7ba2}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {fd45c8cf-5fc3-43ca-9521-d4bddc46167d}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {51224dff-16cd-4075-9d3e-b70368e87539}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 
