@@ -3013,7 +3013,8 @@ class Standard
                        else
                          "ASHRAE 169-2006-#{cz.value}"
                        end
-        next
+      elsif cz.institution == 'CEC'
+        climate_zone = "CEC T24-CEC#{cz.value}"
       end
     end
 
