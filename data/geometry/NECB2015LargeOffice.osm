@@ -5703,11 +5703,11 @@ OS:SpaceType,
   {5fe57b6e-9f37-4b97-88c4-358889add151}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-A;            !- Standards Space Type
+  Electrical/Mechanical room-sch-A;            !- Standards Space Type
 
 OS:Rendering:Color,
   {5fe57b6e-9f37-4b97-88c4-358889add151}, !- Handle
-  Space Function Electrical/Mechanical-sch-A, !- Name
+  Space Function Electrical/Mechanical room-sch-A, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -5720,11 +5720,11 @@ OS:SpaceType,
   {45508235-37c4-499b-94d3-9bea0b08f0d1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - open plan;                     !- Standards Space Type
+  Office open plan;                     !- Standards Space Type
 
 OS:Rendering:Color,
   {45508235-37c4-499b-94d3-9bea0b08f0d1}, !- Handle
-  Space Function Office - open plan,      !- Name
+  Space Function Office open plan,      !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
