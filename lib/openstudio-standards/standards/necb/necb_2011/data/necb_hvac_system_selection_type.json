@@ -8,6 +8,7 @@
           "necb_hvac_system_selection_type": "- undefined -",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 0,
           "dwelling": false
@@ -16,6 +17,7 @@
           "necb_hvac_system_selection_type": "Assembly Area",
           "min_stories": 0,
           "max_stories": 4,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": false
@@ -24,6 +26,7 @@
           "necb_hvac_system_selection_type": "Assembly Area",
           "min_stories": 4,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 6,
           "dwelling": false
@@ -32,6 +35,7 @@
           "necb_hvac_system_selection_type": "Automotive Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 4,
           "dwelling": false
@@ -40,6 +44,7 @@
           "necb_hvac_system_selection_type": "Data Processing Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 19.999,
           "system_type": 1,
           "dwelling": false
@@ -48,22 +53,25 @@
           "necb_hvac_system_selection_type": "Data Processing Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 19.999,
           "max_cooling_capacity_kw": 99999,
           "system_type": 2,
           "dwelling": false
         },
         {
           "necb_hvac_system_selection_type": "General Area",
-          "min_stories": 2,
-          "max_stories": 99999,
+          "min_stories": 0,
+          "max_stories": 2,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": false
         },
         {
           "necb_hvac_system_selection_type": "General Area",
-          "min_stories": 0,
+          "min_stories": 2,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 6,
           "dwelling": false
@@ -72,6 +80,7 @@
           "necb_hvac_system_selection_type": "Historical Collections Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 2,
           "dwelling": false
@@ -80,6 +89,7 @@
           "necb_hvac_system_selection_type": "Hospital Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": false
@@ -88,6 +98,7 @@
           "necb_hvac_system_selection_type": "Indoor Arena",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 7,
           "dwelling": false
@@ -96,6 +107,7 @@
           "necb_hvac_system_selection_type": "Industrial Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": false
@@ -104,6 +116,7 @@
           "necb_hvac_system_selection_type": "Residential/Accomodation Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 1,
           "dwelling": true
@@ -112,6 +125,7 @@
           "necb_hvac_system_selection_type": "Sleeping Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": true
@@ -120,6 +134,7 @@
           "necb_hvac_system_selection_type": "Supermarket/Food Services Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 3,
           "dwelling": false
@@ -128,6 +143,7 @@
           "necb_hvac_system_selection_type": "Supermarket/Food Services Area - vented",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 4,
           "dwelling": false
@@ -136,6 +152,7 @@
           "necb_hvac_system_selection_type": "Warehouse Area",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 4,
           "dwelling": false
@@ -144,6 +161,7 @@
           "necb_hvac_system_selection_type": "Warehouse Area - refrigerated",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": 5,
           "dwelling": false
@@ -152,6 +170,7 @@
           "necb_hvac_system_selection_type": "Wildcard",
           "min_stories": 0,
           "max_stories": 99999,
+          "min_cooling_capacity_kw": 0,
           "max_cooling_capacity_kw": 99999,
           "system_type": null,
           "dwelling": false
