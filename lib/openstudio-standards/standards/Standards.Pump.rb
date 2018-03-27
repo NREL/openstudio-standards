@@ -111,7 +111,7 @@ module Pump
   # Determines the minimum pump motor efficiency and nominal size
   # for a given motor bhp.  This should be the total brake horsepower with
   # any desired safety factor already included.  This method picks
-  # the next nominal motor catgory larger than the required brake
+  # the next nominal motor category larger than the required brake
   # horsepower, and the efficiency is based on that size.  For example,
   # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
   # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
