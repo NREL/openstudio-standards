@@ -2582,11 +2582,7 @@ class NECB2011
 
       # identify space-system_index and assign the right NECB system type 1-7.
 
-      puts "Chris was here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      puts necb_hvac_system_selection_type
-      puts ""
-
-      # Check if the
+      # Check if there is an hvac system selection category associated with the space.
       if necb_hvac_system_selection_type.nil?
         raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
       end
@@ -2595,19 +2591,13 @@ class NECB2011
       is_dwelling_unit = false
       is_wildcard = nil
 
-      # Debug var start
-      # system_test = nil
-      # is_dwelling_unit_test = false
-      # is_wildcard_test = nil
-      # Debug var ends
-
       # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
       necb_hvac_system_selection_table = []
       necb_hvac_system_selection_table = standards_data['necb_hvac_system_selection_type']['table']
 
       # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
       # main selection loop
-      necb_hvac_system_selection_cooling_desg_load = 0.0001
+      necb_hvac_system_selection_cooling_desg_load = 0
       unless cooling_design_load.nil?
         necb_hvac_system_selection_cooling_desg_load = cooling_design_load
       end
@@ -2620,28 +2610,12 @@ class NECB2011
         # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
         # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
         necb_hvac_system_selection_table.each do |necb_hvac_system_select|
-          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] < number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] < necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
+          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
             system = necb_hvac_system_select['system_type']
             is_dwelling_unit = necb_hvac_system_select['dwelling']
-
-            # Debug information start
-            necb_hvac_system_select_test = necb_hvac_system_select['necb_hvac_system_selection_type']
-            puts "Is #{necb_hvac_system_select_test} the same as #{necb_hvac_system_selection_type}?"
-            puts "Is #{number_of_stories} stories within #{necb_hvac_system_select['min_stories']} and #{necb_hvac_system_select['max_stories']}"
-            puts "Is #{necb_hvac_system_selection_cooling_desg_load} kW cooling load within #{necb_hvac_system_select['min_cooling_capacity_kw']} and #{necb_hvac_system_select['max_cooling_capacity_kw']}"
-            puts ""
-            puts "Sytem type: #{system}"
-            puts "Dwelling?: #{is_dwelling_unit}"
-            # Debug information end
-
             if necb_hvac_system_select['necb_hvac_system_selection_type']=='Wildcard'
               is_wildcard = true
             end
-
-            # Debug information start
-            puts "Wildcard?: #{is_wildcard}"
-            # Debug information end
-
             break
           end
         end
@@ -2657,98 +2631,7 @@ class NECB2011
           raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
         end
       end
-=begin
-      case necb_hvac_system_selection_type
-        when nil
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        when 0, '- undefined -'
-          # These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
-          system = 0
-        when 'Assembly Area' # Assembly Area.
-          system = if number_of_stories <= 4
-                     3
-                   else
-                     6
-                   end
 
-        when 'Automotive Area'
-          system = 4
-
-        when 'Data Processing Area'
-          system = if cooling_design_load > 20 # KW...need a sizing run.
-                     2
-                   else
-                     1
-                   end
-
-        when 'General Area' # [3,6]
-          system = if number_of_stories <= 2
-                     3
-                   else
-                     6
-                   end
-
-        when 'Historical Collections Area' # [2],
-          system = 2
-
-        when 'Hospital Area' # [3],
-          system = 3
-
-        when 'Indoor Arena' # ,[7],
-          system = 7
-
-        when 'Industrial Area' #  [3] this need some thought.
-          system = 3
-
-        when 'Residential/Accomodation Area' # ,[1], this needs some thought.
-          system = 1
-          is_dwelling_unit = true
-
-        when 'Sleeping Area' # [3],
-          system = 3
-          is_dwelling_unit = true
-
-        when 'Supermarket/Food Services Area' # [3,4],
-          system = 3
-
-        when 'Supermarket/Food Services Area - vented'
-          system = 4
-
-        when 'Warehouse Area'
-          system = 4
-
-        when 'Warehouse Area - refrigerated'
-          system = 5
-        when 'Wildcard'
-          system = nil
-          is_wildcard = true
-        else
-          raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
-      end
-
-      # Ckirney 2018-03-23 - Remove when everything works from here:
-      puts ""
-      puts "Check if my loop and Phylroy's loop agree:"
-      if system == system_test
-        puts "system agrees"
-      else
-        puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!system broken"
-      end
-
-      if is_dwelling_unit == is_dwelling_unit_test
-        puts "is_dwelling_unit agrees"
-      else
-        puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!is_dwelling_unit broken"
-      end
-
-      puts "Is is_wildcard: {#{is_wildcard}} the same as is_wildcard_test: {#{is_wildcard_test}}?"
-      unless is_wildcard_test == is_wildcard
-        puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!is_wildcard broken"
-      end
-      puts "Chris left!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      puts ""
-      # To here.
-=end
       # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
       horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
       # dump all info into an array for debugging and iteration.
