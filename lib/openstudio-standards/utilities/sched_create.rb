@@ -26,7 +26,7 @@ class Sched_create
 
   # Open Excel file containing schdeules and look for the schedlues worksheet.
 
-  workbook = RubyXL::Parser.parse("./NECB2015_tables-171121mod.xlsx")
+  workbook = RubyXL::Parser.parse("./NECB2015_tables-171121.xlsx")
   worksheet = workbook['A-8.4.3.2.(1)']
 
   # Determine how many rows are used in the schedules worksheet.  Had to do this because there were some nil lines
@@ -139,7 +139,7 @@ class Sched_create
   # Turn the big hash in memory into a .json format and save it to file.  The pretty part is so the json file is nicely
   # ordered and relatively easy to follow.
 
-  File.open("/home/osdev/Sched_create/schedulesNECB2015.json","w") do |each_file|
+  File.open("./schedulesNECB2015.json","w") do |each_file|
     each_file.write(JSON.pretty_generate(table_array))
   end
 end
