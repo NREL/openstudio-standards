@@ -4,7 +4,7 @@
       "name": "schedules",
       "data_type": "table",
       "refs": [
-        "NECB Table A-8.4.3.2.(1)-A"
+        "NECB 2015 Table A-8.4.3.2.(1)-A"
       ],
       "table": [
         {
@@ -109,6 +109,19 @@
           "notes": "From DOE Reference Buildings ",
           "values": [
             130.0
+          ]
+        },
+        {
+          "name": "Always On",
+          "category": "Unknown",
+          "units": null,
+          "day_types": "Default",
+          "start_date": "2014-01-01T00:00:00+00:00",
+          "end_date": "2014-12-31T00:00:00+00:00",
+          "type": "Constant",
+          "notes": null,
+          "values": [
+            1.0
           ]
         },
         {
