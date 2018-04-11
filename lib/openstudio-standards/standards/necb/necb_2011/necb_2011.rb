@@ -253,6 +253,8 @@ class NECB2011 < Standard
 
     # Here is a hash to keep track of the m2 running total of spacetypes for each
     # sched type.
+    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
+    # future schedules.
     s = Hash[
         'A', 0,
         'B', 0,
@@ -262,7 +264,15 @@ class NECB2011 < Standard
         'F', 0,
         'G', 0,
         'H', 0,
-        'I', 0
+        'I', 0,
+        'J', 0,
+        'K', 0,
+        'L', 0,
+        'M', 0,
+        'N', 0,
+        'O', 0,
+        'P', 0,
+        'Q', 0
     ]
     # iterate through spaces in building.
     wildcard_spaces = 0
