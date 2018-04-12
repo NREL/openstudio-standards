@@ -147,33 +147,39 @@ class NECB2011 < Standard
     set_occ_sensor_spacetypes(model, @space_type_map)
 
     # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
-    puts ""
-    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-    puts "Pre-Loads"
-    puts ""
-    if model.getSchedules.empty?
-      puts "No Schedules"
-    else
-      model.getSchedules.each { |sched_run| puts sched_run.name}
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Pre-Loads"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
     end
-    puts ""
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+
     # End Debug
 
     model_add_loads(model) # standards candidate
 
 
     # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
-    puts ""
-    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-    puts "Post-Loads"
-    puts ""
-    if model.getSchedules.empty?
-      puts "No Schedules"
-    else
-      model.getSchedules.each { |sched_run| puts sched_run.name}
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post-Loads"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
     end
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
     # End Debug
 
     model_apply_infiltration_standard(model) # standards candidate
@@ -184,17 +190,37 @@ class NECB2011 < Standard
     apply_standard_skylight_to_roof_ratio(model) # standards candidate
 
     # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
-    puts ""
-    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-    puts "Pre-Thermal Zones"
-    puts ""
-    model.getSchedules.each { |sched_run| puts sched_run.name}
-    puts ""
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Pre-Thermal Zones"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
     # End Debug
 
     model_create_thermal_zones(model, @space_multiplier_map) # standards candidate
     # For some building types, stories are defined explicitly
+
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post-Thermal Zones"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
 
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
       raise("sizing run 0 failed!")
@@ -205,13 +231,19 @@ class NECB2011 < Standard
     model_apply_sizing_parameters(model)
 
     # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
-    puts ""
-    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-    puts "Post-Thermal Zones"
-    puts ""
-    model.getSchedules.each { |sched_run| puts sched_run.name}
-    puts""
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post-Sizing Run"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
     # End Debug
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
