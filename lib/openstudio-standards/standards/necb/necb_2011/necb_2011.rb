@@ -193,7 +193,7 @@ class NECB2011 < Standard
     open('/home/osdev/testoutput.out', 'a') do |file_var|
       file_var.puts ""
       file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-      file_var.puts "Pre-Thermal Zones"
+      file_var.puts "Post lods, infiltration, surface conv, constructions, window to wall, skyligth to roof/Pre-Thermal Zones"
       file_var.puts ""
       if model.getSchedules.empty?
         file_var.puts "No Schedules"
@@ -211,7 +211,7 @@ class NECB2011 < Standard
     open('/home/osdev/testoutput.out', 'a') do |file_var|
       file_var.puts ""
       file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-      file_var.puts "Post-Thermal Zones"
+      file_var.puts "Post-Thermal Zones/Pre-Sizing Run 0"
       file_var.puts ""
       if model.getSchedules.empty?
         file_var.puts "No Schedules"
@@ -227,14 +227,48 @@ class NECB2011 < Standard
     end
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
+
+    # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post Sizinig Run 0/Pre-SWH"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
+    # End Debug
+
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+
+    # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post SWH/Pre-apply sizing"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
+    # End Debug
+
     model_apply_sizing_parameters(model)
 
     # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
     open('/home/osdev/testoutput.out', 'a') do |file_var|
       file_var.puts ""
       file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
-      file_var.puts "Post-Sizing Run"
+      file_var.puts "Post-apply sizing/pre-sizing run 1"
       file_var.puts ""
       if model.getSchedules.empty?
         file_var.puts "No Schedules"
@@ -252,6 +286,22 @@ class NECB2011 < Standard
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
       raise("sizing run 1 failed!")
     end
+
+    # DEBUG!!!!!!!!!!!!!!!!!!!!!  Look through schedules
+    open('/home/osdev/testoutput.out', 'a') do |file_var|
+      file_var.puts ""
+      file_var.puts "Chris was here!!!!!!!!!!!!!!!!!!!!!"
+      file_var.puts "Post-Sizing Run 1"
+      file_var.puts ""
+      if model.getSchedules.empty?
+        file_var.puts "No Schedules"
+      else
+        model.getSchedules.each { |sched_run| puts file_var.puts sched_run.name}
+      end
+      file_var.puts ""
+      file_var.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left"
+    end
+    # End Debug
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
