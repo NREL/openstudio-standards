@@ -445,7 +445,7 @@ class Standard
   def change_construction_properties_in_model(model, values)
     puts JSON.pretty_generate(values)
     #copy orginal model for reporting.
-    before_measure_model = copy_model(model)
+    before_measure_model = BTAP::FileIO.copy_model(model)
     #report change as Info
     info = ""
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
