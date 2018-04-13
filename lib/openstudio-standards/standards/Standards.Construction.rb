@@ -445,7 +445,7 @@ class Standard
   def change_construction_properties_in_model(model, values)
     puts JSON.pretty_generate(values)
     #copy orginal model for reporting.
-    before_measure_model = BTAP::FileIO.copy_model(model)
+    before_measure_model = BTAP::FileIO.deep_copy(model)
     #report change as Info
     info = ""
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
@@ -538,7 +538,6 @@ class Standard
             )
           end
         when 'Ground'
-          BTAP::Resources::Envelope::Constructions::find_and_set_insulation_layer(model, [new_construction])
           case surface.surfaceType
             when 'Wall'
               standard.construction_set_u_value(new_construction,
