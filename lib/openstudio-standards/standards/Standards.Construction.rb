@@ -489,7 +489,7 @@ class Standard
         info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_conductance for #{surface.name.to_s} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
       end
     end
-    info << JSON.pretty_generate(compare_osm_files(before_measure_model, model))
+    info << JSON.pretty_generate(BTAP::FileIO.compare_osm_files(before_measure_model, model))
     return info
   end
 
