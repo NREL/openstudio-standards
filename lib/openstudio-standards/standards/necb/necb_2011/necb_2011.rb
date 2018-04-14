@@ -1,6 +1,5 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
-require 'rubyXL'
 class NECB2011 < Standard
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)

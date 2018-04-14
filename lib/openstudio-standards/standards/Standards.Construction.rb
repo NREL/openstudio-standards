@@ -265,7 +265,7 @@ class Standard
   # Only applies to fenestration constructions.
   # @return [Double] the SHGC as a decimal.
   def construction_calculated_solar_heat_gain_coefficient(construction)
-    construction_name = name.get.to_s
+    construction_name = construction.name.get.to_s
 
     shgc = nil
 
@@ -286,7 +286,7 @@ class Standard
       if row_id.is_initialized
         row_id = row_id.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "SHGC row ID not found for construction: #{construction_name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Construction', "SHGC row ID not found for construction: #{construction_name}.")
         row_id = 9999
       end
 
@@ -315,7 +315,7 @@ class Standard
   # Only applies to fenestration constructions.
   # @return [Double] the visible transmittance as a decimal.
   def construction_calculated_visible_transmittance(construction)
-    construction_name = name.get.to_s
+    construction_name = construction.name.get.to_s
 
     vt = nil
 
@@ -365,7 +365,7 @@ class Standard
   # Only applies to fenestration constructions.
   # @return [Double] the U-Factor in W/m^2*K.
   def construction_calculated_u_factor(construction)
-    construction_name = name.get.to_s
+    construction_name = construction.name.get.to_s
 
     u_factor_w_per_m2_k = nil
 
@@ -386,7 +386,7 @@ class Standard
       if row_id.is_initialized
         row_id = row_id.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "U-Factor row ID not found for construction: #{construction_name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Construction', "U-Factor row ID not found for construction: #{construction_name}.")
         row_id = 9999
       end
 
@@ -405,7 +405,7 @@ class Standard
                             end
 
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no sql file containing results, cannot lookup data.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', 'Model has no sql file containing results, cannot lookup data.')
     end
 
     return u_factor_w_per_m2_k

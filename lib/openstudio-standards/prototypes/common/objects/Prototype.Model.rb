@@ -1444,7 +1444,7 @@ Standard.class_eval do
     # Residential
     # NonResidential
     # Use 90.1-2010 so that retail and publicassembly are not split out
-    zones = model_zones_with_occ_and_fuel_type(model, '90.1-2010', nil)
+    zones = model_zones_with_occ_and_fuel_type(model, nil)
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?

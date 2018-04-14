@@ -4,13 +4,13 @@ jobs:
     working_directory: ~/openstudio-standards
     docker:
       - image: nrel/openstudio
-    parallelism: 7
+    parallelism: 4
     steps:
       - checkout
       - run:
           name: Install openstudio-standards test dependencies
           command: |
-            ~/.rbenv/shims/bundle install
+            bundle install
       - run:
           name: Parallelize Tests
           command: |
@@ -20,11 +20,11 @@ jobs:
       - run:
           name: Run tests
           command: |
-            ~/.rbenv/shims/bundle exec rake test:circleci
+            bundle exec rake test:circleci
       - run:
           name: Summarize test times
           command: |
-            ~/.rbenv/shims/bundle exec rake test:times
+            bundle exec rake test:times
       - store_test_results:
           path: test/reports/
       - store_artifacts:
