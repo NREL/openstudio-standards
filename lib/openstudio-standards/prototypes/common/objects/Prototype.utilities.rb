@@ -102,6 +102,28 @@ class Standard
     return model
   end
 
+  # Loads a JSON file containing the space type map into a hash
+  #
+  # @param hvac_map_file [String] path to JSON file, relative to the /data folder
+  # @return [Hash] returns a hash that contains the space type map
+  def load_hvac_map(hvac_map_file)
+    # Load the geometry .osm from relative to the data folder
+    rel_path_to_hvac_map = "../../../../../data/#{hvac_map_file}"
+
+    # Load the JSON depending on whether running from normal gem location
+    # or from the embedded location in the OpenStudio CLI
+    if File.dirname(__FILE__)[0] == ':'
+      # running from embedded location in OpenStudio CLI
+      hvac_map_string = load_resource_relative(rel_path_to_hvac_map)
+      hvac_map = JSON.parse(hvac_map_string)
+    else
+      abs_path = File.join(File.dirname(__FILE__), rel_path_to_hvac_map)
+      hvac_map = JSON.parse(File.read(abs_path))if File.exist?(abs_path)
+    end
+
+    return hvac_map
+  end
+
   # Convert from SEER to COP (no fan) for cooling coils
   # @ref [References::ASHRAE9012013] Appendix G
   #
