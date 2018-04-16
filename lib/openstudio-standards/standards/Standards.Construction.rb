@@ -495,7 +495,7 @@ class Standard
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil)
     #If user has no changes...do nothing and return true.
-    return true if conductance.nil? and shgc.nil?
+    return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
     new_construction_name_suffix = ":{"
@@ -507,7 +507,7 @@ class Standard
 
     new_construction_name = "#{surface.construction.get.name.to_s}-#{new_construction_name_suffix}"
     new_construction = OpenStudio::Model::getConstructionByName(surface.model, new_construction_name)
-    target_u_value_ip = OpenStudio.convert(conductance.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    target_u_value_ip = OpenStudio.convert(conductance.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless conductance.nil?
     if new_construction.empty?
       #create new construction.
       #create a copy
@@ -519,12 +519,14 @@ class Standard
                                                       target_u_value_ip.to_f,
                                                       nil,
                                                       false,
-                                                      false)
+                                                      false
+            ) unless conductance.nil?
             standard.construction_set_glazing_shgc(new_construction,
-                                                   shgc)
-            if construction_set_glazing_tvis(new_construction, tvis) == false
-              return false
-            end
+                                                   shgc
+            ) unless shgc.nil?
+            construction_set_glazing_tvis(new_construction,
+                                          tvis
+            ) unless tvis.nil?
 
 
           else
@@ -535,7 +537,7 @@ class Standard
                                               intended_surface_type = nil,
                                               false,
                                               false
-            )
+            ) unless conductance.nil?
           end
         when 'Ground'
           case surface.surfaceType
@@ -547,7 +549,7 @@ class Standard
                                                 intended_surface_type = nil,
                                                 false,
                                                 false
-              )
+              ) unless conductance.nil?
 =begin
               standard.construction_set_underground_wall_c_factor(new_construction,
                                                                   target_u_value_ip.to_f,
@@ -561,7 +563,7 @@ class Standard
                                                 intended_surface_type = nil,
                                                 false,
                                                 false
-              )
+              ) unless conductance.nil?
 =begin
               standard.construction_set_slab_f_factor(new_construction,
                                                       target_u_value_ip.to_f,
