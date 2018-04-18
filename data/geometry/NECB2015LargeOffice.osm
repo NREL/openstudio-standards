@@ -1,7 +1,7 @@
 
 OS:Version,
-  {9e88e65c-208f-4657-99e2-8550eb51e9cc}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {2212e800-7fc0-4fa1-9c9c-353289a8796c}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
@@ -5616,20 +5616,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 23,            !- Name
   {faf2bd95-c1db-4b83-8767-1e4de184af12}; !- Thermal Zone
 
-OS:WeatherFile,
-  {cb8dc81e-19ee-4dfc-925c-762c479a7886}, !- Handle
-  Sherbrooke,                             !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04785,                          !- Data Source
-  716100,                                 !- WMO Number
-  45.43,                                  !- Latitude {deg}
-  -71.68,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  241,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
-  F7B2328B;                               !- Checksum
-
 OS:Site,
   {bef0b4ad-baf9-4fdd-9d67-de91ead2276b}, !- Handle
   Sherbrooke_PQ_CAN,                      !- Name
@@ -5711,34 +5697,34 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {5abd617c-0032-4623-94a3-ca7b89d01fa8}, !- Handle
-  Space Function Electrical/Mechanical-sch-A, !- Name
+  Space Function Electrical/Mechanical room-sch-A, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {5fe57b6e-9f37-4b97-88c4-358889add151}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-A;            !- Standards Space Type
+  Electrical/Mechanical room-sch-A;            !- Standards Space Type
 
 OS:Rendering:Color,
   {5fe57b6e-9f37-4b97-88c4-358889add151}, !- Handle
-  Space Function Electrical/Mechanical-sch-A, !- Name
+  Space Function Electrical/Mechanical room-sch-A, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {cbc1800d-3058-4bca-9be8-d37e6a76ff55}, !- Handle
-  Space Function Office - open plan,      !- Name
+  Space Function Office open plan,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {45508235-37c4-499b-94d3-9bea0b08f0d1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - open plan;                     !- Standards Space Type
+  Office open plan;                     !- Standards Space Type
 
 OS:Rendering:Color,
   {45508235-37c4-499b-94d3-9bea0b08f0d1}, !- Handle
-  Space Function Office - open plan,      !- Name
+  Space Function Office open plan,      !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -5759,4 +5745,60 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {0a25cd01-6ad5-43a0-b562-713a95d660e9}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {726400a8-9c78-4868-ab11-f455b1d89299}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {e507baae-6367-42cc-9d9c-cb9c4e978d98}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:HeatBalanceAlgorithm,
+  {56ae9568-9360-4fe3-ac10-aa49b458839e}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:RunPeriod,
+  {5d1ee6c7-beb7-41b4-9138-b72653f6fb3a}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  ,                                       !- Use Weather File Holidays and Special Days
+  ,                                       !- Use Weather File Daylight Saving Period
+  ,                                       !- Apply Weekend Holiday Rule
+  ,                                       !- Use Weather File Rain Indicators
+  ,                                       !- Use Weather File Snow Indicators
+  ;                                       !- Number of Times Runperiod to be Repeated
+
+OS:LifeCycleCost:Parameters,
+  {d20a9421-6554-473a-8a89-ceae4a8e84ad}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 
