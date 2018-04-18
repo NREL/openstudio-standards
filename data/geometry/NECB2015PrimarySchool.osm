@@ -1,7 +1,7 @@
 
 OS:Version,
-  {491b61d7-4de1-491b-85da-670dfdaeb619}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {d0bcec09-5cba-4ee0-9ba4-f5d342a08ae7}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {8ffe45b3-ba5c-4e6f-b1e0-6f8db1fc384d}, !- Handle
@@ -6303,20 +6303,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 25,            !- Name
   {f71ff842-9c9e-4da1-84ac-50a51bf528a8}; !- Thermal Zone
 
-OS:WeatherFile,
-  {e08631c0-a9a1-4a86-b808-11ddfd5d49f3}, !- Handle
-  Vancouver Int'l,                        !- City
-  BC,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-94238,                          !- Data Source
-  718920,                                 !- WMO Number
-  49.18,                                  !- Latitude {deg}
-  -123.17,                                !- Longitude {deg}
-  -8,                                     !- Time Zone {hr}
-  2,                                      !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_BC_Vancouver.718920_CWEC.epw, !- Url
-  9D8CC810;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {30791027-d109-43b9-b650-8b1431d632b4}, !- Handle
   Correlation,                            !- Calculation Method
@@ -6389,119 +6375,119 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {cabee98f-743f-4c39-8274-5e669ae8405d}, !- Handle
-  Space Function Washroom-sch-D,          !- Name
+  Space Function Washroom - other-sch-D,  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {a94c061b-b898-4904-b246-9e9cfcfc41c1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Washroom-sch-D;                         !- Standards Space Type
+  Washroom - other-sch-D;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {a94c061b-b898-4904-b246-9e9cfcfc41c1}, !- Handle
-  Space Function Washroom-sch-D,          !- Name
+  Space Function Washroom - other-sch-D,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {78b430f6-da72-43ef-9274-a1898195a9c9}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {489c0803-a145-42f7-bb21-fe6009c32450}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Conference/Meeting/Multi-purpose room;              !- Standards Space Type
 
 OS:Rendering:Color,
   {489c0803-a145-42f7-bb21-fe6009c32450}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {3c2d95d8-b95d-4321-8dc9-7c792eb80bd5}, !- Handle
-  Space Function Classroom/lecture/training, !- Name
+  Space Function Classroom/Lecture hall/Training room other, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {60a527d2-861e-44bd-b300-13344e72e62e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Classroom/lecture/training;             !- Standards Space Type
+  Classroom/Lecture hall/Training room other;             !- Standards Space Type
 
 OS:Rendering:Color,
   {60a527d2-861e-44bd-b300-13344e72e62e}, !- Handle
-  Space Function Classroom/lecture/training, !- Name
+  Space Function Classroom/Lecture hall/Training room other, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {e36d2955-e00d-4a28-9e5a-e657bcd145d0}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-D, !- Name
+  Space Function Corridor/Transition area other-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {383e4391-2dfa-4885-a04a-35a3ec0102e1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Corr. >= 2.4m wide-sch-D;               !- Standards Space Type
+  Corridor/Transition area other-sch-D;               !- Standards Space Type
 
 OS:Rendering:Color,
   {383e4391-2dfa-4885-a04a-35a3ec0102e1}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-D, !- Name
+  Space Function Corridor/Transition area other-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {c7054775-25c5-4ee6-a091-dc40d8ccb7cc}, !- Handle
-  Space Function Gym - play,              !- Name
+  Space Function Gymnasium/Fitness centre playing area, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {dc6c74a6-6bd9-48cd-9bef-06ae86796646}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Gym - play;                             !- Standards Space Type
+  Gymnasium/Fitness centre playing area;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {dc6c74a6-6bd9-48cd-9bef-06ae86796646}, !- Handle
-  Space Function Gym - play,              !- Name
+  Space Function Gymnasium/Fitness centre playing area,              !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {2c0582a1-cbbc-40a4-9ef0-cf9c9063100b}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {09e2b0e2-4d2f-49c1-8770-5d525a31e334}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Food preparation;                       !- Standards Space Type
+  Food preparation area;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {09e2b0e2-4d2f-49c1-8770-5d525a31e334}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {5590c2c6-e033-437f-b48a-4afedc9d7337}, !- Handle
-  Space Function Library - reading,       !- Name
+  Space Function Library reading area,    !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {49eb1681-c678-4fe0-b73c-b3318f1d97ec}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Library - reading;                      !- Standards Space Type
+  Library reading area;                      !- Standards Space Type
 
 OS:Rendering:Color,
   {49eb1681-c678-4fe0-b73c-b3318f1d97ec}, !- Handle
-  Space Function Library - reading,       !- Name
+  Space Function Library reading area,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -6525,35 +6511,67 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {e60457d2-2f1d-4721-b679-7344e169d83b}, !- Handle
-  Space Function Electrical/Mechanical-sch-D, !- Name
+  Space Function Electrical/Mechanical room-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {9b50b986-a6ad-45cf-be50-0f3260904ef7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-D;            !- Standards Space Type
+  Electrical/Mechanical room-sch-D;            !- Standards Space Type
 
 OS:Rendering:Color,
   {9b50b986-a6ad-45cf-be50-0f3260904ef7}, !- Handle
-  Space Function Electrical/Mechanical-sch-D, !- Name
+  Space Function Electrical/Mechanical room-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b3c419b2-2ad9-4759-8e37-9924f20b09b2}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {d4b0ad43-c115-494f-b009-48ffcc8e21cd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2;                      !- Standards Space Type
 
 OS:Rendering:Color,
   {d4b0ad43-c115-494f-b009-48ffcc8e21cd}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2,       !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {ec10b23f-9a9e-4c64-ae5f-019c0550744b}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {7e21916c-6d1b-41ba-b4b0-cce5449ad98e}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {0a0bb73c-8cae-49d2-90f0-5ca9b5ce6500}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 

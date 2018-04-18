@@ -713,66 +713,136 @@ module BTAP
       end
       File.open("#{output_folder}/../RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
     end
-    
-    # This is a simple example which uses rubyzip to
-    # recursively generate a zip file from the contents of
-    # a specified directory. The directory itself is not
-    # included in the archive, rather just its contents.
-    #
-    # Usage:
-    # require /path/to/the/ZipFileGenerator/Class
-    # directoryToZip = "/tmp/input"
-    # outputFile = "/tmp/out.zip"
-    # zf = BTAP::FileIO::ZipFileGenerator.new(directoryToZip, outputFile)
-    # zf.write()
-    #
-    #    class ZipFileGenerator
-    #      # Initialize with the directory to zip and the location of the output archive.
-    #      def initialize(input_dir, output_file)
-    #        @input_dir = input_dir
-    #        @output_file = output_file
-    #        self.write()
-    #      end
-    #
-    #      # Zip the input directory.
-    #      def write
-    #        entries = Dir.entries(@input_dir) - %w(. ..)
-    #
-    #        ::Zip::File.open(@output_file, ::Zip::File::CREATE) do |io|
-    #          write_entries entries, '', io
-    #        end
-    #      end
-    #
-    #      private
-    #
-    #      # A helper method to make the recursion work.
-    #      def write_entries(entries, path, io)
-    #        entries.each do |e|
-    #          zip_file_path = path == '' ? e : File.join(path, e)
-    #          disk_file_path = File.join(@input_dir, zip_file_path)
-    #          puts "Deflating #{disk_file_path}"
-    #
-    #          if File.directory? disk_file_path
-    #            recursively_deflate_directory(disk_file_path, io, zip_file_path)
-    #          else
-    #            put_into_archive(disk_file_path, io, zip_file_path)
-    #          end
-    #        end
-    #      end
-    #
-    #      def recursively_deflate_directory(disk_file_path, io, zip_file_path)
-    #        io.mkdir zip_file_path
-    #        subdir = Dir.entries(disk_file_path) - %w(. ..)
-    #        write_entries subdir, zip_file_path, io
-    #      end
-    #
-    #      def put_into_archive(disk_file_path, io, zip_file_path)
-    #        io.get_output_stream(zip_file_path) do |f|
-    #          f.puts(File.open(disk_file_path, 'rb').read)
-    #        end
-    #      end
-    #    end
-    #      
+
+    def self.compare_osm_files(model_true, model_compare)
+      only_model_true = [] # objects only found in the true model
+      only_model_compare = [] # objects only found in the compare model
+      both_models = [] # objects found in both models
+      diffs = [] # differences between the two models
+      num_ignored = 0 # objects not compared because they don't have names
+
+      # Define types of objects to skip entirely during the comparison
+      object_types_to_skip = [
+          'OS:EnergyManagementSystem:Sensor', # Names are UIDs
+          'OS:EnergyManagementSystem:Program', # Names are UIDs
+          'OS:EnergyManagementSystem:Actuator', # Names are UIDs
+          'OS:Connection', # Names are UIDs
+          'OS:PortList', # Names are UIDs
+          'OS:Building', # Name includes timestamp of creation
+          'OS:ModelObjectList' # Names are UIDs
+      ]
+
+      # Find objects in the true model only or in both models
+      model_true.getModelObjects.sort.each do |true_object|
+
+        # Skip comparison of certain object types
+        next if object_types_to_skip.include?(true_object.iddObject.name)
+
+        # Skip comparison for objects with no name
+        unless true_object.iddObject.hasNameField
+          num_ignored += 1
+          next
+        end
+
+        # Find the object with the same name in the other model
+        compare_object = model_compare.getObjectByTypeAndName(true_object.iddObject.type, true_object.name.to_s)
+        if compare_object.empty?
+          only_model_true << true_object
+        else
+          both_models << [true_object, compare_object.get]
+        end
+      end
+
+      # Report a diff for each object found in only the true model
+      only_model_true.each do |true_object|
+        diffs << "A #{true_object.iddObject.name} called '#{true_object.name}' was found only in the before model"
+      end
+
+      # Find objects in compare model only
+      model_compare.getModelObjects.sort.each do |compare_object|
+
+        # Skip comparison of certain object types
+        next if object_types_to_skip.include?(compare_object.iddObject.name)
+
+        # Skip comparison for objects with no name
+        unless compare_object.iddObject.hasNameField
+          num_ignored += 1
+          next
+        end
+
+        # Find the object with the same name in the other model
+        true_object = model_true.getObjectByTypeAndName(compare_object.iddObject.type, compare_object.name.to_s)
+        if true_object.empty?
+          only_model_compare << compare_object
+        end
+      end
+
+      # Report a diff for each object found in only the compare model
+      only_model_compare.each do |compare_object|
+        #diffs << "An object called #{compare_object.name} of type #{compare_object.iddObject.name} was found only in the compare model"
+        diffs << "A #{compare_object.iddObject.name} called '#{compare_object.name}' was found only in the after model"
+      end
+
+      # Compare objects found in both models field by field
+      both_models.each do |b|
+        true_object = b[0]
+        compare_object = b[1]
+        idd_object = true_object.iddObject
+
+        true_object_num_fields = true_object.numFields
+        compare_object_num_fields = compare_object.numFields
+
+        # loop over fields skipping handle
+        (1...[true_object_num_fields, compare_object_num_fields].max).each do |i|
+
+          field_name = idd_object.getField(i).get.name
+
+          # Don't compare node, branch, or port names because they are populated with IDs
+          next if field_name.include?('Node Name')
+          next if field_name.include?('Branch Name')
+          next if field_name.include?('Inlet Port')
+          next if field_name.include?('Outlet Port')
+          next if field_name.include?('Inlet Node')
+          next if field_name.include?('Outlet Node')
+          next if field_name.include?('Port List')
+          next if field_name.include?('Cooling Control Zone or Zone List Name')
+          next if field_name.include?('Heating Control Zone or Zone List Name')
+          next if field_name.include?('Heating Zone Fans Only Zone or Zone List Name')
+
+          # Don't compare the names of schedule type limits
+          # because they appear to be created non-deteministically
+          next if field_name.include?('Schedule Type Limits Name')
+
+          # Get the value from the true object
+          true_value = ""
+          if i < true_object_num_fields
+            true_value = true_object.getString(i).to_s
+          end
+          true_value = "-" if true_value.empty?
+
+          # Get the same value from the compare object
+          compare_value = ""
+          if i < compare_object_num_fields
+            compare_value = compare_object.getString(i).to_s
+          end
+          compare_value = "-" if compare_value.empty?
+
+          # Round long numeric fields
+          true_value = true_value.to_f.round(5) unless true_value.to_f.zero?
+          compare_value = compare_value.to_f.round(5) unless compare_value.to_f.zero?
+
+          # Move to the next field if no difference was found
+          next if true_value == compare_value
+
+          # Report the difference
+          diffs << "For #{true_object.iddObject.name} called '#{true_object.name}' field '#{field_name}': before model = #{true_value}, after model = #{compare_value}"
+
+        end
+
+      end
+
+      return diffs
+    end
 
   end #FileIO
 
