@@ -9,6 +9,7 @@ class Sched_create
   # Set a bunch of variables which generally remain static and are added to the new schedulesNECB2015.json file because
   # that was how they were in the NECB2011 schedules.json file.
 
+  template = "NECB2015"
   name = "NECB-"
   name_pre_mod = [ '', '', '-Electric', '', '', '', '' ]
   name_post_mod = [ '', '', '', '', '-Cooling', '-Heating', '' ]
@@ -94,6 +95,7 @@ class Sched_create
         # Put everything for this day in a hash (the order according to the original NECB2011 schedules.json file).
 
         entry_array = {
+            "template" => template,
             "name" => table_name,
             "category" => cat,
             "units" => units[cat_index],
