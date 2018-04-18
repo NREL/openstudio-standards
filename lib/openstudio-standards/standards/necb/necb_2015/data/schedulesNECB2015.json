@@ -4,7 +4,7 @@
       "name": "schedules",
       "data_type": "table",
       "refs": [
-        "NECB 2011 Table A-8.4.3.2.(1)-A"
+        "NECB 2011 Table A-8.4.3.2.(1)-A ***Note that this file will be replaced with the proper NECB 2015 schedules data when it is ready***"
       ],
       "table": [
         {
