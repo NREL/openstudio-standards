@@ -1,7 +1,7 @@
 
 OS:Version,
-  {c1f0f1b7-1f39-4daf-90d6-d5030d74a5fd}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {9f650fd4-ab7c-4c4b-be46-0f42e4b6d498}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {33a21b25-cf6d-422d-a9eb-73fff61b16f2}, !- Handle
@@ -1546,20 +1546,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 5,             !- Name
   {2457585a-e958-4f6b-8185-1b373f9ce0d5}; !- Thermal Zone
 
-OS:WeatherFile,
-  {67c16b49-c9da-4211-b11f-7e16cdb225cf}, !- Handle
-  Vancouver Int'l,                        !- City
-  BC,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-94238,                          !- Data Source
-  718920,                                 !- WMO Number
-  49.18,                                  !- Latitude {deg}
-  -123.17,                                !- Longitude {deg}
-  -8,                                     !- Time Zone {hr}
-  2,                                      !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_BC_Vancouver.718920_CWEC.epw, !- Url
-  9D8CC810;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {9d38b933-9adc-4906-b832-a1ecf60236d2}, !- Handle
   Correlation,                            !- Calculation Method
@@ -1632,34 +1618,34 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {736ef72e-afee-4290-a3a5-ca8b4f085eb8}, !- Handle
-  Space Function Storage area,            !- Name
+  Space Function Storage room > 100 m2-sch-E, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {9726098d-f897-4a94-9dd2-ba6b8c7b92d8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Storage area;                           !- Standards Space Type
+  Storage room > 100 m2-sch-E;            !- Standards Space Type
 
 OS:Rendering:Color,
   {9726098d-f897-4a94-9dd2-ba6b8c7b92d8}, !- Handle
-  Space Function Storage area,            !- Name
+  Space Function Storage room > 100 m2-sch-E, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {2429420e-483a-4d65-b214-dd7d7b99c0b3}, !- Handle
-  Space Function Retail - sales,          !- Name
+  Space Function Sales area,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {a56cab18-47b6-4b98-8382-399c422abdb2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Retail - sales;                         !- Standards Space Type
+  Sales area;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {a56cab18-47b6-4b98-8382-399c422abdb2}, !- Handle
-  Space Function Retail - sales,          !- Name
+  Space Function Sales area,              !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -1680,4 +1666,36 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {683fe814-f020-46c4-aa4b-6351321381bd}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {d5615781-cbe2-4b40-a892-a2650ca3dfa3}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {13995bae-4d7f-4e0f-9bb4-f85742a0628b}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 
