@@ -4305,6 +4305,103 @@ class Standard
     return space_type_hash.sort.to_h
   end
 
+
+  # This method will apply the a FDWR to a model. It will remove any existing windows and use the
+  # Default contruction to set to apply the window construction. Sill height is in meters
+  def apply_max_fdwr(model, runner, sillHeight_si, wwr)
+    empty_const_warning = false
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        zone = surface.space.get.thermalZone
+        zone_multiplier = nil
+        zone.empty? ? zone_multiplier = 1 : zone_multiplier = zone.get.multiplier
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == "Wall"
+          new_window = surface.setWindowToWallRatio(wwr, sillHeight_si, true)
+          if new_window.empty?
+            runner.registerWarning("The requested window to wall ratio for surface '#{surface.name}' was too large. Fenestration was not altered for this surface.")
+          else
+            windows_added = true
+            # warn user if resulting window doesn't have a construction, as it will result in failed simulation. In the future may use logic from starting windows to apply construction to new window.
+            if new_window.get.construction.empty? && (empty_const_warning == false)
+              runner.registerWarning('one or more resulting windows do not have constructions. This script is intended to be used with models using construction sets versus hard assigned constructions.')
+              empty_const_warning = true
+            end
+          end
+        end
+      end
+    end
+  end
+  # This method will apply the a SRR to a model. It will remove any existing skylights and use the
+  # Default contruction to set to apply the skylight construction. A default skylight square area of 0.25^2 is used.
+  def apply_max_srr(model, runner, srr, skylight_area = 0.25 * 0.25)
+    spaces = []
+    surface_type = "RoofCeiling"
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == surface_type
+          spaces << space
+          break
+        end
+      end
+    end
+    pattern = OpenStudio::Model.generateSkylightPattern(spaces, spaces[0].directionofRelativeNorth, srr, Math.sqrt(skylight_area), Math.sqrt(skylight_area)) # ratio, x value, y value
+    # applying skylight pattern
+    skylights = OpenStudio::Model.applySkylightPattern(pattern, spaces, OpenStudio::Model::OptionalConstructionBase.new)
+    spacenames = spaces.map {|space| space.name.get}
+    runner.registerInfo("Adding #{skylights.size} skylights to #{spacenames}")
+  end
+  # This method will limit the subsurface of a given surface_type ("Wall" or "RoofCeiling") to the ratio for the building.
+  # This method only reduces subsurface sizes at most.
+  def apply_limit_to_subsurface_ratio(model, ratio, surface_type = "Wall")
+    fdwr = get_outdoor_subsurface_ratio(model, surface_type)
+    if fdwr <= ratio
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Building FDWR of #{fdwr} is already lower than limit of #{wwr_lim.round}%.")
+      return true
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by shrinking to centroid) to reduce window area down to the limit of #{wwr_lim.round}%.")
+    # Determine the factors by which to reduce the window / door area
+    mult = ratio / fdwr
+    # Reduce the window area if any of the categories necessary
+    model.getSpaces.sort.each do |space|
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == surface_type
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          # Reduce the size of the window
+          red = 1.0 - mult
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+        end
+      end
+    end
+    return true
+  end
+  # This method return the building ratio of subsurface_area / surface_type_area where surface_type can be "Wall" or "RoofCeiling"
+  def get_outdoor_subsurface_ratio(model, surface_type = "Wall")
+    surface_area = 0.0
+    sub_surface_area = 0
+    all_surfaces = []
+    all_sub_surfaces = []
+    model.getSpaces.sort.each do |space|
+      zone = space.thermalZone
+      zone_multiplier = nil
+      zone.empty? ? zone_multiplier = 1 : zone_multiplier = zone.get.multiplier
+      space.surfaces.sort.each do |surface|
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == surface_type
+          surface_area += surface.grossArea * zone_multiplier
+          surface.subSurfaces.sort.each do |sub_surface|
+            sub_surface_area += sub_surface.grossArea * sub_surface.multiplier * zone_multiplier
+          end
+        end
+      end
+    end
+    return fdwr = (sub_surface_area / surface_area)
+  end
+
+
   private
 
   # Helper method to fill in hourly values
@@ -4478,4 +4575,7 @@ class Standard
     end
     return model
   end
+
+
+
 end
