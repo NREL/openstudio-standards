@@ -14,7 +14,7 @@ class NECB2011 < Standard
     @standards_data["tables"] = []
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
-      embedded_files_relative('data/', /.*/, 'json').each do |file|
+      embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
         if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
           @standards_data["tables"] << data["tables"].first
@@ -113,7 +113,7 @@ class NECB2011 < Standard
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
     fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
+    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
 

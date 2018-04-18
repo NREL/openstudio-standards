@@ -236,7 +236,7 @@ module BTAP
     def self.get_canadian_weather_file_names()
       canadian_file_names = []
       if __dir__[0] == ':' # Running from OpenStudio CLI
-        embedded_files_relative('../../../', /.*/, 'epw').each do |file|
+        embedded_files_relative('../../../', /.*\.epw/).each do |file|
           canadian_file_names << File.basename(file).to_s
         end
       else

@@ -90,7 +90,7 @@ class StandardsData
   def load_standards_data(datafolder = File.dirname(__FILE__))
     @standards_data = {}
     if __dir__[0] == ':' # Running from OpenStudio CLI
-      files = embedded_files_relative('./', /.*/, 'json')
+      files = embedded_files_relative('./', /.*\.json/)
       files.each do |file|
         @standards_data = standards_data.deep_merge(JSON.parse(EmbeddedScripting.getFileAsString(file)))
       end

@@ -190,7 +190,7 @@ end
       #ideally we should map the data required to a instance variable.
       @geometry_file = 'geometry/' + self.class.name + '.osm'
       hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
-      @system_to_space_map = load_hvac_map(hvac_map_file)
+      # @system_to_space_map = load_hvac_map(hvac_map_file) # No HVAC map json files for NECB
       self.set_variables()
     end
 
