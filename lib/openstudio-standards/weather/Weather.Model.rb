@@ -73,9 +73,7 @@ class Standard
 
     # Define where the weather files lives
     weather_dir = nil
-    if File.dirname(__FILE__)[0] == ':'
-      # running embedded copy of the gem
-
+    if __dir__[0] == ':' # Running from OpenStudio CLI
       # load weather file from embedded files
       epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
       ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
@@ -237,8 +235,16 @@ module BTAP
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names()
       canadian_file_names = []
-      Dir.glob("#{File.dirname(__FILE__)}/../../../**/*.epw").each do |file|
-        canadian_file_names << File.basename(file).to_s
+      if __dir__[0] == ':' # Running from OpenStudio CLI
+        embedded_files_relative('../../../', /.*/, 'epw').each do |file|
+          canadian_file_names << File.basename(file).to_s
+        end
+      else
+        Dir.glob("#{File.dirname(__FILE__)}/../../../**/*.epw").each do |file|
+          canadian_file_names << File.basename(file).to_s
+          puts "File.basename = #{File.basename(file)}"
+          puts "File.dirname = #{File.dirname(file)}"
+        end
       end
       return canadian_file_names
     end
@@ -384,10 +390,6 @@ module BTAP
       # @param weather_file [String]
       # @return [String] self
       def initialize(weather_file)
-        # Define the openstudio-standards weather location
-        top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-        weather_dir = "#{top_dir}/data/weather"
-
         # First check if the epw file exists at a full path.  If not found there,
         # check for the file in the openstudio-standards/data/weather directory.
         weather_file = weather_file.to_s
@@ -398,12 +400,29 @@ module BTAP
           @epw_filepath = weather_file.to_s
           @ddy_filepath = weather_file.sub('epw', 'ddy').to_s
           @stat_filepath = weather_file.sub('epw', 'stat').to_s
-        elsif File.exist?("#{weather_dir}/#{weather_file}")
+        else
+          # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
+          if __dir__[0] == ':' # Running from OpenStudio CLI
+            # load weather file from embedded files
+            epw_string = load_resource_relative("../../../data/weather/#{weather_file}")
+            ddy_string = load_resource_relative("../../../data/weather/#{weather_file.gsub('.epw', '.ddy')}")
+            stat_string = load_resource_relative("../../../data/weather/#{weather_file.gsub('.epw', '.stat')}")
+
+            # extract to local weather dir
+            weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+            puts "Extracting weather files to #{weather_dir}"
+            FileUtils.mkdir_p(weather_dir)
+            File.open("#{weather_dir}/#{weather_file}", 'wb') { |f| f << epw_string; f.flush }
+            File.open("#{weather_dir}/#{weather_file.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
+            File.open("#{weather_dir}/#{weather_file.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+          else # loaded gem from system path
+            top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+            weather_dir = File.expand_path("#{top_dir}/data/weather")
+          end
+
           @epw_filepath = "#{weather_dir}/#{weather_file}"
           @ddy_filepath = "#{weather_dir}/#{weather_file.sub('epw', 'ddy')}"
           @stat_filepath = "#{weather_dir}/#{weather_file.sub('epw', 'stat')}"
-        else
-          raise("Could not find weather file #{weather_file}.  Make sure file path is correct.")
         end
 
         # Ensure that epw, ddy, and stat file all exist
