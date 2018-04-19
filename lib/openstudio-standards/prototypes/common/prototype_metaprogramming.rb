@@ -70,9 +70,9 @@ end
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file = Folders.instance.data_geometry_folder + '/' + self.class.name + '.osm'
-    hvac_map_file =  Folders.instance.data_geometry_folder + '/' + self.class.name + '.hvac_map.json'
-    @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
+    @geometry_file = 'geometry/' + self.class.name + '.osm'
+    hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
+    @system_to_space_map = load_hvac_map(hvac_map_file)
     self.set_variables()
   end
   # This method is used to extend the class with building-type-specific
@@ -188,9 +188,9 @@ end
       end
       @lookup_building_type = self.model_get_lookup_name(@building_type)
       #ideally we should map the data required to a instance variable.
-      @geometry_file = Folders.instance.data_geometry_folder + '/' + self.class.name + '.osm'
-      hvac_map_file =  Folders.instance.data_geometry_folder + '/' + self.class.name + '.hvac_map.json'
-      @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
+      @geometry_file = 'geometry/' + self.class.name + '.osm'
+      hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
+      # @system_to_space_map = load_hvac_map(hvac_map_file) # No HVAC map json files for NECB
       self.set_variables()
     end
 
@@ -512,19 +512,9 @@ end
     end
     @lookup_building_type = @@building_type
     #ideally we should map the data required to a instance variable.
-    @geometry_file = Folders.instance.data_geometry_folder + '/' + @prototype_input['geometry_osm']
-    if !File.exist?(@geometry_file)
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
-      raise(\"Could not find geometry osm \#{@prototype_input['geometry_osm']} for #{template}#{building_type}#{hvac_system}, cannot create model.\")
-      return false
-    end
-    hvac_map_file =  Folders.instance.data_geometry_folder + '/' + @prototype_input['hvac_json']
-    if !File.exist?(hvac_map_file)
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
-      raise(\"Could not find HVAC json \#{@prototype_input['hvac_json']} for #{template}#{building_type}#{hvac_system}, cannot create model.\")
-      return false
-    end
-    @system_to_space_map = JSON.parse(File.read(hvac_map_file))if File.exist?(hvac_map_file)
+    @geometry_file = 'geometry/' + @prototype_input['geometry_osm']
+    hvac_map_file =  'geometry/' + @prototype_input['hvac_json']
+    @system_to_space_map = load_hvac_map(hvac_map_file)
     self.set_variables()
   end
 

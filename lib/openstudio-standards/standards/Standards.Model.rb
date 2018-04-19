@@ -4433,16 +4433,33 @@ class Standard
 
   # Loads a osm as a starting point.
   #
+  # @param osm_file [String] path to the .osm file, relative to the /data folder
   # @return [Bool] returns true if successful, false if not
-  def load_initial_osm(osm_file)
-    # Load the geometry .osm
-    unless File.exist?(osm_file)
-      raise("The initial osm path: #{osm_file} does not exist.")
+  def load_geometry_osm(osm_file)
+    # Load the geometry .osm from relative to the data folder
+    osm_model_path = "../../../data/#{osm_file}"
+
+    # Load the .osm depending on whether running from normal gem location
+    # or from the embedded location in the OpenStudio CLI
+    if File.dirname(__FILE__)[0] == ':'
+      # running from embedded location in OpenStudio CLI
+      geom_model_string = load_resource_relative(osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModelFromString(geom_model_string)
+    else
+      abs_path = File.join(File.dirname(__FILE__), osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModel(abs_path)
     end
-    osm_model_path = OpenStudio::Path.new(osm_file.to_s)
-    # Upgrade version if required.
-    version_translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = version_translator.loadModel(osm_model_path).get
+
+    # Check that the model loaded successfully
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
+      return false
+    end
+    model = model.get
+
+    # Check for expected characteristics of geometry model
     if model.getBuildingStorys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
     end

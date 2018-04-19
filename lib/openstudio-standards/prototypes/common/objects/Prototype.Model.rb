@@ -19,7 +19,7 @@ Standard.class_eval do
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''
     end
-    model = load_initial_osm(@geometry_file)
+    model = load_geometry_osm(@geometry_file)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     # save new basefile to new geometry folder as class name.

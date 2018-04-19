@@ -7699,23 +7699,6 @@ OS:Rendering:Color,
   0,                                      !- Rendering Green Value
   205;                                    !- Rendering Blue Value
 
-OS:Surface,
-  {74a99d2e-2781-48f4-846f-08e7ac644699}, !- Handle
-  Surface 381,                            !- Name
-  Wall,                                   !- Surface Type
-  ,                                       !- Construction Name
-  {48fefa1e-1147-45f5-b815-a25562d1b0a2}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  4.94713744502324, 0.00533038639472434, 4.572, !- X,Y,Z Vertex 1 {m}
-  4.94713744502324, 0.00533038639472434, 8.61182867082151e-035, !- X,Y,Z Vertex 2 {m}
-  4.94655034896259, 0.00532975381701877, -2.31011654250324e-014, !- X,Y,Z Vertex 3 {m}
-  4.94537532086817, 0.00532848776087267, 4.572; !- X,Y,Z Vertex 4 {m}
-
 OS:DefaultConstructionSet,
   {1340a035-d8ec-4609-aab9-7a4e9829ca53}, !- Handle
   90.1-2007 - CZ5 - Office,               !- Name
