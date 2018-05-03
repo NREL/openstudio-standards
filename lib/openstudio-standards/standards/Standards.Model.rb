@@ -4404,6 +4404,61 @@ class Standard
     return fdwr = (sub_surface_area / surface_area)
   end
 
+  # Loads a osm as a starting point.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def load_initial_osm(osm_file)
+    # Load the geometry .osm
+    unless File.exist?(osm_file)
+      raise("The initial osm path: #{osm_file} does not exist.")
+    end
+    osm_model_path = OpenStudio::Path.new(osm_file.to_s)
+    # Upgrade version if required.
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(osm_model_path).get
+    validate_initial_model(model)
+    return model
+  end
+
+  def validate_initial_model(model)
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
+      end
+    end
+
+    # ensure that model is intersected correctly.
+    model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    # Get multipliers from TZ in model. Need this for HVAC contruction.
+    @space_multiplier_map = {}
+    model.getSpaces.sort.each do |space|
+      @space_multiplier_map[space.name.get] = space.multiplier if space.multiplier > 1
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
+    unless @space_multiplier_map.empty?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
+    end
+  end
+
+
+
 
   private
 
@@ -4528,59 +4583,6 @@ class Standard
     end
 
     return true
-  end
-
-  # Loads a osm as a starting point.
-  #
-  # @return [Bool] returns true if successful, false if not
-  def load_initial_osm(osm_file)
-    # Load the geometry .osm
-    unless File.exist?(osm_file)
-      raise("The initial osm path: #{osm_file} does not exist.")
-    end
-    osm_model_path = OpenStudio::Path.new(osm_file.to_s)
-    # Upgrade version if required.
-    version_translator = OpenStudio::OSVersion::VersionTranslator.new
-    model = version_translator.loadModel(osm_model_path).get
-    validate_initial_model(model)
-    return model
-  end
-
-  def validate_initial_model(model)
-    if model.getBuildingStorys.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
-    end
-    if model.getThermalZones.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
-    end
-    if model.getBuilding.standardsNumberOfStories.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
-    end
-    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
-    end
-
-    if @space_type_map.nil? || @space_type_map.empty?
-      @space_type_map = get_space_type_maps_from_model(model)
-      if @space_type_map.nil? || @space_type_map.empty?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
-      else
-        @space_type_map = @space_type_map.sort.to_h
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
-      end
-    end
-
-    # ensure that model is intersected correctly.
-    model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
-    # Get multipliers from TZ in model. Need this for HVAC contruction.
-    @space_multiplier_map = {}
-    model.getSpaces.sort.each do |space|
-      @space_multiplier_map[space.name.get] = space.multiplier if space.multiplier > 1
-    end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
-    unless @space_multiplier_map.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
-    end
   end
 
 
