@@ -1,7 +1,7 @@
 
 OS:Version,
-  {240fe14c-df5c-421f-afaa-5215912bed6b}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {4bcf827c-876e-42e6-8175-c32ed3653789}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {b24a8c8c-c603-4c71-9293-1675139ee819}, !- Handle
@@ -17077,20 +17077,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 67,            !- Name
   {e989f41e-db5b-43b3-b627-983662cebcb3}; !- Thermal Zone
 
-OS:WeatherFile,
-  {d795fd30-77a0-4e80-9105-7ba9154dbaff}, !- Handle
-  Sherbrooke,                             !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04785,                          !- Data Source
-  716100,                                 !- WMO Number
-  45.43,                                  !- Latitude {deg}
-  -71.68,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  241,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
-  F7B2328B;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {8ea0d3df-0bde-48d9-8414-7b6cf19f2b4d}, !- Handle
   Correlation,                            !- Calculation Method
@@ -17163,17 +17149,17 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {7cd7e6cd-0ad8-4a4f-89f8-1819ca4f265c}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-F, !- Name
+  Space Function Corridor/Transition area other-sch-F, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {9b73eb48-a75d-45c7-8b4f-c7ce691daede}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Corr. >= 2.4m wide-sch-F;               !- Standards Space Type
+  Corridor/Transition area other-sch-F;   !- Standards Space Type
 
 OS:Rendering:Color,
   {9b73eb48-a75d-45c7-8b4f-c7ce691daede}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-F, !- Name
+  Space Function Corridor/Transition area other-sch-F, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -17197,161 +17183,191 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {fdfa46ba-a0ed-4afa-afdc-127db8614a08}, !- Handle
-  Space Function Lounge/recreation,       !- Name
+  Space Function Lounge/Break room - other, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {a45b1b3c-cd2f-4b8e-a7a4-58a5270512dd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Lounge/recreation;                      !- Standards Space Type
+  Lounge/Break room - other;              !- Standards Space Type
 
 OS:Rendering:Color,
   {a45b1b3c-cd2f-4b8e-a7a4-58a5270512dd}, !- Handle
-  Space Function Lounge/recreation,       !- Name
+  Space Function Lounge/Break room - other, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {35bcb3ed-8286-43cf-8b60-5188ab82da74}, !- Handle
-  Space Function Gym - fitness,           !- Name
+  Space Function Gymnasium/Fitness centre exercise area, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {2dd07264-a35a-4264-93bf-f10444de0192}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Gym - fitness;                          !- Standards Space Type
+  Gymnasium/Fitness centre exercise area; !- Standards Space Type
 
 OS:Rendering:Color,
   {2dd07264-a35a-4264-93bf-f10444de0192}, !- Handle
-  Space Function Gym - fitness,           !- Name
+  Space Function Gymnasium/Fitness centre exercise area, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {7b4970e1-638f-4aa9-bc5d-3db72ca38f7f}, !- Handle
-  Space Function Hotel/Motel - lobby,     !- Name
+  Space Function Lobby - hotel,           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {e804d3a9-2dfb-4d88-a0ac-df477cdb6b4d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hotel/Motel - lobby;                    !- Standards Space Type
+  Lobby - hotel;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {e804d3a9-2dfb-4d88-a0ac-df477cdb6b4d}, !- Handle
-  Space Function Hotel/Motel - lobby,     !- Name
+  Space Function Lobby - hotel,           !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {cd5c607f-27bd-4a22-9a08-0d5f3b66b311}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {1d2ba076-8c99-4fbe-8998-d644d18fed97}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2;                !- Standards Space Type
 
 OS:Rendering:Color,
   {1d2ba076-8c99-4fbe-8998-d644d18fed97}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {3ed7a219-7dda-41c2-a27b-7adb7e93a3d4}, !- Handle
-  Space Function Stairway-sch-F,          !- Name
+  Space Function Stairway/Stairwell-sch-F, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {d3c65688-acd5-4b36-a8e6-ac1baa7b2b95}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Stairway-sch-F;                         !- Standards Space Type
+  Stairway/Stairwell-sch-F;               !- Standards Space Type
 
 OS:Rendering:Color,
   {d3c65688-acd5-4b36-a8e6-ac1baa7b2b95}, !- Handle
-  Space Function Stairway-sch-F,          !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {e9d1e78d-f5d2-407b-bfc7-ba86c4bc5e2e}, !- Handle
-  Space Function Storage area,            !- Name
+  Space Function Stairway/Stairwell-sch-F, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {462ff843-73d9-42a2-84d2-455016972b92}, !- Handle
-  Space Function Storage area - occsens,  !- Name
+  Space Function Storage room <= 5 m2 <= 100 m2-sch-F, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {c084d293-60fb-4b9f-bf3a-9f1dc7b08cb9}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Storage area - occsens;                 !- Standards Space Type
+  Storage room <= 5 m2 <= 100 m2-sch-F;   !- Standards Space Type
 
 OS:Rendering:Color,
   {c084d293-60fb-4b9f-bf3a-9f1dc7b08cb9}, !- Handle
-  Space Function Storage area - occsens,  !- Name
+  Space Function Storage room <= 5 m2 <= 100 m2-sch-F, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {5ca86fce-20c3-46c4-a378-d293b01c9aac}, !- Handle
-  Space Function Hway lodging - rooms,    !- Name
+  Space Function Guest room,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {7567f0e0-7a54-4275-92fb-9bb85914130b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hway lodging - rooms;                   !- Standards Space Type
+  Guest room;                             !- Standards Space Type
 
 OS:Rendering:Color,
   {7567f0e0-7a54-4275-92fb-9bb85914130b}, !- Handle
-  Space Function Hway lodging - rooms,    !- Name
+  Space Function Guest room,              !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {f4f03fab-acd3-46d7-a05a-53c1d612a395}, !- Handle
-  Space Function Electrical/Mechanical-sch-F, !- Name
+  Space Function Electrical/Mechanical room-sch-F, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {fa93c851-c7b9-4ae5-b910-2483b4e5ada6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-F;            !- Standards Space Type
+  Electrical/Mechanical room-sch-F;       !- Standards Space Type
 
 OS:Rendering:Color,
   {fa93c851-c7b9-4ae5-b910-2483b4e5ada6}, !- Handle
-  Space Function Electrical/Mechanical-sch-F, !- Name
+  Space Function Electrical/Mechanical room-sch-F, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {115e046a-9cf7-4943-882a-d7f51af323bf}, !- Handle
-  Space Function Washroom-sch-F,          !- Name
+  Space Function Washroom - other-sch-F,  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {c7739cf7-ef2f-4ae0-b7f4-725668958627}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Washroom-sch-F;                         !- Standards Space Type
+  Washroom - other-sch-F;                 !- Standards Space Type
 
 OS:Rendering:Color,
   {c7739cf7-ef2f-4ae0-b7f4-725668958627}, !- Handle
-  Space Function Washroom-sch-F,          !- Name
+  Space Function Washroom - other-sch-F,  !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {d7988fd9-9e80-436d-9f1f-47c292331cbe}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {974d1835-c202-464b-b8da-052c37c4dcac}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {937887ee-9096-4d93-87b2-3a3de387746d}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:LifeCycleCost:Parameters,
+  {e4ffcf2b-2c6e-4647-a2a9-35c575f534b5}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 

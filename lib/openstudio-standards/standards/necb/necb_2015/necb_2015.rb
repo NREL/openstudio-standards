@@ -25,6 +25,20 @@ class NECB2015 < NECB2011
       end
     end
 
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/"
+    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+    files.each do |file|
+      #puts "loading standards data from #{file}"
+      data = JSON.parse(File.read(file))
+      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        @standards_data["tables"] << data["tables"].first
+      else
+        @standards_data[data.keys.first] = data[data.keys.first]
+      end
+    end
+
     #needed for compatibility of standards database format
     @standards_data['tables'].each do |table|
       @standards_data[table['name']] = table
