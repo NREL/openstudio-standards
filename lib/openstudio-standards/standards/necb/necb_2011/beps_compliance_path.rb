@@ -1,4 +1,43 @@
 class NECB2011
+
+  def add_all_spacetypes_to_model(model)
+    # Get the space Type data from @standards data
+    spacetype_data = nil
+    if @standards_data['space_types'].is_a?(Hash) == true
+      spacetype_data = @standards_data['space_types']['table']
+    else
+      spacetype_data = @standards_data['space_types']
+    end
+    spacetype_data.each do |spacedata|
+      space_type = OpenStudio::Model::SpaceType.new(model)
+      space_type.setStandardsSpaceType(spacedata["space_type"])
+      space_type.setStandardsBuildingType(spacedata["building_type"])
+      space_type.setName("#{spacedata['building_type']} #{spacedata['space_type']}")
+      # Loads
+      self.space_type_apply_internal_loads(space_type,
+                                           true,
+                                           true,
+                                           true,
+                                           true,
+                                           true,
+                                           true)
+
+      # Schedules
+      self.space_type_apply_internal_load_schedules(space_type,
+                                                    true,
+                                                    true,
+                                                    true,
+                                                    true,
+                                                    true,
+                                                    true,
+                                                    true)
+
+    end
+  end
+
+
+
+
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
   # but the first instance if multiple instances.  Add a new instance/definition
