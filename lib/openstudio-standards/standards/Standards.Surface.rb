@@ -74,4 +74,25 @@ class Standard
 
     return comp_infil_rate_m3_per_s
   end
+
+  def surface_replace_existing_subsurfaces_with_centered_subsurface(model)
+
+  end
+
+  def is_surface_vertical?(surfaces, max_angle, min_angle)
+    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    surfaces.each do |surface|
+      if surface.empty?
+        puts "Surface does not exist"
+      else
+        # Placeholder
+      end
+    end
+
+    if surface.empty?
+      puts "Surface does not exist"
+    else
+      # planarSurfaces = surface.findPlanarSurfaces('minDegreesTelt' = min_angle)
+    end
+  end
 end
