@@ -76,11 +76,28 @@ class Standard
   end
 
   def surface_replace_existing_subsurfaces_with_centered_subsurface(model)
-
+    puts "Chris was here (find surfaces)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    exposed_surface = []
+    model.getSpaces.sort.each do |space|
+      cooled = nul
+      heated = nul
+      cooled = space_cooled?(space)
+      heated = space_heated?(space)
+      if heated || cooled
+        space.surfaces.sort.each do |surface|
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          exposed_surface << surface
+          tilt_angle = surface.tilt
+          puts "Added outdoor surface"
+          puts "Tilt: #{tilt_angle}"
+        end
+      end
+    end
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left (find surfaces)"
   end
 
   def is_surface_vertical?(surfaces, max_angle, min_angle)
-    puts "Chris was here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    puts "Chris was here (is vertical?)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     surfaces.each do |surface|
       if surface.empty?
         puts "Surface does not exist"
@@ -94,5 +111,7 @@ class Standard
     else
       # planarSurfaces = surface.findPlanarSurfaces('minDegreesTelt' = min_angle)
     end
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left (is vertical)"
   end
+
 end
