@@ -68,8 +68,6 @@ class Standard
       qaqc[:spacetype_area_breakdown][spaceType.name.get.gsub(/\s+/, "_").downcase.to_sym] = floor_area_si
     end
     
-    
-    
     #Economics Section
     qaqc[:economics] = {}
     costing_rownames = model.sqlFile().get().execAndReturnVectorOfString("SELECT RowName FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost'")
@@ -641,7 +639,7 @@ class Standard
     
     #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
-    #necb_2011_qaqc(qaqc, model) if qaqc[:building][:name].include?("NECB2011") #had to nodify this because this is specifically for "NECB-2011" standard
+    necb_2011_qaqc(qaqc, model) if @template == "NECB2011"
     #sanity_check(qaqc)
     
     #qaqc[:information] = qaqc[:information].sort
@@ -681,9 +679,38 @@ class Standard
     qaqc[:sanity_check][:fail] = qaqc[:sanity_check][:fail].sort
     qaqc[:sanity_check][:pass] = qaqc[:sanity_check][:pass].sort
     #Padmassun's code for isConditioned end
+    
+
+    necb_section_name = "SANITY-??"
+    qaqc[:plant_loops].each do |plant_loop_info|  
+      pump_head = plant_loop_info[:pumps][0][:head_pa]
+      flow_rate = plant_loop_info[:pumps][0][:water_flow_m3_per_s]*1000
+      hp_check = ((flow_rate*60*60)/1000*1000*9.81*pump_head*0.000101997)/3600000
+      puts "\npump_head #{pump_head}"
+      puts "name: #{qaqc[:building][:name]}"
+      puts "name: #{plant_loop_info[:name]}"
+      puts "flow_rate #{flow_rate}"
+      puts "hp_check #{hp_check}\n"
+      pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
+      percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
+      
+      if percent_diff.nan?
+        qaqc[:ruby_warnings] << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
+        next
+      end
+      
+      necb_section_test( 
+        qaqc,
+        20, #diff of 20%
+        '>=',
+        percent_diff,
+        necb_section_name,
+        "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
+      )
+    end
   end
 
-  def necb_space_compliance(qaqc,csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv")
+  def necb_space_compliance(qaqc,csv_file_name = "#{File.dirname(__FILE__)}/necb_2011/data/necb_2011_spacetype_info.csv")
     #    #Padmassun's Code Start
     #csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
     puts csv_file_name
@@ -742,15 +769,7 @@ class Standard
     #Padmassun's Code End
   end
 
-  def necb_2011_qaqc(qaqc, model)
-    #Now perform basic QA/QC on items for NECB2011 
-    qaqc[:information] = []
-    qaqc[:warnings] =[]
-    qaqc[:errors] = []
-    qaqc[:unique_errors]=[]
-           
-    necb_space_compliance(qaqc,"#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv")
-
+  def necb_envelope_compliance(qaqc)
     # Envelope
     necb_section_name = "NECB2011-Section 3.2.1.4"
     #store hdd in short form
@@ -781,7 +800,9 @@ class Standard
         1 #padmassun added tollerance
       )
     }
+  end
 
+  def necb_infiltration_compliance(qaqc)
     #Infiltration
     necb_section_name = "NECB2011-Section 8.4.3.6"
     qaqc[:spaces].each do |spaceinfo|
@@ -801,6 +822,9 @@ class Standard
         )
       end
     end
+  end
+
+  def necb_exterior_opaque_compliance(qaqc)
     #Exterior Opaque
     necb_section_name = "NECB2011-Section 3.2.2.2"
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
@@ -821,6 +845,9 @@ class Standard
         round_precision
       )
     }
+  end
+
+  def necb_exterior_fenestration_compliance(qaqc)
     #Exterior Fenestration
     necb_section_name = "NECB2011-Section 3.2.2.3"
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
@@ -831,8 +858,8 @@ class Standard
     data[:ext_door_conductances]        =     [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:doors_average_conductance_w_per_m2_k]]   unless qaqc[:envelope][:doors_average_conductance_w_per_m2_k].nil?
     data[:ext_overhead_door_conductances] =   [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k].nil?
     data[:ext_skylight_conductances]  =       [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil?
-    data.each do |key,value|
     
+    data.each do |key,value|
       #puts key
       necb_section_test( 
         qaqc,
@@ -843,7 +870,10 @@ class Standard
         "[ENVELOPE]#{key}",
         round_precision
       )
-    end    
+    end
+  end
+
+  def necb_exterior_ground_surfaces_compliance(qaqc)
     #Exterior Ground surfaces
     necb_section_name = "NECB2011-Section 3.2.3.1"
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
@@ -863,8 +893,12 @@ class Standard
         round_precision
       )
     }
-    #Zone Sizing and design supply temp tests
+  end
+
+  def necb_zone_sizing_compliance(qaqc)
+    #Zone Sizing test
     necb_section_name = "NECB2011-?"
+    round_precision = 3
     qaqc[:thermal_zones].each do |zoneinfo|
       #    skipping undefined schedules
       if zoneinfo[:name].to_s.include?"- undefined -"
@@ -873,6 +907,35 @@ class Standard
       data = {}
       data[:heating_sizing_factor] = [1.3 , zoneinfo[:heating_sizing_factor]]
       data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
+      #data[:heating_design_supply_air_temp] =   [43.0, zoneinfo[:zone_heating_design_supply_air_temperature] ] #unless zoneinfo[:zone_heating_design_supply_air_temperature].nil?
+      #data[:cooling_design_supply_temp]   =   [13.0, zoneinfo[:zone_cooling_design_supply_air_temperature] ]
+      data.each do |key,value| 
+        #puts key
+        necb_section_test( 
+          qaqc,
+          value[0],
+          '==',
+          value[1],
+          necb_section_name,
+          "[ZONE][#{zoneinfo[:name]}] #{key}",
+          round_precision
+        )
+      end
+    end 
+  end
+
+  def necb_design_supply_temp_compliance(qaqc)
+    # Design supply temp test
+    necb_section_name = "NECB2011-?"
+    round_precision = 3
+    qaqc[:thermal_zones].each do |zoneinfo|
+      #    skipping undefined schedules
+      if zoneinfo[:name].to_s.include?"- undefined -"
+        next
+      end
+      data = {}
+      #data[:heating_sizing_factor] = [1.3 , zoneinfo[:heating_sizing_factor]]
+      #data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
       data[:heating_design_supply_air_temp] =   [43.0, zoneinfo[:zone_heating_design_supply_air_temperature] ] #unless zoneinfo[:zone_heating_design_supply_air_temperature].nil?
       data[:cooling_design_supply_temp]   =   [13.0, zoneinfo[:zone_cooling_design_supply_air_temperature] ]
       data.each do |key,value| 
@@ -888,23 +951,13 @@ class Standard
         )
       end
     end 
-    #Air flow sizing check
+  end
+
+  def necb_economizer_compliance(qaqc)
     #determine correct economizer usage according to section 5.2.2.7 of NECB2011
     necb_section_name = "NECB2011-5.2.2.7"
     qaqc[:air_loops].each do |air_loop_info|
-      #    air_loop_info[:name] 
-      #    air_loop_info[:thermal_zones] 
-      #    air_loop_info[:total_floor_area_served]
-      #    air_loop_info[:cooling_coils][:dx_single_speed]
-      #    air_loop_info[:cooling_coils][:dx_two_speed]
-      #    air_loop_info[:supply_fan][:max_air_flow_rate]
-      #    
-      #    air_loop_info[:heating_coils][:coil_heating_gas][:nominal_capacity]
-      #    air_loop_info[:heating_coils][:coil_heating_electric][:nominal_capacity]
-      #    air_loop_info[:heating_coils][:coil_heating_water][:nominal_capacity]
-      #    
-      #    air_loop_info[:economizer][:control_type]
-      
+
       capacity = -1.0
       
       if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
@@ -949,8 +1002,10 @@ class Standard
         end
       end
     end
-    
-    #*TODO*
+  end 
+
+  def necb_hrv_compliance(qaqc, model)
+    # HRV check
     necb_section_name = "NECB2011-5.2.10.1"
     qaqc[:air_loops].each do |air_loop_info|
       unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
@@ -972,7 +1027,9 @@ class Standard
         
       end
     end
-    
+  end
+
+  def necb_vav_fan_power_compliance(qaqc)
     necb_section_name = "NECB2011-5.2.3.3"
     qaqc[:air_loops].each do |air_loop_info|
       #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
@@ -1019,34 +1076,142 @@ class Standard
         )
       end
     end
-    
-    necb_section_name = "SANITY-??"
-    qaqc[:plant_loops].each do |plant_loop_info|  
-      pump_head = plant_loop_info[:pumps][0][:head_pa]
-      flow_rate = plant_loop_info[:pumps][0][:water_flow_m3_per_s]*1000
-      hp_check = ((flow_rate*60*60)/1000*1000*9.81*pump_head*0.000101997)/3600000
-      puts "\npump_head #{pump_head}"
-      puts "name: #{qaqc[:building][:name]}"
-      puts "name: #{plant_loop_info[:name]}"
-      puts "flow_rate #{flow_rate}"
-      puts "hp_check #{hp_check}\n"
-      pump_power_hp = plant_loop_info[:pumps][0][:electric_power_w]/1000*0.746
-      percent_diff = (hp_check - pump_power_hp).to_f.abs/hp_check * 100
-      
-      if percent_diff.nan?
-        qaqc[:ruby_warnings] << "(hp_check - pump_power_hp).to_f.abs/hp_check * 100 for #{plant_loop_info[:name]} is NaN"
-        next
-      end
-      
-      necb_section_test( 
-        qaqc,
-        20, #diff of 20%
-        '>=',
-        percent_diff,
-        necb_section_name,
-        "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
-      )
-      
+  end
+
+  def necb_2011_qaqc(qaqc, model)
+    puts "\n\nin necb_2011_qaqc now\n\n"
+    #Now perform basic QA/QC on items for NECB2011 
+    qaqc[:information] = []
+    qaqc[:warnings] =[]
+    qaqc[:errors] = []
+    qaqc[:unique_errors]=[]
+
+    if @template == 'NECB2011'           
+      necb_space_compliance(qaqc,"#{File.dirname(__FILE__)}/necb_2011/data/necb_2011_spacetype_info.csv")
     end
+
+    necb_envelope_compliance(qaqc)
+
+    necb_infiltration_compliance(qaqc)
+    
+    necb_exterior_opaque_compliance(qaqc)
+
+    necb_exterior_fenestration_compliance(qaqc)
+   
+    necb_exterior_ground_surfaces_compliance(qaqc)
+
+    necb_zone_sizing_compliance(qaqc)
+
+    necb_design_supply_temp_compliance(qaqc)
+    
+    necb_economizer_compliance(qaqc)
+    
+    necb_hrv_compliance(qaqc, model)
+    
+    necb_vav_fan_power_compliance(qaqc)
+
+    sanity_check(qaqc)
+  end
+
+
+
+
+
+
+  private
+
+  def look_up_csv_data(csv_fname, search_criteria)
+    options = { :headers    => :first_row,
+      :converters => [ :numeric ] }
+    unless File.exist?(csv_fname)
+      raise ("File: [#{csv_fname}] Does not exist")
+    end
+    # we'll save the matches here
+    matches = nil
+    # save a copy of the headers
+    headers = nil
+    CSV.open( csv_fname, "r", options ) do |csv|
+
+      # Since CSV includes Enumerable we can use 'find_all'
+      # which will return all the elements of the Enumerble for 
+      # which the block returns true
+
+      matches = csv.find_all do |row|
+        match = true
+        search_criteria.keys.each do |key|
+          match = match && ( row[key].strip == search_criteria[key].strip )
+        end
+        match
+      end
+      headers = csv.headers
+    end
+    #puts matches
+    raise("More than one match") if matches.size > 1
+    puts "Zero matches found for [#{search_criteria}]" if matches.size == 0
+    #return matches[0]
+    return matches[0]
+  end
+
+  def necb_section_test(qaqc,result_value,bool_operator,expected_value,necb_section_name,test_text,tolerance = nil)
+    test = "eval_failed"
+    command = ''
+    if tolerance.is_a?(Integer)
+      command = "#{result_value}.round(#{tolerance}) #{bool_operator} #{expected_value}.round(#{tolerance})"
+    elsif expected_value.is_a?(String) and result_value.is_a?(String)
+      command = "'#{result_value}' #{bool_operator} '#{expected_value}'"
+    else
+      command = "#{result_value} #{bool_operator} #{expected_value}"
+    end
+    test = eval(command)
+    test == 'true' ? true :false
+    raise ("Eval command failed #{test}") if !!test != test 
+    if test
+      qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
+    else
+      qaqc[:errors] << "[ERROR][TEST-FAIL][#{necb_section_name}]:#{test_text} expected value:#{expected_value} #{bool_operator} result value:#{result_value}"
+      unless (expected_value == -1.0 or expected_value == 'N/A')
+        qaqc[:unique_errors] << "[ERROR][TEST-FAIL][#{necb_section_name}]:#{test_text} expected value:#{expected_value} #{bool_operator} result value:#{result_value}"
+      end
+    end
+  end
+
+  def check_boolean_value (value,varname)
+    return true if value =~ (/^(true|t|yes|y|1)$/i)
+    return false if value.empty? || value =~ (/^(false|f|no|n|0)$/i)
+
+    raise ArgumentError.new "invalid value for #{varname}: #{value}"
+  end
+
+  def look_up_csv_data(csv_fname, search_criteria)
+    options = { :headers    => :first_row,
+      :converters => [ :numeric ] }
+    unless File.exist?(csv_fname)
+      raise ("File: [#{csv_fname}] Does not exist")
+    end
+    # we'll save the matches here
+    matches = nil
+    # save a copy of the headers
+    headers = nil
+    CSV.open( csv_fname, "r", options ) do |csv|
+
+      # Since CSV includes Enumerable we can use 'find_all'
+      # which will return all the elements of the Enumerble for 
+      # which the block returns true
+
+      matches = csv.find_all do |row|
+        match = true
+        search_criteria.keys.each do |key|
+          match = match && ( row[key].strip == search_criteria[key].strip )
+        end
+        match
+      end
+      headers = csv.headers
+    end
+    #puts matches
+    raise("More than one match") if matches.size > 1
+    puts "Zero matches found for [#{search_criteria}]" if matches.size == 0
+    #return matches[0]
+    return matches[0]
+  end
 
 end
