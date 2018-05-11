@@ -75,43 +75,60 @@ class Standard
     return comp_infil_rate_m3_per_s
   end
 
-  def surface_replace_existing_subsurfaces_with_centered_subsurface(model)
+  def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
+    puts "Chris was here (replace sub surfaces)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    max_angle = 91
+    min_angle = 89
+    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
+    vertical_surfaces.each do |vertical_surface|
+      vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
+        if vertical_subsurface.nil?
+          puts "Surface does not exist"
+        else
+          vertical_subsurface.remove
+        end
+      end
+      # corner_coords = vertical_surface.vertices
+      code_window_area = fdwr*vertical_surface.grossArea
+      code_window_width = code_window_area/window_height_m
+      min_z = 0
+      vertical_surface.vertices.each_with_index do |vertex, index|
+        if index == 0
+          min_z = vertex.z
+        elsif vertex.z < min_z
+          min_z = vertex.z
+        end
+      end
+      vertex_nminusone
+      vertical_surface.vertices.each do |vertex|
+
+      end
+    end
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left (find sub surfaces)"
+  end
+
+  def find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
     puts "Chris was here (find surfaces)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    exposed_surface = []
+    exposed_surfaces = []
     model.getSpaces.sort.each do |space|
-      cooled = nul
-      heated = nul
       cooled = space_cooled?(space)
       heated = space_heated?(space)
       if heated || cooled
         space.surfaces.sort.each do |surface|
+          next unless surface.surfaceType == 'Wall'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
-          exposed_surface << surface
-          tilt_angle = surface.tilt
+          tilt_radian = surface.tilt
+          tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
+          if tilt_degrees <= max_angle and tilt_degrees >= min_angle
+            exposed_surfaces << surface
+          end
           puts "Added outdoor surface"
-          puts "Tilt: #{tilt_angle}"
+          puts "Tilt: #{tilt_degrees}"
         end
       end
     end
+    return exposed_surfaces
     puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left (find surfaces)"
-  end
-
-  def is_surface_vertical?(surfaces, max_angle, min_angle)
-    puts "Chris was here (is vertical?)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    surfaces.each do |surface|
-      if surface.empty?
-        puts "Surface does not exist"
-      else
-        # Placeholder
-      end
-    end
-
-    if surface.empty?
-      puts "Surface does not exist"
-    else
       # planarSurfaces = surface.findPlanarSurfaces('minDegreesTelt' = min_angle)
-    end
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Chris left (is vertical)"
   end
-
 end
