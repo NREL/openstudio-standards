@@ -9,7 +9,7 @@ class NECBRegressionHelper < Minitest::Test
   end
 
 
-  def create_model_and_regression_test(building_type, epw_file, template)
+  def create_model_and_regression_test(building_type, epw_file, template, performQAQC = false)
     begin
       diffs = []
       test_dir = "#{File.dirname(__FILE__)}/output"
@@ -22,7 +22,7 @@ class NECBRegressionHelper < Minitest::Test
         Dir.mkdir(run_dir)
       end
 
-      model = Standard.build("#{template}_#{building_type}").model_create_prototype_model('NECB HDD Method', epw_file, run_dir)
+      model = Standard.build("#{template}_#{building_type}").model_create_prototype_model('NECB HDD Method', epw_file, run_dir, false, nil, performQAQC)
 
       #Save osm file.
       filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
@@ -63,4 +63,5 @@ class NECBRegressionHelper < Minitest::Test
       return true, nil
     end
   end
+
 end
