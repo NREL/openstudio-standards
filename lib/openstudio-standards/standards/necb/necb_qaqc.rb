@@ -642,11 +642,6 @@ class Standard
     necb_2011_qaqc(qaqc, model) if @template == "NECB2011"
     #sanity_check(qaqc)
     
-    #qaqc[:information] = qaqc[:information].sort
-    #qaqc[:warnings] = qaqc[:warnings].sort
-    #qaqc[:errors] = qaqc[:errors].sort
-    #qaqc[:unique_errors]= qaqc[:unique_errors].sort
-    
     return qaqc
   end
 
@@ -1114,6 +1109,11 @@ class Standard
     sanity_check(qaqc)
 
     necb_plantloop_sanity(qaqc)
+
+    qaqc[:information] = qaqc[:information].sort
+    qaqc[:warnings] = qaqc[:warnings].sort
+    qaqc[:errors] = qaqc[:errors].sort
+    qaqc[:unique_errors]= qaqc[:unique_errors].sort
   end
 
 
