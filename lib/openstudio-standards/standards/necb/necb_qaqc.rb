@@ -1,6 +1,15 @@
 class Standard
 
   def generate_qaqc(model)
+    cli_path = OpenStudio.getOpenStudioCLI
+    #construct command with local libs
+    f = open("| \"#{cli_path}\" openstudio_version")
+    os_version = f.read()
+    f = open("| \"#{cli_path}\" energyplus_version")
+    eplus_version = f.read()
+    puts "\n\n\nOS_version is [#{os_version.strip}]"
+    puts "\n\n\nEP_version is [#{eplus_version.strip}]"
+
     surfaces = {}
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
     outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
@@ -29,6 +38,9 @@ class Standard
     error_warning=[]
     qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
+    qaqc[:openstudio_version] = os_version.strip
+    qaqc[:energyplus_version] = eplus_version.strip
+    qaqc[:date] = Time.now
     # Store Building data. 
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -70,6 +82,39 @@ class Standard
     
     #Economics Section
     qaqc[:economics] = {}
+    provinces_names_map = {'QC' => 'Quebec','NL' => 'Newfoundland and Labrador','NS' => 'Nova Scotia','PE' => 'Prince Edward Island','ON' => 'Ontario','MB' => 'Manitoba','SK' => 'Saskatchewan','AB' => 'Alberta','BC' => 'British Columbia','YT' => 'Yukon','NT' => 'Northwest Territories','NB' => 'New Brunswick','NU' => 'Nunavut'}
+    neb_prices_csv_file_name ="#{File.dirname(__FILE__)}/qaqc_resources/neb_end_use_prices.csv"
+    puts neb_prices_csv_file_name
+    building_type = 'Commercial'
+    province = provinces_names_map[qaqc[:geography][:state_province_region]]
+    neb_fuel_list = ['Electricity','Natural Gas',"Oil"]
+    neb_eplus_fuel_map = {'Electricity' => 'Electricity','Natural Gas' => 'Gas','Oil' => "FuelOil#2"}
+    qaqc[:economics][:total_neb_cost]  = 0.0
+    qaqc[:economics][:total_neb_cost_per_m2]  = 0.0
+    neb_eplus_fuel_map.each do |neb_fuel,ep_fuel|
+      row = look_up_csv_data(neb_prices_csv_file_name,{0 => building_type,1 => province, 2 => neb_fuel})
+      neb_fuel_cost = row['2018']
+    fuel_consumption_gj = 0.0
+      if neb_fuel == 'Electricity' || neb_fuel == 'Natural Gas'
+        if model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND 
+        TableName='Annual and Peak Values - #{ep_fuel}' AND RowName='#{ep_fuel}:Facility' AND ColumnName='#{ep_fuel} Annual Value' AND Units='GJ'").is_initialized
+          fuel_consumption_gj = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND 
+        TableName='Annual and Peak Values - #{ep_fuel}' AND RowName='#{ep_fuel}:Facility' AND ColumnName='#{ep_fuel} Annual Value' AND Units='GJ'").get
+        end
+    else
+        if model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND 
+        TableName='Annual and Peak Values - Other' AND RowName='#{ep_fuel}:Facility' AND ColumnName='Annual Value' AND Units='GJ'").is_initialized
+          fuel_consumption_gj = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM tabulardatawithstrings WHERE ReportName='EnergyMeters' AND ReportForString='Entire Facility' AND 
+        TableName='Annual and Peak Values - Other' AND RowName='#{ep_fuel}:Facility' AND ColumnName='Annual Value' AND Units='GJ'").get
+        end
+      end
+      qaqc[:economics][:"#{neb_fuel}_neb_cost"] = fuel_consumption_gj*neb_fuel_cost.to_f
+      qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"] = qaqc[:economics][:"#{neb_fuel}_neb_cost"]/qaqc[:building][:conditioned_floor_area_m2] unless model.building.get.conditionedFloorArea().empty?  
+      qaqc[:economics][:total_neb_cost] += qaqc[:economics][:"#{neb_fuel}_neb_cost"]
+      qaqc[:economics][:total_neb_cost_per_m2] += qaqc[:economics][:"#{neb_fuel}_neb_cost_per_m2"]
+    end
+    
+    #Fuel cost based local utility rates
     costing_rownames = model.sqlFile().get().execAndReturnVectorOfString("SELECT RowName FROM TabularDataWithStrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-7. Energy Cost Summary' AND ColumnName='Total Energy Cost'")
     #==> ["Electricity", "Natural Gas", "Additional", "Total"]
     costing_rownames = validate_optional(costing_rownames, model, "N/A")
