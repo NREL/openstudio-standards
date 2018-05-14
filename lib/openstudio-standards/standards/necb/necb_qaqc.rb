@@ -679,8 +679,9 @@ class Standard
     qaqc[:sanity_check][:fail] = qaqc[:sanity_check][:fail].sort
     qaqc[:sanity_check][:pass] = qaqc[:sanity_check][:pass].sort
     #Padmassun's code for isConditioned end
-    
+  end
 
+  def necb_plantloop_sanity(qaqc)
     necb_section_name = "SANITY-??"
     qaqc[:plant_loops].each do |plant_loop_info|  
       pump_head = plant_loop_info[:pumps][0][:head_pa]
@@ -1111,6 +1112,8 @@ class Standard
     necb_vav_fan_power_compliance(qaqc)
 
     sanity_check(qaqc)
+
+    necb_plantloop_sanity(qaqc)
   end
 
 
