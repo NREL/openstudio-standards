@@ -892,27 +892,42 @@ class NECB2011
     #Exterior Opaque
     necb_section_name = "NECB2011-Section 3.2.2.2"
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
-    puts "\n\n"
-    puts "climate_index: #{climate_index}"
-    puts get_qaqc_table("exterior_opaque_compliance", {"var" => "ext_wall_conductances", "climate_index" => 2})
+    # puts "\n\n"
+    # puts "climate_index: #{climate_index}"
+    # puts get_qaqc_table("exterior_opaque_compliance", {"var" => "ext_wall_conductances", "climate_index" => 2})
 
-    result_value_index = 6
-    round_precision = 3
-    data = {}
-    data[:ext_wall_conductances]        =  [0.315,0.278,0.247,0.210,0.210,0.183,qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k].nil?
-    data[:ext_roof_conductances]        =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k].nil?
-    data[:ext_floor_conductances]       =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k].nil?
-      
-    data.each {|key,value| necb_section_test( 
+    ["ext_wall_conductances", "ext_roof_conductances", "ext_floor_conductances"].each { |compliance_var|
+      qaqc_table = get_qaqc_table("exterior_opaque_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
+      puts "\n#{qaqc_table}\n"
+      result_value = eval(qaqc_table["call"])
+      next if result_value.nil?
+      necb_section_test( 
         qaqc,
-        value[result_value_index],
-        '==',
-        value[climate_index],
-        necb_section_name,
-        "[ENVELOPE]#{key}",
-        round_precision
+        result_value,
+        qaqc_table["bool_operator"],
+        qaqc_table["expected_value"],
+        qaqc_table["necb_section_name"],
+        qaqc_table["test_text"],
+        qaqc_table["tolerance"]
       )
     }
+    # result_value_index = 6
+    # round_precision = 3
+    # data = {}
+    # data[:ext_wall_conductances]        =  [0.315,0.278,0.247,0.210,0.210,0.183,qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k].nil?
+    # data[:ext_roof_conductances]        =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k].nil?
+    # data[:ext_floor_conductances]       =  [0.227,0.183,0.183,0.162,0.162,0.142,qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k].nil?
+      
+    # data.each {|key,value| necb_section_test( 
+    #     qaqc,
+    #     value[result_value_index],
+    #     '==',
+    #     value[climate_index],
+    #     necb_section_name,
+    #     "[ENVELOPE]#{key}",
+    #     round_precision
+    #   )
+    # }
   end
 
   def necb_exterior_fenestration_compliance(qaqc)
