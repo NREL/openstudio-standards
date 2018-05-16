@@ -1,5 +1,6 @@
-class Standard
+class NECB2011
 
+  # Generates the base qaqc hash.
   def generate_qaqc(model)
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
@@ -690,6 +691,7 @@ class Standard
     return qaqc
   end
 
+  # Checks if a space with a proper schedule is conditioned or not
   def sanity_check(qaqc)
     qaqc[:sanity_check] = {}
     qaqc[:sanity_check][:fail] = []
@@ -721,6 +723,7 @@ class Standard
     #Padmassun's code for isConditioned end
   end
 
+  # checks the pump power using pressure, and flowrate
   def necb_plantloop_sanity(qaqc)
     necb_section_name = "SANITY-??"
     qaqc[:plant_loops].each do |plant_loop_info|  
@@ -751,6 +754,8 @@ class Standard
     end
   end
 
+  # checks space compliance 
+  # Re: lighting_per_area, occupancy_per_area, occupancy_schedule, electric_equipment_per_area
   def necb_space_compliance(qaqc,csv_file_name = "#{File.dirname(__FILE__)}/necb_2011/data/necb_2011_spacetype_info.csv")
     #    #Padmassun's Code Start
     #csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
@@ -810,6 +815,8 @@ class Standard
     #Padmassun's Code End
   end
 
+  # checks envelope compliance
+  # fenestration_to_door_and_window_percentage, skylight_to_roof_percentage
   def necb_envelope_compliance(qaqc)
     # Envelope
     necb_section_name = "NECB2011-Section 3.2.1.4"
@@ -845,23 +852,38 @@ class Standard
 
   def necb_infiltration_compliance(qaqc)
     #Infiltration
-    necb_section_name = "NECB2011-Section 8.4.3.6"
+    # puts "\n"
+    # puts get_standards_table("infiltration_compliance")
+    # puts "\n"
+    # puts "\n"
+    # puts get_standards_table("infiltration_compliance", {"var" => ":infiltration_method"} )
+    # puts "\n"
+    # puts "\n"
+    infiltration_compliance = get_standards_table("infiltration_compliance")
     qaqc[:spaces].each do |spaceinfo|
-      data = {}
-      data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
-      data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
-      data.each do |key,value|
+      infiltration_compliance.each { |compliance|  
+        data = {}
+        necb_section_name = compliance["necb_section_name"]
+        # puts "\nspaceinfo[#{compliance['var']}]"
+        result_value = eval("spaceinfo[#{compliance['var']}]")
+        # puts "#{compliance['test_text']}"
+        test_text = eval("\"#{compliance['test_text']}\"")
+        # puts "result_value: #{result_value}"
+        # puts "test_text: #{test_text}\n"
+#       data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
+#       data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
+#       data.each do |key,value|
         #puts key
         necb_section_test( 
           qaqc,
-          value[0],
-          '==',
-          value[1],
-          necb_section_name,
-          "[SPACE][#{spaceinfo[:name]}]-#{key}",
-          value[2]
+          result_value,
+          compliance["bool_operator"],
+          compliance["expected_value"],
+          compliance["necb_section_name"],
+          test_text,
+          compliance["tolerance"]
         )
-      end
+      }
     end
   end
 
