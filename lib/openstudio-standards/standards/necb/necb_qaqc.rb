@@ -853,13 +853,13 @@ class NECB2011
   def necb_infiltration_compliance(qaqc)
     #Infiltration
     # puts "\n"
-    # puts get_standards_table("infiltration_compliance")
+    # puts get_qaqc_table("infiltration_compliance")
     # puts "\n"
     # puts "\n"
-    # puts get_standards_table("infiltration_compliance", {"var" => ":infiltration_method"} )
+    # puts get_qaqc_table("infiltration_compliance", {"var" => ":infiltration_method"} )
     # puts "\n"
     # puts "\n"
-    infiltration_compliance = get_standards_table("infiltration_compliance")
+    infiltration_compliance = get_qaqc_table("infiltration_compliance")
     qaqc[:spaces].each do |spaceinfo|
       infiltration_compliance.each { |compliance|  
         data = {}
