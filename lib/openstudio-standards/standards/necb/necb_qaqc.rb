@@ -888,9 +888,14 @@ class NECB2011
   end
 
   def necb_exterior_opaque_compliance(qaqc)
+    # puts JSON.pretty_generate @qaqc_data
     #Exterior Opaque
     necb_section_name = "NECB2011-Section 3.2.2.2"
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    puts "\n\n"
+    puts "climate_index: #{climate_index}"
+    puts get_qaqc_table("exterior_opaque_compliance", {"var" => "ext_wall_conductances", "climate_index" => 2})
+
     result_value_index = 6
     round_precision = 3
     data = {}

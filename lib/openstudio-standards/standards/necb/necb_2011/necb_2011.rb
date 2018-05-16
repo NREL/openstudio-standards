@@ -35,12 +35,12 @@ class NECB2011 < Standard
   def load_qaqc_database_new()
     # Combine the data from the JSON files into a single hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/qaqc_data/"
+    qaqc_data_dir = "#{top_dir}/qaqc_data/"
     files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
     @qaqc_data = {}
     @qaqc_data["tables"] = []
     files.each do |file|
-      #puts "loading standards data from #{file}"
+      #puts "loading qaqc data from #{file}"
       data = JSON.parse(File.read(file))
       if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
         @qaqc_data["tables"] << data["tables"].first
@@ -48,7 +48,7 @@ class NECB2011 < Standard
         @qaqc_data[data.keys.first] = data[data.keys.first]
       end
     end
-    #needed for compatibility of standards database format
+    #needed for compatibility of qaqc database format
     @qaqc_data['tables'].each do |table|
       @qaqc_data[table['name']] = table
     end
