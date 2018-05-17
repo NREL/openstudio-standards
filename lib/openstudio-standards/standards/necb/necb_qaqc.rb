@@ -1127,53 +1127,101 @@ class NECB2011
 
   def necb_economizer_compliance(qaqc)
     #determine correct economizer usage according to section 5.2.2.7 of NECB2011
-    necb_section_name = "NECB2011-5.2.2.7"
+    necb_section_name = get_qaqc_table("economizer_compliance")['refs'].join(",")
+    qaqc_table = get_qaqc_table("economizer_compliance") # stores the full hash of qaqc for economizer_compliance
+    compliance = {} # stores the qaqc row that will be porformed
     qaqc[:air_loops].each do |air_loop_info|
-
       capacity = -1.0
-      
-      if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
-        puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
-        capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
-      elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
-        puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
-        capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
-      end
-      puts capacity
-      if capacity == -1.0
-        #This should not happen
-        puts "air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
-      else
-        #check for correct economizer usage
-        puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
-        unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-          #capacity should be in kW
-          if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
-            #diff enth
-            #puts "diff"
-            necb_section_test( 
-              qaqc,
-              "DifferentialEnthalpy",
-              '==',
-              air_loop_info[:economizer][:control_type],
-              necb_section_name,
-              "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
-            )
-          else
-            #no economizer
-            #puts "no econ"
-            necb_section_test( 
-              qaqc,
-              'NoEconomizer',
-              '==',
-              air_loop_info[:economizer][:control_type],
-              necb_section_name,
-              "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
-            )
-          end
+
+      # check if the key condition exists
+      if qaqc_table.key?("condition")
+        puts "\n\n necb_economizer_compliance for #{air_loop_info[:name]}"
+        # check if it is empty or not
+        if !qaqc_table["condition"].empty? 
+          # loop through all the conditions and 'eval' them
+          qaqc_table["condition"].each { |condition_hash| 
+            puts "#{(condition_hash['if'])}"
+            if eval(condition_hash['if'])
+              puts "\t#{(condition_hash['then'])}"
+              eval(condition_hash['then'])
+            else
+              puts "\t#{(condition_hash['else'])}" unless condition_hash['else'].nil?
+              eval(condition_hash['else']) unless condition_hash['else'].nil?
+            end
+          }
         end
       end
+
+      if (/^:/ =~ compliance['var']) # if var is a symbol
+        result_value = eval("air_loop_info[#{compliance['var']}]")
+      else
+        result_value = eval("#{compliance['call']}")
+      end
+
+      next if result_value.nil?
+      test_text = eval("\"#{compliance['test_text']}\"")
+      #puts key
+      puts "compliance: \n#{compliance}" 
+      puts "result_value: #{result_value}"
+      puts "test_text: #{test_text}"
+      necb_section_test( 
+        qaqc,
+        result_value,
+        compliance["bool_operator"],
+        compliance["expected_value"],
+        necb_section_name,
+        test_text,
+        compliance["tolerance"]
+      )
     end
+
+    # necb_section_name = "NECB2011-5.2.2.7"
+    # qaqc[:air_loops].each do |air_loop_info|
+
+    #   capacity = -1.0
+      
+    #   if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
+    #     puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
+    #     capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
+    #   elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
+    #     puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
+    #     capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
+    #   end
+    #   puts capacity
+    #   if capacity == -1.0
+    #     #This should not happen
+    #     qaqc[:errors] << "air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
+    #   else
+    #     #check for correct economizer usage
+    #     puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
+    #     unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+    #       #capacity should be in kW
+    #       if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
+    #         #diff enth
+    #         #puts "diff"
+    #         necb_section_test( 
+    #           qaqc,
+    #           "DifferentialEnthalpy",
+    #           '==',
+    #           air_loop_info[:economizer][:control_type],
+    #           necb_section_name,
+    #           "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
+    #         )
+    #       else
+    #         #no economizer
+    #         #puts "no econ"
+    #         necb_section_test( 
+    #           qaqc,
+    #           'NoEconomizer',
+    #           '==',
+    #           air_loop_info[:economizer][:control_type],
+    #           necb_section_name,
+    #           "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
+    #         )
+    #       end
+    #     end
+    #   end
+    # end
   end 
 
   def necb_hrv_compliance(qaqc, model)
