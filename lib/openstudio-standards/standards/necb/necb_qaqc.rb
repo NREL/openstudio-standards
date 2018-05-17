@@ -1037,6 +1037,7 @@ class NECB2011
       zone_sizing_compliance = qaqc_table["table"]
       zone_sizing_compliance.each { |compliance|
         result_value = eval("zoneinfo[#{compliance['var']}]")
+        next if result_value.nil?
         test_text = eval("\"#{compliance['test_text']}\"")
         #puts key
         necb_section_test( 
@@ -1070,32 +1071,58 @@ class NECB2011
   end
 
   def necb_design_supply_temp_compliance(qaqc)
-    # Design supply temp test
-    necb_section_name = "NECB2011-?"
-    round_precision = 3
+    necb_section_name = get_qaqc_table("design_supply_temp_compliance")['refs'].join(",")
+    qaqc_table = get_qaqc_table("design_supply_temp_compliance")
+
     qaqc[:thermal_zones].each do |zoneinfo|
       #    skipping undefined schedules
-      if zoneinfo[:name].to_s.include?"- undefined -"
+      if (qaqc_table["exclude"]["exclude_string"].any? { |ex_string| zoneinfo[:name].to_s.include? ex_string}) && !qaqc_table["exclude"]["exclude_string"].empty?
+        puts "#{zoneinfo[:name]} was skipped in necb_zone_sizing_compliance because it contains #{qaqc_table["exclude"]["exclude_string"].join(',')}"
         next
       end
-      data = {}
-      #data[:heating_sizing_factor] = [1.3 , zoneinfo[:heating_sizing_factor]]
-      #data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
-      data[:heating_design_supply_air_temp] =   [43.0, zoneinfo[:zone_heating_design_supply_air_temperature] ] #unless zoneinfo[:zone_heating_design_supply_air_temperature].nil?
-      data[:cooling_design_supply_temp]   =   [13.0, zoneinfo[:zone_cooling_design_supply_air_temperature] ]
-      data.each do |key,value| 
+      design_supply_temp_compliance = qaqc_table["table"]
+      design_supply_temp_compliance.each { |compliance|
+        result_value = eval("zoneinfo[#{compliance['var']}]")
+        next if result_value.nil?
+        test_text = eval("\"#{compliance['test_text']}\"")
         #puts key
         necb_section_test( 
           qaqc,
-          value[0],
-          '==',
-          value[1],
+          result_value,
+          compliance["bool_operator"],
+          compliance["expected_value"],
           necb_section_name,
-          "[ZONE][#{zoneinfo[:name]}] #{key}",
-          round_precision
+          test_text,
+          compliance["tolerance"]
         )
-      end
-    end 
+      }
+    end
+    # Design supply temp test
+    # necb_section_name = "NECB2011-?"
+    # round_precision = 3
+    # qaqc[:thermal_zones].each do |zoneinfo|
+    #   #    skipping undefined schedules
+    #   if zoneinfo[:name].to_s.include?"- undefined -"
+    #     next
+    #   end
+    #   data = {}
+    #   #data[:heating_sizing_factor] = [1.3 , zoneinfo[:heating_sizing_factor]]
+    #   #data[:cooling_sizing_factor] = [1.1 ,zoneinfo[:cooling_sizing_factor]]
+    #   data[:heating_design_supply_air_temp] =   [43.0, zoneinfo[:zone_heating_design_supply_air_temperature] ] #unless zoneinfo[:zone_heating_design_supply_air_temperature].nil?
+    #   data[:cooling_design_supply_temp]   =   [13.0, zoneinfo[:zone_cooling_design_supply_air_temperature] ]
+    #   data.each do |key,value| 
+    #     #puts key
+    #     necb_section_test( 
+    #       qaqc,
+    #       value[0],
+    #       '==',
+    #       value[1],
+    #       necb_section_name,
+    #       "[ZONE][#{zoneinfo[:name]}] #{key}",
+    #       round_precision
+    #     )
+    #   end
+    # end 
   end
 
   def necb_economizer_compliance(qaqc)

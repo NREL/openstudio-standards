@@ -1,0 +1,33 @@
+{
+  "tables": [
+    {
+      "name": "design_supply_temp_compliance",
+      "data_type": "table",
+      "refs": [
+        "NECB2011-?"
+      ],
+	  "exclude_note": "The QAQC for a Thermal zone will be skipped if its name contains any of the substring(s) in the exclude_string",
+	  "exclude":{
+		"exclude_string": [
+		  "- undefined -"
+		]
+	  },
+      "table": [
+	    {
+		  "var": ":zone_heating_design_supply_air_temperature",
+		  "bool_operator": "==",
+		  "expected_value": 43.0,
+		  "test_text": "[ZONE][#{zoneinfo[:name]}] heating_design_supply_air_temp",
+		  "tolerance": 3
+		},
+		{
+		  "var": ":zone_cooling_design_supply_air_temperature",
+		  "bool_operator": "==",
+		  "expected_value": 13.0,
+		  "test_text": "[ZONE][#{zoneinfo[:name]}] cooling_design_supply_temp",
+		  "tolerance": 3
+		}
+	  ]
+	}
+  ]
+}
