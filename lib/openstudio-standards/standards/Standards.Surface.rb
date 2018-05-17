@@ -75,11 +75,11 @@ class Standard
     return comp_infil_rate_m3_per_s
   end
 
-  # Not complete-do not call.  Start of method meant to help implement NECB2015 8.4.4.5.(5).  The method starts by finding exterior
-  # surfaces which help enclose conditioned spaces.  It then removes the subsurfaces.  Though not implemented
-  # yet it was supposed to then put a window centered in the surface with a sill height and window height
-  # defined passed via sill_heght_m and window_height_m (0.9 m, and 1.8 m respectively for NECB2015).  The
-  # width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
+  # Chris Kirney 2018-05-17:  Not complete-do not call.  Start of method meant to help implement NECB2015 8.4.4.5.(5).
+  # The method starts by finding exterior surfaces which help enclose conditioned spaces.  It then removes the
+  # subsurfaces.  Though not implemented yet it was supposed to then put a window centered in the surface with a sill
+  # height and window height defined passed via sill_heght_m and window_height_m (0.9 m, and 1.8 m respectively for
+  # NECB2015).  The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
   def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
     max_angle = 91
     min_angle = 89
@@ -109,8 +109,8 @@ class Standard
     end
   end
 
-  # This method searches through a model a returns vertical exterior surfaces which help enclose a
-  # conditioned space.
+  # Chris Kirney 2018-05-17:  This method searches through a model a returns vertical exterior surfaces which help
+  # enclose a conditioned space.
   def find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
     exposed_surfaces = []
     model.getSpaces.sort.each do |space|
