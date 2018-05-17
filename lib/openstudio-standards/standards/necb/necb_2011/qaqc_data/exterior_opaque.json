@@ -13,7 +13,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.227,
 		  "climate_index": 0,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -23,7 +22,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.183,
 		  "climate_index": 1,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -33,7 +31,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.183,
 		  "climate_index": 2,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -43,7 +40,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.162,
 		  "climate_index": 3,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -53,7 +49,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.162,
 		  "climate_index": 4,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -63,7 +58,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.142,
 		  "climate_index": 5,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_floor_conductances",
 		  "tolerance": 3
 		},
@@ -83,7 +77,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.227,
 		  "climate_index": 0,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -93,7 +86,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.183,
 		  "climate_index": 1,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -103,7 +95,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.183,
 		  "climate_index": 2,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -113,7 +104,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.162,
 		  "climate_index": 3,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -123,7 +113,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.162,
 		  "climate_index": 4,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -133,7 +122,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.142,
 		  "climate_index": 5,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_roof_conductances",
 		  "tolerance": 3
 		},
@@ -153,7 +141,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.315,
 		  "climate_index": 0,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		},
@@ -163,7 +150,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.278,
 		  "climate_index": 1,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		},
@@ -173,7 +159,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.247,
 		  "climate_index": 2,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		},
@@ -183,7 +168,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.210,
 		  "climate_index": 3,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		},
@@ -193,7 +177,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.210,
 		  "climate_index": 4,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		},
@@ -203,7 +186,6 @@
 		  "bool_operator": "==",
 		  "expected_value": 0.183,
 		  "climate_index": 5,
-		  "necb_section_name": "NECB2011-Section 3.2.2.2",
 		  "test_text": "[ENVELOPE] ext_wall_conductances",
 		  "tolerance": 3
 		}

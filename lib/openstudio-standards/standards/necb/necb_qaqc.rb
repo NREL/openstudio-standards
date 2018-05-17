@@ -859,27 +859,28 @@ class NECB2011
     # puts get_qaqc_table("infiltration_compliance", {"var" => ":infiltration_method"} )
     # puts "\n"
     # puts "\n"
-    infiltration_compliance = get_qaqc_table("infiltration_compliance")
+    infiltration_compliance = get_qaqc_table("infiltration_compliance")['table']
+    necb_section_name = get_qaqc_table("infiltration_compliance")['refs'].join(",")
     qaqc[:spaces].each do |spaceinfo|
       infiltration_compliance.each { |compliance|  
         data = {}
-        necb_section_name = compliance["necb_section_name"]
+        
         # puts "\nspaceinfo[#{compliance['var']}]"
         result_value = eval("spaceinfo[#{compliance['var']}]")
         # puts "#{compliance['test_text']}"
         test_text = eval("\"#{compliance['test_text']}\"")
         # puts "result_value: #{result_value}"
         # puts "test_text: #{test_text}\n"
-#       data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
-#       data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
-#       data.each do |key,value|
+        # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
+        # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
+        # data.each do |key,value|
         #puts key
         necb_section_test( 
           qaqc,
           result_value,
           compliance["bool_operator"],
           compliance["expected_value"],
-          compliance["necb_section_name"],
+          necb_section_name,
           test_text,
           compliance["tolerance"]
         )
@@ -889,8 +890,8 @@ class NECB2011
 
   def necb_exterior_opaque_compliance(qaqc)
     # puts JSON.pretty_generate @qaqc_data
-    #Exterior Opaque
-    necb_section_name = "NECB2011-Section 3.2.2.2"
+    # Exterior Opaque
+    necb_section_name = get_qaqc_table("exterior_opaque_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
@@ -906,7 +907,7 @@ class NECB2011
         result_value,
         qaqc_table["bool_operator"],
         qaqc_table["expected_value"],
-        qaqc_table["necb_section_name"],
+        necb_section_name,
         qaqc_table["test_text"],
         qaqc_table["tolerance"]
       )
@@ -932,28 +933,50 @@ class NECB2011
 
   def necb_exterior_fenestration_compliance(qaqc)
     #Exterior Fenestration
-    necb_section_name = "NECB2011-Section 3.2.2.3"
+    necb_section_name = get_qaqc_table("exterior_fenestration_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
-    result_value_index = 6
-    round_precision = 3
-    data = {}
-    data[:ext_window_conductances]      =     [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:windows_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:windows_average_conductance_w_per_m2_k].nil?
-    data[:ext_door_conductances]        =     [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:doors_average_conductance_w_per_m2_k]]   unless qaqc[:envelope][:doors_average_conductance_w_per_m2_k].nil?
-    data[:ext_overhead_door_conductances] =   [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k].nil?
-    data[:ext_skylight_conductances]  =       [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil?
-    
-    data.each do |key,value|
-      #puts key
+    # puts "\n\n"
+    # puts "climate_index: #{climate_index}"
+    # puts get_qaqc_table("exterior_fenestration_compliance", {"var" => "ext_window_conductances", "climate_index" => 2})
+
+    ["ext_window_conductances", "ext_door_conductances", "ext_overhead_door_conductances", "ext_skylight_conductances"].each { |compliance_var|
+      qaqc_table = get_qaqc_table("exterior_fenestration_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
+      puts "\n#{qaqc_table}\n"
+      result_value = eval(qaqc_table["call"])
+      next if result_value.nil?
       necb_section_test( 
         qaqc,
-        value[result_value_index].round(round_precision),
-        '==',
-        value[climate_index].round(round_precision),
+        result_value,
+        qaqc_table["bool_operator"],
+        qaqc_table["expected_value"],
         necb_section_name,
-        "[ENVELOPE]#{key}",
-        round_precision
+        qaqc_table["test_text"],
+        qaqc_table["tolerance"]
       )
-    end
+    }
+    # necb_section_name = "NECB2011-Section 3.2.2.3"
+    # climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    # result_value_index = 6
+    # round_precision = 3
+    # data = {}
+    # data[:ext_window_conductances]      =     [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:windows_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:windows_average_conductance_w_per_m2_k].nil?
+    # data[:ext_door_conductances]        =     [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:doors_average_conductance_w_per_m2_k]]   unless qaqc[:envelope][:doors_average_conductance_w_per_m2_k].nil?
+    # data[:ext_overhead_door_conductances] =   [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k].nil?
+    # data[:ext_skylight_conductances]  =       [2.400,2.200,2.200,2.200,2.200,1.600,qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]] unless qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil?
+    
+    # data.each do |key,value|
+    #   #puts key
+    #   necb_section_test( 
+    #     qaqc,
+    #     value[result_value_index].round(round_precision),
+    #     '==',
+    #     value[climate_index].round(round_precision),
+    #     necb_section_name,
+    #     "[ENVELOPE]#{key}",
+    #     round_precision
+    #   )
+    # end
+
   end
 
   def necb_exterior_ground_surfaces_compliance(qaqc)

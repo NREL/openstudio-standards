@@ -96,7 +96,8 @@ class NECB2011 < Standard
     object = @qaqc_data['tables'].detect {|table| table['name'] == table_name}
     raise("could not find #{table_name} in qaqc table database. ") if object.nil? or object['table'].nil?
     if search_criteria.nil?
-      return object['table']
+      #return object['table']
+      return object  # removed table beause need to use the object['refs']
     else
       return_objects = model_find_objects(object['table'], search_criteria)
       return return_objects
