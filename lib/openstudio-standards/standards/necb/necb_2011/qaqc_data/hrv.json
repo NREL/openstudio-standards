@@ -1,0 +1,21 @@
+{
+  "tables": [
+    {
+      "name": "hrv_compliance",
+      "data_type": "table",
+      "refs": [
+        "NECB2011-5.2.10.1"
+      ],
+      "table": [
+	    {
+		  "var": "hrv_reqd",
+		  "bool_operator": "==",
+		  "expected_value": "(0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990)) > 150",
+		  "result_value": "!air_loop_info[:heat_exchanger].empty?",
+		  "test_text": "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?",
+		  "tolerance": null
+		}
+	  ]
+	}
+  ]
+}

@@ -1160,10 +1160,9 @@ class NECB2011
 
       next if result_value.nil?
       test_text = eval("\"#{compliance['test_text']}\"")
-      #puts key
-      puts "compliance: \n#{compliance}" 
-      puts "result_value: #{result_value}"
-      puts "test_text: #{test_text}"
+      #puts "compliance: \n#{compliance}" 
+      #puts "result_value: #{result_value}"
+      #puts "test_text: #{test_text}"
       necb_section_test( 
         qaqc,
         result_value,
@@ -1226,27 +1225,55 @@ class NECB2011
 
   def necb_hrv_compliance(qaqc, model)
     # HRV check
-    necb_section_name = "NECB2011-5.2.10.1"
+    hrv_compliance = get_qaqc_table("hrv_compliance")['table']
+    necb_section_name = get_qaqc_table("hrv_compliance")['refs'].join(",")
     qaqc[:air_loops].each do |air_loop_info|
-      unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-        hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
-        hrv_reqd = hrv_calc > 150 ? true : false
-        #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
-        hrv_present = false
-        unless air_loop_info[:heat_exchanger].empty?
-          hrv_present = true
-        end
+      hrv_compliance.each { |compliance|  
+        data = {}
+        
+        # puts "\nspaceinfo[#{compliance['var']}]"
+        result_value = eval(compliance['result_value'])
+        # puts "#{compliance['test_text']}"
+        test_text = eval("\"#{compliance['test_text']}\"")
+        # puts "result_value: #{result_value}"
+        # puts "test_text: #{test_text}\n"
+        # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
+        # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
+        # data.each do |key,value|
+        #puts key
         necb_section_test( 
           qaqc,
-          hrv_reqd,
-          '==',
-          hrv_present,
+          result_value,
+          compliance["bool_operator"],
+          eval(compliance["expected_value"]),
           necb_section_name,
-          "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
+          test_text,
+          compliance["tolerance"]
         )
-        
-      end
+      }
     end
+    # necb_section_name = "NECB2011-5.2.10.1"
+    # qaqc[:air_loops].each do |air_loop_info|
+    #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     hrv_reqd = hrv_calc > 150 ? true : false
+    #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
+    #     hrv_present = false
+    #     unless air_loop_info[:heat_exchanger].empty?
+    #       hrv_present = true
+    #     end
+    #     necb_section_test( 
+    #       qaqc,
+    #       hrv_reqd,
+    #       '==',
+    #       hrv_present,
+    #       necb_section_name,
+    #       "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
+    #     )
+    #   else
+    #     qaqc['warnings'] << "[hrv_compliance] air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0 for [#{air_loop_info[:name]}]"
+    #   end
+    # end
   end
 
   def necb_vav_fan_power_compliance(qaqc)
