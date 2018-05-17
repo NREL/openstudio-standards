@@ -866,9 +866,9 @@ class NECB2011
         data = {}
         
         # puts "\nspaceinfo[#{compliance['var']}]"
-        result_value = eval("spaceinfo[#{compliance['var']}]")
+        result_value = eval("spaceinfo[:#{compliance['var']}]")
         # puts "#{compliance['test_text']}"
-        test_text = eval("\"#{compliance['test_text']}\"")
+        test_text = "[SPACE][#{spaceinfo[:name]}]-#{compliance['var']}"
         # puts "result_value: #{result_value}"
         # puts "test_text: #{test_text}\n"
         # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
@@ -893,14 +893,23 @@ class NECB2011
     # Exterior Opaque
     necb_section_name = get_qaqc_table("exterior_opaque_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
     # puts get_qaqc_table("exterior_opaque_compliance", {"var" => "ext_wall_conductances", "climate_index" => 2})
 
     ["ext_wall_conductances", "ext_roof_conductances", "ext_floor_conductances"].each { |compliance_var|
       qaqc_table = get_qaqc_table("exterior_opaque_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
-      puts "\n#{qaqc_table}\n"
-      result_value = eval(qaqc_table["call"])
+      #puts "\n#{qaqc_table}\n"
+      if compliance_var =="ext_wall_conductances"
+        result_value = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ext_roof_conductances"
+        result_value = qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ext_floor_conductances"
+        result_value = qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]
+      end
+      
+      test_text = "[ENVELOPE] #{compliance_var}"
       next if result_value.nil?
       necb_section_test( 
         qaqc,
@@ -908,8 +917,8 @@ class NECB2011
         qaqc_table["bool_operator"],
         qaqc_table["expected_value"],
         necb_section_name,
-        qaqc_table["test_text"],
-        qaqc_table["tolerance"]
+        test_text,
+        tolerance
       )
     }
     # result_value_index = 6
@@ -935,14 +944,24 @@ class NECB2011
     #Exterior Fenestration
     necb_section_name = get_qaqc_table("exterior_fenestration_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
     # puts get_qaqc_table("exterior_fenestration_compliance", {"var" => "ext_window_conductances", "climate_index" => 2})
 
     ["ext_window_conductances", "ext_door_conductances", "ext_overhead_door_conductances", "ext_skylight_conductances"].each { |compliance_var|
       qaqc_table = get_qaqc_table("exterior_fenestration_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
-      puts "\n#{qaqc_table}\n"
-      result_value = eval(qaqc_table["call"])
+      #puts "\n#{qaqc_table}\n"
+      if compliance_var =="ext_window_conductances"
+        result_value = qaqc[:envelope][:windows_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ext_door_conductances"
+        result_value = qaqc[:envelope][:doors_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ext_overhead_door_conductances"
+        result_value = qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ext_skylight_conductances"
+        result_value = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]
+      end
+      test_text = "[ENVELOPE] #{compliance_var}"
       next if result_value.nil?
       necb_section_test( 
         qaqc,
@@ -950,8 +969,8 @@ class NECB2011
         qaqc_table["bool_operator"],
         qaqc_table["expected_value"],
         necb_section_name,
-        qaqc_table["test_text"],
-        qaqc_table["tolerance"]
+        test_text,
+        tolerance
       )
     }
     # necb_section_name = "NECB2011-Section 3.2.2.3"
@@ -982,14 +1001,22 @@ class NECB2011
     #Exterior Ground surfaces
     necb_section_name = get_qaqc_table("exterior_ground_surfaces_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
     # puts get_qaqc_table("exterior_ground_surfaces_compliance", {"var" => "ground_wall_conductances", "climate_index" => 2})
 
     ["ground_wall_conductances", "ground_roof_conductances", "ground_floor_conductances"].each { |compliance_var|
       qaqc_table = get_qaqc_table("exterior_ground_surfaces_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
-      puts "\n#{qaqc_table}\n"
-      result_value = eval(qaqc_table["call"])
+      #puts "\n#{qaqc_table}\n"
+      if compliance_var =="ground_wall_conductances"
+        result_value = qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ground_roof_conductances"
+        result_value = qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k]
+      elsif compliance_var =="ground_floor_conductances"
+        result_value = qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k]
+      end
+      test_text = "[ENVELOPE] #{compliance_var}"
       next if result_value.nil?
       necb_section_test( 
         qaqc,
@@ -997,8 +1024,8 @@ class NECB2011
         qaqc_table["bool_operator"],
         qaqc_table["expected_value"],
         necb_section_name,
-        qaqc_table["test_text"],
-        qaqc_table["tolerance"]
+        test_text,
+        tolerance
       )
     }
     # necb_section_name = "NECB2011-Section 3.2.3.1"
@@ -1025,6 +1052,7 @@ class NECB2011
     #Zone Sizing test
     necb_section_name = get_qaqc_table("zone_sizing_compliance")['refs'].join(",")
     qaqc_table = get_qaqc_table("zone_sizing_compliance")
+    tolerance = 3
     #necb_section_name = "NECB2011-?"
     #round_precision = 3
     qaqc[:thermal_zones].each do |zoneinfo|
@@ -1036,9 +1064,9 @@ class NECB2011
       end
       zone_sizing_compliance = qaqc_table["table"]
       zone_sizing_compliance.each { |compliance|
-        result_value = eval("zoneinfo[#{compliance['var']}]")
+        result_value = eval("zoneinfo[:#{compliance['var']}]")
         next if result_value.nil?
-        test_text = eval("\"#{compliance['test_text']}\"")
+        test_text = "[ZONE][#{zoneinfo[:name]}] #{compliance['var']}"
         #puts key
         necb_section_test( 
           qaqc,
@@ -1047,7 +1075,7 @@ class NECB2011
           compliance["expected_value"],
           necb_section_name,
           test_text,
-          compliance["tolerance"]
+          tolerance
         )
       }
       # data = {}
@@ -1073,7 +1101,7 @@ class NECB2011
   def necb_design_supply_temp_compliance(qaqc)
     necb_section_name = get_qaqc_table("design_supply_temp_compliance")['refs'].join(",")
     qaqc_table = get_qaqc_table("design_supply_temp_compliance")
-
+    tolerance = 3
     qaqc[:thermal_zones].each do |zoneinfo|
       #    skipping undefined schedules
       if (qaqc_table["exclude"]["exclude_string"].any? { |ex_string| zoneinfo[:name].to_s.include? ex_string}) && !qaqc_table["exclude"]["exclude_string"].empty?
@@ -1081,10 +1109,16 @@ class NECB2011
         next
       end
       design_supply_temp_compliance = qaqc_table["table"]
+
       design_supply_temp_compliance.each { |compliance|
-        result_value = eval("zoneinfo[#{compliance['var']}]")
+        if compliance['var'] == "heating_design_supply_air_temp"
+          result_value = zoneinfo[:zone_heating_design_supply_air_temperature]
+        elsif compliance['var'] == "cooling_design_supply_temp"
+          result_value = zoneinfo[:zone_cooling_design_supply_air_temperature]
+        end
+          
         next if result_value.nil?
-        test_text = eval("\"#{compliance['test_text']}\"")
+        test_text = "[ZONE][#{zoneinfo[:name]}] #{compliance['var']}"
         #puts key
         necb_section_test( 
           qaqc,
@@ -1093,7 +1127,7 @@ class NECB2011
           compliance["expected_value"],
           necb_section_name,
           test_text,
-          compliance["tolerance"]
+          tolerance
         )
       }
     end
@@ -1129,98 +1163,38 @@ class NECB2011
     #determine correct economizer usage according to section 5.2.2.7 of NECB2011
     necb_section_name = get_qaqc_table("economizer_compliance")['refs'].join(",")
     qaqc_table = get_qaqc_table("economizer_compliance") # stores the full hash of qaqc for economizer_compliance
-    compliance = {} # stores the qaqc row that will be porformed
+    # necb_section_name = "NECB2011-5.2.2.7"
+     
     qaqc[:air_loops].each do |air_loop_info|
       capacity = -1.0
-
-      # check if the key condition exists
-      if qaqc_table.key?("condition")
-        puts "\n\n necb_economizer_compliance for #{air_loop_info[:name]}"
-        # check if it is empty or not
-        if !qaqc_table["condition"].empty? 
-          # loop through all the conditions and 'eval' them
-          qaqc_table["condition"].each { |condition_hash| 
-            puts "#{(condition_hash['if'])}"
-            if eval(condition_hash['if'])
-              puts "\t#{(condition_hash['then'])}"
-              eval(condition_hash['then'])
-            else
-              puts "\t#{(condition_hash['else'])}" unless condition_hash['else'].nil?
-              eval(condition_hash['else']) unless condition_hash['else'].nil?
-            end
-          }
+      if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
+        puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
+        capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
+      elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
+        puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
+        capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
+      end
+      puts capacity
+      if capacity == -1.0
+        #This should not happen
+        qaqc[:errors] << "[necb_economizer_compliance] air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
+      else
+        #check for correct economizer usage
+        #puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
+        unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+          #capacity should be in kW
+          max_air_flow_rate_m3_per_s = air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]
+          necb_section_test( 
+            qaqc,
+            eval(qaqc_table["table"][0]["expected_value"]),
+            '==',
+            air_loop_info[:economizer][:control_type],
+            necb_section_name,
+            "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
+          )
         end
       end
-
-      if (/^:/ =~ compliance['var']) # if var is a symbol
-        result_value = eval("air_loop_info[#{compliance['var']}]")
-      else
-        result_value = eval("#{compliance['call']}")
-      end
-
-      next if result_value.nil?
-      test_text = eval("\"#{compliance['test_text']}\"")
-      #puts "compliance: \n#{compliance}" 
-      #puts "result_value: #{result_value}"
-      #puts "test_text: #{test_text}"
-      necb_section_test( 
-        qaqc,
-        result_value,
-        compliance["bool_operator"],
-        compliance["expected_value"],
-        necb_section_name,
-        test_text,
-        compliance["tolerance"]
-      )
     end
-
-    # necb_section_name = "NECB2011-5.2.2.7"
-    # qaqc[:air_loops].each do |air_loop_info|
-
-    #   capacity = -1.0
-      
-    #   if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
-    #     puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
-    #     capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
-    #   elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
-    #     puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
-    #     capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
-    #   end
-    #   puts capacity
-    #   if capacity == -1.0
-    #     #This should not happen
-    #     qaqc[:errors] << "air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
-    #   else
-    #     #check for correct economizer usage
-    #     puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
-    #     unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-    #       #capacity should be in kW
-    #       if capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500
-    #         #diff enth
-    #         #puts "diff"
-    #         necb_section_test( 
-    #           qaqc,
-    #           "DifferentialEnthalpy",
-    #           '==',
-    #           air_loop_info[:economizer][:control_type],
-    #           necb_section_name,
-    #           "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
-    #         )
-    #       else
-    #         #no economizer
-    #         #puts "no econ"
-    #         necb_section_test( 
-    #           qaqc,
-    #           'NoEconomizer',
-    #           '==',
-    #           air_loop_info[:economizer][:control_type],
-    #           necb_section_name,
-    #           "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]"
-    #         )
-    #       end
-    #     end
-    #   end
-    # end
   end 
 
   def necb_hrv_compliance(qaqc, model)
@@ -1232,19 +1206,21 @@ class NECB2011
         data = {}
         
         # puts "\nspaceinfo[#{compliance['var']}]"
-        result_value = eval(compliance['result_value'])
+        result_value = !air_loop_info[:heat_exchanger].empty?
         # puts "#{compliance['test_text']}"
-        test_text = eval("\"#{compliance['test_text']}\"")
+        test_text = "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
         # puts "result_value: #{result_value}"
         # puts "test_text: #{test_text}\n"
         # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ] 
         # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
         # data.each do |key,value|
         #puts key
+        outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
+        db990 = BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990
         necb_section_test( 
           qaqc,
           result_value,
-          compliance["bool_operator"],
+          "==",
           eval(compliance["expected_value"]),
           necb_section_name,
           test_text,

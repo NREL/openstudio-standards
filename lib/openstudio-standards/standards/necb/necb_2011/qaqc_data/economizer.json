@@ -6,39 +6,11 @@
       "refs": [
         "NECB2011-5.2.2.7"
       ],
-	  "condition":[
-	    {
-		  "if": "!air_loop_info[:cooling_coils][:dx_single_speed][0].nil?",
-		  "then": "capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]",
-		  "else": null
-		},
-		{
-		  "if": "!air_loop_info[:cooling_coils][:dx_two_speed][0].nil?",
-		  "then": "capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]",
-		  "else": null
-		},
-	    {
-	      "if": "capacity > 20000 or air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000 >1500",
-		  "then": "compliance = qaqc_table['table'][0]",
-		  "else": "compliance = qaqc_table['table'][1]"
-	    }
-	  ],
       "table": [
 	    {
 		  "var": "economizer_control_type",
-		  "call": "air_loop_info[:economizer][:control_type]",
-		  "bool_operator": "==",
-		  "expected_value": "DifferentialEnthalpy",
-		  "test_text": "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]",
-		  "tolerance": null
-		},
-		{
-		  "var": "economizer_control_type",
-		  "call": "air_loop_info[:economizer][:control_type]",
-		  "bool_operator": "==",
-		  "expected_value": "NoEconomizer",
-		  "test_text": "[AIR LOOP][#{air_loop_info[:name]}][:economizer][:control_type]",
-		  "tolerance": null
+		  "expected_value": "(capacity > 20000 or max_air_flow_rate_m3_per_s*1000 >1500) ? 'DifferentialEnthalpy' : 'NoEconomizer'",
+		  "note": "capacity can be either [dx single speed]'s `nominal total capacity` or [dx two speed]'s `highest cop`"
 		}
 	  ]
 	}

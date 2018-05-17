@@ -8,17 +8,15 @@
       ],
       "table": [
 	    {
-		  "var": ":infiltration_method",
+		  "var": "infiltration_method",
 		  "bool_operator": "==",
 		  "expected_value": "Flow/ExteriorArea",
-		  "test_text": "[SPACE][#{spaceinfo[:name]}]-infiltration_method",
 		  "tolerance": null
 		},
 		{
-		  "var": ":infiltration_flow_per_m2",
+		  "var": "infiltration_flow_per_m2",
 		  "bool_operator": "==",
 		  "expected_value": 0.00025,
-		  "test_text": "[SPACE][#{spaceinfo[:name]}]-infiltration_flow_per_m2",
 		  "tolerance": 5
 		}
 	  ]
