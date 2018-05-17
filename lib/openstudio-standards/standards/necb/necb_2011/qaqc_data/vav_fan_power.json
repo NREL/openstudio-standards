@@ -1,0 +1,82 @@
+{
+  "tables": [
+    {
+      "name": "vav_fan_power_compliance",
+      "data_type": "table",
+      "refs": [
+        "NECB2011-5.2.3.3"
+      ],
+	  "ini_variables":[
+		"necb_supply_fan_w = -1.0",
+		"supply_fan_w = -1.0",
+		"absolute_diff = -1.0",
+		"percent_diff = -1.0"
+	  ],
+	  "notes":"applies to air_loop",
+	  "condition":[
+	    {
+		  "if": "air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s].nil?",
+		  "then": "qaqc[:warnings] << \"[vav_fan_power_compliance] air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] is nil\"; next",
+		  "else": null,
+		  "notes": "skip if max_air_flow_rate_m3_per_s is not defined for the supply_fan"
+		},
+		{
+		  "if": "air_loop_info[:supply_fan][:rated_electric_power_w].nil?",
+		  "then": "qaqc[:warnings] << \"[vav_fan_power_compliance] air_loop_info[:supply_fan][:rated_electric_power_w] is nil\"; next",
+		  "else": null,
+		  "notes": "skip if the rated_electric_power_w is not defined for the supply_fan"
+		},
+		{
+		  "if": "air_loop_info[:name].include? 'PSZ'",
+		  "then": "necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)",
+		  "else": null
+		},
+		{
+		  "if": "air_loop_info[:name].include? 'VAV'",
+		  "then": "necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)",
+		  "else": null
+		},
+		{
+		  "if": "true",
+		  "then": "supply_fan_w = (air_loop_info[:supply_fan][:rated_electric_power_w]).round(3)",
+		  "else": null
+		},
+		{
+		  "if": "true",
+		  "then": "absolute_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs",
+		  "else": null
+		},
+		{
+		  "if": "true",
+		  "then": "percent_diff = ((necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100).round(3)",
+		  "else": null
+		},
+		{
+		  "if": "absolute_diff < 10",
+		  "then": "compliance = qaqc_table['table'][0]",
+		  "else": "compliance = qaqc_table['table'][1]"
+		}
+		
+
+	  ],
+      "table": [
+	    {
+		  "var": "absolute_diff_rated_electric_power_w",
+		  "bool_operator": "<=",
+		  "expected_value": 10,
+		  "result_value": "absolute_diff",
+		  "test_text": "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Absolute Difference of #{absolute_diff} from NECB value [#{necb_supply_fan_w}]",
+		  "tolerance": null
+		},
+		{
+		  "var": "percent_diff_rated_electric_power_w",
+		  "bool_operator": "<=",
+		  "expected_value": 10,
+		  "result_value": "percent_diff",
+		  "test_text": "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff of #{percent_diff}% from NECB value [#{necb_supply_fan_w}]",
+		  "tolerance": null
+		}
+	  ]
+	}
+  ]
+}

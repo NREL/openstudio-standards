@@ -1277,52 +1277,103 @@ class NECB2011
   end
 
   def necb_vav_fan_power_compliance(qaqc)
-    necb_section_name = "NECB2011-5.2.3.3"
+    necb_supply_fan_w = -1.0
+    supply_fan_w = -1.0
+    absolute_diff = -1.0
+    percent_diff = -1.0
+
+    necb_section_name = get_qaqc_table("vav_fan_power_compliance")['refs'].join(",")
+    qaqc_table = get_qaqc_table("vav_fan_power_compliance") # stores the full hash of qaqc for vav_fan_power_compliance
+    compliance = {} # stores the qaqc row that will be porformed
     qaqc[:air_loops].each do |air_loop_info|
-      #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
-      if air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s].nil?
-        qaqc[:ruby_warnings] << "air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] is nil"
-        next
-      end
-      necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
+      capacity = -1.0
 
-      if air_loop_info[:name].include? "PSZ"
-        necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
-      elsif air_loop_info[:name].include? "VAV"
-        necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*2.65).round(2)
+      # check if the key condition exists
+      if qaqc_table.key?("condition")
+        puts "\n\nvav_fan_power_compliance for #{air_loop_info[:name]}"
+        # check if it is empty or not
+        if !qaqc_table["condition"].empty? 
+          # loop through all the conditions and 'eval' them
+          qaqc_table["condition"].each { |condition_hash| 
+            puts "#{(condition_hash['if'])}"
+            if eval(condition_hash['if'])
+              puts "\t#{(condition_hash['then'])}"
+              eval(condition_hash['then'])
+            else
+              puts "\t#{(condition_hash['else'])}" unless condition_hash['else'].nil?
+              eval(condition_hash['else']) unless condition_hash['else'].nil?
+            end
+          }
+        end
       end
 
-      if air_loop_info[:supply_fan][:rated_electric_power_w].nil?
-        qaqc[:ruby_warnings] << "air_loop_info[:supply_fan][:rated_electric_power_w] is nil"
-        next
-      end
-
-      supply_fan_w = (air_loop_info[:supply_fan][:rated_electric_power_w]).round(3)
-      absolute_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs
-      if absolute_diff < 10
-        #This case should ALWAYS PASS
-        necb_section_test(
-          qaqc,
-          10,
-          '>=',
-          absolute_diff,
-          necb_section_name,
-          "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Absolute Difference from NECB value [#{necb_supply_fan_w}]"
-        )
-        next
+      if (/^:/ =~ compliance['var']) # if var is a symbol
+        result_value = eval("air_loop_info[#{compliance['var']}]")
       else
-        #The test should pass if and only if the percent difference is less than 10%
-        percent_diff = ((necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100).round(3)
-        necb_section_test( 
-          qaqc,
-          10,
-          '>=',
-          percent_diff,
-          necb_section_name,
-          "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
-        )
+        result_value = eval("#{compliance['result_value']}")
       end
+
+      next if result_value.nil?
+      test_text = eval("\"#{compliance['test_text']}\"")
+      puts "compliance: \n#{compliance}" 
+      puts "result_value: #{result_value}"
+      puts "test_text: #{test_text}"
+      necb_section_test( 
+        qaqc,
+        result_value,
+        compliance["bool_operator"],
+        compliance["expected_value"],
+        necb_section_name,
+        test_text,
+        compliance["tolerance"]
+      )
     end
+    # necb_section_name = "NECB2011-5.2.3.3"
+    # qaqc[:air_loops].each do |air_loop_info|
+    #   #necb_clg_cop = air_loop_info[:cooling_coils][:dx_single_speed][:cop] #*assuming that the cop is defined correctly*
+    #   if air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s].nil?
+    #     qaqc[:warnings] << "[vav_fan_power_compliance] air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] is nil"
+    #     next
+    #   end
+    #   necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
+
+    #   if air_loop_info[:name].include? "PSZ"
+    #     necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*1.6).round(2)
+    #   elsif air_loop_info[:name].include? "VAV"
+    #     necb_supply_fan_w = (air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s]*1000*2.65).round(2)
+    #   end
+
+    #   if air_loop_info[:supply_fan][:rated_electric_power_w].nil?
+    #     qaqc[:warnings] << "[vav_fan_power_compliance] air_loop_info[:supply_fan][:rated_electric_power_w] is nil"
+    #     next
+    #   end
+
+    #   supply_fan_w = (air_loop_info[:supply_fan][:rated_electric_power_w]).round(3)
+    #   absolute_diff = (necb_supply_fan_w - supply_fan_w).to_f.abs
+    #   if absolute_diff < 10
+    #     #This case should ALWAYS PASS
+    #     necb_section_test(
+    #       qaqc,
+    #       10,
+    #       '>=',
+    #       absolute_diff,
+    #       necb_section_name,
+    #       "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Absolute Difference from NECB value [#{necb_supply_fan_w}]"
+    #     )
+    #     next
+    #   else
+    #     #The test should pass if and only if the percent difference is less than 10%
+    #     percent_diff = ((necb_supply_fan_w - supply_fan_w).to_f.abs/necb_supply_fan_w * 100).round(3)
+    #     necb_section_test( 
+    #       qaqc,
+    #       10,
+    #       '>=',
+    #       percent_diff,
+    #       necb_section_name,
+    #       "[AIR LOOP][#{air_loop_info[:name]}][:supply_fan][:rated_electric_power_w] [#{supply_fan_w}] Percent Diff from NECB value [#{necb_supply_fan_w}]"
+    #     )
+    #   end
+    # end
   end
 
   def necb_2011_qaqc(qaqc, model)
