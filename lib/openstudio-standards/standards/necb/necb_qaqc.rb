@@ -976,29 +976,49 @@ class NECB2011
     #     round_precision
     #   )
     # end
-
   end
 
   def necb_exterior_ground_surfaces_compliance(qaqc)
     #Exterior Ground surfaces
-    necb_section_name = "NECB2011-Section 3.2.3.1"
+    necb_section_name = get_qaqc_table("exterior_ground_surfaces_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
-    result_value_index = 6
-    round_precision = 3
-    data = {}
-    data[:ground_wall_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k].nil?
-    data[:ground_roof_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k].nil?
-    data[:ground_floor_conductances] = [ 0.757,0.757,0.757,0.757,0.757,0.379, qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] ] unless qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k].nil?
-    data.each {|key,value| necb_section_test( 
+    # puts "\n\n"
+    # puts "climate_index: #{climate_index}"
+    # puts get_qaqc_table("exterior_ground_surfaces_compliance", {"var" => "ground_wall_conductances", "climate_index" => 2})
+
+    ["ground_wall_conductances", "ground_roof_conductances", "ground_floor_conductances"].each { |compliance_var|
+      qaqc_table = get_qaqc_table("exterior_ground_surfaces_compliance", {"var" => compliance_var, "climate_index" => climate_index}).first
+      puts "\n#{qaqc_table}\n"
+      result_value = eval(qaqc_table["call"])
+      next if result_value.nil?
+      necb_section_test( 
         qaqc,
-        value[result_value_index],
-        '==',
-        value[climate_index],
+        result_value,
+        qaqc_table["bool_operator"],
+        qaqc_table["expected_value"],
         necb_section_name,
-        "[ENVELOPE]#{key}",
-        round_precision
+        qaqc_table["test_text"],
+        qaqc_table["tolerance"]
       )
     }
+    # necb_section_name = "NECB2011-Section 3.2.3.1"
+    # climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    # result_value_index = 6
+    # round_precision = 3
+    # data = {}
+    # data[:ground_wall_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k].nil?
+    # data[:ground_roof_conductances]  = [ 0.568,0.379,0.284,0.284,0.284,0.210, qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] ]  unless qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k].nil?
+    # data[:ground_floor_conductances] = [ 0.757,0.757,0.757,0.757,0.757,0.379, qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] ] unless qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k].nil?
+    # data.each {|key,value| necb_section_test( 
+    #     qaqc,
+    #     value[result_value_index],
+    #     '==',
+    #     value[climate_index],
+    #     necb_section_name,
+    #     "[ENVELOPE]#{key}",
+    #     round_precision
+    #   )
+    # }
   end
 
   def necb_zone_sizing_compliance(qaqc)
