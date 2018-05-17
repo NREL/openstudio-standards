@@ -1,0 +1,33 @@
+{
+  "tables": [
+    {
+      "name": "zone_sizing_compliance",
+      "data_type": "table",
+      "refs": [
+        "NECB2011-?"
+      ],
+	  "exclude_note": "The QAQC for a Thermal zone will be skipped if its name contains any of the substring(s) in the exclude_string",
+	  "exclude":{
+		"exclude_string": [
+		  "- undefined -"
+		]
+	  },
+      "table": [
+	    {
+		  "var": ":heating_sizing_factor",
+		  "bool_operator": "==",
+		  "expected_value": 1.3,
+		  "test_text": "[ZONE][#{zoneinfo[:name]}] heating_sizing_factor",
+		  "tolerance": 3
+		},
+		{
+		  "var": ":cooling_sizing_factor",
+		  "bool_operator": "==",
+		  "expected_value": 1.1,
+		  "test_text": "[ZONE][#{zoneinfo[:name]}] cooling_sizing_factor",
+		  "tolerance": 3
+		}
+	  ]
+	}
+  ]
+}
