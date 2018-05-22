@@ -78,9 +78,9 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         #People / Occupancy
         total_occ_dens = []
         occ_sched = []
-        st.people.each {|people_def| total_occ_dens << people_def.spaceFloorAreaPerPerson.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
-        assert(total_lpd.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")   
-        
+        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get.name}
+        assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
+
         #Equipment -Gas
         gas_equip_power = []
         gas_equip_sched = []
@@ -117,7 +117,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         shw_heating_target_temperature = []
         shw__schedule = ""
         area_per_occ = 0.0
-        area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
+        area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
         water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
         if water_fixture.nil?
           shw_watts_per_person = 0.0
@@ -155,6 +155,8 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         if total_occ_dens[0].nil?
           total_occ_dens[0] = 0.0
           occ_sched[0] = "NA"
+        else
+          total_occ_dens[0] = 1/total_occ_dens[0].to_f
         end
         header_output << "Occupancy Density (m2/person),"
         output << "#{total_occ_dens[0].round(4)},"
