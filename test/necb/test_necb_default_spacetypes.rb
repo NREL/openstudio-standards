@@ -6,7 +6,7 @@ require_relative '../helpers/minitest_helper'
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class NECB2011DefaultSpaceTypesTests < Minitest::Test
   #Standards
-  Templates = ['NECB2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
@@ -18,13 +18,15 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
-    standard = Standard.build('NECB2011')
+#    standard = Standard.build('NECB2015')
 
     header_output = ""
     output = ""
     #Iterate through all spacetypes/buildingtypes. 
     Templates.each do |template|
-      #Get spacetypes from googledoc. 
+      #Get spacetypes from googledoc.
+      standard = Standard.build(template)
+
       search_criteria = {
         "template" => template,
       }
@@ -244,6 +246,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         water_fixture.remove unless water_fixture.nil? 
             
       end #loop spacetypes
+      puts template
     end #loop Template
     #Write test report file. 
     test_result_file = File.join(File.dirname(__FILE__),'data','space_type_test_results.csv')
