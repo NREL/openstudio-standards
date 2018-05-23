@@ -53,18 +53,79 @@ class NECB2011ScheduleTests < Minitest::Test
         space = @model.getSpaces[0]
         space_area = space.floorArea #m2
 
- #       spacetype_occ_sched = OpenStudio::Model::ScheduleRuleset.new(@model)
-        spacetype_occ_sched = st.defaultScheduleSet.get.numberofPeopleSchedule.get
+        #People / Occupancy
+        total_occ_dens = []
+        occ_sched = []
+        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get}
+        assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
+
+        unless occ_sched[0].nil?
+          occ_sched[0].to_ScheduleRuleset.get.scheduleRules.each do |occ_day|
+            sched_times = []
+            sched_values = []
+            occ_times = occ_day.daySchedule.times
+            occ_values = occ_day.daySchedule.values
+          end
+        end
+
+        #Lights
+        lpd_sched = []
+        st.lights.each {|light| lpd_sched << light.schedule.get.name}
+        assert(lpd_sched.size <= 1 , "#{lpd_sched.size} light definitions given. Expecting <= 1.")
+
+        #Equipment -Electric
+        elec_equip_sched = []
+        st.electricEquipment.each {|elec_equip| elec_equip_sched << elec_equip.schedule.get.name}
+        assert( elec_equip_sched.size <= 1 , "#{elec_equip_sched.size} electric definitions given. Expecting <= 1." )
+
+        #Hot Water Equipment
+        hw_equip_power = []
+        hw_equip_sched = []
+        st.hotWaterEquipment.each {|equip| hw_equip_power << equip.powerPerFloorArea.get ; hw_equip_sched << equip.schedule.get.name}
+        assert( hw_equip_power.size <= 1 , "#{hw_equip_power.size} hw definitions given. Expecting <= 1." )
+
+        #SHW
+        shw_loop = OpenStudio::Model::PlantLoop.new(@model)
+        shw_peak_flow_per_area = []
+        shw_heating_target_temperature = []
+        shw__schedule = ""
+        area_per_occ = 0.0
+        area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
+        water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
+        if water_fixture.nil?
+          shw_watts_per_person = 0.0
+          shw__fraction_schedule = 0.0
+          shw_target_temperature_schedule = "NA"
+        else
+          shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
+          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
+          shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
+          # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
+          shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
+          shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+        end
+
+        occ_sched = st.defaultScheduleSet.get.numberofPeopleSchedule.get
         scheds = @model.getScheduleRulesets
         occ_sched_ruleset = nil
         scheds.each do |sched|
           if sched.name.get.to_s == spacetype_occ_sched.name.get.to_s
-            occ_sched_ruleset = sched.scheduleRules
-            puts occ_sched_ruleset
+            sched.scheduleRules.each do |sched_day|
+              sched_times = []
+              sched_values = []
+              sched_times = sched_day.daySchedule.times
+              sched_values = sched_day.daySchedule.values
+              puts "Schedule!"
+            end
           end
-          puts "Testing"
         end
+=begin
+        sched_times = []
+        sched_values = []
         sched_day = occ_sched_ruleset[0].daySchedule
+        sched_values = sched_day.values
+        sched_times = sched_day.times
+=end
 
         #        spacetype_occ_sched_name = st.defaultScheduleSet.get.numberofPeopleSchedule.get.name
 #        spacetype_occ_sched = st.defaultScheduleSet.get.numberofPeopleSchedule.get
