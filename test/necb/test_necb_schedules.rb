@@ -59,12 +59,15 @@ class NECB2011ScheduleTests < Minitest::Test
         st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get}
         assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
 
+        occ_array = []
         unless occ_sched[0].nil?
           occ_sched[0].to_ScheduleRuleset.get.scheduleRules.each do |occ_day|
-            sched_times = []
-            sched_values = []
-            occ_times = occ_day.daySchedule.times
-            occ_values = occ_day.daySchedule.values
+            sched_entry = {
+                "schedule_name" => occ_day.daySchedule.name.get,
+                "schedule_times" => occ_day.daySchedule.times,
+                "schedule_values" => occ_day.daySchedule.values
+            }
+            occ_array << sched_entry
           end
         end
 
@@ -98,6 +101,7 @@ class NECB2011ScheduleTests < Minitest::Test
           shw_target_temperature_schedule = "NA"
         else
           shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
+          shw_fraction_schedule_rules = water_fixture.flowRateFractionSchedule.get.to_ScheduleRuleset.get.scheduleRules
           shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
           shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
           # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
