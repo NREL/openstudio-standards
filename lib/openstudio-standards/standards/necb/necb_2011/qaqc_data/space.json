@@ -15,7 +15,8 @@
           "occupancy_per_area_people_per_m2": 0,
           "occupancy_schedule": null,
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -25,7 +26,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -35,7 +37,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -45,7 +48,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -55,7 +59,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -65,7 +70,8 @@
           "occupancy_per_area_people_per_m2": 0.133364907,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001893375
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001893375,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -75,7 +81,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -85,7 +92,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001142515
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001142515,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -95,7 +103,8 @@
           "occupancy_per_area_people_per_m2": 0.133364907,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004120874
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004120874,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -105,7 +114,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004286783
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004286783,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -115,7 +125,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -125,7 +136,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -135,7 +147,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -145,7 +158,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -155,7 +169,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -165,7 +180,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -175,7 +191,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -185,7 +202,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -195,7 +213,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -205,7 +224,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -215,7 +235,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -225,7 +246,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -235,7 +257,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -245,7 +268,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -255,7 +279,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -265,7 +290,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -275,7 +301,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -285,7 +312,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -295,7 +323,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -305,7 +334,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -315,7 +345,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006180727
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006180727,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -325,7 +356,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -335,7 +367,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -345,7 +378,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004272865
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004272865,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -355,7 +389,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -365,7 +400,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -375,7 +411,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009507954
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009507954,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -385,7 +422,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -395,7 +433,8 @@
           "occupancy_per_area_people_per_m2": 0.016684068,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003961647
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003961647,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -405,7 +444,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -415,7 +455,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -425,7 +466,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -435,7 +477,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -445,7 +488,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -455,7 +499,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -465,7 +510,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -475,7 +521,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -485,7 +532,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -495,7 +543,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006180727
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006180727,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -505,7 +554,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009507954
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009507954,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -515,7 +565,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002849321
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002849321,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -525,7 +576,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002849321
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002849321,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -535,7 +587,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -545,7 +598,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -555,7 +609,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -565,7 +620,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -575,7 +631,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -585,7 +642,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 19.99981419,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001428144
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001428144,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -595,7 +653,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002853216
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002853216,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -605,7 +664,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -615,7 +675,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -625,7 +686,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -635,7 +697,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007133752
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007133752,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -645,7 +708,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -655,7 +719,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -665,7 +730,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001072849,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -675,7 +741,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -685,7 +752,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -695,7 +763,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -705,7 +774,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -715,7 +785,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -725,7 +796,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -735,7 +807,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -745,7 +818,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -755,7 +829,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -765,7 +840,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -775,7 +851,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -785,7 +862,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -795,7 +873,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -805,7 +884,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -815,7 +895,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -825,7 +906,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -835,7 +917,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -845,7 +928,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -855,7 +939,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -865,7 +950,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -875,7 +961,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005455906
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005455906,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -885,7 +972,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -895,7 +983,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.01140843
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.01140843,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -905,7 +994,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005455906
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005455906,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -915,7 +1005,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.01140843
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.01140843,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -925,7 +1016,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -935,7 +1027,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004277465,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -945,7 +1038,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -955,7 +1049,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -965,7 +1060,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -975,7 +1071,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -985,7 +1082,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -995,7 +1093,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1005,7 +1104,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1015,7 +1115,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-*-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1025,7 +1126,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1035,7 +1137,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1045,7 +1148,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1055,7 +1159,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1065,7 +1170,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1075,7 +1181,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1085,7 +1192,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1095,7 +1203,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1105,7 +1214,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1115,7 +1225,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002853216
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002853216,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1125,7 +1236,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1135,7 +1247,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1145,7 +1258,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1155,7 +1269,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1165,7 +1280,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1175,7 +1291,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1185,7 +1302,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1195,7 +1313,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1205,7 +1324,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1215,7 +1335,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1225,7 +1346,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1235,7 +1357,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1245,7 +1368,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1255,7 +1379,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1265,7 +1390,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1275,7 +1401,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1285,7 +1412,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1295,7 +1423,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1305,7 +1434,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1315,7 +1445,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1325,7 +1456,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1335,7 +1467,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1345,7 +1478,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1355,7 +1489,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005706432
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005706432,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1365,7 +1500,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001191281
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001191281,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1375,7 +1511,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1385,7 +1522,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1395,7 +1533,8 @@
           "occupancy_per_area_people_per_m2": 0.000968752,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1405,7 +1544,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1415,7 +1555,8 @@
           "occupancy_per_area_people_per_m2": 0.133364907,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004120874
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004120874,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1425,7 +1566,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005692514,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1435,7 +1577,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1445,7 +1588,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1455,7 +1599,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004286783
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004286783,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1465,7 +1610,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001419649,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1475,7 +1621,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1485,7 +1632,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000710589
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000710589,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1495,7 +1643,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1505,7 +1654,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000631634,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1515,7 +1665,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002839298,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1525,7 +1676,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1535,7 +1687,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1545,7 +1698,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1555,7 +1709,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1565,7 +1720,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 1.499986062,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00854573,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1575,7 +1731,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1585,7 +1742,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1595,7 +1753,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1605,7 +1764,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1615,7 +1775,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1625,7 +1786,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1635,7 +1797,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1645,7 +1808,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1655,7 +1819,8 @@
           "occupancy_per_area_people_per_m2": 0.004951401,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1665,7 +1830,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1675,7 +1841,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1685,7 +1852,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001546575
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001546575,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1695,7 +1863,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003089824
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003089824,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1705,7 +1874,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003089824
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003089824,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1715,7 +1885,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001546575
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001546575,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1725,7 +1896,8 @@
           "occupancy_per_area_people_per_m2": 0.020020882,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00061863
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00061863,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1735,7 +1907,8 @@
           "occupancy_per_area_people_per_m2": 0.020020882,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00061863
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00061863,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1745,7 +1918,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1755,7 +1929,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1765,7 +1940,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1775,7 +1951,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000309315,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1785,7 +1962,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1795,7 +1973,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1805,7 +1984,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1815,7 +1995,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1825,7 +2006,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1835,7 +2017,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1845,7 +2028,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1855,7 +2039,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1865,7 +2050,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -1875,7 +2061,8 @@
           "occupancy_per_area_people_per_m2": 0.124969054,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1885,7 +2072,8 @@
           "occupancy_per_area_people_per_m2": 0.066628634,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.0019
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.0019,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1895,7 +2083,8 @@
           "occupancy_per_area_people_per_m2": 0.124969054,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1905,7 +2094,8 @@
           "occupancy_per_area_people_per_m2": 0.124969054,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001781,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1915,7 +2105,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1925,7 +2116,8 @@
           "occupancy_per_area_people_per_m2": 0.199993542,
           "occupancy_schedule": "NECB-I-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1935,7 +2127,8 @@
           "occupancy_per_area_people_per_m2": 0.124969054,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003562
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003562,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1945,7 +2138,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-D-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1955,7 +2149,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1965,7 +2160,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007599
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007599,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1975,7 +2171,8 @@
           "occupancy_per_area_people_per_m2": 0.000968752,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1985,7 +2182,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -1995,7 +2193,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2005,7 +2204,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2015,7 +2215,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2025,7 +2226,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00171,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2035,7 +2237,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000633
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000633,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2045,7 +2248,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.004274,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2055,7 +2259,8 @@
           "occupancy_per_area_people_per_m2": 0.066628634,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002058
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002058,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2065,7 +2270,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2075,7 +2281,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-C-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2085,7 +2292,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499930322,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002137,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2095,7 +2303,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2105,7 +2314,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2115,7 +2325,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009498
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009498,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2125,7 +2336,8 @@
           "occupancy_per_area_people_per_m2": 0.040041764,
           "occupancy_schedule": "NECB-F-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009498
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.009498,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2135,7 +2347,8 @@
           "occupancy_per_area_people_per_m2": 0.016684068,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 4.999953548,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003958
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.003958,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2145,7 +2358,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-G-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007915
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.007915,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2155,7 +2369,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-H-Occupancy",
           "electric_equipment_per_area_w_per_m2": 2.499976774,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006332
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.006332,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2165,7 +2380,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2175,7 +2391,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2185,7 +2402,8 @@
           "occupancy_per_area_people_per_m2": 0.099996771,
           "occupancy_schedule": "NECB-B-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.005462,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2195,7 +2413,8 @@
           "occupancy_per_area_people_per_m2": 0.000645835,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000095
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000095,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2205,7 +2424,8 @@
           "occupancy_per_area_people_per_m2": 0.000645835,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.999990712,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000095
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.000095,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2215,7 +2435,8 @@
           "occupancy_per_area_people_per_m2": 0.033368137,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 9.999907096,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.001425822,
+          "lpd_ratio": 1
         },
         {
           "template": "NECB 2011",
@@ -2225,7 +2446,8 @@
           "occupancy_per_area_people_per_m2": 0.050052205,
           "occupancy_schedule": "NECB-A-Occupancy",
           "electric_equipment_per_area_w_per_m2": 7.499940809,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.002138732,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -2235,7 +2457,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.99999211,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675,
+          "lpd_ratio": 0.9
         },
         {
           "template": "NECB 2011",
@@ -2245,7 +2468,8 @@
           "occupancy_per_area_people_per_m2": 0.010010441,
           "occupancy_schedule": "NECB-E-Occupancy",
           "electric_equipment_per_area_w_per_m2": 0.99999211,
-          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675
+          "service_water_heating_peak_flow_per_area_gal_per_h_ft2": 0.00142675,
+          "lpd_ratio": 0.9
         }
       ]
     }
