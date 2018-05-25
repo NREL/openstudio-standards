@@ -175,7 +175,7 @@ class NECB2011ScheduleTests < Minitest::Test
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'data','schedule_test_expected_results.json')
+    expected_result_file = File.join(File.dirname(__FILE__),'data','schedule_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
       "Schedule test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
