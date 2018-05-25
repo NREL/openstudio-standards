@@ -168,6 +168,14 @@ class NECB2011ScheduleTests < Minitest::Test
         st.remove
         shw_loop.remove
         water_fixture.remove unless water_fixture.nil?
+
+        @model.getScheduleRulesets.each do |sched_ruleset|
+          ruleset_name = sched_ruleset.name.get
+          if ruleset_name.start_with?("NECB")
+            puts sched_ruleset
+          end
+        end
+
       end #loop spacetypes
     end #loop Template
     #Write test report file. 
