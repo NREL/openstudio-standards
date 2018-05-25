@@ -74,4 +74,60 @@ class Standard
 
     return comp_infil_rate_m3_per_s
   end
+
+  # Chris Kirney 2018-05-17:  Not complete-do not call.  Start of method meant to help implement NECB2015 8.4.4.5.(5).
+  # The method starts by finding exterior surfaces which help enclose conditioned spaces.  It then removes the
+  # subsurfaces.  Though not implemented yet it was supposed to then put a window centered in the surface with a sill
+  # height and window height defined passed via sill_heght_m and window_height_m (0.9 m, and 1.8 m respectively for
+  # NECB2015).  The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
+  def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
+    max_angle = 91
+    min_angle = 89
+    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
+    vertical_surfaces.each do |vertical_surface|
+      vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
+        # Need to fix this so that error show up in right place
+        if vertical_subsurface.nil?
+          puts "Surface does not exist"
+        else
+          vertical_subsurface.remove
+        end
+      end
+      # corner_coords = vertical_surface.vertices
+      code_window_area = fdwr*vertical_surface.grossArea
+      code_window_width = code_window_area/window_height_m
+      min_z = 0
+      vertical_surface.vertices.each_with_index do |vertex, index|
+        if index == 0
+          min_z = vertex.z
+        elsif vertex.z < min_z
+          min_z = vertex.z
+        end
+      end
+      surface_centroid = vertical_surface.centroid
+      surface_normal = vertical_surface.outwardNormal
+    end
+  end
+
+  # Chris Kirney 2018-05-17:  This method searches through a model a returns vertical exterior surfaces which help
+  # enclose a conditioned space.
+  def find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
+    exposed_surfaces = []
+    model.getSpaces.sort.each do |space|
+      cooled = space_cooled?(space)
+      heated = space_heated?(space)
+      if heated || cooled
+        space.surfaces.sort.each do |surface|
+          next unless surface.surfaceType == 'Wall'
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          tilt_radian = surface.tilt
+          tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
+          if tilt_degrees <= max_angle and tilt_degrees >= min_angle
+            exposed_surfaces << surface
+          end
+        end
+      end
+    end
+    return exposed_surfaces
+  end
 end
