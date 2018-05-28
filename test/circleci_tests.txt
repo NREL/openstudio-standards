@@ -62,4 +62,4 @@ necb/test_necb_loop_rules.rb
 necb/test_necb_unitary_rules.rb
 necb/test_necb_waterheater_rules.rb
 necb/test_necb_weather.rb
-necb/single_test_necb_qaqc.rb
+necb/test_necb_qaqc_single.rb
