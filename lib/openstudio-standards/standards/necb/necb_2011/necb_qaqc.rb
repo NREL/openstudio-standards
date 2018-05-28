@@ -861,7 +861,8 @@ class NECB2011
 
   # checks space compliance
   # Re: lighting_per_area, occupancy_per_area, occupancy_schedule, electric_equipment_per_area
-  def necb_space_compliance(qaqc, csv_file_name = "#{File.dirname(__FILE__)}/necb_2011/data/necb_2011_spacetype_info.csv")
+
+  def necb_space_compliance(qaqc,csv_file_name = "#{File.dirname(__FILE__)}/data/necb_2011_spacetype_info.csv")
     #    #Padmassun's Code Start
     #csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
     puts csv_file_name
@@ -1419,8 +1420,9 @@ class NECB2011
     qaqc[:errors] = []
     qaqc[:unique_errors]=[]
 
-    if @template == 'NECB2011'
-      necb_space_compliance(qaqc, "#{File.dirname(__FILE__)}/necb_2011/data/necb_2011_spacetype_info.csv")
+
+    if @template == 'NECB2011'           
+      necb_space_compliance(qaqc,"#{File.dirname(__FILE__)}/data/necb_2011_spacetype_info.csv")
     end
 
     necb_envelope_compliance(qaqc)
