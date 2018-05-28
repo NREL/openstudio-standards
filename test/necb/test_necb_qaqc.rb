@@ -41,11 +41,12 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     "RetailStripmall",
     "SmallHotel",
     "SmallOffice",
-    "Warehouse"]
+    "Warehouse"
+  ]
 
   templates =  'NECB2011'
   climate_zones = 'NECB HDD Method'
-  epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+  epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
 
   start = Time.now
   run_argument_array = []
@@ -81,11 +82,13 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
 
     BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
-    model_run_simulation_and_log_errors(model, run_dir(test_name))
-    qaqc = BTAP.perform_qaqc(model)
-    File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc)) }
+    prototype_creator.model_run_simulation_and_log_errors(model, run_dir(test_name))
+    qaqc = prototype_creator.generate_qaqc(model)
+    qaqc = prototype_creator.necb_2011_qaqc(qaqc, model)
+    #write to json file.
+    File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     puts JSON.pretty_generate(qaqc)
   }
-  BTAP::FileIO.compile_qaqc_results("#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}")
+  # BTAP::FileIO.compile_qaqc_results("#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}")
   puts "completed in #{Time.now - start} secs"
 end
