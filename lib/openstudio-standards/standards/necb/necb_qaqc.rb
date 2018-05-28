@@ -24,6 +24,7 @@ class NECB2011
     surfaces.uniq!
 
     #Sort surfaces by type
+    surfaces = model.getSurfaces
     interior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(surfaces, ["Surface","Adiabatic"])
     interior_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(interior_surfaces, "Floor")
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(surfaces, "Outdoors")
@@ -256,19 +257,19 @@ class NECB2011
     #Store Envelope data.
     qaqc[:envelope] = {}
     #Get Areas
-    qaqc[:envelope][:outdoor_walls_area_m2] = outdoor_walls.sum(&:netArea)
-    qaqc[:envelope][:outdoor_roofs_area_m2] = outdoor_roofs.sum(&:netArea)
-    qaqc[:envelope][:outdoor_floors_area_m2] = outdoor_floors.sum(&:netArea)
-    qaqc[:envelope][:ground_walls_area_m2] = ground_walls.sum(&:netArea)
-    qaqc[:envelope][:ground_roofs_area_m2] = ground_roofs.sum(&:netArea)
-    qaqc[:envelope][:ground_floors_area_m2] = ground_floors.sum(&:netArea)
-    qaqc[:envelope][:interior_floors_area_m2] = interior_floors.sum(&:netArea)
+    qaqc[:envelope][:outdoor_walls_area_m2] = outdoor_walls.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:outdoor_roofs_area_m2] = outdoor_roofs.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:outdoor_floors_area_m2] = outdoor_floors.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:ground_walls_area_m2] = ground_walls.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:ground_roofs_area_m2] = ground_roofs.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:ground_floors_area_m2] = ground_floors.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:interior_floors_area_m2] = interior_floors.inject(0){|sum,e| sum + e.netArea() }
 
     #Subsurface areas
-    qaqc[:envelope][:windows_area_m2] = windows.sum(&:netArea)
-    qaqc[:envelope][:skylights_area_m2] = skylights.sum(&:netArea)
-    qaqc[:envelope][:doors_area_m2] = doors.sum(&:netArea)
-    qaqc[:envelope][:overhead_doors_area_m2] = overhead_doors.sum(&:netArea)
+    qaqc[:envelope][:windows_area_m2] = windows.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:skylights_area_m2] = skylights.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:doors_area_m2] = doors.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:overhead_doors_area_m2] = overhead_doors.inject(0){|sum,e| sum + e.netArea() }
 
     #Total Building Surface Area.
     qaqc[:envelope][:total_exterior_area_m2] = qaqc[:envelope][:outdoor_walls_area_m2] +
@@ -308,16 +309,16 @@ class NECB2011
     qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors).round(4) if overhead_doors.size > 0
 
     # #Average Conductances for building whole weight factors
-    o_wall_cond_weight = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_walls_area_m2]
-    o_roof_cond_weight = qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_roofs_area_m2]
-    o_floor_cond_weight = qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_floors_area_m2]
-    g_wall_cond_weight = qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_walls_area_m2]
-    g_roof_cond_weight = qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_roofs_area_m2]
-    g_floor_cond_weight = qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_floors_area_m2]
-    win_cond_weight = qaqc[:envelope][:windows_average_conductance_w_per_m2_k] * qaqc[:envelope][:windows_area_m2]
-    sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2]
-    door_cond_weight = qaqc[:envelope][:doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:doors_area_m2]
-    overhead_door_cond_weight = qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:overhead_doors_area_m2]
+    outdoor_walls.size  > 0 ? o_wall_cond_weight = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_walls_area_m2] : o_wall_cond_weight = 0
+    outdoor_roofs.size  > 0 ? o_roof_cond_weight = qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_roofs_area_m2] : o_roof_cond_weight = 0
+    outdoor_floors.size > 0 ? o_floor_cond_weight = qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_floors_area_m2]: o_floor_cond_weight = 0
+    ground_walls.size > 0   ? g_wall_cond_weight = qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_walls_area_m2] : g_wall_cond_weight = 0
+    ground_roofs.size > 0   ? g_roof_cond_weight = qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_roofs_area_m2] : g_roof_cond_weight = 0
+    ground_floors.size > 0  ? g_floor_cond_weight = qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_floors_area_m2] : g_floor_cond_weight = 0
+    windows.size > 0        ? win_cond_weight = qaqc[:envelope][:windows_average_conductance_w_per_m2_k] * qaqc[:envelope][:windows_area_m2] : win_cond_weight = 0
+    doors.size > 0 ? sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2] : sky_cond_weight = 0
+    overhead_doors.size > 0 ? door_cond_weight = qaqc[:envelope][:doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:doors_area_m2] : door_cond_weight = 0
+    overhead_doors.size > 0 ?overhead_door_cond_weight = qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:overhead_doors_area_m2] : overhead_door_cond_weight = 0
 
 
     # Building Average Conductance
@@ -778,16 +779,15 @@ class NECB2011
 
     qaqc[:code_metrics] = {}
     #TEDI
-    qaqc[:code_metrics][:building_tedi_gj_per_m2] = (qaqc[:end_uses][:heating_gj] +
-        qaqc[:end_uses][:cooling_gj]
+    qaqc[:code_metrics][:building_tedi_gj_per_m2] = ( qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
     #Mech TEDI?
-    qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses][:fans_gj] +
-        qaqc[:end_uses][:pumps_gj] +
-        qaqc[:end_uses][:heat_rejection_gj] +
-        qaqc[:end_uses][:humidification_gj] +
-        qaqc[:end_uses][:heat_recovery_gj]
-    ) / qaqc[:building][:conditioned_floor_area_m2 ]
+    qaqc[:code_metrics][:building_medi_gj_per_m2] = (qaqc[:end_uses]['fans_gj'] +
+        qaqc[:end_uses]['pumps_gj'] +
+        qaqc[:end_uses]['heat_rejection_gj'] +
+        qaqc[:end_uses]['humidification_gj'] +
+        qaqc[:end_uses]['heat_recovery_gj']
+    ) / qaqc[:building][:conditioned_floor_area_m2]
 
     #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
