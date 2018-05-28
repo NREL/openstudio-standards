@@ -11,20 +11,13 @@ class NECB2011
     puts "\n\n\nOS_version is [#{os_version.strip}]"
     puts "\n\n\nEP_version is [#{eplus_version.strip}]"
 
-    #Get all surfaces that are attached to a conditioned space.
-    surfaces = []
-    model.getThermalZones.sort.each do |zone|
-      if (not zone.isConditioned.empty?) && zone.isConditioned.get
-        zone.spaces.each do |space|
-          surfaces.concat(space.surfaces)
-        end
-      end
-    end
+
     #Ensure all surfaces are unique.
-    surfaces.uniq!
+    surfaces = model.getSurfaces.sort
+
 
     #Sort surfaces by type
-    surfaces = model.getSurfaces
+
     interior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(surfaces, ["Surface","Adiabatic"])
     interior_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(interior_surfaces, "Floor")
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(surfaces, "Outdoors")
@@ -73,7 +66,7 @@ class NECB2011
     qaqc[:building][:number_of_stories] = model.getBuildingStorys.size
     # Store Geography Data
     qaqc[:geography] ={}
-    qaqc[:geography][:hdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).hdd18
+    qaqc[:geography][:hdd] = get_necb_hdd18(model)
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
     qaqc[:geography][:climate_zone] = BTAP::Compliance::NECB2011::get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
@@ -778,6 +771,12 @@ class NECB2011
     end
 
     qaqc[:code_metrics] = {}
+    qaqc[:code_metrics]['heating_gj']  = qaqc[:end_uses]['heating_gj']
+    qaqc[:code_metrics]['cooling_gj']  = qaqc[:end_uses]['cooling_gj']
+    qaqc[:code_metrics][:ep_conditioned_floor_area_m2] = qaqc[:building][:conditioned_floor_area_m2]
+    qaqc[:code_metrics][:os_conditioned_floor_area_m2] = qaqc[:envelope][:interior_floors_area_m2] +
+        qaqc[:envelope][:outdoor_floors_area_m2] +
+        qaqc[:envelope][:ground_floors_area_m2]
     #TEDI
     qaqc[:code_metrics][:building_tedi_gj_per_m2] = ( qaqc[:end_uses]['heating_gj'] + qaqc[:end_uses]['cooling_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
@@ -999,6 +998,7 @@ class NECB2011
     # Exterior Opaque
     necb_section_name = get_qaqc_table("exterior_opaque_compliance")['refs'].join(",")
     climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    puts "HDD #{qaqc[:geography][:hdd]}"
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
