@@ -160,6 +160,43 @@ class NECB2011ScheduleTests < Minitest::Test
           space_sched_array << shw_entry
         end
 
+        heat_sched = []
+        cool_sched = []
+        @model.getScheduleRulesets.each do |sched_ruleset|
+          ruleset_name = sched_ruleset.name.get
+          if sched_ruleset.name.get.start_with?("NECB")
+            if sched_ruleset.name.get.end_with?("Thermostat Setpoint-Heating")
+              sched_ruleset.scheduleRules.sort.each do |heat_set_day|
+                sched_entry = {
+                    "ScheduleName" => heat_set_day.daySchedule.name.get,
+                    "ScheduleTimes" => heat_set_day.daySchedule.times,
+                    "ScheduleValues" => heat_set_day.daySchedule.values
+                }
+                heat_sched << sched_entry
+              end
+              heat_entry = {
+                  "ScheduleType" => sched_ruleset.name.get,
+                  "Schedules" => heat_sched
+              }
+              space_sched_array << heat_entry
+            elsif sched_ruleset.name.get.end_with?("Thermostat Setpoint-Cooling")
+              sched_ruleset.scheduleRules.sort.each do |cool_set_day|
+                sched_entry = {
+                    "ScheduleName" => cool_set_day.daySchedule.name.get,
+                    "ScheduleTimes" => cool_set_day.daySchedule.times,
+                    "ScheduleValues" => cool_set_day.daySchedule.values
+                }
+                cool_sched << sched_entry
+              end
+              cool_entry = {
+                  "ScheduleType" => sched_ruleset.name.get,
+                  "Schedules" => cool_sched
+              }
+              space_sched_array << cool_entry
+            end
+          end
+        end
+
         unless space_sched_array.empty?
           output_array << space_sched_array
         end
@@ -168,14 +205,6 @@ class NECB2011ScheduleTests < Minitest::Test
         st.remove
         shw_loop.remove
         water_fixture.remove unless water_fixture.nil?
-
-        @model.getScheduleRulesets.each do |sched_ruleset|
-          ruleset_name = sched_ruleset.name.get
-          if ruleset_name.start_with?("NECB")
-            puts sched_ruleset
-          end
-        end
-
       end #loop spacetypes
     end #loop Template
     #Write test report file. 
