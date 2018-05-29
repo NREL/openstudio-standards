@@ -876,47 +876,50 @@ class NECB2011
         space_type = (space[:space_type_name].to_s.rpartition(' WholeBuilding'))[0].strip
         building_type = 'WholeBuilding'
       end
-      row = look_up_csv_data(csv_file_name, {2 => space_type, 1 => building_type})
-      if row.nil?
-        #raise ("space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]")
-        qaqc[:ruby_warnings] << "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
-        puts "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
-      else
-        #correct the data from the csv file to include a multiplier of 0.9 for specific space types.
 
-        reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
-                           "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E",
-                           "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts",
-                           "Locker room", "Retail - dressing/fitting", "Locker room-sch-A", "Locker room-sch-B", "Locker room-sch-C",
-                           "Locker room-sch-D", "Locker room-sch-E", "Locker room-sch-F", "Locker room-sch-G", "Locker room-sch-H",
-                           "Locker room-sch-I", "Office - open plan - occsens", "Office - enclosed - occsens", "Storage area - occsens",
-                           "Hospital - medical supply - occsens", "Storage area - refrigerated - occsens"]
-
-        if reduceLPDSpaces.include?(space_type)
-          row[3] = row[3]*0.9
-          puts "\n============================\nspace_type: #{space_type}\n============================\n"
-        end
-
-        # Start of Space Compliance
-        necb_section_name = "NECB2011-Section 8.4.3.6"
-        data = {}
-        data[:lighting_per_area] = [row[3], '==', space[:lighting_w_per_m2], "Table 4.2.1.6", 1] unless space[:lighting_w_per_m2].nil?
-        data[:occupancy_per_area] = [row[4], '==', space[:occ_per_m2], "Table A-8.4.3.3.1", 3] unless space[:occ_per_m2].nil?
-        data[:occupancy_schedule] = [row[5], '==', space[:occupancy_schedule], "Table A-8.4.3.3.1", nil] unless space[:occupancy_schedule].nil?
-        data[:electric_equipment_per_area] = [row[6], '==', space[:electric_w_per_m2], "Table A-8.4.3.3.1", 1] unless space[:electric_w_per_m2].nil?
-        data.each do |key, value|
-          #puts key
-          necb_section_test(
-              qaqc,
-              value[0],
-              value[1],
-              value[2],
-              value[3],
-              "[SPACE][#{space[:name]}]-[TYPE:][#{space_type}]#{key}",
-              value[4]
-          )
-        end
-      end #space Compliance
+      # get_qaqc_table(table_name, search_criteria = nil)
+      qaqc_table = get_qaqc_table("space_compliance", {"building_type" => building_type, "space_type" => space_type}).first
+      # row = look_up_csv_data(csv_file_name,{2 => space_type, 1 => building_type})
+      # if row.nil?
+      #   #raise ("space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]")
+      #   qaqc[:ruby_warnings] << "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
+      #   puts "space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]"
+      # else
+      #   #correct the data from the csv file to include a multiplier of 0.9 for specific space types.
+        
+      #   reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+      #     "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E", 
+      #     "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts", 
+      #     "Locker room", "Retail - dressing/fitting","Locker room-sch-A","Locker room-sch-B","Locker room-sch-C",
+      #     "Locker room-sch-D","Locker room-sch-E","Locker room-sch-F","Locker room-sch-G","Locker room-sch-H",
+      #     "Locker room-sch-I", "Office - open plan - occsens", "Office - enclosed - occsens", "Storage area - occsens",
+      #     "Hospital - medical supply - occsens", "Storage area - refrigerated - occsens"]
+        
+      #   if reduceLPDSpaces.include?(space_type)
+      #     row[3] = row[3]*0.9
+      #     puts "\n============================\nspace_type: #{space_type}\n============================\n"
+      #   end
+        
+      #   # Start of Space Compliance
+      #   necb_section_name = "NECB2011-Section 8.4.3.6"
+      #   data = {}
+      #   data[:lighting_per_area]            = [ row[3],'==',space[:lighting_w_per_m2] , "Table 4.2.1.6"     ,1 ] unless space[:lighting_w_per_m2].nil?
+      #   data[:occupancy_per_area]           = [ row[4],'==',space[:occ_per_m2]        , "Table A-8.4.3.3.1" ,3 ] unless space[:occ_per_m2].nil?
+      #   data[:occupancy_schedule]           = [ row[5],'==',space[:occupancy_schedule], "Table A-8.4.3.3.1" ,nil ] unless space[:occupancy_schedule].nil?
+      #   data[:electric_equipment_per_area]  = [ row[6],'==',space[:electric_w_per_m2] , "Table A-8.4.3.3.1" ,1 ] unless space[:electric_w_per_m2].nil?
+      #   data.each do |key,value|
+      #     #puts key
+      #     necb_section_test(
+      #       qaqc,
+      #       value[0],
+      #       value[1],
+      #       value[2],
+      #       value[3],
+      #       "[SPACE][#{space[:name]}]-[TYPE:][#{space_type}]#{key}",
+      #       value[4]
+      #     )
+      #   end
+      # end#space Compliance
     end
     #Padmassun's Code End
   end
