@@ -68,6 +68,7 @@ class NECB2011ScheduleTests < Minitest::Test
         st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get}
         assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
 
+        #Get occupancy rules from default occupancy ruleset and add to schedule array for this space type.
         unless occ_sched[0].nil?
           occ_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |occ_day|
             sched_entry = {
@@ -90,6 +91,7 @@ class NECB2011ScheduleTests < Minitest::Test
         st.lights.each {|light| lpd_sched << light.schedule.get}
         assert(lpd_sched.size <= 1 , "#{lpd_sched.size} light definitions given. Expecting <= 1.")
 
+        #Get lighting rules from default lighting ruleset and add to schedule array for this space type.
         unless lpd_sched[0].nil?
           lpd_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |lpd_day|
             sched_entry = {
@@ -112,6 +114,7 @@ class NECB2011ScheduleTests < Minitest::Test
         st.electricEquipment.each {|elec_equip| elec_equip_sched << elec_equip.schedule.get}
         assert( elec_equip_sched.size <= 1 , "#{elec_equip_sched.size} electric definitions given. Expecting <= 1." )
 
+        #Get electrical equipment rules from default electrical equipment ruleset and add to schedule array for this space type.
         unless elec_equip_sched[0].nil?
           elec_equip_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |elec_day|
             sched_entry = {
@@ -143,6 +146,9 @@ class NECB2011ScheduleTests < Minitest::Test
         area_per_occ = 0.0
         area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
         water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
+
+        #Get shw schedule rules from shw equipment for this space type and add to schedule array for this space type.
+
         unless water_fixture.nil?
           shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
           water_fixture.flowRateFractionSchedule.get.to_ScheduleRuleset.get.scheduleRules.sort.each do |shw_day|
@@ -160,6 +166,8 @@ class NECB2011ScheduleTests < Minitest::Test
           space_sched_array << shw_entry
         end
 
+        # Cycle through rulesets and determine which are the NECB heating and cooling setpoint schedules.  Get the
+        # appropriate rules from these schedules and add them to the schedule array for this space type.
         heat_sched = []
         cool_sched = []
         @model.getScheduleRulesets.sort.each do |sched_ruleset|
@@ -196,6 +204,8 @@ class NECB2011ScheduleTests < Minitest::Test
             end
           end
         end
+
+        # Add the schedules for this spacetype to giant output array.
 
         unless space_sched_array.empty?
           output_array << space_sched_array
