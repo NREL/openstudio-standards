@@ -29,9 +29,9 @@ end
 class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   building_types = [
-    # "FullServiceRestaurant",
+      "FullServiceRestaurant",
     # "LargeHotel",
-    "LargeOffice",
+    # "LargeOffice",
     # "MediumOffice",
     # "MidriseApartment",
     # "Outpatient",
@@ -86,7 +86,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     qaqc = prototype_creator.generate_qaqc(model)
     qaqc = prototype_creator.necb_2011_qaqc(qaqc, model)
     #write to json file.
-    File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
+    File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc, {:allow_nan => true})) }
     puts JSON.pretty_generate(qaqc)
   }
   # BTAP::FileIO.compile_qaqc_results("#{File.dirname(__FILE__)}/output#{Time.now.strftime("%m-%d")}")

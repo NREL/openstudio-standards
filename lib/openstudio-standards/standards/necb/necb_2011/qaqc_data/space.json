@@ -3,9 +3,12 @@
     {
       "name": "space_compliance",
       "data_type": "table",
-      "refs": [
-        "NECB2011-Section 8.4.3.6"
-      ],
+      "refs": {
+        "lighting_per_area_w_per_m2": "Table 4.2.1.6",
+        "occupancy_per_area_people_per_m2": "Table A-8.4.3.3.1",
+        "occupancy_schedule": "Table A-8.4.3.3.1",
+        "electric_equipment_per_area_w_per_m2": "Table A-8.4.3.3.1"
+      },
       "table": [
         {
           "template": "NECB 2011",
