@@ -168,12 +168,12 @@ class NECB2011ScheduleTests < Minitest::Test
 
         # Cycle through rulesets and determine which are the NECB heating and cooling setpoint schedules.  Get the
         # appropriate rules from these schedules and add them to the schedule array for this space type.
-        heat_sched = []
-        cool_sched = []
+
         @model.getScheduleRulesets.sort.each do |sched_ruleset|
           ruleset_name = sched_ruleset.name.get
           if sched_ruleset.name.get.start_with?("NECB")
             if sched_ruleset.name.get.end_with?("Thermostat Setpoint-Heating")
+              heat_sched = []
               sched_ruleset.scheduleRules.sort.each do |heat_set_day|
                 sched_entry = {
                     "ScheduleName" => heat_set_day.daySchedule.name.get,
@@ -188,6 +188,7 @@ class NECB2011ScheduleTests < Minitest::Test
               }
               space_sched_array << heat_entry
             elsif sched_ruleset.name.get.end_with?("Thermostat Setpoint-Cooling")
+              cool_sched = []
               sched_ruleset.scheduleRules.sort.each do |cool_set_day|
                 sched_entry = {
                     "ScheduleName" => cool_set_day.daySchedule.name.get,
@@ -203,6 +204,9 @@ class NECB2011ScheduleTests < Minitest::Test
               space_sched_array << cool_entry
             end
           end
+          # remove the the schedule ruleset when done with it.  This prevents irrelevant schedules being carried over
+          # to the next space type test.
+          sched_ruleset.remove
         end
 
         # Add the schedules for this spacetype to giant output array.
