@@ -29,7 +29,7 @@ end
 class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   building_types = [
-      "FullServiceRestaurant",
+     "FullServiceRestaurant"
     # "LargeHotel",
     # "LargeOffice",
     # "MediumOffice",
@@ -46,7 +46,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   templates =  'NECB2011'
   climate_zones = 'NECB HDD Method'
-  epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
+  epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
 
   start = Time.now
   run_argument_array = []
