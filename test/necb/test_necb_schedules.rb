@@ -162,7 +162,7 @@ class NECB2011ScheduleTests < Minitest::Test
 
         heat_sched = []
         cool_sched = []
-        @model.getScheduleRulesets.each do |sched_ruleset|
+        @model.getScheduleRulesets.sort.each do |sched_ruleset|
           ruleset_name = sched_ruleset.name.get
           if sched_ruleset.name.get.start_with?("NECB")
             if sched_ruleset.name.get.end_with?("Thermostat Setpoint-Heating")
