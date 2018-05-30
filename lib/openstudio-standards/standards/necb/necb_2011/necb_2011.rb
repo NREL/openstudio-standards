@@ -476,7 +476,7 @@ class NECB2011 < Standard
     return true
   end
 
-  def generate_qaqc(model)
+  def init_qaqc(model)
     puts "\n\nGenerating qaqc.json...\n\n"
     super(model)
   end

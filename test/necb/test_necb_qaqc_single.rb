@@ -83,8 +83,8 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
     BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
     prototype_creator.model_run_simulation_and_log_errors(model, run_dir(test_name))
-    qaqc = prototype_creator.generate_qaqc(model)
-    qaqc = prototype_creator.necb_2011_qaqc(qaqc, model)
+    qaqc = prototype_creator.init_qaqc(model)
+    qaqc = prototype_creator.necb_qaqc(qaqc, model)
     #write to json file.
     File.open("#{output_folder}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc, {:allow_nan => true})) }
     puts JSON.pretty_generate(qaqc)

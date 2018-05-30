@@ -1,7 +1,7 @@
 class NECB2011
 
   # Generates the base qaqc hash.
-  def generate_qaqc(model)
+  def init_qaqc(model)
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
@@ -790,7 +790,7 @@ class NECB2011
 
     #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
-    necb_2011_qaqc(qaqc, model) if @template == "NECB2011"
+    necb_qaqc(qaqc, model) if @template == "NECB2011"
     #sanity_check(qaqc)
 
     return qaqc
@@ -1442,8 +1442,8 @@ class NECB2011
     end
   end
 
-  def necb_2011_qaqc(qaqc, model)
-    puts "\n\nin necb_2011_qaqc now\n\n"
+  def necb_qaqc(qaqc, model)
+    puts "\n\nin necb_qaqc now\n\n"
     #Now perform basic QA/QC on items for NECB2011
     qaqc[:information] = []
     qaqc[:warnings] =[]
