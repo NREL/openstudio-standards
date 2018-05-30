@@ -170,7 +170,7 @@ class NECB2011 < Standard
   end
 
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, performQAQC = false)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
@@ -231,12 +231,6 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-
-    if performQAQC
-      qaqc = generate_qaqc(model)
-      puts "Saving qaqc.jason file to #{sizing_run_dir}/qaqc.json"
-      File.open("#{sizing_run_dir}/qaqc.json", 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
-    end
     # If measure model is passed, then replace measure model with new model created here.
     if measure_model.nil?
       return model
