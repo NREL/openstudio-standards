@@ -131,8 +131,21 @@ class NECB2011 < Standard
     end
   end
 
-
+  # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
   def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
+  end
+
+  # Created this method so that additional methods can be addded for bulding the prototype model in later
+  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
+  def build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
@@ -193,13 +206,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    # If measure model is passed, then replace measure model with new model created here.
-    if measure_model.nil?
-      return model
-    else
-      model_replace_model(measure_model, model)
-      return measure_model
-    end
+    model
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
