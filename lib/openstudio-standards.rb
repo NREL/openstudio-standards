@@ -66,6 +66,9 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/necb_2011/electrical_power_systems_and_motors"
   require_relative "#{stds}/necb/necb_2011/beps_compliance_path"
 
+  # NECB QAQC
+  require_relative "#{stds}/necb/necb_2011/necb_qaqc.rb"
+  
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004"
