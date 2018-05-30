@@ -882,7 +882,7 @@ class NECB2011
         puts "\n#{qaqc_table}\n"
         necb_section_name = get_qaqc_table("space_compliance")['refs'][compliance_var]
         tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
-        puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
+        # puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
         if compliance_var =="lighting_per_area_w_per_m2"
           result_value = space[:lighting_w_per_m2]
         elsif compliance_var =="occupancy_per_area_people_per_m2"
