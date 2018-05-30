@@ -101,4 +101,11 @@ class NECB2015
     return successfully_set_all_properties
   end
 
+  # Searches through any hydronic loops and applies the maxmimum total pump power by modifying the pump design power consumption.
+  # This is as per NECB2015 5.2.6.3.(1)
+  def apply_maximum_loop_pump_power(model)
+    test_var = @standards_data['max_total_loop_pump_power']['table']
+    return model
+  end
+
 end
