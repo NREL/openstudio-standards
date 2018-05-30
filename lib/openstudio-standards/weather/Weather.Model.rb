@@ -508,7 +508,6 @@ module BTAP
       # @param model [OpenStudio::model::Model] A model object
       # @return [String] log
       def set_weather_file(model, runner = nil)
-        raise 'hell'
         BTAP.runner_register('Info', 'BTAP::Environment::WeatherFile::set_weather', runner)
         OpenStudio::Model::WeatherFile.setWeatherFile(model, @epw_file)
         building_name = model.building.get.name
