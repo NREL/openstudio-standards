@@ -877,8 +877,35 @@ class NECB2011
         building_type = 'WholeBuilding'
       end
 
-      # get_qaqc_table(table_name, search_criteria = nil)
-      qaqc_table = get_qaqc_table("space_compliance", {"building_type" => building_type, "space_type" => space_type}).first
+      ["lighting_per_area_w_per_m2", "occupancy_per_area_people_per_m2", "occupancy_schedule", "electric_equipment_per_area_w_per_m2"].each {|compliance_var|
+        qaqc_table = get_qaqc_table("space_compliance", {"building_type" => building_type, "space_type" => space_type}).first
+        puts "\n#{qaqc_table}\n"
+        necb_section_name = get_qaqc_table("space_compliance")['refs'][compliance_var]
+        tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
+        puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
+        if compliance_var =="lighting_per_area_w_per_m2"
+          result_value = space[:lighting_w_per_m2]
+        elsif compliance_var =="occupancy_per_area_people_per_m2"
+          result_value = space[:occ_per_m2]
+        elsif compliance_var =="occupancy_schedule"
+          result_value = space[:occupancy_schedule]
+        elsif compliance_var =="electric_equipment_per_area_w_per_m2"
+          result_value = space[:electric_w_per_m2]
+        end
+
+        test_text = "[ENVELOPE] #{compliance_var}"
+        next if result_value.nil?
+        necb_section_test(
+            qaqc,
+            result_value,
+            '==',
+            qaqc_table[compliance_var],
+            necb_section_name,
+            test_text,
+            tolerance
+        )
+      }
+
       # row = look_up_csv_data(csv_file_name,{2 => space_type, 1 => building_type})
       # if row.nil?
       #   #raise ("space type of [#{space_type}] and/or building type of [#{building_type}] was not found in the excel sheet for space: [#{space[:name]}]")

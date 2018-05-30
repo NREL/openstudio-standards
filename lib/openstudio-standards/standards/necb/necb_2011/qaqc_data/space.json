@@ -9,6 +9,12 @@
         "occupancy_schedule": "Table A-8.4.3.3.1",
         "electric_equipment_per_area_w_per_m2": "Table A-8.4.3.3.1"
       },
+      "tolerance": {
+        "lighting_per_area_w_per_m2": 1,
+        "occupancy_per_area_people_per_m2": 3,
+        "occupancy_schedule": null,
+        "electric_equipment_per_area_w_per_m2": 1
+      },
       "table": [
         {
           "template": "NECB 2011",
