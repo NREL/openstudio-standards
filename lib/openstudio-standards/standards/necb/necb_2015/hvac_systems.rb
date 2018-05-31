@@ -104,7 +104,31 @@ class NECB2015
   # Searches through any hydronic loops and applies the maxmimum total pump power by modifying the pump design power consumption.
   # This is as per NECB2015 5.2.6.3.(1)
   def apply_maximum_loop_pump_power(model)
-    test_var = @standards_data['max_total_loop_pump_power']['table']
+    testdata = @standards_data['max_total_loop_pump_power']['table']
+    plant_loops = model.getPlantLoops
+    return model if plant_loops.nil?
+    plant_loops.each do |plantloop|
+      next if plant_loop_swh_loop?(plantloop) == true
+      pumps = []
+      max_powertoload = 0
+      plantloop.supplyComponents.each do |supplycomp|
+        supplycomp_type = supplycomp.iddObjectType.valueName.to_s
+        case supplycomp_type
+          when 'OS_Boiler_HotWater'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heating')['total_normalized_pump_power_wperkw']
+          when 'OS_Chiller_Electric_EIR'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Cooling')['total_normalized_pump_power_wperkw']
+          when 'OS_CoolingTower_SingleSpeed'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heat_rejection')['total_normalized_pump_power_wperkw']
+          when 'OS_Pump_VariableSpeed'
+            pumps << supplycomp
+          when 'OS_Pump_ConstantSpeed'
+            pumps << supplycomp
+        end
+      end
+      next if max_powertoload == 0 || pumps.length == 0
+      puts "hello"
+    end
     return model
   end
 
