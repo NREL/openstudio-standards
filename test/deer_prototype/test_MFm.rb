@@ -5,7 +5,7 @@ class TestMFm < CreateDEERPrototypeBuildingTest
   
   building_types = ['MFm']
   templates = ['DEER Pre-1975']
-  hvacs = ['NCEH','NCGF'] #[]
+  hvacs = ['DXGF', 'DXHP', 'NCEH', 'NCGF']
   climate_zones = ['CEC T24-CEC9']
   
   # building_types = ['MFm']
