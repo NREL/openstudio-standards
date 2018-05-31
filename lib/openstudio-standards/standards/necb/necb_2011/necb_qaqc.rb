@@ -790,7 +790,7 @@ class NECB2011
 
     #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
-    necb_qaqc(qaqc, model) if @template == "NECB2011"
+    # necb_qaqc(qaqc, model) if @template == "NECB2011"
     #sanity_check(qaqc)
 
     return qaqc
