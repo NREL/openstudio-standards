@@ -11,7 +11,7 @@
 
 # Rubocop output
 /.rubocop
-/.rubocop-https*
+/.rubocop-http*
 
 # Doc generation output
 /.yardoc

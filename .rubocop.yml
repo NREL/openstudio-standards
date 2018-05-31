@@ -13,7 +13,7 @@ AllCops:
     - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
 
 inherit_from:
-  - https://raw.githubusercontent.com/NREL/OpenStudio-resources/develop/styles/rubocop.yml
+  - http://s3.amazonaws.com/openstudio-resources/styles/rubocop.yml
 
 # =============== OpenStudio Standards Specific ===========
 # Ignore file name convention; choices based on OpenStudio C++ class names
