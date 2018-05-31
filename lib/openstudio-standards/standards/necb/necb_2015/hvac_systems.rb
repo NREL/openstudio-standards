@@ -113,7 +113,7 @@ class NECB2015
       max_powertoload = 0
       plantloop.supplyComponents.each do |supplycomp|
         supplycomp_type = supplycomp.iddObjectType.valueName.to_s
-        case supplycomp_type
+        case supplycomp.iddObjectType.valueName.to_s
           when 'OS_Boiler_HotWater'
             max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heating')['total_normalized_pump_power_wperkw']
           when 'OS_Chiller_Electric_EIR'
@@ -127,7 +127,26 @@ class NECB2015
         end
       end
       next if max_powertoload == 0 || pumps.length == 0
-      puts "hello"
+      comp_list = []
+      plantloop.demandComponents.each do |demandcomp|
+        case demandcomp.iddObjectType.valueName.to_s
+          when 'OS_Coil_Heating_Water_Baseboard'
+            comp_list << demandcomp
+          when 'OS_Coil_Cooling_Water'
+            comp_list << demandcomp
+          when 'OS_Coil_Heating_Water'
+            comp_list << demandcomp
+          when 'OS_Coil_CoolingTower_SingleSpeed'
+            comp_list << demandcomp
+        end
+        puts "What next?"
+      end
+      unless comp_list.empty?
+        comp_list.each do |comp|
+#          rel = comp.straightComponent.get
+#          puts rel
+        end
+      end
     end
     return model
   end
