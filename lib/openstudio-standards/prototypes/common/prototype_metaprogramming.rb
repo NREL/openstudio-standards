@@ -387,6 +387,8 @@ def create_deer_class_array
           'SVVG',
           'WLHP'],
       'MFm' => [
+          'DXGF',
+          'DXHP',
           'NCEH',
           'NCGF'],
       'MLI' => [
