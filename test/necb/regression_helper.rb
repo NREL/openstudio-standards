@@ -9,7 +9,7 @@ class NECBRegressionHelper < Minitest::Test
   end
 
 
-  def create_model_and_regression_test(building_type, epw_file, template)
+  def create_model_and_regression_test(building_type, epw_file, template, performQAQC = false)
     begin
       diffs = []
       test_dir = "#{File.dirname(__FILE__)}/output"
@@ -63,4 +63,5 @@ class NECBRegressionHelper < Minitest::Test
       return true, nil
     end
   end
+
 end

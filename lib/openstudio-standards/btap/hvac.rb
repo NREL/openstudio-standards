@@ -3686,6 +3686,10 @@ module BTAP
             cw_supply_inlet_node = cw_loop.supplyInletNode
             cw_supply_outlet_node = cw_loop.supplyOutletNode
             cw_pump.addToNode(cw_supply_inlet_node)
+            clg_tower.setDesignInletAirWetBulbTemperature(24.0)
+            clg_tower.setDesignInletAirDryBulbTemperature(35.0)
+            clg_tower.setDesignApproachTemperature(5.0)
+            clg_tower.setDesignRangeTemperature(6.0)
             cw_loop.addSupplyBranchForComponent(clg_tower)
             cw_loop.addSupplyBranchForComponent(clg_tower_bypass_pipe)
             cw_supply_outlet_pipe.addToNode(cw_supply_outlet_node)
