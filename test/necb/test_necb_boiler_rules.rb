@@ -16,53 +16,6 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     #boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_efficiencies_expected_results.csv')
     standard = Standard.build('NECB2011')
 
-=begin    
-    # Initialize hashes for storing expected boiler efficiency data from file
-    fuel_type_min_cap = {}
-    fuel_type_min_cap['Electricity'] = []
-    fuel_type_min_cap['NaturalGas'] = []
-    fuel_type_min_cap['FuelOil#2'] = []
-    fuel_type_max_cap = {}
-    fuel_type_max_cap['Electricity'] = []
-    fuel_type_max_cap['NaturalGas'] = []
-    fuel_type_max_cap['FuelOil#2'] = []
-    efficiency_type = {}
-    efficiency_type['Electricity'] = []
-    efficiency_type['NaturalGas'] = []
-    efficiency_type['FuelOil#2'] = []
-
-    # read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges
-    CSV.foreach(boiler_expected_result_file, headers: true) do |data|
-      fuel_type_min_cap[data['Fuel']] << data['Min Capacity (Btu per hr)']
-      fuel_type_max_cap[data['Fuel']] << data['Max Capacity (Btu per hr)']
-      if data['Annual Fuel Utilization Efficiency (AFUE)'].to_f > 0.0
-        efficiency_type[data['Fuel']] << 'Annual Fuel Utilization Efficiency (AFUE)'
-      elsif data['Thermal Efficiency'].to_f > 0.0
-        efficiency_type[data['Fuel']] << 'Thermal Efficiency'
-      elsif data['Combustion Efficiency'].to_f > 0.0
-        efficiency_type[data['Fuel']] << 'Combustion Efficiency'
-      end
-    end
-
-    # Use the expected boiler efficiency data to generate suitable equipment capacities for the test to cover all
-    # the relevant equipment capacity ranges
-    fuel_type_cap = {}
-    fuel_type_min_cap.each do |fuel, cap|
-      unless fuel_type_cap.key? fuel then fuel_type_cap[fuel] = [] end
-      if cap.size == 1
-        fuel_type_cap[fuel] << 10000.0
-      else
-        fuel_type_cap[fuel] << 0.5 * (OpenStudio.convert(fuel_type_min_cap[fuel][0].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/h', 'W').to_f)
-        if cap.size == 2
-          fuel_type_cap[fuel] << (OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/hr', 'W').to_f + 10000.0)
-        else
-          fuel_type_cap[fuel] << 0.5 * (OpenStudio.convert(fuel_type_min_cap[fuel][1].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(fuel_type_min_cap[fuel][2].to_f, 'Btu/hr', 'W').to_f)
-          fuel_type_cap[fuel] << (fuel_type_min_cap[fuel][2].to_f + 10000.0)
-        end
-      end
-    end
-=end
-
     # Generate the osm files for all relevant cases to generate the test data for system 1
     boiler_fueltypes = ['Electricity', 'NaturalGas', 'FuelOil#2']
     mau_type = true
@@ -217,7 +170,7 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     template = 'NECB2011'
     test_boiler_cap.each do |boiler_cap|
-      name = "sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
+      name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
       puts "***************************************#{name}*******************************************************\n"
       model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
@@ -291,11 +244,12 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
+    template = 'NECB2011'
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
@@ -311,7 +265,6 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
-    template = 'NECB2011'
     result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
