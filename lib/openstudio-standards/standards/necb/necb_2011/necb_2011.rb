@@ -6,6 +6,7 @@ class NECB2011 < Standard
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
+  attr_accessor :qaqc_data
 
 
   def load_standards_database_new()
@@ -29,6 +30,29 @@ class NECB2011 < Standard
       @standards_data[table['name']] = table
     end
     return @standards_data
+  end
+
+  def load_qaqc_database_new()
+    # Combine the data from the JSON files into a single hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    qaqc_data_dir = "#{top_dir}/qaqc_data/"
+    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
+    @qaqc_data = {}
+    @qaqc_data["tables"] = []
+    files.each do |file|
+      #puts "loading qaqc data from #{file}"
+      data = JSON.parse(File.read(file))
+      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        @qaqc_data["tables"] << data["tables"].first
+      else
+        @qaqc_data[data.keys.first] = data[data.keys.first]
+      end
+    end
+    #needed for compatibility of qaqc database format
+    @qaqc_data['tables'].each do |table|
+      @qaqc_data[table['name']] = table
+    end
+    return @qaqc_data
   end
 
 
@@ -67,11 +91,25 @@ class NECB2011 < Standard
     end
   end
 
+  def get_qaqc_table(table_name, search_criteria = nil)
+    return_objects = nil
+    object = @qaqc_data['tables'].detect {|table| table['name'] == table_name}
+    raise("could not find #{table_name} in qaqc table database. ") if object.nil? or object['table'].nil?
+    if search_criteria.nil?
+      #return object['table']
+      return object  # removed table beause need to use the object['refs']
+    else
+      return_objects = model_find_objects(object['table'], search_criteria)
+      return return_objects
+    end
+  end
+
 
   def initialize
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    @qaqc_data = self.load_qaqc_database_new()
     #puts "loaded these tables..."
     #puts @standards_data.keys.size
     #raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -445,5 +483,9 @@ class NECB2011 < Standard
     return true
   end
 
+  def init_qaqc(model)
+    puts "\n\nGenerating qaqc.json...\n\n"
+    super(model)
+  end
 
 end
