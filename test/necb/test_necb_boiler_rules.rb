@@ -275,10 +275,10 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_plfvsplr_curve_test_results.csv')
+    test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_boiler_plfvsplr_curve_test_results.csv")
     File.open(test_result_file, 'w') { |f| f.write(boiler_res_file_output_text) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_plfvsplr_curve_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_boiler_plfvsplr_curve_expected_results.csv")
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "test_boiler_plf_vs_plr_curve: Boiler plf vs plr curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
