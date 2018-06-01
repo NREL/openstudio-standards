@@ -151,6 +151,7 @@ class NECB2015
       plantloop.demandComponents.each do |demandcomp|
         case demandcomp.iddObjectType.valueName.to_s
           when 'OS_Coil_Heating_Water_Baseboard'
+#            anothertest = demandcomp.getAutosizedValue(self, '')
             test = demandcomp.to_CoilHeatingWaterBaseboard.get.isHeatingDesignCapacityAutosized
 #            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.isHeatingDesignCapacityAutosized
 #            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.heatingDesignCapacity
