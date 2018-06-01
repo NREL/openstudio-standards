@@ -18,7 +18,7 @@
 # **********************************************************************/
 
 
-require "#{File.dirname(__FILE__)}/btap"
+
 require 'fileutils'
 require 'csv'
 require 'securerandom'
@@ -78,18 +78,18 @@ module BTAP
     def self.get_find_files_from_folder_by_extension(folder, ext)
       Dir.glob("#{folder}/**/*#{ext}")
     end
-    
+
     def self.delete_files_in_folder_by_extention(folder,ext)
       BTAP::FileIO::get_find_files_from_folder_by_extension(folder, ext).each do |file|
         FileUtils.rm(file)
         #puts "#{file} deleted."
       end
     end
-    
+
     def self.find_file_in_folder_by_filename(folder,filename)
       Dir.glob("#{folder}/**/*#{filename}")
     end
-    
+
     def self.fix_url_to_path(url_string)
       if  url_string =~/\/([a-zA-Z]:.*)/
         return $1
@@ -159,10 +159,10 @@ module BTAP
       model.addObjects( new_model.toIdfFile.objects )
       BTAP::runner_register("Info",  "Model name is now #{model.building.get.name}.", runner)
     end
-    
-    
-    
-    
+
+
+
+
 
     # This method loads an Openstudio file into the model.
     # @author Phylroy A. Lopez
@@ -262,10 +262,10 @@ module BTAP
       # add new file to empty model
       model.addObjects( new_model.toIdfFile.objects )
       BTAP::runner_register("Info",  "Model name is now #{model.building.get.name}.", runner)
-      
-      
-      
-      
+
+
+
+
     end
 
     # This method will save the model to an osm file.
@@ -304,7 +304,7 @@ module BTAP
       }
     end
 
-   
+
 
 
 
@@ -312,7 +312,7 @@ module BTAP
       column_data = get_timeseries_arrays(sql, env_period, hourly_time_step, "Boiler Fan Coil Part Load Ratio")
     end
 
-    
+
     def self.convert_all_eso_to_csv(in_folder,out_folder)
       list_of_csv_files = Array.new
       FileUtils.mkdir_p(out_folder)
@@ -325,7 +325,7 @@ module BTAP
         #puts File.dirname(eso_file_path)
         Dir.chdir(File.dirname(eso_file_path))
         if File.exist?("eplustbl.htm")
-          File.open("dummy.rvi", 'w') {|f| f.write("") } 
+          File.open("dummy.rvi", 'w') {|f| f.write("") }
 
 
           system("#{BTAP::SimManager::ProcessManager::find_read_vars_eso()} dummy.rvi unlimited")
@@ -348,7 +348,7 @@ module BTAP
           #puts "copy sql results to #{out_folder}/#{runname}_eplusout.sql"
           FileUtils.cp("eplusout.sql","#{out_folder}/#{runname}_eplusout.sql")
 
-          
+
           list_of_csv_files << "#{out_folder}/#{runname}_eplusout.csv"
         end
         Dir.chdir(root_folder)
@@ -364,8 +364,8 @@ module BTAP
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_rows(file, searchHash)
       options = {
-        :headers =>       true,
-        :converters =>     :numeric }
+          :headers =>       true,
+          :converters =>     :numeric }
       table = CSV.read( file, options )
       # we'll save the matches here
       matches = nil
@@ -393,7 +393,7 @@ module BTAP
     # This method will read a CSV file and return the unique values in a given column header.
     # @author Phylroy Lopez
     # @param file The path to the csv file.
-    # @param colHeader The header name in teh csv file. 
+    # @param colHeader The header name in teh csv file.
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_unique_col_data(file, colHeader)
       column_data = Array.new
@@ -414,10 +414,10 @@ module BTAP
       #puts "reading #{csv_file} being processed"
       #reads csv file into memory.
       original = CSV.read(csv_file,
-        {
-          :headers =>       true, #This flag tell the parser that there are headers.
-          :converters =>     :numeric  #This tell it to convert string data into numeric when possible.
-        }
+                          {
+                              :headers =>       true, #This flag tell the parser that there are headers.
+                              :converters =>     :numeric  #This tell it to convert string data into numeric when possible.
+                          }
       )
       #puts "done reading #{csv_file} being processed"
       # We are going to collect the header names  that fit a pattern. But first we need to
@@ -482,18 +482,18 @@ module BTAP
       CSV.open("#{csv_file}.terminus_hourly.csv", 'w') do |csv|
         #Create header row for new terminus hourly file.
         csv << [
-          "Date/Time",
-          "water_heater_gas_rate_total",
-          "water_heater_electric_rate_total",
-          "water_heater_heating_rate_total",
-          "cooling_coil_electric_power_total",
-          "cooling_coil_total_cooling_rate_total",
-          "heating_coil_air_heating_rate_total",
-          "heating_coil_gas_rate_total",
-          "heating_coil_electric_power_total",
-          "plant_supply_heating_demand_rate_total",
-          "facility_total_electrical_demand_total",
-          "boiler_gas_rate_total"
+            "Date/Time",
+            "water_heater_gas_rate_total",
+            "water_heater_electric_rate_total",
+            "water_heater_heating_rate_total",
+            "cooling_coil_electric_power_total",
+            "cooling_coil_total_cooling_rate_total",
+            "heating_coil_air_heating_rate_total",
+            "heating_coil_gas_rate_total",
+            "heating_coil_electric_power_total",
+            "plant_supply_heating_demand_rate_total",
+            "facility_total_electrical_demand_total",
+            "boiler_gas_rate_total"
         ]
         original.each do |row|
 
@@ -517,18 +517,18 @@ module BTAP
 
           #Write the data out. Should match header row as above.
           csv << [
-            row["Date/Time"], #Time index is hardcoded because every file will have a "Date/Time" column header.
-            water_heater_gas_rate_total,
-            water_heater_electric_rate_total,
-            water_heater_heating_rate_total,
-            cooling_coil_electric_power_total,
-            cooling_coil_total_cooling_rate_total,
-            heating_coil_air_heating_rate_total,
-            heating_coil_gas_rate_total,
-            heating_coil_electric_power_total,
-            plant_supply_heating_demand_rate_total,
-            facility_total_electrical_demand_total,
-            boiler_gas_rate_headers_total
+              row["Date/Time"], #Time index is hardcoded because every file will have a "Date/Time" column header.
+              water_heater_gas_rate_total,
+              water_heater_electric_rate_total,
+              water_heater_heating_rate_total,
+              cooling_coil_electric_power_total,
+              cooling_coil_total_cooling_rate_total,
+              heating_coil_air_heating_rate_total,
+              heating_coil_gas_rate_total,
+              heating_coil_electric_power_total,
+              plant_supply_heating_demand_rate_total,
+              facility_total_electrical_demand_total,
+              boiler_gas_rate_headers_total
           ]
         end
       end
@@ -698,7 +698,7 @@ module BTAP
       full_json = []
       Dir.foreach("#{output_folder}") do |folder|
         next if folder == '.' or folder == '..'
-        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item| 
+        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item|
           puts "Reading #{output_folder}/#{folder}/qaqc.json"
           json = JSON.parse(File.read(item))
           json['eplusout_err']['warnings'] = json['eplusout_err']['warnings'].size
