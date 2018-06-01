@@ -112,40 +112,67 @@ class NECB2015
       pumps = []
       max_powertoload = 0
       plantloop.supplyComponents.each do |supplycomp|
-        supplycomp_type = supplycomp.iddObjectType.valueName.to_s
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_Boiler_HotWater'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heating')['total_normalized_pump_power_wperkw']
-          when 'OS_Chiller_Electric_EIR'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Cooling')['total_normalized_pump_power_wperkw']
-          when 'OS_CoolingTower_SingleSpeed'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heat_rejection')['total_normalized_pump_power_wperkw']
+          when 'OS_CentralHeatPumpSystem'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_HeatPump_WaterToWater_EquationFit_Cooling'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp
           when 'OS_Pump_ConstantSpeed'
             pumps << supplycomp
+          when 'OS_HeaderedPumps_ConstantSpeed'
+            pumps << supplycomp
+          when 'OS_HeaderedPumps_VariableSpeed'
+            pumps << supplycomp
+        end
+      end
+      unless max_powertoload > 0
+        case plantloop.sizingPlant.loopType
+          when 'Heating'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heating')['total_normalized_pump_power_wperkw']
+          when 'Cooling'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Cooling')['total_normalized_pump_power_wperkw']
+          when 'Condenser'
+            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heat_rejection')['total_normalized_pump_power_wperkw']
         end
       end
       next if max_powertoload == 0 || pumps.length == 0
       comp_list = []
+      total_capacity = 0
       plantloop.demandComponents.each do |demandcomp|
         case demandcomp.iddObjectType.valueName.to_s
           when 'OS_Coil_Heating_Water_Baseboard'
-            comp_list << demandcomp
-          when 'OS_Coil_Cooling_Water'
-            comp_list << demandcomp
-          when 'OS_Coil_Heating_Water'
-            comp_list << demandcomp
-          when 'OS_Coil_CoolingTower_SingleSpeed'
-            comp_list << demandcomp
+            test = demandcomp.to_CoilHeatingWaterBaseboard.get.isHeatingDesignCapacityAutosized
+#            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.isHeatingDesignCapacityAutosized
+#            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.heatingDesignCapacity
         end
+        if @demandcomp.respond_to?(:heatingDesignCapacity)
+          total_capacity += demandcomp.heatingDesignCapacity
+        end
+        if @demandcomp.methods.include?(:heatingDesignCapacity)
+          total_capacity += demandcomp.heatingDesignCapacity
+        end
+
+#        if demandcomp.referenceCapacity.respond_to?
+#          total_capacity += demandcomp.referenceCapacity
+#        end
+#        if demandcomp.nominalCapacity.respond_to?
+#          total_capacity += demandcomp.nominalCapacity
+#        end
         puts "What next?"
       end
-      unless comp_list.empty?
-        comp_list.each do |comp|
-#          rel = comp.straightComponent.get
-#          puts rel
-        end
+
+      pumps.each do |pump|
+        puts "hello"
       end
     end
     return model
