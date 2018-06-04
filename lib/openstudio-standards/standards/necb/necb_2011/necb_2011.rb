@@ -36,7 +36,7 @@ class NECB2011 < Standard
     # Combine the data from the JSON files into a single hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
     qaqc_data_dir = "#{top_dir}/qaqc_data/"
-    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
+    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc/qaqc_data/*.json").select {|e| File.file? e}
     @qaqc_data = {}
     @qaqc_data["tables"] = []
     files.each do |file|
@@ -481,11 +481,6 @@ class NECB2011 < Standard
       end
     end
     return true
-  end
-
-  def init_qaqc(model)
-    puts "\n\nGenerating qaqc.json...\n\n"
-    super(model)
   end
 
 end
