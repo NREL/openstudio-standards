@@ -1,7 +1,46 @@
 class NECB2011
 
+  attr_accessor :qaqc_data
+
+  def load_qaqc_database_new()
+    # Combine the data from the JSON files into a single hash
+    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
+    @qaqc_data = {}
+    @qaqc_data["tables"] = []
+    files.each do |file|
+      #puts "loading qaqc data from #{file}"
+      data = JSON.parse(File.read(file))
+      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        @qaqc_data["tables"] << data["tables"].first
+      else
+        @qaqc_data[data.keys.first] = data[data.keys.first]
+      end
+    end
+    #needed for compatibility of qaqc database format
+    @qaqc_data['tables'].each do |table|
+      @qaqc_data[table['name']] = table
+    end
+    return @qaqc_data
+  end
+
+  def get_qaqc_table(table_name, search_criteria = nil)
+    return_objects = nil
+    object = @qaqc_data['tables'].detect {|table| table['name'] == table_name}
+    raise("could not find #{table_name} in qaqc table database. ") if object.nil? or object['table'].nil?
+    if search_criteria.nil?
+      #return object['table']
+      return object  # removed table beause need to use the object['refs']
+    else
+      return_objects = model_find_objects(object['table'], search_criteria)
+      return return_objects
+    end
+  end
+
   # Generates the base qaqc hash.
   def init_qaqc(model)
+    # initialize qaqc
+    # Read the qaqc.json files
+    @qaqc_data = self.load_qaqc_database_new()
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
@@ -848,11 +887,11 @@ class NECB2011
 
       necb_section_test(
           qaqc,
-          20, #diff of 20%
-          '>=',
           percent_diff,
+          '<=',
+          20, #diff of 20%
           necb_section_name,
-          "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
+          "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}]; NECB value [#{hp_check}]; Percent Diff"
       )
     end
   end
