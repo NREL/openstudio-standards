@@ -788,10 +788,8 @@ class NECB2011
         qaqc[:end_uses]['heat_recovery_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
 
-    #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
-    # necb_qaqc(qaqc, model) if @template == "NECB2011"
-    #sanity_check(qaqc)
+    necb_qaqc(qaqc, model)
 
     return qaqc
   end
@@ -1480,41 +1478,7 @@ class NECB2011
     qaqc[:warnings] = qaqc[:warnings].sort
     qaqc[:errors] = qaqc[:errors].sort
     qaqc[:unique_errors]= qaqc[:unique_errors].sort
-  end
-
-
-  private
-
-  def look_up_csv_data(csv_fname, search_criteria)
-    options = {:headers => :first_row,
-               :converters => [:numeric]}
-    unless File.exist?(csv_fname)
-      raise ("File: [#{csv_fname}] Does not exist")
-    end
-    # we'll save the matches here
-    matches = nil
-    # save a copy of the headers
-    headers = nil
-    CSV.open(csv_fname, "r", options) do |csv|
-
-      # Since CSV includes Enumerable we can use 'find_all'
-      # which will return all the elements of the Enumerble for
-      # which the block returns true
-
-      matches = csv.find_all do |row|
-        match = true
-        search_criteria.keys.each do |key|
-          match = match && (row[key].strip == search_criteria[key].strip)
-        end
-        match
-      end
-      headers = csv.headers
-    end
-    #puts matches
-    raise("More than one match") if matches.size > 1
-    puts "Zero matches found for [#{search_criteria}]" if matches.size == 0
-    #return matches[0]
-    return matches[0]
+    return qaqc
   end
 
   def necb_section_test(qaqc, result_value, bool_operator, expected_value, necb_section_name, test_text, tolerance = nil)
