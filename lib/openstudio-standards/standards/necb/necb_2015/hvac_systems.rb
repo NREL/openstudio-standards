@@ -104,13 +104,13 @@ class NECB2015
   # Searches through any hydronic loops and applies the maxmimum total pump power by modifying the pump design power consumption.
   # This is as per NECB2015 5.2.6.3.(1)
   def apply_maximum_loop_pump_power(model)
-    testdata = @standards_data['max_total_loop_pump_power']['table']
     plant_loops = model.getPlantLoops
     return model if plant_loops.nil?
     plant_loops.each do |plantloop|
       next if plant_loop_swh_loop?(plantloop) == true
       pumps = []
       max_powertoload = 0
+      total_pump_power = 0
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
           when 'OS_CentralHeatPumpSystem'
@@ -127,12 +127,17 @@ class NECB2015
             max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp
+            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
+            puts "did it work"
           when 'OS_Pump_ConstantSpeed'
             pumps << supplycomp
+            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_ConstantSpeed'
             pumps << supplycomp
+            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_VariableSpeed'
             pumps << supplycomp
+            total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
         end
       end
       unless max_powertoload > 0
@@ -148,20 +153,38 @@ class NECB2015
       next if max_powertoload == 0 || pumps.length == 0
       comp_list = []
       total_capacity = 0
-      plantloop.demandComponents.each do |demandcomp|
-        case demandcomp.iddObjectType.valueName.to_s
-          when 'OS_Coil_Heating_Water_Baseboard'
+      plantloop_dt = plantloop.sizingPlant.loopDesignTemperatureDifference.to_f
+      plantloop_maxflowrate = model.getAutosizedValue(plantloop, 'Maximum Loop Flow Rate', 'm3/s').to_f
+      # Plant loop capacity = temperature difference across plant loop * maximum plant loop flow rate * density of water (1000 kg/m^3) * see next line
+      # Heat capacity of water (4180 J/(kg*K))
+      plantloop_capacity = plantloop_dt*plantloop_maxflowrate*1000*4180
+      # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity)
+      necb_pump_power_cap = plantloop_capacity*max_powertoload/1000
+      pump_power_adjustment = necb_pump_power_cap/total_pump_power
+      pumps.each do |pump|
+        adjusted_pump_power_sizing = OpenStudio::OptionalDouble.new(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f * pump_power_adjustment)
+        pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(adjusted_pump_power_sizing)
+      end
+
+#      plantloop.demandComponents.each do |demandcomp|
+#        case demandcomp.iddObjectType.valueName.to_s
+#          when 'OS_Coil_Heating_Water_Baseboard'
+#            puts "Will it work?"
+#            test = model.getAutosizedValue(demandcomp, 'Design Size Maximum Water Flow Rate', 'm3/s').to_f
+#            test2 = model.getAutosizedValue(demandcomp, 'Design Size U-Factor Times Area Value', 'W/K').to_f
+#            puts "What's going on?"
+#            test = demandcomp.getAutosizedValue('HeatingDesignCapacity', 'W').to_f
 #            anothertest = demandcomp.getAutosizedValue(self, '')
-            test = demandcomp.to_CoilHeatingWaterBaseboard.get.isHeatingDesignCapacityAutosized
+#            test = demandcomp.to_CoilHeatingWaterBaseboard.get.isHeatingDesignCapacityAutosized
 #            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.isHeatingDesignCapacityAutosized
 #            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.heatingDesignCapacity
-        end
-        if @demandcomp.respond_to?(:heatingDesignCapacity)
-          total_capacity += demandcomp.heatingDesignCapacity
-        end
-        if @demandcomp.methods.include?(:heatingDesignCapacity)
-          total_capacity += demandcomp.heatingDesignCapacity
-        end
+#        end
+#        if @demandcomp.respond_to?(:heatingDesignCapacity)
+#          total_capacity += demandcomp.heatingDesignCapacity
+#        end
+#        if @demandcomp.methods.include?(:heatingDesignCapacity)
+#          total_capacity += demandcomp.heatingDesignCapacity
+#        end
 
 #        if demandcomp.referenceCapacity.respond_to?
 #          total_capacity += demandcomp.referenceCapacity
@@ -169,12 +192,12 @@ class NECB2015
 #        if demandcomp.nominalCapacity.respond_to?
 #          total_capacity += demandcomp.nominalCapacity
 #        end
-        puts "What next?"
-      end
+#        puts "What next?"
+#      end
 
-      pumps.each do |pump|
-        puts "hello"
-      end
+#      pumps.each do |pump|
+#        puts "hello"
+#      end
     end
     return model
   end
