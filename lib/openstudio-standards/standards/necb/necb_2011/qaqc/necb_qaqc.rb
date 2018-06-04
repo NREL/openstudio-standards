@@ -36,11 +36,18 @@ class NECB2011
     end
   end
 
-  # Generates the base qaqc hash.
   def init_qaqc(model)
-    # initialize qaqc
-    # Read the qaqc.json files
+    # load the qaqc.json files
     @qaqc_data = self.load_qaqc_database_new()
+
+    # generate base qaqc hash
+    qaqc = create_base_qaqc(model)
+    # performs the qaqc on the given base qaqc hash
+    necb_qaqc(qaqc, model)
+  end
+
+  # Generates the base qaqc hash.
+  def create_base_qaqc(model)    
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
