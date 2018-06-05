@@ -174,6 +174,7 @@ module OpenstudioStandards
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
+  require_relative "#{stds}/deer/deer.Space"
 
   ### Prototypes ###
   # Building Types
