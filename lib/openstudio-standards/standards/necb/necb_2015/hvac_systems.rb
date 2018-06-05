@@ -111,6 +111,10 @@ class NECB2015
       pumps = []
       max_powertoload = 0
       total_pump_power = 0
+      # This cycles through the plant loop supply side components to determine if there is a heat pump present or a pump
+      # If a heat pump is present the pump power to total demand ratio is set to what NECB 2015 table 5.2.6.3. say it should be.
+      # If a pump is present, this is a handy time to grab it for modification later.  Also, it adds the pump power consumption
+      # to a total which will be used to determine how much to modify the pump power consumption later.
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
           when 'OS_CentralHeatPumpSystem'
@@ -126,20 +130,27 @@ class NECB2015
           when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
             max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
-            pumps << supplycomp
+            current_pump = supplycomp
+            pumps << supplycomp.to_PumpVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
-            puts "did it work"
           when 'OS_Pump_ConstantSpeed'
-            pumps << supplycomp
+            pumps << supplycomp.to_PumpConstantSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_ConstantSpeed'
-            pumps << supplycomp
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name.to_s} is headered.  This may result in an error and cause a failure.")
+            pumps << supplycomp.to_HeaderedPumpsConstantSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_HeaderedPumps_VariableSpeed'
-            pumps << supplycomp
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "A pump used in the plant loop named #{plantloop.name.to_s} is headered.  This may result in an error and cause a failure.")
+            pumps << supplycomp.to_HeaderedPumpsVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
         end
       end
+      # If no pumps were found then there is nothing to set so go to the next plant loop
+      next if pumps.length == 0
+      # If a heat pump was found then the pump power to total demand ratio should have been set to what NECB 2015 table 5.2.6.3 says.
+      # If the pump power to total demand ratio was not set then no heat pump was present so set according to if the plant loop is
+      # used for heating, cooling, or heat rejection (condeser as OpenStudio calls it).
       unless max_powertoload > 0
         case plantloop.sizingPlant.loopType
           when 'Heating'
@@ -150,56 +161,26 @@ class NECB2015
             max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heat_rejection')['total_normalized_pump_power_wperkw']
         end
       end
-      next if max_powertoload == 0 || pumps.length == 0
-      comp_list = []
-      total_capacity = 0
-      plantloop_dt = plantloop.sizingPlant.loopDesignTemperatureDifference.to_f
-      plantloop_maxflowrate = model.getAutosizedValue(plantloop, 'Maximum Loop Flow Rate', 'm3/s').to_f
-      # Plant loop capacity = temperature difference across plant loop * maximum plant loop flow rate * density of water (1000 kg/m^3) * see next line
-      # Heat capacity of water (4180 J/(kg*K))
-      plantloop_capacity = plantloop_dt*plantloop_maxflowrate*1000*4180
-      # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity)
+      # If nothing was found then do nothing (though by this point if nothing was found then an error should have been thrown).
+      next if max_powertoload == 0
+      # Get the capacity of the loop (using the more general method of calculating via maxflow*temp diff*density*heat capacity)
+      # This is more general than the other method in Standards.PlantLoop.rb which only looks at heat and cooling.  Also,
+      # that method looks for spceific equipment and would be thrown if other equipment was present.  However my method
+      # only works for water for now.
+      plantloop_capacity = plant_loop_capacity_W_by_maxflow_and_deltaT_forwater (plantloop)
+      # Sizing factor is pump power (W)/ zone demand (in kW, as approximated using plant loop capacity).
       necb_pump_power_cap = plantloop_capacity*max_powertoload/1000
       pump_power_adjustment = necb_pump_power_cap/total_pump_power
+      # Multiply the factor EnergyPlus uses to calculate the pump power by the sizing factor to make pump power in line with NECB 2015.
       pumps.each do |pump|
-        adjusted_pump_power_sizing = OpenStudio::OptionalDouble.new(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f * pump_power_adjustment)
-        pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(adjusted_pump_power_sizing)
+        case pump.designPowerSizingMethod
+          when 'PowerPerFlowPerPressure'
+            pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(pump.designShaftPowerPerUnitFlowRatePerUnitHead.to_f*pump_power_adjustment)
+          when 'PowerPerFlow'
+            pump.setDesignElectricPowerPerUnitFlowRate(pump.designElectricPowerPerUnitFlowRate.to_f*pump_power_adjustment)
+        end
       end
-
-#      plantloop.demandComponents.each do |demandcomp|
-#        case demandcomp.iddObjectType.valueName.to_s
-#          when 'OS_Coil_Heating_Water_Baseboard'
-#            puts "Will it work?"
-#            test = model.getAutosizedValue(demandcomp, 'Design Size Maximum Water Flow Rate', 'm3/s').to_f
-#            test2 = model.getAutosizedValue(demandcomp, 'Design Size U-Factor Times Area Value', 'W/K').to_f
-#            puts "What's going on?"
-#            test = demandcomp.getAutosizedValue('HeatingDesignCapacity', 'W').to_f
-#            anothertest = demandcomp.getAutosizedValue(self, '')
-#            test = demandcomp.to_CoilHeatingWaterBaseboard.get.isHeatingDesignCapacityAutosized
-#            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.isHeatingDesignCapacityAutosized
-#            total_capacity += demandcomp.to_OS_Coil_Heating_Water_Baseboard.heatingDesignCapacity
-#        end
-#        if @demandcomp.respond_to?(:heatingDesignCapacity)
-#          total_capacity += demandcomp.heatingDesignCapacity
-#        end
-#        if @demandcomp.methods.include?(:heatingDesignCapacity)
-#          total_capacity += demandcomp.heatingDesignCapacity
-#        end
-
-#        if demandcomp.referenceCapacity.respond_to?
-#          total_capacity += demandcomp.referenceCapacity
-#        end
-#        if demandcomp.nominalCapacity.respond_to?
-#          total_capacity += demandcomp.nominalCapacity
-#        end
-#        puts "What next?"
-#      end
-
-#      pumps.each do |pump|
-#        puts "hello"
-#      end
     end
     return model
   end
-
 end
