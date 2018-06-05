@@ -5209,7 +5209,7 @@
       "notes": null
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5251,7 +5251,7 @@
       "notes": null
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -5293,7 +5293,7 @@
       "notes": null
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -5335,7 +5335,7 @@
       "notes": null
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5377,7 +5377,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5419,7 +5419,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -5461,7 +5461,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -5503,7 +5503,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5545,7 +5545,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5587,7 +5587,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -5629,7 +5629,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -5671,7 +5671,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5713,7 +5713,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5755,7 +5755,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -5797,7 +5797,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -5839,7 +5839,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5881,7 +5881,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -5923,7 +5923,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -5965,7 +5965,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -6007,7 +6007,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",
@@ -6049,7 +6049,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "building_type": "MediumOffice",
       "space_type": null,
       "is_residential": "No",
@@ -6091,7 +6091,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "building_type": "Office",
       "space_type": null,
       "is_residential": "No",
@@ -6133,7 +6133,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "building_type": "Retail",
       "space_type": null,
       "is_residential": "No",
@@ -6175,7 +6175,7 @@
       "notes": null
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "building_type": "SmallOffice",
       "space_type": null,
       "is_residential": "No",

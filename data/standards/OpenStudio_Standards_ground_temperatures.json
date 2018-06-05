@@ -26148,7 +26148,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -26165,7 +26165,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -26182,7 +26182,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -26199,7 +26199,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -26216,7 +26216,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -26233,7 +26233,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -26250,7 +26250,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -26267,7 +26267,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -26284,7 +26284,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -26301,7 +26301,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -26318,7 +26318,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -26335,7 +26335,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -26352,7 +26352,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -26369,7 +26369,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -26386,7 +26386,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -26403,7 +26403,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -26420,7 +26420,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -26437,7 +26437,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -26454,7 +26454,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -26471,7 +26471,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -26488,7 +26488,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -26505,7 +26505,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -26522,7 +26522,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -26539,7 +26539,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -26556,7 +26556,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -26573,7 +26573,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -26590,7 +26590,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -26607,7 +26607,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -26624,7 +26624,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -26641,7 +26641,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -26658,7 +26658,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -26675,7 +26675,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -26692,7 +26692,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -26709,7 +26709,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -26726,7 +26726,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -26743,7 +26743,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -26760,7 +26760,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -26777,7 +26777,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -26794,7 +26794,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -26811,7 +26811,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -26828,7 +26828,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -26845,7 +26845,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -26862,7 +26862,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -26879,7 +26879,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -26896,7 +26896,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -26913,7 +26913,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -26930,7 +26930,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -26947,7 +26947,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -26964,7 +26964,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -26981,7 +26981,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -26998,7 +26998,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -27015,7 +27015,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27032,7 +27032,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27049,7 +27049,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27066,7 +27066,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27083,7 +27083,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27100,7 +27100,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27117,7 +27117,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27134,7 +27134,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27151,7 +27151,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27168,7 +27168,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -27185,7 +27185,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -27202,7 +27202,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -27219,7 +27219,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -27236,7 +27236,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -27253,7 +27253,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -27270,7 +27270,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -27287,7 +27287,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -27304,7 +27304,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -27321,7 +27321,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -27338,7 +27338,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -27355,7 +27355,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -27372,7 +27372,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -27389,7 +27389,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -27406,7 +27406,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -27423,7 +27423,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -27440,7 +27440,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -27457,7 +27457,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -27474,7 +27474,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -27491,7 +27491,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -27508,7 +27508,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -27525,7 +27525,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -27542,7 +27542,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -27559,7 +27559,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -27576,7 +27576,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -27593,7 +27593,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -27610,7 +27610,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -27627,7 +27627,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -27644,7 +27644,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -27661,7 +27661,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -27678,7 +27678,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -27695,7 +27695,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -27712,7 +27712,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -27729,7 +27729,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -27746,7 +27746,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -27763,7 +27763,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -27780,7 +27780,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -27797,7 +27797,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -27814,7 +27814,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -27831,7 +27831,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27848,7 +27848,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27865,7 +27865,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -27882,7 +27882,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27899,7 +27899,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27916,7 +27916,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -27933,7 +27933,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27950,7 +27950,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27967,7 +27967,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -27984,7 +27984,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28001,7 +28001,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28018,7 +28018,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28035,7 +28035,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28052,7 +28052,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28069,7 +28069,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28086,7 +28086,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28103,7 +28103,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28120,7 +28120,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28137,7 +28137,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -28154,7 +28154,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -28171,7 +28171,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -28188,7 +28188,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -28205,7 +28205,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -28222,7 +28222,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -28239,7 +28239,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -28256,7 +28256,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -28273,7 +28273,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -28290,7 +28290,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -28307,7 +28307,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -28324,7 +28324,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -28341,7 +28341,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -28358,7 +28358,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -28375,7 +28375,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -28392,7 +28392,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -28409,7 +28409,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -28426,7 +28426,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -28443,7 +28443,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -28460,7 +28460,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -28477,7 +28477,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -28494,7 +28494,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -28511,7 +28511,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -28528,7 +28528,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -28545,7 +28545,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -28562,7 +28562,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -28579,7 +28579,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -28596,7 +28596,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -28613,7 +28613,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -28630,7 +28630,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -28647,7 +28647,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -28664,7 +28664,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -28681,7 +28681,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -28698,7 +28698,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -28715,7 +28715,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -28732,7 +28732,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -28749,7 +28749,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -28766,7 +28766,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -28783,7 +28783,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -28800,7 +28800,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28817,7 +28817,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28834,7 +28834,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -28851,7 +28851,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28868,7 +28868,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28885,7 +28885,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -28902,7 +28902,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28919,7 +28919,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28936,7 +28936,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -28953,7 +28953,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -28970,7 +28970,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -28987,7 +28987,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -29004,7 +29004,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29021,7 +29021,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29038,7 +29038,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29055,7 +29055,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29072,7 +29072,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29089,7 +29089,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29106,7 +29106,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29123,7 +29123,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29140,7 +29140,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29157,7 +29157,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -29174,7 +29174,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -29191,7 +29191,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -29208,7 +29208,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -29225,7 +29225,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -29242,7 +29242,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -29259,7 +29259,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -29276,7 +29276,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -29293,7 +29293,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -29310,7 +29310,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -29327,7 +29327,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -29344,7 +29344,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -29361,7 +29361,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -29378,7 +29378,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -29395,7 +29395,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -29412,7 +29412,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -29429,7 +29429,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -29446,7 +29446,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -29463,7 +29463,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -29480,7 +29480,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -29497,7 +29497,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -29514,7 +29514,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -29531,7 +29531,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -29548,7 +29548,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -29565,7 +29565,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -29582,7 +29582,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -29599,7 +29599,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -29616,7 +29616,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -29633,7 +29633,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -29650,7 +29650,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -29667,7 +29667,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -29684,7 +29684,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -29701,7 +29701,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -29718,7 +29718,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -29735,7 +29735,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -29752,7 +29752,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -29769,7 +29769,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -29786,7 +29786,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -29803,7 +29803,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -29820,7 +29820,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29837,7 +29837,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29854,7 +29854,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -29871,7 +29871,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29888,7 +29888,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29905,7 +29905,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -29922,7 +29922,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29939,7 +29939,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29956,7 +29956,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -29973,7 +29973,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -29990,7 +29990,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -30007,7 +30007,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -30024,7 +30024,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30041,7 +30041,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30058,7 +30058,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30075,7 +30075,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30092,7 +30092,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30109,7 +30109,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30126,7 +30126,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30143,7 +30143,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30160,7 +30160,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30177,7 +30177,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -30194,7 +30194,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -30211,7 +30211,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -30228,7 +30228,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -30245,7 +30245,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -30262,7 +30262,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC1",
       "jan": 9.7,
       "feb": 10.1,
@@ -30279,7 +30279,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -30296,7 +30296,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -30313,7 +30313,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC2",
       "jan": 8.3,
       "feb": 9.4,
@@ -30330,7 +30330,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -30347,7 +30347,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -30364,7 +30364,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC3",
       "jan": 10.9,
       "feb": 10.6,
@@ -30381,7 +30381,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -30398,7 +30398,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -30415,7 +30415,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC4",
       "jan": 10.0,
       "feb": 10.9,
@@ -30432,7 +30432,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -30449,7 +30449,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -30466,7 +30466,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC5",
       "jan": 11.3,
       "feb": 11.8,
@@ -30483,7 +30483,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -30500,7 +30500,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -30517,7 +30517,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC6",
       "jan": 13.2,
       "feb": 12.9,
@@ -30534,7 +30534,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -30551,7 +30551,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -30568,7 +30568,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC7",
       "jan": 13.4,
       "feb": 14.1,
@@ -30585,7 +30585,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -30602,7 +30602,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -30619,7 +30619,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC8",
       "jan": 13.0,
       "feb": 13.8,
@@ -30636,7 +30636,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -30653,7 +30653,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -30670,7 +30670,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC9",
       "jan": 13.0,
       "feb": 13.9,
@@ -30687,7 +30687,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -30704,7 +30704,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -30721,7 +30721,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC10",
       "jan": 12.1,
       "feb": 11.6,
@@ -30738,7 +30738,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -30755,7 +30755,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -30772,7 +30772,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC11",
       "jan": 8.4,
       "feb": 7.7,
@@ -30789,7 +30789,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -30806,7 +30806,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -30823,7 +30823,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC12",
       "jan": 8.3,
       "feb": 9.6,
@@ -30840,7 +30840,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30857,7 +30857,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30874,7 +30874,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC13",
       "jan": 8.7,
       "feb": 10.4,
@@ -30891,7 +30891,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30908,7 +30908,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30925,7 +30925,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC14",
       "jan": 6.4,
       "feb": 8.2,
@@ -30942,7 +30942,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30959,7 +30959,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30976,7 +30976,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC15",
       "jan": 13.7,
       "feb": 15.5,
@@ -30993,7 +30993,7 @@
     },
     {
       "building_type": "SmallOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -31010,7 +31010,7 @@
     },
     {
       "building_type": "MediumOffice",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
@@ -31027,7 +31027,7 @@
     },
     {
       "building_type": "RetailStandalone",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "climate_zone": "CEC T24-CEC16",
       "jan": 2.5,
       "feb": 1.7,
