@@ -12,6 +12,8 @@ class NECB2015
           table['refs'].each {|item|
             # Supply air system - necb_design_supply_temp_compliance
             item.gsub!('NECB2011-8.4.4.19', 'NECB2015-8.4.4.18')
+            # Zone sizing compliance - Re: heating_sizing_factor and cooling_sizing_factor
+            item.gsub!('NECB2011-8.4.4.9', 'NECB2015-8.4.4.8')
             item.gsub!('NECB2011', 'NECB2015')
           }
           # if the reference is a hash (e.g. see space.json compliance), then
@@ -113,19 +115,21 @@ class NECB2015
 
     necb_exterior_ground_surfaces_compliance(qaqc) # [DONE-NC]
 
-    necb_zone_sizing_compliance(qaqc)
+    necb_zone_sizing_compliance(qaqc) # [DONE] made changes to NECB section numbers
 
-    necb_design_supply_temp_compliance(qaqc) # [DONE] made changes to NEECB section numbers
+    necb_design_supply_temp_compliance(qaqc) # [DONE] made changes to NECB section numbers
 
-    # necb_economizer_compliance(qaqc)
+    # Cannot implement 5.2.2.8.(4) and 5.2.2.8.(5) due to OpenStudio's limitation.
+    necb_economizer_compliance(qaqc) # [DONE-NC]
 
-    # necb_hrv_compliance(qaqc, model)
+    #NECB code regarding MURBS (§5.2.10.4) has not been implemented in both NECB 2011 and 2015
+    necb_hrv_compliance(qaqc, model) # [DONE-NC]
 
     necb_vav_fan_power_compliance(qaqc) # [DONE-NC]
 
     sanity_check(qaqc)
 
-    # necb_plantloop_sanity(qaqc)
+    necb_plantloop_sanity(qaqc)
 
     qaqc[:information] = qaqc[:information].sort
     qaqc[:warnings] = qaqc[:warnings].sort
