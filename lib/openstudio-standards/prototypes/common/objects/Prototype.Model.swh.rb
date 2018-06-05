@@ -124,13 +124,10 @@ class Standard
           data = model_find_object(standards_data['space_types'], search_criteria)
 
           # Skip space types with no data
-          if data.nil?
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "space type: #{search_criteria} has no standards data defined")
-            next
-          end
+          next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil? || !data['service_water_heating_peak_flow_per_area'].nil?
 
           # Add a service water use for each space
           space_names.sort.each do |space_name|
