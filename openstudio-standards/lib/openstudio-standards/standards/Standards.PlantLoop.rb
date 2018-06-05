@@ -245,7 +245,7 @@ class OpenStudio::Model::PlantLoop
       approach_r = nil
       range_r = nil
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         # G3.1.3.11 - CW supply temp = 85F or 10F approaching design wet bulb temperature,
         # whichever is lower.  Design range = 10F
         # Design Temperature rise of 10F => Range: 10F
@@ -364,7 +364,7 @@ class OpenStudio::Model::PlantLoop
     reset_required = false
 
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
 
       # Not required before 90.1-2004
       return reset_required

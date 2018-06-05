@@ -963,7 +963,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -995,7 +995,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1027,7 +1027,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1059,7 +1059,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1091,7 +1091,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1123,7 +1123,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1155,7 +1155,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1187,7 +1187,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1219,7 +1219,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1251,7 +1251,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1283,7 +1283,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1315,7 +1315,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1347,7 +1347,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1379,7 +1379,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1411,7 +1411,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1443,7 +1443,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1475,7 +1475,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1507,7 +1507,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1539,7 +1539,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1571,7 +1571,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1603,7 +1603,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1635,7 +1635,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1667,7 +1667,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1699,7 +1699,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1731,7 +1731,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1763,7 +1763,7 @@
     {
       "exterior_lighting_zone_number": 0,
       "exerior_lighting_zone_name": "Undeveloped Areas Parks",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1795,7 +1795,7 @@
     {
       "exterior_lighting_zone_number": 1,
       "exerior_lighting_zone_name": "Developed Areas Parks",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1827,7 +1827,7 @@
     {
       "exterior_lighting_zone_number": 2,
       "exerior_lighting_zone_name": "Neighborhood",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1859,7 +1859,7 @@
     {
       "exterior_lighting_zone_number": 3,
       "exerior_lighting_zone_name": "All Other Areas",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,
@@ -1891,7 +1891,7 @@
     {
       "exterior_lighting_zone_number": 4,
       "exerior_lighting_zone_name": "High Activity",
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "control_option": "AstronomicalClock",
       "building_facade_and_landscape_automatic_shut_off": null,
       "occupancy_setback_reduction": null,

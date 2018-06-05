@@ -695,7 +695,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Determine the minimum capacity that requires an economizer
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       case climate_zone
       when 'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-1B',
@@ -849,7 +849,7 @@ class OpenStudio::Model::AirLoopHVAC
     enthalpy_limit_btu_per_lb = nil
     dewpoint_limit_f = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       case economizer_type
       when 'FixedDryBulb'
         case climate_zone
@@ -984,7 +984,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine if an integrated economizer is required
     integrated_economizer_required = true
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       minimum_capacity_btu_per_hr = 65_000
       minimum_capacity_w = OpenStudio.convert(minimum_capacity_btu_per_hr, 'Btu/hr', 'W').get
       # 6.5.1.3 Integrated Economizer Control
@@ -1292,7 +1292,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Determine the minimum capacity that requires an economizer
     prohibited_types = []
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       case climate_zone
       when 'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2B',
@@ -1443,7 +1443,7 @@ class OpenStudio::Model::AirLoopHVAC
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       erv_cfm = nil # Not required
     when '90.1-2004', '90.1-2007'
       erv_cfm = if pct_oa < 0.7
@@ -1893,7 +1893,7 @@ class OpenStudio::Model::AirLoopHVAC
     multizone_opt_required = false
 
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
 
       # Not required before 90.1-2010
       return multizone_opt_required
@@ -2276,7 +2276,7 @@ class OpenStudio::Model::AirLoopHVAC
     dcv_required = false
 
     # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011' || template == 'CEC Pre-1978' || template == 'CEC T24 1978' || template == 'CEC T24 1992' || template == 'CEC T24 2001' || template == 'CEC T24 2005' || template == 'CEC T24 2008'
+    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011' || template == 'CBES Pre-1978' || template == 'CBES T24 1978' || template == 'CBES T24 1992' || template == 'CBES T24 2001' || template == 'CBES T24 2005' || template == 'CBES T24 2008'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{name}: DCV is not required for any system.")
       return dcv_required
     end
@@ -2412,7 +2412,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Not required until 90.1-2010
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       return is_sat_reset_required
     when '90.1-2010', '90.1-2013'
       case climate_zone
@@ -2632,7 +2632,7 @@ class OpenStudio::Model::AirLoopHVAC
   def apply_vav_damper_action(template)
     damper_action = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       damper_action = 'Single Maximum'
     when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
       damper_action = 'Dual Maximum'
@@ -2696,7 +2696,7 @@ class OpenStudio::Model::AirLoopHVAC
     minimum_oa_flow_cfm = 0
     maximum_stories = 0
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       # Assuming that older buildings always
       # used backdraft gravity dampers
       return motorized_oa_damper_required
@@ -3072,7 +3072,7 @@ class OpenStudio::Model::AirLoopHVAC
     # Number of stages is determined by the template
     num_stages = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB 2011', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB 2011', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: No special economizer controls were modeled.")
       return true
     when '90.1-2004', '90.1-2007'
@@ -3433,7 +3433,7 @@ class OpenStudio::Model::AirLoopHVAC
 
     # Determine the minimum capacity that requires an economizer
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       # static pressure reset not required
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       if has_ddc
@@ -3461,7 +3461,7 @@ class OpenStudio::Model::AirLoopHVAC
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       minimum_fan_hp = 0.75
     end
 

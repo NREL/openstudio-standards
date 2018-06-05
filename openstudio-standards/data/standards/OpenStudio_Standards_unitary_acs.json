@@ -4137,7 +4137,7 @@
       "notes": null
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4159,7 +4159,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4181,7 +4181,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -4203,7 +4203,7 @@
       "notes": "From DOE Pre-1980 Reference Buildings"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4225,7 +4225,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4247,7 +4247,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",
@@ -4269,7 +4269,7 @@
       "notes": "From DOE Pre-1980 Reference Buildings"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4291,7 +4291,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4313,7 +4313,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -4335,7 +4335,7 @@
       "notes": "From DOE Post-1980 Reference Buildings"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4357,7 +4357,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4379,7 +4379,7 @@
       "notes": "From Title 24 1978Table 6-1"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",
@@ -4401,7 +4401,7 @@
       "notes": "From DOE Post-1980 Reference Buildings"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4423,7 +4423,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4445,7 +4445,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4467,7 +4467,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4489,7 +4489,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4511,7 +4511,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4533,7 +4533,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4555,7 +4555,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4577,7 +4577,7 @@
       "notes": "From Title 24 1992 Table 1-C"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -4599,7 +4599,7 @@
       "notes": "From DOE Post-1980 Reference Buildings"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",
@@ -4621,7 +4621,7 @@
       "notes": "From DOE Post-1980 Reference Buildings"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4643,7 +4643,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4665,7 +4665,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4687,7 +4687,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4709,7 +4709,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4731,7 +4731,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4753,7 +4753,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4775,7 +4775,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4797,7 +4797,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4819,7 +4819,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4841,7 +4841,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4863,7 +4863,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4885,7 +4885,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -4907,7 +4907,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -4929,7 +4929,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -4951,7 +4951,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -4973,7 +4973,7 @@
       "notes": "From Title 24 2001 Table 1-C1"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -4995,7 +4995,7 @@
       "notes": "From Title 24 2001 Table 1-C4"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",
@@ -5017,7 +5017,7 @@
       "notes": "From Title 24 2001 Table 1-C4"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5039,7 +5039,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5061,7 +5061,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5083,7 +5083,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5105,7 +5105,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5127,7 +5127,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5149,7 +5149,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5171,7 +5171,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5193,7 +5193,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5215,7 +5215,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5237,7 +5237,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5259,7 +5259,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5281,7 +5281,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5303,7 +5303,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5325,7 +5325,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5347,7 +5347,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5369,7 +5369,7 @@
       "notes": "From Title 24 2005 Table 112-A"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -5391,7 +5391,7 @@
       "notes": "From Title 24 2008 Table 112-E"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",
@@ -5413,7 +5413,7 @@
       "notes": "From Title 24 2008 Table 112-E"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5435,7 +5435,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5457,7 +5457,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5479,7 +5479,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5501,7 +5501,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5523,7 +5523,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5545,7 +5545,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5567,7 +5567,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5589,7 +5589,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5611,7 +5611,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5633,7 +5633,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5655,7 +5655,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5677,7 +5677,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Single Package",
@@ -5699,7 +5699,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Single Package",
@@ -5721,7 +5721,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "Split System",
@@ -5743,7 +5743,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "Split System",
@@ -5765,7 +5765,7 @@
       "notes": "From Title 24 2008 Table 112-A"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "Electric Resistance or None",
       "subcategory": "PTAC",
@@ -5787,7 +5787,7 @@
       "notes": "From Title 24 2008 Table 112-E"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "cooling_type": "AirCooled",
       "heating_type": "All Other",
       "subcategory": "PTAC",

@@ -35,7 +35,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
                             else
                               0.3
                             end
-    when '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       min_damper_position = 0.3
     when '90.1-2010', '90.1-2013'
       min_damper_position = 0.2
@@ -47,7 +47,7 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
     # to OA rates in prototypes since not well documented in papers.
     if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         setConstantMinimumAirFlowFraction(min_damper_position)
       else
         # High OA zones

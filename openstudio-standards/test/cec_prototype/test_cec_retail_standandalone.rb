@@ -6,7 +6,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestRetailStandalone < CreateDOEPrototypeBuildingTest
   
   building_types = ['RetailStandalone']
-  templates = ['CEC Pre-1978','CEC T24 1978','CEC T24 1992','CEC T24 2001','CEC T24 2005','CEC T24 2008']
+  templates = ['CBES Pre-1978','CBES T24 1978','CBES T24 1992','CBES T24 2001','CBES T24 2005','CBES T24 2008']
   climate_zones = [
     #'CEC T24-CEC1',
     #'CEC T24-CEC2',

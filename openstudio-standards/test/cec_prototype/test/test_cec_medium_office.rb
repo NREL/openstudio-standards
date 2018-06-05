@@ -6,7 +6,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestMediumOffice < CreateDOEPrototypeBuildingTest
   
   building_types = ['RetailStandalone']
-  templates = ['CEC T24 2008']
+  templates = ['CBES T24 2008']
   climate_zones = ['CEC 2008-3']
   
   # not used for ASHRAE/DOE archetypes, but required for call

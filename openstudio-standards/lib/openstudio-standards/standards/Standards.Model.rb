@@ -4288,7 +4288,7 @@ class OpenStudio::Model::Model
                end
     when 'ICC IECC 2015', 'OEESC 2014'
       result = possible_climate_zones.sort.first
-    when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       result = possible_climate_zones.sort.first
     end
 

@@ -391,7 +391,7 @@ class OpenStudio::Model::Model
       end
     when 'RetailStandalone'
       case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'DOE Ref 2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         geometry_file = 'Geometry.retail_standalone.pre1980_post1980.osm'
       when '90.1-2004', '90.1-2007'
         geometry_file = 'Geometry.retail_standalone.2004_2007.osm'
@@ -1360,7 +1360,7 @@ class OpenStudio::Model::Model
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('DOE-2')
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       inside.setAlgorithm('TARP')
       outside.setAlgorithm('TARP')
     end
@@ -1386,7 +1386,7 @@ class OpenStudio::Model::Model
         clg = 1.33
         htg = 1.33
       end
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       case building_type
       when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'Outpatient', 'PrimarySchool'
         clg = 1.0
@@ -1446,7 +1446,7 @@ class OpenStudio::Model::Model
         # in the prototype buildings, which depends on climate zone.
         economizer_type = nil
         case template
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
           economizer_type = 'DifferentialDryBulb'
         when '90.1-2010', '90.1-2013'
           case climate_zone

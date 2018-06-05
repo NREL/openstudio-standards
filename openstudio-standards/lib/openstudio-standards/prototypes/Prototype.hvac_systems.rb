@@ -2278,7 +2278,7 @@ class OpenStudio::Model::Model
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch) if building_type == 'RetailStandalone' || building_type == 'RetailStripmall'
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No maximum fraction outdoor air schedule in PSZ for building types except RetailStandalone')
       end
 
@@ -5210,7 +5210,7 @@ class OpenStudio::Model::Model
     # Lift motor assumptions
     lift_pwr_w = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
       if elevator_type == 'Traction'
         lift_pwr_w = 18_537.0
       elsif elevator_type == 'Hydraulic'
@@ -5275,7 +5275,7 @@ class OpenStudio::Model::Model
     elevator_equipment.setMultiplier(number_of_elevators)
 
     # Pre-1980 and 1980-2004 don't have lights or fans
-    return elevator_equipment if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'CEC Pre-1978' || template == 'CEC T24 1978' || template == 'CEC T24 1992' || template == 'CEC T24 2001' || template == 'CEC T24 2005' || template == 'CEC T24 2008'
+    return elevator_equipment if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'CBES Pre-1978' || template == 'CBES T24 1978' || template == 'CBES T24 1992' || template == 'CBES T24 2001' || template == 'CBES T24 2005' || template == 'CBES T24 2008'
 
     # Elevator fan
     elevator_fan_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(self)
@@ -5457,7 +5457,7 @@ class OpenStudio::Model::Model
       case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_Pre2004'
       end
       defrost_type = 'Electric'
@@ -5874,7 +5874,7 @@ class OpenStudio::Model::Model
         hot_water_loop = get_or_add_hot_water_loop(main_heat_fuel)
         
         ## BRICR ## 
-        if template != 'CEC Pre-1978' && template != 'CEC T24 1978' && template != 'CEC T24 1992' && template != 'CEC T24 2001' && template != 'CEC T24 2005' && template != 'CEC T24 2008'
+        if template != 'CBES Pre-1978' && template != 'CBES T24 1978' && template != 'CBES T24 1992' && template != 'CBES T24 2001' && template != 'CBES T24 2005' && template != 'CBES T24 2008'
           chilled_water_loop = get_or_add_chilled_water_loop(template, cool_fuel, air_cooled=false)
         end 
 
@@ -6122,7 +6122,7 @@ class OpenStudio::Model::Model
       end
 	    ## BRICR template ##
       case template
-      when 'CEC Pre-1978', 'CEC T24 1978', 'CEC T24 1992', 'CEC T24 2001', 'CEC T24 2005', 'CEC T24 2008'
+      when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         if area_ft2 < 20_000
           size_category = 'nonres_small'
         else
