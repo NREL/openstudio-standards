@@ -4,7 +4,7 @@
       "name": "design_supply_temp_compliance",
       "data_type": "table",
       "refs": [
-        "NECB2011-?"
+        "NECB2011-8.4.4.19"
       ],
 	  "exclude_note": "The QAQC for a Thermal zone will be skipped if its name contains any of the substring(s) in the exclude_string",
 	  "exclude":{

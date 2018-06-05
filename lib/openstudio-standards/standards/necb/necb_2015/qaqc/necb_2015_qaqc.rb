@@ -2,26 +2,7 @@ class NECB2015
 
 
   def load_qaqc_database_new()
-    # # Combine the data from the JSON files into a single hash
-    # files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
-    # @qaqc_data = {}
-    # @qaqc_data["tables"] = []
-    # files.each do |file|
-    #   #puts "loading qaqc data from #{file}"
-    #   data = JSON.parse(File.read(file))
-    #   if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-    #     @qaqc_data["tables"] << data["tables"].first
-    #   else
-    #     @qaqc_data[data.keys.first] = data[data.keys.first]
-    #   end
-    # end
-    # #needed for compatibility of qaqc database format
-    # @qaqc_data['tables'].each do |table|
-    #   @qaqc_data[table['name']] = table
-    # end
-    # return @qaqc_data
     super()
-
     # replace 2011 to 2015 for all references in the tables.
     # puts JSON.pretty_generate( @standards_data['tables'] )
     @qaqc_data['tables'].each do |table|
@@ -29,6 +10,8 @@ class NECB2015
         # check if the reference is an array
         if table['refs'].is_a?(Array)
           table['refs'].each {|item|
+            # Supply air system - necb_design_supply_temp_compliance
+            item.gsub!('NECB2011-8.4.4.19', 'NECB2015-8.4.4.18')
             item.gsub!('NECB2011', 'NECB2015')
           }
           # if the reference is a hash (e.g. see space.json compliance), then
@@ -120,25 +103,25 @@ class NECB2015
 
     # necb_space_compliance(qaqc)
 
-    necb_envelope_compliance(qaqc)
+    necb_envelope_compliance(qaqc) # [DONE]
 
-    necb_infiltration_compliance(qaqc)
+    necb_infiltration_compliance(qaqc) # [DONE-NC]
 
-    necb_exterior_opaque_compliance(qaqc)
+    necb_exterior_opaque_compliance(qaqc) # [DONE-NC]
 
-    # necb_exterior_fenestration_compliance(qaqc)
+    necb_exterior_fenestration_compliance(qaqc) # [DONE-NC]
 
-    # necb_exterior_ground_surfaces_compliance(qaqc)
+    necb_exterior_ground_surfaces_compliance(qaqc) # [DONE-NC]
 
     necb_zone_sizing_compliance(qaqc)
 
-    necb_design_supply_temp_compliance(qaqc)
+    necb_design_supply_temp_compliance(qaqc) # [DONE] made changes to NEECB section numbers
 
     # necb_economizer_compliance(qaqc)
 
     # necb_hrv_compliance(qaqc, model)
 
-    necb_vav_fan_power_compliance(qaqc)
+    necb_vav_fan_power_compliance(qaqc) # [DONE-NC]
 
     sanity_check(qaqc)
 
