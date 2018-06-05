@@ -4027,7 +4027,7 @@ class Standard
                          parasitic_fuel_consumption_rate,
                          building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop')
 
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -4159,7 +4159,7 @@ class Standard
                              water_heater_thermal_zone,
                              building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater')
 
     # Water heater
     # TODO Standards - Change water heater methodology to follow
@@ -4275,7 +4275,7 @@ class Standard
                             booster_water_heater_thermal_zone,
                             building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}")
 
     # Booster water heating loop
     booster_service_water_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -4515,6 +4515,7 @@ class Standard
     # If there is no service hot water load.. Don't bother adding anything.
     if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
        data['service_water_heating_peak_flow_rate'].to_f == 0.0
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "Space type #{search_criteria} has no service water heating peak flow specified.")
       return nil
     end
 
