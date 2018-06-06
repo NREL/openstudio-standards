@@ -16,9 +16,6 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
     FileUtils.mkdir_p(output_folder)
 
     # Generate the osm files for all relevant cases to generate the test data for system 3
-    actual_unitary_cop = {}
-    actual_unitary_cop['Electric Resistance'] = []
-    actual_unitary_cop['All Other'] = []
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     unitary_heating_types = ['Electric Resistance','All Other']
@@ -29,7 +26,7 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
     templates = ['NECB2011','NECB2015']
     num_cap_intv = {'NECB2011' => 4,'NECB2015' => 5}
     templates.each do |template|
-      unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_unitary_efficiencies_expected_results.csv")
+      unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       standard = Standard.build(template)
       unitary_res_file_output_text = "Heating Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)\n"
       # Initialize hashes for storing expected unitary efficiency data from file
@@ -65,6 +62,9 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
         heating_type_cap[heating_type] << (heating_type_min_cap[heating_type][num_cap_intv[template]-1].to_f + 10000.0)
       end
 
+      actual_unitary_cop = {}
+      actual_unitary_cop['Electric Resistance'] = []
+      actual_unitary_cop['All Other'] = []
       unitary_heating_types.each do |heating_type|
         if heating_type == 'Electric Resistance'
           heating_coil_type = 'Electric'
@@ -122,17 +122,16 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
       end
     
       # Write actual results file
-      test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_unitary_efficiencies_test_results.csv")
+      test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_test_results.csv")
       File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
       # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_unitary_efficiencies_expected_results.csv")
+      expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       b_result = FileUtils.compare_file(expected_result_file, test_result_file)
       assert(b_result,
          "test_unitary_efficiency: Unitary efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
     end
   end
  
-=begin
   # Test to validate the unitary performance curves
   def test_NECB2011_unitary_curves
     output_folder = "#{File.dirname(__FILE__)}/output/unitary_curves"
@@ -208,7 +207,6 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
     assert(b_result,
     "Unitary performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
   end
-=end
 
   def run_the_measure(model, template, sizing_dir)
     if PERFORM_STANDARDS
