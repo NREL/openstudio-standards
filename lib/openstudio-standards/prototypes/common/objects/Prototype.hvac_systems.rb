@@ -4515,7 +4515,6 @@ class Standard
     # If there is no service hot water load.. Don't bother adding anything.
     if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
        data['service_water_heating_peak_flow_rate'].to_f == 0.0
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "Space type #{search_criteria} has no service water heating peak flow specified.")
       return nil
     end
 
