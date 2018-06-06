@@ -4027,7 +4027,7 @@ class Standard
                          parasitic_fuel_consumption_rate,
                          building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop')
 
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -4159,7 +4159,7 @@ class Standard
                              water_heater_thermal_zone,
                              building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater')
 
     # Water heater
     # TODO Standards - Change water heater methodology to follow
@@ -4275,7 +4275,7 @@ class Standard
                             booster_water_heater_thermal_zone,
                             building_type = nil)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}")
 
     # Booster water heating loop
     booster_service_water_loop = OpenStudio::Model::PlantLoop.new(model)
