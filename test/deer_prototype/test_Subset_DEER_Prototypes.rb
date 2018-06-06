@@ -40,7 +40,7 @@ class TestSubsetDEERPrototypes < CreateDEERPrototypeBuildingTest
       'EUn' => ['SVVG'],
       'Gro' => ['DXGF'],
       'Hsp' => ['SVVG'],
-      'Nrs' => ['FPFC'],
+      'Nrs' => ['DXGF'],
       'Htl' => ['SVVG'],
       'Mtl' => ['DXHP'],
       'MBT' => ['DXGF'],
