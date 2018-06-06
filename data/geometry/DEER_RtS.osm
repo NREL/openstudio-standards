@@ -171,23 +171,6 @@ OS:Surface,
   -1.66945946436009e-15, 2.74829295516222e-46, 0, !- X,Y,Z Vertex 3 {m}
   -1.66945946436009e-15, 2.74829295516222e-46, 3.048; !- X,Y,Z Vertex 4 {m}
 
-OS:SubSurface,
-  {2e0799e1-60c0-46b5-bbc9-8834d7c696f2}, !- Handle
-  EL1 West Win (G.S1.E4.W1),              !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  {c733168d-a1a9-44fc-a800-4cba2d0ee210}, !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -0.914399999999976, 11.7518688, 3.048,  !- X,Y,Z Vertex 1 {m}
-  -0.914400000000003, 2.12821835886074e-15, 3.048, !- X,Y,Z Vertex 2 {m}
-  -2.505456, 5.83131830327843e-15, 3.048, !- X,Y,Z Vertex 3 {m}
-  -2.50545599999997, 11.7518688, 3.048;   !- X,Y,Z Vertex 4 {m}
-
 OS:Surface,
   {519182a2-48a3-4233-a289-d0813681f826}, !- Handle
   EL1 East Wall (G.S1.I1),                !- Name
@@ -781,57 +764,6 @@ OS:Surface,
   24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 2 {m}
   13.63218, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
   13.63218, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {6a2693d8-0819-4cd1-96fc-9bb30ffad914}, !- Handle
-  EL2 North Win (G.W1.E4.W1),             !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  11.7518688, 99.538536, 3.048,           !- X,Y,Z Vertex 1 {m}
-  11.7518688, 97.94748, 3.048,            !- X,Y,Z Vertex 2 {m}
-  6.71890219884202e-16, 97.94748, 3.048,  !- X,Y,Z Vertex 3 {m}
-  1.84097920248273e-15, 99.538536, 3.048; !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {c3cd7a7a-790b-4f42-872f-e0301fa6c2ce}, !- Handle
-  EL3 East Win (G.N1.E4.W1),              !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -46.430184, 97.03308, 3.048,            !- X,Y,Z Vertex 1 {m}
-  -46.430184, 85.2812112, 3.048,          !- X,Y,Z Vertex 2 {m}
-  -48.02124, 85.2812112, 3.048,           !- X,Y,Z Vertex 3 {m}
-  -48.02124, 97.03308, 3.048;             !- X,Y,Z Vertex 4 {m}
-
-OS:SubSurface,
-  {d0a7820d-ddf2-4628-aae2-259361b10d20}, !- Handle
-  EL4 South Win (G.E1.E4.W1),             !- Name
-  FixedWindow,                            !- Sub Surface Type
-  ,                                       !- Construction Name
-  ,                                       !- Surface Name
-  ,                                       !- Outside Boundary Condition Object
-  ,                                       !- View Factor to Ground
-  ,                                       !- Shading Control Name
-  ,                                       !- Frame and Divider Name
-  ,                                       !- Multiplier
-  ,                                       !- Number of Vertices
-  -48.93564, -0.914400000000003, 3.048,   !- X,Y,Z Vertex 1 {m}
-  -48.93564, -2.505456, 3.048,            !- X,Y,Z Vertex 2 {m}
-  -60.6875088, -2.50545599999999, 3.048,  !- X,Y,Z Vertex 3 {m}
-  -60.6875088, -0.914399999999994, 3.048; !- X,Y,Z Vertex 4 {m}
 
 OS:Facility,
   {deee7c3b-5120-4b61-8ce5-8a6455de1dc9}; !- Handle

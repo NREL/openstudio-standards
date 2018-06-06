@@ -363,6 +363,21 @@ class Standard
                                      thermal_zones,
                                      ventilation=true)
 
+      when 'Baseboards'
+        case system['heating_type']
+        when 'Gas', 'DistrictHeating'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+        when 'Electricity'
+          hot_water_loop = nil
+        when nil
+          # TODO: Error, Baseboard systems must have a main_heat_fuel
+          # return ??
+        end
+
+        model_add_baseboard(model,
+                            hot_water_loop,
+                            thermal_zones)
+
       else
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type '#{system['type']}' is not recognized for system named '#{system['name']}'.  This system will not be added.")

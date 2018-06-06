@@ -1,7 +1,7 @@
 
 OS:Version,
-  {8282af54-7e9c-414b-a757-80c88a67c70a}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {60e2db66-ed09-4840-bbbc-880b0c948c49}, !- Handle
+  2.5.1;                                  !- Version Identifier
 
 OS:BuildingStory,
   {46888037-0eeb-45e1-996e-2afd2eabe3bd}, !- Handle
@@ -7738,13 +7738,13 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {57d86ed9-2f68-4670-a5a6-06ce7f7cbec0}, !- Handle
-  Corridor,                               !- Name
+  ResPublicArea,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {ef466833-aa86-487e-87a8-37492ed33b61}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MFm,                                    !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  ResPublicArea;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {ef466833-aa86-487e-87a8-37492ed33b61}, !- Handle
@@ -12023,8 +12023,15 @@ OS:SpaceType,
   Plenum,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Group Rendering Name
+  {d6b4bcc1-ab91-44a6-83c4-066be11ac346}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
   Plenum;                                 !- Standards Space Type
+
+OS:Rendering:Color,
+  {d6b4bcc1-ab91-44a6-83c4-066be11ac346}, !- Handle
+  Rendering Color 8,                      !- Name
+  250,                                    !- Rendering Red Value
+  235,                                    !- Rendering Green Value
+  215;                                    !- Rendering Blue Value
 
