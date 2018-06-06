@@ -137,7 +137,8 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/unitary_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_unitary_curves_expected_results.csv')
+    template = 'NECB2011'
+    unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
     unitary_curve_names = []
     CSV.foreach(unitary_expected_result_file, headers: true) do |data|
       unitary_curve_names << data['Curve Name']
@@ -152,7 +153,7 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     template = 'NECB2011'
-    name = "#{template}_sys2_CoolingType~#{mua_cooling_type}"
+    name = "#{template.downcase}_sys2_CoolingType~#{mua_cooling_type}"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
@@ -199,10 +200,10 @@ class NECB2011HVACEfficienciesTest < MiniTest::Test
         "#{'%.5E' % unitary_plfvsplr__curve.minimumValueofx},#{'%.5E' % unitary_plfvsplr__curve.maximumValueofx}\n"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}_compliance_unitary_curves_test_results.csv")
+    test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_curves_test_results.csv")
     File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template}compliance_unitary_curves_expected_results.csv")
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "Unitary performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
