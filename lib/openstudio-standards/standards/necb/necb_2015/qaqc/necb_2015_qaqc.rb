@@ -26,17 +26,16 @@ class NECB2015
       end
     end
 
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/"
-    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+    # Overwrite the data present from 2011 with the data read from the JSON files
+    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
+    puts "\n\n#{files}\n\n"
     files.each do |file|
-      #puts "loading standards data from #{file}"
+      puts "loading standards data from #{file}"
       data = JSON.parse(File.read(file))
       if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
         @qaqc_data["tables"] << data["tables"].first
       else
-        @qaqc_data[data.keys.first] = data[data.keys.first]
+        @qaqc_data["tables"][data.keys.first] = data[data.keys.first]
       end
     end
 
@@ -95,6 +94,58 @@ class NECB2015
     )
   end
 
+  def necb_space_compliance(qaqc)
+    #    #Padmassun's Code Start
+    #csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
+    qaqc[:spaces].each do |space|
+      building_type =""
+      space_type =""
+      if space[:space_type_name].include? 'Space Function '
+        space_type = (space[:space_type_name].to_s.rpartition('Space Function '))[2].strip
+        building_type = 'Space Function'
+      elsif space[:space_type_name].include? ' WholeBuilding'
+        space_type = (space[:space_type_name].to_s.rpartition(' WholeBuilding'))[0].strip
+        building_type = 'WholeBuilding'
+      end
+
+      ["occupancy_per_area_people_per_m2", "occupancy_schedule", "electric_equipment_per_area_w_per_m2"].each {|compliance_var|
+        #qaqc_table = get_qaqc_table("space_compliance", {"template" => 'NECB2015', "building_type" => building_type, "space_type" => space_type}).first
+        #qaqc_table = @qaqc_data['space_compliance']
+
+        search_criteria = {"template" => 'NECB2015', "building_type" => building_type, "space_type" => space_type}
+        qaqc_table = model_find_objects(@qaqc_data['space_compliance'], search_criteria)
+        qaqc_table = qaqc_table.first
+        puts"{\"building_type\" => #{building_type}, \"space_type\" => #{space_type}}"
+        puts "#{qaqc_table}\n\n"
+
+        necb_section_name = get_qaqc_table("space_compliance")['refs'][compliance_var]
+        tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
+        # puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
+        if compliance_var =="occupancy_per_area_people_per_m2"
+          result_value = space[:occ_per_m2]
+        elsif compliance_var =="occupancy_schedule"
+          result_value = space[:occupancy_schedule]
+        elsif compliance_var =="electric_equipment_per_area_w_per_m2"
+          result_value = space[:electric_w_per_m2]
+        end
+
+        test_text = "[ENVELOPE] #{compliance_var}"
+        next if result_value.nil?
+        necb_section_test(
+            qaqc,
+            result_value,
+            '==',
+            qaqc_table[compliance_var],
+            necb_section_name,
+            test_text,
+            tolerance
+        )
+      }
+
+    end
+    #Padmassun's Code End
+  end
+
   def necb_qaqc(qaqc, model)
     puts "\n\nin necb_qaqc 2015 now\n\n"
     #Now perform basic QA/QC on items for NECB2015
@@ -103,7 +154,7 @@ class NECB2015
     qaqc[:errors] = []
     qaqc[:unique_errors]=[]
 
-    # necb_space_compliance(qaqc)
+    necb_space_compliance(qaqc)
 
     necb_envelope_compliance(qaqc) # [DONE]
 
