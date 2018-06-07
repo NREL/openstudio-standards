@@ -85,4 +85,17 @@ class NECB2015 < NECB2011
     qaqc[:errors] = qaqc[:errors].sort
     qaqc[:unique_errors]= qaqc[:unique_errors].sort
   end
+
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+    # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
+    apply_maximum_loop_pump_power(model)
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
+  end
 end
