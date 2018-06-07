@@ -35,7 +35,7 @@ class NECB2015
       if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
         @qaqc_data["tables"] << data["tables"].first
       else
-        @qaqc_data["tables"][data.keys.first] = data[data.keys.first]
+        @qaqc_data[data.keys.first] = data[data.keys.first]
       end
     end
 
