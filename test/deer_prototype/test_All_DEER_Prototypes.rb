@@ -27,10 +27,7 @@ class TestAllDEERPrototypes < CreateDEERPrototypeBuildingTest
       'SCn',
       'SUn',
       'WRf',
-      'GHs',
-      'DMo',
-      'MFm',
-      'SFm'
+      'MFm'
   ]
 
   # Only a subset of building type and HVAC type combinations are valid
@@ -141,6 +138,11 @@ class TestAllDEERPrototypes < CreateDEERPrototypeBuildingTest
           'SVVE',
           'SVVG',
           'WLHP'],
+      'MFm' => [
+          'DXGF',
+          'DXHP',
+          'NCEH',
+          'NCGF'],
       'MLI' => [
           'DXEH',
           'DXGF',

@@ -31453,7 +31453,7 @@
       "solar_absorptance": null,
       "visible_absorptance": null,
       "gas_type": null,
-      "u_factor": 1.98,
+      "u_factor": 1.23,
       "solar_heat_gain_coefficient": 0.61,
       "visible_transmittance": 0.25,
       "optical_data_type": null,
