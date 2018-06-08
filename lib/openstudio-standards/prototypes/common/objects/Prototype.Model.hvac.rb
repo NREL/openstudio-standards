@@ -378,6 +378,9 @@ class Standard
                             hot_water_loop,
                             thermal_zones)
 
+      when 'Unconditioned'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "System type is Unconditioned.  No system will be added.")
+
       else
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type '#{system['type']}' is not recognized for system named '#{system['name']}'.  This system will not be added.")
@@ -385,7 +388,7 @@ class Standard
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished adding HVAC")
 
     return true
   end # add hvac
