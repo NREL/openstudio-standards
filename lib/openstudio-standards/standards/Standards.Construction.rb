@@ -442,7 +442,7 @@ class Standard
     end
   end
 
-  def change_construction_properties_in_model(model, values)
+  def change_construction_properties_in_model(model, values, is_percentage = false)
     puts JSON.pretty_generate(values)
     #copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
@@ -462,7 +462,10 @@ class Standard
       ecm_cond_name = "#{surface.outsideBoundaryCondition.downcase}_#{surface.surfaceType.downcase}_conductance"
       apply_changes_to_surface_construction(model,
                                             surface,
-                                            values[ecm_cond_name])
+                                            values[ecm_cond_name],
+                                            nil,
+                                            nil,
+                                            is_percentage)
       #report change as Info
       surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(surface)
       before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(OpenStudio::Model::getSurfaceByName(before_measure_model, surface.name.to_s).get)
@@ -493,24 +496,40 @@ class Standard
     return info
   end
 
-  def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil)
+  def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     #If user has no changes...do nothing and return true.
     return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
+
+    #set initial targets
+    target_u_value_si = conductance
+    target_shgc = shgc
+    target_tvis = tvis
+    #Mulitply by percentages if required.
+    if true == is_percentage
+      target_u_value_si = target_u_value_si / 100.0  * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
+      if true == standard.construction_simple_glazing?(construction)
+        target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.getSolarHeatGainCoefficient() unless target_shgc.nil?
+        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance() unless target_tvis.nil?
+      end
+    end
+
     new_construction_name_suffix = ":{"
-    new_construction_name_suffix << " \"cond\"=>#{conductance.round(3)}" unless conductance.nil?
-    new_construction_name_suffix << " \"shgc\"=>#{shgc.round(3)}" unless shgc.nil?
-    new_construction_name_suffix << " \"tvis\"=>#{tvis.round(3)}" unless tvis.nil?
+    new_construction_name_suffix << " \"cond\"=>#{target_u_value_si.round(3)}" unless target_u_value_si.nil?
+    new_construction_name_suffix << " \"shgc\"=>#{target_shgc.round(3)}" unless target_shgc.nil?
+    new_construction_name_suffix << " \"tvis\"=>#{target_tvis.round(3)}" unless target_tvis.nil?
     new_construction_name_suffix << "}"
 
 
     new_construction_name = "#{surface.construction.get.name.to_s}-#{new_construction_name_suffix}"
     new_construction = OpenStudio::Model::getConstructionByName(surface.model, new_construction_name)
-    target_u_value_ip = OpenStudio.convert(conductance.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless conductance.nil?
+
+
     if new_construction.empty?
       #create new construction.
       #create a copy
+      target_u_value_ip = OpenStudio.convert(target_u_value_si.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless target_u_value_si.nil?
       new_construction = self.construction_deep_copy(model, construction)
       case surface.outsideBoundaryCondition
         when 'Outdoors'
@@ -533,7 +552,7 @@ class Standard
             standard.construction_set_u_value(new_construction,
                                               target_u_value_ip.to_f,
                                               find_and_set_insulation_layer(
-                                                                           new_construction).name.get,
+                                                  new_construction).name.get,
                                               intended_surface_type = nil,
                                               false,
                                               false
@@ -545,7 +564,7 @@ class Standard
               standard.construction_set_u_value(new_construction,
                                                 target_u_value_ip.to_f,
                                                 find_and_set_insulation_layer(
-                                                                             new_construction).name.get,
+                                                    new_construction).name.get,
                                                 intended_surface_type = nil,
                                                 false,
                                                 false
