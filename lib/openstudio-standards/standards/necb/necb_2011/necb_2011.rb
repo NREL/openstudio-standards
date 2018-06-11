@@ -159,6 +159,7 @@ class NECB2011 < Standard
     model = nil
     # prototype generation.
     model = load_geometry_osm(@geometry_file) # standard candidate
+    self.validate_initial_model(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
