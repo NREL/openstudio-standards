@@ -1,7 +1,7 @@
 
 OS:Version,
-  {8282af54-7e9c-414b-a757-80c88a67c70a}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {60e2db66-ed09-4840-bbbc-880b0c948c49}, !- Handle
+  2.5.1;                                  !- Version Identifier
 
 OS:BuildingStory,
   {46888037-0eeb-45e1-996e-2afd2eabe3bd}, !- Handle
@@ -544,7 +544,7 @@ OS:Space,
 OS:Space,
   {91b255a4-755a-46ee-bf0b-cd63490306fb}, !- Handle
   EL1 SSE Perim Attc (T.SSE40),           !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -557,7 +557,7 @@ OS:Space,
 OS:Space,
   {3b144542-b921-415e-81c7-d379e1bd7820}, !- Handle
   EL1 East Perim Attc (T.E41),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -570,7 +570,7 @@ OS:Space,
 OS:Space,
   {bbc813e8-2811-48d9-806f-d4fcdd967b76}, !- Handle
   EL1 East Perim Attc (T.E42),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -583,7 +583,7 @@ OS:Space,
 OS:Space,
   {ac0db8e0-7d52-4d07-a254-ea12fea7f0f8}, !- Handle
   EL1 East Perim Attc (T.E43),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -596,7 +596,7 @@ OS:Space,
 OS:Space,
   {c8621a34-eb3c-4a10-a129-5187a876f7ed}, !- Handle
   EL1 East Perim Attc (T.E44),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -609,7 +609,7 @@ OS:Space,
 OS:Space,
   {b678114a-d117-45f2-a4e5-2a412caded77}, !- Handle
   EL1 NNE Perim Attc (T.NNE45),           !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -622,7 +622,7 @@ OS:Space,
 OS:Space,
   {a3b8e0e6-a5d5-4c01-a811-0459d05a312f}, !- Handle
   EL1 SSW Perim Attc (T.SSW46),           !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -635,7 +635,7 @@ OS:Space,
 OS:Space,
   {26756a1b-02b3-4394-9794-ab2402164ccf}, !- Handle
   EL1 West Perim Attc (T.W47),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -648,7 +648,7 @@ OS:Space,
 OS:Space,
   {0554609f-b856-4abe-a1ed-d356f42ac2e9}, !- Handle
   EL1 West Perim Attc (T.W48),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -661,7 +661,7 @@ OS:Space,
 OS:Space,
   {b39701d2-7a93-4fa5-bb25-7e05c818298f}, !- Handle
   EL1 West Perim Attc (T.W49),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -674,7 +674,7 @@ OS:Space,
 OS:Space,
   {bab5ce3c-7b0e-4110-b511-553842967fb2}, !- Handle
   EL1 West Perim Attc (T.W50),            !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -687,7 +687,7 @@ OS:Space,
 OS:Space,
   {3735bc76-7523-456c-a587-cdc3290719de}, !- Handle
   EL1 NNW Perim Attc (T.NNW51),           !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -700,7 +700,7 @@ OS:Space,
 OS:Space,
   {6951ab5b-7672-467d-abcc-dc320b32d771}, !- Handle
   EL1 Core Attc (T.C52),                  !- Name
-  ,                                       !- Space Type Name
+  {9b6f045f-da45-4774-bf25-d3630b838120}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -7738,13 +7738,13 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {57d86ed9-2f68-4670-a5a6-06ce7f7cbec0}, !- Handle
-  Corridor,                               !- Name
+  ResPublicArea,                          !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {ef466833-aa86-487e-87a8-37492ed33b61}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MFm,                                    !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  ResPublicArea;                          !- Standards Space Type
 
 OS:Rendering:Color,
   {ef466833-aa86-487e-87a8-37492ed33b61}, !- Handle
@@ -7773,7 +7773,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {e3a3a4de-a327-4aa9-8c76-74d9b9331571}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -7855,7 +7855,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {58cc1e0d-912a-48ca-98a3-a863aa0aa942}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -7937,7 +7937,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {63e72d59-4c55-49f5-8c95-72fba933acd6}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8019,7 +8019,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {5def1916-2693-441c-b335-b6e3e20cd440}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8101,7 +8101,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6c66bbd5-7944-4b76-ac4a-0e389b3c97d3}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8183,7 +8183,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {77f32785-fa1e-4080-b186-bc0326f90e22}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8265,7 +8265,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {45f039ff-0903-4721-a3b1-8b02347c34b8}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8347,7 +8347,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {46853153-80f0-44aa-aeeb-68cbb23b0acf}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8429,7 +8429,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f388c2bb-e2bb-4dd1-abdd-b9663cf56a8a}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8511,7 +8511,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {c443b362-fe98-438d-bbb1-2875d4586ca9}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8593,7 +8593,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {e02095e4-6f86-4520-ace4-d07cab367ec1}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8675,7 +8675,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {a63d7659-6706-464c-81b3-6660ddaf07ed}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8757,7 +8757,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {039d5d0d-51f9-4d5d-aead-c338c43862af}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8839,7 +8839,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {59107e71-72c7-4b70-bc7e-d5944850e0ca}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -8921,7 +8921,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {b234d1a7-8716-49f4-8869-1a16f20c46ff}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9003,7 +9003,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6b23bf67-5183-434b-8460-577fe2aec30a}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9085,7 +9085,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {95bcc186-71d3-4a55-b02a-b069d92410f7}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9167,7 +9167,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {c4563984-bc92-4aac-80c4-62d6c18d9a6f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9249,7 +9249,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {e561facc-3c3b-422d-854c-e956e1eb2b72}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9331,7 +9331,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {53ead175-73f1-4358-8e9b-9f7932801e0f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9413,7 +9413,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {d1127db1-d126-4f34-938d-90c7b6b1e6fe}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9495,7 +9495,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {0a6f2c1f-4ab8-43c7-a92f-0e4d6ff9d7ae}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9577,7 +9577,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {95181dff-3409-445f-91bd-2fa8e8f0aa2c}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9659,7 +9659,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {eb145b63-f681-47e8-aa01-2f9da1b80ee0}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9741,7 +9741,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {7d4c4d9a-de54-468f-a43d-7d5df058ecab}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9823,7 +9823,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {7f6e5df0-2c5a-4445-aa3e-3b9c1920fc62}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9905,7 +9905,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {9fa0eb38-070d-4038-9de9-467b6b5c3acb}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -9987,7 +9987,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {e82eefc4-79e7-4071-8d1f-9159c2eb20bd}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10069,7 +10069,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {eec3b582-9e8a-4f2e-8f30-6d0a95c73612}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10151,7 +10151,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ba2156f4-8d3d-4566-aaf6-c5f0d68feb93}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10233,7 +10233,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {3e0e57cc-c0ce-4cb8-865e-c9bd1b627c72}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10315,7 +10315,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {08f7ff25-ff27-4302-af9a-8d7b7a8c646f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10397,7 +10397,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {7286d828-ebb5-41fc-b88f-1129393039e4}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10479,7 +10479,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {0a05a1bb-4d56-4696-9d39-df348f26d939}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10561,7 +10561,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ddb42812-e57c-4475-ae6f-e9cd94910f73}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10643,7 +10643,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {78be5019-0bcc-4425-8f47-bbf91154318c}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10725,7 +10725,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {22afad7b-d749-43d8-974c-3e6e54fd80b7}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10807,7 +10807,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {88c5c737-65e4-40c2-932e-f106a1a6d758}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10889,7 +10889,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {5e2a4766-7169-412b-bf57-b2054c00093a}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -10971,7 +10971,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {4498cf3f-7690-4ddd-a3da-a6ed2a157e2c}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11053,7 +11053,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {40df2875-c62f-49a8-a13a-6604e7a0bbbb}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11135,7 +11135,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {266c3838-a820-4217-a6d3-193d3c05037b}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11217,7 +11217,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {bdfd9424-405e-4270-934a-0eab14f34dd3}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11299,7 +11299,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {893d9a4b-b59c-4f1b-b5d7-ecde3c9c2c66}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11381,7 +11381,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f0cfc287-5ac2-4877-bdf9-27879dad4311}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11463,7 +11463,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ac1f609b-33e7-4fb7-b488-4c303c0f80b9}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11545,7 +11545,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {fc5b73e5-8488-4241-9757-138df8450ae4}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11627,7 +11627,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {9474907d-75bd-4475-aade-761c0155bdb6}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11709,7 +11709,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {0647c22b-7a2c-4a27-9ade-b694b90e0183}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11791,7 +11791,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {a997471f-1897-46ab-99d4-1519a56ac5c9}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11873,7 +11873,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {efdf2a27-43cc-4584-970e-a71f0cdd7435}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -11955,7 +11955,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {bedfddfb-89d2-4df6-b9ae-baf676e75beb}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -12023,8 +12023,379 @@ OS:SpaceType,
   Plenum,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ,                                       !- Group Rendering Name
+  {d6b4bcc1-ab91-44a6-83c4-066be11ac346}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
   Plenum;                                 !- Standards Space Type
+
+OS:Rendering:Color,
+  {d6b4bcc1-ab91-44a6-83c4-066be11ac346}, !- Handle
+  Rendering Color 8,                      !- Name
+  250,                                    !- Rendering Red Value
+  235,                                    !- Rendering Green Value
+  215;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {efdf2a27-43cc-4584-970e-a71f0cdd7435}, !- Handle
+  Rendering Color 9,                      !- Name
+  255,                                    !- Rendering Red Value
+  228,                                    !- Rendering Green Value
+  196;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {bedfddfb-89d2-4df6-b9ae-baf676e75beb}, !- Handle
+  Rendering Color 10,                     !- Name
+  153,                                    !- Rendering Red Value
+  50,                                     !- Rendering Green Value
+  204;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {9474907d-75bd-4475-aade-761c0155bdb6}, !- Handle
+  Rendering Color 11,                     !- Name
+  127,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6b23bf67-5183-434b-8460-577fe2aec30a}, !- Handle
+  Rendering Color 12,                     !- Name
+  221,                                    !- Rendering Red Value
+  160,                                    !- Rendering Green Value
+  221;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f0cfc287-5ac2-4877-bdf9-27879dad4311}, !- Handle
+  Rendering Color 13,                     !- Name
+  255,                                    !- Rendering Red Value
+  69,                                     !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {a997471f-1897-46ab-99d4-1519a56ac5c9}, !- Handle
+  Rendering Color 14,                     !- Name
+  192,                                    !- Rendering Red Value
+  192,                                    !- Rendering Green Value
+  192;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c443b362-fe98-438d-bbb1-2875d4586ca9}, !- Handle
+  Rendering Color 15,                     !- Name
+  255,                                    !- Rendering Red Value
+  127,                                    !- Rendering Green Value
+  80;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {bdfd9424-405e-4270-934a-0eab14f34dd3}, !- Handle
+  Rendering Color 16,                     !- Name
+  119,                                    !- Rendering Red Value
+  136,                                    !- Rendering Green Value
+  153;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {77f32785-fa1e-4080-b186-bc0326f90e22}, !- Handle
+  Rendering Color 17,                     !- Name
+  186,                                    !- Rendering Red Value
+  85,                                     !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {40df2875-c62f-49a8-a13a-6604e7a0bbbb}, !- Handle
+  Rendering Color 18,                     !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7286d828-ebb5-41fc-b88f-1129393039e4}, !- Handle
+  Rendering Color 19,                     !- Name
+  233,                                    !- Rendering Red Value
+  150,                                    !- Rendering Green Value
+  122;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {88c5c737-65e4-40c2-932e-f106a1a6d758}, !- Handle
+  Rendering Color 20,                     !- Name
+  199,                                    !- Rendering Red Value
+  21,                                     !- Rendering Green Value
+  133;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {08f7ff25-ff27-4302-af9a-8d7b7a8c646f}, !- Handle
+  Rendering Color 21,                     !- Name
+  186,                                    !- Rendering Red Value
+  85,                                     !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {eb145b63-f681-47e8-aa01-2f9da1b80ee0}, !- Handle
+  Rendering Color 22,                     !- Name
+  255,                                    !- Rendering Red Value
+  20,                                     !- Rendering Green Value
+  147;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3e0e57cc-c0ce-4cb8-865e-c9bd1b627c72}, !- Handle
+  Rendering Color 23,                     !- Name
+  255,                                    !- Rendering Red Value
+  215,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {e82eefc4-79e7-4071-8d1f-9159c2eb20bd}, !- Handle
+  Rendering Color 24,                     !- Name
+  240,                                    !- Rendering Red Value
+  248,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {9fa0eb38-070d-4038-9de9-467b6b5c3acb}, !- Handle
+  Rendering Color 25,                     !- Name
+  176,                                    !- Rendering Red Value
+  196,                                    !- Rendering Green Value
+  222;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {4498cf3f-7690-4ddd-a3da-a6ed2a157e2c}, !- Handle
+  Rendering Color 26,                     !- Name
+  255,                                    !- Rendering Red Value
+  192,                                    !- Rendering Green Value
+  203;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {95bcc186-71d3-4a55-b02a-b069d92410f7}, !- Handle
+  Rendering Color 27,                     !- Name
+  255,                                    !- Rendering Red Value
+  250,                                    !- Rendering Green Value
+  250;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {0a6f2c1f-4ab8-43c7-a92f-0e4d6ff9d7ae}, !- Handle
+  Rendering Color 28,                     !- Name
+  119,                                    !- Rendering Red Value
+  136,                                    !- Rendering Green Value
+  153;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {266c3838-a820-4217-a6d3-193d3c05037b}, !- Handle
+  Rendering Color 29,                     !- Name
+  105,                                    !- Rendering Red Value
+  105,                                    !- Rendering Green Value
+  105;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {d1127db1-d126-4f34-938d-90c7b6b1e6fe}, !- Handle
+  Rendering Color 30,                     !- Name
+  240,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  128;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {78be5019-0bcc-4425-8f47-bbf91154318c}, !- Handle
+  Rendering Color 31,                     !- Name
+  139,                                    !- Rendering Red Value
+  69,                                     !- Rendering Green Value
+  19;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {0647c22b-7a2c-4a27-9ade-b694b90e0183}, !- Handle
+  Rendering Color 32,                     !- Name
+  30,                                     !- Rendering Red Value
+  144,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {b234d1a7-8716-49f4-8869-1a16f20c46ff}, !- Handle
+  Rendering Color 33,                     !- Name
+  238,                                    !- Rendering Red Value
+  232,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {0a05a1bb-4d56-4696-9d39-df348f26d939}, !- Handle
+  Rendering Color 34,                     !- Name
+  219,                                    !- Rendering Red Value
+  112,                                    !- Rendering Green Value
+  147;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {e561facc-3c3b-422d-854c-e956e1eb2b72}, !- Handle
+  Rendering Color 35,                     !- Name
+  32,                                     !- Rendering Red Value
+  178,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c4563984-bc92-4aac-80c4-62d6c18d9a6f}, !- Handle
+  Rendering Color 36,                     !- Name
+  184,                                    !- Rendering Red Value
+  134,                                    !- Rendering Green Value
+  11;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {fc5b73e5-8488-4241-9757-138df8450ae4}, !- Handle
+  Rendering Color 37,                     !- Name
+  72,                                     !- Rendering Red Value
+  61,                                     !- Rendering Green Value
+  139;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7f6e5df0-2c5a-4445-aa3e-3b9c1920fc62}, !- Handle
+  Rendering Color 38,                     !- Name
+  152,                                    !- Rendering Red Value
+  251,                                    !- Rendering Green Value
+  152;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {53ead175-73f1-4358-8e9b-9f7932801e0f}, !- Handle
+  Rendering Color 39,                     !- Name
+  245,                                    !- Rendering Red Value
+  222,                                    !- Rendering Green Value
+  179;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {039d5d0d-51f9-4d5d-aead-c338c43862af}, !- Handle
+  Rendering Color 40,                     !- Name
+  32,                                     !- Rendering Red Value
+  178,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {46853153-80f0-44aa-aeeb-68cbb23b0acf}, !- Handle
+  Rendering Color 41,                     !- Name
+  255,                                    !- Rendering Red Value
+  218,                                    !- Rendering Green Value
+  185;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {a63d7659-6706-464c-81b3-6660ddaf07ed}, !- Handle
+  Rendering Color 42,                     !- Name
+  154,                                    !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {58cc1e0d-912a-48ca-98a3-a863aa0aa942}, !- Handle
+  Rendering Color 43,                     !- Name
+  240,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  240;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {e02095e4-6f86-4520-ace4-d07cab367ec1}, !- Handle
+  Rendering Color 44,                     !- Name
+  176,                                    !- Rendering Red Value
+  196,                                    !- Rendering Green Value
+  222;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {eec3b582-9e8a-4f2e-8f30-6d0a95c73612}, !- Handle
+  Rendering Color 45,                     !- Name
+  255,                                    !- Rendering Red Value
+  248,                                    !- Rendering Green Value
+  220;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {95181dff-3409-445f-91bd-2fa8e8f0aa2c}, !- Handle
+  Rendering Color 46,                     !- Name
+  255,                                    !- Rendering Red Value
+  228,                                    !- Rendering Green Value
+  181;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f388c2bb-e2bb-4dd1-abdd-b9663cf56a8a}, !- Handle
+  Rendering Color 47,                     !- Name
+  245,                                    !- Rendering Red Value
+  245,                                    !- Rendering Green Value
+  245;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6c66bbd5-7944-4b76-ac4a-0e389b3c97d3}, !- Handle
+  Rendering Color 48,                     !- Name
+  255,                                    !- Rendering Red Value
+  165,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {45f039ff-0903-4721-a3b1-8b02347c34b8}, !- Handle
+  Rendering Color 49,                     !- Name
+  128,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  128;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {5e2a4766-7169-412b-bf57-b2054c00093a}, !- Handle
+  Rendering Color 50,                     !- Name
+  255,                                    !- Rendering Red Value
+  222,                                    !- Rendering Green Value
+  173;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {59107e71-72c7-4b70-bc7e-d5944850e0ca}, !- Handle
+  Rendering Color 51,                     !- Name
+  0,                                      !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7d4c4d9a-de54-468f-a43d-7d5df058ecab}, !- Handle
+  Rendering Color 52,                     !- Name
+  255,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ba2156f4-8d3d-4566-aaf6-c5f0d68feb93}, !- Handle
+  Rendering Color 53,                     !- Name
+  250,                                    !- Rendering Red Value
+  235,                                    !- Rendering Green Value
+  215;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {e3a3a4de-a327-4aa9-8c76-74d9b9331571}, !- Handle
+  Rendering Color 54,                     !- Name
+  255,                                    !- Rendering Red Value
+  250,                                    !- Rendering Green Value
+  250;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ddb42812-e57c-4475-ae6f-e9cd94910f73}, !- Handle
+  Rendering Color 55,                     !- Name
+  0,                                      !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {5def1916-2693-441c-b335-b6e3e20cd440}, !- Handle
+  Rendering Color 56,                     !- Name
+  139,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  139;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ac1f609b-33e7-4fb7-b488-4c303c0f80b9}, !- Handle
+  Rendering Color 57,                     !- Name
+  128,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  128;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {893d9a4b-b59c-4f1b-b5d7-ecde3c9c2c66}, !- Handle
+  Rendering Color 58,                     !- Name
+  210,                                    !- Rendering Red Value
+  180,                                    !- Rendering Green Value
+  140;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {22afad7b-d749-43d8-974c-3e6e54fd80b7}, !- Handle
+  Rendering Color 59,                     !- Name
+  210,                                    !- Rendering Red Value
+  180,                                    !- Rendering Green Value
+  140;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {63e72d59-4c55-49f5-8c95-72fba933acd6}, !- Handle
+  Rendering Color 60,                     !- Name
+  70,                                     !- Rendering Red Value
+  130,                                    !- Rendering Green Value
+  180;                                    !- Rendering Blue Value
 

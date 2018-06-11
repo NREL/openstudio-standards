@@ -170,6 +170,15 @@
       "beds_per_spot": null,
       "parking_area_per_spot": 486,
       "notes": null
+    },
+    {
+      "building_type": "Courthouse",
+      "building_area_per_spot": null,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": null,
+      "notes": null
     }
   ]
 }

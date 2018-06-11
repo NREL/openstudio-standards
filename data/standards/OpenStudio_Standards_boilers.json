@@ -481,7 +481,7 @@
       "notes": "Assumes a condensing boiler"
     },
     {
-      "template": "CEC Pre-1978",
+      "template": "CBES Pre-1978",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,
@@ -497,7 +497,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "template": "CEC T24 1978",
+      "template": "CBES T24 1978",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,
@@ -513,7 +513,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "template": "CEC T24 1992",
+      "template": "CBES T24 1992",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,
@@ -529,7 +529,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "template": "CEC T24 2001",
+      "template": "CBES T24 2001",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,
@@ -545,7 +545,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "template": "CEC T24 2005",
+      "template": "CBES T24 2005",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,
@@ -561,7 +561,7 @@
       "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
     },
     {
-      "template": "CEC T24 2008",
+      "template": "CBES T24 2008",
       "fluid_type": "Hot Water",
       "fuel_type": "Gas",
       "condensing": null,

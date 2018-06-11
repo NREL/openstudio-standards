@@ -1,4 +1,4 @@
-require 'minitest/unit.rb'
+require 'minitest/unit'
 
 
 class NECBRegressionHelper < Minitest::Test

@@ -1235,6 +1235,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
       return true
     end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, set infiltration rate to #{adj_infil_rate_cfm_per_ft2.round(3)} cfm/ft2 exterior wall area (aka #{basic_infil_rate_cfm_per_ft2} cfm/ft2 @75Pa).")
 
     # Calculate the total infiltration, assuming
     # that it only occurs through exterior walls

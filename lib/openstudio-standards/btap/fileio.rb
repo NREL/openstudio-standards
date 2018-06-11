@@ -22,7 +22,6 @@
 require 'fileutils'
 require 'csv'
 require 'securerandom'
-#require 'rubygems'
 
 
 module BTAP

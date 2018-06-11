@@ -3013,7 +3013,8 @@ class Standard
                        else
                          "ASHRAE 169-2006-#{cz.value}"
                        end
-        next
+      elsif cz.institution == 'CEC'
+        climate_zone = "CEC T24-CEC#{cz.value}"
       end
     end
 
@@ -4011,7 +4012,7 @@ class Standard
 
     parts = [template]
 
-    unless building_type.empty?
+    unless building_type.nil?
       parts << building_type
     end
 
@@ -4586,4 +4587,58 @@ class Standard
   end
 
 
+  # Loads a osm as a starting point.
+  #
+  # @param osm_file [String] path to the .osm file, relative to the /data folder
+  # @return [Bool] returns true if successful, false if not
+  def load_geometry_osm(osm_file)
+    # Load the geometry .osm from relative to the data folder
+    osm_model_path = "../../../data/#{osm_file}"
+
+    # Load the .osm depending on whether running from normal gem location
+    # or from the embedded location in the OpenStudio CLI
+    if File.dirname(__FILE__)[0] == ':'
+      # running from embedded location in OpenStudio CLI
+      geom_model_string = load_resource_relative(osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModelFromString(geom_model_string)
+    else
+      abs_path = File.join(File.dirname(__FILE__), osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModel(abs_path)
+    end
+
+    # Check that the model loaded successfully
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
+      return false
+    end
+    model = model.get
+
+    # Check for expected characteristics of geometry model
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
+      end
+    end
+
+
 end
+  end

@@ -88,10 +88,17 @@ class StandardsData
   end
 
   def load_standards_data(datafolder = File.dirname(__FILE__))
-    files = Dir.glob("#{datafolder}/**/*.json").select {|e| File.file? e}
     @standards_data = {}
-    files.each do |file|
-      @standards_data = standards_data.deep_merge (JSON.parse(File.read(file)))
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      files = embedded_files_relative('./', /.*\.json/)
+      files.each do |file|
+        @standards_data = standards_data.deep_merge(JSON.parse(EmbeddedScripting.getFileAsString(file)))
+      end
+    else
+      files = Dir.glob("#{datafolder}/**/*.json").select {|e| File.file? e}
+      files.each do |file|
+        @standards_data = standards_data.deep_merge (JSON.parse(File.read(file)))
+      end
     end
     @standards_data = @standards_data.sort_by_key(true)
     return @standards_data
