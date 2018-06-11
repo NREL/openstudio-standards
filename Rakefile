@@ -155,6 +155,7 @@ namespace :data do
     export_spreadsheet_to_json
   end
 
+=begin
   desc 'Update RS-Means Database'
   task 'update:costing' do
     $LOAD_PATH.unshift File.expand_path('lib', __FILE__)
@@ -170,6 +171,7 @@ namespace :data do
     end
     BTAPCosting.instance
   end
+=end
 end
 
 # Tasks to export libraries packaged with
