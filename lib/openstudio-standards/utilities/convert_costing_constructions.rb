@@ -1,3 +1,4 @@
+=begin
 require_relative '../../../test/helpers/minitest_helper'
 require_relative '../../../test/helpers/create_doe_prototype_helper'
 
@@ -101,4 +102,4 @@ costing.costing_database['raw']['construction_sets'].each do |set|
 
 end
 File.write("/home/osdev/space_type_standard_construction_sets.json",JSON.pretty_generate(sets))
-File.write("/home/osdev/standard_constructions.json",JSON.pretty_generate(unique_constructions.sort))
+File.write("/home/osdev/standard_constructions.json",JSON.pretty_generate(unique_constructions.sort))=end

@@ -1,3 +1,4 @@
+=begin
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -31,3 +32,4 @@ class TestCosting < NECB2011
   puts "Total envelope cost is $#{'%.2f' % cost_result}"
 
 end
+=end
