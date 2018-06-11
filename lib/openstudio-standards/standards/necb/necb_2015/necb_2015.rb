@@ -46,43 +46,4 @@ class NECB2015 < NECB2011
     return @standards_data
   end
 
-  def necb_qaqc(qaqc, model)
-    puts "\n\nin necb_qaqc 2015 now\n\n"
-    #Now perform basic QA/QC on items for NECB2015
-    qaqc[:information] = []
-    qaqc[:warnings] =[]
-    qaqc[:errors] = []
-    qaqc[:unique_errors]=[]
-
-    # necb_space_compliance(qaqc)
-    #
-    # necb_envelope_compliance(qaqc)
-    #
-    # necb_infiltration_compliance(qaqc)
-    #
-    # necb_exterior_opaque_compliance(qaqc)
-    #
-    # necb_exterior_fenestration_compliance(qaqc)
-    #
-    # necb_exterior_ground_surfaces_compliance(qaqc)
-    #
-    # necb_zone_sizing_compliance(qaqc)
-    #
-    # necb_design_supply_temp_compliance(qaqc)
-    #
-    # necb_economizer_compliance(qaqc)
-    #
-    # necb_hrv_compliance(qaqc, model)
-    #
-    # necb_vav_fan_power_compliance(qaqc)
-
-    sanity_check(qaqc)
-
-    necb_plantloop_sanity(qaqc)
-
-    qaqc[:information] = qaqc[:information].sort
-    qaqc[:warnings] = qaqc[:warnings].sort
-    qaqc[:errors] = qaqc[:errors].sort
-    qaqc[:unique_errors]= qaqc[:unique_errors].sort
-  end
 end
