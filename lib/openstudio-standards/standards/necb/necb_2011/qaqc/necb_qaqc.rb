@@ -355,7 +355,12 @@ class NECB2011
     ground_roofs.size > 0   ? g_roof_cond_weight = qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_roofs_area_m2] : g_roof_cond_weight = 0
     ground_floors.size > 0  ? g_floor_cond_weight = qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_floors_area_m2] : g_floor_cond_weight = 0
     windows.size > 0        ? win_cond_weight = qaqc[:envelope][:windows_average_conductance_w_per_m2_k] * qaqc[:envelope][:windows_area_m2] : win_cond_weight = 0
-    doors.size > 0 ? sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2] : sky_cond_weight = 0
+    # doors.size > 0 ? sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2] : sky_cond_weight = 0
+    if doors.size > 0 && !qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil? && !qaqc[:envelope][:skylights_area_m2].nil?
+      sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2]
+    else
+      sky_cond_weight = 0
+    end
     overhead_doors.size > 0 ? door_cond_weight = qaqc[:envelope][:doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:doors_area_m2] : door_cond_weight = 0
     overhead_doors.size > 0 ?overhead_door_cond_weight = qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:overhead_doors_area_m2] : overhead_door_cond_weight = 0
 
