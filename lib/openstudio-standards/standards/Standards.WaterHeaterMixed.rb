@@ -112,7 +112,7 @@ class Standard
       # Calculate the percent loss per hr
       hr_loss_base = wh_props['hourly_loss_base']
       hr_loss_allow = wh_props['hourly_loss_volume_allowance']
-      hrly_loss_pct = (hr_loss_base + hr_loss_allow / volume_gal) / 100
+      hrly_loss_pct = hr_loss_base + (hr_loss_allow / volume_gal) / 100
       # Convert to Btu/hr, assuming:
       # Water at 120F, density = 8.25 lb/gal
       # 1 Btu to raise 1 lb of water 1 F

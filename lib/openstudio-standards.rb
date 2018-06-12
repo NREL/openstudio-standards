@@ -1,34 +1,6 @@
 require 'singleton'
 require_relative 'openstudio-standards/version'
 
-class Folders
-  # A place to keep all folder paths and ensure that they exist!
-  # Usage is
-  # Folders.instance.refactor_folder
-  include Singleton
-  attr_reader :data_costing_folder
-  attr_reader :data_geometry_folder
-  attr_reader :data_standards_folder
-  attr_reader :data_weather_folder
-  attr_reader :refactor_folder
-
-  def initialize
-    folders = []
-    # folders << @data_costing_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/costing/")
-    folders << @data_geometry_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/geometry/")
-    folders << @data_standards_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/standards/")
-    folders << @data_weather_folder = File.expand_path("#{File.dirname(__FILE__)}/../data/weather/")
-    error = false
-    folders.each do |folder|
-      unless Dir.exist?(folder)
-        puts "#{folder} does not exist. Please check paths relative to this file."
-        error = true
-      end
-    end
-    raise('Folder paths are incorrect. Standards Cannot continue.') if error
-  end
-end
-
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
@@ -89,6 +61,12 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer_2014/deer_2014"
   require_relative "#{stds}/deer/deer_2015/deer_2015"
   require_relative "#{stds}/deer/deer_2017/deer_2017"
+
+  require_relative "#{stds}/oeesc/oeesc"
+  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"  
+
+  require_relative "#{stds}/icc_iecc/icc_iecc"
+  require_relative "#{stds}/icc_iecc/icc_iecc_2015/icc_iecc_2015"
 
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
@@ -201,6 +179,7 @@ module OpenstudioStandards
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
+  require_relative "#{stds}/deer/deer.Space"
 
   ### Prototypes ###
   # Building Types

@@ -89,6 +89,7 @@ class Standard
         end
 
       elsif prototype_input['main_service_water_peak_flowrate']
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by main_service_water_peak_flowrate')
 
         # Attaches the end uses if specified as a lump value in the prototype_input
         model_add_swh_end_uses(model,
@@ -101,6 +102,7 @@ class Standard
                                building_type)
 
       else
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by space_type_map')
 
         # Attaches the end uses if specified by space type
         space_type_map = @space_type_map
@@ -109,6 +111,10 @@ class Standard
           building_type = 'Space Function'
         end
 
+        # Log how many water fixtures are added
+        water_fixtures = []
+
+        # Loop through spaces types and add service hot water if specified
         space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
               'template' => template,
@@ -121,7 +127,7 @@ class Standard
           next if data.nil?
 
           # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil?
+          next unless template == 'NECB2011' || !data['service_water_heating_peak_flow_rate'].nil? || !data['service_water_heating_peak_flow_per_area'].nil?
 
           # Add a service water use for each space
           space_names.sort.each do |space_name|
@@ -135,14 +141,19 @@ class Standard
                                    space.multiplier
                                end
 
-            model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
+            water_fixture = model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
                                             climate_zone,
                                             main_swh_loop,
                                             space_type_name,
                                             space_name,
                                             space_multiplier)
+            if !water_fixture.nil?
+              water_fixtures << water_fixture
+            end
           end
         end
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{water_fixtures.size} water fixtures to model")
 
       end
 

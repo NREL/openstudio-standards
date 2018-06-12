@@ -12,7 +12,9 @@
 90_1_general/test_find_target_eui.rb
 90_1_general/test_find_target_eui_by_end_use.rb
 
+doe_prototype/test_primary_school.rb
 doe_prototype/test_warehouse.rb
+doe_prototype/test_secondary_school.rb
 doe_prototype/test_medium_office.rb
 doe_prototype/test_mid_rise_apartment.rb
 doe_prototype/test_large_hotel.rb
