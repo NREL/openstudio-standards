@@ -4462,8 +4462,6 @@ class Standard
   end
 
 
-  private
-
   # Helper method to fill in hourly values
   def model_add_vals_to_sch(model, day_sch, sch_type, values)
     if sch_type == 'Constant'
