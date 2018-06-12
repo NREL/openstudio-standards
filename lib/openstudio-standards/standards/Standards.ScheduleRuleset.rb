@@ -79,7 +79,7 @@ class Standard
 
       previous_time_decimal = 0
       times.each_with_index do |time, i|
-        time_decimal = (time.days * 24) + time.hours + (time.minutes / 60) + (time.seconds / 3600)
+        time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
         duration_of_value = time_decimal - previous_time_decimal
         # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
         daily_flh += values[i] * duration_of_value
@@ -219,7 +219,7 @@ class Standard
 
       previous_time_decimal = 0
       times.each_with_index do |time, i|
-        time_decimal = (time.days * 24) + time.hours + (time.minutes / 60) + (time.seconds / 3600)
+        time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
         duration_of_value = time_decimal - previous_time_decimal
         # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
         daily_hrs += values[i] * duration_of_value

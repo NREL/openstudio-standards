@@ -278,13 +278,24 @@ module Pump
     end
 
     rated_m3_per_s = 0
-    if pump.autosizedRatedFlowRate.is_initialized
-      rated_m3_per_s = pump.autosizedRatedFlowRate.get
-    elsif pump.ratedFlowRate.is_initialized
-      rated_m3_per_s = pump.ratedFlowRate.get
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
-      return 0.0
+    if pump.to_PumpVariableSpeed.is_initialized || pump.to_PumpConstantSpeed.is_initialized
+      if pump.ratedFlowRate.is_initialized
+        rated_m3_per_s = pump.ratedFlowRate.get
+      elsif pump.autosizedRatedFlowRate.is_initialized
+        rated_m3_per_s = pump.autosizedRatedFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
+        return 0.0
+      end
+    elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
+      if pump.totalRatedFlowRate.is_initialized
+        rated_m3_per_s = pump.totalRatedFlowRate.get
+      elsif pump.autosizedTotalRatedFlowRate.is_initialized
+        rated_m3_per_s = pump.autosizedTotalRatedFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find rated pump Flow Rate, cannot determine w per gpm correctly.")
+        return 0.0
+      end
     end
 
     rated_w_per_m3s = rated_power_w / rated_m3_per_s

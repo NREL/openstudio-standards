@@ -1,29 +1,39 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
-require 'rubyXL'
 class NECB2011 < Standard
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
 
-
+  # Combine the data from the JSON files into a single hash
+  # Load JSON files differently depending on whether loading from
+  # the OpenStudio CLI embedded filesystem or from typical gem installation
   def load_standards_database_new()
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/"
-    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
     @standards_data = {}
     @standards_data["tables"] = []
-    files.each do |file|
-      #puts "loading standards data from #{file}"
-      data = JSON.parse(File.read(file))
-      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-        @standards_data["tables"] << data["tables"].first
-      else
-        @standards_data[data.keys.first] = data[data.keys.first]
+
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      embedded_files_relative('data/', /.*\.json/).each do |file|
+        data = JSON.parse(EmbeddedScripting.getFileAsString(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    else
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files.each do |file|
+        data = JSON.parse(File.read(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
       end
     end
+
     #needed for compatibility of standards database format
     @standards_data['tables'].each do |table|
       @standards_data[table['name']] = table
@@ -101,7 +111,7 @@ class NECB2011 < Standard
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
     fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
+    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
 
@@ -148,7 +158,8 @@ class NECB2011 < Standard
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
     # prototype generation.
-    model = load_initial_osm(@geometry_file) # standard candidate
+    model = load_geometry_osm(@geometry_file) # standard candidate
+    self.validate_initial_model(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards

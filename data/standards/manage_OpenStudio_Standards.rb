@@ -1,7 +1,6 @@
 # This script reads OpenStudio_standards.xlsx
 # and creates a JSON file containing all the information
 
-require 'rubygems'
 require 'json'
 require 'rubyXL'
 

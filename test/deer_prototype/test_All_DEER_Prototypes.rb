@@ -27,10 +27,7 @@ class TestAllDEERPrototypes < CreateDEERPrototypeBuildingTest
       'SCn',
       'SUn',
       'WRf',
-      'GHs',
-      'DMo',
-      'MFm',
-      'SFm'
+      'MFm'
   ]
 
   # Only a subset of building type and HVAC type combinations are valid
@@ -141,6 +138,11 @@ class TestAllDEERPrototypes < CreateDEERPrototypeBuildingTest
           'SVVE',
           'SVVG',
           'WLHP'],
+      'MFm' => [
+          'DXGF',
+          'DXHP',
+          'NCEH',
+          'NCGF'],
       'MLI' => [
           'DXEH',
           'DXGF',
@@ -229,7 +231,7 @@ class TestAllDEERPrototypes < CreateDEERPrototypeBuildingTest
   # Create a new set of tests for each building type because HVAC systems aren't all the same
   building_types.each do |building_type|
     hvacs = building_to_hvac_systems[building_type]
-    TestAllDEERPrototypes.create_run_model_tests(building_types, templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
+    TestAllDEERPrototypes.create_run_model_tests([building_type], templates, hvacs, climate_zones, create_models, run_models, compare_results, debug)
   end
 
 end
