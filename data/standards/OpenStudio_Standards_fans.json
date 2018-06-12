@@ -85,7 +85,7 @@
       "motor_efficiency": 0.9,
       "motor_in_airstream_fraction": 1.0,
       "fan_power_minimum_flow_rate_fraction": 0.25,
-      "fan_curve": null,
+      "fan_curve": "Single zone VAV fan",
       "notes": null
     },
     {
@@ -184,7 +184,7 @@
       "motor_efficiency": 0.9,
       "motor_in_airstream_fraction": 1.0,
       "fan_power_minimum_flow_rate_fraction": 0.25,
-      "fan_curve": null,
+      "fan_curve": "Multi zone VAV with static pressure reset",
       "notes": null
     },
     {
