@@ -130,7 +130,6 @@ class NECB2015
           when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
             max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
-            current_pump = supplycomp
             pumps << supplycomp.to_PumpVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
           when 'OS_Pump_ConstantSpeed'
