@@ -1,0 +1,74 @@
+{
+  "fans_cv": [
+    {
+      "name": "default",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.58175,
+      "motor_efficiency": 0.895,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "DOAS_Fan",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.58175,
+      "motor_efficiency": 0.895,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "PFP_Fan",
+      "pressure_rise": 1.20439,
+      "fan_efficiency": null,
+      "motor_efficiency": null,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "PTAC_CAV_Fan",
+      "pressure_rise": 1.33,
+      "fan_efficiency": 0.52,
+      "motor_efficiency": 0.8,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "Packaged_RTU_SZ_AC_CAV_Fan",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.54,
+      "motor_efficiency": 0.9,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "Split_AC_CAV_Fan",
+      "pressure_rise": 2.5,
+      "fan_efficiency": 0.56,
+      "motor_efficiency": 0.86,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
+      "name": "Unit_Heater_Fan",
+      "pressure_rise": null,
+      "fan_efficiency": 0.53625,
+      "motor_efficiency": 0.825,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_curve": null,
+      "notes": null
+    }
+  ]
+}
