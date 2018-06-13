@@ -1,5 +1,6 @@
 class Standard
   def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
     # Get the list of HVAC systems, as defined
