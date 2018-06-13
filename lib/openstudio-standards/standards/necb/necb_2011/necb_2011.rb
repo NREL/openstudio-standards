@@ -5,6 +5,7 @@ class NECB2011 < Standard
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
+  attr_accessor :space_type_map
 
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
