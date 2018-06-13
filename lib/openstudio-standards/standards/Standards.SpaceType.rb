@@ -336,7 +336,7 @@ class Standard
         definition = inst.gasEquipmentDefinition
         unless gas_equip_per_area.zero?
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{elec_equip_per_area} Btu/hr*ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{gas_equip_per_area} Btu/hr*ft^2.")
         end
         unless gas_equip_frac_latent.zero?
           definition.setFractionLatent(gas_equip_frac_latent)

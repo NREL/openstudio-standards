@@ -49,8 +49,8 @@ module SecondarySchool
           elec_equip_def1.setDesignLevel(915)
           elec_equip_def2.setDesignLevel(570)
         else
-          elec_equip_def1.setDesignLevel(99_999.88)
-          elec_equip_def2.setDesignLevel(99_999.99)
+          elec_equip_def1.setDesignLevel(1032)
+          elec_equip_def2.setDesignLevel(852)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)

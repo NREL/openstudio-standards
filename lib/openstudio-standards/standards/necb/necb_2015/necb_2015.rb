@@ -1,6 +1,5 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
-require 'rubyXL'
 class NECB2015 < NECB2011
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)
@@ -44,5 +43,25 @@ class NECB2015 < NECB2011
       @standards_data[table['name']] = table
     end
     return @standards_data
+  end
+
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+    # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
+    # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
+    # the cooling tower loop capacity can be significantly off which will affect the NECB 2015 maximum loop pump capacity.  Found
+    # all sizing was off somewhat if the additional sizing run was not done.
+    if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+      raise("sizing run 2 failed!")
+    end
+    # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
+    apply_maximum_loop_pump_power(model)
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
   end
 end

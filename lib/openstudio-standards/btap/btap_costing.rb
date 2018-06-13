@@ -1,3 +1,4 @@
+=begin
 require "#{File.dirname(__FILE__)}/btap"
 require 'json'
 require 'singleton'
@@ -661,3 +662,4 @@ end
 
 
 
+=end
