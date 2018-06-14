@@ -13,78 +13,78 @@ class TestAddHVACSystems < Minitest::Test
 
       ## Forced Air ##
 
-      # Gas, Electric, forced air
-      # ['PTAC', 'NaturalGas', nil, 'Electricity'],
-      # ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
-      # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-      # ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
+      #Gas, Electric, forced air
+      ['PTAC', 'NaturalGas', nil, 'Electricity'],
+      ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
+      ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+      ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-      # Electric, Electric, forced air
-      # ['PTHP', 'Electricity', nil, 'Electricity'],
-      # ['PSZ-HP', 'Electricity', nil, 'Electricity'],
-      # ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
-      # ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
+      #Electric, Electric, forced air
+      ['PTHP', 'Electricity', nil, 'Electricity'],
+      ['PSZ-HP', 'Electricity', nil, 'Electricity'],
+      ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
+      ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
 
       # VRF
       ['VRF', 'nil', 'nil', 'nil'],
 
-      # # District Hot Water, Electric, forced air
-      # ['PTAC', 'DistrictHeating', nil, 'Electricity'],
-      # # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-      # ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+      # District Hot Water, Electric, forced air
+      ['PTAC', 'DistrictHeating', nil, 'Electricity'],
+      # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+      ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
-      # # Ambient Loop, Ambient Loop, forced air
-      # # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-      # # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      # Ambient Loop, Ambient Loop, forced air
+      # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
 
-      # # Gas, District Chilled Water, forced air
-      # ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
-      # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
-      # ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+      # Gas, District Chilled Water, forced air
+      ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
+      ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+      ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
-      # # Electric, District Chilled Water, forced air
-      # ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
-      # ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
-      # ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # Electric, District Chilled Water, forced air
+      ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
+      ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
 
-      # # District Hot Water, District Chilled Water, forced air
-      # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
-      # ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+      # District Hot Water, District Chilled Water, forced air
+      ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+      ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
-      # ## Hydronic ##
+      ## Hydronic ##
 
-      # # Gas, Electric, hydronic
-      # ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
-      # ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
-      # ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
+      # Gas, Electric, hydronic
+      ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
+      ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
+      ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-      # # Electric, Electric, hydronic
-      # ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
-      # ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
-      # ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
+      # Electric, Electric, hydronic
+      ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
+      ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
+      ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
 
-      # # District Hot Water, Electric, hydronic
-      # ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
-      # ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+      # District Hot Water, Electric, hydronic
+      ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
+      ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
-      # # Ambient Loop, Ambient Loop, hydronic
-      # ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
-      # ['Water Source Heat Pumps with DOAS', 'HeatPump', nil, 'HeatPump'],
-      # ['Water Source Heat Pumps with DOAS', 'HeatPump', 'HeatPump', 'HeatPump'],
+      # Ambient Loop, Ambient Loop, hydronic
+      ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
+      ['Water Source Heat Pumps with DOAS', 'HeatPump', nil, 'HeatPump'],
+      ['Water Source Heat Pumps with DOAS', 'HeatPump', 'HeatPump', 'HeatPump'],
 
-      # # Gas, District Chilled Water, hydronic
-      # ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+      # Gas, District Chilled Water, hydronic
+      ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
-      # # Electric, District Chilled Water, hydronic
-      # ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # Electric, District Chilled Water, hydronic
+      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
-      # # District Hot Water, District Chilled Water, hydronic
-      # ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
+      # District Hot Water, District Chilled Water, hydronic
+      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
     ]
 
     template = '90.1-2013'
