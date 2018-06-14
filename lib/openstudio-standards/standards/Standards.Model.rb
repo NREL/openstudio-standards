@@ -267,7 +267,7 @@ class Standard
       end
     end
 
-    return { 'residential' => res_area_m2, 'nonresidential' => nonres_area_m2 }
+    return {'residential' => res_area_m2, 'nonresidential' => nonres_area_m2}
   end
 
   # Determine the number of stories spanned by the
@@ -378,8 +378,8 @@ class Standard
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
+    type_to_area = Hash.new {0.0}
+    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -387,7 +387,7 @@ class Standard
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
+    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
@@ -440,15 +440,15 @@ class Standard
 
       # Determine the dominant fuel type
       # from the subset of the dominant area type zones
-      fuel_to_area = Hash.new { 0.0 }
-      zones_grouped_by_fuel = dom_occ_zns.group_by { |z| z['fuel'] }
+      fuel_to_area = Hash.new {0.0}
+      zones_grouped_by_fuel = dom_occ_zns.group_by {|z| z['fuel']}
       zones_grouped_by_fuel.each do |fuel, zns_by_fuel|
         zns_by_fuel.each do |zn|
           fuel_to_area[fuel] += zn['area']
         end
       end
 
-      sorted_by_area = fuel_to_area.sort_by { |k, v| v }.reverse
+      sorted_by_area = fuel_to_area.sort_by {|k, v| v}.reverse
       dom_fuel = sorted_by_area[0][0]
 
       # Don't allow unconditioned to be the dominant fuel,
@@ -658,7 +658,7 @@ class Standard
     fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
 
     # Define the lookup by row and by fuel type
-    sys_lookup = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
+    sys_lookup = Hash.new {|h, k| h[k] = Hash.new(&h.default_proc)}
 
     # fossil, fossil and electric, purchased heat, purchased heat and cooling
     sys_lookup['1_or_2']['fossil'] = ['PTAC', 'NaturalGas', nil, 'Electricity']
@@ -937,7 +937,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_Reheat (Sys5)"
 
           # If and only if there are primary zones to attach to the loop
@@ -999,7 +999,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1094,7 +1094,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_Reheat (Sys7)"
 
           # If and only if there are primary zones to attach to the loop
@@ -1176,7 +1176,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1335,7 +1335,7 @@ class Standard
   # with the keys 'zone',
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
-    array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
+    array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
 
     # Calculate the area-weighted average
     total = 0.0
@@ -1518,7 +1518,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    return {'primary' => pri_zones, 'secondary' => sec_zones}
   end
 
   # Group an array of zones into multiple arrays, one
@@ -1590,7 +1590,7 @@ class Standard
     end
 
     # Pre-sort spaces
-    sorted_spaces = sorted_spaces.sort_by { |a| a[1] }
+    sorted_spaces = sorted_spaces.sort_by {|a| a[1]}
 
     # Take the sorted list and assign/make stories
     sorted_spaces.each do |space|
@@ -1803,7 +1803,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
     # Multi-zone VAV outdoor air sizing
-    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj) }
+    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
@@ -1816,7 +1816,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Air Loop Controls
-    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_standard_controls(obj, climate_zone)}
 
     # Plant Loop Controls
     # TODO refactor: enable this code (missing before refactor)
@@ -1825,44 +1825,44 @@ class Standard
     ##### Apply equipment efficiencies
 
     # Fans
-    model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    model.getFanVariableVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanConstantVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanOnOffs.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanZoneExhausts.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
 
     # Pumps
-    model.getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    model.getPumpConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getPumpVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getHeaderedPumpsConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getHeaderedPumpsVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paried DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
 
     # Unitary ACs
-    model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
-    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXTwoSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
+    model.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
 
     # Chillers
     clg_tower_objs = model.getCoolingTowerSingleSpeeds
-    model.getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs) }
+    model.getChillerElectricEIRs.sort.each {|obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs)}
 
     # Boilers
-    model.getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj) }
+    model.getBoilerHotWaters.sort.each {|obj| boiler_hot_water_apply_efficiency_and_curves(obj)}
 
     # Water Heaters
-    model.getWaterHeaterMixeds.sort.each { |obj| water_heater_mixed_apply_efficiency(obj) }
+    model.getWaterHeaterMixeds.sort.each {|obj| water_heater_mixed_apply_efficiency(obj)}
 
     # Cooling Towers
-    model.getCoolingTowerSingleSpeeds.sort.each { |obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj) }
-    model.getCoolingTowerTwoSpeeds.sort.each { |obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj) }
-    model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
+    model.getCoolingTowerSingleSpeeds.sort.each {|obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj)}
+    model.getCoolingTowerTwoSpeeds.sort.each {|obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj)}
+    model.getCoolingTowerVariableSpeeds.sort.each {|obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj)}
 
     # ERVs
-    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
+    model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
@@ -2197,7 +2197,7 @@ class Standard
     end
 
     # Make a schedule ruleset
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new( model )
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
     sch_ruleset.setName(schedule_name.to_s)
 
     # Loop through the rules, making one for each row in the spreadsheet
@@ -3013,7 +3013,8 @@ class Standard
                        else
                          "ASHRAE 169-2006-#{cz.value}"
                        end
-        next
+      elsif cz.institution == 'CEC'
+        climate_zone = "CEC T24-CEC#{cz.value}"
       end
     end
 
@@ -3878,31 +3879,31 @@ class Standard
 
     result = []
     if building_type == 'FullServiceRestaurant'
-      result << { units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4 }
+      result << {units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4}
     elsif building_type == 'Hospital'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif ['LargeHotel', 'SmallHotel'].include? building_type
-      result << { units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0 }
-      result << { units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0 }
-      result << { units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0 }
+      result << {units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0}
+      result << {units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0}
+      result << {units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0}
     elsif building_type == 'MidriseApartment'
-      result << { units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0 }
-      result << { units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0 }
-      result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
-      result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
-      result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
+      result << {units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0}
+      result << {units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0}
+      result << {units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0}
+      result << {units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0}
+      result << {units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0}
     elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
-      result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
+      result << {units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0}
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'PrimarySchool'
-      result << { units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6 }
+      result << {units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6}
     elsif building_type == 'QuickServiceRestaurant'
-      result << { units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7 }
+      result << {units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7}
     elsif building_type == 'Retail'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SecondarySchool'
-      result << { units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8 }
+      result << {units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8}
     elsif building_type == 'StripMall'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SuperMarket'
@@ -4011,7 +4012,7 @@ class Standard
 
     parts = [template]
 
-    unless building_type.empty?
+    unless building_type.nil?
       parts << building_type
     end
 
@@ -4172,7 +4173,7 @@ class Standard
     end
 
     # sort hash by min_z low to high
-    story_hash = story_hash.sort_by { |k, v| v[:min_z] }
+    story_hash = story_hash.sort_by {|k, v| v[:min_z]}
 
     # reassemble into hash after sorting
     hash = {}
@@ -4317,7 +4318,7 @@ class Standard
         next if zone.empty?
         if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == "Wall"
           surface.subSurfaces.each {|ss| ss.remove}
-          new_window = surface.setWindowToWallRatio(wwr,sillHeight_si,true)
+          new_window = surface.setWindowToWallRatio(wwr, sillHeight_si, true)
           raise "#{surface.name.get} did not get set to #{wwr}. The size of the surface is #{surface.grossArea}" unless surface.windowToWallRatio.round(3) == wwr.round(3)
           if new_window.empty?
             runner.registerWarning("The requested window to wall ratio for surface '#{surface.name}' was too large. Fenestration was not altered for this surface.")
@@ -4333,6 +4334,7 @@ class Standard
       end
     end
   end
+
   # This method will apply the a SRR to a model. It will remove any existing skylights and use the
   # Default contruction to set to apply the skylight construction. A default skylight square area of 0.25^2 is used.
   def apply_max_srr(model, runner, srr, skylight_area = 0.25 * 0.25)
@@ -4352,6 +4354,7 @@ class Standard
     spacenames = spaces.map {|space| space.name.get}
     runner.registerInfo("Adding #{skylights.size} skylights to #{spacenames}")
   end
+
   # This method will limit the subsurface of a given surface_type ("Wall" or "RoofCeiling") to the ratio for the building.
   # This method only reduces subsurface sizes at most.
   def apply_limit_to_subsurface_ratio(model, ratio, surface_type = "Wall")
@@ -4381,6 +4384,7 @@ class Standard
     end
     return true
   end
+
   # This method return the building ratio of subsurface_area / surface_type_area where surface_type can be "Wall" or "RoofCeiling"
   def get_outdoor_subsurface_ratio(model, surface_type = "Wall")
     surface_area = 0.0
@@ -4457,10 +4461,6 @@ class Standard
     end
   end
 
-
-
-
-  private
 
   # Helper method to fill in hourly values
   def model_add_vals_to_sch(model, day_sch, sch_type, values)
@@ -4586,4 +4586,58 @@ class Standard
   end
 
 
+  # Loads a osm as a starting point.
+  #
+  # @param osm_file [String] path to the .osm file, relative to the /data folder
+  # @return [Bool] returns true if successful, false if not
+  def load_geometry_osm(osm_file)
+    # Load the geometry .osm from relative to the data folder
+    osm_model_path = "../../../data/#{osm_file}"
+
+    # Load the .osm depending on whether running from normal gem location
+    # or from the embedded location in the OpenStudio CLI
+    if File.dirname(__FILE__)[0] == ':'
+      # running from embedded location in OpenStudio CLI
+      geom_model_string = load_resource_relative(osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModelFromString(geom_model_string)
+    else
+      abs_path = File.join(File.dirname(__FILE__), osm_model_path)
+      version_translator = OpenStudio::OSVersion::VersionTranslator.new
+      model = version_translator.loadModel(abs_path)
+    end
+
+    # Check that the model loaded successfully
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
+      return false
+    end
+    model = model.get
+
+    # Check for expected characteristics of geometry model
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
+      end
+    end
+    return model
+
+  end
 end

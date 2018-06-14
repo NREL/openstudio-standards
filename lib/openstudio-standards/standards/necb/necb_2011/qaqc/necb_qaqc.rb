@@ -1,7 +1,53 @@
 class NECB2011
 
-  # Generates the base qaqc hash.
+  attr_accessor :qaqc_data
+
+  def load_qaqc_database_new()
+    # Combine the data from the JSON files into a single hash
+    files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
+    @qaqc_data = {}
+    @qaqc_data["tables"] = []
+    files.each do |file|
+      #puts "loading qaqc data from #{file}"
+      data = JSON.parse(File.read(file))
+      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        @qaqc_data["tables"] << data["tables"].first
+      else
+        @qaqc_data[data.keys.first] = data[data.keys.first]
+      end
+    end
+    #needed for compatibility of qaqc database format
+    @qaqc_data['tables'].each do |table|
+      @qaqc_data[table['name']] = table
+    end
+    return @qaqc_data
+  end
+
+  def get_qaqc_table(table_name, search_criteria = nil)
+    return_objects = nil
+    object = @qaqc_data['tables'].detect {|table| table['name'] == table_name}
+    raise("could not find #{table_name} in qaqc table database. ") if object.nil? or object['table'].nil?
+    if search_criteria.nil?
+      #return object['table']
+      return object  # removed table beause need to use the object['refs']
+    else
+      return_objects = model_find_objects(object['table'], search_criteria)
+      return return_objects
+    end
+  end
+
   def init_qaqc(model)
+    # load the qaqc.json files
+    @qaqc_data = self.load_qaqc_database_new()
+
+    # generate base qaqc hash
+    qaqc = create_base_qaqc(model)
+    # performs the qaqc on the given base qaqc hash
+    necb_qaqc(qaqc, model)
+  end
+
+  # Generates the base qaqc hash.
+  def create_base_qaqc(model)    
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
@@ -309,7 +355,12 @@ class NECB2011
     ground_roofs.size > 0   ? g_roof_cond_weight = qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_roofs_area_m2] : g_roof_cond_weight = 0
     ground_floors.size > 0  ? g_floor_cond_weight = qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] * qaqc[:envelope][:ground_floors_area_m2] : g_floor_cond_weight = 0
     windows.size > 0        ? win_cond_weight = qaqc[:envelope][:windows_average_conductance_w_per_m2_k] * qaqc[:envelope][:windows_area_m2] : win_cond_weight = 0
-    doors.size > 0 ? sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2] : sky_cond_weight = 0
+    # doors.size > 0 ? sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2] : sky_cond_weight = 0
+    if doors.size > 0 && !qaqc[:envelope][:skylights_average_conductance_w_per_m2_k].nil? && !qaqc[:envelope][:skylights_area_m2].nil?
+      sky_cond_weight = qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] * qaqc[:envelope][:skylights_area_m2]
+    else
+      sky_cond_weight = 0
+    end
     overhead_doors.size > 0 ? door_cond_weight = qaqc[:envelope][:doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:doors_area_m2] : door_cond_weight = 0
     overhead_doors.size > 0 ?overhead_door_cond_weight = qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] * qaqc[:envelope][:overhead_doors_area_m2] : overhead_door_cond_weight = 0
 
@@ -788,10 +839,8 @@ class NECB2011
         qaqc[:end_uses]['heat_recovery_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
 
-    #File.open('qaqc.json', 'w') {|f| f.write(JSON.pretty_generate(qaqc, :allow_nan => true)) }
     # Perform qaqc
-    necb_qaqc(qaqc, model) if @template == "NECB2011"
-    #sanity_check(qaqc)
+    necb_qaqc(qaqc, model)
 
     return qaqc
   end
@@ -850,11 +899,11 @@ class NECB2011
 
       necb_section_test(
           qaqc,
-          20, #diff of 20%
-          '>=',
           percent_diff,
+          '<=',
+          20, #diff of 20%
           necb_section_name,
-          "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}] Percent Diff from NECB value [#{hp_check}]"
+          "[PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] [#{pump_power_hp}]; NECB value [#{hp_check}]; Percent Diff"
       )
     end
   end
@@ -862,10 +911,9 @@ class NECB2011
   # checks space compliance
   # Re: lighting_per_area, occupancy_per_area, occupancy_schedule, electric_equipment_per_area
 
-  def necb_space_compliance(qaqc,csv_file_name = "#{File.dirname(__FILE__)}/data/necb_2011_spacetype_info.csv")
+  def necb_space_compliance(qaqc)
     #    #Padmassun's Code Start
     #csv_file_name ="#{File.dirname(__FILE__)}/necb_2011_spacetype_info.csv"
-    puts csv_file_name
     qaqc[:spaces].each do |space|
       building_type =""
       space_type =""
@@ -1443,7 +1491,7 @@ class NECB2011
   end
 
   def necb_qaqc(qaqc, model)
-    puts "\n\nin necb_qaqc now\n\n"
+    puts "\n\nin necb_qaqc 2011 now\n\n"
     #Now perform basic QA/QC on items for NECB2011
     qaqc[:information] = []
     qaqc[:warnings] =[]
@@ -1451,9 +1499,7 @@ class NECB2011
     qaqc[:unique_errors]=[]
 
 
-    if @template == 'NECB2011'           
-      necb_space_compliance(qaqc,"#{File.dirname(__FILE__)}/data/necb_2011_spacetype_info.csv")
-    end
+    necb_space_compliance(qaqc)
 
     necb_envelope_compliance(qaqc)
 
@@ -1483,41 +1529,7 @@ class NECB2011
     qaqc[:warnings] = qaqc[:warnings].sort
     qaqc[:errors] = qaqc[:errors].sort
     qaqc[:unique_errors]= qaqc[:unique_errors].sort
-  end
-
-
-  private
-
-  def look_up_csv_data(csv_fname, search_criteria)
-    options = {:headers => :first_row,
-               :converters => [:numeric]}
-    unless File.exist?(csv_fname)
-      raise ("File: [#{csv_fname}] Does not exist")
-    end
-    # we'll save the matches here
-    matches = nil
-    # save a copy of the headers
-    headers = nil
-    CSV.open(csv_fname, "r", options) do |csv|
-
-      # Since CSV includes Enumerable we can use 'find_all'
-      # which will return all the elements of the Enumerble for
-      # which the block returns true
-
-      matches = csv.find_all do |row|
-        match = true
-        search_criteria.keys.each do |key|
-          match = match && (row[key].strip == search_criteria[key].strip)
-        end
-        match
-      end
-      headers = csv.headers
-    end
-    #puts matches
-    raise("More than one match") if matches.size > 1
-    puts "Zero matches found for [#{search_criteria}]" if matches.size == 0
-    #return matches[0]
-    return matches[0]
+    return qaqc
   end
 
   def necb_section_test(qaqc, result_value, bool_operator, expected_value, necb_section_name, test_text, tolerance = nil)

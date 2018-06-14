@@ -130671,54 +130671,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-A-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "07:00:00",
-            "08:00:00",
-            "10:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "19:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.3,
-            0.2,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-A-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-A-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-A-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -131025,110 +130977,6 @@
             0.5,
             0.7,
             0.9
-          ]
-        }
-      ]
-    },
-    {
-      "ScheduleType": "NECB-B-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-B-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "11:00:00",
-            "12:00:00",
-            "13:00:00",
-            "15:00:00",
-            "16:00:00",
-            "18:00:00",
-            "19:00:00",
-            "20:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.6,
-            0.5,
-            0.05,
-            0.7,
-            0.4,
-            0.5,
-            0.6,
-            0.4,
-            0.3,
-            0.4,
-            0.5,
-            0.8,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "11:00:00",
-            "12:00:00",
-            "13:00:00",
-            "15:00:00",
-            "16:00:00",
-            "18:00:00",
-            "19:00:00",
-            "20:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.7,
-            0.6,
-            0.05,
-            0.7,
-            0.4,
-            0.5,
-            0.6,
-            0.4,
-            0.3,
-            0.4,
-            0.5,
-            0.8,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "11:00:00",
-            "12:00:00",
-            "13:00:00",
-            "15:00:00",
-            "16:00:00",
-            "18:00:00",
-            "19:00:00",
-            "20:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.5,
-            0.6,
-            0.05,
-            0.7,
-            0.4,
-            0.5,
-            0.6,
-            0.4,
-            0.3,
-            0.4,
-            0.5,
-            0.8,
-            0.5
           ]
         }
       ]
@@ -131447,94 +131295,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-C-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "12:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "19:00:00",
-            "21:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.2,
-            0.3,
-            0.4,
-            0.8,
-            0.6,
-            0.4,
-            0.3,
-            0.2,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-C-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "12:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "19:00:00",
-            "21:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.2,
-            0.3,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.3,
-            0.2,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-C-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "12:00:00",
-            "17:00:00",
-            "18:00:00",
-            "19:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.2,
-            0.3,
-            0.5,
-            0.9,
-            0.5,
-            0.3,
-            0.05
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-C-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -131778,52 +131538,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-D-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "10:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "21:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.5,
-            0.9,
-            0.7,
-            0.3,
-            0.5,
-            0.3,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-D-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-D-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-D-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -132057,66 +131771,6 @@
             0.9,
             0.7,
             0.5,
-            0.05
-          ]
-        }
-      ]
-    },
-    {
-      "ScheduleType": "NECB-E-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-E-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.4,
-            0.5,
-            0.7,
-            0.9,
-            0.8,
-            0.7,
-            0.8,
-            0.3,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-E-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "16:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.2,
-            0.4,
-            0.2,
-            0.05
-          ]
-        },
-        {
-          "ScheduleName": "NECB-E-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
             0.05
           ]
         }
@@ -132514,128 +132168,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-F-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "03:00:00",
-            "05:00:00",
-            "06:00:00",
-            "07:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.35,
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.42,
-            0.63,
-            0.49,
-            0.35,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.35,
-            0.49
-          ]
-        },
-        {
-          "ScheduleName": "NECB-F-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "03:00:00",
-            "05:00:00",
-            "06:00:00",
-            "07:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.35,
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.42,
-            0.63,
-            0.49,
-            0.35,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.35,
-            0.49
-          ]
-        },
-        {
-          "ScheduleName": "NECB-F-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "03:00:00",
-            "05:00:00",
-            "06:00:00",
-            "07:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.35,
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.42,
-            0.63,
-            0.49,
-            0.35,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.35,
-            0.49
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-F-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -132937,112 +132469,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-G-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "06:00:00",
-            "07:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "14:00:00",
-            "15:00:00",
-            "17:00:00",
-            "19:00:00",
-            "21:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.1,
-            0.05,
-            0.2,
-            0.8,
-            0.7,
-            0.5,
-            0.4,
-            0.2,
-            0.3,
-            0.5,
-            0.7,
-            0.4,
-            0.2,
-            0.1
-          ]
-        },
-        {
-          "ScheduleName": "NECB-G-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "07:00:00",
-            "08:00:00",
-            "11:00:00",
-            "15:00:00",
-            "16:00:00",
-            "17:00:00",
-            "19:00:00",
-            "20:00:00",
-            "21:00:00",
-            "22:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.1,
-            0.05,
-            0.2,
-            0.5,
-            0.3,
-            0.7,
-            0.9,
-            0.7,
-            0.6,
-            0.5,
-            0.4,
-            0.3,
-            0.2
-          ]
-        },
-        {
-          "ScheduleName": "NECB-G-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "08:00:00",
-            "09:00:00",
-            "11:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.1,
-            0.05,
-            0.2,
-            0.3,
-            0.2,
-            0.3,
-            0.4,
-            0.5,
-            0.6,
-            0.7,
-            0.4,
-            0.3,
-            0.2
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-G-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -133218,38 +132644,6 @@
         },
         {
           "ScheduleName": "NECB-H-Electric-Equipment Sat Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9
-          ]
-        }
-      ]
-    },
-    {
-      "ScheduleType": "NECB-H-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-H-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-H-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-H-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -133534,84 +132928,6 @@
             0.1,
             0.2,
             0.8
-          ]
-        }
-      ]
-    },
-    {
-      "ScheduleType": "NECB-I-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-I-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "15:00:00",
-            "18:00:00",
-            "19:00:00",
-            "22:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.2,
-            0.05,
-            0.2,
-            0.4,
-            0.9,
-            0.8,
-            0.6
-          ]
-        },
-        {
-          "ScheduleName": "NECB-I-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "10:00:00",
-            "13:00:00",
-            "14:00:00",
-            "15:00:00",
-            "16:00:00",
-            "17:00:00",
-            "18:00:00",
-            "20:00:00",
-            "22:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.2,
-            0.05,
-            0.2,
-            0.4,
-            0.8,
-            0.9,
-            0.8,
-            0.6,
-            0.4,
-            0.9,
-            0.8,
-            0.6
-          ]
-        },
-        {
-          "ScheduleName": "NECB-I-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "12:00:00",
-            "13:00:00",
-            "14:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.05,
-            0.1,
-            0.2,
-            0.4,
-            0.2,
-            0.1,
-            0.05
           ]
         }
       ]
@@ -133986,100 +133302,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-J-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "05:00:00",
-            "06:00:00",
-            "07:00:00",
-            "21:00:00",
-            "22:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.1,
-            0.2,
-            0.4,
-            0.6,
-            0.3,
-            0.1
-          ]
-        },
-        {
-          "ScheduleName": "NECB-J-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "03:00:00",
-            "05:00:00",
-            "06:00:00",
-            "07:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "15:00:00",
-            "16:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.5,
-            0.3,
-            0.2,
-            0.1,
-            0.2,
-            0.4,
-            0.5,
-            0.8,
-            0.6,
-            0.5,
-            0.4,
-            0.3,
-            0.5,
-            0.7
-          ]
-        },
-        {
-          "ScheduleName": "NECB-J-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "03:00:00",
-            "05:00:00",
-            "06:00:00",
-            "08:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "14:00:00",
-            "15:00:00",
-            "19:00:00",
-            "20:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.5,
-            0.3,
-            0.2,
-            0.1,
-            0.2,
-            0.4,
-            0.6,
-            0.9,
-            0.7,
-            0.5,
-            0.4,
-            0.3,
-            0.4,
-            0.6
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-J-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -134313,38 +133535,6 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Service Water Heating",
-      "Schedules": [
-        {
-          "ScheduleName": "NECB-K-Service Water Heating Default|Wkdy Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.0
-          ]
-        },
-        {
-          "ScheduleName": "NECB-K-Service Water Heating Sat Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.0
-          ]
-        },
-        {
-          "ScheduleName": "NECB-K-Service Water Heating Sun|Hol Day",
-          "ScheduleTimes": [
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.0
-          ]
-        }
-      ]
-    },
-    {
       "ScheduleType": "NECB-K-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -134504,6 +133694,54 @@
         },
         {
           "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-A-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "07:00:00",
+            "08:00:00",
+            "10:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.5,
+            0.9,
+            0.7,
+            0.5,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -134765,6 +134003,110 @@
       ]
     },
     {
+      "ScheduleType": "NECB-B-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.6,
+            0.5,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.7,
+            0.6,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.6,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-B-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -135020,6 +134362,94 @@
       ]
     },
     {
+      "ScheduleType": "NECB-C-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "21:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.8,
+            0.6,
+            0.4,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "21:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.5,
+            0.9,
+            0.7,
+            0.5,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.5,
+            0.9,
+            0.5,
+            0.3,
+            0.05
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-C-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -135217,6 +134647,52 @@
       ]
     },
     {
+      "ScheduleType": "NECB-D-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "10:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "21:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.5,
+            0.9,
+            0.7,
+            0.3,
+            0.5,
+            0.3,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-D-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -135394,6 +134870,66 @@
         },
         {
           "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-E-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.4,
+            0.5,
+            0.7,
+            0.9,
+            0.8,
+            0.7,
+            0.8,
+            0.3,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "16:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.2,
+            0.4,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -135685,6 +135221,128 @@
       ]
     },
     {
+      "ScheduleType": "NECB-F-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        },
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        },
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-F-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -135906,6 +135564,112 @@
       ]
     },
     {
+      "ScheduleType": "NECB-G-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "14:00:00",
+            "15:00:00",
+            "17:00:00",
+            "19:00:00",
+            "21:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.8,
+            0.7,
+            0.5,
+            0.4,
+            0.2,
+            0.3,
+            0.5,
+            0.7,
+            0.4,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "07:00:00",
+            "08:00:00",
+            "11:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "19:00:00",
+            "20:00:00",
+            "21:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.5,
+            0.3,
+            0.7,
+            0.9,
+            0.7,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.2
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "08:00:00",
+            "09:00:00",
+            "11:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.3,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.4,
+            0.3,
+            0.2
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-G-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -136049,6 +135813,38 @@
         },
         {
           "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-H-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -136286,6 +136082,84 @@
             0.5,
             0.9,
             0.5,
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-I-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "15:00:00",
+            "18:00:00",
+            "19:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.2,
+            0.05,
+            0.2,
+            0.4,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "10:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "20:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.2,
+            0.05,
+            0.2,
+            0.4,
+            0.8,
+            0.9,
+            0.8,
+            0.6,
+            0.4,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.4,
+            0.2,
+            0.1,
             0.05
           ]
         }
@@ -136551,6 +136425,100 @@
       ]
     },
     {
+      "ScheduleType": "NECB-J-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "21:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.2,
+            0.4,
+            0.6,
+            0.3,
+            0.1
+          ]
+        },
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "15:00:00",
+            "16:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.3,
+            0.2,
+            0.1,
+            0.2,
+            0.4,
+            0.5,
+            0.8,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.5,
+            0.7
+          ]
+        },
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.3,
+            0.2,
+            0.1,
+            0.2,
+            0.4,
+            0.6,
+            0.9,
+            0.7,
+            0.5,
+            0.4,
+            0.3,
+            0.4,
+            0.6
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-J-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -136752,6 +136720,38 @@
       ]
     },
     {
+      "ScheduleType": "NECB-K-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
+          ]
+        },
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
+          ]
+        },
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-K-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -136911,6 +136911,54 @@
         },
         {
           "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-A-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "07:00:00",
+            "08:00:00",
+            "10:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.5,
+            0.9,
+            0.7,
+            0.5,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-A-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -137172,6 +137220,110 @@
       ]
     },
     {
+      "ScheduleType": "NECB-B-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.6,
+            0.5,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.7,
+            0.6,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "11:00:00",
+            "12:00:00",
+            "13:00:00",
+            "15:00:00",
+            "16:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.6,
+            0.05,
+            0.7,
+            0.4,
+            0.5,
+            0.6,
+            0.4,
+            0.3,
+            0.4,
+            0.5,
+            0.8,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-B-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -137427,6 +137579,94 @@
       ]
     },
     {
+      "ScheduleType": "NECB-C-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "21:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.8,
+            0.6,
+            0.4,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "21:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.5,
+            0.9,
+            0.7,
+            0.5,
+            0.3,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-C-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.5,
+            0.9,
+            0.5,
+            0.3,
+            0.05
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-C-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -137624,6 +137864,52 @@
       ]
     },
     {
+      "ScheduleType": "NECB-D-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "10:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "21:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.5,
+            0.9,
+            0.7,
+            0.3,
+            0.5,
+            0.3,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-D-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-D-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -137801,6 +138087,66 @@
         },
         {
           "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-E-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.4,
+            0.5,
+            0.7,
+            0.9,
+            0.8,
+            0.7,
+            0.8,
+            0.3,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "16:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.2,
+            0.4,
+            0.2,
+            0.05
+          ]
+        },
+        {
+          "ScheduleName": "NECB-E-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -138092,6 +138438,128 @@
       ]
     },
     {
+      "ScheduleType": "NECB-F-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        },
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        },
+        {
+          "ScheduleName": "NECB-F-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.35,
+            0.21,
+            0.14,
+            0.07,
+            0.14,
+            0.28,
+            0.42,
+            0.63,
+            0.49,
+            0.35,
+            0.28,
+            0.35,
+            0.28,
+            0.21,
+            0.35,
+            0.49
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-F-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -138313,6 +138781,112 @@
       ]
     },
     {
+      "ScheduleType": "NECB-G-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "14:00:00",
+            "15:00:00",
+            "17:00:00",
+            "19:00:00",
+            "21:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.8,
+            0.7,
+            0.5,
+            0.4,
+            0.2,
+            0.3,
+            0.5,
+            0.7,
+            0.4,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "07:00:00",
+            "08:00:00",
+            "11:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "19:00:00",
+            "20:00:00",
+            "21:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.5,
+            0.3,
+            0.7,
+            0.9,
+            0.7,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.2
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "08:00:00",
+            "09:00:00",
+            "11:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.05,
+            0.2,
+            0.3,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.4,
+            0.3,
+            0.2
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-G-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -138456,6 +139030,38 @@
         },
         {
           "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-H-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-H-Service Water Heating Sun|Hol Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -138693,6 +139299,84 @@
             0.5,
             0.9,
             0.5,
+            0.05
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-I-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "15:00:00",
+            "18:00:00",
+            "19:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.2,
+            0.05,
+            0.2,
+            0.4,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "10:00:00",
+            "13:00:00",
+            "14:00:00",
+            "15:00:00",
+            "16:00:00",
+            "17:00:00",
+            "18:00:00",
+            "20:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.2,
+            0.05,
+            0.2,
+            0.4,
+            0.8,
+            0.9,
+            0.8,
+            0.6,
+            0.4,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-I-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "12:00:00",
+            "13:00:00",
+            "14:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.05,
+            0.1,
+            0.2,
+            0.4,
+            0.2,
+            0.1,
             0.05
           ]
         }
@@ -138958,6 +139642,100 @@
       ]
     },
     {
+      "ScheduleType": "NECB-J-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "21:00:00",
+            "22:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.1,
+            0.2,
+            0.4,
+            0.6,
+            0.3,
+            0.1
+          ]
+        },
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "15:00:00",
+            "16:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.3,
+            0.2,
+            0.1,
+            0.2,
+            0.4,
+            0.5,
+            0.8,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.5,
+            0.7
+          ]
+        },
+        {
+          "ScheduleName": "NECB-J-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "03:00:00",
+            "05:00:00",
+            "06:00:00",
+            "08:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "14:00:00",
+            "15:00:00",
+            "19:00:00",
+            "20:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5,
+            0.3,
+            0.2,
+            0.1,
+            0.2,
+            0.4,
+            0.6,
+            0.9,
+            0.7,
+            0.5,
+            0.4,
+            0.3,
+            0.4,
+            0.6
+          ]
+        }
+      ]
+    },
+    {
       "ScheduleType": "NECB-J-Thermostat Setpoint-Cooling",
       "Schedules": [
         {
@@ -139154,6 +139932,38 @@
           ],
           "ScheduleValues": [
             0.9
+          ]
+        }
+      ]
+    },
+    {
+      "ScheduleType": "NECB-K-Service Water Heating",
+      "Schedules": [
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Default|Wkdy Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
+          ]
+        },
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Sat Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
+          ]
+        },
+        {
+          "ScheduleName": "NECB-K-Service Water Heating Sun|Hol Day",
+          "ScheduleTimes": [
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.0
           ]
         }
       ]
