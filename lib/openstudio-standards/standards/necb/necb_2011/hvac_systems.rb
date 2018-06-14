@@ -980,6 +980,7 @@ class NECB2011
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
+      # Is this a return or supply fan
       if fan.name.to_s.include?('Supply')
         template_mod += '-VARIABLE-SUPPLY'
       elsif fan.name.to_s.include?('Return')
