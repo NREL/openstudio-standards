@@ -3,7 +3,7 @@ class Standard
 
   # Prototype CoilHeatingGas object
   # @param name [String] the name of the system, or nil in which case it will be defaulted
-  # @param schedule [String] name of the availability schedule, or [Schedule] Schedule object, or nil in which case default to always on
+  # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param nominal_capacity [Double] rated nominal capacity
   # @param efficiency [Double] rated heating efficiency
   def create_coil_heating_gas(model, name: "Gas Htg Coil", schedule: nil, nominal_capacity: nil, efficiency: 0.80)

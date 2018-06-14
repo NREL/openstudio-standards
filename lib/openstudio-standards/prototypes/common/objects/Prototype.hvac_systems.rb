@@ -3418,21 +3418,47 @@ class Standard
     return baseboards
   end
 
-  # Adds Variable Refrigerant Flow system to each zone
+  # Adds Variable Refrigerant Flow system and terminal units for each zone
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
   # @return [Array<OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow>]
-  # array of vrf units.
+  #   array of vrf units.
   def model_add_vrf(model,
                     thermal_zones)
 
-    # TODO: code to make a main vrf condenser
+    # create vrf outdoor unit
+    master_zone = thermal_zones[0]
+    vrf_outdoor_unit = create_air_conditioner_variable_refrigerant_flow(model, name: "VRF System",
+                                                                           master_zone: master_zone)
     vrfs = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding vrf unit for #{zone.name}.")
 
-      # TODO: code to add vrf system
+      # add vrf terminal unit
+      vrf_terminal_unit = OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow.new(model)
+      vrf_terminal_unit.setName("#{zone.name.to_s} VRF Terminal Unit")
+      vrf_terminal_unit.addToThermalZone(zone)
+      vrf_terminal_unit.setTerminalUnitAvailabilityschedule(model.alwaysOnDiscreteSchedule)
 
+      # no outdoor air assumed
+      vrf_terminal_unit.setOutdoorAirFlowRateDuringCoolingOperation(0)
+      vrf_terminal_unit.setOutdoorAirFlowRateDuringHeatingOperation(0)
+      vrf_terminal_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0)
+
+      # set fan variables
+      # always off denotes cycling fan
+      vrf_terminal_unit.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      vrf_fan = vrf_terminal_unit.supplyAirFan.to_FanOnOff.get
+
+      # corresponds to 50 W at 300 cfm
+      pressure_rise = OpenStudio.convert(0.68,"inH_{2}O","Pa").get
+      vrf_fan.setPressureRise(pressure_rise)
+      vrf_fan.setMotorEfficiency(0.8)
+      vrf_fan.setFanEfficiency(0.6)
+      vrf_fan.setName("#{zone.name.to_s} VRF Unit Cycling Fan")
+
+      # add to main condensing unit
+      vrf_outdoor_unit.addTerminal(vrf_terminal_unit)
     end
 
     return vrfs
@@ -4373,7 +4399,6 @@ class Standard
                         heating_type,
                         supplemental_heating_type)
     when 'VRF'
-      
       model_add_vrf(model,
                     zones)
 
