@@ -1,7 +1,40 @@
 class NECB2011
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
+# Chris Start
+#=begin
+    peak_flow_rate = 0
+    model.getSpaces.sort.each do |space|
+      space_type_name = space.spaceType.get.nameString
+      # find the specific space_type properties from standard.json
+      @standards_data['space_types']['table'].each do |space_type|
+        space_type_name == (space_type['building_type'] + " " + space_type['space_type']) ? data = space_type : next
+      end
+      search_criteria = {
+          'template' => template,
+          'building_type' => building_type,
+          'space_type' => space_type_name
+      }
+      data = model_find_object(standards_data['space_types'], search_criteria)
+      puts "hello"
+#=begin
+      if data.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
+        return nil
+      end
+      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
 
+      # If there is no service hot water load.. Don't bother adding anything.
+      if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
+          data['service_water_heating_peak_flow_rate'].to_f == 0.0
+        next
+      end
+      peak_flow_rate += data['service_water_heating_peak_flow_per_area'].to_f
+#=end
+    end
+
+#=end
+# Chris End
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
