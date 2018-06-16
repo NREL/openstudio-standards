@@ -9,7 +9,7 @@ class Standard
   # @param cooling_cop [Double] rated cooling coefficient of performance
   # @param heating_cop [Double] rated heating coefficient of performance
   # @param heat_recovery [Bool] does the unit have heat recovery
-  # @param defrost_strategy [String] type of defrost strategy. options are reverse-cycle or resistive
+  # @param defrost_strategy [String] type of defrost strategy. options are ReverseCycle or Resistive
   # @param condenser_type [String] type of condenser
   #   options are AirCooled (default), WaterCooled, and EvaporativelyCooled.
   #   if WaterCooled, the user most include a condenser_loop
@@ -18,10 +18,10 @@ class Standard
   #   options are LoadPriority, ZonePriority, ThermostatOffsetPriority, MasterThermostatPriority
   def create_air_conditioner_variable_refrigerant_flow(model, name: "VRF System",
                                                        schedule: nil, type: nil,
-                                                       cooling_cop: 4.0, heating_cop: 4.0,
+                                                       cooling_cop: 4.287, heating_cop: 4.147,
                                                        heat_recovery: true, defrost_strategy: "Resistive",
                                                        condenser_type: "AirCooled", condenser_loop: nil,
-                                                       master_zone: nil, priority_control_type: "ZonePriority")
+                                                       master_zone: nil, priority_control_type: "LoadPriority")
 
     vrf_outdoor_unit = OpenStudio::Model::AirConditionerVariableRefrigerantFlow.new(model)
 
@@ -63,8 +63,10 @@ class Standard
     vrf_outdoor_unit.setDefrostStrategy(defrost_strategy)
 
     # defaults
-    vrf_outdoor_unit.setMinimumOutdoorTemperatureinCoolingMode(-6.0)
+    vrf_outdoor_unit.setMinimumOutdoorTemperatureinCoolingMode(-5.0)
+    vrf_outdoor_unit.setMaximumOutdoorTemperatureinCoolingMode(43.0)
     vrf_outdoor_unit.setMinimumOutdoorTemperatureinHeatingMode(-20.0)
+    vrf_outdoor_unit.setMaximumOutdoorTemperatureinHeatingMode(30.0)
     vrf_outdoor_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(30.48)
     vrf_outdoor_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinHeatingMode(30.48)
     vrf_outdoor_unit.setVerticalHeightusedforPipingCorrectionFactor(10.668)
@@ -87,142 +89,331 @@ class Standard
       vrf_outdoor_unit.setMasterThermostatPriorityControlType(priority_control_type)
     end
 
+    vrf_cool_cap_f_of_low_temp = nil
+    vrf_cool_cap_ratio_boundary = nil
+    vrf_cool_cap_f_of_high_temp = nil
+    vrf_cool_eir_f_of_low_temp = nil
+    vrf_cool_eir_ratio_boundary = nil
+    vrf_cool_eir_f_of_high_temp = nil
+    vrf_cooling_eir_low_plr = nil
+    vrf_cooling_eir_high_plr = nil
+    vrf_cooling_comb_ratio = nil
+    vrf_cooling_cplffplr = nil
     vrf_heat_cap_f_of_low_temp = nil
-    vrf_heat_cap_f_of_high_temp = nil
     vrf_heat_cap_ratio_boundary = nil
+    vrf_heat_cap_f_of_high_temp = nil
     vrf_heat_eir_f_of_low_temp = nil
-    vrf_heat_eir_f_of_high_temp = nil
-    heating_eir_low_plr = nil
-    heating_eir_hi_plr = nil
     vrf_heat_eir_boundary = nil
+    vrf_heat_eir_f_of_high_temp = nil
+    vrf_heating_eir_low_plr = nil
+    vrf_heating_eir_hi_plr = nil
     vrf_heating_comb_ratio = nil
-    vrf_cplff_plr = nil
+    vrf_heating_cplffplr = nil
+    vrf_defrost_eir_f_of_temp = nil
 
     # curve sets
-    # TODO: update and add cooling curves based on manufacturer data
     if type == 'OS default'
 
       # use OS default curves
 
     else # default curve set
 
+      # based on DAIKINREYQ 120 on BCL
+
+      # Cooling Capacity Ratio Modifier Function of Low Temperature Curve
+      vrf_cool_cap_f_of_low_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_cool_cap_f_of_low_temp.setName("vrf_cool_cap_f_of_low_temp")
+      vrf_cool_cap_f_of_low_temp.setCoefficient1Constant(-1.69653019339465)
+      vrf_cool_cap_f_of_low_temp.setCoefficient2x(0.207248180531939)
+      vrf_cool_cap_f_of_low_temp.setCoefficient3xPOW2(-0.00343146229659024)
+      vrf_cool_cap_f_of_low_temp.setCoefficient4y(0.016381597419714)
+      vrf_cool_cap_f_of_low_temp.setCoefficient5yPOW2(-6.7387172629965e-05)
+      vrf_cool_cap_f_of_low_temp.setCoefficient6xTIMESY(-0.000849848402870241)
+      vrf_cool_cap_f_of_low_temp.setMinimumValueofx(13.9)
+      vrf_cool_cap_f_of_low_temp.setMaximumValueofx(23.9)
+      vrf_cool_cap_f_of_low_temp.setMinimumValueofy(-5.0)
+      vrf_cool_cap_f_of_low_temp.setMaximumValueofy(43.3)
+      vrf_cool_cap_f_of_low_temp.setMinimumCurveOutput(0.59)
+      vrf_cool_cap_f_of_low_temp.setMaximumCurveOutput(1.33)
+
+      # Cooling Capacity Ratio Boundary Curve
+      vrf_cool_cap_ratio_boundary = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cool_cap_ratio_boundary.setName("vrf_cool_cap_ratio_boundary")
+      vrf_cool_cap_ratio_boundary.setCoefficient1Constant(25.73)
+      vrf_cool_cap_ratio_boundary.setCoefficient2x(-0.03150043)
+      vrf_cool_cap_ratio_boundary.setCoefficient3xPOW2(-0.01416595)
+      vrf_cool_cap_ratio_boundary.setCoefficient4xPOW3(0.0)
+      vrf_cool_cap_ratio_boundary.setMinimumValueofx(11.0)
+      vrf_cool_cap_ratio_boundary.setMaximumValueofx(30.0)
+
+      # Cooling Capacity Ratio Modifier Function of High Temperature Curve
+      vrf_cool_cap_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_cool_cap_f_of_high_temp.setName("vrf_cool_cap_f_of_high_temp")
+      vrf_cool_cap_f_of_high_temp.setCoefficient1Constant(0.6867358)
+      vrf_cool_cap_f_of_high_temp.setCoefficient2x(0.0207631)
+      vrf_cool_cap_f_of_high_temp.setCoefficient3xPOW2(0.0005447)
+      vrf_cool_cap_f_of_high_temp.setCoefficient4y(-0.0016218)
+      vrf_cool_cap_f_of_high_temp.setCoefficient5yPOW2(-4.259e-07)
+      vrf_cool_cap_f_of_high_temp.setCoefficient6xTIMESY(-0.0003392)
+      vrf_cool_cap_f_of_high_temp.setMinimumValueofx(15.0)
+      vrf_cool_cap_f_of_high_temp.setMaximumValueofx(24.0)
+      vrf_cool_cap_f_of_high_temp.setMinimumValueofy(16.0)
+      vrf_cool_cap_f_of_high_temp.setMaximumValueofy(43.0)
+
+      # Cooling Energy Input Ratio Modifier Function of Low Temperature Curve
+      vrf_cool_eir_f_of_low_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_cool_eir_f_of_low_temp.setName("vrf_cool_eir_f_of_low_temp")
+      vrf_cool_eir_f_of_low_temp.setCoefficient1Constant(-1.61908214818635)
+      vrf_cool_eir_f_of_low_temp.setCoefficient2x(0.185964818731756)
+      vrf_cool_eir_f_of_low_temp.setCoefficient3xPOW2(-0.00389610393381592)
+      vrf_cool_eir_f_of_low_temp.setCoefficient4y(-0.00901995326324613)
+      vrf_cool_eir_f_of_low_temp.setCoefficient5yPOW2(0.00030340007815629)
+      vrf_cool_eir_f_of_low_temp.setCoefficient6xTIMESY(0.000476048529099348)
+      vrf_cool_eir_f_of_low_temp.setMinimumValueofx(13.9)
+      vrf_cool_eir_f_of_low_temp.setMaximumValueofx(23.9)
+      vrf_cool_eir_f_of_low_temp.setMinimumValueofy(-5.0)
+      vrf_cool_eir_f_of_low_temp.setMaximumValueofy(43.3)
+      vrf_cool_eir_f_of_low_temp.setMinimumCurveOutput(0.27)
+      vrf_cool_eir_f_of_low_temp.setMaximumCurveOutput(1.15)
+
+      # Cooling Energy Input Ratio Boundary Curve
+      vrf_cool_eir_ratio_boundary = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cool_eir_ratio_boundary.setName("vrf_cool_eir_ratio_boundary")
+      vrf_cool_eir_ratio_boundary.setCoefficient1Constant(25.73473775)
+      vrf_cool_eir_ratio_boundary.setCoefficient2x(-0.03150043)
+      vrf_cool_eir_ratio_boundary.setCoefficient3xPOW2(-0.01416595)
+      vrf_cool_eir_ratio_boundary.setCoefficient4xPOW3(0.0)
+      vrf_cool_eir_ratio_boundary.setMinimumValueofx(15.0)
+      vrf_cool_eir_ratio_boundary.setMaximumValueofx(24.0)
+
+      # Cooling Energy Input Ratio Modifier Function of High Temperature Curve
+      vrf_cool_eir_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_cool_eir_f_of_high_temp.setName("vrf_cool_eir_f_of_high_temp")
+      vrf_cool_eir_f_of_high_temp.setCoefficient1Constant(-1.4395110176)
+      vrf_cool_eir_f_of_high_temp.setCoefficient2x(0.1619850459)
+      vrf_cool_eir_f_of_high_temp.setCoefficient3xPOW2(-0.0034911781)
+      vrf_cool_eir_f_of_high_temp.setCoefficient4y(0.0269442645)
+      vrf_cool_eir_f_of_high_temp.setCoefficient5yPOW2(0.0001346163)
+      vrf_cool_eir_f_of_high_temp.setCoefficient6xTIMESY(-0.0006714941)
+      vrf_cool_eir_f_of_high_temp.setMinimumValueofx(15.0)
+      vrf_cool_eir_f_of_high_temp.setMaximumValueofx(23.9)
+      vrf_cool_eir_f_of_high_temp.setMinimumValueofy(16.8)
+      vrf_cool_eir_f_of_high_temp.setMaximumValueofy(43.3)
+
+      # Cooling Energy Input Ratio Modifier Function of Low Part-Load Ratio Curve
+      vrf_cooling_eir_low_plr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cooling_eir_low_plr.setName("vrf_cool_eir_f_of_low_temp")
+      vrf_cooling_eir_low_plr.setCoefficient1Constant(0.0734992169827752)
+      vrf_cooling_eir_low_plr.setCoefficient2x(0.334783365234032)
+      vrf_cooling_eir_low_plr.setCoefficient3xPOW2(0.591613015486343)
+      vrf_cooling_eir_low_plr.setCoefficient4xPOW3(0.0)
+      vrf_cooling_eir_low_plr.setMinimumValueofx(0.25)
+      vrf_cooling_eir_low_plr.setMaximumValueofx(1.0)
+      vrf_cooling_eir_low_plr.setMinimumCurveOutput(0.0)
+      vrf_cooling_eir_low_plr.setMaximumCurveOutput(1.0)
+
+      # Cooling Energy Input Ratio Modifier Function of High Part-Load Ratio Curve
+      vrf_cooling_eir_high_plr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cooling_eir_high_plr.setName("vrf_cooling_eir_high_plr")
+      vrf_cooling_eir_high_plr.setCoefficient1Constant(1.0)
+      vrf_cooling_eir_high_plr.setCoefficient2x(0.0)
+      vrf_cooling_eir_high_plr.setCoefficient3xPOW2(0.0)
+      vrf_cooling_eir_high_plr.setCoefficient4xPOW3(0.0)
+      vrf_cooling_eir_high_plr.setMinimumValueofx(1.0)
+      vrf_cooling_eir_high_plr.setMaximumValueofx(1.5)
+
+      # Cooling Combination Ratio Correction Factor Curve
+      vrf_cooling_comb_ratio = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cooling_comb_ratio.setName("vrf_cooling_comb_ratio")
+      vrf_cooling_comb_ratio.setCoefficient1Constant(0.24034)
+      vrf_cooling_comb_ratio.setCoefficient2x(-0.21873)
+      vrf_cooling_comb_ratio.setCoefficient3xPOW2(1.97941)
+      vrf_cooling_comb_ratio.setCoefficient4xPOW3(-1.02636)
+      vrf_cooling_comb_ratio.setMinimumValueofx(0.5)
+      vrf_cooling_comb_ratio.setMaximumValueofx(2.0)
+      vrf_cooling_comb_ratio.setMinimumCurveOutput(0.5)
+      vrf_cooling_comb_ratio.setMaximumCurveOutput(1.056)
+
+      # Cooling Part-Load Fraction Correlation Curve
+      vrf_cooling_cplffplr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_cooling_cplffplr.setName("vrf_cooling_cplffplr")
+      vrf_cooling_cplffplr.setCoefficient1Constant(0.85)
+      vrf_cooling_cplffplr.setCoefficient2x(0.15)
+      vrf_cooling_cplffplr.setCoefficient3xPOW2(0.0)
+      vrf_cooling_cplffplr.setCoefficient4xPOW3(0.0)
+      vrf_cooling_cplffplr.setMinimumValueofx(1.0)
+      vrf_cooling_cplffplr.setMaximumValueofx(1.0)
+
       # Heating Capacity Ratio Modifier Function of Low Temperature Curve Name
       vrf_heat_cap_f_of_low_temp = OpenStudio::Model::CurveBiquadratic.new(model)
-      vrf_heat_cap_f_of_low_temp.setCoefficient1Constant(1.014599599)
-      vrf_heat_cap_f_of_low_temp.setCoefficient2x(-0.002506703)
-      vrf_heat_cap_f_of_low_temp.setCoefficient3xPOW2(-0.000141599)
-      vrf_heat_cap_f_of_low_temp.setCoefficient4y(0.026931595)
-      vrf_heat_cap_f_of_low_temp.setCoefficient5yPOW2(1.83538E-06)
-      vrf_heat_cap_f_of_low_temp.setCoefficient6xTIMESY(-0.000358147)
-      vrf_heat_cap_f_of_low_temp.setMinimumValueofx(15)
-      vrf_heat_cap_f_of_low_temp.setMaximumValueofx(27)
-      vrf_heat_cap_f_of_low_temp.setMinimumValueofy(-20)
-      vrf_heat_cap_f_of_low_temp.setMaximumValueofy(15)
-
-      # Heating Capacity Ratio Modifier Function of High Temperature Curve Name
-      vrf_heat_cap_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
-      vrf_heat_cap_f_of_high_temp.setCoefficient1Constant(1.161134821)
-      vrf_heat_cap_f_of_high_temp.setCoefficient2x(0.027478868)
-      vrf_heat_cap_f_of_high_temp.setCoefficient3xPOW2(-0.00168795)
-      vrf_heat_cap_f_of_high_temp.setCoefficient4y(0.001783378)
-      vrf_heat_cap_f_of_high_temp.setCoefficient5yPOW2(2.03208E-06)
-      vrf_heat_cap_f_of_high_temp.setCoefficient6xTIMESY(-6.8969E-05)
-      vrf_heat_cap_f_of_high_temp.setMinimumValueofx(15)
-      vrf_heat_cap_f_of_high_temp.setMaximumValueofx(27)
-      vrf_heat_cap_f_of_high_temp.setMinimumValueofy(-10)
-      vrf_heat_cap_f_of_high_temp.setMaximumValueofy(15)
+      vrf_heat_cap_f_of_low_temp.setName("vrf_heat_cap_f_of_low_temp")
+      vrf_heat_cap_f_of_low_temp.setCoefficient1Constant(0.983220174655636)
+      vrf_heat_cap_f_of_low_temp.setCoefficient2x(0.0157167577703294)
+      vrf_heat_cap_f_of_low_temp.setCoefficient3xPOW2(-0.000835032422884084)
+      vrf_heat_cap_f_of_low_temp.setCoefficient4y(0.0522939264581759)
+      vrf_heat_cap_f_of_low_temp.setCoefficient5yPOW2(-0.000531556035364549)
+      vrf_heat_cap_f_of_low_temp.setCoefficient6xTIMESY(-0.00190605953116024)
+      vrf_heat_cap_f_of_low_temp.setMinimumValueofx(16.1)
+      vrf_heat_cap_f_of_low_temp.setMaximumValueofx(23.9)
+      vrf_heat_cap_f_of_low_temp.setMinimumValueofy(-25.0)
+      vrf_heat_cap_f_of_low_temp.setMaximumValueofy(13.3)
+      vrf_heat_cap_f_of_low_temp.setMinimumCurveOutput(0.515151515151515)
+      vrf_heat_cap_f_of_low_temp.setMaximumCurveOutput(1.2)
 
       # Heating Capacity Ratio Boundary Curve Name
       vrf_heat_cap_ratio_boundary = OpenStudio::Model::CurveCubic.new(model)
-      vrf_heat_cap_ratio_boundary.setCoefficient1Constant(-7.6000882)
-      vrf_heat_cap_ratio_boundary.setCoefficient2x(3.05090016)
-      vrf_heat_cap_ratio_boundary.setCoefficient3xPOW2(-0.1162844)
+      vrf_heat_cap_ratio_boundary.setName("vrf_heat_cap_ratio_boundary")
+      vrf_heat_cap_ratio_boundary.setCoefficient1Constant(58.577)
+      vrf_heat_cap_ratio_boundary.setCoefficient2x(-3.0255)
+      vrf_heat_cap_ratio_boundary.setCoefficient3xPOW2(0.0193)
       vrf_heat_cap_ratio_boundary.setCoefficient4xPOW3(0.0)
       vrf_heat_cap_ratio_boundary.setMinimumValueofx(15)
-      vrf_heat_cap_ratio_boundary.setMaximumValueofx(27)
+      vrf_heat_cap_ratio_boundary.setMaximumValueofx(23.9)
+
+      # Heating Capacity Ratio Modifier Function of High Temperature Curve Name
+      vrf_heat_cap_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_heat_cap_f_of_high_temp.setName("vrf_heat_cap_f_of_high_temp")
+      vrf_heat_cap_f_of_high_temp.setCoefficient1Constant(2.5859872368)
+      vrf_heat_cap_f_of_high_temp.setCoefficient2x(-0.0953227101)
+      vrf_heat_cap_f_of_high_temp.setCoefficient3xPOW2(0.0009553288)
+      vrf_heat_cap_f_of_high_temp.setCoefficient4y(0.0)
+      vrf_heat_cap_f_of_high_temp.setCoefficient5yPOW2(0.0)
+      vrf_heat_cap_f_of_high_temp.setCoefficient6xTIMESY(0.0)
+      vrf_heat_cap_f_of_high_temp.setMinimumValueofx(21.1)
+      vrf_heat_cap_f_of_high_temp.setMaximumValueofx(27.2)
+      vrf_heat_cap_f_of_high_temp.setMinimumValueofy(-944)
+      vrf_heat_cap_f_of_high_temp.setMaximumValueofy(15)
 
       # Heating Energy Input Ratio Modifier Function of Low Temperature Curve Name
       vrf_heat_eir_f_of_low_temp = OpenStudio::Model::CurveBiquadratic.new(model)
-      vrf_heat_eir_f_of_low_temp.setCoefficient1Constant(0.87465501)
-      vrf_heat_eir_f_of_low_temp.setCoefficient2x(-0.01319754)
-      vrf_heat_eir_f_of_low_temp.setCoefficient3xPOW2(0.00110307)
-      vrf_heat_eir_f_of_low_temp.setCoefficient4y(-0.0133118)
-      vrf_heat_eir_f_of_low_temp.setCoefficient5yPOW2(0.00089017)
-      vrf_heat_eir_f_of_low_temp.setCoefficient6xTIMESY(-0.00012766)
-      vrf_heat_eir_f_of_low_temp.setMinimumValueofx(15)
-      vrf_heat_eir_f_of_low_temp.setMaximumValueofx(27)
-      vrf_heat_eir_f_of_low_temp.setMinimumValueofy(-20)
-      vrf_heat_eir_f_of_low_temp.setMaximumValueofy(12)
-
-      # Heating Energy Input Ratio Modifier Function of High Temperature Curve Name
-      vrf_heat_eir_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
-      vrf_heat_eir_f_of_high_temp.setCoefficient1Constant(2.504005146)
-      vrf_heat_eir_f_of_high_temp.setCoefficient2x(-0.05736767)
-      vrf_heat_eir_f_of_high_temp.setCoefficient3xPOW2(4.07336E-05)
-      vrf_heat_eir_f_of_high_temp.setCoefficient4y(-0.12959669)
-      vrf_heat_eir_f_of_high_temp.setCoefficient5yPOW2(0.00135839)
-      vrf_heat_eir_f_of_high_temp.setCoefficient6xTIMESY(0.00317047)
-      vrf_heat_eir_f_of_high_temp.setMinimumValueofx(15)
-      vrf_heat_eir_f_of_high_temp.setMaximumValueofx(27)
-      vrf_heat_eir_f_of_high_temp.setMinimumValueofy(-20)
-      vrf_heat_eir_f_of_high_temp.setMaximumValueofy(15)
-
-      # Heating Energy Input Ratio Modifier Function of Low Part-Load Ratio Curve Name
-      heating_eir_low_plr = OpenStudio::Model::CurveCubic.new(model)
-      heating_eir_low_plr.setCoefficient1Constant(0.1400093)
-      heating_eir_low_plr.setCoefficient2x(0.6415002)
-      heating_eir_low_plr.setCoefficient3xPOW2(0.1339047)
-      heating_eir_low_plr.setCoefficient4xPOW3(0.0845859)
-      heating_eir_low_plr.setMinimumValueofx(0)
-      heating_eir_low_plr.setMaximumValueofx(1)
-
-      # Heating Energy Input Ratio Modifier Function of High Part-Load Ratio Curve Name
-      heating_eir_hi_plr = OpenStudio::Model::CurveQuadratic.new(model)
-      heating_eir_hi_plr.setCoefficient1Constant(2.4294355)
-      heating_eir_hi_plr.setCoefficient2x(-2.235887)
-      heating_eir_hi_plr.setCoefficient3xPOW2(0.8064516)
-      heating_eir_hi_plr.setMinimumValueofx(0.0)
-      heating_eir_hi_plr.setMaximumValueofx(1.5)
+      vrf_heat_eir_f_of_low_temp.setName("vrf_heat_eir_f_of_low_temp")
+      vrf_heat_eir_f_of_low_temp.setCoefficient1Constant(0.756830029796909)
+      vrf_heat_eir_f_of_low_temp.setCoefficient2x(0.0457499799042671)
+      vrf_heat_eir_f_of_low_temp.setCoefficient3xPOW2(-0.00136357240431388)
+      vrf_heat_eir_f_of_low_temp.setCoefficient4y(0.0554884599902023)
+      vrf_heat_eir_f_of_low_temp.setCoefficient5yPOW2(-0.00120700875497686)
+      vrf_heat_eir_f_of_low_temp.setCoefficient6xTIMESY(-0.00303329271420931)
+      vrf_heat_eir_f_of_low_temp.setMinimumValueofx(16.1)
+      vrf_heat_eir_f_of_low_temp.setMaximumValueofx(23.9)
+      vrf_heat_eir_f_of_low_temp.setMinimumValueofy(-25.0)
+      vrf_heat_eir_f_of_low_temp.setMaximumValueofy(13.3)
+      vrf_heat_eir_f_of_low_temp.setMinimumCurveOutput(0.7)
+      vrf_heat_eir_f_of_low_temp.setMaximumCurveOutput(1.184)
 
       # Heating Energy Input Ratio Boundary Curve Name
       vrf_heat_eir_boundary = OpenStudio::Model::CurveCubic.new(model)
-      vrf_heat_eir_boundary.setCoefficient1Constant(-7.6000882)
-      vrf_heat_eir_boundary.setCoefficient2x(3.05090016)
-      vrf_heat_eir_boundary.setCoefficient3xPOW2(-0.1162844)
+      vrf_heat_eir_boundary.setName("vrf_heat_eir_boundary")
+      vrf_heat_eir_boundary.setCoefficient1Constant(58.577)
+      vrf_heat_eir_boundary.setCoefficient2x(-3.0255)
+      vrf_heat_eir_boundary.setCoefficient3xPOW2(0.0193)
       vrf_heat_eir_boundary.setCoefficient4xPOW3(0.0)
-      vrf_heat_eir_boundary.setMinimumValueofx(-20)
-      vrf_heat_eir_boundary.setMaximumValueofx(15)
+      vrf_heat_eir_boundary.setMinimumValueofx(15.0)
+      vrf_heat_eir_boundary.setMaximumValueofx(23.9)
+
+      # Heating Energy Input Ratio Modifier Function of High Temperature Curve Name
+      vrf_heat_eir_f_of_high_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_heat_eir_f_of_high_temp.setName("vrf_heat_eir_f_of_high_temp")
+      vrf_heat_eir_f_of_high_temp.setCoefficient1Constant(1.3885703646)
+      vrf_heat_eir_f_of_high_temp.setCoefficient2x(-0.0229771462)
+      vrf_heat_eir_f_of_high_temp.setCoefficient3xPOW2(0.000537274)
+      vrf_heat_eir_f_of_high_temp.setCoefficient4y(-0.0273936962)
+      vrf_heat_eir_f_of_high_temp.setCoefficient5yPOW2(0.0004030426)
+      vrf_heat_eir_f_of_high_temp.setCoefficient6xTIMESY(-5.9786e-05)
+      vrf_heat_eir_f_of_high_temp.setMinimumValueofx(21.1)
+      vrf_heat_eir_f_of_high_temp.setMaximumValueofx(27.2)
+      vrf_heat_eir_f_of_high_temp.setMinimumValueofy(0.0)
+      vrf_heat_eir_f_of_high_temp.setMaximumValueofy(1.0)
+
+      # Heating Performance Curve Outdoor Temperature Type
+      vrf_outdoor_unit.setHeatingPerformanceCurveOutdoorTemperatureType("WetBulbTemperature")
+
+      # Heating Energy Input Ratio Modifier Function of Low Part-Load Ratio Curve Name
+      vrf_heating_eir_low_plr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_heating_eir_low_plr.setName("vrf_heating_eir_low_plr")
+      vrf_heating_eir_low_plr.setCoefficient1Constant(0.0724906507105475)
+      vrf_heating_eir_low_plr.setCoefficient2x(0.658189977561701)
+      vrf_heating_eir_low_plr.setCoefficient3xPOW2(0.269259536275246)
+      vrf_heating_eir_low_plr.setCoefficient4xPOW3(0.0)
+      vrf_heating_eir_low_plr.setMinimumValueofx(0.25)
+      vrf_heating_eir_low_plr.setMaximumValueofx(1.0)
+      vrf_heating_eir_low_plr.setMinimumCurveOutput(0.0)
+      vrf_heating_eir_low_plr.setMaximumCurveOutput(1.0)
+
+      # Heating Energy Input Ratio Modifier Function of High Part-Load Ratio Curve Name
+      vrf_heating_eir_hi_plr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_heating_eir_hi_plr.setName("vrf_heating_eir_hi_plr")
+      vrf_heating_eir_hi_plr.setCoefficient1Constant(1.0)
+      vrf_heating_eir_hi_plr.setCoefficient2x(0.0)
+      vrf_heating_eir_hi_plr.setCoefficient3xPOW2(0.0)
+      vrf_heating_eir_hi_plr.setCoefficient4xPOW3(0.0)
+      vrf_heating_eir_hi_plr.setMinimumValueofx(1.0)
+      vrf_heating_eir_hi_plr.setMaximumValueofx(1.5)
 
       # Heating Combination Ratio Correction Factor Curve Name
-      vrf_heating_comb_ratio = OpenStudio::Model::CurveLinear.new(model)
-      vrf_heating_comb_ratio.setCoefficient1Constant(0.96034)
-      vrf_heating_comb_ratio.setCoefficient2x(0.03966)
-      vrf_heating_comb_ratio.setMinimumValueofx(1.0)
-      vrf_heating_comb_ratio.setMaximumValueofx(1.5)
-      vrf_heating_comb_ratio.setMinimumCurveOutput(1.0)
-      vrf_heating_comb_ratio.setMaximumCurveOutput(1.023)
+      vrf_heating_comb_ratio = OpenStudio::Model::CurveCubic.new(model)
+      vrf_heating_comb_ratio.setName("vrf_heating_comb_ratio")
+      vrf_heating_comb_ratio.setCoefficient1Constant(0.62115)
+      vrf_heating_comb_ratio.setCoefficient2x(-1.55798)
+      vrf_heating_comb_ratio.setCoefficient3xPOW2(3.36817)
+      vrf_heating_comb_ratio.setCoefficient4xPOW3(-1.4224)
+      vrf_heating_comb_ratio.setMinimumValueofx(0.5)
+      vrf_heating_comb_ratio.setMaximumValueofx(2.0)
+      vrf_heating_comb_ratio.setMinimumCurveOutput(0.5)
+      vrf_heating_comb_ratio.setMaximumCurveOutput(1.155)
 
       # Heating Part-Load Fraction Correlation Curve Name
-      vrf_cplff_plr = OpenStudio::Model::CurveQuadratic.new(model)
-      vrf_cplff_plr.setCoefficient1Constant(0.85)
-      vrf_cplff_plr.setCoefficient2x(0.15)
-      vrf_cplff_plr.setCoefficient3xPOW2(0)
-      vrf_cplff_plr.setMinimumValueofx(0.0)
-      vrf_cplff_plr.setMaximumValueofx(1.0)
-      vrf_cplff_plr.setMinimumCurveOutput(0.85)
-      vrf_cplff_plr.setMaximumCurveOutput(1.0)
+      vrf_heating_cplffplr = OpenStudio::Model::CurveCubic.new(model)
+      vrf_heating_cplffplr.setName("vrf_heating_cplffplr")
+      vrf_heating_cplffplr.setCoefficient1Constant(0.85)
+      vrf_heating_cplffplr.setCoefficient2x(0.15)
+      vrf_heating_cplffplr.setCoefficient3xPOW2(0.0)
+      vrf_heating_cplffplr.setCoefficient4xPOW3(0.0)
+      vrf_heating_cplffplr.setMinimumValueofx(1.0)
+      vrf_heating_cplffplr.setMaximumValueofx(1.0)
+
+      # Defrost Energy Input Ratio Modifier Function of Temperature Curve
+      vrf_defrost_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      vrf_defrost_eir_f_of_temp.setName("vrf_defrost_eir_f_of_temp")
+      vrf_defrost_eir_f_of_temp.setCoefficient1Constant(-1.61908214818635)
+      vrf_defrost_eir_f_of_temp.setCoefficient2x(0.185964818731756)
+      vrf_defrost_eir_f_of_temp.setCoefficient3xPOW2(-0.00389610393381592)
+      vrf_defrost_eir_f_of_temp.setCoefficient4y(-0.00901995326324613)
+      vrf_defrost_eir_f_of_temp.setCoefficient5yPOW2(0.00030340007815629)
+      vrf_defrost_eir_f_of_temp.setCoefficient6xTIMESY(0.000476048529099348)
+      vrf_defrost_eir_f_of_temp.setMinimumValueofx(13.9)
+      vrf_defrost_eir_f_of_temp.setMaximumValueofx(23.9)
+      vrf_defrost_eir_f_of_temp.setMinimumValueofy(-5.0)
+      vrf_defrost_eir_f_of_temp.setMaximumValueofy(50.0)
+      vrf_defrost_eir_f_of_temp.setMinimumCurveOutput(0.27)
+      vrf_defrost_eir_f_of_temp.setMaximumCurveOutput(1.155)
+
+      # set defrost control
+      vrf_outdoor_unit.setDefrostStrategy("ReverseCycle")
+      vrf_outdoor_unit.setDefrostControl("OnDemand")
+
     end
 
+    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_cool_cap_f_of_low_temp) if !vrf_cool_cap_f_of_low_temp.nil?
+    vrf_outdoor_unit.setCoolingCapacityRatioBoundaryCurve(vrf_cool_cap_ratio_boundary) if !vrf_cool_cap_ratio_boundary.nil?
+    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_cool_cap_f_of_high_temp) if !vrf_cool_cap_f_of_high_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_cool_eir_f_of_low_temp) if !vrf_cool_eir_f_of_low_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioBoundaryCurve(vrf_cool_eir_ratio_boundary) if !vrf_cool_eir_ratio_boundary.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_cool_eir_f_of_high_temp) if !vrf_cool_eir_f_of_high_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_cooling_eir_low_plr) if !vrf_cooling_eir_low_plr.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_cooling_eir_high_plr) if !vrf_cooling_eir_high_plr.nil?
+    vrf_outdoor_unit.setCoolingCombinationRatioCorrectionFactorCurve(vrf_cooling_comb_ratio) if !vrf_cooling_comb_ratio.nil?
+    vrf_outdoor_unit.setCoolingPartLoadFractionCorrelationCurve(vrf_cooling_cplffplr) if !vrf_cooling_cplffplr.nil?
     vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_heat_cap_f_of_low_temp) if !vrf_heat_cap_f_of_low_temp.nil?
-    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_heat_cap_f_of_high_temp) if !vrf_heat_cap_f_of_high_temp.nil?
     vrf_outdoor_unit.setHeatingCapacityRatioBoundaryCurve(vrf_heat_cap_ratio_boundary) if !vrf_heat_cap_ratio_boundary.nil?
+    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_heat_cap_f_of_high_temp) if !vrf_heat_cap_f_of_high_temp.nil?
     vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_heat_eir_f_of_low_temp) if !vrf_heat_eir_f_of_low_temp.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_heat_eir_f_of_high_temp) if !vrf_heat_eir_f_of_high_temp.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(heating_eir_low_plr) if !heating_eir_low_plr.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(heating_eir_hi_plr) if !heating_eir_hi_plr.nil?
     vrf_outdoor_unit.setHeatingEnergyInputRatioBoundaryCurve(vrf_heat_eir_boundary) if !vrf_heat_eir_boundary.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_heat_eir_f_of_high_temp) if !vrf_heat_eir_f_of_high_temp.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_heating_eir_low_plr) if !vrf_heating_eir_low_plr.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_heating_eir_hi_plr) if !vrf_heating_eir_hi_plr.nil?
     vrf_outdoor_unit.setHeatingCombinationRatioCorrectionFactorCurve(vrf_heating_comb_ratio) if !vrf_heating_comb_ratio.nil?
-    vrf_outdoor_unit.setHeatingPartLoadFractionCorrelationCurve(vrf_cplff_plr) if !vrf_cplff_plr.nil?
+    vrf_outdoor_unit.setHeatingPartLoadFractionCorrelationCurve(vrf_heating_cplffplr) if !vrf_heating_cplffplr.nil?
+    vrf_outdoor_unit.setDefrostEnergyInputRatioModifierFunctionofTemperatureCurve(vrf_defrost_eir_f_of_temp) if !vrf_defrost_eir_f_of_temp.nil?
 
     return vrf_outdoor_unit
   end
