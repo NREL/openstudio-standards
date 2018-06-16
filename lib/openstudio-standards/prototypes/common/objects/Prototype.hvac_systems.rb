@@ -846,24 +846,17 @@ class Standard
       htg_coil = create_coil_heating_gas(model, name: "Main Gas Htg Coil")
       htg_coil.addToNode(air_loop.supplyInletNode)
     else
-      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
+      htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: htg_sa_temp_c,
+                                           rated_outlet_air_temperature: rht_sa_temp_c)
       htg_coil.addToNode(air_loop.supplyInletNode)
-      hot_water_loop.addDemandBranchForComponent(htg_coil)
-      htg_coil.setName("#{air_loop.name} Main Htg Coil")
-      htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
-      htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-      htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-      htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
     end
 
     # cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-    clg_coil.setName("#{air_loop.name} Clg Coil")
+    clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
-    clg_coil.setHeatExchangerConfiguration('CrossFlow')
-    chilled_water_loop.addDemandBranchForComponent(clg_coil)
-    clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
 
     # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -899,13 +892,11 @@ class Standard
       when 'Electricity'
         rht_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} Electric Reheat Coil")
       when 'Water'
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        rht_coil.setName("#{zone.name} Reheat Coil")
-        rht_coil.setRatedInletWaterTemperature(hw_temp_c)
-        rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-        rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(rht_coil)
+        rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Reheat Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                             rated_inlet_air_temperature: htg_sa_temp_c,
+                                             rated_outlet_air_temperature: rht_sa_temp_c)
       when nil
         # Zero-capacity, always-off electric heating coil
         rht_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} No Reheat", schedule: "alwaysOffDiscreteSchedule", nominal_capacity: 0)
@@ -1048,12 +1039,8 @@ class Standard
     htg_coil.addToNode(air_loop.supplyInletNode)
 
     # cooling coil
-    clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-    clg_coil.setName("#{air_loop.name} Clg Coil")
+    clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
     clg_coil.addToNode(air_loop.supplyInletNode)
-    clg_coil.setHeatExchangerConfiguration('CrossFlow')
-    chilled_water_loop.addDemandBranchForComponent(clg_coil)
-    clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
 
     # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1218,14 +1205,12 @@ class Standard
       htg_coil = create_coil_heating_gas(model, name: "#{air_loop.name.to_s} Main Gas Htg Coil")
       htg_coil.addToNode(air_loop.supplyInletNode)
     else
-      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-      htg_coil.setName("#{air_loop.name} Main Htg Coil")
-      htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-      htg_coil.setRatedInletAirTemperature(sys_dsn_prhtg_temp_c)
-      htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
+      htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Main Htg Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: sys_dsn_prhtg_temp_c,
+                                           rated_outlet_air_temperature: rht_rated_air_out_temp_c)
       htg_coil.addToNode(air_loop.supplyInletNode)
-      hot_water_loop.addDemandBranchForComponent(htg_coil)
     end
 
     # Cooling coil
@@ -1233,12 +1218,8 @@ class Standard
       clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
       clg_coil.addToNode(air_loop.supplyInletNode)
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
-      clg_coil.setHeatExchangerConfiguration('CrossFlow')
-      chilled_water_loop.addDemandBranchForComponent(clg_coil)
-      clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
     end
 
     # Outdoor air intake system
@@ -1261,13 +1242,11 @@ class Standard
       if electric_reheat || hot_water_loop.nil? || sys_name.include?('Outpatient F2 F3')
         rht_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} Electric Reheat Coil")
       else
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        rht_coil.setName("#{zone.name} Rht Coil")
-        rht_coil.setRatedInletWaterTemperature(hw_temp_c)
-        rht_coil.setRatedInletAirTemperature(rht_rated_air_in_temp_c)
-        rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        rht_coil.setRatedOutletAirTemperature(rht_rated_air_out_temp_c)
-        hot_water_loop.addDemandBranchForComponent(rht_coil)
+        rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Rht Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                             rated_inlet_air_temperature: rht_rated_air_in_temp_c,
+                                             rated_outlet_air_temperature: rht_rated_air_out_temp_c)
       end
 
       # VAV terminal
@@ -1403,12 +1382,8 @@ class Standard
       clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
       clg_coil.addToNode(air_loop.supplyInletNode)
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-      clg_coil.setName("#{air_loop.name} Clg Coil")
+      clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
       clg_coil.addToNode(air_loop.supplyInletNode)
-      clg_coil.setHeatExchangerConfiguration('CrossFlow')
-      chilled_water_loop.addDemandBranchForComponent(clg_coil)
-      clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
     end
 
     # outdoor air intake system
@@ -1588,26 +1563,18 @@ class Standard
     fan.setEndUseSubcategory('CAV system Fans')
 
     # Air handler heating coil
-    htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
+    htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Main Htg Coil",
+                                         rated_inlet_water_temperature: hw_temp_c,
+                                         rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                         rated_inlet_air_temperature: prehtg_sa_temp_c,
+                                         rated_outlet_air_temperature: htg_sa_temp_c)
     htg_coil.addToNode(air_loop.supplyInletNode)
-    hot_water_loop.addDemandBranchForComponent(htg_coil)
-    htg_coil.setName("#{air_loop.name} Main Htg Coil")
-    htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
-    htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-    htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
-    htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-    htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
 
     # Air handler cooling coil
-
     if chilled_water_loop.nil?
       clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
     else
-      clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-      clg_coil.setName("#{air_loop.name} Clg Coil")
-      clg_coil.setHeatExchangerConfiguration('CrossFlow')
-      chilled_water_loop.addDemandBranchForComponent(clg_coil)
-      clg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Clg Coil Controller")
+      clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
     end
     clg_coil.addToNode(air_loop.supplyInletNode)
 
@@ -1638,14 +1605,11 @@ class Standard
         terminal.setName("#{zone.name} CAV Term")
       else
         # Reheat coil
-        rht_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        rht_coil.setName("#{zone.name} Rht Coil")
-        rht_coil.setRatedInletWaterTemperature(hw_temp_c)
-        rht_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-        rht_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        rht_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(rht_coil)
-
+        rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Rht Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                             rated_inlet_air_temperature: htg_sa_temp_c,
+                                             rated_outlet_air_temperature: rht_sa_temp_c)
         # VAV terminal
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Term")
@@ -1831,41 +1795,15 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        htg_coil.setName("#{air_loop.name} Water Htg Coil")
-        htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-        htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
-        htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(htg_coil)
+        htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Water Htg Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                             rated_inlet_air_temperature: prehtg_sa_temp_c,
+                                             rated_outlet_air_temperature: htg_sa_temp_c)
       when 'Single Speed Heat Pump'
-        htg_coil = create_coil_heating_dx_single_speed(model, name: "#{zone.name} HP Htg Coil", cop: 3.3)
-        htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-12.2)
-        htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(1.67)
-        htg_coil.setCrankcaseHeaterCapacity(50.0)
-        htg_coil.setMaximumOutdoorDryBulbTemperatureforCrankcaseHeaterOperation(4.4)
-        htg_coil.setDefrostStrategy('ReverseCycle')
-        htg_coil.setDefrostControl('OnDemand')
-
-        def_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
-        def_eir_f_of_temp.setCoefficient1Constant(0.297145)
-        def_eir_f_of_temp.setCoefficient2x(0.0430933)
-        def_eir_f_of_temp.setCoefficient3xPOW2(-0.000748766)
-        def_eir_f_of_temp.setCoefficient4y(0.00597727)
-        def_eir_f_of_temp.setCoefficient5yPOW2(0.000482112)
-        def_eir_f_of_temp.setCoefficient6xTIMESY(-0.000956448)
-        def_eir_f_of_temp.setMinimumValueofx(12.77778)
-        def_eir_f_of_temp.setMaximumValueofx(23.88889)
-        def_eir_f_of_temp.setMinimumValueofy(21.11111)
-        def_eir_f_of_temp.setMaximumValueofy(46.11111)
-        htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(def_eir_f_of_temp)
+        htg_coil = create_coil_heating_dx_single_speed(model, name: "#{zone.name} HP Htg Coil", type: "PSZ-AC", cop: 3.3)
       when 'Water To Air Heat Pump'
-        if hot_water_loop.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
-          return false
-        end
-        htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
-        hot_water_loop.addDemandBranchForComponent(htg_coil)
+        htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, hot_water_loop, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
       when 'Electricity', 'Electric'
         htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Electric Htg Coil")
       end
@@ -1888,9 +1826,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied')
           return false
         end
-        clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-        clg_coil.setName("#{air_loop.name} Water Clg Coil")
-        chilled_water_loop.addDemandBranchForComponent(clg_coil)
+        clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Water Clg Coil")
 
       elsif cooling_type == 'Two Speed DX AC'
         clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX AC Clg Coil")
@@ -2348,11 +2284,8 @@ class Standard
       fan.setFanEfficiency(0.54)
       fan.setMotorEfficiency(0.90)
 
-      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
-      heat_pump_loop.addDemandBranchForComponent(htg_coil)
-      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, name: "#{air_loop.name} Water-to-Air HP Clg Coil")
-      heat_pump_loop.addDemandBranchForComponent(clg_coil)
-
+      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, heat_pump_loop, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
+      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, heat_pump_loop, name: "#{air_loop.name} Water-to-Air HP Clg Coil")
       supplemental_htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Electric Backup Htg Coil")
 
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -2367,29 +2300,24 @@ class Standard
       supply_inlet_node = air_loop.supplyInletNode
 
       if main_data_center
+        extra_water_htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Water Htg Coil",
+                                                         rated_inlet_water_temperature: hw_temp_c,
+                                                         rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                                         rated_inlet_air_temperature: prehtg_sa_temp_c,
+                                                         rated_outlet_air_temperature: htg_sa_temp_c)
+        extra_water_htg_coil.addToNode(supply_inlet_node)
+
+        extra_elec_htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Electric Htg Coil")
+        extra_elec_htg_coil.addToNode(supply_inlet_node)
+
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100_000)
         humidifier.setName("#{air_loop.name} Electric Steam Humidifier")
-
-
-        extra_elec_htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Electric Htg Coil")
-
-        extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        extra_water_htg_coil.setName("#{air_loop.name} Water Htg Coil")
-        extra_water_htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-        extra_water_htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
-        extra_water_htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        extra_water_htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-
-        extra_water_htg_coil.addToNode(supply_inlet_node)
-        extra_elec_htg_coil.addToNode(supply_inlet_node)
         humidifier.addToNode(supply_inlet_node)
 
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         humidity_spm.setControlZone(zone)
-
         humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
 
         humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
@@ -2723,19 +2651,9 @@ class Standard
         hw_sizing = hot_water_loop.sizingPlant
         hw_temp_c = hw_sizing.designLoopExitTemperature
         hw_delta_t_k = hw_sizing.loopDesignTemperatureDifference
-
-        # Using openstudio defaults for now...
-        prehtg_sa_temp_c = 16.6
-        htg_sa_temp_c = 32.2
-
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        htg_coil.setName("#{hot_water_loop.name} Water Htg Coil")
-        # None of these temperatures are defined
-        htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-        htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
-        htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(htg_coil)
+        htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{hot_water_loop.name} Water Htg Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k))
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_heating_type of #{heating_type} is not recognized.")
       end
@@ -2920,13 +2838,11 @@ class Standard
       elsif heating_type == 'Electricity' || heating_type == 'Electric'
         htg_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} UnitHeater Electric Htg Coil", schedule: hvac_op_sch)
       elsif heating_type == 'DistrictHeating' && !hot_water_loop.nil?
-        htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        htg_coil.setName("#{zone.name} UnitHeater Water Htg Coil")
-        htg_coil.setRatedInletWaterTemperature(hw_temp_c)
-        htg_coil.setRatedInletAirTemperature(zn_temp_c)
-        htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
-        hot_water_loop.addDemandBranchForComponent(htg_coil)
+        htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} UnitHeater Water Htg Coil",
+                                             rated_inlet_water_temperature: hw_temp_c,
+                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                             rated_inlet_air_temperature: zn_temp_c,
+                                             rated_outlet_air_temperature: htg_sa_temp_c)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No heating type was found when adding unit heater; no unit heater will be created.')
         return false
@@ -3282,18 +3198,12 @@ class Standard
     fan.addToNode(airloop_supply_inlet)
 
     # create heating coil
-    # water coil
-    heating_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-    hot_water_loop.addDemandBranchForComponent(heating_coil)
-    heating_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+    heating_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Htg Coil")
     heating_coil.addToNode(airloop_supply_inlet)
     heating_coil.controllerWaterCoil.get.setControllerConvergenceTolerance(0.0001)
 
     # create cooling coil
-    # water coil
-    cooling_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-    chilled_water_loop.addDemandBranchForComponent(cooling_coil)
-    cooling_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+    cooling_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
     cooling_coil.addToNode(airloop_supply_inlet)
 
     # create controller outdoor air
@@ -3449,10 +3359,7 @@ class Standard
       # always off denotes cycling fan
       vrf_terminal_unit.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       vrf_fan = vrf_terminal_unit.supplyAirFan.to_FanOnOff.get
-
-      # corresponds to 50 W at 300 cfm
-      pressure_rise = OpenStudio.convert(0.68,"inH_{2}O","Pa").get
-      vrf_fan.setPressureRise(pressure_rise)
+      vrf_fan.setPressureRise(300)
       vrf_fan.setMotorEfficiency(0.8)
       vrf_fan.setFanEfficiency(0.6)
       vrf_fan.setName("#{zone.name.to_s} VRF Unit Cycling Fan")
@@ -3501,10 +3408,7 @@ class Standard
 
       fcu_clg_coil = nil
       if chilled_water_loop
-        fcu_clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
-        fcu_clg_coil.setName("#{zone.name} 'FCU Cooling Coil")
-        chilled_water_loop.addDemandBranchForComponent(fcu_clg_coil)
-        fcu_clg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+        fcu_clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{zone.name} FCU Cooling Coil")
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Fan coil units require a chilled water loop, but none was provided.')
         return fcus
@@ -3512,10 +3416,7 @@ class Standard
 
       fcu_htg_coil = nil
       if hot_water_loop
-        fcu_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-        fcu_htg_coil.setName("#{zone.name} FCU Heating Coil")
-        hot_water_loop.addDemandBranchForComponent(fcu_htg_coil)
-        fcu_htg_coil.controllerWaterCoil.get.setMinimumActuatedFlow(0)
+        fcu_htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} FCU Heating Coil")
       else
         # Zero-capacity, always-off electric heating coil
         fcu_htg_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} No Heat", schedule: "alwaysOffDiscreteSchedule", nominal_capacity: 0)
@@ -3897,10 +3798,8 @@ class Standard
     water_to_air_hp_systems = []
     thermal_zones.each do |zone|
       supplemental_htg_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} Supplemental Htg Coil")
-      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
-      condenser_loop.addDemandBranchForComponent(htg_coil)
-      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, name: "#{air_loop.name} Water-to-Air HP Clg Coil")
-      condenser_loop.addDemandBranchForComponent(clg_coil)
+      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
+      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{air_loop.name} Water-to-Air HP Clg Coil")
 
       # add fan
       fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)

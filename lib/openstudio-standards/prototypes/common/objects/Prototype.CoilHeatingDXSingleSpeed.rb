@@ -7,7 +7,8 @@ class Standard
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of single speed DX coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
-  def create_coil_heating_dx_single_speed(model, name: "1spd DX Htg Coil", schedule: nil, type: nil, cop: nil)
+  # @param defrost_strategy [String] type of defrost strategy. options are reverse-cycle or resistive
+  def create_coil_heating_dx_single_speed(model, name: "1spd DX Htg Coil", schedule: nil, type: nil, cop: nil, defrost_strategy: "ReverseCycle")
 
     htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
 
@@ -44,7 +45,7 @@ class Standard
     htg_energy_input_ratio_f_of_temp = nil
     htg_energy_input_ratio_f_of_flow = nil
     htg_part_load_fraction = nil
-    defrost_eir_curve = nil
+    def_eir_f_of_temp = nil
 
     # curve sets
     if type == 'OS default'
@@ -73,7 +74,7 @@ class Standard
       htg_part_load_fraction = create_curve_quadratic(heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
       # Heating defrost curve for reverse cycle
-      defrost_eir_curve = create_curve_biquadratic(defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
+      def_eir_f_of_temp = create_curve_biquadratic(defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
 
     else # default curve set
 
@@ -116,12 +117,32 @@ class Standard
       htg_part_load_fraction.setMaximumValueofx(1.0)
     end
 
+    if type == 'PSZ-AC'
+      htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-12.2)
+      htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(1.67)
+      htg_coil.setCrankcaseHeaterCapacity(50.0)
+      htg_coil.setMaximumOutdoorDryBulbTemperatureforCrankcaseHeaterOperation(4.4)
+      htg_coil.setDefrostControl('OnDemand')
+
+      def_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      def_eir_f_of_temp.setCoefficient1Constant(0.297145)
+      def_eir_f_of_temp.setCoefficient2x(0.0430933)
+      def_eir_f_of_temp.setCoefficient3xPOW2(-0.000748766)
+      def_eir_f_of_temp.setCoefficient4y(0.00597727)
+      def_eir_f_of_temp.setCoefficient5yPOW2(0.000482112)
+      def_eir_f_of_temp.setCoefficient6xTIMESY(-0.000956448)
+      def_eir_f_of_temp.setMinimumValueofx(12.77778)
+      def_eir_f_of_temp.setMaximumValueofx(23.88889)
+      def_eir_f_of_temp.setMinimumValueofy(21.11111)
+      def_eir_f_of_temp.setMaximumValueofy(46.11111)
+    end
+
     htg_coil.setTotalHeatingCapacityFunctionofTemperatureCurve(htg_cap_f_of_temp) if !htg_cap_f_of_temp.nil?
     htg_coil.setTotalHeatingCapacityFunctionofFlowFractionCurve(htg_cap_f_of_flow) if !htg_cap_f_of_flow.nil?
     htg_coil.setEnergyInputRatioFunctionofTemperatureCurve(htg_energy_input_ratio_f_of_temp) if !htg_energy_input_ratio_f_of_temp.nil?
     htg_coil.setEnergyInputRatioFunctionofFlowFractionCurve(htg_energy_input_ratio_f_of_flow) if !htg_energy_input_ratio_f_of_flow.nil?
     htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction) if !htg_part_load_fraction.nil?
-    htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(defrost_eir_curve) if !defrost_eir_curve.nil?
+    htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(def_eir_f_of_temp) if !def_eir_f_of_temp.nil?
 
     return htg_coil
   end
