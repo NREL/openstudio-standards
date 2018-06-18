@@ -81,4 +81,49 @@ class Standard
 
     return pressure_rise_in_h2o
   end
+
+  def model_create_fan_vv_from_json(model, fan_json, fan_name:nil, fan_efficiency: nil, pressure_rise: nil, motor_efficiency: nil,
+                                    motor_in_airstream_fraction: nil, fan_power_minimum_flow_rate_input_method:nil, end_use_subcategory:nil,
+                                    fan_power_coefficient_1: nil, fan_power_coefficient_2: nil, fan_power_coefficient_3: nil,
+                                    fan_power_coefficient_4: nil, fan_power_coefficient_5: nil)
+    # check value to use
+    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
+    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
+    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
+    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
+    fan_power_minimum_flow_rate_input_method = fan_power_minimum_flow_rate_input_method ? fan_power_minimum_flow_rate_input_method : fan_json['fan_power_minimum_flow_rate_input_method']
+    fan_power_coefficient_1 = fan_power_coefficient_1 ? fan_power_coefficient_1 : fan_json['fan_power_coefficient_1']
+    fan_power_coefficient_2 = fan_power_coefficient_2 ? fan_power_coefficient_2 : fan_json['fan_power_coefficient_2']
+    fan_power_coefficient_3 = fan_power_coefficient_3 ? fan_power_coefficient_3 : fan_json['fan_power_coefficient_3']
+    fan_power_coefficient_4 = fan_power_coefficient_4 ? fan_power_coefficient_4 : fan_json['fan_power_coefficient_4']
+    fan_power_coefficient_5 = fan_power_coefficient_5 ? fan_power_coefficient_5 : fan_json['fan_power_coefficient_5']
+
+    # convert values
+    pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil
+
+    # create fan
+    model_create_fan_vv(model, fan_name:fan_name, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise, motor_efficiency: motor_efficiency,
+                        motor_in_airstream_fraction: motor_in_airstream_fraction, fan_power_minimum_flow_rate_input_method:fan_power_minimum_flow_rate_input_method, end_use_subcategory:end_use_subcategory,
+                        fan_power_coefficient_1: fan_power_coefficient_1, fan_power_coefficient_2: fan_power_coefficient_2, fan_power_coefficient_3: fan_power_coefficient_3,
+                        fan_power_coefficient_4: fan_power_coefficient_4, fan_power_coefficient_5: fan_power_coefficient_5)
+  end
+
+  def model_create_fan_vv(model, fan_name:nil, fan_efficiency: nil, pressure_rise: nil, motor_efficiency: nil,
+                          motor_in_airstream_fraction: nil, fan_power_minimum_flow_rate_input_method:nil, end_use_subcategory:nil,
+                          fan_power_coefficient_1: nil, fan_power_coefficient_2: nil, fan_power_coefficient_3: nil,
+                          fan_power_coefficient_4: nil, fan_power_coefficient_5: nil)
+    fan = OpenStudio::Model::FanVariableVolume.new(model)
+    PrototypeFan.apply_base_fan_variables(fan, fan_name:fan_name, fan_efficiency: fan_efficiency,
+                                          pressure_rise: pressure_rise, end_use_subcategory:end_use_subcategory)
+    if motor_efficiency then fan.setMotorEfficiency(motor_efficiency) end
+    if motor_in_airstream_fraction then fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) end
+    if fan_power_minimum_flow_rate_input_method then fan.setFanPowerMinimumFlowRateInputMethod(fan_power_minimum_flow_rate_input_method) end
+    if fan_power_coefficient_1 then fan.setFanPowerCoefficient1(fan_power_coefficient_1) end
+    if fan_power_coefficient_2 then fan.setFanPowerCoefficient2(fan_power_coefficient_2) end
+    if fan_power_coefficient_3 then fan.setFanPowerCoefficient3(fan_power_coefficient_3) end
+    if fan_power_coefficient_4 then fan.setFanPowerCoefficient4(fan_power_coefficient_4) end
+    if fan_power_coefficient_5 then fan.setFanPowerCoefficient5(fan_power_coefficient_5) end
+
+    fan
+  end
 end

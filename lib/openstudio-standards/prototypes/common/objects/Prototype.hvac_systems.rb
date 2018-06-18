@@ -832,16 +832,12 @@ class Standard
     sizing_system.setAllOutdoorAirinHeating(false)
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
-    # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName("#{air_loop.name} Fan")
-    fan.setFanEfficiency(vav_fan_efficiency)
-    fan.setMotorEfficiency(vav_fan_motor_efficiency)
-    fan.setPressureRise(vav_fan_pressure_rise)
-    fan.setFanPowerMinimumFlowRateInputMethod('fraction')
-    fan.setFanPowerMinimumFlowFraction(0.25)
+    # @type [OpenStudio::Model::FanVariableVolume] fan
+    fan = model_create_fan_by_name(model, 'VAV_System_Fan', fan_name:"#{air_loop.name} Fan",
+                                   fan_efficiency:vav_fan_efficiency, pressure_rise:vav_fan_pressure_rise,
+                                   motor_efficiency: vav_fan_motor_efficiency, end_use_subcategory:"VAV system Fans")
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
-    fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
     if hot_water_loop.nil?
@@ -1041,15 +1037,12 @@ class Standard
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName("#{air_loop.name} Fan")
-    fan.setFanEfficiency(vav_fan_efficiency)
-    fan.setMotorEfficiency(vav_fan_motor_efficiency)
-    fan.setPressureRise(vav_fan_pressure_rise)
-    fan.setFanPowerMinimumFlowRateInputMethod('fraction')
-    fan.setFanPowerMinimumFlowFraction(0.25)
+    # @type [OpenStudio::Model::FanVariableVolume] fan
+    fan = model_create_fan_by_name(model, 'VAV_System_Fan', fan_name:"#{air_loop.name} Fan",
+                                   fan_efficiency:vav_fan_efficiency, pressure_rise:vav_fan_pressure_rise,
+                                   motor_efficiency: vav_fan_motor_efficiency, end_use_subcategory:"VAV system Fans")
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
-    fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
     htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
@@ -1089,9 +1082,9 @@ class Standard
       rht_coil.setName("#{zone.name} Rht Coil")
 
       # terminal fan
-      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-      pfp_fan.setName("#{zone.name} PFP Term Fan")
-      pfp_fan.setPressureRise(300)
+      # @type [OpenStudio::Model::FanConstantVolume] pfp_fan
+      pfp_fan = model_create_fan_by_name(model, 'PFP_Fan', fan_name:"#{zone.name} PFP Term Fan")
+      pfp_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # parallel fan powered terminal
       pfp_terminal = OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat.new(model,
@@ -1218,9 +1211,12 @@ class Standard
     air_loop.setNightCycleControlType('CycleOnAny')
 
     # Fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName("#{air_loop.name} Fan")
+    # @type [OpenStudio::Model::FanVariableVolume] fan
+    fan = model_create_fan_by_name(model, 'VAV_default', fan_name:"#{air_loop.name} Fan")
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
+
+    puts "pressure rise = #{fan.pressureRise}"
 
     # Heating coil - depends on whether heating is hot water or electric,
     # which is determined by whether or not a hot water loop is provided.
@@ -1397,15 +1393,12 @@ class Standard
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # fan
-    fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName("#{air_loop.name} Fan")
-    fan.setFanEfficiency(vav_fan_efficiency)
-    fan.setMotorEfficiency(vav_fan_motor_efficiency)
-    fan.setPressureRise(vav_fan_pressure_rise)
-    fan.setFanPowerMinimumFlowRateInputMethod('fraction')
-    fan.setFanPowerMinimumFlowFraction(0.25)
+    # @type [OpenStudio::Model::FanVariableVolume] fan
+    fan = model_create_fan_by_name(model, 'VAV_System_Fan', fan_name:"#{air_loop.name} Fan",
+                                   fan_efficiency:vav_fan_efficiency, pressure_rise:vav_fan_pressure_rise,
+                                   motor_efficiency: vav_fan_motor_efficiency, end_use_subcategory:"VAV system Fans")
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
-    fan.setEndUseSubcategory('VAV system Fans')
 
     # heating coil
     htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
@@ -1451,9 +1444,9 @@ class Standard
       rht_coil.setName("#{zone.name} Rht Coil")
 
       # terminal fan
-      pfp_fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-      pfp_fan.setName("#{zone.name} PFP Term Fan")
-      pfp_fan.setPressureRise(300)
+      # @type [OpenStudio::Model::FanConstantVolume] pfp_fan
+      pfp_fan = model_create_fan_by_name(model, 'PFP_Fan', fan_name:"#{zone.name} PFP Term Fan")
+      pfp_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # parallel fan powered terminal
       pfp_terminal = OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat.new(model,
@@ -1589,19 +1582,18 @@ class Standard
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # Fan
-    fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName("#{air_loop.name} Fan")
+    fan = nil
     if building_type == 'Hospital'
-      fan.setFanEfficiency(0.61425)
-      fan.setMotorEfficiency(0.945)
-      fan.setPressureRise(1018.41)
+      fan = model_create_fan_by_name(model, 'Hospital_CAV_Sytem_Fan', fan_name:"#{air_loop.name} Fan",
+                                     end_use_subcategory:'CAV system Fans')
+
     else
-      fan.setFanEfficiency(fan_efficiency)
-      fan.setMotorEfficiency(fan_motor_efficiency)
-      fan.setPressureRise(fan_pressure_rise)
+      fan = model_create_fan_by_name(model, 'Packaged_RTU_SZ_AC_CAV_Fan', fan_name:"#{air_loop.name} Fan",
+                                     fan_efficiency:fan_efficiency, pressure_rise:fan_pressure_rise,
+                                     motor_efficiency: fan_motor_efficiency, end_use_subcategory:'CAV system Fans')
     end
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
-    fan.setEndUseSubcategory('CAV system Fans')
 
     # Air handler heating coil
     htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
@@ -1814,22 +1806,11 @@ class Standard
       # Cycling: Unitary System;
       # CyclingHeatPump: Unitary Heat Pump system
       if fan_type == 'ConstantVolume'
-        fan = OpenStudio::Model::FanConstantVolume.new(model, hvac_op_sch)
-        fan.setName("#{air_loop.name} Fan")
-        fan_static_pressure_in_h2o = 2.5
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.54)
-        fan.setMotorEfficiency(0.90)
+        fan = model_create_fan_by_name(model, 'Packaged_RTU_SZ_AC_CAV_Fan', fan_name:"#{air_loop.name} Fan")
+        fan.setAvailabilitySchedule(hvac_op_sch)
       elsif fan_type == 'Cycling'
-
-        fan = OpenStudio::Model::FanOnOff.new(model, hvac_op_sch) # Set fan op sch manually since fwd translator doesn't
-        fan.setName("#{air_loop.name} Fan")
-        fan_static_pressure_in_h2o = 2.5
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.54)
-        fan.setMotorEfficiency(0.90)
+        fan = model_create_fan_by_name(model, 'Packaged_RTU_SZ_AC_Cycling_Fan', fan_name:"#{air_loop.name} Fan")
+        fan.setAvailabilitySchedule(hvac_op_sch)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add PSZ-AC.")
         return []
@@ -2422,13 +2403,10 @@ class Standard
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
 
       # Fan
-      fan = OpenStudio::Model::FanVariableVolume.new(model, hvac_op_sch)
-      fan.setName("#{air_loop.name} Fan")
-      fan_static_pressure_in_h2o = 2.5
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-      fan.setPressureRise(fan_static_pressure_pa)
-      fan.setFanEfficiency(0.54)
-      fan.setMotorEfficiency(0.90)
+      # @type [OpenStudio::Model::FanVariableVolume] fan
+      fan = model_create_fan_by_name(model, 'VAV_System_Fan', fan_name:"#{air_loop.name} Fan",
+                                     end_use_subcategory:"VAV system Fans")
+      fan.setAvailabilitySchedule(hvac_op_sch)
 
       # Heating coil
       htg_coil = nil
@@ -2643,13 +2621,9 @@ class Standard
       setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
 
-      fan = OpenStudio::Model::FanOnOff.new(model, hvac_op_sch) # Set fan op sch manually since fwd translator doesn't
-      fan.setName("#{air_loop.name} Fan")
-      fan_static_pressure_in_h2o = 2.5
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-      fan.setPressureRise(fan_static_pressure_pa)
-      fan.setFanEfficiency(0.54)
-      fan.setMotorEfficiency(0.90)
+      # @type [OpenStudio::Model::FanConstantVolume] fan
+      fan = model_create_fan_by_name(model, 'Packaged_RTU_SZ_AC_Cycling_Fan', fan_name:"#{air_loop.name} Fan")
+      fan.setAvailabilitySchedule(hvac_op_sch)
 
       htg_coil = OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit.new(model)
       htg_coil.setName("#{air_loop.name} Water-to-Air HP Htg Coil")
@@ -2875,21 +2849,13 @@ class Standard
     # Fan
     fan = nil
     if fan_type == 'ConstantVolume'
-      fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{thermal_zone_name} SAC Fan")
-      fan_static_pressure_in_h2o = 2.5
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-      fan.setPressureRise(fan_static_pressure_pa)
-      fan.setFanEfficiency(0.56) # get the average of four fans
-      fan.setMotorEfficiency(0.86) # get the average of four fans
+      fan = model_create_fan_by_name(model, 'Split_AC_CAV_Fan', fan_name:"#{thermal_zone_name} SAC Fan",
+                                     end_use_subcategory:'CAV system Fans')
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     elsif fan_type == 'Cycling'
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{thermal_zone_name} SAC Fan")
-      fan_static_pressure_in_h2o = 2.5
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-      fan.setPressureRise(fan_static_pressure_pa)
-      fan.setFanEfficiency(0.53625)
-      fan.setMotorEfficiency(0.825)
+      fan = model_create_fan_by_name(model, 'Split_AC_Cycling_Fan', fan_name:"#{thermal_zone_name} SAC Fan",
+                                     end_use_subcategory:'CAV system Fans')
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     end
 
     # Heating Coil
@@ -3273,21 +3239,11 @@ class Standard
       # add fan
       fan = nil
       if fan_type == 'ConstantVolume'
-        fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-        fan.setName("#{zone.name} PTAC Fan")
-        fan_static_pressure_in_h2o = 1.33
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.52)
-        fan.setMotorEfficiency(0.8)
+        fan = model_create_fan_by_name(model, 'PTAC_CAV_Fan', fan_name:"#{zone.name} PTAC Fan")
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
-        fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-        fan.setName("#{zone.name} PTAC Fan")
-        fan_static_pressure_in_h2o = 1.33
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.52)
-        fan.setMotorEfficiency(0.8)
+        fan = model_create_fan_by_name(model, 'PTAC_Cycling_Fan', fan_name:"#{zone.name} PTAC Fan")
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_fan_type of #{fan_type} is not recognized.")
       end
@@ -3543,21 +3499,11 @@ class Standard
       # add fan
       fan = nil
       if fan_type == 'ConstantVolume'
-        fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-        fan.setName("#{zone.name} PTAC Fan")
-        fan_static_pressure_in_h2o = 1.33
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.52)
-        fan.setMotorEfficiency(0.8)
+        fan = model_create_fan_by_name(model, 'PTAC_CAV_Fan', fan_name:"#{zone.name} PTAC Fan")
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
-        fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-        fan.setName("#{zone.name} PTAC Fan")
-        fan_static_pressure_in_h2o = 1.33
-        fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-        fan.setPressureRise(fan_static_pressure_pa)
-        fan.setFanEfficiency(0.52)
-        fan.setMotorEfficiency(0.8)
+        fan = model_create_fan_by_name(model, 'PTAC_Cycling_Fan', fan_name:"#{zone.name} PTAC Fan")
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "ptac_fan_type of #{fan_type} is not recognized.")
       end
@@ -3753,11 +3699,9 @@ class Standard
       sizing_zone.setZoneHeatingDesignSupplyAirHumidityRatio(0.008)
 
       # add fan
-      fan = OpenStudio::Model::FanConstantVolume.new(model, hvac_op_sch)
-      fan.setName("#{zone.name} UnitHeater Fan")
-      fan.setPressureRise(fan_pressure_rise)
-      fan.setFanEfficiency(0.53625)
-      fan.setMotorEfficiency(0.825)
+      fan = model_create_fan_by_name(model, 'Unit_Heater_Fan', fan_name:"#{zone.name} UnitHeater Fan",
+                                     pressure_rise:fan_pressure_rise)
+      fan.setAvailabilitySchedule(hvac_op_sch)
 
       # add heating coil
       htg_coil = nil
@@ -3855,9 +3799,6 @@ class Standard
     approach_r = 3 # WetBulb approach
     approach_k = OpenStudio.convert(approach_r, 'R', 'K').get
 
-    fan_static_pressure_in_h2o = 0.25
-    fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-
     # EMS programs
     programs = []
 
@@ -3932,10 +3873,8 @@ class Standard
       evap.addToNode(air_loop.supplyInletNode)
 
       # Fan (cycling), must be inside unitary system to cycle on airloop
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{zone.name} Evap Cooler Supply Fan")
-      fan.setFanEfficiency(0.55)
-      fan.setPressureRise(fan_static_pressure_pa)
+      fan = model_create_fan_by_name(model, 'Evap_Cooler_Supply_Fan', fan_name:"#{zone.name} Evap Cooler Supply Fan")
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # Dummy zero-capacity cooling coil
       clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
@@ -4734,21 +4673,15 @@ class Standard
 
     # create air loop fan
     # constant speed fan
-    fan_static_pressure_in_h2o = 2.5
-    fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-    fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
-    fan.setName('DOAS Fan')
-    fan.setFanEfficiency(0.58175)
-    fan.setPressureRise(fan_static_pressure_pa)
+    fan = model_create_fan_by_name(model, 'DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+    fan.addToNode(airloop_supply_inlet)
+
     if fan_max_flow_rate.nil?
       fan.autosizeMaximumFlowRate
     else
       fan.setMaximumFlowRate(OpenStudio.convert(fan_max_flow_rate, 'cfm', 'm^3/s').get) # unit of fan_max_flow_rate is cfm
     end
-    fan.setMotorEfficiency(0.895)
-    fan.setMotorInAirstreamFraction(1.0)
-    fan.setEndUseSubcategory('DOAS Fans')
-    fan.addToNode(airloop_supply_inlet)
 
     # create heating coil
     # water coil
@@ -4946,14 +4879,10 @@ class Standard
         fcu_htg_coil.setNominalCapacity(0)
       end
 
-      fcu_fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fcu_fan.setName("#{zone.name} Fan Coil fan")
-      fcu_fan.setFanEfficiency(0.16)
-      fcu_fan.setPressureRise(270.9) # Pa
+      fcu_fan = model_create_fan_by_name(model, 'Fan_Coil_Fan', fan_name:'#{zone.name} Fan Coil fan',
+                                     end_use_subcategory:'FCU Fans')
+      fcu_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       fcu_fan.autosizeMaximumFlowRate
-      fcu_fan.setMotorEfficiency(0.29)
-      fcu_fan.setMotorInAirstreamFraction(1.0)
-      fcu_fan.setEndUseSubcategory('FCU Fans')
 
       fcu = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model,
                                                            model.alwaysOnDiscreteSchedule,
@@ -5022,12 +4951,8 @@ class Standard
       clg_coil.setMaximumOutdoorDryBulbTemperatureForCrankcaseHeaterOperation(OpenStudio::OptionalDouble.new(10))
       clg_coil.setBasinHeaterSetpointTemperature(OpenStudio::OptionalDouble.new(2))
 
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName('Window AC Supply Fan')
-      fan.setFanEfficiency(1)
-      fan.setPressureRise(0)
-      fan.setMotorEfficiency(1)
-      fan.setMotorInAirstreamFraction(0)
+      fan = model_create_fan_by_name(model, 'Window_AC_Supply_Fan', fan_name:'Window AC Supply Fan')
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOffDiscreteSchedule)
       htg_coil.setName('Window AC Always Off Htg Coil')
@@ -5075,7 +5000,6 @@ class Standard
     end
 
     # Defaults
-    fan_pressure_rise_in = 0.5 # 0.5 in W.C.
     afue = 0.78
     seer = 13
     eer = 11.1
@@ -5104,9 +5028,6 @@ class Standard
     ac_eir_ft = create_curve_biquadratic(cool_eir_ft_coeffs_si, 'AC-EIR-fT', 0, 100, 0, 100, nil, nil)
     ac_eir_fff = create_curve_quadratic(cool_eir_fflow_coeffs, 'AC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
     ac_plf_fplr = create_curve_quadratic(cool_plf_fplr_coeffs, 'AC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
-
-    # Unit conversion
-    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
 
     furnaces = []
     thermal_zones.each do |zone|
@@ -5150,13 +5071,9 @@ class Standard
       end
 
       # Fan
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{air_loop_name} supply fan")
-      fan.setEndUseSubcategory('residential hvac fan')
-      fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
-      fan.setPressureRise(fan_pressure_rise_pa)
-      fan.setMotorEfficiency(1)
-      fan.setMotorInAirstreamFraction(1)
+      fan = model_create_fan_by_name(model, 'Residential_HVAC_Fan', fan_name:"#{air_loop_name} supply fan",
+                                     end_use_subcategory:'residential hvac fan')
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # Outdoor Air Intake
       oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -5219,7 +5136,6 @@ class Standard
     equip_name = 'Central Air Source HP'
 
     # Defaults
-    fan_pressure_rise_in = 0.5 # 0.5 in W.C.
     hspf = 7.7
     seer = 13
     eer = 11.4
@@ -5231,9 +5147,6 @@ class Standard
     sat_clg_f = 55
     crank_case_heat_w = 0
     crank_case_max_temp_f = 55
-
-    # Unit conversion
-    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
 
     # Performance curves
     # These coefficients are in IP UNITS
@@ -5272,9 +5185,6 @@ class Standard
 
     # Heating defrost curve for reverse cycle
     defrost_eir_curve = create_curve_biquadratic(defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
-
-    # Unit conversion
-    fan_pressure_rise_pa = OpenStudio.convert(fan_pressure_rise_in, 'inH_{2}O', 'Pa').get
 
     hps = []
     thermal_zones.each do |zone|
@@ -5336,13 +5246,9 @@ class Standard
       end
 
       # Fan
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{air_loop_name} supply fan")
-      fan.setEndUseSubcategory('residential hvac fan')
-      fan.setFanEfficiency(0.6) # Overall Efficiency of the Supply Fan, Motor and Drive
-      fan.setPressureRise(fan_pressure_rise_pa)
-      fan.setMotorEfficiency(1)
-      fan.setMotorInAirstreamFraction(1)
+      fan = model_create_fan_by_name(model, 'Residential_HVAC_Fan', fan_name:"#{air_loop_name} supply fan",
+                                     end_use_subcategory:'residential hvac fan')
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       # Outdoor Air Intake
       oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -5444,13 +5350,8 @@ class Standard
       condenser_loop.addDemandBranchForComponent(clg_coil)
 
       # add fan
-      fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
-      fan.setName("#{zone.name} WSHP Fan")
-      fan_static_pressure_in_h2o = 1.33
-      fan_static_pressure_pa = OpenStudio.convert(fan_static_pressure_in_h2o, 'inH_{2}O', 'Pa').get
-      fan.setPressureRise(fan_static_pressure_pa)
-      fan.setFanEfficiency(0.52)
-      fan.setMotorEfficiency(0.8)
+      fan = model_create_fan_by_name(model, 'WSHP_Fan', fan_name:"#{zone.name} WSHP Fan")
+      fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
       water_to_air_hp_system = OpenStudio::Model::ZoneHVACWaterToAirHeatPump.new(model, model.alwaysOnDiscreteSchedule, fan, htg_coil, clg_coil, supplemental_htg_coil)
       water_to_air_hp_system.setName("#{zone.name} WSHP")
@@ -5488,20 +5389,12 @@ class Standard
       # Determine the OA requirement for this zone
       min_oa_flow_m3_per_s_per_m2 = thermal_zone_outdoor_airflow_rate_per_area(zone)
 
-      supply_fan = OpenStudio::Model::FanOnOff.new(model)
-      supply_fan.setName("#{zone.name} ERV Supply Fan")
-      supply_fan.setMotorEfficiency(fan_motor_efficiency)
+      supply_fan = model_create_fan_by_name(model, 'ERV_Supply_Fan', fan_name:"#{zone.name} ERV Supply Fan")
       impeller_eff = fan_baseline_impeller_efficiency(supply_fan)
       fan_change_impeller_efficiency(supply_fan, impeller_eff)
-      supply_fan.setPressureRise(fan_static_pressure_pa)
-      supply_fan.setMotorInAirstreamFraction(1)
 
-      exhaust_fan = OpenStudio::Model::FanOnOff.new(model)
-      exhaust_fan.setName("#{zone.name} ERV Exhaust Fan")
-      exhaust_fan.setMotorEfficiency(fan_motor_efficiency)
+      exhaust_fan = model_create_fan_by_name(model, 'ERV_Supply_Fan', fan_name:"#{zone.name} ERV Exhaust Fan")
       fan_change_impeller_efficiency(exhaust_fan, impeller_eff)
-      exhaust_fan.setPressureRise(fan_static_pressure_pa)
-      exhaust_fan.setMotorInAirstreamFraction(1)
 
       erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
       # erv_controller.setExhaustAirTemperatureLimit("NoExhaustAirTemperatureLimit")
@@ -5981,7 +5874,7 @@ class Standard
                            zones,
                            hvac_op_sch = nil,
                            fan_control_type = 'ConstantVolume',
-                           fan_pressure_rise = OpenStudio.convert(0.2, 'inH_{2}O', 'Pa').get,
+                           fan_pressure_rise = 0.2,
                            main_heat_fuel,
                            hot_water_loop = nil)
 
@@ -6038,7 +5931,7 @@ class Standard
                            oa_damper_sch = nil,
                            vav_fan_efficiency = 0.62,
                            vav_fan_motor_efficiency = 0.9,
-                           vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                           vav_fan_pressure_rise = 4.0,
                            return_plenum = nil,
                            reheat_type)
 
@@ -6054,7 +5947,7 @@ class Standard
                            oa_damper_sch = nil,
                            vav_fan_efficiency = 0.62,
                            vav_fan_motor_efficiency = 0.9,
-                           vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                           vav_fan_pressure_rise = 4.0,
                            return_plenum = nil,
                            reheat_type = nil)
 
@@ -6070,7 +5963,7 @@ class Standard
                            oa_damper_sch = nil,
                            vav_fan_efficiency = 0.62,
                            vav_fan_motor_efficiency = 0.9,
-                           vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                           vav_fan_pressure_rise = 4.0,
                            return_plenum = nil,
                            reheat_type = 'NaturalGas')
 
@@ -6111,7 +6004,7 @@ class Standard
                                oa_damper_sch = nil,
                                vav_fan_efficiency = 0.62,
                                vav_fan_motor_efficiency = 0.9,
-                               vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                               vav_fan_pressure_rise = 4.0,
                                chilled_water_loop)
     when 'VAV PFP Boxes'
       chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled = false)
@@ -6123,7 +6016,7 @@ class Standard
                                oa_damper_sch = nil,
                                vav_fan_efficiency = 0.62,
                                vav_fan_motor_efficiency = 0.9,
-                               vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
+                               vav_fan_pressure_rise = 4.0,
                                chilled_water_loop)
 
     when 'Water Source Heat Pumps'
