@@ -33,13 +33,13 @@ class Standard
     end
     clg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
-    clg_cap_f_of_temp = nil?
-    clg_cap_f_of_flow = nil?
-    clg_energy_input_ratio_f_of_temp = nil?
-    clg_energy_input_ratio_f_of_flow = nil?
-    clg_part_load_ratio = nil?
-    clg_cap_f_of_temp_low_spd = nil?
-    clg_energy_input_ratio_f_of_temp_low_spd = nil?
+    clg_cap_f_of_temp = nil
+    clg_cap_f_of_flow = nil
+    clg_energy_input_ratio_f_of_temp = nil
+    clg_energy_input_ratio_f_of_flow = nil
+    clg_part_load_ratio = nil
+    clg_cap_f_of_temp_low_spd = nil
+    clg_energy_input_ratio_f_of_temp_low_spd = nil
 
     # curve sets
     if type == 'OS default'
