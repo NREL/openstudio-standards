@@ -296,19 +296,19 @@ class NECB2011
     #Store Envelope data.
     qaqc[:envelope] = {}
     #Get Areas
-    qaqc[:envelope][:outdoor_walls_area_m2] = outdoor_walls.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:outdoor_roofs_area_m2] = outdoor_roofs.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:outdoor_floors_area_m2] = outdoor_floors.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:ground_walls_area_m2] = ground_walls.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:ground_roofs_area_m2] = ground_roofs.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:ground_floors_area_m2] = ground_floors.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:interior_floors_area_m2] = interior_floors.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:outdoor_walls_area_m2] = outdoor_walls.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:outdoor_roofs_area_m2] = outdoor_roofs.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:outdoor_floors_area_m2] = outdoor_floors.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:ground_walls_area_m2] = ground_walls.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:ground_roofs_area_m2] = ground_roofs.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:ground_floors_area_m2] = ground_floors.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
+    qaqc[:envelope][:interior_floors_area_m2] = interior_floors.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier }
 
     #Subsurface areas
-    qaqc[:envelope][:windows_area_m2] = windows.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:skylights_area_m2] = skylights.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:doors_area_m2] = doors.inject(0){|sum,e| sum + e.netArea() }
-    qaqc[:envelope][:overhead_doors_area_m2] = overhead_doors.inject(0){|sum,e| sum + e.netArea() }
+    qaqc[:envelope][:windows_area_m2] = windows.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier*e.multiplier }
+    qaqc[:envelope][:skylights_area_m2] = skylights.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier*e.multiplier }
+    qaqc[:envelope][:doors_area_m2] = doors.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier*e.multiplier }
+    qaqc[:envelope][:overhead_doors_area_m2] = overhead_doors.inject(0){|sum,e| sum + e.netArea()*e.space.get.multiplier*e.multiplier }
 
     #Total Building Surface Area.
     qaqc[:envelope][:total_exterior_area_m2] = qaqc[:envelope][:outdoor_walls_area_m2] +
