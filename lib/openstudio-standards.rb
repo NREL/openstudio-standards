@@ -201,8 +201,17 @@ module OpenstudioStandards
   create_meta_classes
 
   # Model Objects
+  require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWaterToAirHeatPumpEquationFit"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingDXSingleSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingElectric"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingGas"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
