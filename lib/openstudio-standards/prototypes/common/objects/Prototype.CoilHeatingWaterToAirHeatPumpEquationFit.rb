@@ -22,7 +22,7 @@ class Standard
     plant_loop.addDemandBranchForComponent(htg_coil)
 
     # set coil cop
-    htg_coil.setRatedCoolingCoefficientofPerformance(cop)
+    htg_coil.setRatedHeatingCoefficientofPerformance(cop)
 
     # curve sets
     if type == 'OS default'

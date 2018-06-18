@@ -3704,8 +3704,8 @@ class Standard
     water_to_air_hp_systems = []
     thermal_zones.each do |zone|
       supplemental_htg_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} Supplemental Htg Coil")
-      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{air_loop.name} Water-to-Air HP Htg Coil")
-      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{air_loop.name} Water-to-Air HP Clg Coil")
+      htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{zone.name} Water-to-Air HP Htg Coil")
+      clg_coil = create_coil_cooling_water_to_air_heat_pump_equation_fit(model, condenser_loop, name: "#{zone.name} Water-to-Air HP Clg Coil")
 
       # add fan
       fan = model_create_fan_by_name(model, 'WSHP_Fan', fan_name:"#{zone.name} WSHP Fan")
