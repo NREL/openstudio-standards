@@ -135,7 +135,7 @@ class Standard
   # Remove VRF units
   def remove_vrf(model)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
-    model.getZoneHVACTerminalUnitVariableRefrigerantFlows(&:remove)
+    model.getZoneHVACTerminalUnitVariableRefrigerantFlows.each(&:remove)
     return model
   end
 
