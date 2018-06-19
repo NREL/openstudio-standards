@@ -102,6 +102,94 @@ class Standard
     return model
   end
 
+  # Remove all air loops in model
+  def remove_air_loops(model)
+    model.getAirLoopHVACs.each(&:remove)
+    return model
+  end
+
+  # Remove plant loops in model except those used for service hot water
+  def remove_plant_loops(model)
+    plant_loops = model.getPlantLoops
+    plant_loops.each do |plant_loop|
+      shw_use = false
+      plant_loop.demandComponents.each do |component|
+        if component.to_WaterUseConnection.is_initialized or component.to_CoilWaterHeatingDesuperheater.is_initialized
+          shw_use = true
+          OpenStudio.logFree(OpenStudio::Info, "openstudio.model.Model", "#{plant_loop.name} is used for SHW or refrigeration heat reclaim.  Loop will not be deleted")
+        end
+        if !shw_use
+          plant_loop.remove
+        end
+      end
+    end
+    return model
+  end
+
+  # Remove all plant loops in model including those used for service hot water
+  def remove_all_plant_loops(model)
+    model.getPlantLoops.each(&:remove)
+    return model
+  end
+
+  # Remove VRF units
+  def remove_vrf(model)
+    model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
+    model.getZoneHVACTerminalUnitVariableRefrigerantFlows(&:remove)
+    return model
+  end
+
+  # Remove zone equipment except for exhaust fans
+  def remove_zone_equipment(model)
+    model.getThermalZones.each do |zone|
+      zone.equipment.each do |equipment|
+        if equipment.to_FanZoneExhaust.is_initialized
+        else
+          equipment.remove
+        end
+      end
+    end
+    return model
+  end
+
+  # Remove all zone equipment including exhaust fans
+  def remove_all_zone_equipment(model)
+    model.getThermalZones.each do |zone|
+      zone.equipment.each(&:remove)
+    end
+    return model
+  end
+
+  # Remove unused performance curves
+  def remove_unused_curves(model)
+    model.getCurves.each do |curve|
+      if curve.directUseCount == 0
+        curve.remove
+      end
+    end
+    return model
+  end
+
+  # Remove HVAC equipment except for service hot water loops and zone exhaust fans
+  def remove_HVAC(model)
+    remove_air_loops(model)
+    remove_plant_loops(model)
+    remove_vrf(model)
+    remove_zone_equipment(model)
+    remove_unused_curves(model)
+    return model
+  end
+
+  # Remove all HVAC equipment except including service hot water loops and zone exhaust fans
+  def remove_all_HVAC(model)
+    remove_air_loops(model)
+    remove_all_plant_loops(model)
+    remove_vrf(model)
+    remove_all_zone_equipment(model)
+    remove_unused_curves(model)
+    return model
+  end
+
   # Loads a JSON file containing the space type map into a hash
   #
   # @param hvac_map_file [String] path to JSON file, relative to the /data folder
@@ -570,4 +658,5 @@ class Standard
     end
     return film_r_si
   end
+
 end
