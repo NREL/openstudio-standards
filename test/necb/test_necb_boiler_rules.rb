@@ -13,7 +13,6 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/boiler_efficiency"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    #boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_boiler_efficiencies_expected_results.csv')
     standard = Standard.build('NECB2011')
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
