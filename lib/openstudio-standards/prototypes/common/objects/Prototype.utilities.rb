@@ -40,7 +40,9 @@ class Standard
     model.getConstructions.each(&:remove)
 
     # remove performance curves
-    model.getCurves.each(&:remove)
+    model.getCurves.each do |curve|
+      model.removeObject(curve.handle)
+    end
 
     # remove all zone equipment
     model.getThermalZones.sort.each do |zone|
@@ -114,13 +116,14 @@ class Standard
     plant_loops.each do |plant_loop|
       shw_use = false
       plant_loop.demandComponents.each do |component|
-        if component.to_WaterUseConnection.is_initialized or component.to_CoilWaterHeatingDesuperheater.is_initialized
+        if component.to_WaterUseConnections.is_initialized or component.to_CoilWaterHeatingDesuperheater.is_initialized
           shw_use = true
-          OpenStudio.logFree(OpenStudio::Info, "openstudio.model.Model", "#{plant_loop.name} is used for SHW or refrigeration heat reclaim.  Loop will not be deleted")
+          OpenStudio.logFree(OpenStudio::Info, "openstudio.model.Model", "#{plant_loop.name} is used for SHW or refrigeration heat reclaim and will not be removed.")
+          break
         end
-        if !shw_use
-          plant_loop.remove
-        end
+      end
+      if !shw_use
+        plant_loop.remove
       end
     end
     return model
@@ -144,6 +147,7 @@ class Standard
     model.getThermalZones.each do |zone|
       zone.equipment.each do |equipment|
         if equipment.to_FanZoneExhaust.is_initialized
+          OpenStudio.logFree(OpenStudio::Info, "openstudio.model.Model", "#{equipment.name} is a zone exhaust fan and will not be removed.")
         else
           equipment.remove
         end
@@ -164,7 +168,7 @@ class Standard
   def remove_unused_curves(model)
     model.getCurves.each do |curve|
       if curve.directUseCount == 0
-        curve.remove
+        model.removeObject(curve.handle)
       end
     end
     return model
@@ -657,6 +661,60 @@ class Standard
       film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
     end
     return film_r_si
+  end
+
+  # Sets VAV reheat and VAV no reheat terminals on an air loop to control for outdoor air
+  #
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] air loop to enable DCV on.
+  #   Default is nil, which will apply to all air loops
+  def set_VAV_terminals_to_control_for_outdoor_air(model, air_loop: nil)
+
+    vav_reheats = model.getAirTerminalSingleDuctVAVReheats
+    vav_no_reheats = model.getAirTerminalSingleDuctVAVNoReheats
+
+    if !air_loop.nil?
+      vav_reheats.each do |vav_reheat|
+        next if vav_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        next if vav_no_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    else # all terminals
+      vav_reheats.each do |vav_reheat|
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    end
+    return model
+  end
+
+  # Enables demand control ventilation in the controller mechanical ventilation object
+  #
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] air loop to enable DCV on.
+  #   Default is nil, which will apply to all air loops
+  def enable_demand_control_ventilation(model, air_loop: nil)
+    if !air_loop.nil?
+      if airloop.airLoopHVACOutdoorAirSystem.is_initialized
+        controller_mv = airloop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.controllerMechanicalVentilation
+        controller_mv.setDemandControlledVentilation(true)
+        OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "Enabling demand control ventilation for #{air_loop.name}")
+      else
+        OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "#{air_loop.name} not registering as an OpenStudio::Model::AirLoopHVAC object with an outdoor air system. Skipping.")
+      end
+    else
+      air_loops.each do |air_loop|
+        if airloop.airLoopHVACOutdoorAirSystem.is_initialized
+          controller_mv = airloop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.controllerMechanicalVentilation
+          controller_mv.setDemandControlledVentilation(true)
+          OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "Enabling demand control ventilation for #{air_loop.name}")
+        end
+      end
+    end
+    return model
   end
 
 end
