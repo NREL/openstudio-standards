@@ -1048,8 +1048,10 @@ class NECB2011
     qaqc[:spaces].each do |spaceinfo|
       model.getSpaces.sort.each do |space|
         next unless space.name.get == spaceinfo[:name]
+        found = false
         space.surfaces.each {|surface|
           next unless surface.outsideBoundaryCondition == 'Outdoors'
+          found = true
           # peform this infiltration qaqc if and only if the space's surface is in contact with outdoors
           infiltration_compliance.each {|compliance|
             # puts "\nspaceinfo[#{compliance['var']}]"
@@ -1075,6 +1077,9 @@ class NECB2011
           # peform qaqc only once per space
           break
         }
+        if !found
+          qaqc[:warnings] << "necb_infiltration_compliance for SPACE:[#{spaceinfo[:name]}] was skipped because it does not contain surfaces with 'Outside' boundary condition."
+        end
       end
 
     end
