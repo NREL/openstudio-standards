@@ -2,38 +2,8 @@ class NECB2011
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 # Chris Start
-#=begin
-    peak_flow_rate = 0
-    model.getSpaces.sort.each do |space|
-      space_type_name = space.spaceType.get.nameString
-      # find the specific space_type properties from standard.json
-      @standards_data['space_types']['table'].each do |space_type|
-        space_type_name == (space_type['building_type'] + " " + space_type['space_type']) ? data = space_type : next
-      end
-      search_criteria = {
-          'template' => template,
-          'building_type' => building_type,
-          'space_type' => space_type_name
-      }
-      data = model_find_object(standards_data['space_types'], search_criteria)
-      puts "hello"
-#=begin
-      if data.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
-        return nil
-      end
-      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-
-      # If there is no service hot water load.. Don't bother adding anything.
-      if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
-          data['service_water_heating_peak_flow_rate'].to_f == 0.0
-        next
-      end
-      peak_flow_rate += data['service_water_heating_peak_flow_per_area'].to_f
-#=end
-    end
-
-#=end
+    peakflow = auto_size_shw_capacity(model, climate_zone, epw_file)
+    pump_defaults = auto_size_shw_pump(model)
 # Chris End
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
@@ -302,5 +272,221 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
 
     return true
+  end
+
+  # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
+  def auto_size_shw_capacity(model, climate_zone, epw_file)
+    peak_flow_rate = 0
+    shw_space_types = []
+    water_use = 0
+    weekly_peak_flow = {
+        'Default|Wkdy' => Array.new(24,0),
+        'Sat' => Array.new(24,0),
+        'Sun|Hol' => Array.new(24,0)
+    }
+    peak_day_sched = nil
+    peak_hour_sched = 0
+    peak_flow_sched = 0
+    next_hour_day = nil
+    next_hour_hour = 0
+    next_hour_flow = 0
+    total_peak_flow_rate = 0
+    tank_temperature = []
+    # First go through all the spaces in the building and determine and determine their shw requirements
+    model.getSpaces.sort.each do |space|
+      space_peak_flow = 0
+      data = nil
+      space_type_name = space.spaceType.get.nameString
+      # find the specific space_type properties from standard.json
+      standards_data['space_types']['table'].each do |space_type|
+        if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
+          # If there is no service hot water load.. Don't bother adding anything.
+          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 && space_type['service_water_heating_schedule'].nil?
+            next
+          else
+            # If there is a service hot water load collect the space information
+            data = space_type
+          end
+        end
+      end
+      # If there is no service hot water load.. Don't bother adding anything.
+      # Skip space types with no data
+      next if data.nil?
+      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
+      # Calculate the peak shw flow rate for the space
+      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)
+      # Add the peak shw flow rate for the space to the total for the entire building
+      total_peak_flow_rate += space_peak_flow
+      # Get the tank temperature for the space.  This should olways be 60 C but I added this part in case something changes in the future.
+      if data['service_water_heating_target_temperature'].nil? || (data['service_water_heating_target_temperature'] <= 16)
+        tank_temperature << 60
+      else
+        tank_temperature << data['service_water_heating_target_temperature']
+      end
+      # The following gets the water use schedule for space and applies it to the peak flow rate for the space.  This
+      # creates an array containing the hourly shw consumption for the space for each day type (Weekday/default, Saturday,
+      # Sunday/Holiday).  The hourly shw consumption for each space is added to the array ultimately producing an array
+      # containing the hourly shw demand for the entire building.  This is used to determine the peak shw demand
+      # hour and rate for the building.  This is different than the overall peak shw demand for the building in that it
+      # takes into account the shw schedule.  The peak shw demand hour and rate should always be less than the overall peak
+      # shw demand.
+
+      # Cycle through the hash accumulating the shw rates for each day type.
+      weekly_peak_flow.sort.each do |day_peak_sched|
+        day_sched = []
+        # Create the search criteria and retrieve the schedule for the current space and current day type.
+        search_criteria = {
+            'template' => template,
+            'name' => data['service_water_heating_schedule'],
+            'day_types' => day_peak_sched[0]
+        }
+        day_sched = model_find_object(standards_data['schedules'], search_criteria)
+        # Make sure the schedule is not empty and contains 24 hours.
+        if day_sched.empty? || day_sched['values'].size != 24
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The water use schedule called #{data['service_water_heating_schedule']} for #{space_type_name} is corrupted or could not be found.  Please check that the schedules.json file is available and that the schedule names are spelled correctly")
+          return false
+        end
+        # For each hour of the current day type multiply the shw schedule fractional multiplier (representing the fraction of the total shw
+        # rate used in that hour) times the overall peak shw rate for the current space.  Add the resulting values to the
+        # array tracking hourly shw demand for the building.  Also, determine what the highest hourly demand is for the
+        # building.
+        day_peak_sched[1].sort.each_with_index do |hour_flow, hour_index|
+          weekly_peak_flow[day_peak_sched[0]][hour_index] += day_sched['values'][hour_index]*space_peak_flow
+          if weekly_peak_flow[day_peak_sched[0]][hour_index] > peak_flow_sched
+            peak_flow_sched = weekly_peak_flow[day_peak_sched[0]][hour_index]
+          end
+        end
+      end
+    end
+    next_day_test = nil
+    next_hour_test = 0
+    # The following loop goes through each hour in the array tracking hourly shw demand to find which hours contain the
+    # peak hourly shw demand (this is in case the peak hourly shw demand occurs more than once).  It then determines what
+    # the hourly shw demand is for the following hour.  It is meant to determine, of the peak hourly shw times, which has
+    # the highest shw demand the following hour.  This is used to determine shw capacity and volume.
+    weekly_peak_flow.sort.each do |day_peak_sched|
+      day_peak_sched[1].sort.each_with_index do |hour_flow, hour_index|
+        if hour_flow == peak_flow_sched
+          if hour_index == 23
+            next_hour_test = 0
+            case day_peak_sched[0]
+              when 'Default|Wkdy'
+                next_day_test = 'Sat'
+              when 'Sat'
+                next_day_test = 'Sun|Hol'
+              when 'Sun|Hol'
+                next_day_test = 'Default|Wkdy'
+            end
+          else
+            next_hour_test = hour_index + 1
+            next_day_test = day_peak_sched[0]
+          end
+          if next_hour_flow < weekly_peak_flow[next_day_test][next_hour_test]
+            next_hour_flow = weekly_peak_flow[next_day_test][next_hour_test]
+            next_hour_hour = next_hour_test
+            next_hour_day = next_day_test
+            peak_day_sched = day_peak_sched[0]
+            peak_hour_sched = hour_index
+          end
+        end
+      end
+    end
+    # The shw tank is sized so that it can fulfill the hour with the highest shw needs
+    tank_volume = peak_flow_sched * 60
+    # Interperite the fractional shw schedules as being the fraction of the hour that the maximum shw rate is used and determine
+    # what this fraction is for the entire building.
+    peak_time_fraction = 1 - (peak_flow_sched / total_peak_flow_rate)
+    # Assume the shw tank needs some minimum amount of time to recover (avoids requiring a ridiculously high capacity).
+    # If the recovery time is to short then the tank needs to hold enough water to service the peak shw hour and the one
+    # after.  Then give the tank the entire hour to heat up again.
+    if peak_time_fraction <= 0.2
+      tank_volume += (next_hour_flow * 60)
+      peak_time_fraction = 1
+    end
+    tank_volume_SI = OpenStudio.convert(tank_volume, 'gal', 'm^3').get
+    # Determine the tank capacity as the heat output required to heat up the entire volume of the tank in time remaining
+    # in the hour after the peak shw draw is stopped (assume water is provided to the building at 15C ).
+    tank_capacity_SI = tank_volume_SI * 1000 * 4180 * (tank_temperature.max - 15)/(3600*peak_time_fraction)
+    height_to_radius = 2
+    tank_radius = (tank_volume_SI/(height_to_radius*Math::PI))**(1.0/3)
+    tank_area = 2*(1+height_to_radius)*Math::PI*(tank_radius**2)
+    room_temp = OpenStudio.convert(70, 'F', 'C').get
+    u = 0.45
+    parasitic_loss = u*tank_area*(tank_temperature.max - room_temp)
+    tank_param = {
+        "tank_volume_SI" => tank_volume_SI,
+        "tank_capacity_SI" => tank_capacity_SI,
+        "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
+        "parasitic_loss" => parasitic_loss
+    }
+    return tank_param
+  end
+
+  # Partially completed code to autosize the pump head by calculating the piping length and deriving required head from that.
+  # Will also determine the pump motor efficiency.  If auto_sized is set to false then it returns a default pump head of
+  # 179532 Pa and motor efficiency of 0.9 (based on the OpenStudio 2.4.1 defaults for a constant speed pump).  Until the
+  # auto sizing method is complete only pass false for auto_sized.
+  # Chris Kirney 2018-06-20
+  def auto_size_shw_pump(model, auto_sized = false)
+    return {head: 179532, motor_efficiency: 0.9} if not auto_sized
+    spaces_peak_flow = []
+    global_max_z = -100000
+    shw_spaces = []
+    max_space_centroids = []
+    building_centre = Array.new(3,0)
+    model.getSpaces.sort.each do |space|
+      shw_space_info = {
+          "space_centroid" => nil,
+          "peak_flow" => 0,
+          "building_cent_dist" => 0
+      }
+      space_surfaces = []
+      min_surface = []
+      space_peak_flow = 0
+      data = nil
+      space_type_name = space.spaceType.get.nameString
+      # find the specific space_type properties from standard.json
+      standards_data['space_types']['table'].each do |space_type|
+        if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
+          # If there is no service hot water load.. Don't bother adding anything.
+          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 && space_type['service_water_heating_schedule'].nil?
+            next
+          else
+            # If there is a service hot water load collect the space information
+            data = space_type
+          end
+        end
+      end
+      # If there is no service hot water load.. Don't bother adding anything.
+      # Skip space types with no data
+      next if data.nil?
+      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
+      # Calculate the peak shw flow rate for the space
+      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)
+      shw_space_info['peak_flow'] = OpenStudio.convert(space_peak_flow, 'gal/min', 'm^3/s').get
+      space_min_z = 100000000
+      min_surface = nil
+      space_surfaces = space.surfaces
+      min_surface = space_surfaces.min_by{|index| index.centroid.z.to_f}
+      shw_space_info["space_centroid"] = min_surface.centroid
+      shw_spaces << shw_space_info
+      building_centre[0] += min_surface.centroid.x.to_f
+      building_centre[1] += min_surface.centroid.y.to_f
+      building_centre[2] += 1
+    end
+    building_centre[0] /= building_centre[2]
+    building_centre[1] /= building_centre[2]
+    min_length = 1000000000
+    space_length = 0
+    shw_spaces.each do |shw_space|
+      shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'].x.to_f - building_centre[0])**2) + ((shw_space['space_centroid'].y.to_f - building_centre[1])**2))
+      shw_space['building_cent_dist'].round(1) <= min_length ? min_length = shw_space['building_cent_dist'].round(1) : next
+    end
+    centre_spaces = []
+    shw_spaces.each do |shw_space|
+      shw_space['building_cent_dist'].round(1) == min_length ? centre_spaces << shw_space : next
+    end
+    centre_space = centre_spaces.max_by{|index| index['space_centroid'].z.to_f}
+    put 'hello'
   end
 end
