@@ -2,7 +2,7 @@ class NECB2011
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 # Chris Start
-    peakflow = auto_size_shw_capacity(model, climate_zone, epw_file)
+    shw_sizing = auto_size_shw_capacity(model, climate_zone, epw_file)
     pump_defaults = auto_size_shw_pump(model)
 # Chris End
     # Add the main service water heating loop, if specified
@@ -10,6 +10,39 @@ class NECB2011
 
 
       swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
+      main_swh_loop = model_add_swh_loop(model,
+                                         'Main Service Water Loop',
+                                         nil,
+                                         55,
+                                         pump_defaults['head'],
+                                         pump_defaults['motor_efficiency'],
+                                         shw_sizing['tank_capacity_SI'],
+                                         shw_sizing['tank_volume_SI'],
+                                         swh_fueltype,
+                                         shw_sizing['parasitic_loss'],
+                                         nil)
+
+      tank_param = {
+          "tank_volume_SI" => tank_volume_SI,
+          "tank_capacity_SI" => tank_capacity_SI,
+          "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
+          "parasitic_loss" => parasitic_loss,
+          "spaces_w_dhw" => shw_spaces
+      }
+      shw_sizing.sort.each do |space|
+        space_multiplier = nil
+
+        # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
+        space_multiplier = 1
+
+        model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
+                                        climate_zone,
+                                        main_swh_loop,
+                                        space_type_name,
+                                        space_name,
+                                        space_multiplier)
+      end
 
       # Add the main service water loop
       unless building_type == 'RetailStripmall' && ( template != 'NECB2011' &&  template != 'NECB2015')
@@ -292,6 +325,7 @@ class NECB2011
     next_hour_flow = 0
     total_peak_flow_rate = 0
     tank_temperature = []
+    shw_spaces = []
     # First go through all the spaces in the building and determine and determine their shw requirements
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
@@ -306,6 +340,7 @@ class NECB2011
           else
             # If there is a service hot water load collect the space information
             data = space_type
+            shw_spaces << space
           end
         end
       end
@@ -417,7 +452,8 @@ class NECB2011
         "tank_volume_SI" => tank_volume_SI,
         "tank_capacity_SI" => tank_capacity_SI,
         "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
-        "parasitic_loss" => parasitic_loss
+        "parasitic_loss" => parasitic_loss,
+        "spaces_w_dhw" => shw_spaces
     }
     return tank_param
   end
