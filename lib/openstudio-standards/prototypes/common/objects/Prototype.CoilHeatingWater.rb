@@ -11,7 +11,8 @@ class Standard
   # @param rated_outlet_air_temperature [Double] rated outlet air temperature in deg C, default is 90F
   def create_coil_heating_water(model, hot_water_loop, name: "Htg Coil", schedule: nil,
                                 rated_inlet_water_temperature: 82.2, rated_outlet_water_temperature: 71.1,
-                                rated_inlet_air_temperature: 16.6, rated_outlet_air_temperature: 32.2)
+                                rated_inlet_air_temperature: 16.6, rated_outlet_air_temperature: 32.2,
+                                controller_convergence_tolerance: 0.1)
 
     htg_coil = OpenStudio::Model::CoilHeatingWater.new(model)
 
@@ -51,6 +52,7 @@ class Standard
     htg_coil_controller = htg_coil.controllerWaterCoil.get
     htg_coil_controller.setName("#{name} Controller")
     htg_coil_controller.setMinimumActuatedFlow(0)
+    htg_coil_controller.setControllerConvergenceTolerance(controller_convergence_tolerance)
 
     return htg_coil
   end

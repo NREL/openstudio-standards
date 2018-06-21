@@ -32,7 +32,11 @@
     "chiller_cooling_type": "AirCooled",
     "chiller_condenser_type": "WithCondenser",
     "fan_maximum_flow_rate": 4346.24464,
-    "economizer_control_type": "DifferentialDrybulb",
+    "economizer_control_method": "DifferentialDrybulb",
+    "minimum_fraction_of_outdoor_air_schedule": "HotelLarge FLR_3_DOAS_OAminOAFracSchedule",
+    "doas_control_strategy": "ColdSupplyAir",
+    "cooling_design_supply_air_temperature": 55.0,
+    "heating_design_supply_air_temperature": 60.0,
     "space_names": [
       "Room_1_Flr_3",
       "Room_2_Flr_3",

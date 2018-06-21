@@ -703,12 +703,226 @@ class Standard
     return loop
   end
 
+  # Creates a DOAS system with terminal units for each zone.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
+  # @param system_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param doas_type [String] DOASCV or DOASVAV, determines whether the DOAS is operated at scheduled,
+  #   constant flow rate, or airflow is variable to allow for economizing or demand controlled ventilation
+  # @param doas_control_strategy [String] DOAS control strategy
+  # @param hot_water_loop [String] hot water loop to connect to heating and zone fan coils
+  # @param chilled_water_loop [String] chilled water loop to connect to cooling coil
+  # @param hvac_op_sch [String] name of the HVAC operation schedule, default is always on
+  # @param min_oa_sch [String] name of the minimum outdoor air schedule, default is always on
+  # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
+  # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
+  # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
+  # @param energy_recovery [Bool] if true, an ERV will be added to the system
+  # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
+  # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
+  # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
+  def model_add_doas(model,
+                     thermal_zones,
+                     system_name: nil,
+                     doas_type: "DOASVAV",
+                     hot_water_loop: nil,
+                     chilled_water_loop: nil,
+                     hvac_op_sch: nil,
+                     min_oa_sch: nil,
+                     min_frac_oa_sch: nil,
+                     fan_maximum_flow_rate: nil,
+                     econo_ctrl_mthd: "NoEconomizer",
+                     energy_recovery: false,
+                     doas_control_strategy: "NeutralSupplyAir",
+                     clg_dsgn_sup_air_temp: 65.0,
+                     htg_dsgn_sup_air_temp: 75.0)
+
+    # Check the total OA requirement for all zones on the system
+    tot_oa_req = 0
+    thermal_zones.each do |zone|
+      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      break if tot_oa_req > 0
+    end
+
+    # If the total OA requirement is zero do not add the DOAS system because the simulations will fail
+    if tot_oa_req.zero?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Not adding DOAS system for #{thermal_zones.size} zones because combined OA requirement for all zones is zero.")
+      return false
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding DOAS system for #{thermal_zones.size} zones.")
+
+    # Make DOAS air loop
+    air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+    if system_name.nil?
+      air_loop.setName("#{thermal_zones.size} Zone DOAS")
+    else
+      air_loop.setName(system_name)
+    end
+
+    # set availability schedule
+    hvac_op_sch = if hvac_op_sch.nil?
+                    model.alwaysOnDiscreteSchedule
+                  else
+                    model_add_schedule(model, hvac_op_sch)
+                  end
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+
+    # DOAS Controls
+    air_loop.setNightCycleControlType('CycleOnAny')
+    clg_dsgn_sup_air_temp = OpenStudio.convert(clg_dsgn_sup_air_temp, 'F', 'C').get
+    htg_dsgn_sup_air_temp = OpenStudio.convert(htg_dsgn_sup_air_temp, 'F', 'C').get
+
+    # modify system sizing properties
+    sizing_system = air_loop.sizingSystem
+    sizing_system.setTypeofLoadtoSizeOn('VentilationRequirement')
+    sizing_system.setAllOutdoorAirinCooling(true)
+    sizing_system.setAllOutdoorAirinHeating(true)
+    sizing_system.setMinimumSystemAirFlowRatio(0.3)
+    sizing_system.setSizingOption('Coincident')
+    sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp)
+    sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp)
+
+    if doas_type == "DOASCV"
+      fan = model_create_fan_by_name(model, 'Constant_DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
+    else # "DOASVAV"
+      fan = model_create_fan_by_name(model, 'Variable_DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
+    end
+    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+    fan.setMaximumFlowRate(OpenStudio.convert(fan_maximum_flow_rate, 'cfm', 'm^3/s').get) if !fan_maximum_flow_rate.nil?
+    fan.addToNode(air_loop.supplyInletNode)
+
+    # create heating coil
+    if hot_water_loop.nil?
+      coil_heating = create_coil_heating_dx_single_speed(model, name: "#{air_loop.name.to_s} Htg Coil")
+    else
+      coil_heating = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Htg Coil",
+                                             controller_convergence_tolerance: 0.0001)
+    end
+    coil_heating.addToNode(air_loop.supplyInletNode)
+
+    # create cooling coil
+    if chilled_water_loop.nil?
+      coil_cooling = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name.to_s} 2spd DX Clg Coil", type:'OS default')
+    else
+      coil_cooling = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
+    end
+    coil_cooling.addToNode(air_loop.supplyInletNode)
+
+    # minimum outdoor air schedule
+    min_oa_sch = if min_oa_sch.nil?
+                   model.alwaysOnDiscreteSchedule
+                 else
+                   model_add_schedule(model, min_oa_sch)
+                 end
+
+    # minimum outdoor air fraction schedule
+    min_frac_oa_sch = if min_frac_oa_sch.nil?
+                        model.alwaysOnDiscreteSchedule
+                      else
+                        model_add_schedule(model, min_frac_oa_sch)
+                      end
+
+    # create controller outdoor air
+    controller_oa = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    controller_oa.setName("#{air_loop.name.to_s} OA Controller")
+    controller_oa.setEconomizerControlType(econo_ctrl_mthd)
+    controller_oa.setMinimumLimitType('FixedMinimum')
+    controller_oa.autosizeMinimumOutdoorAirFlowRate
+    controller_oa.setMinimumOutdoorAirSchedule(min_oa_sch)
+    controller_oa.setMinimumFractionofOutdoorAirSchedule(min_frac_oa_sch)
+    controller_oa.resetEconomizerMaximumLimitDryBulbTemperature
+    controller_oa.resetEconomizerMaximumLimitEnthalpy
+    controller_oa.resetMaximumFractionofOutdoorAirSchedule
+    controller_oa.resetEconomizerMinimumLimitDryBulbTemperature
+    controller_oa.setHeatRecoveryBypassControlType('BypassWhenWithinEconomizerLimits')
+
+    # create outdoor air system
+    system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
+    system_oa.addToNode(air_loop.supplyInletNode)
+
+    # Create a setpoint manager
+    sat_oa_reset = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
+    sat_oa_reset.setName("#{air_loop.name.to_s} SAT Reset")
+    sat_oa_reset.setControlVariable('Temperature')
+    sat_oa_reset.setSetpointatOutdoorLowTemperature(htg_dsgn_sup_air_temp)
+    sat_oa_reset.setOutdoorLowTemperature(OpenStudio.convert(60, 'F', 'C').get)
+    sat_oa_reset.setSetpointatOutdoorHighTemperature(clg_dsgn_sup_air_temp)
+    sat_oa_reset.setOutdoorHighTemperature(OpenStudio.convert(70, 'F', 'C').get)
+    sat_oa_reset.addToNode(air_loop.supplyOutletNode)
+
+    # add energy recovery if requested
+    if energy_recovery
+      # Get the OA system and its outboard OA node
+      oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
+      oa_node = oa_system.outboardOANode.get
+
+      # Create the ERV and set its properties
+      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
+      erv.addToNode(oa_node)
+      erv.setHeatExchangerType('Rotary')
+      # TODO: Come up with scheme for estimating power of ERV motor wheel
+      # which might require knowing airlow (like prototype buildings do).
+      # erv.setNominalElectricPower(value_new)
+      erv.setEconomizerLockout(true)
+      erv.setSupplyAirOutletTemperatureControl(false)
+
+      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
+      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
+      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
+      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
+
+      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
+      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
+      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
+      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
+
+      # Increase fan pressure caused by the ERV
+      fans = []
+      fans += air_loop.supplyComponents('OS:Fan:VariableVolume'.to_IddObjectType)
+      fans += air_loop.supplyComponents('OS:Fan:ConstantVolume'.to_IddObjectType)
+      unless fans.empty?
+        if fans[0].to_FanConstantVolume.is_initialized
+          fans[0].to_FanConstantVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
+        elsif fans[0].to_FanVariableVolume.is_initialized
+          fans[0].to_FanVariableVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
+        end
+      end
+    end
+
+    # add thermal zones to airloop
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---adding #{zone.name} to #{air_loop.name.to_s}")
+
+      # make an air terminal for the zone
+      if doas_type == "DOASCV"
+        air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+      else # "DOASVAV"
+        air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
+        air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
+        air_terminal.setConstantMinimumAirFlowFraction(0.1)
+      end
+      air_terminal.setName("#{zone.name.to_s} Air Terminal")
+
+      # attach new terminal to the zone and to the airloop
+      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
+
+      # DOAS sizing
+      zone_sizing = zone.sizingZone
+      zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
+      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy(doas_control_strategy)
+      zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp)
+      zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp)
+    end
+
+    return air_loop
+  end
+
   # Creates a VAV system and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -935,7 +1149,7 @@ class Standard
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -1088,7 +1302,7 @@ class Standard
   # Creates a packaged VAV system and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -1210,11 +1424,10 @@ class Standard
     # Cooling coil
     if chilled_water_loop.nil?
       clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
-      clg_coil.addToNode(air_loop.supplyInletNode)
     else
       clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
-      clg_coil.addToNode(air_loop.supplyInletNode)
     end
+    clg_coil.addToNode(air_loop.supplyInletNode)
 
     # Outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1270,7 +1483,7 @@ class Standard
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -1371,11 +1584,10 @@ class Standard
     # Cooling coil
     if chilled_water_loop.nil?
       clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
-      clg_coil.addToNode(air_loop.supplyInletNode)
     else
       clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
-      clg_coil.addToNode(air_loop.supplyInletNode)
     end
+    clg_coil.addToNode(air_loop.supplyInletNode)
 
     # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1429,7 +1641,7 @@ class Standard
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to.
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -1637,7 +1849,7 @@ class Standard
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to, or nil
   # @param chilled_water_loop [String] chilled water loop to connect cooling coil to, or nil
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -1800,23 +2012,18 @@ class Standard
 
       clg_coil = nil
       if cooling_type == 'Water'
-
         if chilled_water_loop.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied')
           return false
         end
         clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Water Clg Coil")
-
       elsif cooling_type == 'Two Speed DX AC'
         clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX AC Clg Coil")
       elsif cooling_type == 'Single Speed DX AC'
-
         clg_coil = create_coil_cooling_dx_single_speed(model,
                                                        name:"#{air_loop.name} 1spd DX AC Clg Coil",
                                                        type:'PSZ-AC')
-
       elsif cooling_type == 'Single Speed Heat Pump'
-
         clg_coil = create_coil_cooling_dx_single_speed(model,
                                                        name:"#{air_loop.name} 1spd DX HP Clg Coil",
                                                        type:'Heat Pump')
@@ -1824,7 +2031,6 @@ class Standard
         # clg_coil.setRatedSensibleHeatRatio(0.69)
         # clg_coil.setBasinHeaterCapacity(10)
         # clg_coil.setBasinHeaterSetpointTemperature(2.0)
-
       elsif cooling_type == 'Water To Air Heat Pump'
         if chilled_water_loop.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied')
@@ -1953,7 +2159,7 @@ class Standard
   # Creates a packaged single zone VAV system for each zone and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -2153,7 +2359,7 @@ class Standard
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heatin coil to
   # @param heat_pump_loop [String] heat pump water loop to connect heat pump to
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -2333,7 +2539,7 @@ class Standard
   # Creates a split DX AC system for each zone and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param oa_damper_sch [Double] name of the oa damper schedule,
@@ -2470,6 +2676,7 @@ class Standard
       supplemental_htg_coil = create_coil_heating_gas(model, name: "#{thermal_zone_name} PSZ-AC Gas Backup Htg Coil")
     end
 
+
     # Cooling Coil
     clg_coil = nil
     if cooling_type == 'Two Speed DX AC'
@@ -2535,7 +2742,7 @@ class Standard
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect heating coil to.
   #   Set to nil for heating types besides water.
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param heating_type [Double] valid choices are
   # NaturalGas, Electricity, Water, nil (no heat)
@@ -2649,7 +2856,7 @@ class Standard
   # Creates a PTHP system for each zone and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [Double] valid choices are ConstantVolume, Cycling
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an
@@ -2715,7 +2922,7 @@ class Standard
   # Creates a unit heater for each zone and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
   # or nil in which case will be defaulted to always on
   # @param fan_control_type [Double] valid choices are Continuous, OnOff, Cycling
@@ -2806,7 +3013,7 @@ class Standard
   # Creates a high temp radiant heater for each zone and adds it to the model.
   #
   # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param heating_type [Double] valid choices are
   # Gas, Electric
   # @param combustion_efficiency [Double] combustion efficiency as decimal
@@ -2839,7 +3046,7 @@ class Standard
 
   # Creates an evaporative cooler for each zone and adds it to the model.
   #
-  # @param thermal_zones [String] zones to connect to this system
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param building_type [String] the building type
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] the resulting evaporative coolers
   def model_add_evap_cooler(model,
@@ -2999,229 +3206,6 @@ class Standard
     end
 
     return evap_coolers
-  end
-
-  # Creates a DOAS system with fan coil units
-  # for each zone.
-  #
-  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param hot_water_loop [String] hot water loop to connect heating and zone fan coils to
-  # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
-  # @param thermal_zones [String] zones to connect to this system
-  # @param hvac_op_sch [String] name of the HVAC operation schedule
-  # or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule,
-  # or nil in which case will be defaulted to always open
-  # @param fan_max_flow_rate [Double] fan maximum flow rate, in m^3/s.
-  # if nil, this value will be autosized.
-  # @param economizer_control_type [String] valid choices are
-  # FixedDryBulb,
-  # @param building_type [String] the building type
-  # @param energy_recovery [Bool] if true, an ERV will be added to the
-  # DOAS system.
-  # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
-  def model_add_doas(model,
-                     sys_name,
-                     hot_water_loop,
-                     chilled_water_loop,
-                     thermal_zones,
-                     hvac_op_sch,
-                     oa_damper_sch,
-                     fan_max_flow_rate,
-                     economizer_control_type,
-                     building_type = nil,
-                     energy_recovery = false)
-
-    # Check the total OA requirement for all zones on the system
-    tot_oa_req = 0
-    thermal_zones.each do |zone|
-      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
-      break if tot_oa_req > 0
-    end
-
-    # If the total OA requirement is zero do not add the DOAS system
-    # because the simulations will fail.
-    if tot_oa_req.zero?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Not adding DOAS system for #{thermal_zones.size} zones because combined OA requirement for all zones is zero.")
-      thermal_zones.each do |zone|
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
-      end
-      return false
-    end
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding DOAS system for #{thermal_zones.size} zones.")
-    thermal_zones.each do |zone|
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
-    end
-
-    # DOAS Controls
-
-    # Reset SAT down to 55F during hotter outdoor
-    # conditions for humidity management
-    lo_oat_f = 60
-    sat_at_lo_oat_f = 60
-    hi_oat_f = 70
-    sat_at_hi_oat_f = 55
-    lo_oat_c = OpenStudio.convert(lo_oat_f, 'F', 'C').get
-    hi_oat_c = OpenStudio.convert(hi_oat_f, 'F', 'C').get
-    sat_at_lo_oat_c = OpenStudio.convert(sat_at_lo_oat_f, 'F', 'C').get
-    sat_at_hi_oat_c = OpenStudio.convert(sat_at_hi_oat_f, 'F', 'C').get
-
-    # Create a setpoint manager
-    sat_oa_reset = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
-    sat_oa_reset.setName('DOAS SAT Reset')
-    sat_oa_reset.setControlVariable('Temperature')
-    sat_oa_reset.setSetpointatOutdoorLowTemperature(sat_at_lo_oat_c)
-    sat_oa_reset.setOutdoorLowTemperature(lo_oat_c)
-    sat_oa_reset.setSetpointatOutdoorHighTemperature(sat_at_hi_oat_c)
-    sat_oa_reset.setOutdoorHighTemperature(hi_oat_c)
-
-    # hvac operation schedule
-    hvac_op_sch = if hvac_op_sch.nil?
-                    model.alwaysOnDiscreteSchedule
-                  else
-                    model_add_schedule(model, hvac_op_sch)
-                  end
-
-    # oa damper schedule
-    oa_damper_sch = if oa_damper_sch.nil?
-                      model.alwaysOnDiscreteSchedule
-                    else
-                      model_add_schedule(model, oa_damper_sch)
-                    end
-
-    # DOAS
-    air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-    if sys_name.nil?
-      air_loop.setName("#{thermal_zones.size} Zone DOAS")
-    else
-      air_loop.setName(sys_name)
-    end
-    air_loop.setNightCycleControlType('CycleOnAny')
-    # modify system sizing properties
-    sizing_system = air_loop.sizingSystem
-    # set central heating and cooling temperatures for sizing
-    sizing_system.setCentralCoolingDesignSupplyAirTemperature(sat_at_hi_oat_c)
-    sizing_system.setCentralHeatingDesignSupplyAirTemperature(sat_at_lo_oat_c)
-    sizing_system.setSizingOption('Coincident')
-    # load specification
-    sizing_system.setTypeofLoadtoSizeOn('VentilationRequirement')
-    sizing_system.setAllOutdoorAirinCooling(true)
-    sizing_system.setAllOutdoorAirinHeating(true)
-    sizing_system.setMinimumSystemAirFlowRatio(0.3)
-
-    # set availability schedule
-    air_loop.setAvailabilitySchedule(hvac_op_sch)
-
-    # get the supply air inlet node
-    airloop_supply_inlet = air_loop.supplyInletNode
-
-    # create air loop fan
-    # constant speed fan
-    fan = model_create_fan_by_name(model, 'DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
-    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-    fan.addToNode(airloop_supply_inlet)
-
-    if fan_max_flow_rate.nil?
-      fan.autosizeMaximumFlowRate
-    else
-      fan.setMaximumFlowRate(OpenStudio.convert(fan_max_flow_rate, 'cfm', 'm^3/s').get) # unit of fan_max_flow_rate is cfm
-    end
-
-    # create heating coil
-    heating_coil = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Htg Coil")
-    heating_coil.addToNode(airloop_supply_inlet)
-    heating_coil.controllerWaterCoil.get.setControllerConvergenceTolerance(0.0001)
-
-    # create cooling coil
-    cooling_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{air_loop.name} Clg Coil")
-    cooling_coil.addToNode(airloop_supply_inlet)
-
-    # create controller outdoor air
-    controller_oa = OpenStudio::Model::ControllerOutdoorAir.new(model)
-    controller_oa.setName('DOAS OA Controller')
-    controller_oa.setEconomizerControlType(economizer_control_type)
-    controller_oa.setMinimumLimitType('FixedMinimum')
-    controller_oa.autosizeMinimumOutdoorAirFlowRate
-    controller_oa.setMinimumOutdoorAirSchedule(oa_damper_sch)
-    controller_oa.resetEconomizerMaximumLimitDryBulbTemperature
-    # TODO: Yixing read the schedule from the Prototype Input
-    if building_type == 'LargeHotel'
-      controller_oa.setMinimumFractionofOutdoorAirSchedule(model_add_schedule(model, 'HotelLarge FLR_3_DOAS_OAminOAFracSchedule'))
-    end
-    controller_oa.resetEconomizerMaximumLimitEnthalpy
-    controller_oa.resetMaximumFractionofOutdoorAirSchedule
-    controller_oa.resetEconomizerMinimumLimitDryBulbTemperature
-
-    # create ventilation schedules and assign to OA controller
-    controller_oa.setHeatRecoveryBypassControlType('BypassWhenWithinEconomizerLimits')
-
-    # create outdoor air system
-    system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
-    system_oa.addToNode(airloop_supply_inlet)
-
-    # add setpoint manager to supply equipment outlet node
-    sat_oa_reset.addToNode(air_loop.supplyOutletNode)
-
-    # ERV, if requested
-    if energy_recovery
-      # Get the OA system and its outboard OA node
-      oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
-      oa_node = oa_system.outboardOANode.get
-
-      # Create the ERV and set its properties
-      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.addToNode(oa_node)
-      erv.setHeatExchangerType('Rotary')
-      # TODO: Come up with scheme for estimating power of ERV motor wheel
-      # which might require knowing airlow (like prototype buildings do).
-      # erv.setNominalElectricPower(value_new)
-      erv.setEconomizerLockout(true)
-      erv.setSupplyAirOutletTemperatureControl(false)
-
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
-
-      # Increase fan pressure caused by the ERV
-      fans = []
-      fans += air_loop.supplyComponents('OS:Fan:VariableVolume'.to_IddObjectType)
-      fans += air_loop.supplyComponents('OS:Fan:ConstantVolume'.to_IddObjectType)
-      unless fans.empty?
-        if fans[0].to_FanConstantVolume.is_initialized
-          fans[0].to_FanConstantVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
-        elsif fans[0].to_FanVariableVolume.is_initialized
-          fans[0].to_FanVariableVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
-        end
-      end
-    end
-
-    # add thermal zones to airloop
-    thermal_zones.each do |zone|
-      zone_name = zone.name.to_s
-
-      # Ensure that zone sizing accounts for DOAS
-      zone_sizing = zone.sizingZone
-      zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
-      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy('ColdSupplyAir')
-      zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(sat_at_hi_oat_c)
-      zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(sat_at_lo_oat_c)
-
-      # make an air terminal for the zone
-      air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      air_terminal.setName(zone_name + 'Air Terminal')
-
-      # attach new terminal to the zone and to the airloop
-      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
-    end
-
-    return air_loop
   end
 
   # Adds hydronic or electric baseboard heating to each zone.
@@ -4403,28 +4387,27 @@ class Standard
     when 'DOAS'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
       chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled = false)
-
       model_add_doas(model,
-                     sys_name = nil,
-                     hot_water_loop,
-                     chilled_water_loop,
                      zones,
-                     hvac_op_sch = nil,
-                     oa_damper_sch = nil,
-                     fan_max_flow_rate = nil,
-                     economizer_control_type = 'FixedDryBulb',
-                     building_type = nil)
+                     doas_type: "DOASCV",
+                     hot_water_loop: hot_water_loop,
+                     chilled_water_loop: chilled_water_loop,
+                     econo_ctrl_mthd: "FixedDryBulb",
+                     doas_control_strategy: "ColdSupplyAir",
+                     clg_dsgn_sup_air_temp: 55.0,
+                     htg_dsgn_sup_air_temp: 60.0)
+
+    when 'DOAS No Plant'
+      model_add_doas(model, zones, energy_recovery: true)
 
     when 'ERVs'
       model_add_zone_erv(model, zones)
 
     when 'Evaporative Cooler'
-      model_add_evap_cooler(model,
-                            zones)
+      model_add_evap_cooler(model, zones)
 
     when 'Ideal Air Loads'
-      model_add_ideal_air_loads(model,
-                                zones)
+      model_add_ideal_air_loads(model, zones)
 
     ### Combination Systems ###
     when 'Water Source Heat Pumps with ERVs'
@@ -4512,6 +4495,21 @@ class Standard
 
       model_add_hvac_system(model,
                             system_type = 'ERVs',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones)
+
+    when  'VRF with DOAS'
+      model_add_hvac_system(model,
+                            system_type = 'VRF',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones)
+
+      model_add_hvac_system(model,
+                            system_type = 'DOAS No Plant',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,

@@ -200,15 +200,19 @@ class Standard
         end
 
         model_add_doas(model,
-                       system['name'],
-                       hot_water_loop,
-                       chilled_water_loop,
                        thermal_zones,
-                       system['operation_schedule'],
-                       system['oa_damper_schedule'],
-                       system['fan_maximum_flow_rate'],
-                       system['economizer_control_type'],
-                       building_type)
+                       system_name: system['name'],
+                       doas_type: "DOASCV",
+                       hot_water_loop: hot_water_loop,
+                       chilled_water_loop: chilled_water_loop,
+                       hvac_op_sch: system['operation_schedule'],
+                       min_oa_sch: system['oa_damper_schedule'],
+                       min_frac_oa_sch: system['minimum_fraction_of_outdoor_air_schedule'],
+                       fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
+                       econo_ctrl_mthd: system['economizer_control_method'],
+                       doas_control_strategy: system['doas_control_strategy'],
+                       clg_dsgn_sup_air_temp: system['cooling_design_supply_air_temperature'],
+                       htg_dsgn_sup_air_temp: system['heating_design_supply_air_temperature'])
 
         model_add_four_pipe_fan_coil(model,
                                      hot_water_loop,

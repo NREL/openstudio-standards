@@ -184,7 +184,7 @@ class Standard
     return model
   end
 
-  # Remove all HVAC equipment except including service hot water loops and zone exhaust fans
+  # Remove all HVAC equipment including service hot water loops and zone exhaust fans
   def remove_all_HVAC(model)
     remove_air_loops(model)
     remove_all_plant_loops(model)
