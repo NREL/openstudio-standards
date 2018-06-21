@@ -158,7 +158,7 @@ class NECB2015
 
     necb_envelope_compliance(qaqc) # [DONE]
 
-    necb_infiltration_compliance(qaqc) # [DONE-NC]
+    necb_infiltration_compliance(qaqc, model) # [DONE-NC]
 
     necb_exterior_opaque_compliance(qaqc) # [DONE-NC]
 
