@@ -734,8 +734,8 @@ class Standard
                      econo_ctrl_mthd: "NoEconomizer",
                      energy_recovery: false,
                      doas_control_strategy: "NeutralSupplyAir",
-                     clg_dsgn_sup_air_temp: 65.0,
-                     htg_dsgn_sup_air_temp: 75.0)
+                     clg_dsgn_sup_air_temp: 60.0,
+                     htg_dsgn_sup_air_temp: 70.0)
 
     # Check the total OA requirement for all zones on the system
     tot_oa_req = 0
@@ -856,7 +856,7 @@ class Standard
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_node = oa_system.outboardOANode.get
 
-      # Create the ERV and set its properties
+      # create the ERV and set its properties
       erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
       erv.addToNode(oa_node)
       erv.setHeatExchangerType('Rotary')
@@ -876,17 +876,10 @@ class Standard
       erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
       erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
 
-      # Increase fan pressure caused by the ERV
-      fans = []
-      fans += air_loop.supplyComponents('OS:Fan:VariableVolume'.to_IddObjectType)
-      fans += air_loop.supplyComponents('OS:Fan:ConstantVolume'.to_IddObjectType)
-      unless fans.empty?
-        if fans[0].to_FanConstantVolume.is_initialized
-          fans[0].to_FanConstantVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
-        elsif fans[0].to_FanVariableVolume.is_initialized
-          fans[0].to_FanVariableVolume.get.setPressureRise(OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get)
-        end
-      end
+      # increase fan static pressure to account for ERV
+      erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      new_pressure_rise = fan.pressureRise + erv_pressure_rise
+      fan.setPressureRise(new_pressure_rise)
     end
 
     # add thermal zones to airloop
