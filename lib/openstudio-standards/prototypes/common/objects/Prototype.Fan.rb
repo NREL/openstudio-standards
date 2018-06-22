@@ -109,22 +109,22 @@ module PrototypeFan
     fan_json = get_fan_from_standards(standards_name: standards_name)
 
     if fan_json['type'] == 'ConstantVolume'
-      model_create_fan_cv_from_json(model, fan_json, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
+      model_create_fan_cv_from_json(model, fan_json, fan_name:fan_name, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
                                     motor_efficiency: motor_efficiency, motor_in_airstream_fraction: motor_in_airstream_fraction,
                                     end_use_subcategory: end_use_subcategory)
     elsif fan_json['type'] == 'OnOff'
-      model_create_fan_on_off_from_json(model, fan_json, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
+      model_create_fan_on_off_from_json(model, fan_json, fan_name:fan_name, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
                               motor_efficiency: motor_efficiency, motor_in_airstream_fraction: motor_in_airstream_fraction,
                               end_use_subcategory: end_use_subcategory)
     elsif fan_json['type'] == 'VariableVolume'
-      model_create_fan_vv_from_json(model, fan_json, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
+      model_create_fan_vv_from_json(model, fan_json, fan_name:fan_name, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
                           motor_efficiency: motor_efficiency, motor_in_airstream_fraction: motor_in_airstream_fraction,
                           fan_power_minimum_flow_rate_input_method: fan_power_minimum_flow_rate_input_method,
                           fan_power_coefficient_1: fan_power_coefficient_1, fan_power_coefficient_2: fan_power_coefficient_2,
                           fan_power_coefficient_3: fan_power_coefficient_3, fan_power_coefficient_4: fan_power_coefficient_4,
                           fan_power_coefficient_5: fan_power_coefficient_5, end_use_subcategory: end_use_subcategory)
     elsif fan_json['type'] == 'ZoneExhaust'
-      model_create_fan_zone_exhaust_from_json(model, fan_json, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
+      model_create_fan_zone_exhaust_from_json(model, fan_json, fan_name:fan_name, fan_efficiency: fan_efficiency, pressure_rise: pressure_rise,
                                     system_availability_manager_coupling_mode: system_availability_manager_coupling_mode,
                                     end_use_subcategory: end_use_subcategory)
     end
