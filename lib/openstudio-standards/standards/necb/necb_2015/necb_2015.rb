@@ -45,8 +45,8 @@ class NECB2015 < NECB2011
     return @standards_data
   end
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
-    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, x_scale = 1.0, y_scale = 1.0, z_scale = 1.0)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
     # the cooling tower loop capacity can be significantly off which will affect the NECB 2015 maximum loop pump capacity.  Found

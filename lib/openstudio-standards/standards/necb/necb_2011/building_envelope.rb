@@ -786,5 +786,19 @@ class NECB2011
     end
   end
 
+  def scale_model_geometry(model, x_scale, y_scale, z_scale)
+    # Identity matrix for setting space origins
+    m = OpenStudio::Matrix.new(4, 4, 0)
+
+    m[0, 0] = 1.0/x_scale
+    m[1, 1] = 1.0/y_scale
+    m[2, 2] = 1.0/z_scale
+    m[3, 3] = 1.0
+    t = OpenStudio::Transformation.new(m)
+    model.getPlanarSurfaceGroups().each do |planar_surface|
+      planar_surface.changeTransformation(t)
+    end
+    return model
+  end
 
 end
