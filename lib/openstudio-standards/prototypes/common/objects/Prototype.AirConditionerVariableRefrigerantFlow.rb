@@ -26,10 +26,13 @@ class Standard
     vrf_outdoor_unit = OpenStudio::Model::AirConditionerVariableRefrigerantFlow.new(model)
 
     # set name
-    vrf_outdoor_unit.setName(name)
+    if name.nil?
+      vrf_outdoor_unit.setName("VRF System")
+    else
+      vrf_outdoor_unit.setName(name)
+    end
 
     # set availability schedule
-    availability_schedule = nil
     if schedule.nil?
       # default always on
       availability_schedule = model.alwaysOnDiscreteSchedule

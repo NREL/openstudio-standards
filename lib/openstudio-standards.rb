@@ -203,6 +203,7 @@ module OpenstudioStandards
   # Model Objects
   require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/common/objects/Prototype.BoilerHotWater"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"

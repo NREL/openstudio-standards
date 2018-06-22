@@ -6,111 +6,157 @@ class Standard
   #
   # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2, DistrictHeating, HeatPump
   # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump.
-  # Only used when boiler_fuel_type is HeatPump.
+  #   Only used when boiler_fuel_type is HeatPump.
+  # @param system_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 180F
+  # @param dsgn_sup_wtr_temp_delt [Double] design supply water temperature in degrees Rankine, default 20R
+  # @param pump_spd_ctrl [String] pump speed control type, Constant or Variable (default)
+  # @param pump_tot_hd [Double] pump head in ft H2O
+  # @param boiler_draft_type [String] Boiler type Condensing, MechanicalNoncondensing, Natural (default)
+  # @param boiler_eff_curve_temp_eval_var [String] LeavingBoiler or EnteringBoiler temperature for the boiler efficiency curve
+  # @param boiler_lvg_temp_dsgn F [Double] boiler leaving design temperature
+  # @param boiler_out_temp_lmt [Double] boiler outlet temperature limit
+  # @param boiler_max_plr [Double] boiler maximum part load ratio
+  # @param boiler_sizing_factor [Double] boiler oversizing factor
   # @return [OpenStudio::Model::PlantLoop] the resulting hot water loop
-  def model_add_hw_loop(model, boiler_fuel_type, building_type = nil, ambient_loop = nil)
+  def model_add_hw_loop(model, boiler_fuel_type, building_type = nil, ambient_loop = nil,
+                        system_name: nil,
+                        dsgn_sup_wtr_temp: nil,
+                        dsgn_sup_wtr_temp_delt: nil,
+                        pump_spd_ctrl: nil,
+                        pump_tot_hd: nil,
+                        boiler_draft_type: nil,
+                        boiler_eff_curve_temp_eval_var: nil,
+                        boiler_lvg_temp_dsgn: nil,
+                        boiler_out_temp_lmt: nil,
+                        boiler_max_plr: nil,
+                        boiler_sizing_factor: nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding hot water loop.')
 
-    # hot water loop
+    # create hot water loop
     hot_water_loop = OpenStudio::Model::PlantLoop.new(model)
-    hot_water_loop.setName('Hot Water Loop')
-    hot_water_loop.setMinimumLoopTemperature(10)
+    if system_name.nil?
+      hot_water_loop.setName("Hot Water Loop")
+    else
+      hot_water_loop.setName(system_name)
+    end
 
-    # hot water loop controls
-    # TODO: Yixing check other building types and add the parameter to the prototype input if more values comes out.
-    hw_temp_f = if building_type == 'LargeHotel'
-                  140 # HW setpoint 140F
-                else
-                  180 # HW setpoint 180F
-                end
+    # hot water loop sizing and controls
+    if dsgn_sup_wtr_temp.nil?
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(180, 'F', 'C').get
+    else
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+    end
+    if dsgn_sup_wtr_temp_delt.nil?
+      dsgn_sup_wtr_temp_delt_c = OpenStudio.convert(20, 'R', 'K').get
+    else
+      dsgn_sup_wtr_temp_delt_c = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'F', 'C').get
+    end
 
-    hw_delta_t_r = 20 # 20F delta-T
-    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
-    hw_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    hw_temp_sch.setName("Hot Water Loop Temp - #{hw_temp_f}F")
-    hw_temp_sch.defaultDaySchedule.setName("Hot Water Loop Temp - #{hw_temp_f}F Default")
-    hw_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), hw_temp_c)
-    hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
-    hw_stpt_manager.setName('Hot water loop setpoint manager')
-    hw_stpt_manager.addToNode(hot_water_loop.supplyOutletNode)
+    # TODO: remove building_type specific logic and move this to function input
+    dsgn_sup_wtr_temp_c = OpenStudio.convert(140, 'F', 'C').get if building_type == 'LargeHotel'
+
     sizing_plant = hot_water_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
-    sizing_plant.setDesignLoopExitTemperature(hw_temp_c)
-    sizing_plant.setLoopDesignTemperatureDifference(hw_delta_t_k)
+    sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_c)
+    hot_water_loop.setMinimumLoopTemperature(10)
+    hw_temp_sch = model_add_constant_schedule_ruleset(model, dsgn_sup_wtr_temp_c, name = "Hot Water Loop Temp - #{hw_temp_f}F")
+    hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
+    hw_stpt_manager.setName("#{hot_water_loop.name.to_s} Setpoint Manager")
+    hw_stpt_manager.addToNode(hot_water_loop.supplyOutletNode)
 
-    # hot water pump
-    hw_pump = if building_type == 'Outpatient'
-                OpenStudio::Model::PumpConstantSpeed.new(model)
-              else
-                OpenStudio::Model::PumpVariableSpeed.new(model)
-              end
-    hw_pump.setName('Hot Water Loop Pump')
-    hw_pump_head_ft_h2o = 60.0
-    hw_pump_head_press_pa = OpenStudio.convert(hw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
-    hw_pump.setRatedPumpHead(hw_pump_head_press_pa)
+
+    # create hot water pump
+    # TODO: remove building_type specific logic and move this to function input
+    if pump_spd_ctrl == 'Constant' or building_type == 'Outpatient'
+      hw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    else
+      hw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+    end
+    hw_pump.setName("#{hot_water_loop.name.to_s} Pump")
+    if pump_tot_hd.nil?
+      pump_tot_hd_pa =  OpenStudio.convert(60, 'ftH_{2}O', 'Pa').get
+    else
+      pump_tot_hd_pa =  OpenStudio.convert(pump_tot_hd, 'ftH_{2}O', 'Pa').get
+    end
+    hw_pump.setRatedPumpHead(pump_tot_hd_pa)
     hw_pump.setMotorEfficiency(0.9)
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
+    # create boiler and add to loop
     case boiler_fuel_type
-    # District Heating
-    when 'DistrictHeating'
-      dist_ht = OpenStudio::Model::DistrictHeating.new(model)
-      dist_ht.setName('Purchased Heating')
-      dist_ht.autosizeNominalCapacity
-      hot_water_loop.addSupplyBranchForComponent(dist_ht)
-    # Ambient Loop
-    when 'HeatPump'
-      water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
-      hot_water_loop.addSupplyBranchForComponent(water_to_water_hp)
-      # Get or add an ambient loop
-      if ambient_loop.nil?
-        ambient_loop = model_get_or_add_ambient_water_loop(model)
-      end
-      ambient_loop.addDemandBranchForComponent(water_to_water_hp)
-    # Boiler
-    when 'Electricity', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
-      boiler_max_t_f = 203
-      boiler_max_t_c = OpenStudio.convert(boiler_max_t_f, 'F', 'C').get
-      boiler = OpenStudio::Model::BoilerHotWater.new(model)
-      boiler.setName('Hot Water Loop Boiler')
-      boiler.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
-      boiler.setFuelType(boiler_fuel_type)
-      boiler.setDesignWaterOutletTemperature(hw_temp_c)
-      boiler.setNominalThermalEfficiency(0.78)
-      boiler.setMaximumPartLoadRatio(1.2)
-      boiler.setWaterOutletUpperTemperatureLimit(boiler_max_t_c)
-      boiler.setBoilerFlowMode('LeavingSetpointModulated')
-      hot_water_loop.addSupplyBranchForComponent(boiler)
+      # District Heating
+      when 'DistrictHeating'
+        district_heat = OpenStudio::Model::DistrictHeating.new(model)
+        district_heat.setName("#{hot_water_loop.name.to_s} District Heating")
+        district_heat.autosizeNominalCapacity
+        hot_water_loop.addSupplyBranchForComponent(district_heat)
+      # Ambient Loop
+      when 'HeatPump'
+        water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
+        water_to_water_hp.setName("#{hot_water_loop.name.to_s} Water to Water Heat Pump")
+        hot_water_loop.addSupplyBranchForComponent(water_to_water_hp)
+        # Get or add an ambient loop
+        if ambient_loop.nil?
+          ambient_loop = model_get_or_add_ambient_water_loop(model)
+        end
+        ambient_loop.addDemandBranchForComponent(water_to_water_hp)
+      # Boiler
+      when 'Electricity', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+        if boiler_lvg_temp_dsgn.nil?
+          lvg_temp_dsgn = dsgn_sup_wtr_temp
+        else
+          lvg_temp_dsgn = boiler_lvg_temp_dsgn
+        end
 
-      if building_type == 'LargeHotel'
-        boiler.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
-        boiler.setDesignWaterOutletTemperature(81)
-        boiler.setMaximumPartLoadRatio(1.2)
-        boiler.setSizingFactor(1.2)
-        boiler.setWaterOutletUpperTemperatureLimit(95)
-      end
+        if boiler_out_temp_lmt.nil?
+          out_temp_lmt = OpenStudio.convert(203, 'F', 'C').get
+        else
+          out_temp_lmt = boiler_out_temp_lmt
+        end
 
-      # TODO: Yixing. Add the temperature setpoint will cost the simulation with
-      # thousands of Severe Errors. Need to figure this out later.
-      # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
-      # boiler_stpt_manager.setName("Boiler outlet setpoint manager")
-      # boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{boiler_fuel_type} is not valid, no boiler will be added.")
+        boiler = create_boiler_hot_water(model,
+                                         hot_water_loop: hot_water_loop,
+                                         fuel_type: boiler_fuel_type,
+                                         draft_type: boiler_draft_type,
+                                         nominal_thermal_efficiency: 0.78,
+                                         eff_curve_temp_eval_var: boiler_eff_curve_temp_eval_var,
+                                         lvg_temp_dsgn: lvg_temp_dsgn,
+                                         out_temp_lmt: out_temp_lmt,
+                                         max_plr: boiler_max_plr,
+                                         sizing_factor: boiler_sizing_factor)
+
+        # TODO: remove building_type specific logic and move this to function input
+        boiler.setDesignWaterOutletTemperature(81) if building_type == 'LargeHotel'
+        boiler.setWaterOutletUpperTemperatureLimit(95) if building_type == 'LargeHotel'
+        boiler.setSizingFactor(1.2) if building_type == 'LargeHotel'
+
+        # TODO: Yixing. Add the temperature setpoint will cost the simulation with
+        # thousands of Severe Errors. Need to figure this out later.
+        # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
+        # boiler_stpt_manager.setName("Boiler outlet setpoint manager")
+        # boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{boiler_fuel_type} is not valid, no boiler will be added.")
     end
 
-    # hot water loop pipes
+    # add hot water loop pipes
     boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    boiler_bypass_pipe.setName("#{hot_water_loop.name.to_s} boiler bypass pipe")
     hot_water_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    coil_bypass_pipe.setName("#{hot_water_loop.name.to_s} coil bypass pipe")
     hot_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    supply_outlet_pipe.setName("#{hot_water_loop.name.to_s} supply outlet pipe")
     supply_outlet_pipe.addToNode(hot_water_loop.supplyOutletNode)
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    demand_inlet_pipe.setName("#{hot_water_loop.name.to_s} demand inlet pipe")
     demand_inlet_pipe.addToNode(hot_water_loop.demandInletNode)
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    demand_outlet_pipe.setName("#{hot_water_loop.name.to_s} demand outlet pipe")
     demand_outlet_pipe.addToNode(hot_water_loop.demandOutletNode)
 
     return hot_water_loop
