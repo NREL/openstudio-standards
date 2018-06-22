@@ -1034,7 +1034,7 @@ class NECB2011
     }
   end
 
-  def necb_infiltration_compliance(qaqc)
+  def necb_infiltration_compliance(qaqc, model)
     #Infiltration
     # puts "\n"
     # puts get_qaqc_table("infiltration_compliance")
@@ -1046,29 +1046,42 @@ class NECB2011
     infiltration_compliance = get_qaqc_table("infiltration_compliance")['table']
     necb_section_name = get_qaqc_table("infiltration_compliance")['refs'].join(",")
     qaqc[:spaces].each do |spaceinfo|
-      infiltration_compliance.each {|compliance|
-        data = {}
+      model.getSpaces.sort.each do |space|
+        next unless space.name.get == spaceinfo[:name]
+        found = false
+        space.surfaces.each {|surface|
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          found = true
+          # peform this infiltration qaqc if and only if the space's surface is in contact with outdoors
+          infiltration_compliance.each {|compliance|
+            # puts "\nspaceinfo[#{compliance['var']}]"
+            result_value = eval("spaceinfo[:#{compliance['var']}]")
+            # puts "#{compliance['test_text']}"
+            test_text = "[SPACE][#{spaceinfo[:name]}]-#{compliance['var']}"
+            # puts "result_value: #{result_value}"
+            # puts "test_text: #{test_text}\n"
+            # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ]
+            # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
+            # data.each do |key,value|
+            #puts key
+            necb_section_test(
+                qaqc,
+                result_value,
+                compliance["bool_operator"],
+                compliance["expected_value"],
+                necb_section_name,
+                test_text,
+                compliance["tolerance"]
+            )
+          }
+          # peform qaqc only once per space
+          break
+        }
+        if !found
+          qaqc[:warnings] << "necb_infiltration_compliance for SPACE:[#{spaceinfo[:name]}] was skipped because it does not contain surfaces with 'Outside' boundary condition."
+        end
+      end
 
-        # puts "\nspaceinfo[#{compliance['var']}]"
-        result_value = eval("spaceinfo[:#{compliance['var']}]")
-        # puts "#{compliance['test_text']}"
-        test_text = "[SPACE][#{spaceinfo[:name]}]-#{compliance['var']}"
-        # puts "result_value: #{result_value}"
-        # puts "test_text: #{test_text}\n"
-        # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ]
-        # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
-        # data.each do |key,value|
-        #puts key
-        necb_section_test(
-            qaqc,
-            result_value,
-            compliance["bool_operator"],
-            compliance["expected_value"],
-            necb_section_name,
-            test_text,
-            compliance["tolerance"]
-        )
-      }
     end
   end
 
@@ -1503,7 +1516,7 @@ class NECB2011
 
     necb_envelope_compliance(qaqc)
 
-    necb_infiltration_compliance(qaqc)
+    necb_infiltration_compliance(qaqc, model)
 
     necb_exterior_opaque_compliance(qaqc)
 
