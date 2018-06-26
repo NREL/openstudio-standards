@@ -4,6 +4,7 @@
     "name": "PVAV Outpatient F1",
     "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
     "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "hotwater_pump_speed_control":"Constant",
     "heating_type": "Gas",
     "space_names": [
       "Floor 1 Anesthesia",
@@ -68,6 +69,7 @@
     "name": "PVAV Outpatient F2 F3",
     "operation_schedule": "OutPatientHealthCare HVACOperationSchd",
     "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH",
+    "hotwater_pump_speed_control":"Constant",
     "heating_type": "Gas",
     "space_names": [
       "Floor 2 Conference",

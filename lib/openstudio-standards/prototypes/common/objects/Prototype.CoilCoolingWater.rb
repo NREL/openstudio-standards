@@ -8,7 +8,10 @@ class Standard
   # @param design_inlet_water_temperature [Double] design inlet water temperature in deg C, default is nil
   # @param design_inlet_air_temperature [Double] design inlet air temperature in deg C, default is nil
   # @param design_outlet_air_temperature [Double] design outlet air temperature in deg C, default is nil
-  def create_coil_cooling_water(model, chilled_water_loop, name: "Clg Coil", schedule: nil,
+  def create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                name: "Clg Coil",
+                                schedule: nil,
                                 design_inlet_water_temperature: nil,
                                 design_inlet_air_temperature: nil,
                                 design_outlet_air_temperature: nil)

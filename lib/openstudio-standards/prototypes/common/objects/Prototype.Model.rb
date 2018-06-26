@@ -1426,20 +1426,15 @@ Standard.class_eval do
     return default_construction_set
   end
 
-  # Split all zones in the model into groups that are big enough
-  # to justify their own HVAC system type.  Similar to the logic from
-  # 90.1 Appendix G, but without regard to the fuel type of the
-  # existing HVAC system (because the model may not have one).
+  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
+  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
   #
-  # @param min_area_m2[Double] the minimum area required to justify
-  # a different system type.
-  # @return [Array<Hash>] an array of hashes of area information,
-  # with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_type(model, min_area_m2 = 20_000)
+  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
+  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
+  def model_group_zones_by_type(model, min_area_m2 = 1858.0608)
     min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
 
-    # Get occupancy type, fuel type, and area information for all zones,
-    # excluding unconditioned zones.
+    # Get occupancy type, fuel type, and area information for all zones, excluding unconditioned zones.
     # Occupancy types are:
     # Residential
     # NonResidential
@@ -1467,11 +1462,9 @@ Standard.class_eval do
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
 
-    # Check the non-dominant occupancy type groups to see if they
-    # are big enough to trigger the occupancy exception.
+    # Check the non-dominant occupancy type groups to see if they are big enough to trigger the occupancy exception.
     # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group
-    # back to the dominant occupancy type group.
+    # If they are not, add the zones in that group back to the dominant occupancy type group.
     occ_groups = []
     zones_grouped_by_occ.each do |occ_type, zns|
       # Skip the dominant occupancy type

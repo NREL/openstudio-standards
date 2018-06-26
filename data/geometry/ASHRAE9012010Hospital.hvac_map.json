@@ -8,6 +8,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "Basement",
       "Office1_Mult4_Flr_1",
@@ -28,6 +29,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "ER_Exam1_Mult4_Flr_1",
       "ER_Trauma1_Flr_1",
@@ -45,6 +47,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "OR1_Flr_2",
       "OR2_Mult5_Flr_2",
@@ -61,6 +64,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "IC_PatRoom1_Mult5_Flr_2",
       "IC_PatRoom2_Flr_2",
@@ -77,6 +81,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "PatRoom1_Mult10_Flr_3",
       "PatRoom2_Flr_3",
@@ -105,6 +110,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "PhysTherapy_Flr_3",
       "NurseStn_Lobby_Flr_3",
@@ -132,6 +138,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "Lab_Flr_3",
       "Lab_Flr_4"
@@ -146,6 +153,7 @@
     "chiller_cooling_type": "WaterCooled",
     "chiller_condenser_type": null,
     "chiller_compressor_type": "Centrifugal",
+    "chiller_sizing_factor": 0.5,
     "space_names": [
       "Kitchen_Flr_5"
     ]
