@@ -932,7 +932,7 @@ class NECB2011
         tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
         # puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
         if compliance_var =="lighting_per_area_w_per_m2"
-          result_value = space[:lighting_w_per_m2]
+          result_value = space[:lighting_w_per_m2] * qaqc_table['lpd_ratio']
         elsif compliance_var =="occupancy_per_area_people_per_m2"
           result_value = space[:occ_per_m2]
         elsif compliance_var =="occupancy_schedule"
