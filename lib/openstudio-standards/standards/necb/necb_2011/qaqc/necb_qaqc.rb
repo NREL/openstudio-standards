@@ -1366,16 +1366,16 @@ class NECB2011
     qaqc[:air_loops].each do |air_loop_info|
       capacity = -1.0
       if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
-        puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
+        puts "capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]"
         capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
       elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
-        puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
+        puts "capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]"
         capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
       end
       puts capacity
       if capacity == -1.0
         #This should not happen
-        qaqc[:errors] << "[necb_economizer_compliance] air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
+        qaqc[:errors] << "[necb_economizer_compliance] air_loop_info[:cooling_coils] for #{air_loop_info[:name]} does not have a capacity "
       else
         #check for correct economizer usage
         #puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"
