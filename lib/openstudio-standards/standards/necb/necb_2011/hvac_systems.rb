@@ -2333,8 +2333,6 @@ class NECB2011
         returnAirNode = oa_system.returnAirModelObject.get.to_Node.get
         return_fan.addToNode(returnAirNode)
 
-        # return_inlet_node = air_loop.returnAirNode
-
         # Add a setpoint manager to control the
         # supply air to a constant temperature
         sat_c = 13.0
