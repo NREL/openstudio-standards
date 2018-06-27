@@ -496,6 +496,8 @@ class NECB2011
           unless spaceinfo[:lighting_w_per_m2].nil?
             spaceinfo[:lighting_w_per_m2] = spaceinfo[:lighting_w_per_m2].round(3)
           end
+        else
+          error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         end
         #spaceinfo[:electric_w_per_m2] = space.spaceType.get.electricEquipment[0].electricEquipmentDefinition.wattsperSpaceFloorArea.get.round(3) unless space.spaceType.get.electricEquipment[0].nil?
 
@@ -932,7 +934,11 @@ class NECB2011
         tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
         # puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
         if compliance_var =="lighting_per_area_w_per_m2"
-          result_value = space[:lighting_w_per_m2] * qaqc_table['lpd_ratio']
+          unless space[:lighting_w_per_m2].nil?
+            result_value = space[:lighting_w_per_m2] * qaqc_table['lpd_ratio']
+          else
+            result_value = 0
+          end
         elsif compliance_var =="occupancy_per_area_people_per_m2"
           result_value = space[:occ_per_m2]
         elsif compliance_var =="occupancy_schedule"
