@@ -318,7 +318,7 @@ class Standard
           # gather inputs for add_swh_loop
           # default fuel, capacity, and volume from Table A.1. Water Heating Equipment Enhancements to ASHRAE Standard 90.1 Prototype Building Models
           # temperature, pump head, motor efficiency, and parasitic load from Prototype Inputs
-          sys_name = "#{space_type.name} Service Water Loop #{i + 1}"
+          system_name = "#{space_type.name} Service Water Loop #{i + 1}"
           water_heater_thermal_zone = nil
           service_water_temperature = service_water_temperature_si
           service_water_pump_head = 0.01
@@ -340,7 +340,7 @@ class Standard
 
           # make loop for each unit and add on water use equipment
           unit_hot_water_loop = model_add_swh_loop(model,
-                                                   sys_name,
+                                                   system_name,
                                                    water_heater_thermal_zone,
                                                    service_water_temperature,
                                                    service_water_pump_head,
@@ -411,7 +411,7 @@ class Standard
         water_use_connection.setName("#{space_type.name} WUC")
 
         # gather inputs for add_swh_loop
-        sys_name = "#{space_type.name} Service Water Loop"
+        system_name = "#{space_type.name} Service Water Loop"
         water_heater_thermal_zone = nil
         water_heater_temp_si = 60.0 # C
         service_water_pump_head = 0.01
@@ -431,7 +431,7 @@ class Standard
 
         # make loop for each unit and add on water use equipment
         dedicated_hot_water_loop = model_add_swh_loop(model,
-                                                      sys_name,
+                                                      system_name,
                                                       water_heater_thermal_zone,
                                                       water_heater_temp_si,
                                                       service_water_pump_head,
@@ -560,7 +560,7 @@ class Standard
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
     water_use_equipment_hash.sort.each do |stds_bldg_type, water_use_equipment_array|
       # gather inputs for add_swh_loop
-      sys_name = "#{stds_bldg_type} Shared Service Water Loop"
+      system_name = "#{stds_bldg_type} Shared Service Water Loop"
       water_heater_thermal_zone = nil
       water_heater_temp_si = 60.0
 
@@ -627,7 +627,7 @@ class Standard
 
       # make loop for each unit and add on water use equipment
       shared_hot_water_loop = model_add_swh_loop(model,
-                                                 sys_name,
+                                                 system_name,
                                                  water_heater_thermal_zone,
                                                  water_heater_temp_si,
                                                  service_water_pump_head,

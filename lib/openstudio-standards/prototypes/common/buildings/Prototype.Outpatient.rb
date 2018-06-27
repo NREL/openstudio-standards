@@ -37,7 +37,7 @@ module Outpatient
 
     # Some exceptions for the Outpatient
     # TODO Refactor: not sure if this is actually enabled in the original code
-    #     if sys_name.include? 'PVAV Outpatient F1'
+    #     if system_name.include? 'PVAV Outpatient F1'
     #       # Outpatient two AHU1 and AHU2 have different HVAC schedule
     #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
     #       # Outpatient has different temperature settings for sizing
@@ -49,7 +49,7 @@ module Outpatient
     #                               end
     #       zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
     #       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    #     elsif sys_name.include? 'PVAV Outpatient F2 F3'
+    #     elsif system_name.include? 'PVAV Outpatient F2 F3'
     #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
     #       clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
     #       sys_dsn_clg_sa_temp_f = 52

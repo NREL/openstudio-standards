@@ -34,12 +34,10 @@ class Standard
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # set capacity
-    if !nominal_capacity.nil?
-      htg_coil.setNominalCapacity(nominal_capacity)
-    end
+    htg_coil.setNominalCapacity(nominal_capacity) if !nominal_capacity.nil?
 
     # set efficiency
-    htg_coil.setEfficiency(efficiency)
+    htg_coil.setEfficiency(efficiency) if !efficiency.nil?
 
     return htg_coil
   end

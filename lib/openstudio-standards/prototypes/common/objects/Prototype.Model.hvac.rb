@@ -231,24 +231,23 @@ class Standard
                            model_add_hp_loop(model, building_type)
                          end
         model_add_data_center_hvac(model,
-                                   nil,
+                                   thermal_zones,
                                    hot_water_loop,
                                    heat_pump_loop,
-                                   thermal_zones,
-                                   system['flow_fraction_schedule'],
-                                   system['flow_fraction_schedule'],
-                                   system['main_data_center'])
+                                   hvac_op_sch: system['flow_fraction_schedule'],
+                                   oa_damper_sch: system['flow_fraction_schedule'],
+                                   main_data_center: system['main_data_center'])
 
       when 'SAC'
         model_add_split_ac(model,
-                           nil,
                            thermal_zones,
-                           system['operation_schedule'],
-                           system['oa_damper_schedule'],
-                           system['fan_type'],
-                           system['heating_type'],
-                           system['heating_type'],
-                           system['cooling_type'])
+                           cooling_type: system['cooling_type'],
+                           heating_type: system['heating_type'],
+                           supplemental_heating_type: system['supplemental_heating_type'],
+                           fan_type: system['fan_type'],
+                           hvac_op_sch: system['operation_schedule'],
+                           oa_damper_sch: system['oa_damper_schedule'],
+                           econ_max_oa_frac_sch: system['econ_max_oa_frac_sch'])
 
       when 'UnitHeater'
         model_add_unitheater(model,
@@ -260,12 +259,10 @@ class Standard
 
       when 'PTAC'
         model_add_ptac(model,
-                       nil,
-                       nil,
                        thermal_zones,
-                       system['fan_type'],
-                       system['heating_type'],
-                       system['cooling_type'])
+                       cooling_type: system['cooling_type'],
+                       heating_type: system['heating_type'],
+                       fan_type: system['fan_type'])
 
       when 'PTHP'
           model_add_pthp(model,
@@ -273,17 +270,19 @@ class Standard
                          fan_type: system['fan_type'])
 
       when 'Exhaust Fan'
-        model_add_exhaust_fan(model, system['operation_schedule'],
-                              system['flow_rate'],
-                              system['flow_fraction_schedule'],
-                              system['balanced_exhaust_fraction_schedule'],
-                              thermal_zones)
+        model_add_exhaust_fan(model,
+                              thermal_zones,
+                              flow_rate: system['flow_rate'],
+                              availability_sch_name: system['operation_schedule'],
+                              flow_fraction_schedule_name: system['flow_fraction_schedule'],
+                              balanced_exhaust_fraction_schedule_name: system['balanced_exhaust_fraction_schedule'])
 
       when 'Zone Ventilation'
-        model_add_zone_ventilation(model, system['operation_schedule'],
-                                   system['flow_rate'],
-                                   system['ventilation_type'],
-                                   thermal_zones)
+        model_add_zone_ventilation(model,
+                                   thermal_zones,
+                                   ventilation_type: system['ventilation_type'],
+                                   flow_rate: system['flow_rate'],
+                                   availability_sch_name: system['operation_schedule'])
 
       when 'Refrigeration'
         model_add_refrigeration(model,
@@ -318,9 +317,9 @@ class Standard
                            model_get_or_add_ambient_water_loop(model)
                          end
         model_add_water_source_hp(model,
-                                  condenser_loop,
                                   thermal_zones,
-                                  ventilation=true)
+                                  condenser_loop,
+                                  ventilation:true)
 
       when 'Fan Coil'
         case system['heating_type']

@@ -3,7 +3,7 @@ class Standard
 
   # Creates a service water heating loop.
   #
-  # @param sys_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
   # @param service_water_temperature [Double] service water temperature, in C
@@ -20,7 +20,7 @@ class Standard
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
   def model_add_swh_loop(model,
-                         sys_name,
+                         system_name,
                          water_heater_thermal_zone,
                          service_water_temperature,
                          service_water_pump_head,
@@ -38,10 +38,10 @@ class Standard
     service_water_loop.setMinimumLoopTemperature(10)
     service_water_loop.setMaximumLoopTemperature(60)
 
-    if sys_name.nil?
+    if system_name.nil?
       service_water_loop.setName('Service Water Loop')
     else
-      service_water_loop.setName(sys_name)
+      service_water_loop.setName(system_name)
     end
 
     # Temperature schedule type limits
@@ -121,16 +121,14 @@ class Standard
     return service_water_loop
   end
 
-  # Determine the type of SWH pump that
-  # a model will have.  Defaults to ConstantSpeed.
+  # Determine the type of SWH pump that a model will have.  Defaults to ConstantSpeed.
   # @return [String] the SWH pump type: ConstantSpeed, VariableSpeed
   def model_swh_pump_type(model, building_type)
     swh_pump_type = 'ConstantSpeed'
     return swh_pump_type
   end
 
-  # Creates a water heater and attaches it to the supplied
-  # service water heating loop.
+  # Creates a water heater and attaches it to the supplied service water heating loop.
   #
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3

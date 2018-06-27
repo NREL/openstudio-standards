@@ -440,7 +440,7 @@ class Standard
   #
   # @param compressor_type [String] the system temperature range.  valid choices are:
   # Low Temp, Med Temp
-  # @param sys_name [String] the name of the refrigeration system
+  # @param system_name [String] the name of the refrigeration system
   # @param cases [Array<Hash>] an array of cases with keys:
   # case_type, case_name, length, number_of_cases, and space_names.
   # @param walkins [Array<Hashs>] an array of walkins with keys:
@@ -450,17 +450,17 @@ class Standard
   # @todo Move refrigeration compressors to spreadsheet
   def model_add_refrigeration_system(model,
                                      compressor_type,
-                                     sys_name,
+                                     system_name,
                                      cases,
                                      walkins,
                                      thermal_zone)
 
     # Refrigeration system
     ref_sys = OpenStudio::Model::RefrigerationSystem.new(model)
-    ref_sys.setName(sys_name.to_s)
+    ref_sys.setName(system_name.to_s)
     ref_sys.setSuctionPipingZone(thermal_zone)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{compressor_type} refrigeration system called #{sys_name} with #{cases.size} cases and #{walkins.size} walkins.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding #{compressor_type} refrigeration system called #{system_name} with #{cases.size} cases and #{walkins.size} walkins.")
 
     # Compressors (20 for each system)
     for i in 0...20

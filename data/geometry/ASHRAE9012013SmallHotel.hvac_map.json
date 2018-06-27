@@ -357,6 +357,8 @@
     "fan_type": "ConstantVolume",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
     "space_names": [
       "ExerciseCenterFlr1",
       "EmployeeLoungeFlr1",
@@ -370,6 +372,8 @@
     "fan_type": "ConstantVolume",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
     "space_names": [
       "FrontLoungeFlr1"
     ]
@@ -381,6 +385,8 @@
     "fan_type": "ConstantVolume",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
     "space_names": [
       "FrontOfficeFlr1"
     ]
@@ -392,6 +398,8 @@
     "fan_type": "ConstantVolume",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
     "space_names": [
       "MeetingRoomFlr1"
     ]

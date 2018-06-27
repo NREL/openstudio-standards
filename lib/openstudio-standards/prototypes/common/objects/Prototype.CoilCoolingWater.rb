@@ -54,8 +54,8 @@ class Standard
 
     # coil controller properties
     clg_coil_controller = clg_coil.controllerWaterCoil.get
-    clg_coil_controller.setName("#{name} Controller")
-    clg_coil_controller.setMinimumActuatedFlow(0)
+    clg_coil_controller.setName("#{clg_coil.name.to_s} Controller")
+    clg_coil_controller.setMinimumActuatedFlow(0.0)
 
     return clg_coil
   end

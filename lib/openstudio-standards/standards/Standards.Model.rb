@@ -733,12 +733,11 @@ class Standard
 
           # Add a hot water PTAC to each zone
           model_add_ptac(model,
-                         nil,
-                         hot_water_loop,
                          zones,
-                         'ConstantVolume',
-                         'Water',
-                         'Single Speed DX AC')
+                         cooling_type: "Single Speed DX AC",
+                         heating_type: "Water",
+                         hot_water_loop: hot_water_loop,
+                         fan_type: "ConstantVolume")
         end
 
       when 'PTHP' # System 2
@@ -779,7 +778,7 @@ class Standard
 
           # Add a gas-fired PSZ-AC to each zone, hvac_op_sch=nil means always on, oa_damper_sch to nil means always open
           model_add_psz_ac(model,
-                           sys_name = nil,
+                           system_name = nil,
                            hot_water_loop,
                            chilled_water_loop,
                            zones,
@@ -855,14 +854,14 @@ class Standard
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by { |nm, z| z }[0][0]
-          sys_name = "#{story_name} PVAV_Reheat (Sys5)"
+          system_name = "#{story_name} PVAV_Reheat (Sys5)"
 
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
 
             model_add_pvav(model,
-                           sys_name,
+                           system_name,
                            pri_zones,
                            nil,
                            nil,
@@ -911,11 +910,11 @@ class Standard
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by { |nm, z| z }[0][0]
-          sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
+          system_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_pvav_pfp_boxes(model,
-                                     sys_name,
+                                     system_name,
                                      pri_zones,
                                      nil,
                                      nil,
@@ -991,13 +990,13 @@ class Standard
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by { |nm, z| z }[0][0]
-          sys_name = "#{story_name} VAV_Reheat (Sys7)"
+          system_name = "#{story_name} VAV_Reheat (Sys7)"
 
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
             model_add_vav_reheat(model,
-                                 sys_name,
+                                 system_name,
                                  hot_water_loop,
                                  chilled_water_loop,
                                  pri_zones,
@@ -1062,11 +1061,11 @@ class Standard
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
           story_name = stories.sort_by { |nm, z| z }[0][0]
-          sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
+          system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_vav_pfp_boxes(model,
-                                    sys_name,
+                                    system_name,
                                     chilled_water_loop,
                                     pri_zones,
                                     nil,
