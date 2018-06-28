@@ -637,6 +637,7 @@ class NECB2011
       air_loop_info[:cooling_coils] ={}
       air_loop_info[:cooling_coils][:dx_single_speed]=[]
       air_loop_info[:cooling_coils][:dx_two_speed]=[]
+      air_loop_info[:cooling_coils][:coil_cooling_water]=[]
 
       #Heating Coil
       air_loop_info[:heating_coils] = {}
@@ -707,6 +708,16 @@ class NECB2011
           coil[:cop_high] = two_speed.getRatedHighSpeedCOP.get
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
+        end
+        if supply_comp.to_CoilCoolingWater.is_initialized
+          coil = {}
+          air_loop_info[:cooling_coils][:coil_cooling_water] << coil
+          coil_cooling_water = supply_comp.to_CoilCoolingWater.get
+          coil[:name] = coil_cooling_water.name.get
+          coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
+          coil[:nominal_sensible_heat_ratio] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Sensible Heat Ratio' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_sensible_heat_ratio] = validate_optional(coil[:nominal_sensible_heat_ratio], model, -1.0)
         end
       end
       qaqc[:air_loops] << air_loop_info
@@ -1371,6 +1382,9 @@ class NECB2011
       elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
         puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
         capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
+      elsif !air_loop_info[:cooling_coils][:coil_cooling_water][0].nil?
+        puts "capacity = air_loop_info[:cooling_coils][:coil_cooling_water][0][:nominal_total_capacity_w]"
+        capacity = air_loop_info[:cooling_coils][:coil_cooling_water][0][:nominal_total_capacity_w]
       end
       puts capacity
       if capacity == -1.0
