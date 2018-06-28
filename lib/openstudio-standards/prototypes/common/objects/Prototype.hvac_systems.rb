@@ -594,7 +594,9 @@ class Standard
                                      fuel_type: "NaturalGas",
                                      flow_mode: "ConstantFlow",
                                      lvg_temp_dsgn: 86.0,
-                                     max_plr: 1.2)
+                                     min_plr: 0.0,
+                                     max_plr: 1.2,
+                                     opt_plr: 1.0)
     # add setpoint manager schedule to boiler outlet so correct plant operation scheme is generated
     boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
     boiler_stpt_manager.setName("#{heat_pump_water_loop.name.to_s} Boiler Scheduled Dual Setpoint")
@@ -608,7 +610,7 @@ class Standard
     heat_pump_water_loop.addSupplyBranchForComponent(supply_bypass_pipe)
 
     demand_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_bypass_pipe.setName("#{heat_pump_water_loop.name} Demand Bypass Pipe")
+    demand_bypass_pipe.setName("#{heat_pump_water_loop.name} Demand Bypass")
     heat_pump_water_loop.addDemandBranchForComponent(demand_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -790,7 +792,7 @@ class Standard
     district_heating.setNominalCapacity(1_000_000_000_000) # large number; no autosizing
     ambient_loop.addSupplyBranchForComponent(district_heating)
 
-    # add abmient water loop pipes
+    # add ambient water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
     supply_bypass_pipe.setName("#{ambient_loop.name} Supply Bypass Pipe")
     ambient_loop.addSupplyBranchForComponent(supply_bypass_pipe)

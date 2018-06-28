@@ -12,7 +12,9 @@ class Standard
   # @param flow_mode [String] boiler flow mode
   # @param lvg_temp_dsgn [Double] boiler leaving design temperature, degrees Fahrenheit
   # @param out_temp_lmt [Double] boiler outlet temperature limit, degrees Fahrenheit
+  # @param min_plr [Double] boiler minimum part load ratio
   # @param max_plr [Double] boiler maximum part load ratio
+  # @param opt_plr [Double] boiler optimum part load ratio
   # @param sizing_factor [Double] boiler oversizing factor
   def create_boiler_hot_water(model,
                               hot_water_loop: nil,
@@ -24,7 +26,9 @@ class Standard
                               flow_mode: "LeavingSetpointModulated",
                               lvg_temp_dsgn: nil,
                               out_temp_lmt: nil,
+                              min_plr: nil,
                               max_plr: 1.2,
+                              opt_plr: nil,
                               sizing_factor: nil)
 
     # create the boiler
@@ -87,7 +91,9 @@ class Standard
     end
 
     boiler.setWaterOutletUpperTemperatureLimit(OpenStudio.convert(out_temp_lmt, 'F', 'C').get) if !out_temp_lmt.nil?
+    boiler.setMinimumPartLoadRatio(min_plr) if !min_plr.nil?
     boiler.setMaximumPartLoadRatio(max_plr) if !max_plr.nil?
+    boiler.setOptimumPartLoadRatio(opt_plr) if !opt_plr.nil?
     boiler.setMaximumPartLoadRatio(sizing_factor) if !sizing_factor.nil?
 
     if !hot_water_loop.nil?
