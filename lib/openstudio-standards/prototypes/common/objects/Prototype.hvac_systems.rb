@@ -136,23 +136,23 @@ class Standard
 
     # add hot water loop pipes
     boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    boiler_bypass_pipe.setName("#{hot_water_loop.name.to_s} Boiler Bypass Pipe")
+    boiler_bypass_pipe.setName("#{hot_water_loop.name.to_s} Boiler Bypass")
     hot_water_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
 
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    coil_bypass_pipe.setName("#{hot_water_loop.name.to_s} Coil Bypass Pipe")
+    coil_bypass_pipe.setName("#{hot_water_loop.name.to_s} Coil Bypass")
     hot_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_outlet_pipe.setName("#{hot_water_loop.name.to_s} Supply Outlet Pipe")
+    supply_outlet_pipe.setName("#{hot_water_loop.name.to_s} Supply Outlet")
     supply_outlet_pipe.addToNode(hot_water_loop.supplyOutletNode)
 
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_inlet_pipe.setName("#{hot_water_loop.name.to_s} Demand Inlet Pipe")
+    demand_inlet_pipe.setName("#{hot_water_loop.name.to_s} Demand Inlet")
     demand_inlet_pipe.addToNode(hot_water_loop.demandInletNode)
 
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_outlet_pipe.setName("#{hot_water_loop.name.to_s} Demand Outlet Pipe")
+    demand_outlet_pipe.setName("#{hot_water_loop.name.to_s} Demand Outlet")
     demand_outlet_pipe.addToNode(hot_water_loop.demandOutletNode)
 
     return hot_water_loop
@@ -307,23 +307,23 @@ class Standard
 
     # chilled water loop pipes
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    chiller_bypass_pipe.setName("#{chilled_water_loop.name.to_s} Chiller Bypass Pipe")
+    chiller_bypass_pipe.setName("#{chilled_water_loop.name.to_s} Chiller Bypass")
     chilled_water_loop.addSupplyBranchForComponent(chiller_bypass_pipe)
 
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    coil_bypass_pipe.setName("#{chilled_water_loop.name.to_s} Coil Bypass Pipe")
+    coil_bypass_pipe.setName("#{chilled_water_loop.name.to_s} Coil Bypass")
     chilled_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_outlet_pipe.setName("#{chilled_water_loop.name.to_s} Supply Outlet Pipe")
+    supply_outlet_pipe.setName("#{chilled_water_loop.name.to_s} Supply Outlet")
     supply_outlet_pipe.addToNode(chilled_water_loop.supplyOutletNode)
 
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_inlet_pipe.setName("#{chilled_water_loop.name.to_s} Demand Inlet Pipe")
+    demand_inlet_pipe.setName("#{chilled_water_loop.name.to_s} Demand Inlet")
     demand_inlet_pipe.addToNode(chilled_water_loop.demandInletNode)
 
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_outlet_pipe.setName("#{chilled_water_loop.name.to_s} Demand Outlet Pipe")
+    demand_outlet_pipe.setName("#{chilled_water_loop.name.to_s} Demand Outlet")
     demand_outlet_pipe.addToNode(chilled_water_loop.demandOutletNode)
 
     return chilled_water_loop
@@ -467,23 +467,23 @@ class Standard
 
     # Condenser water loop pipes
     cooling_tower_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    cooling_tower_bypass_pipe.setName("#{condenser_water_loop.name.to_s} Cooling Tower Bypass Pipe")
+    cooling_tower_bypass_pipe.setName("#{condenser_water_loop.name.to_s} Cooling Tower Bypass")
     condenser_water_loop.addSupplyBranchForComponent(cooling_tower_bypass_pipe)
 
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    chiller_bypass_pipe.setName("#{condenser_water_loop.name.to_s} Chiller Bypass Pipe")
+    chiller_bypass_pipe.setName("#{condenser_water_loop.name.to_s} Chiller Bypass")
     condenser_water_loop.addDemandBranchForComponent(chiller_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_outlet_pipe.setName("#{condenser_water_loop.name.to_s} Supply Outlet Pipe")
+    supply_outlet_pipe.setName("#{condenser_water_loop.name.to_s} Supply Outlet")
     supply_outlet_pipe.addToNode(condenser_water_loop.supplyOutletNode)
 
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_inlet_pipe.setName("#{condenser_water_loop.name.to_s} Demand Inlet Pipe")
+    demand_inlet_pipe.setName("#{condenser_water_loop.name.to_s} Demand Inlet")
     demand_inlet_pipe.addToNode(condenser_water_loop.demandInletNode)
 
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_outlet_pipe.setName("#{condenser_water_loop.name.to_s} Demand Outlet Pipe")
+    demand_outlet_pipe.setName("#{condenser_water_loop.name.to_s} Demand Outlet")
     demand_outlet_pipe.addToNode(condenser_water_loop.demandOutletNode)
 
     return condenser_water_loop
@@ -606,7 +606,7 @@ class Standard
 
     # add heat pump water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_bypass_pipe.setName("#{heat_pump_water_loop.name} Supply Bypass Pipe")
+    supply_bypass_pipe.setName("#{heat_pump_water_loop.name} Supply Bypass")
     heat_pump_water_loop.addSupplyBranchForComponent(supply_bypass_pipe)
 
     demand_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -614,15 +614,15 @@ class Standard
     heat_pump_water_loop.addDemandBranchForComponent(demand_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_outlet_pipe.setName("#{heat_pump_water_loop.name} Supply Outlet Pipe")
+    supply_outlet_pipe.setName("#{heat_pump_water_loop.name} Supply Outlet")
     supply_outlet_pipe.addToNode(heat_pump_water_loop.supplyOutletNode)
 
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_inlet_pipe.setName("#{heat_pump_water_loop.name} Demand Inlet Pipe")
+    demand_inlet_pipe.setName("#{heat_pump_water_loop.name} Demand Inlet")
     demand_inlet_pipe.addToNode(heat_pump_water_loop.demandInletNode)
 
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_outlet_pipe.setName("#{heat_pump_water_loop.name} Demand Outlet Pipe")
+    demand_outlet_pipe.setName("#{heat_pump_water_loop.name} Demand Outlet")
     demand_outlet_pipe.addToNode(heat_pump_water_loop.demandOutletNode)
 
     return heat_pump_water_loop
@@ -794,23 +794,23 @@ class Standard
 
     # add ambient water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_bypass_pipe.setName("#{ambient_loop.name} Supply Bypass Pipe")
+    supply_bypass_pipe.setName("#{ambient_loop.name} Supply Bypass")
     ambient_loop.addSupplyBranchForComponent(supply_bypass_pipe)
 
     demand_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_bypass_pipe.setName("#{ambient_loop.name} Demand Bypass Pipe")
+    demand_bypass_pipe.setName("#{ambient_loop.name} Demand Bypass")
     ambient_loop.addDemandBranchForComponent(demand_bypass_pipe)
 
     supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    supply_outlet_pipe.setName("#{ambient_loop.name} Supply Outlet Pipe")
+    supply_outlet_pipe.setName("#{ambient_loop.name} Supply Outlet")
     supply_outlet_pipe.addToNode(ambient_loop.supplyOutletNode)
 
     demand_inlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_inlet_pipe.setName("#{ambient_loop.name} Demand Inlet Pipe")
+    demand_inlet_pipe.setName("#{ambient_loop.name} Demand Inlet")
     demand_inlet_pipe.addToNode(ambient_loop.demandInletNode)
 
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    demand_outlet_pipe.setName("#{ambient_loop.name} Demand Outlet Pipe")
+    demand_outlet_pipe.setName("#{ambient_loop.name} Demand Outlet")
     demand_outlet_pipe.addToNode(ambient_loop.demandOutletNode)
 
     return ambient_loop
