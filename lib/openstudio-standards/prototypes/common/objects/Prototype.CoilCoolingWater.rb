@@ -25,7 +25,6 @@ class Standard
     clg_coil.setName(name)
 
     # set coil availability schedule
-    coil_availability_schedule = nil
     if schedule.nil?
       # default always on
       coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -55,6 +54,7 @@ class Standard
     # coil controller properties
     clg_coil_controller = clg_coil.controllerWaterCoil.get
     clg_coil_controller.setName("#{clg_coil.name.to_s} Controller")
+    clg_coil_controller.setAction("Reverse")
     clg_coil_controller.setMinimumActuatedFlow(0.0)
 
     return clg_coil

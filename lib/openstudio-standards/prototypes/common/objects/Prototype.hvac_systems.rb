@@ -1541,8 +1541,10 @@ class Standard
     thermal_zones.each do |zone|
       # Reheat coil
       rht_coil = nil
-      # system_name.include? "Outpatient F2 F3"  is only for reheat coil of Outpatient Floor2&3
-      if electric_reheat || hot_water_loop.nil? || system_name.include?('Outpatient F2 F3')
+
+      # TODO: system_name.include? "Outpatient F2 F3"  is only for reheat coil of Outpatient Floor2&3
+      # add reheat type to system in hvac_map.json for the Outpatient models
+      if electric_reheat || hot_water_loop.nil?
         rht_coil = create_coil_heating_electric(model, name: "#{zone.name.to_s} Electric Reheat Coil")
       else
         rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Rht Coil",
