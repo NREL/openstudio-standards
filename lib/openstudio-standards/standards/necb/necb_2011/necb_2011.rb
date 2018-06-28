@@ -161,7 +161,7 @@ class NECB2011 < Standard
     model = nil
     # prototype generation.
     model = load_geometry_osm(@geometry_file) # standard candidate
-    if x_scale != 1.0 && y_scale != 1.0 && z_scale != 1.0
+    if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
       scale_model_geometry(model, x_scale, y_scale, z_scale)
     end
     self.validate_initial_model(model)
