@@ -122,17 +122,17 @@ class Standard
         end
 
         model_add_psz_ac(model,
-                         system['name'],
-                         heat_pump_loop, # Typically nil unless water source hp
-                         heat_pump_loop, # Typically nil unless water source hp
                          thermal_zones,
-                         system['operation_schedule'],
-                         system['oa_damper_schedule'],
-                         fan_position,
-                         system['fan_type'],
-                         system['heating_type'],
-                         system['supplemental_heating_type'],
-                         system['cooling_type'])
+                         system_name: system['name'],
+                         cooling_type: system['cooling_type'],
+                         chilled_water_loop: heat_pump_loop,
+                         heating_type: system['heating_type'],
+                         supplemental_heating_type: system['supplemental_heating_type'],
+                         hot_water_loop: heat_pump_loop,
+                         fan_location: fan_position,
+                         fan_type: system['fan_type'],
+                         hvac_op_sch: system['operation_schedule'],
+                         oa_damper_sch: system['oa_damper_schedule'])
 
       when 'PVAV'
         # Retrieve the existing hot water loop or add a new one if necessary.

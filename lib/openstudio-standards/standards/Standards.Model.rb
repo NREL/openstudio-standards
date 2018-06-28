@@ -776,36 +776,29 @@ class Standard
                                  end
           end
 
-          # Add a gas-fired PSZ-AC to each zone, hvac_op_sch=nil means always on, oa_damper_sch to nil means always open
+          # Add a PSZ-AC to each zone
           model_add_psz_ac(model,
-                           system_name = nil,
-                           hot_water_loop,
-                           chilled_water_loop,
                            zones,
-                           hvac_op_sch = nil,
-                           oa_damper_sch = nil,
-                           fan_location = 'DrawThrough',
-                           fan_type = 'ConstantVolume',
-                           heating_type,
-                           supplemental_heating_type = 'Gas', # Should we really add supplemental heating here?
-                           cooling_type)
+                           cooling_type: cooling_type,
+                           chilled_water_loop: chilled_water_loop,
+                           heating_type: heating_type,
+                           supplemental_heating_type: "Gas",
+                           hot_water_loop: hot_water_loop,
+                           fan_location: 'DrawThrough',
+                           fan_type: 'ConstantVolume')
         end
 
       when 'PSZ_HP' # System 4
         unless zones.empty?
           # Add an air-source packaged single zone heat pump with electric supplemental heat to each zone.
           model_add_psz_ac(model,
-                           'PSZ-HP',
-                           nil,
-                           nil,
                            zones,
-                           nil,
-                           nil,
-                           'DrawThrough',
-                           'ConstantVolume',
-                           'Single Speed Heat Pump',
-                           'Electric',
-                           'Single Speed Heat Pump')
+                           system_name: 'PSZ-HP',
+                           cooling_type: 'Single Speed Heat Pump',
+                           heating_type: 'Single Speed Heat Pump',
+                           supplemental_heating_type: 'Electric',
+                           fan_location: 'DrawThrough',
+                           fan_type: 'ConstantVolume')
         end
 
       when 'PVAV_Reheat' # System 5
