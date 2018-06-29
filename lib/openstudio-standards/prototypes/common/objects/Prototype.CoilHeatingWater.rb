@@ -2,7 +2,7 @@ class Standard
   # @!group CoilHeatingWater
 
   # Prototype CoilHeatingWater object
-  # @param coil_name [String] the name of the coil, or nil in which case it will be defaulted
+  # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is 82.2 (180F)
@@ -12,7 +12,7 @@ class Standard
   # @parama [Double] controller convergence tolerance
   def create_coil_heating_water(model,
                                 hot_water_loop,
-                                coil_name: "Htg Coil",
+                                name: "Htg Coil",
                                 schedule: nil,
                                 rated_inlet_water_temperature: 82.2,
                                 rated_outlet_water_temperature: 71.1,
@@ -26,10 +26,10 @@ class Standard
     hot_water_loop.addDemandBranchForComponent(htg_coil)
 
     # set coil name
-    if coil_name.nil?
+    if name.nil?
       htg_coil.setName("Htg Coil")
     else
-      htg_coil.setName(coil_name)
+      htg_coil.setName(name)
     end
 
     # set coil availability schedule

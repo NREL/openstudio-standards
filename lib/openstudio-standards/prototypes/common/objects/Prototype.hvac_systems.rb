@@ -917,7 +917,7 @@ class Standard
       coil_heating = create_coil_heating_dx_single_speed(model, name: "#{air_loop.name.to_s} Htg Coil")
     else
       coil_heating = create_coil_heating_water(model, hot_water_loop, name: "#{air_loop.name} Htg Coil",
-                                             controller_convergence_tolerance: 0.0001)
+                                               controller_convergence_tolerance: 0.0001)
     end
     coil_heating.addToNode(air_loop.supplyInletNode)
 
