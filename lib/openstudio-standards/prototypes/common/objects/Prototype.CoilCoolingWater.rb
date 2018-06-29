@@ -2,15 +2,15 @@ class Standard
   # @!group CoilCoolingWater
 
   # Prototype CoilCoolingWater object
-  # @param name [String] the name of the system, or nil in which case it will be defaulted
+  # @param coil_name [String] the name of the coil, or nil in which case it will be defaulted
   # @param chilled_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
-  # @param design_inlet_water_temperature [Double] design inlet water temperature in deg C, default is nil
-  # @param design_inlet_air_temperature [Double] design inlet air temperature in deg C, default is nil
-  # @param design_outlet_air_temperature [Double] design outlet air temperature in deg C, default is nil
+  # @param design_inlet_water_temperature [Double] design inlet water temperature in degrees Celsius, default is nil
+  # @param design_inlet_air_temperature [Double] design inlet air temperature in degrees Celsius, default is nil
+  # @param design_outlet_air_temperature [Double] design outlet air temperature in degrees Celsius, default is nil
   def create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                name: "Clg Coil",
+                                coil_name: "Clg Coil",
                                 schedule: nil,
                                 design_inlet_water_temperature: nil,
                                 design_inlet_air_temperature: nil,
@@ -22,7 +22,11 @@ class Standard
     chilled_water_loop.addDemandBranchForComponent(clg_coil)
 
     # set coil name
-    clg_coil.setName(name)
+    if coil_name.nil?
+      clg_coil.setName("Clg Coil")
+    else
+      clg_coil.setName(coil_name)
+    end
 
     # set coil availability schedule
     if schedule.nil?

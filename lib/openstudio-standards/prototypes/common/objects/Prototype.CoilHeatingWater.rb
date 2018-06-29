@@ -2,17 +2,17 @@ class Standard
   # @!group CoilHeatingWater
 
   # Prototype CoilHeatingWater object
-  # @param name [String] the name of the system, or nil in which case it will be defaulted
+  # @param coil_name [String] the name of the coil, or nil in which case it will be defaulted
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
-  # @param rated_inlet_water_temperature [Double] rated inlet water temperature in deg C, default is 180F
-  # @param rated_outlet_water_temperature [Double] rated outlet water temperature in deg C, default is 160F
-  # @param rated_inlet_air_temperature [Double] rated inlet air temperature in deg C, default is 62F
-  # @param rated_outlet_air_temperature [Double] rated outlet air temperature in deg C, default is 90F
+  # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is 82.2 (180F)
+  # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Celsius, default is 71.1 (160F)
+  # @param rated_inlet_air_temperature [Double] rated inlet air temperature in degrees Celsius, default is 16.6 (62F)
+  # @param rated_outlet_air_temperature [Double] rated outlet air temperature in degrees Celsius, default is 32.2 (90F)
   # @parama [Double] controller convergence tolerance
   def create_coil_heating_water(model,
                                 hot_water_loop,
-                                name: "Htg Coil",
+                                coil_name: "Htg Coil",
                                 schedule: nil,
                                 rated_inlet_water_temperature: 82.2,
                                 rated_outlet_water_temperature: 71.1,
@@ -26,10 +26,13 @@ class Standard
     hot_water_loop.addDemandBranchForComponent(htg_coil)
 
     # set coil name
-    htg_coil.setName(name)
+    if coil_name.nil?
+      htg_coil.setName("Htg Coil")
+    else
+      htg_coil.setName(coil_name)
+    end
 
     # set coil availability schedule
-    coil_availability_schedule = nil
     if schedule.nil?
       # default always on
       coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -49,15 +52,31 @@ class Standard
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # rated temperatures
-    htg_coil.setRatedInletWaterTemperature(rated_inlet_water_temperature) if !rated_inlet_water_temperature.nil?
-    htg_coil.setRatedOutletWaterTemperature(rated_outlet_water_temperature) if !rated_outlet_water_temperature.nil?
-    htg_coil.setRatedInletAirTemperature(rated_inlet_air_temperature) if !rated_inlet_air_temperature.nil?
-    htg_coil.setRatedOutletAirTemperature(rated_outlet_air_temperature) if !rated_outlet_air_temperature.nil?
+    if rated_inlet_water_temperature.nil?
+      htg_coil.setRatedInletWaterTemperature(82.2)
+    else
+      htg_coil.setRatedInletWaterTemperature(rated_inlet_water_temperature)
+    end
+    if rated_outlet_water_temperature.nil?
+      htg_coil.setRatedOutletWaterTemperature(71.1)
+    else
+      htg_coil.setRatedOutletWaterTemperature(rated_outlet_water_temperature)
+    end
+    if rated_inlet_air_temperature.nil?
+      htg_coil.setRatedInletAirTemperature(16.6)
+    else
+      htg_coil.setRatedInletAirTemperature(rated_inlet_air_temperature)
+    end
+    if rated_outlet_air_temperature.nil?
+      htg_coil.setRatedOutletAirTemperature(32.2)
+    else
+      htg_coil.setRatedOutletAirTemperature(rated_outlet_air_temperature)
+    end
 
     # coil controller properties
     htg_coil_controller = htg_coil.controllerWaterCoil.get
-    htg_coil_controller.setName("#{name} Controller")
-    htg_coil_controller.setMinimumActuatedFlow(0)
+    htg_coil_controller.setName("#{htg_coil.name.to_s} Controller")
+    htg_coil_controller.setMinimumActuatedFlow(0.0)
     htg_coil_controller.setControllerConvergenceTolerance(controller_convergence_tolerance) if !controller_convergence_tolerance.nil?
 
     return htg_coil

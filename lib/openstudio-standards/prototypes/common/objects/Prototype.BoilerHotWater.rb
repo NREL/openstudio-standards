@@ -24,11 +24,11 @@ class Standard
                               nominal_thermal_efficiency: 0.80,
                               eff_curve_temp_eval_var: "LeavingBoiler",
                               flow_mode: "LeavingSetpointModulated",
-                              lvg_temp_dsgn: nil,
-                              out_temp_lmt: nil,
-                              min_plr: nil,
+                              lvg_temp_dsgn: 180.0,
+                              out_temp_lmt: 203.0, # 95C
+                              min_plr: 0.0,
                               max_plr: 1.2,
-                              opt_plr: nil,
+                              opt_plr: 1.0,
                               sizing_factor: nil)
 
     # create the boiler
@@ -67,38 +67,46 @@ class Standard
       boiler.setBoilerFlowMode(flow_mode)
     end
 
-    # logic to set boiler design temperature and efficiency based on draft_type
-    if draft_type == "Condensing"
-      if lvg_temp_dsgn.nil?
-        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120, 'F', 'C').get)
-      else
-        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(lvg_temp_dsgn, 'F', 'C').get)
-      end
-
-      # higher efficiency condensing boiler
-      if nominal_thermal_efficiency.nil?
-        boiler.setNominalThermalEfficiency(0.96)
-      end
-
-      # TODO: add curve for condensing boiler
-
+    if lvg_temp_dsgn.nil?
+      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(180.0, 'F', 'C').get)
     else
-      if lvg_temp_dsgn.nil?
-        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(180, 'F', 'C').get)
-      else
-        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(lvg_temp_dsgn, 'F', 'C').get)
-      end
+      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(lvg_temp_dsgn, 'F', 'C').get)
     end
 
-    boiler.setWaterOutletUpperTemperatureLimit(OpenStudio.convert(out_temp_lmt, 'F', 'C').get) if !out_temp_lmt.nil?
-    boiler.setMinimumPartLoadRatio(min_plr) if !min_plr.nil?
-    boiler.setMaximumPartLoadRatio(max_plr) if !max_plr.nil?
-    boiler.setOptimumPartLoadRatio(opt_plr) if !opt_plr.nil?
-    boiler.setMaximumPartLoadRatio(sizing_factor) if !sizing_factor.nil?
-
-    if !hot_water_loop.nil?
-      hot_water_loop.addSupplyBranchForComponent(boiler)
+    if !out_temp_lmt.nil?
+      boiler.setWaterOutletUpperTemperatureLimit(OpenStudio.convert(203.0, 'F', 'C').get)
+    else
+      boiler.setWaterOutletUpperTemperatureLimit(OpenStudio.convert(out_temp_lmt, 'F', 'C').get)
     end
+
+    # logic to set different defaults for condensing boilers if not specified
+    if draft_type == "Condensing"
+      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get) if lvg_temp_dsgn.nil?
+      boiler.setNominalThermalEfficiency(0.96) if nominal_thermal_efficiency.nil?
+    end
+
+    if min_plr.nil?
+      boiler.setMinimumPartLoadRatio(0.0)
+    else
+      boiler.setMinimumPartLoadRatio(min_plr)
+    end
+
+    if max_plr.nil?
+      boiler.setMaximumPartLoadRatio(1.2)
+    else
+      boiler.setMaximumPartLoadRatio(max_plr)
+    end
+
+    if opt_plr.nil?
+      boiler.setOptimumPartLoadRatio(1.0)
+    else
+      boiler.setOptimumPartLoadRatio(opt_plr)
+    end
+
+    boiler.setSizingFactor(sizing_factor) if !sizing_factor.nil?
+
+    # add to supply side of hot water loop if specified
+    hot_water_loop.addSupplyBranchForComponent(boiler) if !hot_water_loop.nil?
 
     return boiler
   end

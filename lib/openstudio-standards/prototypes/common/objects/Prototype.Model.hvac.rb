@@ -54,18 +54,20 @@ class Standard
 
         # Add the VAV
         model_add_vav_reheat(model,
-                             system['name'],
-                             hot_water_loop,
-                             chilled_water_loop,
                              thermal_zones,
-                             system['operation_schedule'],
-                             system['oa_damper_schedule'],
-                             vav_fan_efficiency = 0.62,
-                             vav_fan_motor_efficiency = 0.9,
-                             vav_fan_pressure_rise = 4.0,
-                             return_plenum,
-                             reheat_type = 'Water',
-                             building_type)
+                             building_type: building_type,
+                             system_name: system['name'],
+                             return_plenum: return_plenum,
+                             reheat_type: 'Water',
+                             hot_water_loop: hot_water_loop,
+                             chilled_water_loop: chilled_water_loop,
+                             hvac_op_sch: system['operation_schedule'],
+                             oa_damper_sch: system['oa_damper_schedule'],
+                             fan_efficiency: 0.62,
+                             fan_motor_efficiency: 0.9,
+                             fan_pressure_rise: 4.0,
+                             min_sys_airflow_ratio: system['min_sys_airflow_ratio'],
+                             vav_sizing_option: system['vav_sizing_option'])
 
       when 'CAV'
         # Retrieve the existing hot water loop or add a new one if necessary.
@@ -96,16 +98,16 @@ class Standard
 
         # Add the CAV
         model_add_cav(model,
-                      system['name'],
-                      hot_water_loop,
                       thermal_zones,
-                      system['operation_schedule'],
-                      system['oa_damper_schedule'],
-                      vav_fan_efficiency = 0.62,
-                      vav_fan_motor_efficiency = 0.9,
-                      vav_fan_pressure_rise = OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                      chilled_water_loop,
-                      building_type)
+                      system_name: system['name'],
+                      hot_water_loop: hot_water_loop,
+                      chilled_water_loop: chilled_water_loop,
+                      hvac_op_sch: system['operation_schedule'],
+                      oa_damper_sch: system['oa_damper_schedule'],
+                      fan_efficiency: 0.62,
+                      fan_motor_efficiency: 0.9,
+                      fan_pressure_rise: 4.0,
+                      building_type: building_type)
 
       when 'PSZ-AC'
         # Special logic to make unitary heat pumps all blow-through
@@ -146,17 +148,15 @@ class Standard
                                             'NaturalGas',
                                              pump_spd_ctrl: system['hotwater_pump_speed_control'])
                          end
-
         model_add_pvav(model,
-                       system['name'],
                        thermal_zones,
-                       system['operation_schedule'],
-                       system['oa_damper_schedule'],
-                       electric_reheat = false,
-                       hot_water_loop,
-                       chilled_water_loop = nil,
-                       return_plenum,
-                       building_type)
+                       system_name: system['name'],
+                       hvac_op_sch: system['operation_schedule'],
+                       oa_damper_sch: system['oa_damper_schedule'],
+                       electric_reheat: false,
+                       hot_water_loop: hot_water_loop,
+                       return_plenum: return_plenum,
+                       building_type: building_type)
 
       when 'DOAS'
         # Retrieve the existing hot water loop or add a new one if necessary.
@@ -192,7 +192,6 @@ class Standard
                                                   chiller_sizing_factor: system['chiller_sizing_factor'],
                                                   condenser_water_loop: condenser_water_loop)
         end
-
         model_add_doas(model,
                        thermal_zones,
                        system_name: system['name'],

@@ -852,17 +852,12 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-
             model_add_pvav(model,
-                           system_name,
                            pri_zones,
-                           nil,
-                           nil,
-                           electric_reheat,
-                           hot_water_loop,
-                           chilled_water_loop,
-                           nil,
-                           nil)
+                           system_name: system_name,
+                           hot_water_loop: hot_water_loop,
+                           chilled_water_loop: chilled_water_loop,
+                           electric_reheat: electric_reheat)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -907,14 +902,12 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_pvav_pfp_boxes(model,
-                                     system_name,
                                      pri_zones,
-                                     nil,
-                                     nil,
-                                     0.62,
-                                     0.9,
-                                     4.0,
-                                     chilled_water_loop)
+                                     system_name: system_name,
+                                     chilled_water_loop: chilled_water_loop,
+                                     fan_efficiency: 0.62,
+                                     fan_motor_efficiency: 0.9,
+                                     fan_pressure_rise: 4.0)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -989,18 +982,14 @@ class Standard
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
             model_add_vav_reheat(model,
-                                 system_name,
-                                 hot_water_loop,
-                                 chilled_water_loop,
                                  pri_zones,
-                                 nil,
-                                 nil,
-                                 0.62,
-                                 0.9,
-                                 4.0,
-                                 nil,
-                                 reheat_type,
-                                 nil)
+                                 system_name: system_name,
+                                 reheat_type: reheat_type,
+                                 hot_water_loop: hot_water_loop,
+                                 chilled_water_loop: chilled_water_loop,
+                                 fan_efficiency: 0.62,
+                                 fan_motor_efficiency: 0.9,
+                                 fan_pressure_rise: 4.0)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1058,14 +1047,12 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_vav_pfp_boxes(model,
-                                    system_name,
-                                    chilled_water_loop,
                                     pri_zones,
-                                    nil,
-                                    nil,
-                                    0.62,
-                                    0.9,
-                                    4.0)
+                                    system_name: system_name,
+                                    chilled_water_loop: chilled_water_loop,
+                                    fan_efficiency:0.62,
+                                    fan_motor_efficiency: 0.9,
+                                    fan_pressure_rise: 4.0)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -2833,7 +2820,7 @@ class Standard
     return result
   end
 
-  # this is used by other methods to get the clinzte aone and building type from a model.
+  # this is used by other methods to get the climate zone and building type from a model.
   # it has logic to break office into small, medium or large based on building area that can be turned off
   # @param remap_office [bool] re-map small office or leave it alone
   # @return [hash] key for climate zone and building type, both values are strings

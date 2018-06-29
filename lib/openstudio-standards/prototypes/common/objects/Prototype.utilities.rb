@@ -280,7 +280,7 @@ class Standard
       # The PNNL Method.
 
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildings per PNNL.
       r = 0.12
 
       cop = (eer / 3.413 + r) / (1 - r)
