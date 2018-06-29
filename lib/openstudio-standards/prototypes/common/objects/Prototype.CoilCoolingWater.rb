@@ -2,14 +2,16 @@ class Standard
   # @!group CoilCoolingWater
 
   # Prototype CoilCoolingWater object
-  # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param chilled_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param design_inlet_water_temperature [Double] design inlet water temperature in degrees Celsius, default is nil
   # @param design_inlet_air_temperature [Double] design inlet air temperature in degrees Celsius, default is nil
   # @param design_outlet_air_temperature [Double] design outlet air temperature in degrees Celsius, default is nil
   def create_coil_cooling_water(model,
                                 chilled_water_loop,
+                                air_loop: nil,
                                 name: "Clg Coil",
                                 schedule: nil,
                                 design_inlet_water_temperature: nil,
@@ -20,6 +22,9 @@ class Standard
 
     # add to chilled water loop
     chilled_water_loop.addDemandBranchForComponent(clg_coil)
+
+    # add to air loop if specified
+    clg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
 
     # set coil name
     if name.nil?
@@ -56,6 +61,7 @@ class Standard
     clg_coil.setHeatExchangerConfiguration('CrossFlow')
 
     # coil controller properties
+    # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     clg_coil_controller = clg_coil.controllerWaterCoil.get
     clg_coil_controller.setName("#{clg_coil.name.to_s} Controller")
     clg_coil_controller.setAction("Reverse")

@@ -2,8 +2,9 @@ class Standard
   # @!group CoilHeatingWater
 
   # Prototype CoilHeatingWater object
-  # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is 82.2 (180F)
   # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Celsius, default is 71.1 (160F)
@@ -12,6 +13,7 @@ class Standard
   # @parama [Double] controller convergence tolerance
   def create_coil_heating_water(model,
                                 hot_water_loop,
+                                air_loop: nil,
                                 name: "Htg Coil",
                                 schedule: nil,
                                 rated_inlet_water_temperature: 82.2,
@@ -24,6 +26,9 @@ class Standard
 
     # add to hot water loop
     hot_water_loop.addDemandBranchForComponent(htg_coil)
+
+    # add to air loop if specified
+    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
 
     # set coil name
     if name.nil?
@@ -74,6 +79,7 @@ class Standard
     end
 
     # coil controller properties
+    # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     htg_coil_controller = htg_coil.controllerWaterCoil.get
     htg_coil_controller.setName("#{htg_coil.name.to_s} Controller")
     htg_coil_controller.setMinimumActuatedFlow(0.0)
