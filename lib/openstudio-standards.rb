@@ -63,6 +63,14 @@ module OpenstudioStandards
   require_relative "#{stds}/icc_iecc/icc_iecc"
   require_relative "#{stds}/icc_iecc/icc_iecc_2015/icc_iecc_2015"
 
+  require_relative "#{stds}/cbes/cbes"
+  require_relative "#{stds}/cbes/cbes_pre_1978/cbes_pre_1978"
+  require_relative "#{stds}/cbes/cbes_t24_1978/cbes_t24_1978"
+  require_relative "#{stds}/cbes/cbes_t24_1992/cbes_t24_1992"
+  require_relative "#{stds}/cbes/cbes_t24_2001/cbes_t24_2001"
+  require_relative "#{stds}/cbes/cbes_t24_2005/cbes_t24_2005"
+  require_relative "#{stds}/cbes/cbes_t24_2008/cbes_t24_2008"
+
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"
@@ -175,6 +183,8 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
+  # CBES Common
+  require_relative "#{stds}/cbes/cbes.Model"
 
   ### Prototypes ###
   # Building Types

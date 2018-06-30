@@ -1,0 +1,44 @@
+[
+  {
+    "type": "PVAV",
+    "return_plenum": "FirstFloor_Plenum",
+    "operation_schedule": "OfficeMedium HVACOperationSchd",
+    "oa_damper_schedule": "OfficeMedium MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
+    "space_names": [
+      "Perimeter_bot_ZN_1",
+      "Perimeter_bot_ZN_2",
+      "Perimeter_bot_ZN_3",
+      "Perimeter_bot_ZN_4",
+      "Core_bottom"
+    ]
+  },
+  {
+    "type": "PVAV",
+    "return_plenum": "MidFloor_Plenum",
+    "operation_schedule": "OfficeMedium HVACOperationSchd",
+    "oa_damper_schedule": "OfficeMedium MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
+    "space_names": [
+      "Perimeter_mid_ZN_1",
+      "Perimeter_mid_ZN_2",
+      "Perimeter_mid_ZN_3",
+      "Perimeter_mid_ZN_4",
+      "Core_mid"
+    ]
+  },
+  {
+    "type": "PVAV",
+    "return_plenum": "TopFloor_Plenum",
+    "operation_schedule": "OfficeMedium HVACOperationSchd",
+    "oa_damper_schedule": "OfficeMedium MinOA_MotorizedDamper_Sched",
+    "heating_type": "Gas",
+    "space_names": [
+      "Perimeter_top_ZN_1",
+      "Perimeter_top_ZN_2",
+      "Perimeter_top_ZN_3",
+      "Perimeter_top_ZN_4",
+      "Core_top"
+    ]
+  }
+]
