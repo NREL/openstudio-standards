@@ -184,7 +184,14 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
   # CBES Common
+  require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
+  require_relative "#{stds}/cbes/cbes.PlantLoop"
+  require_relative "#{stds}/cbes/cbes.Space"
+  # CBES T24 2005
+  require_relative "#{stds}/cbes/cbes_t24_2005/cbes_t24_2005.Space"
+  # CBES T24 2008
+  require_relative "#{stds}/cbes/cbes_t24_2008/cbes_t24_2008.Space"
 
   ### Prototypes ###
   # Building Types
@@ -271,4 +278,11 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
   # DEER
   require_relative "#{proto}/deer/deer.Model"
+  # CBES Common
+  require_relative "#{proto}/cbes/cbes.Model.elevators"
+  require_relative "#{proto}/cbes/cbes.refrigeration"
+  # CBES T24 2008
+  require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanConstantVolume"
+  require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanOnOff"
+  require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
 end
