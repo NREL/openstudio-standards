@@ -479,7 +479,6 @@ class Standard
     # People
     if set_people
       occupancy_sch = space_type_properties['occupancy_schedule']
-      puts space_type_properties
       unless occupancy_sch.nil?
         default_sch_set.setNumberofPeopleSchedule(model_add_schedule(space_type.model, occupancy_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy schedule to #{occupancy_sch}.")
