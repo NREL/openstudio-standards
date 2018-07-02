@@ -4,6 +4,7 @@ class Standard
   # Prototype CoilCoolingWater object
   # @param chilled_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  #   Note: if the coil is added to an air loop outside of this function, coil controller properties will need to be reset
   # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param design_inlet_water_temperature [Double] design inlet water temperature in degrees Celsius, default is nil

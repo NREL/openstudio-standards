@@ -13,13 +13,13 @@ class TestAddHVACSystems < Minitest::Test
 
       ## Forced Air ##
 
-      #Gas, Electric, forced air
+      # Gas, Electric, forced air
       ['PTAC', 'NaturalGas', nil, 'Electricity'],
       ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
-      ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+      # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
       ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-      #Electric, Electric, forced air
+      # Electric, Electric, forced air
       ['PTHP', 'Electricity', nil, 'Electricity'],
       ['PSZ-HP', 'Electricity', nil, 'Electricity'],
       ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
