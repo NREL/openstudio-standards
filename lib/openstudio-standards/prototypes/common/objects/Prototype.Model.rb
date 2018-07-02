@@ -1072,7 +1072,6 @@ Standard.class_eval do
     model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_prototype_efficiency(obj)}
 
     ##### Add Economizers
-
     apply_economizers(climate_zone, model)
 
     # TODO: What is the logic behind hard-sizing
