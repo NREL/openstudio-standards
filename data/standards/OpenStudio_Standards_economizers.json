@@ -1441,6 +1441,48 @@
       "data_center": true,
       "capacity_limit": 55000.0,
       "notes": "From MASControl2"
+    },
+    {
+      "template": "CBES Pre-1978",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    },
+    {
+      "template": "CBES T24 1978",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    },
+    {
+      "template": "CBES T24 1992",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    },
+    {
+      "template": "CBES T24 2001",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    },
+    {
+      "template": "CBES T24 2005",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    },
+    {
+      "template": "CBES T24 2008",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
     }
   ]
 }

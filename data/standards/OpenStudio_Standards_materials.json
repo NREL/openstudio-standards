@@ -1523,7 +1523,7 @@
     {
       "name": "Air - Cavity - Wall Roof Ceiling - 4 in. or more",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 6.0,
       "conductivity": 6.5196,
       "resistance": 0.920301859,
@@ -1563,7 +1563,7 @@
     {
       "name": "Air - Ceiling - 1 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 1.5,
       "conductivity": 1.95,
       "resistance": 0.7692307692,
@@ -1603,7 +1603,7 @@
     {
       "name": "Air - Ceiling - 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.5,
       "conductivity": 0.6804,
       "resistance": 0.734861846,
@@ -1643,7 +1643,7 @@
     {
       "name": "Air - Ceiling - 3 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 3.5,
       "conductivity": 4.38,
       "resistance": 0.799086758,
@@ -1683,7 +1683,7 @@
     {
       "name": "Air - Ceiling - 3/4 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.75,
       "conductivity": 0.9996,
       "resistance": 0.75030012,
@@ -1723,7 +1723,7 @@
     {
       "name": "Air - Floor - 1 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 1.5,
       "conductivity": 1.5996,
       "resistance": 0.9377344336,
@@ -1763,7 +1763,7 @@
     {
       "name": "Air - Floor - 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.5,
       "conductivity": 0.6504,
       "resistance": 0.7687576876,
@@ -1803,7 +1803,7 @@
     {
       "name": "Air - Floor - 3 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 3.5,
       "conductivity": 3.5004,
       "resistance": 0.9998857273,
@@ -1843,7 +1843,7 @@
     {
       "name": "Air - Floor - 3/4 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.75,
       "conductivity": 0.8796,
       "resistance": 0.8526603001,
@@ -1883,7 +1883,7 @@
     {
       "name": "Air - Metal Wall Framing - 16 or 24 in. OC",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 5.5,
       "conductivity": 8.45999999999999,
       "resistance": 0.6501182033,
@@ -1923,7 +1923,7 @@
     {
       "name": "Air - Roof - 1 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 1.5,
       "conductivity": 1.8804,
       "resistance": 0.7977026165,
@@ -1963,7 +1963,7 @@
     {
       "name": "Air - Roof - 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.5,
       "conductivity": 0.66,
       "resistance": 0.7575757576,
@@ -2003,7 +2003,7 @@
     {
       "name": "Air - Roof - 3 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 3.5,
       "conductivity": 4.2696,
       "resistance": 0.8197489226,
@@ -2043,7 +2043,7 @@
     {
       "name": "Air - Roof - 3/4 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.75,
       "conductivity": 0.929999999999999,
       "resistance": 0.8064516129,
@@ -2083,7 +2083,7 @@
     {
       "name": "Air - Wall - 1 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 1.5,
       "conductivity": 1.7196,
       "resistance": 0.8722958828,
@@ -2123,7 +2123,7 @@
     {
       "name": "Air - Wall - 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.5,
       "conductivity": 0.6504,
       "resistance": 0.7687576876,
@@ -2163,7 +2163,7 @@
     {
       "name": "Air - Wall - 3 1/2 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 3.5,
       "conductivity": 4.1196,
       "resistance": 0.8495970483,
@@ -2203,7 +2203,7 @@
     {
       "name": "Air - Wall - 3/4 in.",
       "material_type": "StandardOpaqueMaterial",
-      "roughness": null,
+      "roughness": "Smooth",
       "thickness": 0.75,
       "conductivity": 0.8904,
       "resistance": 0.8423180593,
