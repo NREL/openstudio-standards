@@ -37,6 +37,7 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+    model_add_daylight_savings(model)
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
@@ -1003,6 +1004,37 @@ Standard.class_eval do
         inside.setAlgorithm('TARP')
         outside.setAlgorithm('TARP')
     end
+  end
+
+  # Set up daylight savings
+  #
+  def model_add_daylight_savings(model)
+
+    start_date  = '2nd Sunday in March'
+    end_date = '1st Sunday in November'
+
+    runperiodctrl_daylgtsaving = model.getRunPeriodControlDaylightSavingTime
+    runperiodctrl_daylgtsaving.setStartDate(start_date)
+    runperiodctrl_daylgtsaving.setEndDate(end_date)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set Daylight Saving Start Date to #{start_date} and end date to #{end_date}.")
+  end
+
+  # Adds holidays to the model.
+  # @todo enable holidays once supported inside OpenStudio schedules
+  def model_add_holidays(model)
+    newyear = OpenStudio::Model::RunPeriodControlSpecialDays.new('1/1', model)
+    newyear.setName('New Years')
+    newyear.setSpecialDayType('Holiday')
+
+    fourth = OpenStudio::NthDayOfWeekInMonth.new(4)
+    thurs = OpenStudio::DayOfWeek.new('Thursday')
+    nov = OpenStudio::MonthOfYear.new('November')
+    thanksgiving = OpenStudio::Model::RunPeriodControlSpecialDays.new(fourth, thurs, nov, model)
+    thanksgiving.setName('Thanksgiving')
+    thanksgiving.setSpecialDayType('Holiday')
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Added holidays: New Years, Thanksgiving.")
   end
 
   # Changes the infiltration coefficients for the prototype vintages.
