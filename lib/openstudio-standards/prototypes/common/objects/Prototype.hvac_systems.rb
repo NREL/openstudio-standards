@@ -892,7 +892,6 @@ class Standard
       htg_dsgn_sup_air_temp_c = OpenStudio.convert(htg_dsgn_sup_air_temp, 'F', 'C').get
     end
 
-
     # modify system sizing properties
     sizing_system = air_loop.sizingSystem
     sizing_system.setTypeofLoadtoSizeOn('VentilationRequirement')
@@ -914,42 +913,48 @@ class Standard
 
     # create heating coil
     if hot_water_loop.nil?
-      coil_heating = create_coil_heating_dx_single_speed(model, name: "#{air_loop.name.to_s} Htg Coil")
-      coil_heating.addToNode(air_loop.supplyInletNode)
+      # electric backup heating coil
+      create_coil_heating_electric(model,
+                                   air_loop: air_loop,
+                                   name: "#{air_loop.name.to_s} Backup Htg Coil")
+      # heat pump coil
+      create_coil_heating_dx_single_speed(model,
+                                          air_loop: air_loop,
+                                          name: "#{air_loop.name.to_s} Htg Coil")
     else
-      coil_heating = create_coil_heating_water(model,
-                                               hot_water_loop,
-                                               air_loop: air_loop,
-                                               name: "#{air_loop.name} Htg Coil",
-                                               controller_convergence_tolerance: 0.0001)
+      create_coil_heating_water(model,
+                                hot_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Htg Coil",
+                                controller_convergence_tolerance: 0.0001)
     end
 
     # create cooling coil
     if chilled_water_loop.nil?
-      coil_cooling = create_coil_cooling_dx_two_speed(model,
-                                                      name:"#{air_loop.name.to_s} 2spd DX Clg Coil",
-                                                      type:'OS default')
-      coil_cooling.addToNode(air_loop.supplyInletNode)
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name.to_s} 2spd DX Clg Coil",
+                                       type:'OS default')
     else
-      coil_cooling = create_coil_cooling_water(model,
-                                               chilled_water_loop,
-                                               air_loop: air_loop,
-                                               name: "#{air_loop.name} Clg Coil")
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Clg Coil")
     end
 
     # minimum outdoor air schedule
-    min_oa_sch = if min_oa_sch.nil?
-                   model.alwaysOnDiscreteSchedule
-                 else
-                   model_add_schedule(model, min_oa_sch)
-                 end
+    if min_oa_sch.nil?
+      min_oa_sch = model.alwaysOnDiscreteSchedule
+    else
+      min_oa_sch = model_add_schedule(model, min_oa_sch)
+    end
 
     # minimum outdoor air fraction schedule
-    min_frac_oa_sch = if min_frac_oa_sch.nil?
-                        model.alwaysOnDiscreteSchedule
-                      else
-                        model_add_schedule(model, min_frac_oa_sch)
-                      end
+    if min_frac_oa_sch.nil?
+      min_frac_oa_sch = model.alwaysOnDiscreteSchedule
+    else
+      min_frac_oa_sch = model_add_schedule(model, min_frac_oa_sch)
+    end
 
     # create controller outdoor air
     controller_oa = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1168,24 +1173,25 @@ class Standard
 
     # create heating coil
     if hot_water_loop.nil?
-      htg_coil = create_coil_heating_gas(model, name: "Main Gas Htg Coil")
-      htg_coil.addToNode(air_loop.supplyInletNode)
+      create_coil_heating_gas(model,
+                              air_loop: air_loop,
+                              name: "Main Gas Htg Coil")
     else
-      htg_coil = create_coil_heating_water(model,
-                                           hot_water_loop,
-                                           air_loop: air_loop,
-                                           name: "#{air_loop.name} Main Htg Coil",
-                                           rated_inlet_water_temperature: hw_temp_c,
-                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                           rated_inlet_air_temperature: htg_sa_temp_c,
-                                           rated_outlet_air_temperature: rht_sa_temp_c)
+      create_coil_heating_water(model,
+                                hot_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Main Htg Coil",
+                                rated_inlet_water_temperature: hw_temp_c,
+                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                rated_inlet_air_temperature: htg_sa_temp_c,
+                                rated_outlet_air_temperature: rht_sa_temp_c)
     end
 
     # create cooling coil
-    clg_coil = create_coil_cooling_water(model,
-                                         chilled_water_loop,
-                                         air_loop: air_loop,
-                                         name: "#{air_loop.name} Clg Coil")
+    create_coil_cooling_water(model,
+                              chilled_water_loop,
+                              air_loop: air_loop,
+                              name: "#{air_loop.name} Clg Coil")
 
     # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1360,14 +1366,15 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Htg Coil")
-    htg_coil.addToNode(air_loop.supplyInletNode)
+    create_coil_heating_electric(model,
+                                 air_loop: air_loop,
+                                 name: "#{air_loop.name.to_s} Htg Coil")
 
     # create cooling coil
-    clg_coil = create_coil_cooling_water(model,
-                                         chilled_water_loop,
-                                         air_loop: air_loop,
-                                         name: "#{air_loop.name} Clg Coil")
+    create_coil_cooling_water(model,
+                              chilled_water_loop,
+                              air_loop: air_loop,
+                              name: "#{air_loop.name} Clg Coil")
 
     # create outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1512,29 +1519,31 @@ class Standard
 
     # create heating coil
     if hot_water_loop.nil?
-      htg_coil = create_coil_heating_gas(model, name: "#{air_loop.name.to_s} Main Gas Htg Coil")
-      htg_coil.addToNode(air_loop.supplyInletNode)
+      create_coil_heating_gas(model,
+                              air_loop: air_loop,
+                              name: "#{air_loop.name.to_s} Main Gas Htg Coil")
     else
-      htg_coil = create_coil_heating_water(model,
-                                           hot_water_loop,
-                                           air_loop: air_loop,
-                                           name: "#{air_loop.name} Main Htg Coil",
-                                           rated_inlet_water_temperature: hw_temp_c,
-                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                           rated_inlet_air_temperature: sys_dsn_prhtg_temp_c,
-                                           rated_outlet_air_temperature: rht_rated_air_out_temp_c)
+      create_coil_heating_water(model,
+                                hot_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Main Htg Coil",
+                                rated_inlet_water_temperature: hw_temp_c,
+                                rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                rated_inlet_air_temperature: sys_dsn_prhtg_temp_c,
+                                rated_outlet_air_temperature: rht_rated_air_out_temp_c)
     end
-
 
     # create cooling coil
     if chilled_water_loop.nil?
-      clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
-      clg_coil.addToNode(air_loop.supplyInletNode)
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name} 2spd DX Clg Coil",
+                                       type:'OS default')
     else
-      clg_coil = create_coil_cooling_water(model,
-                                           chilled_water_loop,
-                                           air_loop: air_loop,
-                                           name: "#{air_loop.name} Clg Coil")
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Clg Coil")
     end
 
     # Outdoor air intake system
@@ -1684,18 +1693,20 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Main Htg Coil")
-    htg_coil.addToNode(air_loop.supplyInletNode)
+    create_coil_heating_electric(model,
+                                 air_loop: air_loop,
+                                 name: "#{air_loop.name.to_s} Main Htg Coil")
 
     # create cooling coil
     if chilled_water_loop.nil?
-      clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
-      clg_coil.addToNode(air_loop.supplyInletNode)
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
     else
-      clg_coil = create_coil_cooling_water(model,
-                                           chilled_water_loop,
-                                           air_loop: air_loop,
-                                           name: "#{air_loop.name} Clg Coil")
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Clg Coil")
     end
 
 
@@ -1863,24 +1874,26 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
-    htg_coil = create_coil_heating_water(model,
-                                         hot_water_loop,
-                                         air_loop: air_loop,
-                                         name: "#{air_loop.name} Main Htg Coil",
-                                         rated_inlet_water_temperature: hw_temp_c,
-                                         rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                         rated_inlet_air_temperature: prehtg_sa_temp_c,
-                                         rated_outlet_air_temperature: htg_sa_temp_c)
+    create_coil_heating_water(model,
+                              hot_water_loop,
+                              air_loop: air_loop,
+                              name: "#{air_loop.name} Main Htg Coil",
+                              rated_inlet_water_temperature: hw_temp_c,
+                              rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                              rated_inlet_air_temperature: prehtg_sa_temp_c,
+                              rated_outlet_air_temperature: htg_sa_temp_c)
 
     # create cooling coil
     if chilled_water_loop.nil?
-      clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name} 2spd DX Clg Coil", type:'OS default')
-      clg_coil.addToNode(air_loop.supplyInletNode)
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name} 2spd DX Clg Coil",
+                                       type:'OS default')
     else
-      clg_coil = create_coil_cooling_water(model,
-                                           chilled_water_loop,
-                                           air_loop: air_loop,
-                                           name: "#{air_loop.name} Clg Coil")
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Clg Coil")
     end
 
     # create outdoor air intake system
@@ -2483,16 +2496,20 @@ class Standard
         hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
         prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
         htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
-        extra_water_htg_coil = create_coil_heating_water(model,
-                                                         hot_water_loop,
-                                                         air_loop: air_loop,
-                                                         name: "#{air_loop.name} Water Htg Coil",
-                                                         rated_inlet_water_temperature: hw_temp_c,
-                                                         rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                                         rated_inlet_air_temperature: prehtg_sa_temp_c,
-                                                         rated_outlet_air_temperature: htg_sa_temp_c)
-        extra_elec_htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} Electric Htg Coil")
-        extra_elec_htg_coil.addToNode(air_loop.supplyInletNode)
+
+        # extra water heating coil
+        create_coil_heating_water(model,
+                                  hot_water_loop,
+                                  air_loop: air_loop,
+                                  name: "#{air_loop.name} Water Htg Coil",
+                                  rated_inlet_water_temperature: hw_temp_c,
+                                  rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                  rated_inlet_air_temperature: prehtg_sa_temp_c,
+                                  rated_outlet_air_temperature: htg_sa_temp_c)
+        # extra electric heating coil
+        create_coil_heating_electric(model,
+                                     air_loop: air_loop,
+                                     name: "#{air_loop.name.to_s} Electric Htg Coil")
 
         # humidity controllers
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
@@ -2646,18 +2663,21 @@ class Standard
     fan.addToNode(air_loop.supplyInletNode) if !fan.nil?
 
     # create supplemental heating coil
-    supplemental_htg_coil = nil
     if supplemental_heating_type == 'Electric'
-      supplemental_htg_coil = create_coil_heating_electric(model, name: "#{air_loop.name.to_s} PSZ-AC Electric Backup Htg Coil")
+      create_coil_heating_electric(model,
+                                   air_loop: air_loop,
+                                   name: "#{air_loop.name.to_s} PSZ-AC Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
-      supplemental_htg_coil = create_coil_heating_gas(model, name: "#{air_loop.name.to_s} PSZ-AC Gas Backup Htg Coil")
+      create_coil_heating_gas(model,
+                              air_loop: air_loop,
+                              name: "#{air_loop.name.to_s} PSZ-AC Gas Backup Htg Coil")
     end
-    supplemental_htg_coil.addToNode(air_loop.supplyInletNode) if !supplemental_htg_coil.nil?
 
     # create heating coil
-    htg_coil = nil
     if heating_type == 'Gas'
-      htg_coil = create_coil_heating_gas(model, name: "#{air_loop.name.to_s} SAC Gas Htg Coil")
+      htg_coil = create_coil_heating_gas(model,
+                                         air_loop: air_loop,
+                                         name: "#{air_loop.name.to_s} SAC Gas Htg Coil")
       htg_part_load_fraction_correlation = OpenStudio::Model::CurveCubic.new(model)
       htg_part_load_fraction_correlation.setCoefficient1Constant(0.8)
       htg_part_load_fraction_correlation.setCoefficient2x(0.2)
@@ -2667,20 +2687,25 @@ class Standard
       htg_part_load_fraction_correlation.setMaximumValueofx(1.0)
       htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction_correlation)
     elsif heating_type == 'Single Speed Heat Pump'
-      htg_coil = create_coil_heating_dx_single_speed(model, name: "#{air_loop.name.to_s} SAC HP Htg Coil")
+      create_coil_heating_dx_single_speed(model,
+                                          air_loop: air_loop,
+                                          name: "#{air_loop.name.to_s} SAC HP Htg Coil")
     end
-    htg_coil.addToNode(air_loop.supplyInletNode) if !htg_coil.nil?
 
     # create cooling coil
-    clg_coil = nil
     if cooling_type == 'Two Speed DX AC'
-      clg_coil = create_coil_cooling_dx_two_speed(model, name:"#{air_loop.name.to_s} SAC 2spd DX AC Clg Coil")
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name.to_s} SAC 2spd DX AC Clg Coil")
     elsif cooling_type == 'Single Speed DX AC'
-      clg_coil = create_coil_cooling_dx_single_speed(model, name:"#{air_loop.name.to_s} SAC 1spd DX AC Clg Coil", type:'Split AC')
+      create_coil_cooling_dx_single_speed(model,
+                                          air_loop: air_loop,
+                                          name:"#{air_loop.name.to_s} SAC 1spd DX AC Clg Coil", type:'Split AC')
     elsif cooling_type == 'Single Speed Heat Pump'
-      clg_coil = create_coil_cooling_dx_single_speed(model, name:"#{air_loop.name.to_s} SAC 1spd DX HP Clg Coil", type:'Heat Pump')
+      create_coil_cooling_dx_single_speed(model,
+                                          air_loop: air_loop,
+                                          name:"#{air_loop.name.to_s} SAC 1spd DX HP Clg Coil", type:'Heat Pump')
     end
-    clg_coil.addToNode(air_loop.supplyInletNode) if !clg_coil.nil?
 
     # create outdoor air controller
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -4248,7 +4273,8 @@ class Standard
                      clg_dsgn_sup_air_temp: 55.0,
                      htg_dsgn_sup_air_temp: 60.0)
 
-    when 'DOAS No Plant'
+    when 'DOAS DX'
+      # with no hot or chilled water loop, default to to DX coils
       model_add_doas(model, zones, energy_recovery: true)
 
     when 'ERVs'
@@ -4360,7 +4386,7 @@ class Standard
                             zones)
 
       model_add_hvac_system(model,
-                            system_type = 'DOAS No Plant',
+                            system_type = 'DOAS DX',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,

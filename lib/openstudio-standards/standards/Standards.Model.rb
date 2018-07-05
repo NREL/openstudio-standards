@@ -1637,15 +1637,16 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
 
-  # Applies the HVAC parts of the template to all objects in the model
-  # using the the template specified in the model.
-  def model_apply_hvac_efficiency_standard(model, climate_zone)
+  # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Air Loop Controls
-    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    if apply_controls.nil? || apply_controls == true
+      model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    end
 
     # Plant Loop Controls
     # TODO refactor: enable this code (missing before refactor)

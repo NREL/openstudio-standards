@@ -3,20 +3,29 @@ class Standard
 
   # Prototype CoilHeatingDXSingleSpeed object
   # Enters in default curves for coil by type of coil
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of single speed DX coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
   # @param defrost_strategy [String] type of defrost strategy. options are reverse-cycle or resistive
-  def create_coil_heating_dx_single_speed(model, name: "1spd DX Htg Coil", schedule: nil, type: nil, cop: nil, defrost_strategy: "ReverseCycle")
+  def create_coil_heating_dx_single_speed(model,
+                                          air_loop: nil,
+                                          name: "1spd DX Htg Coil",
+                                          schedule: nil,
+                                          type: nil,
+                                          cop: 3.3,
+                                          defrost_strategy: "ReverseCycle")
 
     htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
+
+    # add to air loop if specified
+    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
 
     # set coil name
     htg_coil.setName(name)
 
     # set coil availability schedule
-    coil_availability_schedule = nil
     if schedule.nil?
       # default always on
       coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -36,7 +45,9 @@ class Standard
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # set coil cop
-    if !cop.nil?
+    if cop.nil?
+      htg_coil.setRatedCOP(3.3)
+    else
       htg_coil.setRatedCOP(cop)
     end
 

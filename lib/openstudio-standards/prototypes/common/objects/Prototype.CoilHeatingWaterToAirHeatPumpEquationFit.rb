@@ -3,13 +3,22 @@ class Standard
 
   # Prototype CoilHeatingWaterToAirHeatPumpEquationFit object
   # Enters in default curves for coil by type of coil
-  # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param plant_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
+  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param type [String] the type of coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
-  def create_coil_heating_water_to_air_heat_pump_equation_fit(model, plant_loop, name: "Water-to-Air HP Htg Coil", type: nil, cop: 4.2)
+  def create_coil_heating_water_to_air_heat_pump_equation_fit(model,
+                                                              plant_loop,
+                                                              air_loop: nil,
+                                                              name: "Water-to-Air HP Htg Coil",
+                                                              type: nil,
+                                                              cop: 4.2)
 
     htg_coil = OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit.new(model)
+
+    # add to air loop if specified
+    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
 
     # set coil name
     htg_coil.setName(name)
@@ -22,7 +31,11 @@ class Standard
     plant_loop.addDemandBranchForComponent(htg_coil)
 
     # set coil cop
-    htg_coil.setRatedHeatingCoefficientofPerformance(cop)
+    if cop.nil?
+      htg_coil.setRatedHeatingCoefficientofPerformance(4.2)
+    else
+      htg_coil.setRatedHeatingCoefficientofPerformance(cop)
+    end
 
     # curve sets
     if type == 'OS default'
