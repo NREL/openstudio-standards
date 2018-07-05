@@ -4214,7 +4214,7 @@ class Standard
     water_heater.setDeadbandTemperatureDifference(OpenStudio.convert(3.6, 'R', 'K').get)
     water_heater.setHeaterControlType('Cycle')
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
-    water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
+    water_heater.setOffCycleParasiticHeatFractiontoTank(0.0)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
     if water_heater_fuel == 'Electricity'
       water_heater.setHeaterFuelType('Electricity')
@@ -4347,7 +4347,7 @@ class Standard
     water_heater.setDeadbandTemperatureDifference(OpenStudio.convert(3.6, 'R', 'K').get)
     water_heater.setHeaterControlType('Cycle')
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
-    water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
+    water_heater.setOffCycleParasiticHeatFractiontoTank(0.0)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
     if water_heater_fuel == 'Electricity'
       water_heater.setHeaterFuelType('Electricity')
