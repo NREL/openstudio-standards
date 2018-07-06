@@ -36,18 +36,34 @@ class NECB2011
     end
   end
 
+  # generates full qaqc.json
   def init_qaqc(model)
     # load the qaqc.json files
     @qaqc_data = self.load_qaqc_database_new()
 
     # generate base qaqc hash
-    qaqc = create_base_qaqc(model)
+    qaqc = create_base_data(model)
     # performs the qaqc on the given base qaqc hash
     necb_qaqc(qaqc, model)
   end
 
-  # Generates the base qaqc hash.
-  def create_base_qaqc(model)    
+  # generates only qaqc component
+  def qaqc_only(model)
+    # load the qaqc.json files
+    @qaqc_data = self.load_qaqc_database_new()
+
+    # generate base qaqc hash
+    qaqc = create_base_data(model)
+    # performs the qaqc on the given base qaqc hash.
+    # using `qaqc.clone` as an argument to pass in a shallow copy, so that the argument passed can stay unmodified.
+    necb_qaqc_with_base = necb_qaqc(qaqc.clone, model)
+
+    # subract base data from qaqc
+    return (necb_qaqc_with_base.to_a - qaqc.to_a).to_h
+  end
+
+  # Generates the base data hash mainly used to perform qaqc.
+  def create_base_data(model)
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
@@ -851,9 +867,6 @@ class NECB2011
         qaqc[:end_uses]['humidification_gj'] +
         qaqc[:end_uses]['heat_recovery_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
-
-    # Perform qaqc
-    necb_qaqc(qaqc, model)
 
     return qaqc
   end
