@@ -1822,6 +1822,9 @@ class Standard
     # TODO refactor: enable this code (missing before refactor)
     # getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, template, climate_zone) }
 
+    # Zone HVAC Controls
+    model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
+
     ##### Apply equipment efficiencies
 
     # Fans
