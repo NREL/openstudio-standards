@@ -68,7 +68,7 @@ class Standard
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -84,7 +84,7 @@ class Standard
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
