@@ -168,13 +168,10 @@ class Standard
       end
     end
 
-    # TODO: Optimum Start
-    # for systems exceeding 10,000 cfm
-    # Don't think that OS will be able to do this.
-    # OS currently only allows 1 availability manager
-    # at a time on an AirLoopHVAC.  If we add an
-    # AvailabilityManager:OptimumStart, it
-    # will replace the AvailabilityManager:NightCycle.
+    # Optimum Start
+    if air_loop_hvac_optimum_start_required?(air_loop_hvac)
+      air_loop_hvac_enable_optimum_start(air_loop_hvac)
+    end
   end
 
   # Apply all PRM baseline required controls to the airloop.
@@ -211,6 +208,122 @@ class Standard
 
     # Unoccupied shutdown
     air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+
+    return true
+  end
+
+  # Determines if optimum start control is required.
+  # Defaults to 90.1-2004 logic, which requires
+  # optimum start if > 10,000 cfm
+  #
+  def air_loop_hvac_optimum_start_required?(air_loop_hvac)
+    opt_start_required = false
+
+    # Get design supply air flow rate (whether autosized or hard-sized)
+    dsn_air_flow_m3_per_s = 0
+    dsn_air_flow_cfm = 0
+    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
+      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
+    else
+      dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
+      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+    end
+    # Optimum start per 6.4.3.3.3, only required if > 10,000 cfm
+    cfm_limit = 10_000
+    if dsn_air_flow_cfm > cfm_limit
+      opt_start_required = true
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Optimum start is required since design flow rate of #{dsn_air_flow_cfm.round} cfm exceeds the limit of #{cfm_limit} cfm.")
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Optimum start is not required since design flow rate of #{dsn_air_flow_cfm.round} cfm is below the limit of #{cfm_limit} cfm.")
+    end
+
+    return opt_start_required
+  end
+
+  # Adds optimum start control to the airloop.
+  #
+  def air_loop_hvac_enable_optimum_start(air_loop_hvac)
+    # Get the heating and cooling setpoint schedules
+    # for all zones on this airloop.
+    htg_clg_schs = []
+    air_loop_hvac.thermalZones.each do |zone|
+      # Skip zones with no thermostat
+      next if zone.thermostatSetpointDualSetpoint.empty?
+      # Get the heating and cooling setpoint schedules
+      tstat = zone.thermostatSetpointDualSetpoint.get
+      htg_sch = nil
+      if tstat.heatingSetpointTemperatureSchedule.is_initialized
+        htg_sch = tstat.heatingSetpointTemperatureSchedule.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{zone.name}: Cannot find a heating setpoint schedule for this zone, cannot apply optimum start control.")
+        next
+      end
+      clg_sch = nil
+      if tstat.coolingSetpointTemperatureSchedule.is_initialized
+        clg_sch = tstat.coolingSetpointTemperatureSchedule.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{zone.name}: Cannot find a cooling setpoint schedule for this zone, cannot apply optimum start control.")
+        next
+      end
+      htg_clg_schs << [htg_sch, clg_sch]
+    end
+
+    # Clean name of airloop
+    loop_name_clean = air_loop_hvac.name.get.to_s.gsub(/\W/, '').delete('_')
+
+    # Sensors
+    oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+    oat_db_c_sen.setName("OAT")
+    oat_db_c_sen.setKeyName("Environment")
+
+    # Make a program for each unique set of schedules.
+    # For most air loops, all zones will have the same
+    # pair of schedules.
+    htg_clg_schs.uniq.each_with_index do |htg_clg_sch, i|
+      htg_sch = htg_clg_sch[0]
+      clg_sch = htg_clg_sch[1]
+
+      # Actuators
+      htg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(htg_sch, 'Schedule:Year', 'Schedule Value')
+      htg_sch_act.setName("#{loop_name_clean}HtgSch#{i}")
+
+      clg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(clg_sch, 'Schedule:Year', 'Schedule Value')
+      clg_sch_act.setName("#{loop_name_clean}ClgSch#{i}")
+
+      # Programs
+      optstart_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      optstart_prg.setName("#{loop_name_clean}OptimumStartProg#{i}")
+      optstart_prg_body = <<-EMS
+      IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && #{oat_db_c_sen.handle}<23.9 && #{oat_db_c_sen.handle}>1.7
+        SET #{clg_sch_act.handle} = 29.4
+        SET #{htg_sch_act.handle} = 15.6
+      ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && #{oat_db_c_sen.handle}<23.9 && #{oat_db_c_sen.handle}>1.7
+        SET #{clg_sch_act.handle} = 29.4
+        SET #{htg_sch_act.handle} = 15.6
+      ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && #{oat_db_c_sen.handle}<23.9 && #{oat_db_c_sen.handle}>1.7
+        SET #{clg_sch_act.handle} = 29.4
+        SET #{htg_sch_act.handle} = 15.6
+      ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && #{oat_db_c_sen.handle}<23.9 && #{oat_db_c_sen.handle}>1.7
+        SET #{clg_sch_act.handle} = 29.4
+        SET #{htg_sch_act.handle} = 15.6
+      ELSE
+        SET #{clg_sch_act.handle} = NULL
+        SET #{htg_sch_act.handle} = NULL
+      ENDIF
+      EMS
+      optstart_prg.setBody(optstart_prg_body)
+
+      # Program Calling Managers
+      setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      setup_mgr.setName("#{loop_name_clean}OptimumStartCallingManager#{i}")
+      setup_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+      setup_mgr.addProgram(optstart_prg)
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Optimum start control enabled.")
 
     return true
   end

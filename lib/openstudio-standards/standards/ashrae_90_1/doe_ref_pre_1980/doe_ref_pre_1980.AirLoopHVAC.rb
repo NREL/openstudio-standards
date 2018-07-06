@@ -28,6 +28,13 @@ class DOERefPre1980 < ASHRAE901
     return sp_reset_required
   end
 
+  # Determines if optimum start control is required.
+  # Not required by DOE Pre-1980.
+  def air_loop_hvac_optimum_start_required?(air_loop_hvac)
+    opt_start_required = false
+    return opt_start_required
+  end
+
   # Determine whether the VAV damper control is single maximum or
   # dual maximum control.  Single Maximum for DOE Ref Pre-1980.
   #
