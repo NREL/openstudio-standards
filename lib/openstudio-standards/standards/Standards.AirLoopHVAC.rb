@@ -1445,7 +1445,7 @@ class Standard
     erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
     erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
     erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
-    erv.setSupplyAirOutletTemperatureControl(true)
+    erv.setSupplyAirOutletTemperatureControl(false)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
     erv.setEconomizerLockout(true)
