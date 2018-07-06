@@ -1,3 +1,3 @@
 module OpenstudioStandards
-  VERSION = '0.1.14-ambient'.freeze
+  VERSION = '0.5.0.ambient'.freeze
 end
