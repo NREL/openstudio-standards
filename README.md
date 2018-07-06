@@ -1,5 +1,7 @@
 # OpenStudio-Standards
 
+**Note--- this branch is still used, do not delete. Contact nicholas.long@nrel.gov before removing**
+
 **Unit Test Status:** [![Circle CI](https://circleci.com/gh/NREL/openstudio-standards/tree/master.svg?style=svg)](https://circleci.com/gh/NREL/openstudio-standards/tree/master)
 
 **Code Coverage:** [![Coverage Status](https://coveralls.io/repos/github/NREL/openstudio-standards/badge.svg?branch=master)](https://coveralls.io/github/NREL/openstudio-standards?branch=master)
@@ -21,4 +23,6 @@ If you are a user, see the {file:openstudio-standards/docs/UserQuickStartGuide.m
 ## Developer Information
 
 If you are a developer, see the {file:openstudio-standards/docs/DeveloperInformation.md Developer Information page}.
+
+
 
