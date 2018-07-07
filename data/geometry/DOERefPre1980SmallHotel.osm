@@ -10073,7 +10073,7 @@ OS:Surface,
 
 OS:Building,
   {b597aef5-f096-465a-836e-448fdbb08993}, !- Handle
-  DOERefPre1980SmallHotel,                !- Name
+  DOE Reference SmallHotel,               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

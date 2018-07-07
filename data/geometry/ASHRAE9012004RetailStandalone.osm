@@ -791,7 +791,7 @@ OS:Surface,
 
 OS:Building,
   {9404bf7e-81e4-47ca-abc2-81298dbab891}, !- Handle
-  A90_1_2004RetailStandalone,             !- Name
+  DOE Prototype RetailStandalone,         !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

@@ -4254,7 +4254,7 @@ OS:YearDescription,
 
 OS:Building,
   {10e9bb00-dcd8-49ad-9381-2e0d56bcde5c}, !- Handle
-  A90_1_2007SmallHotel,                   !- Name
+  DOE Prototype SmallHotel,               !- Name
   ,                                       !- Building Sector Type
   90,                                     !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

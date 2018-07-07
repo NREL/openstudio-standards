@@ -335,7 +335,7 @@ OS:Space,
 
 OS:Building,
   {7ff83cae-b8c0-45c2-96d3-1a5681aaeb1f}, !- Handle
-  DOERef1980_2004PrimarySchool,           !- Name
+  DOE Reference PrimarySchool,            !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

@@ -901,7 +901,7 @@ OS:Surface,
 
 OS:Building,
   {36ad2c41-0d79-4c8a-9261-7f328fecf0e3}, !- Handle
-  DOERef1980_2004LargeHotel,              !- Name
+  DOE Reference LargeHotel,               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

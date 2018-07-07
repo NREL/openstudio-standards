@@ -5812,7 +5812,7 @@ OS:Surface,
 
 OS:Building,
   {667be65a-e2bd-454f-9a6e-53896804cfd1}, !- Handle
-  DOERefPre1980SecondarySchool,           !- Name
+  DOE Reference SecondarySchool,          !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

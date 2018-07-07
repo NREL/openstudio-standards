@@ -7469,7 +7469,7 @@ OS:Surface,
 
 OS:Building,
   {c87534d6-7cd4-47d0-b573-e9e6e0e8a53a}, !- Handle
-  A90_1_2010SmallHotel,                   !- Name
+  DOE Prototype SmallHotel,               !- Name
   ,                                       !- Building Sector Type
   180,                                    !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

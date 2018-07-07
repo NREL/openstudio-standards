@@ -1219,7 +1219,7 @@ OS:Surface,
 
 OS:Building,
   {0a64ac60-d921-493c-b7ae-b7542f5c5589}, !- Handle
-  DOERef1980_2004LargeOffice,             !- Name
+  DOE Reference LargeOffice,              !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

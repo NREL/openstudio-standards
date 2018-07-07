@@ -1980,7 +1980,7 @@ OS:Surface,
 
 OS:Building,
   {68c9edb6-6468-4e38-8097-c4eeaf277603}, !- Handle
-  A90_1_2004LargeHotel,                   !- Name
+  DOE Prototype LargeHotel,               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
