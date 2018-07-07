@@ -25,6 +25,9 @@ module MediumOffice
     add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
 
+    # Adjust the daylight sensor positions
+    update_daylight_sensor_positions(model, climate_zone)
+
     return true
   end
 
@@ -53,6 +56,57 @@ module MediumOffice
       infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
       infiltration_entrydoor.setSpace(entry_space)
     end
+  end
+
+  def update_daylight_sensor_positions(model, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Ajusting daylight sensor positions and fractions')
+
+    adjustments = [
+        { 'stds_spc_type' => 'WholeBuilding - Md Office',
+          'sensor_1_frac' => 0.3835,
+          'sensor_2_frac' => 0.1395,
+        }
+    ]
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      next if space.thermalZone.emtpy?
+      zone = space.thermalZone.get
+      next if space.spaceType.empty?
+      spc_type = space.spaceType.get
+      next if spc_type.standardsSpaceType.empty?
+      stds_spc_type = spc_type.standardsSpaceType.get
+      adjustments.each do |adj|
+        next unless adj['stds_spc_type'] == stds_spc_type
+        # Adjust the primary sensor
+        if adj['sensor_1_frac']
+          zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+          if zone.primaryDaylightingControl.is_initialized
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              pri_ctrl.setPositionXCoordinate(adj['sensor_1_xyz'][0])
+              pri_ctrl.setPositionYCoordinate(adj['sensor_1_xyz'][1])
+              pri_ctrl.setPositionZCoordinate(adj['sensor_1_xyz'][2])
+            end
+          end
+        end
+        # Adjust the secondary sensor
+        if adj['sensor_2_frac']
+          zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+          if zone.secondaryDaylightingControl.is_initialized
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              sec_ctrl.setPositionXCoordinate(adj['sensor_2_xyz'][0])
+              sec_ctrl.setPositionYCoordinate(adj['sensor_2_xyz'][1])
+              sec_ctrl.setPositionZCoordinate(adj['sensor_2_xyz'][2])
+            end
+          end
+        end
+
+      end
+    end
+
+    return true
   end
 
   def update_waterheater_loss_coefficient(model)

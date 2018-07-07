@@ -45,7 +45,75 @@ module RetailStandalone
     infiltration_entry.setVelocityTermCoefficient(0.0)
     infiltration_entry.setVelocitySquaredTermCoefficient(0.0)
 
+    # Adjust the daylight sensor positions
+    update_daylight_sensor_positions(model, climate_zone)
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+
+    return true
+  end
+
+  def update_daylight_sensor_positions(model, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Ajusting daylight sensor positions and fractions')
+
+    adjustments = case climate_zone
+    when 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A'
+      [
+          { 'stds_spc_type' => 'Core_Retail',
+            'sensor_1_frac' => 0.1724,
+            'sensor_1_xyz' => [14.2, 14.2, 0],
+            'sensor_2_frac' => 0.1724,
+            'sensor_2_xyz' => [3.4, 14.2, 0]
+          }
+      ]
+    else
+      [
+          { 'stds_spc_type' => 'Core_Retail',
+            'sensor_1_frac' => 0.25,
+            'sensor_1_xyz' => [14.2, 14.2, 0],
+            'sensor_2_frac' => 0.25,
+            'sensor_2_xyz' => [3.4, 14.2, 0]
+          }
+      ]
+    end
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      next if space.thermalZone.emtpy?
+      zone = space.thermalZone.get
+      next if space.spaceType.empty?
+      spc_type = space.spaceType.get
+      next if spc_type.standardsSpaceType.empty?
+      stds_spc_type = spc_type.standardsSpaceType.get
+      adjustments.each do |adj|
+        next unless adj['stds_spc_type'] == stds_spc_type
+        # Adjust the primary sensor
+        if adj['sensor_1_frac']
+          zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+          if zone.primaryDaylightingControl.is_initialized
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              pri_ctrl.setPositionXCoordinate(adj['sensor_1_xyz'][0])
+              pri_ctrl.setPositionYCoordinate(adj['sensor_1_xyz'][1])
+              pri_ctrl.setPositionZCoordinate(adj['sensor_1_xyz'][2])
+            end
+          end
+        end
+        # Adjust the secondary sensor
+        if adj['sensor_2_frac']
+          zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+          if zone.secondaryDaylightingControl.is_initialized
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              sec_ctrl.setPositionXCoordinate(adj['sensor_2_xyz'][0])
+              sec_ctrl.setPositionYCoordinate(adj['sensor_2_xyz'][1])
+              sec_ctrl.setPositionZCoordinate(adj['sensor_2_xyz'][2])
+            end
+          end
+        end
+
+      end
+    end
 
     return true
   end
