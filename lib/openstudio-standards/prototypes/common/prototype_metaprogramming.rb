@@ -70,8 +70,8 @@ end
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file = 'geometry/' + self.class.name + '.osm'
-    hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
+    @geometry_file = 'geometry/' + @prototype_input['geometry_osm']
+    hvac_map_file =  'geometry/' + @prototype_input['hvac_json']
     @system_to_space_map = load_hvac_map(hvac_map_file)
     self.set_variables()
   end
