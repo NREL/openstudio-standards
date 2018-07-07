@@ -2621,12 +2621,18 @@ class Standard
     # Exterior surfaces constructions
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
-    if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
-      exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
-                                                                             climate_zone_set,
-                                                                             'ExteriorFloor',
-                                                                             data['exterior_floor_standards_construction_type'],
-                                                                             data['exterior_floor_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor
+    # but the soffit is uninsulated
+    if spc_type == 'Attic'
+      exterior_surfaces.setFloorConstruction(model_add_construction(model, 'Typical Attic Soffit'))
+    else
+      if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
+        exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                               climate_zone_set,
+                                                                               'ExteriorFloor',
+                                                                               data['exterior_floor_standards_construction_type'],
+                                                                               data['exterior_floor_building_category']))
+      end
     end
     if data['exterior_wall_standards_construction_type'] && data['exterior_wall_building_category']
       exterior_surfaces.setWallConstruction(model_find_and_add_construction(model,
@@ -2635,20 +2641,40 @@ class Standard
                                                                             data['exterior_wall_standards_construction_type'],
                                                                             data['exterior_wall_building_category']))
     end
-    if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
-      exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
-                                                                                   climate_zone_set,
-                                                                                   'ExteriorRoof',
-                                                                                   data['exterior_roof_standards_construction_type'],
-                                                                                   data['exterior_roof_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor
+    # and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(model_add_construction(model, 'Typical Uninsulated Wood Joist Attic Roof'))
+      end
+    else
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
+                                                                                     climate_zone_set,
+                                                                                     'ExteriorRoof',
+                                                                                     data['exterior_roof_standards_construction_type'],
+                                                                                     data['exterior_roof_building_category']))
+      end
     end
-
     # Interior surfaces constructions
     interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = data['interior_floors']
-    unless construction_name.nil?
-      interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
+    # Special condition for attics, where the insulation is actually on the floor
+    # and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        interior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                               climate_zone_set,
+                                                                               'ExteriorRoof',
+                                                                               data['exterior_roof_standards_construction_type'],
+                                                                               data['exterior_roof_building_category']))
+
+      end
+    else
+      unless construction_name.nil?
+        interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
+      end
     end
     construction_name = data['interior_walls']
     unless construction_name.nil?
