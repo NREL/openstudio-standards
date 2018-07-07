@@ -2474,6 +2474,43 @@ class Standard
 
       end
 
+      # If the construction has a skylight framing material specified,
+      # get the skylight frame material properties and add frame to
+      # all skylights in the model.
+      if data['skylight_framing']
+        # Get the skylight framing material
+        framing_name = data['skylight_framing']
+        frame_data = model_find_object(standards_data['materials'], 'name' => framing_name)
+        if frame_data
+          frame_width_in = frame_data['frame_width'].to_f
+          frame_with_m = OpenStudio.convert(frame_width_in, 'in', 'm').get
+          frame_resistance_ip = frame_data['resistance'].to_f
+          frame_resistance_si = OpenStudio.convert(frame_resistance_ip, 'hr*ft^2*R/Btu', 'm^2*K/W').get
+          frame_conductance_si = 1.0/frame_resistance_si
+          frame = OpenStudio::Model::WindowPropertyFrameAndDivider.new(model)
+          frame.setName("Skylight frame R-#{frame_resistance_ip.round(2)} #{frame_width_in.round(1)} in. wide")
+          frame.setFrameWidth(frame_with_m)
+          frame.setFrameConductance(frame_conductance_si)
+          skylights_frame_added = 0
+          model.getSubSurfaces.each do |sub_surface|
+            next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
+            # todo enable proper window frame setting after https://github.com/NREL/OpenStudio/issues/2895 is fixed
+            sub_surface.setString(8, frame.name.get.to_s)
+            skylights_frame_added += 1
+            # if sub_surface.allowWindowPropertyFrameAndDivider
+            #   sub_surface.setWindowPropertyFrameAndDivider(frame)
+            #   skylights_frame_added += 1
+            # else
+            #   OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sub_surface.name}: cannot add a frame to this skylight.")
+            # end
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding #{frame.name} to #{skylights_frame_added} skylights.") if skylights_frame_added > 0
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find skylight framing data for: #{framing_name}, will not be created.")
+          return false # TODO: change to return empty optional material
+        end
+      end
+
     end
     #     # Check if the construction with the modified name was already in the model.
     #     # If it was, delete this new construction and return the copy already in the model.
