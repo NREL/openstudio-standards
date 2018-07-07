@@ -3,15 +3,6 @@ OS:Version,
   {e40961ad-cf19-4e8a-8b79-a185b80622e7}, !- Handle
   2.2.1;                                  !- Version Identifier
 
-OS:Site,
-  {b24a8c8c-c603-4c71-9293-1675139ee819}, !- Handle
-  Memphis International Ap_TN_USA Design_Conditions, !- Name
-  35.07,                                  !- Latitude {deg}
-  -89.98,                                 !- Longitude {deg}
-  -6,                                     !- Time Zone {hr}
-  81,                                     !- Elevation {m}
-  Suburbs;                                !- Terrain
-
 OS:SimulationControl,
   {b3838fe9-dd1f-424c-a8a9-73ac9fdc550d}, !- Handle
   Yes,                                    !- Do Zone Sizing Calculation
@@ -10698,7 +10689,7 @@ OS:ShadingSurface,
 
 OS:ShadingSurfaceGroup,
   {f6d0abdc-d84f-45f1-9ffd-dd8e20fe16e1}, !- Handle
-  {e1e8edb4-1f29-4a8c-9abb-3ea1062e1468}, !- Name
+  Entry Canopy Group,                     !- Name
   Space,                                  !- Shading Surface Type
   {663c7a10-7b04-4537-baa8-c6a88ea5b0d3}; !- Space Name
 
