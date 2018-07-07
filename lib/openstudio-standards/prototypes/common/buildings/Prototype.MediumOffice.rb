@@ -70,7 +70,7 @@ module MediumOffice
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      next if space.thermalZone.emtpy?
+      next if space.thermalZone.empty?
       zone = space.thermalZone.get
       next if space.spaceType.empty?
       spc_type = space.spaceType.get

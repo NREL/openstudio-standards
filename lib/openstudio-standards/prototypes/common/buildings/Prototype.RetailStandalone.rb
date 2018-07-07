@@ -19,7 +19,7 @@ module RetailStandalone
       infiltration_entry.setName('Entry door Infiltration')
       infiltration_per_zone = 1.418672682
       infiltration_entry.setDesignFlowRate(infiltration_per_zone)
-      infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
+      infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
       infiltration_entry.setSpace(entry_space)
 
       # temporal solution for CZ dependent door infiltration rate.  In fact other standards need similar change as well
@@ -30,10 +30,10 @@ module RetailStandalone
       case climate_zone
       when 'ASHRAE 169-2006-1A','ASHRAE 169-2006-1B','ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
         infiltration_per_zone = 1.418672682
-        infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH'))
+        infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
       else
         infiltration_per_zone = 0.937286742
-        infiltration_entry.setSchedule(model.add_schedule('RetailStandalone INFIL_Door_Opening_SCH_2013'))
+        infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH_2013'))
       end
       infiltration_entry.setDesignFlowRate(infiltration_per_zone)
       infiltration_entry.setSpace(entry_space)
@@ -79,7 +79,7 @@ module RetailStandalone
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      next if space.thermalZone.emtpy?
+      next if space.thermalZone.empty?
       zone = space.thermalZone.get
       next if space.spaceType.empty?
       spc_type = space.spaceType.get

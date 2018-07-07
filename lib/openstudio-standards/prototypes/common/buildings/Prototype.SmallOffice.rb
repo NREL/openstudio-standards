@@ -27,15 +27,15 @@ module SmallOffice
       infiltration_per_zone_entrydoor = 0
       if template == '90.1-2004'
         infiltration_per_zone_entrydoor = 0.129785425
-        infiltration_entrydoor.setSchedule(model.add_schedule('OfficeSmall INFIL_Door_Opening_SCH'))
+        infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeSmall INFIL_Door_Opening_SCH'))
       elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
           infiltration_per_zone_entrydoor = 0.129785425
-          infiltration_entrydoor.setSchedule(model.add_schedule('OfficeSmall INFIL_Door_Opening_SCH'))
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeSmall INFIL_Door_Opening_SCH'))
         else
           infiltration_per_zone_entrydoor = 0.076455414
-          infiltration_entrydoor.setSchedule(model.add_schedule('OfficeSmall INFIL_Door_Opening_SCH_2013'))
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeSmall INFIL_Door_Opening_SCH_2013'))
         end
       end
       infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
@@ -54,7 +54,7 @@ module SmallOffice
       infiltration_attic = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_attic.setName('attic Infiltration')
       infiltration_per_zone_attic = 0.2001
-      infiltration_attic.setSchedule(model.add_schedule('Always On'))
+      infiltration_attic.setSchedule(model_add_schedule(model, 'Always On'))
       infiltration_attic.setDesignFlowRate(infiltration_per_zone_attic)
       infiltration_attic.setConstantTermCoefficient(1.0)
       infiltration_attic.setTemperatureTermCoefficient(0.0)
@@ -76,7 +76,7 @@ module SmallOffice
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      next if space.thermalZone.emtpy?
+      next if space.thermalZone.empty?
       zone = space.thermalZone.get
       next if space.spaceType.empty?
       spc_type = space.spaceType.get

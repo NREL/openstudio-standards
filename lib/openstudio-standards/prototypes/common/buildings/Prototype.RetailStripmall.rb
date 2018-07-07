@@ -14,17 +14,17 @@ module RetailStripmall
     when '90.1-2004'
       door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
                                 ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
-      infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+      infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
     when '90.1-2007', '90.1-2010', '90.1-2013'
       case climate_zone
       when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
         door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
                                   ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
-        infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH')
+        infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
       else
         door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.2411649,
                                   ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.1345049 }
-        infiltration_schedule = model.add_schedule('RetailStripmall INFIL_Door_Opening_SCH_2013')
+        infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH_2013')
       end
     end
 

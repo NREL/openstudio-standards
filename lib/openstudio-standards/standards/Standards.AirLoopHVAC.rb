@@ -235,9 +235,9 @@ class Standard
     cfm_limit = 10_000
     if dsn_air_flow_cfm > cfm_limit
       opt_start_required = true
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Optimum start is required since design flow rate of #{dsn_air_flow_cfm.round} cfm exceeds the limit of #{cfm_limit} cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Optimum start is required since design flow rate of #{dsn_air_flow_cfm.round} cfm exceeds the limit of #{cfm_limit} cfm.")
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{name}: Optimum start is not required since design flow rate of #{dsn_air_flow_cfm.round} cfm is below the limit of #{cfm_limit} cfm.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Optimum start is not required since design flow rate of #{dsn_air_flow_cfm.round} cfm is below the limit of #{cfm_limit} cfm.")
     end
 
     return opt_start_required
@@ -275,7 +275,7 @@ class Standard
     loop_name_clean = air_loop_hvac.name.get.to_s.gsub(/\W/, '').delete('_')
 
     # Sensors
-    oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+    oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Site Outdoor Air Drybulb Temperature')
     oat_db_c_sen.setName("OAT")
     oat_db_c_sen.setKeyName("Environment")
 
@@ -294,7 +294,7 @@ class Standard
       clg_sch_act.setName("#{loop_name_clean}ClgSch#{i}")
 
       # Programs
-      optstart_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      optstart_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
       optstart_prg.setName("#{loop_name_clean}OptimumStartProg#{i}")
       optstart_prg_body = <<-EMS
       IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && #{oat_db_c_sen.handle}<23.9 && #{oat_db_c_sen.handle}>1.7
@@ -317,7 +317,7 @@ class Standard
       optstart_prg.setBody(optstart_prg_body)
 
       # Program Calling Managers
-      setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      setup_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
       setup_mgr.setName("#{loop_name_clean}OptimumStartCallingManager#{i}")
       setup_mgr.setCallingPoint('BeginTimestepBeforePredictor')
       setup_mgr.addProgram(optstart_prg)
