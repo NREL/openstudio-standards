@@ -139,6 +139,14 @@ end
     end
     return lookup_name
   end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
 end
 "
     end
@@ -593,6 +601,14 @@ end
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
 end
 "
       end
@@ -748,6 +764,14 @@ end
   #
   # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 end
