@@ -558,6 +558,16 @@
       ]
     },
     {
+      "name": "NACM_Drop Ceiling",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "Acoustic Ceiling"
+      ]
+    },
+    {
       "name": "NACM_Interior Floor",
       "intended_surface_type": "InteriorFloor",
       "standards_construction_type": null,

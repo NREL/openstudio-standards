@@ -40,11 +40,8 @@ Standard.class_eval do
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-    # set climate zone and building type
     model.getBuilding.setStandardsBuildingType(building_type)
-    if climate_zone.include? 'ASHRAE 169-2006-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    end
+    model_set_climate_zone(model, climate_zone)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
     # If there are any multizone systems, reset damper positions
@@ -1028,7 +1025,7 @@ Standard.class_eval do
             clg = 1.33
             htg = 1.33
         end
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
           when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail', 'Outpatient', 'PrimarySchool'
             clg = 1.0
