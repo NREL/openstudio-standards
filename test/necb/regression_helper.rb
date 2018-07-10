@@ -1,6 +1,7 @@
 require 'minitest/unit'
 
 def create_model_and_regression_test(building_type, epw_file, template)
+  diffs = []
   begin
     test_dir = "#{File.dirname(__FILE__)}/output"
     if !Dir.exists?(test_dir)
@@ -15,7 +16,7 @@ def create_model_and_regression_test(building_type, epw_file, template)
     model = Standard.build("#{template}_#{building_type}").model_create_prototype_model('NECB HDD Method', epw_file, run_dir)
 
     #Save osm file.
-    filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
+    filename = "#{run_dir}/#{model_name}.osm"
     FileUtils.mkdir_p(File.dirname(filename))
     File.delete(filename) if File.exist?(filename)
     puts "Saving osm file to : #{filename}"
@@ -31,7 +32,6 @@ def create_model_and_regression_test(building_type, epw_file, template)
     # Upgrade version if required.
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
     old_model = version_translator.loadModel(osm_model_path).get
-    diffs = []
 
     # Compare the two models.
     diffs = compare_osm_files(old_model, model)
@@ -42,8 +42,13 @@ def create_model_and_regression_test(building_type, epw_file, template)
     diffs << "#{model_name}: Error \n#{error}"
 
   end
+
+  # Write out the openstudio-standards log messages for debugging
+  log_file_path = "#{run_dir}/openstudio-standards.log"
+  log_messages_to_file(log_file_path, false)
+
   #Write out diff or error message
-  diff_file = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_diffs.json"
+  diff_file = "#{run_dir}/#{model_name}_diffs.json"
   FileUtils.rm(diff_file) if File.exists?(diff_file)
   if diffs.size > 0
     File.write(diff_file, JSON.pretty_generate(diffs))
