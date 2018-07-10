@@ -26,6 +26,8 @@ module RetailStripmall
                                   ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.1345049 }
         infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH_2013')
       end
+    else
+      door_infiltration_map = {}
     end
 
     door_infiltration_map.each_pair do |space_names, infiltration_design_flowrate|

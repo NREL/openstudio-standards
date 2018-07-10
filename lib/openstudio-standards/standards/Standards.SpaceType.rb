@@ -213,7 +213,7 @@ class Standard
 
       # Modify the definition of the instance
       space_type.lights.sort.each do |inst|
-        instance.setFractionReplaceable(lights_frac_replaceable)
+        inst.setFractionReplaceable(lights_frac_replaceable)
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
           occ_sens_lpd_factor = 1.0

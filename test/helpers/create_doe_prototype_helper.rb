@@ -191,6 +191,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
                       
             
       # Compare the model against the regression model, if requested.
+      diffs = []
       if compare_results
 
         # Load the model from disk if not already in memory
@@ -203,7 +204,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
           diffs = compare_osm_files(truth_model, model)
         else
-          diffs = []
           diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
         end
 
