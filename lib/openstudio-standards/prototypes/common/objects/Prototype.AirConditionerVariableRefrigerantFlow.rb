@@ -16,12 +16,18 @@ class Standard
   # @param master_zone [<OpenStudio::Model::ThermalZone>] master control zone to switch between heating and cooling
   # @param priority_control_type [String] type of master thermostat priority control type
   #   options are LoadPriority, ZonePriority, ThermostatOffsetPriority, MasterThermostatPriority
-  def create_air_conditioner_variable_refrigerant_flow(model, name: "VRF System",
-                                                       schedule: nil, type: nil,
-                                                       cooling_cop: 4.287, heating_cop: 4.147,
-                                                       heat_recovery: true, defrost_strategy: "Resistive",
-                                                       condenser_type: "AirCooled", condenser_loop: nil,
-                                                       master_zone: nil, priority_control_type: "LoadPriority")
+  def create_air_conditioner_variable_refrigerant_flow(model,
+                                                       name: "VRF System",
+                                                       schedule: nil,
+                                                       type: nil,
+                                                       cooling_cop: 4.287,
+                                                       heating_cop: 4.147,
+                                                       heat_recovery: true,
+                                                       defrost_strategy: "Resistive",
+                                                       condenser_type: "AirCooled",
+                                                       condenser_loop: nil,
+                                                       master_zone: nil,
+                                                       priority_control_type: "LoadPriority")
 
     vrf_outdoor_unit = OpenStudio::Model::AirConditionerVariableRefrigerantFlow.new(model)
 
@@ -66,10 +72,12 @@ class Standard
     vrf_outdoor_unit.setDefrostStrategy(defrost_strategy)
 
     # defaults
-    vrf_outdoor_unit.setMinimumOutdoorTemperatureinCoolingMode(-5.0)
-    vrf_outdoor_unit.setMaximumOutdoorTemperatureinCoolingMode(43.0)
-    vrf_outdoor_unit.setMinimumOutdoorTemperatureinHeatingMode(-20.0)
-    vrf_outdoor_unit.setMaximumOutdoorTemperatureinHeatingMode(30.0)
+    vrf_outdoor_unit.setMinimumOutdoorTemperatureinCoolingMode(-15.0)
+    vrf_outdoor_unit.setMaximumOutdoorTemperatureinCoolingMode(50.0)
+    vrf_outdoor_unit.setMinimumOutdoorTemperatureinHeatingMode(-25.0)
+    vrf_outdoor_unit.setMaximumOutdoorTemperatureinHeatingMode(16.1)
+    vrf_outdoor_unit.setMinimumOutdoorTemperatureinHeatRecoveryMode (-10.0)
+    vrf_outdoor_unit.setMaximumOutdoorTemperatureinHeatRecoveryMode(27.2)
     vrf_outdoor_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinCoolingMode(30.48)
     vrf_outdoor_unit.setEquivalentPipingLengthusedforPipingCorrectionFactorinHeatingMode(30.48)
     vrf_outdoor_unit.setVerticalHeightusedforPipingCorrectionFactor(10.668)

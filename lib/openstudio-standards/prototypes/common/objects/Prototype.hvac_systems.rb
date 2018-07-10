@@ -830,6 +830,7 @@ class Standard
   # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
   # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
+  # @param include_exhaust_fan [Bool] if true, include an exhaust fan
   # @param energy_recovery [Bool] if true, an ERV will be added to the system
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
@@ -845,6 +846,7 @@ class Standard
                      min_frac_oa_sch: nil,
                      fan_maximum_flow_rate: nil,
                      econo_ctrl_mthd: "NoEconomizer",
+                     include_exhaust_fan: false,
                      energy_recovery: false,
                      doas_control_strategy: "NeutralSupplyAir",
                      clg_dsgn_sup_air_temp: 60.0,
@@ -897,19 +899,20 @@ class Standard
     sizing_system.setTypeofLoadtoSizeOn('VentilationRequirement')
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
-    sizing_system.setMinimumSystemAirFlowRatio(0.3)
+    # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
+    sizing_system.setMinimumSystemAirFlowRatio(1.0)
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
 
     if doas_type == "DOASCV"
-      fan = create_fan_by_name(model, 'Constant_DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
+      supply_fan = create_fan_by_name(model, 'Constant_DOAS_Fan', fan_name:'DOAS Supply Fan', end_use_subcategory:'DOAS Fans')
     else # "DOASVAV"
-      fan = create_fan_by_name(model, 'Variable_DOAS_Fan', fan_name:'DOAS Fan', end_use_subcategory:'DOAS Fans')
+      supply_fan = create_fan_by_name(model, 'Variable_DOAS_Fan', fan_name:'DOAS Supply Fan', end_use_subcategory:'DOAS Fans')
     end
-    fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-    fan.setMaximumFlowRate(OpenStudio.convert(fan_maximum_flow_rate, 'cfm', 'm^3/s').get) if !fan_maximum_flow_rate.nil?
-    fan.addToNode(air_loop.supplyInletNode)
+    supply_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+    supply_fan.setMaximumFlowRate(OpenStudio.convert(fan_maximum_flow_rate, 'cfm', 'm^3/s').get) if !fan_maximum_flow_rate.nil?
+    supply_fan.addToNode(air_loop.supplyInletNode)
 
     # create heating coil
     if hot_water_loop.nil?
@@ -974,7 +977,21 @@ class Standard
     system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
     system_oa.addToNode(air_loop.supplyInletNode)
 
-    # Create a setpoint manager
+    # create an exhaust fan
+    if include_exhaust_fan
+      if doas_type == "DOASCV"
+        exhaust_fan = create_fan_by_name(model, 'Constant_DOAS_Fan', fan_name:'DOAS Exhaust Fan', end_use_subcategory:'DOAS Fans')
+      else # "DOASVAV"
+        exhaust_fan = create_fan_by_name(model, 'Variable_DOAS_Fan', fan_name:'DOAS Exhaust Fan', end_use_subcategory:'DOAS Fans')
+      end
+      # set pressure rise 1 inH2O lower than supply fan, 1 inH2O minimum
+      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      exhaust_fan_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      exhaust_fan.setPressureRise(exhaust_fan_pressure_rise)
+      exhaust_fan.addToNode(air_loop.supplyInletNode)
+    end
+
+    # create a setpoint manager
     sat_oa_reset = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
     sat_oa_reset.setName("#{air_loop.name.to_s} SAT Reset")
     sat_oa_reset.setControlVariable('Temperature')
@@ -992,11 +1009,10 @@ class Standard
     if energy_recovery
       # Get the OA system and its outboard OA node
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
-      oa_node = oa_system.outboardOANode.get
 
       # create the ERV and set its properties
       erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.addToNode(oa_node)
+      erv.addToNode(oa_system.outboardOANode.get)
       erv.setHeatExchangerType('Rotary')
       # TODO: Come up with scheme for estimating power of ERV motor wheel
       # which might require knowing airlow (like prototype buildings do).
@@ -1016,8 +1032,8 @@ class Standard
 
       # increase fan static pressure to account for ERV
       erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
-      new_pressure_rise = fan.pressureRise + erv_pressure_rise
-      fan.setPressureRise(new_pressure_rise)
+      new_pressure_rise = supply_fan.pressureRise + erv_pressure_rise
+      supply_fan.setPressureRise(new_pressure_rise)
     end
 
     # add thermal zones to airloop
@@ -3247,11 +3263,20 @@ class Standard
     # create vrf outdoor unit
     master_zone = thermal_zones[0]
     vrf_outdoor_unit = create_air_conditioner_variable_refrigerant_flow(model,
-                                                                        name: "VRF System",
+                                                                        name: "#{thermal_zones.size} Zone VRF System",
                                                                         master_zone: master_zone)
+    # fan coil supply air temps used across all zones
+    zn_dsn_clg_sa_temp_c = OpenStudio.convert(55.0, 'F', 'C').get
+    zn_dsn_htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
+
     vrfs = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding vrf unit for #{zone.name}.")
+
+      # zone sizing
+      sizing_zone = zone.sizingZone
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(zn_dsn_clg_sa_temp_c)
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zn_dsn_htg_sa_temp_c)
 
       # add vrf terminal unit
       vrf_terminal_unit = OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow.new(model)
@@ -3295,11 +3320,9 @@ class Standard
                                    hot_water_loop: nil,
                                    ventilation: false)
 
-    # supply temps used across all zones
-    zn_dsn_clg_sa_temp_f = 55
-    zn_dsn_htg_sa_temp_f = 104
-    zn_dsn_clg_sa_temp_c = OpenStudio.convert(zn_dsn_clg_sa_temp_f, 'F', 'C').get
-    zn_dsn_htg_sa_temp_c = OpenStudio.convert(zn_dsn_htg_sa_temp_f, 'F', 'C').get
+    # fan coil supply air temps used across all zones
+    zn_dsn_clg_sa_temp_c = OpenStudio.convert(55.0, 'F', 'C').get
+    zn_dsn_htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
 
     # make a fan coil unit for each zone
     fcus = []
@@ -3310,14 +3333,20 @@ class Standard
       zone_sizing.setZoneHeatingDesignSupplyAirTemperature(zn_dsn_htg_sa_temp_c)
 
       if chilled_water_loop
-        fcu_clg_coil = create_coil_cooling_water(model, chilled_water_loop, name: "#{zone.name} FCU Cooling Coil")
+        fcu_clg_coil = create_coil_cooling_water(model,
+                                                 chilled_water_loop,
+                                                 name: "#{zone.name} FCU Cooling Coil",
+                                                 design_outlet_air_temperature: zn_dsn_clg_sa_temp_c)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Fan coil units require a chilled water loop, but none was provided.')
         return false
       end
 
       if hot_water_loop
-        fcu_htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} FCU Heating Coil")
+        fcu_htg_coil = create_coil_heating_water(model,
+                                                 hot_water_loop,
+                                                 name: "#{zone.name} FCU Heating Coil",
+                                                 rated_outlet_air_temperature: zn_dsn_htg_sa_temp_c)
       else
         # Zero-capacity, always-off electric heating coil
         fcu_htg_coil = create_coil_heating_electric(model,
@@ -3690,23 +3719,25 @@ class Standard
       fan_change_impeller_efficiency(exhaust_fan, impeller_eff)
 
       erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
+      erv_controller.setName("#{zone.name} ERV Controller")
       # erv_controller.setExhaustAirTemperatureLimit("NoExhaustAirTemperatureLimit")
       # erv_controller.setExhaustAirEnthalpyLimit("NoExhaustAirEnthalpyLimit")
       # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
       # erv_controller.setHighHumidityControlFlag(false)
 
       heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      # heat_exchanger.setHeatExchangerType("Plate")
-      # heat_exchanger.setEconomizerLockout(true)
-      # heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-      # heat_exchanger.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      # heat_exchanger.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      # heat_exchanger.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      # heat_exchanger.setLatentEffectivenessat75HeatingAirFlow(0.73)
-      # heat_exchanger.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      # heat_exchanger.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      # heat_exchanger.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      # heat_exchanger.setLatentEffectivenessat75CoolingAirFlow(0.73)
+      heat_exchanger.setName("#{zone.name} ERV HX")
+      heat_exchanger.setHeatExchangerType("Plate")
+      heat_exchanger.setEconomizerLockout(false)
+      heat_exchanger.setSupplyAirOutletTemperatureControl(false)
+      heat_exchanger.setSensibleEffectivenessat100HeatingAirFlow(0.76)
+      heat_exchanger.setSensibleEffectivenessat75HeatingAirFlow(0.81)
+      heat_exchanger.setLatentEffectivenessat100HeatingAirFlow(0.68)
+      heat_exchanger.setLatentEffectivenessat75HeatingAirFlow(0.73)
+      heat_exchanger.setSensibleEffectivenessat100CoolingAirFlow(0.76)
+      heat_exchanger.setSensibleEffectivenessat75CoolingAirFlow(0.81)
+      heat_exchanger.setLatentEffectivenessat100CoolingAirFlow(0.68)
+      heat_exchanger.setLatentEffectivenessat75CoolingAirFlow(0.73)
 
       zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       zone_hvac.setName("#{zone.name} ERV")
@@ -3714,16 +3745,27 @@ class Standard
       zone_hvac.setController(erv_controller)
       zone_hvac.addToThermalZone(zone)
 
+      # ensure the ERV takes priority, so ventilation load is included when treated by other zonal systems
+      # From EnergyPlus I/O reference:
+      # "For situations where one or more equipment types has limited capacity or limited control capability, order the
+      #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
+      #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
+      #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
+      #  is added to the zone."
+      zone.setCoolingPriority(zone_hvac.to_ModelObject.get, 1)
+      zone.setHeatingPriority(zone_hvac.to_ModelObject.get, 1)
+
       # Calculate ERV SAT during sizing periods
-      # Heating design day
-      oat_f = 0.0
-      return_air_f = 68.0
+      # Standard rating conditions based on AHRI Std 1060 - 2013
+      # heating design
+      oat_f = 35.0
+      return_air_f = 70.0
       eff = heat_exchanger.sensibleEffectivenessat100HeatingAirFlow
       coldest_erv_supply_f = oat_f - (eff * (oat_f - return_air_f))
       coldest_erv_supply_c = OpenStudio.convert(coldest_erv_supply_f, 'F', 'C').get
 
-      # Cooling design day
-      oat_f = 110.0
+      # cooling design
+      oat_f = 95.0
       return_air_f = 75.0
       eff = heat_exchanger.sensibleEffectivenessat100CoolingAirFlow
       hottest_erv_supply_f = oat_f - (eff * (oat_f - return_air_f))
@@ -3732,7 +3774,7 @@ class Standard
       # Ensure that zone sizing accounts for OA from ERV
       zone_sizing = zone.sizingZone
       zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
-      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy('ColdSupplyAir')
+      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy('NeutralSupplyAir')
       zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(coldest_erv_supply_c)
       zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(hottest_erv_supply_c)
 
@@ -3999,7 +4041,13 @@ class Standard
   # @param system_type [String] The system type.  Valid choices are
   # TODO: enumerate the valid strings
   # @return [Bool] returns true if successful, false if not
-  def model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
+  def model_add_hvac_system(model,
+                            system_type,
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones,
+                            fan_coil_ventilation: true)
     # Don't do anything if there are no zones
     return true if zones.empty?
 
@@ -4113,7 +4161,7 @@ class Standard
                                    zones,
                                    chilled_water_loop,
                                    hot_water_loop: hot_water_loop,
-                                   ventilation: true)
+                                   ventilation: fan_coil_ventilation)
 
     when 'Baseboards'
       case main_heat_fuel
@@ -4289,14 +4337,14 @@ class Standard
     ### Combination Systems ###
     when 'Water Source Heat Pumps with ERVs'
       model_add_hvac_system(model,
-                            system_type = 'Water Source Heat Pumps',
+                            system_type = 'ERVs',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
                             zones)
 
       model_add_hvac_system(model,
-                            system_type = 'ERVs',
+                            system_type = 'Water Source Heat Pumps',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
@@ -4319,14 +4367,14 @@ class Standard
 
     when 'Ground Source Heat Pumps with ERVs'
       model_add_hvac_system(model,
-                            system_type = 'Ground Source Heat Pumps',
+                            system_type = 'ERVs',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
                             zones)
 
       model_add_hvac_system(model,
-                            system_type = 'ERVs',
+                            system_type = 'Ground Source Heat Pumps',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
@@ -4364,18 +4412,19 @@ class Standard
 
     when 'Fan Coil with ERVs'
       model_add_hvac_system(model,
-                            system_type = 'Fan Coil',
+                            system_type = 'ERVs',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
                             zones)
 
       model_add_hvac_system(model,
-                            system_type = 'ERVs',
+                            system_type = 'Fan Coil',
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            fan_coil_ventilation: false)
 
     when  'VRF with DOAS'
       model_add_hvac_system(model,
@@ -4396,6 +4445,11 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "HVAC system type '#{system_type}' not recognized")
       return false
     end
+
+    # rename air loop and plant loop nodes for readability
+    rename_air_loop_nodes(model)
+    rename_plant_loop_nodes(model)
+
   end
 
   # Determine the typical system type given the inputs.

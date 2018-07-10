@@ -78,11 +78,11 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
       # Electric, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
+      #['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
+      #['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
     ]
