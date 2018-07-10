@@ -40,10 +40,12 @@ module RetailStandalone
     end
 
     # add these additional coefficient inputs
-    infiltration_entry.setConstantTermCoefficient(1.0)
-    infiltration_entry.setTemperatureTermCoefficient(0.0)
-    infiltration_entry.setVelocityTermCoefficient(0.0)
-    infiltration_entry.setVelocitySquaredTermCoefficient(0.0)
+    if infiltration_entry
+      infiltration_entry.setConstantTermCoefficient(1.0)
+      infiltration_entry.setTemperatureTermCoefficient(0.0)
+      infiltration_entry.setVelocityTermCoefficient(0.0)
+      infiltration_entry.setVelocitySquaredTermCoefficient(0.0)
+    end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
