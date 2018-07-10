@@ -2251,7 +2251,7 @@ class Standard
     # Check the number of stories exception,
     # which is climate-zone dependent.
     if num_stories < maximum_stories
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper not required because the building has #{num_stories} stories, less than the maximum of #{maximum_stories} stories for climate zone #{climate_zone}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper not required because the building has #{num_stories} stories, less than the minimum of #{maximum_stories} stories for climate zone #{climate_zone}.")
       return motorized_oa_damper_required
     end
 
@@ -2264,6 +2264,9 @@ class Standard
         oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
         oa_flow_m3_per_s = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Could not determine the minimum OA flow rate, cannot determine if a motorized OA damper is required.")
+        return motorized_oa_damper_required
       end
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, Motorized OA damper not applicable because it has no OA intake.")
@@ -2278,6 +2281,7 @@ class Standard
     end
 
     # If here, motorized damper is required
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper is required because the building has #{num_stories} stories, >= the minimum of #{maximum_stories} stories for climate zone #{climate_zone}, and the system OA intake of #{oa_flow_cfm.round} cfm is >= the minimum threshold of #{minimum_oa_flow_cfm} cfm. ")
     motorized_oa_damper_required = true
 
     return motorized_oa_damper_required
@@ -2322,15 +2326,20 @@ class Standard
 
     # Get the current min OA schedule and do nothing
     # if it is already set to something other than Always On
-    unless oa_control.minimumOutdoorAirSchedule == air_loop_hvac.model.alwaysOnDiscreteSchedule
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Min OA damper schedule is already set, assume this includes correct motorized OA damper control.")
-      return true
+    if oa_control.minimumOutdoorAirSchedule.is_initialized
+      min_oa_sch = oa_control.minimumOutdoorAirSchedule.get
+      unless min_oa_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Min OA damper schedule is already set to #{min_oa_sch.name}, assume this includes correct motorized OA damper control.")
+        return true
+      end
     end
 
     # Get the airloop occupancy schedule if none supplied
-    if occ_sch.nil?
-      occ_sch = get_occupancy_schedule(min_occ_pct)
-      flh = occ_sch.annual_equivalent_full_load_hrs
+    # or if the supplied availability schedule is Always On, implying
+    # that the availability schedule does not reflect occupancy.
+    if occ_sch.nil? || occ_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
+      occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, min_occ_pct)
+      flh = schedule_ruleset_annual_equivalent_full_load_hrs(occ_sch)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used to close OA damper during unoccupied hours.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Setting motorized OA damper schedule to #{occ_sch.name}.")
@@ -2338,7 +2347,6 @@ class Standard
 
     # Set the minimum OA schedule to follow occupancy
     oa_control.setMinimumOutdoorAirSchedule(occ_sch)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: occ #{occ_sch}, assuming a #{min_occ_pct} occupancy threshol.  This schedule will be used to close OA damper during unoccupied hours.")
 
     return true
   end
