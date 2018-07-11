@@ -69,20 +69,35 @@ class NECB2015
           hourly_index = 0
           for hourly_value in occupancy_value do
 
+            #default light schedule hourly value
+            lighting_sched_value = 999
+
+            #get the hourly value from the .json schedule
+            #get lighting schedule
+            orig_lighting_rules = model_find_objects(standards_data['schedules'], 'name' => orig_lighting_sch) # returns all schedules with schedule name
+            if orig_lighting_rules.size.zero?
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{orig_lighting_sch}.")
+            end
+
             if hourly_value<lights_rel_absence_occ
               #occupancy sensor control applies for this hour
               occ_control = 1-(lights_rel_absence_occ*lights_occ_sense)-lights_personal_control
+
+              #go through lighitng schedule and adjust the value for the hour
+              orig_lighting_rules.each do |orig_lighting_rule|
+                if day_types == orig_lighting_rule['day_types'] #if light day schedule type matches occupancy day type
+                  orig_hourly_values =orig_lighting_rule['values']
+                  lighting_sched_value = (orig_hourly_values[hourly_index])*occ_control
+                  f= 1
+                end
+
+              end
               e = 1
             else
 
               #occupancy sensor control does not apply for this hour. Use default schedule value from .json file
 
-              #get the hourly value from the .json schedule
-              #get lighting schedule
-              orig_lighting_rules = model_find_objects(standards_data['schedules'], 'name' => orig_lighting_sch) # returns all schedules with schedule name
-              if orig_lighting_rules.size.zero?
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{orig_lighting_sch}.")
-              end
+
 
 
               #go through each lighting schedule day  to find the one with the matching day type
@@ -91,15 +106,16 @@ class NECB2015
 
                 if day_types == orig_lighting_rule['day_types'] #if light day schedule type matches occupancy day type
                   orig_hourly_values =orig_lighting_rule['values']
-                  occ_control = orig_hourly_values[hourly_index] #set the current hourly_index's original lighting schedule day value to occ_control
+                  occ_control =1
+                  lighting_sched_value = orig_hourly_values[hourly_index] #set the current hourly_index's original lighting schedule day value to lighting_sched_value
                   f= 1
                 end
                 g= 1
               end
             end # if hourly_value<lights_rel_absence_occ
 
-            #store the occ_control factor for this hour to the array
-            hourly_occ_control << occ_control
+            #store the lighting_sched_value factor for this hour to the array
+            hourly_occ_control << lighting_sched_value
 
             #update index
             hourly_index = hourly_index + 1
