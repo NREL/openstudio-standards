@@ -129,7 +129,7 @@ class NECB2015
           result_value = space[:electric_w_per_m2]
         end
 
-        test_text = "[ENVELOPE] #{compliance_var}"
+        test_text = "[SPACE][#{space[:name]}]-[TYPE:][#{space_type}]-#{compliance_var}"
         next if result_value.nil?
         necb_section_test(
             qaqc,
@@ -158,7 +158,7 @@ class NECB2015
 
     necb_envelope_compliance(qaqc) # [DONE]
 
-    necb_infiltration_compliance(qaqc) # [DONE-NC]
+    necb_infiltration_compliance(qaqc, model) # [DONE-NC]
 
     necb_exterior_opaque_compliance(qaqc) # [DONE-NC]
 

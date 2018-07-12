@@ -39,6 +39,22 @@ class NECB2011
     # Determine the minimum capacity that requires an economizer
     minimum_capacity_btu_per_hr = 68_243 # NECB requires economizer for cooling cap > 20 kW
 
+    # puts air_loop_hvac.name.to_s
+    # Design Supply Air Flow Rate: This method below reads the value from the sql file.
+    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    min_dsafr_l_per_s = 1500
+    unless dsafr_m3_per_s.empty?
+      dsafr_l_per_s = dsafr_m3_per_s.get()*1000
+      if dsafr_l_per_s > min_dsafr_l_per_s
+        economizer_required = true
+        puts "economizer_required = true for #{air_loop_hvac.name} because dsafr_l_per_s(#{dsafr_l_per_s}) > 1500"
+        if is_dc
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s for data centers.")
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s.")
+        end
+      end
+    end
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
@@ -49,6 +65,7 @@ class NECB2011
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
+      puts "economizer_required = true for #{air_loop_hvac.name} because total_cooling_capacity_btu_per_hr(#{total_cooling_capacity_btu_per_hr}) >= #{minimum_capacity_btu_per_hr}"
       economizer_required = true
     else
       if is_dc
