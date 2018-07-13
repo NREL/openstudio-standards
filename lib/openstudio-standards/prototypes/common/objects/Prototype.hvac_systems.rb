@@ -2319,6 +2319,14 @@ class Standard
       # Attach the nightcycle manager to the supply outlet node
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
       air_loop.setNightCycleControlType('CycleOnAny')
+      avail_mgr = air_loop.availabilityManager
+      if avail_mgr.is_initialized
+        avail_mgr = avail_mgr.get
+        if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+          avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+          avail_mgr.setCyclingRunTime(1800)
+        end
+      end
 
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
