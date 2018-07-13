@@ -32,7 +32,7 @@
     ]
   },
   {
-    "type": "DOAS",
+    "type": "DOAS Cold Supply",
     "operation_schedule": "HotelLarge HVACOperationSchd",
     "oa_damper_schedule": "HotelLarge MinOA_MotorizedDamper_Sched",
     "chilled_water_design_supply_water_temperature": 44.0,

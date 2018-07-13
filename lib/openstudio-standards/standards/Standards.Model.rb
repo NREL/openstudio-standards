@@ -319,6 +319,9 @@ class Standard
       # Occupancy type
       zn_hash['occ'] = thermal_zone_occupancy_type(zone)
 
+      # Building type
+      zn_hash['bldg_type'] = thermal_zone_building_type(zone)
+
       # Fuel type
       zn_hash['fuel'] = thermal_zone_fossil_or_electric_type(zone, custom)
 
@@ -1980,15 +1983,108 @@ class Standard
   #
   # @param value [double] the value to use, 24-7, 365
   # @param name [string] the name of the schedule
+  # @param sch_type_limit [string] the name of a schedule type limit
+  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
   # @return schedule
-  def model_add_constant_schedule_ruleset(model, value, name = nil)
+  def model_add_constant_schedule_ruleset(model,
+                                          value,
+                                          name = nil,
+                                          sch_type_limit: "Temperature")
     schedule = OpenStudio::Model::ScheduleRuleset.new(model)
     unless name.nil?
       schedule.setName(name)
       schedule.defaultDaySchedule.setName("#{name} Default")
     end
+
+    if !sch_type_limit.nil?
+      sch_type_limits_obj = model_add_schedule_type_limits(model, standard_sch_type_limit: sch_type_limit)
+      schedule.setScheduleTypeLimits(sch_type_limits_obj)
+    end
+
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
     return schedule
+  end
+
+  # Create ScheduleTypeLimits
+  #
+  # @param standard_sch_type_limit [string] the name of a standard schedule type limit with predefined limits
+  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
+  # @param name[string] the name of the schedule type limits
+  # @param lower_limit_value [double] the lower limit value for the schedule type
+  # @param upper_limit_value [double] the upper limit value for the schedule type
+  # @param numeric_type [string] the numeric type, options are Continuous or Discrete
+  # @param unit_type [string] the unit type, options are defined in EnergyPlus I/O reference
+  # @return [<OpenStudio::Model::ScheduleTypeLimits>]
+  def model_add_schedule_type_limits(model,
+                                     standard_sch_type_limit: nil,
+                                     name: nil,
+                                     lower_limit_value: nil,
+                                     upper_limit_value: nil,
+                                     numeric_type: nil,
+                                     unit_type: nil)
+
+    if standard_sch_type_limit.nil?
+      if lower_limit_value.nil? || upper_limit_value.nil? || numeric_type.nil? || unit_type.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "If calling model_add_schedule_type_limits without a standard_sch_type_limit, you must specify all properties of ScheduleTypeLimits.")
+        return false
+      end
+      schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+      schedule_type_limits.setName(name) if !name.nil?
+      schedule_type_limits.setLowerLimitValue(lower_limit_value)
+      schedule_type_limits.setUpperLimitValue(upper_limit_value)
+      schedule_type_limits.setNumericType(numeric_type)
+      schedule_type_limits.setUnitType(unit_type)
+    else
+      schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
+      if !schedule_type_limits.empty?
+        schedule_type_limits = schedule_type_limits.get
+      else
+        case standard_sch_type_limit.downcase
+          when 'temperature'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Temperature")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(100.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Temperature")
+
+          when 'humidity ratio'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Humidity Ratio")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(0.3)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Dimensionless")
+
+          when 'fraction'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Fraction")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(1.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Dimensionless")
+
+          when 'onoff'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("OnOff")
+            schedule_type_limits.setLowerLimitValue(0)
+            schedule_type_limits.setUpperLimitValue(1)
+            schedule_type_limits.setNumericType("Discrete")
+            schedule_type_limits.setUnitType("Availability")
+
+          when 'activity'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Activity")
+            schedule_type_limits.setLowerLimitValue(70.0)
+            schedule_type_limits.setUpperLimitValue(1000.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("ActivityLevel")
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Invalid standard_sch_type_limit for method model_add_schedule_type_limits.")
+        end
+      end
+    end
+    return schedule_type_limits
   end
 
   # Create a schedule from the openstudio standards dataset and

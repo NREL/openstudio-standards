@@ -1526,6 +1526,103 @@ Standard.class_eval do
     return final_groups
   end
 
+  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
+  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
+  #
+  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
+  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
+  def model_group_zones_by_building_type(model, min_area_m2 = 1858.0608)
+    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
+
+    # Get occupancy type, building type, fuel type, and area information for all zones, excluding unconditioned zones
+    zones = model_zones_with_occ_and_fuel_type(model, nil)
+
+    # Ensure that there is at least one conditioned zone
+    if zones.size.zero?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
+      return []
+    end
+
+    # Group the zones by building type
+    type_to_area = Hash.new {0.0}
+    zones_grouped_by_bldg_type = zones.group_by {|z| z['bldg_type']}
+
+    # Determine the dominant building type by area
+    zones_grouped_by_bldg_type.each do |bldg_type, zns|
+      zns.each do |zn|
+        type_to_area[bldg_type] += zn['area']
+      end
+    end
+    dom_bldg_type = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+
+    # Get the dominant building type group
+    dom_bldg_type_group = zones_grouped_by_bldg_type[dom_bldg_type]
+
+    # Check the non-dominant building type groups to see if they are big enough to trigger the building exception.
+    # If they are, leave the group standing alone.
+    # If they are not, add the zones in that group back to the dominant building type group.
+    bldg_type_groups = []
+    zones_grouped_by_bldg_type.each do |bldg_type, zns|
+      # Skip the dominant building type
+      next if bldg_type == dom_bldg_type
+
+      # Add up the floor area of the group
+      area_m2 = 0
+      zns.each do |zn|
+        area_m2 += zn['area']
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+
+      # If the non-dominant group is big enough, preserve that group.
+      if area_ft2 > min_area_ft2
+        bldg_type_groups << [bldg_type, zns]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with a building type of #{bldg_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
+        # Otherwise, add the zones back to the dominant group.
+      else
+        dom_bldg_type_group += zns
+      end
+    end
+    # Add the dominant building type group to the list
+    bldg_type_groups << [dom_bldg_type, dom_bldg_type_group]
+
+    # Calculate the area for each of the final groups
+    # and replace the zone hashes with an array of zone objects
+    final_groups = []
+    bldg_type_groups.each do |bldg_type, zns|
+      # Sum the area and put all zones into an array
+      area_m2 = 0.0
+      gp_zns = []
+      zns.each do |zn|
+        area_m2 += zn['area']
+        gp_zns << zn['zone']
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+
+      # Determine the number of stories this group spans
+      num_stories = model_num_stories_spanned(model, gp_zns)
+
+      # Create a hash representing this group
+      group = {}
+      group['area_ft2'] = area_ft2
+      group['type'] = bldg_type
+      group['stories'] = num_stories
+      group['zones'] = gp_zns
+      final_groups << group
+
+      # Report out the final grouping
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: bldg_type = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      end
+    end
+
+    return final_groups
+  end
+
   # Method to multiply the values in a day schedule by a specified value
   # but only when the existing value is higher than a specified lower limit.
   # This limit prevents occupancy sensors from affecting unoccupied hours.

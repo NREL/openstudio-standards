@@ -45,12 +45,7 @@ class Standard
     end
 
     # Temperature schedule type limits
-    temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-    temp_sch_type_limits.setName('Temperature Schedule Type Limits')
-    temp_sch_type_limits.setLowerLimitValue(0.0)
-    temp_sch_type_limits.setUpperLimitValue(100.0)
-    temp_sch_type_limits.setNumericType('Continuous')
-    temp_sch_type_limits.setUnitType('Temperature')
+    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
 
     # Service water heating loop controls
     swh_temp_c = service_water_temperature
@@ -171,12 +166,7 @@ class Standard
     water_heater_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
 
     # Temperature schedule type limits
-    temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-    temp_sch_type_limits.setName('Temperature Schedule Type Limits')
-    temp_sch_type_limits.setLowerLimitValue(0.0)
-    temp_sch_type_limits.setUpperLimitValue(100.0)
-    temp_sch_type_limits.setNumericType('Continuous')
-    temp_sch_type_limits.setUnitType('Temperature')
+    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
 
     if swh_temp_sch.nil?
       # Service water heating loop controls
@@ -284,12 +274,7 @@ class Standard
     booster_service_water_loop.setName('Service Water Loop')
 
     # Temperature schedule type limits
-    temp_sch_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-    temp_sch_type_limits.setName('Temperature Schedule Type Limits')
-    temp_sch_type_limits.setLowerLimitValue(0.0)
-    temp_sch_type_limits.setUpperLimitValue(100.0)
-    temp_sch_type_limits.setNumericType('Continuous')
-    temp_sch_type_limits.setUnitType('Temperature')
+    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
 
     # Service water heating loop controls
     swh_temp_c = booster_water_temperature

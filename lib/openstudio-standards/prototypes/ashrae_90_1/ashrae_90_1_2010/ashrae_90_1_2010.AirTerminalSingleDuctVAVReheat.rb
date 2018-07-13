@@ -29,7 +29,6 @@ class ASHRAE9012010 < ASHRAE901
           min_damper_position = 0.5
         else
           min_damper_position = 1.0
-          min_damper_position = 1.0
         end
       else
         min_damper_position = 0.7

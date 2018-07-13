@@ -11,6 +11,9 @@ class TestAddHVACSystems < Minitest::Test
     # List all the HVAC system types to test
     hvac_systems = [
 
+      # input
+      # [system_type, main_heat_fuel, zone_heat_fuel, cool_fuel]
+
       ## Forced Air ##
 
       # Gas, Electric, forced air
@@ -84,7 +87,10 @@ class TestAddHVACSystems < Minitest::Test
       # District Hot Water, District Chilled Water, hydronic
       #['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+
+      # DOAS Variations
+      ['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
     ]
 
     template = '90.1-2013'
