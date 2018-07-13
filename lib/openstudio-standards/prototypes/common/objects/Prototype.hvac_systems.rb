@@ -1913,6 +1913,7 @@ class Standard
 
         htg_coil.setDefrostStrategy('ReverseCycle')
         htg_coil.setDefrostControl('OnDemand')
+        htg_coil.resetDefrostTimePeriodFraction
 
         def_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
         def_eir_f_of_temp.setCoefficient1Constant(0.297145)
@@ -2961,6 +2962,7 @@ class Standard
                                                                  htg_energy_input_ratio_f_of_flow,
                                                                  htg_part_load_fraction)
 
+      htg_coil.resetDefrostTimePeriodFraction
       htg_coil.setName("#{thermal_zone_name} SAC HP Htg Coil")
     end
 
@@ -3617,6 +3619,7 @@ class Standard
                                                                  htg_energy_input_ratio_f_of_flow,
                                                                  htg_part_load_fraction)
 
+      htg_coil.resetDefrostTimePeriodFraction
       htg_coil.setName("#{zone.name} PTHP Htg Coil")
 
       # add cooling coil
@@ -5313,6 +5316,7 @@ class Standard
         htg_coil.setMaximumOutdoorDryBulbTemperatureforCrankcaseHeaterOperation(OpenStudio.convert(crank_case_max_temp_f, 'F', 'C').get)
         htg_coil.setDefrostStrategy('ReverseCycle')
         htg_coil.setDefrostControl('OnDemand')
+        htg_coil.resetDefrostTimePeriodFraction
 
         # Supplemental Heating Coil
         supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
