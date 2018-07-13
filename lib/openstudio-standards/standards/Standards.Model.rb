@@ -219,13 +219,8 @@ class Standard
     # Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
 
-    # Delete all the unused curves
-    model.getCurves.sort.each do |curve|
-      if curve.directUseCount == 0
-        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
-        model.removeObject(curve.handle)
-      end
-    end
+    # Delete all the unused resource objects
+    model_remove_unused_resource_objects(model)
 
     # TODO: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -4416,6 +4411,22 @@ class Standard
     ventilation_method = 'Sum'
     return ventilation_method
   end
+
+  # Removes all of the unused ResourceObjects
+  # (Curves, ScheduleDay, Material, etc.) from the model.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_remove_unused_resource_objects(model)
+    model.getResourceObjects.sort.each do |obj|
+      if obj.directUseCount.zero?
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{obj.name} is unused; it will be removed.")
+        model.removeObject(obj.handle)
+      end
+    end
+
+    return true
+  end
+
 
   private
 
