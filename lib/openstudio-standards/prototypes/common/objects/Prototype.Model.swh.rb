@@ -4,12 +4,29 @@ class Standard
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
+      # Get the thermal zone for the water heater, if specified
+      water_heater_zone = nil
+      if prototype_input['main_water_heater_space_name']
+        wh_space_name = prototype_input['main_water_heater_space_name']
+        wh_space = model.getSpaceByName(wh_space_name)
+        if wh_space.empty?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Cannot find a space called #{wh_space_name} in the model, water heater will not be placed in a zone.")
+        else
+          wh_zone = wh_space.get.thermalZone
+          if wh_zone.empty?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Cannot find a zone that contains the space #{wh_space_name} in the model, water heater will not be placed in a zone.")
+          else
+            water_heater_zone = wh_zone.get
+          end
+        end
+      end
+
       swh_fueltype = prototype_input['main_water_heater_fuel']
       # Add the main service water loop
       unless building_type == 'RetailStripmall' && template != 'NECB2011'
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
-                                           nil,
+                                           water_heater_zone,
                                            OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
                                            prototype_input['main_service_water_pump_head'],
                                            prototype_input['main_service_water_pump_motor_efficiency'],
