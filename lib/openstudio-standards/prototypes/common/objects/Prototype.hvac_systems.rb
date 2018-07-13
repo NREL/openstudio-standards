@@ -1216,6 +1216,14 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)
     air_loop.setNightCycleControlType('CycleOnAny')
+    avail_mgr = air_loop.availabilityManager
+    if avail_mgr.is_initialized
+      avail_mgr = avail_mgr.get
+      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+        avail_mgr.setCyclingRunTime(1800)
+      end
+    end
 
     # Fan
     fan = OpenStudio::Model::FanVariableVolume.new(model, model.alwaysOnDiscreteSchedule)
