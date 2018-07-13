@@ -33,7 +33,6 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
-    model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
@@ -61,6 +60,7 @@ Standard.class_eval do
     model_modify_oa_controller(model)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
+    model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
