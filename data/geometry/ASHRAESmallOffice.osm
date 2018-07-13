@@ -1303,7 +1303,7 @@ OS:SubSurface,
 OS:SubSurface,
   {53588f1b-5734-4f40-b8d3-73d92c10e021}, !- Handle
   Perimeter_ZN_1_wall_south_door,         !- Name
-  Door,                                   !- Sub Surface Type
+  GlassDoor,                              !- Sub Surface Type
   ,                                       !- Construction Name
   {67ca62ce-e572-4957-8e6a-efb74825f170}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
