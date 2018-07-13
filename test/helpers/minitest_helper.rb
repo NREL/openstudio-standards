@@ -30,7 +30,7 @@ else
   require 'minitest/reporters'
 end
 
-require 'openstudio'
+require '/usr/Ruby/openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'json'
 require 'fileutils'
