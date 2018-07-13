@@ -116,7 +116,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Building Story Name
+  ,                                       !- Building Story Name
   {761af5ec-0e7c-4fea-81cc-7d7860391e92}, !- Thermal Zone Name
   No;                                     !- Part of Total Floor Area
 
@@ -1324,15 +1324,6 @@ OS:BuildingStory,
   {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Handle
   Building Story 1,                       !- Name
   0,                                      !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
-
-OS:BuildingStory,
-  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Handle
-  Building Story 2,                       !- Name
-  3.05,                                   !- Nominal Z Coordinate {m}
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
