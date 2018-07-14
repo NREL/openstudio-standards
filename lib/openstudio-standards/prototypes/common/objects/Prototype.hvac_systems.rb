@@ -891,6 +891,14 @@ class Standard
 
     # The oa system need to be added before setting the night cycle control
     air_loop.setNightCycleControlType('CycleOnAny')
+    avail_mgr = air_loop.availabilityManager
+    if avail_mgr.is_initialized
+      avail_mgr = avail_mgr.get
+      if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+        avail_mgr = avail_mgr.to_AvailabilityManagerNightCycle.get
+        avail_mgr.setCyclingRunTime(1800)
+      end
+    end
 
     # hook the VAV system to each zone
     thermal_zones.each do |zone|
