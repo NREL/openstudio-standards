@@ -856,8 +856,8 @@ class Standard
       htg_coil.controllerWaterCoil.get.setName("#{air_loop.name} Main Htg Coil Controller")
       htg_coil.setRatedInletWaterTemperature(hw_temp_c)
       htg_coil.setRatedOutletWaterTemperature(hw_temp_c - hw_delta_t_k)
-      htg_coil.setRatedInletAirTemperature(htg_sa_temp_c)
-      htg_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+      htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+      htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
     end
 
     # cooling coil
