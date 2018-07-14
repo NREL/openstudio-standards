@@ -1494,23 +1494,6 @@ OS:Space,
   {b09335c3-d2bd-43d7-83fb-091f1c3251e3}, !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
 
-OS:Surface,
-  {0c5017de-39bb-4dfc-b09d-3fe9258b75c3}, !- Handle
-  Office2_Mult5_Flr_5_Ceiling,            !- Name
-  RoofCeiling,                            !- Surface Type
-  ,                                       !- Construction Name
-  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  9.144, 7.62, 21.3415,                   !- X,Y,Z Vertex 1 {m}
-  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 2 {m}
-  0, 7.622, 21.3415,                      !- X,Y,Z Vertex 3 {m}
-  0, 7.62, 21.3415;                       !- X,Y,Z Vertex 4 {m}
-
 OS:Connection,
   {756cc636-3a51-4938-bf3f-67bf5be6d00b}, !- Handle
   {9133422a-801e-4246-9ea4-17dabb7a139f}, !- Name
