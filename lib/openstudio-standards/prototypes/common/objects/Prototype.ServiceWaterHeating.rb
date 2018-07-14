@@ -45,7 +45,12 @@ class Standard
     end
 
     # Temperature schedule type limits
-    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
+    temp_sch_type_limits =  model_add_schedule_type_limits(model,
+                                                           name: "Temperature Schedule Type Limits",
+                                                           lower_limit_value: 0.0,
+                                                           upper_limit_value: 100.0,
+                                                           numeric_type: "Continuous",
+                                                           unit_type: "Temperature")
 
     # Service water heating loop controls
     swh_temp_c = service_water_temperature
@@ -166,7 +171,12 @@ class Standard
     water_heater_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
 
     # Temperature schedule type limits
-    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
+    temp_sch_type_limits =  model_add_schedule_type_limits(model,
+                                                           name: "Temperature Schedule Type Limits",
+                                                           lower_limit_value: 0.0,
+                                                           upper_limit_value: 100.0,
+                                                           numeric_type: "Continuous",
+                                                           unit_type: "Temperature")
 
     if swh_temp_sch.nil?
       # Service water heating loop controls
@@ -274,7 +284,12 @@ class Standard
     booster_service_water_loop.setName('Service Water Loop')
 
     # Temperature schedule type limits
-    temp_sch_type_limits =  model_add_schedule_type_limits(model, standard_sch_type_limit: "Temperature")
+    temp_sch_type_limits =  model_add_schedule_type_limits(model,
+                                                           name: "Temperature Schedule Type Limits",
+                                                           lower_limit_value: 0.0,
+                                                           upper_limit_value: 100.0,
+                                                           numeric_type: "Continuous",
+                                                           unit_type: "Temperature")
 
     # Service water heating loop controls
     swh_temp_c = booster_water_temperature
