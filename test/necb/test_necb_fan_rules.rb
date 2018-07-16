@@ -9,7 +9,8 @@ class HVACEfficienciesTest < MiniTest::Test
   FULL_SIMULATIONS = false
 
   # Test to validate variable volume fan performance curves and pressure rise
-  def test_vav_fan_rules
+  def test_NECB2011_vav_fan_rules
+    standard_NECB2011 = Standard.build('NECB2011')
     output_folder = "#{File.dirname(__FILE__)}/output/vavfan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -39,21 +40,25 @@ class HVACEfficienciesTest < MiniTest::Test
       BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule	
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
-        model, 
-        model.getThermalZones, 
-        boiler_fueltype, 
-        heating_coil_type, 
-        baseboard_type, 
-        chiller_type, 
-        vavfan_type,
-        hw_loop)
+      standard_NECB2011.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard_NECB2011.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
+         model,
+         model.getThermalZones,
+         boiler_fueltype,
+         heating_coil_type,
+         baseboard_type,
+         chiller_type,
+         vavfan_type,
+         hw_loop)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
-        deltaP = 1458.33  # necb pressure rise for vav fans
+        if ifan.name.to_s.include?('Supply')
+          deltaP = 1000.0  # necb pressure rise for supply vav fans
+        elsif ifan.name.to_s.include?('Return')
+          deltaP = 250.0   # necb pressure rise for return vav fans
+        end
         fan_eff = 0.65  # assumed fan mechanical efficiency
         flow_rate = cap * fan_eff/deltaP
         ifan.setMaximumFlowRate(flow_rate)
@@ -66,12 +71,17 @@ class HVACEfficienciesTest < MiniTest::Test
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
         deltaP = ifan.pressureRise
-        necb_deltaP = 1458.33
+        if ifan.name.to_s.include?('Supply')
+          necb_deltaP = 1000.0  # necb pressure rise for supply vav fans
+          necb_tot_eff = 0.55   # necb total fan efficiency for supply vav fans
+        elsif ifan.name.to_s.include?('Return')
+          necb_deltaP = 250.0   # necb pressure rise for return vav fans
+          necb_tot_eff = 0.30   # necb total fan efficiency for return vav fans
+        end
         diff = (deltaP - necb_deltaP).abs / necb_deltaP
         deltaP_set_properly = true
         if diff > tol then deltaP_set_properly = false end
         assert(deltaP_set_properly, "test_vavfan_rules: Variable fan pressure rise does not match necb requirement #{name}")
-        necb_tot_eff = 0.55
         tot_eff = ifan.fanEfficiency
         diff = (tot_eff - necb_tot_eff).abs / necb_tot_eff
         tot_eff_set_properly = true
@@ -105,7 +115,8 @@ class HVACEfficienciesTest < MiniTest::Test
   end
   
   # Test to validate constant volume fan pressure rise and total efficiency
-  def test_const_vol_fan_rules
+  def test_NECB2011_const_vol_fan_rules
+    standard_NECB2011 = Standard.build('NECB2011')
     output_folder = "#{File.dirname(__FILE__)}/output/const_vol_fan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -120,16 +131,16 @@ class HVACEfficienciesTest < MiniTest::Test
     name = 'sys1'
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      mau_type, 
-      mau_heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    always_on = model.alwaysOnDiscreteSchedule
+    standard_NECB2011.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard_NECB2011.add_sys1_unitary_ac_baseboard_heating(
+        model,
+        model.getThermalZones,
+        boiler_fueltype,
+        mau_type,
+        mau_heating_coil_type,
+        baseboard_type,
+        hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -160,23 +171,6 @@ class HVACEfficienciesTest < MiniTest::Test
       econ_is_diff_enthalpy = true
       if oa_ctl.getEconomizerControlType.to_s != 'NoEconomizer' && oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
       assert(econ_is_diff_enthalpy, "test_vavfan_rules: Economizer control does not match necb requirement #{name}")
-    end
-  end
-  
-  def run_simulations(output_folder)
-    if FULL_SIMULATIONS == true
-      file_array = []
-      BTAP::FileIO.get_find_files_from_folder_by_extension(output_folder, '.osm').each do |file|
-        # skip any sizing.osm file.
-        unless file.to_s.include? 'sizing.osm'
-          file_array << file
-        end
-      end
-      BTAP::SimManager.simulate_files(output_folder, file_array)
-      BTAP::Reporting.get_all_annual_results_from_runmanger_by_files(output_folder, file_array)
-
-      are_there_no_severe_errors = File.zero?("#{output_folder}/failed simulations.txt")
-      assert_equal(true, are_there_no_severe_errors, "Simulations had severe errors. Check #{output_folder}/failed simulations.txt")
     end
   end
 
