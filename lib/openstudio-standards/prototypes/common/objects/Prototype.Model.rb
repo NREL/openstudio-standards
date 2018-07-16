@@ -1425,6 +1425,39 @@ Standard.class_eval do
     return default_construction_set
   end
 
+  # Return the dominant standards building type
+  def model_get_standards_building_type(model)
+
+    # determine areas of each building type
+    building_type_areas = {}
+    model.getSpaces.each do |space|
+      # ignore space if not part of total area
+      next unless space.partofTotalFloorArea
+      if space.spaceType.is_initialized
+        space_type = space.spaceType.get
+        if space_type.standardsBuildingType.is_initialized
+          building_type = space_type.standardsBuildingType.get
+          if building_type_areas[building_type].nil?
+            building_type_areas[building_type] = space.floorArea
+          else
+            building_type_areas[building_type] += space.floorArea
+          end
+        end
+      end
+    end
+
+    # return largest building type area
+    building_type = building_type_areas.key(building_type_areas.values.max)
+
+    if building_type.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Model has no dominant standards building type.")
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "#{building_type} is the dominant standards building type.")
+    end
+
+    return building_type
+  end
+
   # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
   # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
   #
