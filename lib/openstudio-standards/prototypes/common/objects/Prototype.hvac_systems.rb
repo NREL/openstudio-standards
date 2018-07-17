@@ -4268,9 +4268,8 @@ class Standard
         hot_water_loop = model_add_hw_loop(model, heat_fuel)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "New high temperature hot water loop created.")
       elsif hot_water_loop_type == "LowTemperature"
-        dsgn_sup_wtr_temp = OpenStudio.convert(120.0,"F","C").get
         hot_water_loop = model_add_hw_loop(model, heat_fuel,
-                                           dsgn_sup_wtr_temp: dsgn_sup_wtr_temp,
+                                           dsgn_sup_wtr_temp: 120.0,
                                            boiler_draft_type: "Condensing")
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "New low temperature hot water loop created.")
       else
