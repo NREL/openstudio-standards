@@ -5,7 +5,7 @@ class NRELZNEReady2017 < ASHRAE901
   def model_apply_hvac_efficiency_standard(model, climate_zone)
     sql_db_vars_map = {}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
 
     # Air Loop Controls
     # model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
@@ -56,6 +56,6 @@ class NRELZNEReady2017 < ASHRAE901
     # ERVs
     model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
   end
 end

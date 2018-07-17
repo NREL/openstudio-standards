@@ -1367,10 +1367,10 @@ class Standard
                     end
 
     # control temps used across all air handlers
-    hw_temp_f = 180.0 # HW setpoint 180F
-    hw_delta_t_r = 20.0 # 20F delta-T
-    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
+    if !hot_water_loop.nil?
+      hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+      hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
+    end
     clg_sa_temp_f = 55.04 # Central deck clg temp 55F
     prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
     preclg_sa_temp_f = 55.04 # Precool to 55F
@@ -1733,13 +1733,11 @@ class Standard
        oa_damper_sch =model_add_schedule(model, oa_damper_sch)
      end
 
-    # control temps for HW loop, only used if hot_water_loop
-    hw_temp_f = 180 # HW setpoint 180F
-    hw_delta_t_r = 20 # 20F delta-T
-    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
-
     # control temps used across all air handlers
+    if !hot_water_loop.nil?
+      hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+      hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
+    end
     sys_dsn_prhtg_temp_f = 44.6 # Design central deck to preheat to 44.6F
     sys_dsn_clg_sa_temp_f = 55 # Design central deck to cool to 55F
     sys_dsn_htg_sa_temp_f = 55 # Central heat to 55F
@@ -2069,13 +2067,14 @@ class Standard
     end
 
     # Hot water loop control temperatures
-    hw_temp_f = 152.6 # HW setpoint 152.6F
-    hw_temp_f = 180 if building_type == 'Hospital'
-    hw_delta_t_r = 20 # 20F delta-T
-    hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-    hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
+    #hw_temp_f = 152.6 # HW setpoint 152.6F
+    #hw_temp_f = 180 if building_type == 'Hospital'
 
     # Air handler control temperatures
+    if !hot_water_loop.nil?
+      hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+      hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
+    end
     clg_sa_temp_f = 55.04 # Central deck clg temp 55F
     prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
     prehtg_sa_temp_f = 55.04 if building_type == 'Hospital'
@@ -2334,8 +2333,8 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
-        hw_temp_c = OpenStudio.convert(180.0, 'F', 'C').get
-        hw_delta_t_k = OpenStudio.convert(20.0, 'R', 'K').get
+        hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+        hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
         prehtg_sa_temp_c = OpenStudio.convert(44.6, 'F', 'C').get
         htg_sa_temp_c = OpenStudio.convert(55.0, 'F', 'C').get
         htg_coil = create_coil_heating_water(model,
@@ -2756,12 +2755,12 @@ class Standard
       if main_data_center
 
         # control temps used across all air handlers
-        hw_temp_f = 180.0 # HW setpoint 180F
-        hw_delta_t_r = 20.0 # 20F delta-T
+        if !hot_water_loop.nil?
+          hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+          hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
+        end
         prehtg_sa_temp_f = 44.6 # Preheat to 44.6F
         htg_sa_temp_f = 55.0 # Central deck htg temp 55F
-        hw_temp_c = OpenStudio.convert(hw_temp_f, 'F', 'C').get
-        hw_delta_t_k = OpenStudio.convert(hw_delta_t_r, 'R', 'K').get
         prehtg_sa_temp_c = OpenStudio.convert(prehtg_sa_temp_f, 'F', 'C').get
         htg_sa_temp_c = OpenStudio.convert(htg_sa_temp_f, 'F', 'C').get
 
@@ -3067,9 +3066,8 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No hot water plant loop supplied')
           return false
         end
-        hw_sizing = hot_water_loop.sizingPlant
-        hw_temp_c = hw_sizing.designLoopExitTemperature
-        hw_delta_t_k = hw_sizing.loopDesignTemperatureDifference
+        hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
+        hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
         htg_coil = create_coil_heating_water(model, hot_water_loop, name: "#{hot_water_loop.name} Water Htg Coil",
                                              rated_inlet_water_temperature: hw_temp_c,
                                              rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k))
@@ -4244,13 +4242,41 @@ class Standard
   # Get the existing hot water loop in the model or add a new one if there isn't one already.
   #
   # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
-  def model_get_or_add_hot_water_loop(model, heat_fuel)
-    # retrieve the existing hot water loop or add a new one if necessary
-    hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
-                       model.getPlantLoopByName('Hot Water Loop').get
-                     else
-                       model_add_hw_loop(model, heat_fuel)
-                     end
+  # @param hot_water_loop_type [String] Archetype for hot water loops
+  #   HighTemperature (180F supply) or LowTemperature (120F supply)
+  def model_get_or_add_hot_water_loop(model, heat_fuel,
+                                      hot_water_loop_type: "HighTemperature")
+    make_new_hot_water_loop = true
+    hot_water_loop = nil
+    # retrieve the existing hot water loop or add a new one if not of the correct type
+    if model.getPlantLoopByName('Hot Water Loop').is_initialized
+      hot_water_loop = model.getPlantLoopByName('Hot Water Loop').get
+      design_loop_exit_temperature = hot_water_loop.sizingPlant.designLoopExitTemperature
+      design_loop_exit_temperature = OpenStudio.convert(design_loop_exit_temperature,"C","F").get
+      # check that the loop is the correct archetype
+      if (hot_water_loop_type == "HighTemperature")
+        make_new_hot_water_loop = false if design_loop_exit_temperature > 130.0
+      elsif (hot_water_loop_type == "LowTemperature")
+        make_new_hot_water_loop = false if design_loop_exit_temperature <= 130.0
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Hot water loop archetype #{hot_water_loop_type} not recognized.")
+      end
+    end
+
+    if make_new_hot_water_loop
+      if hot_water_loop_type == "HighTemperature"
+        hot_water_loop = model_add_hw_loop(model, heat_fuel)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "New high temperature hot water loop created.")
+      elsif hot_water_loop_type == "LowTemperature"
+        dsgn_sup_wtr_temp = OpenStudio.convert(120.0,"F","C").get
+        hot_water_loop = model_add_hw_loop(model, heat_fuel,
+                                           dsgn_sup_wtr_temp: dsgn_sup_wtr_temp,
+                                           boiler_draft_type: "Condensing")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "New low temperature hot water loop created.")
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Hot water loop archetype #{hot_water_loop_type} not recognized.")
+      end
+    end
     return hot_water_loop
   end
 
@@ -4290,7 +4316,16 @@ class Standard
   # Add the specified system type to the specified zones based on the specified template.
   # For multi-zone system types, add one system per story.
   #
-  # @param system_type [String] The system type.
+  # @param system_type [String] The system type
+  # @param main_heat_fuel [String] Main heating fuel used for air loops and plant loops
+  # @param zone_heat_fuel [String] Zone heating fuel for zone hvac equipment and terminal units
+  # @param cool_fuel [String] Cooling fuel used for air loops, plant loops, and zone equipment
+  # @param zones [Array<OpenStudio::Model::ThermalZone>] array of thermal zones served by the system
+  # @param hot_water_loop_type [String] Archetype for hot water loops
+  #   HighTemperature (180F supply) (default) or LowTemperature (120F supply)
+  #   only used if HVAC system has a hot water loop
+  # @param fan_coil_ventilation [Bool] toggle whether to include outdoor air ventilation on zone fan coil units
+  #   only used if HVAC system has four pipe fan coil units
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -4298,6 +4333,7 @@ class Standard
                             zone_heat_fuel,
                             cool_fuel,
                             zones,
+                            hot_water_loop_type: "HighTemperature",
                             fan_coil_ventilation: true)
 
     # don't do anything if there are no zones
@@ -4308,7 +4344,8 @@ class Standard
       case main_heat_fuel
       when 'NaturalGas', 'DistrictHeating'
         heating_type = 'Water'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
       when 'Electricity'
         heating_type = main_heat_fuel
         hot_water_loop = nil
@@ -4338,7 +4375,8 @@ class Standard
       when 'DistrictHeating'
         heating_type = 'Water'
         supplemental_heating_type = 'Electricity'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
       when nil
         heating_type = nil
         supplemental_heating_type = nil
@@ -4397,7 +4435,8 @@ class Standard
     when 'Fan Coil'
       case main_heat_fuel
       when 'NaturalGas', 'DistrictHeating', 'Electricity'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
       when nil
         hot_water_loop = nil
       end
@@ -4418,7 +4457,8 @@ class Standard
     when 'Baseboards'
       case main_heat_fuel
       when 'NaturalGas', 'DistrictHeating'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
       when 'Electricity'
         hot_water_loop = nil
       when nil
@@ -4471,7 +4511,8 @@ class Standard
                                              ventilation: false)
 
     when 'VAV Reheat'
-      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                       hot_water_loop_type: hot_water_loop_type)
       chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
       reheat_type = zone_heat_fuel == 'Electricity' ? 'Electricity' : 'Water'
       model_add_vav_reheat(model,
@@ -4505,7 +4546,8 @@ class Standard
                            fan_pressure_rise: 4.0)
 
     when 'PVAV Reheat'
-      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                       hot_water_loop_type: hot_water_loop_type)
       chilled_water_loop = case cool_fuel
                            when 'Electricity'
                              nil
@@ -4560,7 +4602,8 @@ class Standard
                                 ventilation: false)
 
     when 'DOAS Cold Supply'
-      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                       hot_water_loop_type: hot_water_loop_type)
       chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
       model_add_doas_cold_supply(model,
                                  zones,
@@ -4703,6 +4746,7 @@ class Standard
                             zone_heat_fuel,
                             cool_fuel,
                             zones,
+                            hot_water_loop_type: hot_water_loop_type,
                             fan_coil_ventilation: false)
 
     when 'Fan Coil with DOAS with DCV'
@@ -4719,6 +4763,7 @@ class Standard
                             zone_heat_fuel,
                             cool_fuel,
                             zones,
+                            hot_water_loop_type: hot_water_loop_type,
                             fan_coil_ventilation: false)
 
     when 'Fan Coil with ERVs'
@@ -4735,6 +4780,7 @@ class Standard
                             zone_heat_fuel,
                             cool_fuel,
                             zones,
+                            hot_water_loop_type: hot_water_loop_type,
                             fan_coil_ventilation: false)
 
     when  'VRF with DOAS'

@@ -7,8 +7,8 @@ class Standard
   #   Note: if the coil is added to an air loop outside of this function, coil controller properties will need to be reset
   # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
-  # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is 82.2 (180F)
-  # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Celsius, default is 71.1 (160F)
+  # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is hot water loop design exit temperature
+  # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Celsius, default is hot water loop design return temperature
   # @param rated_inlet_air_temperature [Double] rated inlet air temperature in degrees Celsius, default is 16.6 (62F)
   # @param rated_outlet_air_temperature [Double] rated outlet air temperature in degrees Celsius, default is 32.2 (90F)
   # @parama [Double] controller convergence tolerance
@@ -17,8 +17,8 @@ class Standard
                                 air_loop: nil,
                                 name: "Htg Coil",
                                 schedule: nil,
-                                rated_inlet_water_temperature: 82.2,
-                                rated_outlet_water_temperature: 71.1,
+                                rated_inlet_water_temperature: nil,
+                                rated_outlet_water_temperature: nil,
                                 rated_inlet_air_temperature: 16.6,
                                 rated_outlet_air_temperature: 32.2,
                                 controller_convergence_tolerance: 0.1)
@@ -57,17 +57,21 @@ class Standard
     end
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
-    # rated temperatures
+    # rated water temperatures, use hot water loop temperatures if defined
     if rated_inlet_water_temperature.nil?
-      htg_coil.setRatedInletWaterTemperature(82.2)
+      rated_inlet_water_temperature = hot_water_loop.sizingPlant.designLoopExitTemperature
+      htg_coil.setRatedInletWaterTemperature(rated_inlet_water_temperature)
     else
       htg_coil.setRatedInletWaterTemperature(rated_inlet_water_temperature)
     end
     if rated_outlet_water_temperature.nil?
-      htg_coil.setRatedOutletWaterTemperature(71.1)
+      rated_outlet_water_temperature = rated_inlet_water_temperature - hot_water_loop.sizingPlant.loopDesignTemperatureDifference
+      htg_coil.setRatedOutletWaterTemperature(rated_outlet_water_temperature)
     else
       htg_coil.setRatedOutletWaterTemperature(rated_outlet_water_temperature)
     end
+
+    # rated air temperatures
     if rated_inlet_air_temperature.nil?
       htg_coil.setRatedInletAirTemperature(16.6)
     else
