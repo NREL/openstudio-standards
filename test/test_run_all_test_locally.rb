@@ -39,7 +39,7 @@ class RunAllTests< Minitest::Test
   def test_all()
     @full_file_list = nil
     @test_list_file = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
-    @test_output =    File.join(File.dirname(__FILE__), 'circleci_tests_errors.json')
+    @test_output = File.join(File.dirname(__FILE__))
 
     if File.exist?(@test_list_file)
       # load test files from file.
@@ -51,28 +51,26 @@ class RunAllTests< Minitest::Test
       puts "Could not find list of files to test at #{@test_list_file}"
       return false
     end
-    processors_used = ((Parallel.processor_count) * 2 / 3 ).round
+    processors_used = ((Parallel.processor_count) - 6).round
     output = {}
     failures = []
     passed = []
     puts "Running #{@full_file_list.size} tests suites in parallel using #{processors_used} which is 2/3 of available cpus."
     puts "To increase or decrease the processors_used, please edit the test/test_run_all_locally.rb file."
-    Parallel.each(@full_file_list, in_threads: (processors_used)) do |test_file|
+    Parallel.each(@full_file_list, in_processes: (processors_used)) do |test_file|
       command = "ruby '#{test_file}'"
       stdout_str, stderr_str, status = Open3.capture3('bundle', 'exec', command)
+      test_result = false
       if status.success?
+        test_result = true
         puts "#{test_file} passed.".green
-        passed << {"test" => test_file, "output" => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
-        File.open(@test_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
       else
+        test_result = false
         puts "#{test_file} failed.".red
-        failures << {"test" => test_file, "output" => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
-        File.open(@test_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
       end
+      output = {"test" => test_file, "test_result" => test_result, "output" => {"status" => status, "std_out" => stdout_str, "std_err" => stderr_str}}
+      @test_file_output = File.join(File.dirname(__FILE__), "#{test_file}_test_output.json")
+      File.open(@test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
     end
-    output['failures'] = failures
-    output['passed'] = passed
-    File.open(@test_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
-    assert(failures.size == 0, "\n #{failures.size} tests did not pass \n #{failures.map do |test| test['test'] end} \n Please review the failed output log at #{@test_output}\n".red)
   end
 end
