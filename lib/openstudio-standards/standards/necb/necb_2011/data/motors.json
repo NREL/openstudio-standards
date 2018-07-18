@@ -28,6 +28,26 @@
           "notes": "To get total fan efficiency of 55% (0.55/0.65)"
         },
         {
+          "template": "NECB2011-VARIABLE-SUPPLY",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.8461,
+          "notes": "To get total fan efficiency of 55% (0.55/0.65)"
+        },
+        {
+          "template": "NECB2011-VARIABLE-RETURN",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.4615,
+          "notes": "To get total fan efficiency of 55% (0.30/0.65)"
+        },
+        {
           "template": "NECB2011",
           "number_of_poles": 4.0,
           "type": "Enclosed",

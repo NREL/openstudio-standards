@@ -57,6 +57,7 @@ necb/test_necb_chiller_rules.rb
 necb/test_necb_constructions_fdwr.rb
 necb/test_necb_coolingtower_rules.rb
 necb/test_necb_default_spacetypes.rb
+necb/test_necb_default_system_selection.rb
 necb/test_necb_fan_rules.rb
 necb/test_necb_heatpump_rules.rb
 necb/test_necb_hrv_rules.rb
@@ -73,3 +74,4 @@ necb/test_necb_hvac_system_4.rb
 necb/test_necb_hvac_system_6.rb
 necb/test_necb_hvac_system_7.rb
 necb/test_necb_pumppower_rules.rb
+

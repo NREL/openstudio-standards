@@ -36,18 +36,34 @@ class NECB2011
     end
   end
 
+  # generates full qaqc.json
   def init_qaqc(model)
     # load the qaqc.json files
     @qaqc_data = self.load_qaqc_database_new()
 
     # generate base qaqc hash
-    qaqc = create_base_qaqc(model)
+    qaqc = create_base_data(model)
     # performs the qaqc on the given base qaqc hash
     necb_qaqc(qaqc, model)
   end
 
-  # Generates the base qaqc hash.
-  def create_base_qaqc(model)    
+  # generates only qaqc component
+  def qaqc_only(model)
+    # load the qaqc.json files
+    @qaqc_data = self.load_qaqc_database_new()
+
+    # generate base qaqc hash
+    qaqc = create_base_data(model)
+    # performs the qaqc on the given base qaqc hash.
+    # using `qaqc.clone` as an argument to pass in a shallow copy, so that the argument passed can stay unmodified.
+    necb_qaqc_with_base = necb_qaqc(qaqc.clone, model)
+
+    # subract base data from qaqc
+    return (necb_qaqc_with_base.to_a - qaqc.to_a).to_h
+  end
+
+  # Generates the base data hash mainly used to perform qaqc.
+  def create_base_data(model)
     cli_path = OpenStudio.getOpenStudioCLI
     #construct command with local libs
     f = open("| \"#{cli_path}\" openstudio_version")
@@ -496,6 +512,8 @@ class NECB2011
           unless spaceinfo[:lighting_w_per_m2].nil?
             spaceinfo[:lighting_w_per_m2] = spaceinfo[:lighting_w_per_m2].round(3)
           end
+        else
+          error_warning << "space.spaceType.get.lights[0] is nil for Space:[#{space.name.get}] Space Type:[#{spaceinfo[:space_type_name]}]"
         end
         #spaceinfo[:electric_w_per_m2] = space.spaceType.get.electricEquipment[0].electricEquipmentDefinition.wattsperSpaceFloorArea.get.round(3) unless space.spaceType.get.electricEquipment[0].nil?
 
@@ -637,6 +655,7 @@ class NECB2011
       air_loop_info[:cooling_coils] ={}
       air_loop_info[:cooling_coils][:dx_single_speed]=[]
       air_loop_info[:cooling_coils][:dx_two_speed]=[]
+      air_loop_info[:cooling_coils][:coil_cooling_water]=[]
 
       #Heating Coil
       air_loop_info[:heating_coils] = {}
@@ -707,6 +726,16 @@ class NECB2011
           coil[:cop_high] = two_speed.getRatedHighSpeedCOP.get
           coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
+        end
+        if supply_comp.to_CoilCoolingWater.is_initialized
+          coil = {}
+          air_loop_info[:cooling_coils][:coil_cooling_water] << coil
+          coil_cooling_water = supply_comp.to_CoilCoolingWater.get
+          coil[:name] = coil_cooling_water.name.get
+          coil[:nominal_total_capacity_w] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
+          coil[:nominal_sensible_heat_ratio] = model.sqlFile().get().execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Sensible Heat Ratio' AND RowName='#{coil[:name].upcase}' ")
+          coil[:nominal_sensible_heat_ratio] = validate_optional(coil[:nominal_sensible_heat_ratio], model, -1.0)
         end
       end
       qaqc[:air_loops] << air_loop_info
@@ -839,9 +868,6 @@ class NECB2011
         qaqc[:end_uses]['heat_recovery_gj']
     ) / qaqc[:building][:conditioned_floor_area_m2]
 
-    # Perform qaqc
-    necb_qaqc(qaqc, model)
-
     return qaqc
   end
 
@@ -932,7 +958,11 @@ class NECB2011
         tolerance = get_qaqc_table("space_compliance")['tolerance'][compliance_var]
         # puts "\ncompliance_var:#{compliance_var}\n\tnecb_section_name:#{necb_section_name}\n\texp Value:#{qaqc_table[compliance_var]}\n"
         if compliance_var =="lighting_per_area_w_per_m2"
-          result_value = space[:lighting_w_per_m2]
+          unless space[:lighting_w_per_m2].nil?
+            result_value = space[:lighting_w_per_m2] * qaqc_table['lpd_ratio']
+          else
+            result_value = 0
+          end
         elsif compliance_var =="occupancy_per_area_people_per_m2"
           result_value = space[:occ_per_m2]
         elsif compliance_var =="occupancy_schedule"
@@ -941,7 +971,7 @@ class NECB2011
           result_value = space[:electric_w_per_m2]
         end
 
-        test_text = "[ENVELOPE] #{compliance_var}"
+        test_text = "[SPACE][#{space[:name]}]-[TYPE:][#{space_type}]-#{compliance_var}"
         next if result_value.nil?
         necb_section_test(
             qaqc,
@@ -1366,16 +1396,19 @@ class NECB2011
     qaqc[:air_loops].each do |air_loop_info|
       capacity = -1.0
       if !air_loop_info[:cooling_coils][:dx_single_speed][0].nil?
-        puts "air_loop_info[:heating_coils][:coil_heating_gas][0][:nominal_capacity]"
+        puts "capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]"
         capacity = air_loop_info[:cooling_coils][:dx_single_speed][0][:nominal_total_capacity_w]
       elsif !air_loop_info[:cooling_coils][:dx_two_speed][0].nil?
-        puts "capacity = air_loop_info[:heating_coils][:coil_heating_electric]"
+        puts "capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]"
         capacity = air_loop_info[:cooling_coils][:dx_two_speed][0][:cop_high]
+      elsif !air_loop_info[:cooling_coils][:coil_cooling_water][0].nil?
+        puts "capacity = air_loop_info[:cooling_coils][:coil_cooling_water][0][:nominal_total_capacity_w]"
+        capacity = air_loop_info[:cooling_coils][:coil_cooling_water][0][:nominal_total_capacity_w]
       end
       puts capacity
       if capacity == -1.0
         #This should not happen
-        qaqc[:errors] << "[necb_economizer_compliance] air_loop_info[:heating_coils] does not have a capacity or the type is not gas/electric/water for #{air_loop_info[:name]}"
+        qaqc[:errors] << "[necb_economizer_compliance] air_loop_info[:cooling_coils] for #{air_loop_info[:name]} does not have a capacity "
       else
         #check for correct economizer usage
         #puts "air_loop_info[:supply_fan][:max_air_flow_rate]: #{air_loop_info[:supply_fan][:max_air_flow_rate]}"

@@ -49,8 +49,9 @@ namespace :test do
   desc 'Manual Run All CircleCI tests'
   Rake::TestTask.new('circ-all-tests') do |t|
     array = full_file_list
-    t.libs << 'test'
-    t.test_files = array
+    puts full_file_list
+    #t.libs << 'test'
+    #t.test_files = array
   end
 
   # These tests only available in the CI environment

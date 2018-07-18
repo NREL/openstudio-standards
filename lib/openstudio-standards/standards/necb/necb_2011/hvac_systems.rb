@@ -39,6 +39,22 @@ class NECB2011
     # Determine the minimum capacity that requires an economizer
     minimum_capacity_btu_per_hr = 68_243 # NECB requires economizer for cooling cap > 20 kW
 
+    # puts air_loop_hvac.name.to_s
+    # Design Supply Air Flow Rate: This method below reads the value from the sql file.
+    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    min_dsafr_l_per_s = 1500
+    unless dsafr_m3_per_s.empty?
+      dsafr_l_per_s = dsafr_m3_per_s.get()*1000
+      if dsafr_l_per_s > min_dsafr_l_per_s
+        economizer_required = true
+        puts "economizer_required = true for #{air_loop_hvac.name} because dsafr_l_per_s(#{dsafr_l_per_s}) > 1500"
+        if is_dc
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s for data centers.")
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s.")
+        end
+      end
+    end
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
@@ -49,6 +65,7 @@ class NECB2011
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
+      puts "economizer_required = true for #{air_loop_hvac.name} because total_cooling_capacity_btu_per_hr(#{total_cooling_capacity_btu_per_hr}) >= #{minimum_capacity_btu_per_hr}"
       economizer_required = true
     else
       if is_dc
@@ -980,17 +997,22 @@ class NECB2011
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
-      template_mod += '-VARIABLE'
+      # Is this a return or supply fan
+      if fan.name.to_s.include?('Supply')
+        template_mod += '-VARIABLE-SUPPLY'
+      elsif fan.name.to_s.include?('Return')
+        template_mod += '-VARIABLE-RETURN'
+      end
       # 0.909 corrects for 10% over sizing implemented upstream
       # 0.7457 is to convert from bhp to kW
       fan_power_kw = 0.909 * 0.7457 * motor_bhp
       power_vs_flow_curve_name = if fan_power_kw >= 25.0
-                                   'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                                 elsif fan_power_kw >= 7.5 && fan_power_kw < 25
-                                   'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
-                                 else
-                                   'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
-                                 end
+                                 'VarVolFan-FCInletVanes-NECB2011-FPLR'
+                               elsif fan_power_kw >= 7.5 && fan_power_kw < 25
+                                 'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
+                               else
+                                 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
+                               end
       power_vs_flow_curve = model_add_curve(fan.model, power_vs_flow_curve_name)
       fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
       fan.setFanPowerCoefficient5(0.0)
@@ -1083,7 +1105,13 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(self.get_standards_constant('fan_variable_volume_pressure_rise_value'))
+    if(fan_variable_volume.name.to_s.include?('Supply'))
+      sfan_deltaP = self.get_standards_constant('supply_fan_variable_volume_pressure_rise_value')
+      fan_variable_volume.setPressureRise(sfan_deltaP)
+    elsif(fan_variable_volume.name.to_s.include?('Return'))
+      rfan_deltaP = self.get_standards_constant('return_fan_variable_volume_pressure_rise_value')
+      fan_variable_volume.setPressureRise(rfan_deltaP)
+    end
     return true
   end
 
@@ -2291,7 +2319,10 @@ class NECB2011
         sizing_system.setHeatingDesignAirFlowRate(0.0)
         sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
-        fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        supply_fan.setName('Sys6 Supply Fan')
+        return_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        return_fan.setName('Sys6 Return Fan')
 
         if heating_coil_type == 'Hot Water'
           htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
@@ -2310,17 +2341,14 @@ class NECB2011
 
         # Add the components to the air loop
         # in order from closest to zone to furthest from zone
-        # TODO: still need to define the return fan (tried to access the air loop "returnAirNode" without success)
-        # TODO: The OS sdk indicates that this keyword should be active but I get a "Not implemented" error when I
-        # TODO: try to access it through "air_loop.returnAirNode"
         supply_inlet_node = air_loop.supplyInletNode
         supply_outlet_node = air_loop.supplyOutletNode
-        fan.addToNode(supply_inlet_node)
+        supply_fan.addToNode(supply_inlet_node)
         htg_coil.addToNode(supply_inlet_node)
         clg_coil.addToNode(supply_inlet_node)
         oa_system.addToNode(supply_inlet_node)
-
-        # return_inlet_node = air_loop.returnAirNode
+        returnAirNode = oa_system.returnAirModelObject.get.to_Node.get
+        return_fan.addToNode(returnAirNode)
 
         # Add a setpoint manager to control the
         # supply air to a constant temperature
@@ -2331,8 +2359,6 @@ class NECB2011
         sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), sat_c)
         sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
         sat_stpt_manager.addToNode(supply_outlet_node)
-
-        # TO-do ask Kamel about zonal assignments per storey.
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
