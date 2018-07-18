@@ -15612,7 +15612,7 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Handle
-  Space Function Health care facility operating room 1, !- Name
+  Space Function Health care facility operating room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {94418fe8-4efe-4187-9041-64ec2782c6ea}, !- Group Rendering Name
