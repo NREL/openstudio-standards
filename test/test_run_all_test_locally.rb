@@ -43,7 +43,7 @@ class RunAllTests< Minitest::Test
 
     if File.exist?(@test_list_file)
       # load test files from file.
-      @full_file_list = File.readlines(@test_list_file)
+      @full_file_list = File.readlines(@test_list_file).shuffle
       # Select only .rb files that exist
       @full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
       @full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
@@ -51,19 +51,23 @@ class RunAllTests< Minitest::Test
       puts "Could not find list of files to test at #{@test_list_file}"
       return false
     end
+    processors_used = ((Parallel.processor_count) * 2 / 3 ).round
     output = {}
     failures = []
     passed = []
-    puts "Running #{@full_file_list.size} tests in parallel using #{Parallel.processor_count- 1} availble threads."
-    Parallel.each(@full_file_list, in_threads: (Parallel.processor_count-1)) do |test_file|
+    puts "Running #{@full_file_list.size} tests suites in parallel using #{processors_used} which is 2/3 of available cpus."
+    puts "To increase or decrease the processors_used, please edit the test/test_run_all_locally.rb file."
+    Parallel.each(@full_file_list, in_threads: (processors_used)) do |test_file|
       command = "ruby '#{test_file}'"
       stdout_str, stderr_str, status = Open3.capture3('bundle', 'exec', command)
       if status.success?
         puts "#{test_file} passed.".green
-        passed << {"test" => test_file, output => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
+        passed << {"test" => test_file, "output" => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
+        File.open(@test_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
       else
         puts "#{test_file} failed.".red
-        failures << {"test" => test_file, output => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
+        failures << {"test" => test_file, "output" => {"status"=> status, "std_out" => stdout_str, "std_err" => stderr_str}}
+        File.open(@test_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
       end
     end
     output['failures'] = failures
