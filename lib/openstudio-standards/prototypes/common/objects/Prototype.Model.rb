@@ -15,9 +15,9 @@ Standard.class_eval do
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
       climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
-    else
+    #else
       # this is required to be blank otherwise it may cause side effects.
-      epw_file = ''
+      #epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
     model.getThermostatSetpointDualSetpoints(&:remove)
@@ -1276,9 +1276,11 @@ Standard.class_eval do
 
     vars = []
     # vars << ['Heating Coil Gas Rate', 'detailed']
-    # vars << ['Zone Thermostat Air Temperature', 'detailed']
-    # vars << ['Zone Thermostat Heating Setpoint Temperature', 'detailed']
-    # vars << ['Zone Thermostat Cooling Setpoint Temperature', 'detailed']
+     vars << ['Zone Thermostat Air Temperature', 'detailed']
+     vars << ['Zone Thermostat Heating Setpoint Temperature', 'detailed']
+     vars << ['Zone Thermostat Cooling Setpoint Temperature', 'detailed']
+	 vars << ['Zone List Sensible Heating Rate','hourly']
+	 vars << ['Zone List Sensible Cooling Rate','hourly']
     # vars << ['Zone Air System Sensible Heating Rate', 'detailed']
     # vars << ['Zone Air System Sensible Cooling Rate', 'detailed']
     # vars << ['Fan Electric Power', 'detailed']

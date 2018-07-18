@@ -17,8 +17,8 @@ class TestAsm < CreateDEERPrototypeBuildingTest
                   # 'CEC T24-CEC13', 'CEC T24-CEC14', 'CEC T24-CEC15', 'CEC T24-CEC16']
 
   create_models = true
-  run_models = false
-  compare_results = false
+  run_models = true
+  compare_results = true
   
   debug = false
   

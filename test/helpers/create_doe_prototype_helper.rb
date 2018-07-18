@@ -55,15 +55,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       templates.each do |template|
         climate_zones.each do |climate_zone|
           #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
-          if climate_zone == 'NECB HDD Method'
+         
             epw_files.each do |epw_file|
               create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
             end 
-          else
-            #otherwise it will go as normal with the american method and wipe the epw_file variable. 
-            epw_file = ""
-            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
-          end
+
+          
           
           
         end
@@ -147,7 +144,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           "Chiller Electric Energy",
           "Cooling Tower Heat Transfer Rate",
           "Cooling Tower Fan Electric Power",
-          "Cooling Tower Fan Electric Energy"
+          "Cooling Tower Fan Electric Energy",
+		  "Zone List Sensible Cooling Rate",
+		  "Zone List Sensible Heating Rate"
         ]
         BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
               
@@ -181,9 +180,132 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         standard.model_run_simulation_and_log_errors(model, full_sim_dir)
 
       end           
-            
-                      
-            
+		#scale results
+        sql_path_string = "#{@test_dir}/#{model_name}/AnnualRun/EnergyPlus/eplusout.sql"
+        sql_path = OpenStudio::Path.new(sql_path_string)
+        sql_path_string_2 = "#{@test_dir}/#{model_name}/AnnualRun/run/eplusout.sql"
+        sql_path_2 = OpenStudio::Path.new(sql_path_string_2)        
+        sql = nil
+        if OpenStudio.exists(sql_path)
+          sql = OpenStudio::SqlFile.new(sql_path)
+        elsif OpenStudio.exists(sql_path_2)
+          sql = OpenStudio::SqlFile.new(sql_path_2)
+        else
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find sql file, could not compare results.")
+        end      
+
+    # get the weather file run period (as opposed to design day run period)
+    ann_env_pd = nil
+    sql.availableEnvPeriods.each do |env_pd|
+      env_type = sql.environmentType(env_pd)
+      if env_type.is_initialized
+        if env_type.get == OpenStudio::EnvironmentType.new("WeatherRunPeriod")
+          ann_env_pd = env_pd
+          break
+        end
+      end
+    end		
+
+	
+      # get desired variable
+      #key_value =  "Office WholeBuilding - Sm Office"
+	  key_value =  "Office WholeBuilding - Lg Office"
+      time_step = "Hourly"
+	  # get min number of hours
+      min_hours_data = 8760
+	  
+	  cool_keys =  sql.availableKeyValues(ann_env_pd, time_step, "Zone List Sensible Cooling Rate")
+	  
+	  heat_keys =  sql.availableKeyValues(ann_env_pd, time_step, "Zone List Sensible Heating Rate")
+	  
+      # gather time series data
+      time_series_data = {}
+	  cool_array = Array.new(8760, 0) 
+	  heat_array = Array.new(8760, 0) 
+	  
+	 heat_keys.each do |key|
+      if sql.timeSeries(ann_env_pd, time_step, "Zone List Sensible Heating Rate", key).is_initialized
+        time_series_data["#{key}_heat_load"] = sql.timeSeries(ann_env_pd, time_step, "Zone List Sensible Heating Rate",key ).get.values
+      end
+	   
+	$temp_array = []
+      #if time_series_data.is_initialized #checks to see if time_series exists
+      min_hours_data.times do |i|
+	     if time_series_data.has_key?("#{key}_heat_load")
+          a = time_series_data["#{key}_heat_load"][i]
+        else
+          a = nil
+        end
+			$temp_array  << a
+		end
+
+	heat_array = heat_array.zip($temp_array).map{ |x| x.reduce(:+) }
+    end	
+	 
+	 cool_keys.each do |key|
+      if sql.timeSeries(ann_env_pd, time_step, "Zone List Sensible Cooling Rate", key).is_initialized
+        time_series_data["#{key}_cool_load"] = sql.timeSeries(ann_env_pd, time_step, "Zone List Sensible Cooling Rate",key ).get.values
+      end	
+	  	$temp_array = []
+      #if time_series_data.is_initialized #checks to see if time_series exists
+      min_hours_data.times do |i|
+	     if time_series_data.has_key?("#{key}_cool_load")
+          a = time_series_data["#{key}_cool_load"][i]
+        else
+          a = nil
+        end
+			$temp_array  << a
+		end
+
+	cool_array = cool_array.zip($temp_array).map{ |x| x.reduce(:+) }
+	 end 
+	  array=[heat_array,cool_array]
+	  
+        # store min and max values
+        heat_load_cap = heat_array.max
+        cool_load_cap = cool_array.max
+		
+		$cool_cap = $cool_cap/0.000284345136261
+		$heat_cap = $heat_cap*293.07107
+		
+	  if $cool_cap == 0.0
+	    cool_scalar = 1.0
+	  else 
+		 cool_scalar = $cool_cap/cool_load_cap	    
+	  end
+	  
+	   if $heat_cap == 0.0
+	     heat_scalar = 1.0	   
+	   else 
+	     heat_scalar = $heat_cap/heat_load_cap
+	   end
+	   
+	   # setup csv
+      require 'csv'
+
+      # path for reports
+      # building = workspace.getObjectsByType("Building".to_IddObjectType)
+      # building_name = building.first.getString(0)
+      # runner.registerInitialCondition("Generating hourly load report for #{building_name}.")
+	  loads_path = 'C:/Users/Public/Documents'
+       report_path = "#{loads_path}/loads.csv"
+      FileUtils.rm_f(report_path) if File.exist?(report_path)
+      csv = CSV.open(report_path, 'w')
+	  #runner.registerInfo("Saving loads file to: #{report_path}")
+      # populate header row for CSV
+      csv << ['heat load','cool load']
+
+      # write to csv
+      min_hours_data.times do |i|
+        # setup data for row
+          col_c = heat_array[i]*heat_scalar
+          col_d = cool_array[i]*cool_scalar
+		  			  
+        # populate row
+        csv << [col_c,col_d]
+	end
+
+
       # Compare the results against the legacy idf files if requested
       if compare_results
             
@@ -211,6 +333,18 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         else
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find sql file, could not compare results.")
         end
+		
+		    # loads query
+            energy_query = "SELECT Value FROM TabularDataWithStrings WHERE (ReportName='AnnualBuildingUtilityPerformanceSummary') AND (ReportForString='Entire Facility') AND (TableName='End Uses') AND (ColumnName='#{fuel_type}') AND (RowName = '#{end_use}') AND (Units='#{units}')"
+
+            # Get the end use value
+            osm_val = sql.execAndReturnFirstDouble(energy_query)
+            if osm_val.is_initialized
+              osm_val = osm_val.get
+            else
+              OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "No sql value found for #{fuel_type}-#{end_use}")
+              osm_val = 0
+            end
 
         # Create a hash of hashes to store the results from each file
         results_hash = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
