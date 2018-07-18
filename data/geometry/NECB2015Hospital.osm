@@ -15469,7 +15469,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {fade844c-2c3f-4596-9528-b042cbd52ecd}, !- Handle
-  Space Function Corridor/Transition area - hospital-sch-B, !- Name
+  Space Function Hospital corr. >= 2.4m-sch-B, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15486,7 +15486,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {b86ff6bc-385d-491b-840b-b0ea5a99d740}, !- Handle
-  Space Function Dining area - bar lounge/leisure dining, !- Name
+  Space Function Dining - bar lounge/leisure, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15503,7 +15503,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {ac44b803-8109-4f4a-b78b-2971fa5df5fa}, !- Handle
-  Space Function Health care facility operating room, !- Name
+  Space Function Hospital - emergency,    !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15520,7 +15520,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {d291f56f-1e7f-4349-8d1f-ad5d0c9f0b01}, !- Handle
-  Space Function Health care facility nurses station, !- Name
+  Space Function Hospital - nurses' station, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15537,7 +15537,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {e62f389c-d8f1-4d44-90b5-0ceca7b96a1d}, !- Handle
-  Space Function Health care facility patient room, !- Name
+  Space Function Hospital - patient room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15554,7 +15554,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {9db96d94-59e4-42d6-9c14-c60de27a9a87}, !- Handle
-  Space Function Health care facility recovery room, !- Name
+  Space Function Hospital - recovery,     !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15571,7 +15571,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {488e1c28-650e-4e3b-b1c7-2079d717d88e}, !- Handle
-  Space Function Food preparation area,   !- Name
+  Space Function Food preparation,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15588,7 +15588,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {5022821c-9068-4c78-bdcf-429769b1ca1e}, !- Handle
-  Space Function Laboratory - other,      !- Name
+  Space Function Lab - research,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15605,7 +15605,24 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {6cbc2365-90f6-4e7b-8d91-7c8f85836328}, !- Handle
-  Space Function Office enclosed > 25 m2, !- Name
+  Space Function Office - enclosed,       !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Handle
+  Space Function Health care facility operating room 1, !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {94418fe8-4efe-4187-9041-64ec2782c6ea}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Health care facility operating room;    !- Standards Space Type
+
+OS:Rendering:Color,
+  {94418fe8-4efe-4187-9041-64ec2782c6ea}, !- Handle
+  Space Function Hospital - operating room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -15639,7 +15656,7 @@ OS:SpaceType,
 
 OS:Rendering:Color,
   {95844795-7fe2-4513-8ab3-da27894477b3}, !- Handle
-  Space Function Health care facility imaging room, !- Name
+  Space Function Hospital - radiology/imaging, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
