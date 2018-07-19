@@ -1,7 +1,7 @@
 
 OS:Version,
-  {c1f0f1b7-1f39-4daf-90d6-d5030d74a5fd}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {873d581b-129f-493b-8ff1-d36043cf03a4}, !- Handle
+  2.4.3;                                  !- Version Identifier
 
 OS:Site,
   {33a21b25-cf6d-422d-a9eb-73fff61b16f2}, !- Handle
@@ -30,7 +30,7 @@ OS:SubSurface,
   Skylights_r2c4,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -56,12 +56,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   29.135, -3, 6.096,                      !- X,Y,Z Vertex 1 {m}
   29.135, 0, 6.096,                       !- X,Y,Z Vertex 2 {m}
-  54.27, 0, 6.096,                        !- X,Y,Z Vertex 3 {m}
-  54.27, 29.27, 6.096,                    !- X,Y,Z Vertex 4 {m}
-  0, 29.27, 6.096,                        !- X,Y,Z Vertex 5 {m}
-  0, 0, 6.096,                            !- X,Y,Z Vertex 6 {m}
-  25.135, 0, 6.096,                       !- X,Y,Z Vertex 7 {m}
-  25.135, -3, 6.096;                      !- X,Y,Z Vertex 8 {m}
+  25.135, 0, 6.096,                       !- X,Y,Z Vertex 3 {m}
+  25.135, -3, 6.096;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Space,
   {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Handle
@@ -75,14 +71,16 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {abec4604-26f9-4acb-88ed-c56f81424c93}, !- Building Story Name
   {568ec955-d2bb-40f2-a59b-ef6a0b9c8499}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:SubSurface,
   {923ba796-4efe-41c0-aa81-5ad4e78c9894}, !- Handle
   Skylights_r4c1,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -99,7 +97,7 @@ OS:SubSurface,
   Skylights_r1c1,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -116,7 +114,7 @@ OS:SubSurface,
   Skylights_r2c1,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -313,7 +311,7 @@ OS:SubSurface,
   Skylights_r2c3,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -347,7 +345,7 @@ OS:SubSurface,
   Skylights_r4c3,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -513,7 +511,7 @@ OS:SubSurface,
   Skylights_r3c3,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -530,7 +528,7 @@ OS:SubSurface,
   Skylights_r3c1,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -605,7 +603,7 @@ OS:SubSurface,
   Skylights_r1c3,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -639,7 +637,7 @@ OS:SubSurface,
   Skylights_r3c2,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -656,7 +654,7 @@ OS:SubSurface,
   Skylights_r1c2,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -765,7 +763,7 @@ OS:SubSurface,
   Skylights_r3c4,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -857,7 +855,7 @@ OS:SubSurface,
   Skylights_r4c4,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -874,7 +872,7 @@ OS:SubSurface,
   Skylights_r2c2,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -940,14 +938,17 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   1,                                      !- Standards Number of Stories
   1,                                      !- Standards Number of Above Ground Stories
-  RetailStandalone;                       !- Standards Building Type
+  RetailStandalone,                       !- Standards Building Type
+  ,                                       !- Standards Number of Living Units
+  ,                                       !- Relocatable
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:SubSurface,
   {e39180f2-1ea3-4914-bc3d-5fb94a696f6b}, !- Handle
   Skylights_r1c4,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -1061,7 +1062,7 @@ OS:SubSurface,
   Skylights_r4c2,                         !- Name
   Skylight,                               !- Sub Surface Type
   ,                                       !- Construction Name
-  {007c4110-77bc-466f-ac9b-021f9a1a4397}, !- Surface Name
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
   ,                                       !- View Factor to Ground
   ,                                       !- Shading Control Name
@@ -1134,7 +1135,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
+  {0e180151-66e4-4db9-af2f-41ed820ed5bf}; !- Group Rendering Name
 
 OS:ThermalZone,
   {568ec955-d2bb-40f2-a59b-ef6a0b9c8499}, !- Handle
@@ -1155,7 +1156,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {1ffb14f8-fbf3-4cf2-a8bb-76659b9e2cbf}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1237,7 +1238,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6226d261-d24a-4b4c-948a-b62029eac10e}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1319,7 +1320,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {4054307e-5f8e-4342-a0a0-2fe8985f0a15}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1401,7 +1402,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {db124eb4-067e-41a9-a237-a90b087645fe}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1483,7 +1484,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {c933a857-425b-4f56-aaf6-e9702734e557}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -1680,4 +1681,63 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {4054307e-5f8e-4342-a0a0-2fe8985f0a15}, !- Handle
+  Rendering Color 1,                      !- Name
+  154,                                    !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6226d261-d24a-4b4c-948a-b62029eac10e}, !- Handle
+  Rendering Color 2,                      !- Name
+  95,                                     !- Rendering Red Value
+  158,                                    !- Rendering Green Value
+  160;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c933a857-425b-4f56-aaf6-e9702734e557}, !- Handle
+  Rendering Color 3,                      !- Name
+  230,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  250;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {1ffb14f8-fbf3-4cf2-a8bb-76659b9e2cbf}, !- Handle
+  Rendering Color 4,                      !- Name
+  123,                                    !- Rendering Red Value
+  104,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {db124eb4-067e-41a9-a237-a90b087645fe}, !- Handle
+  Rendering Color 5,                      !- Name
+  255,                                    !- Rendering Red Value
+  105,                                    !- Rendering Green Value
+  180;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {0e180151-66e4-4db9-af2f-41ed820ed5bf}, !- Handle
+  Rendering Color 6,                      !- Name
+  189,                                    !- Rendering Red Value
+  183,                                    !- Rendering Green Value
+  107;                                    !- Rendering Blue Value
+
+OS:Surface,
+  {f4711cc0-0cf3-4424-956b-e2079525ba5e}, !- Handle
+  Core_Retail_Roof 1,                     !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  54.27, 0, 6.096,                        !- X,Y,Z Vertex 1 {m}
+  54.27, 29.27, 6.096,                    !- X,Y,Z Vertex 2 {m}
+  0, 29.27, 6.096,                        !- X,Y,Z Vertex 3 {m}
+  0, 0, 6.096;                            !- X,Y,Z Vertex 4 {m}
 
