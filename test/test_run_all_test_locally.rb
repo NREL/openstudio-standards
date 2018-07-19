@@ -1,7 +1,12 @@
 require_relative './helpers/minitest_helper'
 require_relative './helpers/create_doe_prototype_helper'
+require 'fileutils'
 require 'parallel'
 require 'open3'
+
+TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
+TestOutputFolder = File.join(File.dirname(__FILE__), 'local_test_output')
+ProcessorsUsed = ( 4 ).round
 
 class String
   # colorization
@@ -34,43 +39,45 @@ class String
   end
 end
 
-class RunAllTests< Minitest::Test
 
+def write_results(result, test_file)
+  test_result = false
+  if result[2].success?
+    test_result = true
+    puts "PASSED: #{test_file}".green
+  else
+    test_result = false
+    output = {"test" => test_file, "test_result" => test_result, "output" => {"status" => result[2], "std_out" => result[0], "std_err" => result[1]}}
+    #puts output
+    test_file_output =  File.join(TestOutputFolder, "#{File.basename(test_file)}_test_output.json")
+    #puts test_file_output
+    File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
+    puts "FAILED: #{test_file_output}".red
+  end
+end
+
+class RunAllTests< Minitest::Test
   def test_all()
     @full_file_list = nil
-    @test_list_file = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
-    @test_output = File.join(File.dirname(__FILE__))
+    FileUtils.rm_rf(TestOutputFolder)
+    FileUtils.mkpath(TestOutputFolder)
 
-    if File.exist?(@test_list_file)
+    if File.exist?(TestListFile)
       # load test files from file.
-      @full_file_list = File.readlines(@test_list_file).shuffle
+      @full_file_list = File.readlines(TestListFile).shuffle
       # Select only .rb files that exist
       @full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
       @full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
     else
-      puts "Could not find list of files to test at #{@test_list_file}"
+      puts "Could not find list of files to test at #{TestListFile}"
       return false
     end
-    processors_used = ((Parallel.processor_count) - 6).round
-    output = {}
-    failures = []
-    passed = []
-    puts "Running #{@full_file_list.size} tests suites in parallel using #{processors_used} which is 2/3 of available cpus."
-    puts "To increase or decrease the processors_used, please edit the test/test_run_all_locally.rb file."
-    Parallel.each(@full_file_list, in_processes: (processors_used)) do |test_file|
-      command = "ruby '#{test_file}'"
-      stdout_str, stderr_str, status = Open3.capture3('bundle', 'exec', command)
-      test_result = false
-      if status.success?
-        test_result = true
-        puts "#{test_file} passed.".green
-      else
-        test_result = false
-        puts "#{test_file} failed.".red
-      end
-      output = {"test" => test_file, "test_result" => test_result, "output" => {"status" => status, "std_out" => stdout_str, "std_err" => stderr_str}}
-      @test_file_output = File.join(File.dirname(__FILE__), "#{test_file}_test_output.json")
-      File.open(@test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
+
+    puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} which is 2/3 of available cpus."
+    puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
+    Parallel.each(@full_file_list, in_threads: (ProcessorsUsed)) do |test_file|
+      write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
     end
   end
+
 end
