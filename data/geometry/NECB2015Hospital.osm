@@ -3728,7 +3728,7 @@ OS:Surface,
 OS:Space,
   {56f10cd4-f89c-4060-b7ff-f2ffeb2a5784}, !- Handle
   OR4_Flr_2,                              !- Name
-  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Space Type Name
+  {108202ea-320c-4e40-a1bc-4b376f626d67}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -3846,7 +3846,7 @@ OS:Surface,
 OS:Space,
   {6a1edc7d-07e3-4e23-a3dd-8df1bf3933ff}, !- Handle
   OR2_Mult5_Flr_2,                        !- Name
-  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Space Type Name
+  {108202ea-320c-4e40-a1bc-4b376f626d67}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4065,7 +4065,7 @@ OS:Surface,
 OS:Space,
   {50c2c50b-68d8-4a18-a0b9-9587b3ce6ce0}, !- Handle
   OR3_Flr_2,                              !- Name
-  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Space Type Name
+  {108202ea-320c-4e40-a1bc-4b376f626d67}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -4183,7 +4183,7 @@ OS:Surface,
 OS:Space,
   {2e542505-aee2-4690-adc4-c7c63197da6c}, !- Handle
   OR1_Flr_2,                              !- Name
-  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Space Type Name
+  {108202ea-320c-4e40-a1bc-4b376f626d67}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -15609,16 +15609,6 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {3a701532-6207-4ec0-87bd-bfedaaabcb1b}, !- Handle
-  Space Function Health care facility operating room, !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {94418fe8-4efe-4187-9041-64ec2782c6ea}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Health care facility operating room;    !- Standards Space Type
 
 OS:Rendering:Color,
   {94418fe8-4efe-4187-9041-64ec2782c6ea}, !- Handle
