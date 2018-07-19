@@ -39,6 +39,7 @@ doe_prototype/test_add_hvac_systems.rb
 necb/test_necb_airloop_sizing_parameters.rb
 necb/test_necb_bldg_full_service_restaurant.rb
 necb/test_necb_bldg_high_rise_apartment.rb
+necb/test_necb_bldg_hospital.rb
 necb/test_necb_bldg_large_hotel.rb
 necb/test_necb_bldg_large_office.rb
 necb/test_necb_bldg_medium_office.rb
