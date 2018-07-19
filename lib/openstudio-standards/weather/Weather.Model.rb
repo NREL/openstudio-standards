@@ -152,6 +152,11 @@ class Standard
       success = false
     end
 
+    # reset the climate zone defined in the model
+    climate_zones_object = model.getClimateZones
+    climate_zones_object.clear
+    climate_zones_object.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+
     return success
   end
 

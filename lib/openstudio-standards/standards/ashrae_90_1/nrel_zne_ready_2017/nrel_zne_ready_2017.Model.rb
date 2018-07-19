@@ -8,7 +8,7 @@ class NRELZNEReady2017 < ASHRAE901
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
 
     # Air Loop Controls
-    # model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
 
     # Plant Loop Controls
 

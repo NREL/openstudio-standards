@@ -54,7 +54,12 @@ class Standard
     clg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # rated temperatures
-    clg_coil.setDesignInletWaterTemperature(design_inlet_water_temperature) if !design_inlet_water_temperature.nil?
+    if !design_inlet_water_temperature.nil?
+      clg_coil.setDesignInletWaterTemperature(design_inlet_water_temperature)
+    else # use loop design exit temperature
+      design_inlet_water_temperature = chilled_water_loop.sizingPlant.designLoopExitTemperature
+      clg_coil.setDesignInletWaterTemperature(design_inlet_water_temperature)
+    end
     clg_coil.setDesignInletAirTemperature(design_inlet_air_temperature) if !design_inlet_air_temperature.nil?
     clg_coil.setDesignOutletAirTemperature(design_outlet_air_temperature) if !design_outlet_air_temperature.nil?
 

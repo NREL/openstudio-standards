@@ -1456,10 +1456,17 @@ class Standard
     end
 
     # create cooling coil
-    create_coil_cooling_water(model,
-                              chilled_water_loop,
-                              air_loop: air_loop,
-                              name: "#{air_loop.name} Clg Coil")
+    if chilled_water_loop.nil?
+      create_coil_cooling_dx_two_speed(model,
+                                       air_loop: air_loop,
+                                       name:"#{air_loop.name} 2spd DX Clg Coil",
+                                       type:'OS default')
+    else
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop: air_loop,
+                                name: "#{air_loop.name} Clg Coil")
+    end
 
     # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -4188,8 +4195,9 @@ class Standard
   # Get the existing chilled water loop in the model or add a new one if there isn't one already.
   #
   # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity, DistrictCooling, and HeatPump.
-  # @param air_cooled [Bool] if true, the chiller will be air-cooled. if false, it will be water-cooled.
-  def model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: true)
+  # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
+  def model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                          chilled_water_loop_cooling_type: "WaterCooled")
     # retrieve the existing chilled water loop or add a new one if necessary
     chilled_water_loop = nil
     if model.getPlantLoopByName('Chilled Water Loop').is_initialized
@@ -4208,7 +4216,7 @@ class Standard
                                                 chiller_compressor_type: 'Rotary Screw',
                                                 condenser_water_loop: condenser_water_loop)
       when 'Electricity'
-        if air_cooled
+        if chilled_water_loop_cooling_type == "AirCooled"
           chilled_water_loop = model_add_chw_loop(model,
                                                   chw_pumping_type: 'const_pri',
                                                   cooling_fuel: cool_fuel)
@@ -4323,6 +4331,10 @@ class Standard
   # @param hot_water_loop_type [String] Archetype for hot water loops
   #   HighTemperature (180F supply) (default) or LowTemperature (120F supply)
   #   only used if HVAC system has a hot water loop
+  # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
+  #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
+  # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
+  # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param fan_coil_ventilation [Bool] toggle whether to include outdoor air ventilation on zone fan coil units
   #   only used if HVAC system has four pipe fan coil units
   # @return [Bool] returns true if successful, false if not
@@ -4333,6 +4345,9 @@ class Standard
                             cool_fuel,
                             zones,
                             hot_water_loop_type: "HighTemperature",
+                            chilled_water_loop_cooling_type: "WaterCooled",
+                            air_loop_heating_type: "Water",
+                            air_loop_cooling_type: "Water",
                             fan_coil_ventilation: true)
 
     # don't do anything if there are no zones
@@ -4387,7 +4402,7 @@ class Standard
 
       case cool_fuel
       when 'DistrictCooling'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel)
         cooling_type = 'Water'
       else
         chilled_water_loop = nil
@@ -4442,7 +4457,8 @@ class Standard
 
       case cool_fuel
       when 'Electricity', 'DistrictCooling'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: true)
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
       when nil
         chilled_water_loop = nil
       end
@@ -4512,7 +4528,12 @@ class Standard
     when 'VAV Reheat'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                        hot_water_loop_type: hot_water_loop_type)
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       reheat_type = zone_heat_fuel == 'Electricity' ? 'Electricity' : 'Water'
       model_add_vav_reheat(model,
                            zones,
@@ -4524,7 +4545,12 @@ class Standard
                            fan_pressure_rise: 4.0)
 
     when 'VAV No Reheat'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       model_add_vav_reheat(model,
                            zones,
                            hot_water_loop: hot_water_loop,
@@ -4534,7 +4560,12 @@ class Standard
                            fan_pressure_rise: 4.0)
 
     when 'VAV Gas Reheat'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       model_add_vav_reheat(model,
                            zones,
                            reheat_type: 'NaturalGas',
@@ -4551,7 +4582,8 @@ class Standard
                            when 'Electricity'
                              nil
                            else
-                             model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+                             model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
                            end
       electric_reheat = zone_heat_fuel == 'Electricity' ? true : false
       model_add_pvav(model,
@@ -4563,7 +4595,7 @@ class Standard
     when 'PVAV PFP Boxes'
       chilled_water_loop = case cool_fuel
                            when 'DistrictCooling'
-                             model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+                             model_get_or_add_chilled_water_loop(model, cool_fuel)
                            end
       model_add_pvav_pfp_boxes(model,
                                zones,
@@ -4573,7 +4605,8 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'VAV PFP Boxes'
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                               chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
       model_add_pvav_pfp_boxes(model,
                                zones,
                                chilled_water_loop: chilled_water_loop,
@@ -4603,30 +4636,88 @@ class Standard
     when 'DOAS Cold Supply'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                        hot_water_loop_type: hot_water_loop_type)
-      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel, air_cooled: false)
+      chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                               chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
       model_add_doas_cold_supply(model,
                                  zones,
                                  hot_water_loop: hot_water_loop,
                                  chilled_water_loop: chilled_water_loop)
 
     when 'DOAS'
-      model_add_doas(model, zones)
-
-    when 'DOAS with DCV'
+      if air_loop_heating_type == "Water"
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        hot_water_loop = nil
+      end
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       model_add_doas(model,
                      zones,
+                     hot_water_loop: hot_water_loop,
+                     chilled_water_loop: chilled_water_loop)
+
+    when 'DOAS with DCV'
+      if air_loop_heating_type == "Water"
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        hot_water_loop = nil
+      end
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
+      model_add_doas(model,
+                     zones,
+                     hot_water_loop: hot_water_loop,
+                     chilled_water_loop: chilled_water_loop,
                      doas_type: "DOASVAV",
                      demand_control_ventilation: true)
 
     when 'DOAS with Economizing'
+      if air_loop_heating_type == "Water"
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        hot_water_loop = nil
+      end
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       model_add_doas(model,
                      zones,
+                     hot_water_loop: hot_water_loop,
+                     chilled_water_loop: chilled_water_loop,
                      doas_type: "DOASVAV",
                      econo_ctrl_mthd: "FixedDryBulb")
 
     when 'DOAS with DCV and Economizing'
+      if air_loop_heating_type == "Water"
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        hot_water_loop = nil
+      end
+      if air_loop_cooling_type == "Water"
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
       model_add_doas(model,
                      zones,
+                     hot_water_loop: hot_water_loop,
+                     chilled_water_loop: chilled_water_loop,
                      doas_type: "DOASVAV",
                      demand_control_ventilation: true,
                      econo_ctrl_mthd: "FixedDryBulb")
@@ -4662,7 +4753,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: air_loop_heating_type,
+                            air_loop_cooling_type: air_loop_cooling_type)
 
       model_add_hvac_system(model,
                             system_type = 'Water Source Heat Pumps',
@@ -4677,7 +4772,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: air_loop_heating_type,
+                            air_loop_cooling_type: air_loop_cooling_type)
 
       model_add_hvac_system(model,
                             system_type = 'Water Source Heat Pumps',
@@ -4707,7 +4806,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: air_loop_heating_type,
+                            air_loop_cooling_type: air_loop_cooling_type)
 
       model_add_hvac_system(model,
                             system_type = 'Ground Source Heat Pumps',
@@ -4722,7 +4825,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: air_loop_heating_type,
+                            air_loop_cooling_type: air_loop_cooling_type)
 
       model_add_hvac_system(model,
                             system_type = 'Ground Source Heat Pumps',
@@ -4737,7 +4844,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: "Water",
+                            air_loop_cooling_type: "Water")
 
       model_add_hvac_system(model,
                             system_type = 'Fan Coil',
@@ -4746,6 +4857,7 @@ class Standard
                             cool_fuel,
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
                             fan_coil_ventilation: false)
 
     when 'Fan Coil with DOAS with DCV'
@@ -4754,7 +4866,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: "Water",
+                            air_loop_cooling_type: "Water")
 
       model_add_hvac_system(model,
                             system_type = 'Fan Coil',
@@ -4763,6 +4879,7 @@ class Standard
                             cool_fuel,
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
                             fan_coil_ventilation: false)
 
     when 'Fan Coil with ERVs'
@@ -4780,6 +4897,7 @@ class Standard
                             cool_fuel,
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
                             fan_coil_ventilation: false)
 
     when  'VRF with DOAS'
@@ -4788,7 +4906,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: "DX",
+                            air_loop_cooling_type: "DX")
 
       model_add_hvac_system(model,
                             system_type = 'VRF',
@@ -4803,7 +4925,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: "DX",
+                            air_loop_cooling_type: "DX")
 
       model_add_hvac_system(model,
                             system_type = 'VRF',
