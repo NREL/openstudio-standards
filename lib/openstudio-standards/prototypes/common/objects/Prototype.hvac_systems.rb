@@ -6444,7 +6444,7 @@ class Standard
 
   # This method will add an swh water fixture to the model for the space.
   # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def model_add_swh_end_uses_by_space_no_building_type(model, building_type, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
+  def model_add_swh_end_uses_by_space_no_building_type(model, space, space_peakflow, tanktemp, climate_zone, swh_loop, is_flow_per_area = true)
     # find the specific space_type properties from standard.json
     search_criteria = {
         'template' => template,

@@ -23,16 +23,14 @@ class NECB2011
                                          shw_sizing['parasitic_loss'],
                                          nil)
 
-      shw_sizing['spaces_w_dhw'].sort.each do |space|
+      shw_sizing['spaces_w_dhw'].sort.each_with_index do |space, index|
 
-        lookupname = model_get_lookup_name(building_type)
-
-        model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
-                                        climate_zone,
-                                        main_swh_loop,
-                                        space.spaceType.get.name,
-                                        space.name,
-                                        space.multiplier)
+        model_add_swh_end_uses_by_space_no_building_type(model,
+                                                         space,
+                                                         shw_sizing['space_peak_flows'][index],
+                                                         shw_sizing['tank_temps'][index],
+                                                         climate_zone,
+                                                         main_swh_loop)
       end
 
       # Add the main service water loop
@@ -302,6 +300,7 @@ class NECB2011
   def auto_size_shw_capacity(model, climate_zone, epw_file)
     peak_flow_rate = 0
     shw_space_types = []
+    space_peak_flows = []
     water_use = 0
     weekly_peak_flow = {
         'Default|Wkdy' => Array.new(24,0),
@@ -341,6 +340,7 @@ class NECB2011
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space
       space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
+      space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building
       total_peak_flow_rate += space_peak_flow
       # Get the tank temperature for the space.  This should olways be 60 C but I added this part in case something changes in the future.
@@ -444,7 +444,9 @@ class NECB2011
         "tank_capacity_SI" => tank_capacity_SI,
         "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
         "parasitic_loss" => parasitic_loss,
-        "spaces_w_dhw" => shw_spaces
+        "spaces_w_dhw" => shw_spaces,
+        "space_peak_flows" => space_peak_flows,
+        "tank_temps" => tank_temperature
     }
     return tank_param
   end
