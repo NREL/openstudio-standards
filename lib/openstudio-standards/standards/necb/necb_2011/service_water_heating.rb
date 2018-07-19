@@ -23,25 +23,16 @@ class NECB2011
                                          shw_sizing['parasitic_loss'],
                                          nil)
 
-      tank_param = {
-          "tank_volume_SI" => tank_volume_SI,
-          "tank_capacity_SI" => tank_capacity_SI,
-          "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
-          "parasitic_loss" => parasitic_loss,
-          "spaces_w_dhw" => shw_spaces
-      }
-      shw_sizing.sort.each do |space|
-        space_multiplier = nil
+      shw_sizing['spaces_w_dhw'].sort.each do |space|
 
-        # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
-        space_multiplier = 1
+        lookupname = model_get_lookup_name(building_type)
 
         model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
                                         climate_zone,
                                         main_swh_loop,
-                                        space_type_name,
-                                        space_name,
-                                        space_multiplier)
+                                        space.spaceType.get.name,
+                                        space.name,
+                                        space.multiplier)
       end
 
       # Add the main service water loop
@@ -349,7 +340,7 @@ class NECB2011
       next if data.nil?
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space
-      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)
+      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
       # Add the peak shw flow rate for the space to the total for the entire building
       total_peak_flow_rate += space_peak_flow
       # Get the tank temperature for the space.  This should olways be 60 C but I added this part in case something changes in the future.
