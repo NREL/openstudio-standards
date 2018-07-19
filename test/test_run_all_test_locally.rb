@@ -73,7 +73,7 @@ class RunAllTests< Minitest::Test
       return false
     end
 
-    puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} which is 2/3 of available cpus."
+    puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} of available cpus."
     puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
     Parallel.each(@full_file_list, in_threads: (ProcessorsUsed)) do |test_file|
       write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
