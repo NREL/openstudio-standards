@@ -1,166 +1,28 @@
 class NECB2011
   def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
-# Chris Start
+
+    # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model, climate_zone, epw_file)
     pump_defaults = auto_size_shw_pump(model)
-# Chris End
-    # Add the main service water heating loop, if specified
-    unless prototype_input['main_water_heater_volume'].nil?
 
+    # Add the main service water heating loop
 
-      swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
-      main_swh_loop = model_add_swh_loop(model,
-                                         'Main Service Water Loop',
-                                         nil,
-                                         55,
-                                         pump_defaults['head'],
-                                         pump_defaults['motor_efficiency'],
-                                         shw_sizing['tank_capacity_SI'],
-                                         shw_sizing['tank_volume_SI'],
-                                         swh_fueltype,
-                                         shw_sizing['parasitic_loss'],
-                                         nil)
+    main_swh_loop = model_add_swh_loop(model,
+                                       'Main Service Water Loop',
+                                       nil,
+                                       55,
+                                       pump_defaults[:head],
+                                       pump_defaults[:motor_efficiency],
+                                       shw_sizing['tank_capacity_SI'],
+                                       shw_sizing['tank_volume_SI'],
+                                       swh_fueltype,
+                                       shw_sizing['parasitic_loss'],
+                                       nil)
 
-      shw_sizing['spaces_w_dhw'].sort.each_with_index do |space, index|
-        # test start
-
-        # Added this to prevent double counting of zone multipliers.. space multipliers are retrieved from the thermal zone
-        # and included in the space flow rate.
-        space_multiplier = 1
-
-        model_add_swh_end_uses_by_space_no_building_type(model,
-                                                         space,
-                                                         shw_sizing['space_peak_flows_SI'][index],
-                                                         shw_sizing['tank_temps'][index],
-                                                         climate_zone,
-                                                         main_swh_loop)
-      end
-
-      # Add the main service water loop
-      unless building_type == 'RetailStripmall' && ( template != 'NECB2011' &&  template != 'NECB2015')
-        main_swh_loop = model_add_swh_loop(model,
-                                           'Main Service Water Loop',
-                                           nil,
-                                           OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
-                                           prototype_input['main_service_water_pump_head'],
-                                           prototype_input['main_service_water_pump_motor_efficiency'],
-                                           OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                           OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
-                                           swh_fueltype,
-                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                           building_type)
-      end
-
-      # Attach the end uses if specified in prototype inputs
-      # TODO remove special logic for large office SWH end uses
-      # TODO remove special logic for stripmall SWH end uses and service water loops
-      # TODO remove special logic for large hotel SWH end uses
-
-      if prototype_input['main_service_water_peak_flowrate']
-
-        # Attaches the end uses if specified as a lump value in the prototype_input
-        model_add_swh_end_uses(model,
-                               'Main',
-                               main_swh_loop,
-                               OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                               prototype_input['main_service_water_flowrate_schedule'],
-                               OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                               nil,
-                               building_type)
-
-      else
-
-        # Attaches the end uses if specified by space type
-        space_type_map = @space_type_map
-        building_type = 'Space Function'
-        puts space_type_map
-
-        space_type_map.sort.each do |space_type_name, space_names|
-          search_criteria = {
-            'template' => template,
-            'building_type' => model_get_lookup_name(building_type),
-            'space_type' => space_type_name
-          }
-          data = model_find_object(standards_data['space_types'], search_criteria)
-
-          # Skip space types with no data
-          next if data.nil?
-
-          # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-
-          # Add a service water use for each space
-
-          space_names.sort.each do |space_name|
-            space = model.getSpaceByName(space_name).get
-            space_multiplier = nil
-
-            # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
-            space_multiplier = 1
-
-            model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
-                                            climate_zone,
-                                            main_swh_loop,
-                                            space_type_name,
-                                            space_name,
-                                            space_multiplier)
-          end
-        end
-      end
-    end
-
-    # Add the booster water heater, if specified
-    unless prototype_input['booster_water_heater_volume'].nil?
-
-      # Add the booster water loop
-      swh_booster_loop = model_add_swh_booster(model,
-                                               main_swh_loop,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
-                                               prototype_input['booster_water_heater_fuel'],
-                                               OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
-                                               0,
-                                               nil,
-                                               building_type)
-
-      # Attach the end uses
-      model_add_booster_swh_end_uses(model,
-                                     swh_booster_loop,
-                                     OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                                     prototype_input['booster_service_water_flowrate_schedule'],
-                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get,
-                                     building_type)
-
-    end
-
-    # Add the laundry water heater, if specified
-    unless prototype_input['laundry_water_heater_volume'].nil?
-
-      # Add the laundry service water heating loop
-      laundry_swh_loop = model_add_swh_loop(model,
-                                            'Laundry Service Water Loop',
-                                            nil,
-                                            OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
-                                            prototype_input['laundry_service_water_pump_head'],
-                                            prototype_input['laundry_service_water_pump_motor_efficiency'],
-                                            OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                            OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
-                                            prototype_input['laundry_water_heater_fuel'],
-                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                            building_type)
-
-      # Attach the end uses if specified in prototype inputs
-      model_add_swh_end_uses(model,
-                             'Laundry',
-                             laundry_swh_loop,
-                             OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                             prototype_input['laundry_service_water_flowrate_schedule'],
-                             OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                             nil,
-                             building_type)
-
-    end
+    shw_sizing['spaces_w_dhw'].sort.each_with_index {|space, index| model_add_swh_end_uses_by_spaceonly(model, space, shw_sizing['space_peak_flows_SI'][index], shw_sizing['tank_temps'][index], shw_sizing['shw_schedule_names'][index], main_swh_loop)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
 
@@ -321,6 +183,7 @@ class NECB2011
     total_peak_flow_rate = 0
     tank_temperature = []
     shw_spaces = []
+    shw_sched_names = []
     # First go through all the spaces in the building and determine and determine their shw requirements
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
@@ -354,6 +217,8 @@ class NECB2011
       else
         tank_temperature << data['service_water_heating_target_temperature']
       end
+      # Get the shw schedule
+      shw_sched_names << data['service_water_heating_schedule']
       # The following gets the water use schedule for space and applies it to the peak flow rate for the space.  This
       # creates an array containing the hourly shw consumption for the space for each day type (Weekday/default, Saturday,
       # Sunday/Holiday).  The hourly shw consumption for each space is added to the array ultimately producing an array
@@ -455,7 +320,8 @@ class NECB2011
         "parasitic_loss" => parasitic_loss,
         "spaces_w_dhw" => shw_spaces,
         "space_peak_flows_SI" => space_peak_flows_SI,
-        "tank_temps" => tank_temperature
+        "tank_temps" => tank_temperature,
+        "shw_schedule_names" => shw_sched_names
     }
     return tank_param
   end

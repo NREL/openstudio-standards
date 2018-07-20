@@ -6444,48 +6444,12 @@ class Standard
 
   # This method will add an swh water fixture to the model for the space.
   # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def model_add_swh_end_uses_by_space_no_building_type(model, space, space_peakflow, tanktemp, climate_zone, swh_loop, is_flow_per_area = true)
-=begin
-    # find the specific space_type properties from standard.json
-    search_criteria = {
-        'template' => template,
-        'building_type' => building_type,
-        'space_type' => space_type_name
-    }
-    data = model_find_object(standards_data['space_types'], search_criteria)
-    if data.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
-      return nil
-    end
-    space = model.getSpaceByName(space_name)
-    space = space.get
-    space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-    if space_multiplier.nil?
-      space_multiplier = 1
-    end
-
-    # If there is no service hot water load.. Don't bother adding anything.
-    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
-        data['service_water_heating_peak_flow_rate'].to_f == 0.0
-      return nil
-    end
-=end
-
+  def model_add_swh_end_uses_by_spaceonly(model, space, space_peakflow, tanktemp, schedname, swh_loop)
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
 
     # Water fixture definition
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-=begin
-    rated_flow_rate_per_area = data['service_water_heating_peak_flow_per_area'].to_f # gal/h.ft2
-    rated_flow_rate_gal_per_hour = if is_flow_per_area
-                                     rated_flow_rate_per_area * space_area * space_multiplier # gal/h
-                                   else
-                                     data['service_water_heating_peak_flow_rate'].to_f
-                                   end
-    rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour / 60 # gal/h to gal/min
-    rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min, 'gal/min', 'm^3/s').get
-=end
 
     # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
     # water_use_sensible_frac_sch.setValue(0.2)
@@ -6499,18 +6463,18 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(space_peakflow)
-    water_fixture_def.setName("#{space_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture_def.setName("#{space.name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
-    mixed_water_temp_c = data['service_water_heating_target_temperature']
+    mixed_water_temp_c = tanktemp
     mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), mixed_water_temp_c)
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = model_add_schedule(model, data['service_water_heating_schedule'])
+    schedule = model_add_schedule(model, schedname)
     water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture.setName("#{space.name.to_s.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     swh_connection.addWaterUseEquipment(water_fixture)
     # Assign water fixture to a space
     water_fixture.setSpace(space) if model_attach_water_fixtures_to_spaces?(model)
