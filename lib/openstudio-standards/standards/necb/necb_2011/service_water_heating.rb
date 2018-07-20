@@ -24,10 +24,15 @@ class NECB2011
                                          nil)
 
       shw_sizing['spaces_w_dhw'].sort.each_with_index do |space, index|
+        # test start
+
+        # Added this to prevent double counting of zone multipliers.. space multipliers are retrieved from the thermal zone
+        # and included in the space flow rate.
+        space_multiplier = 1
 
         model_add_swh_end_uses_by_space_no_building_type(model,
                                                          space,
-                                                         shw_sizing['space_peak_flows'][index],
+                                                         shw_sizing['space_peak_flows_SI'][index],
                                                          shw_sizing['tank_temps'][index],
                                                          climate_zone,
                                                          main_swh_loop)
@@ -325,7 +330,7 @@ class NECB2011
       standards_data['space_types']['table'].each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
           # If there is no service hot water load.. Don't bother adding anything.
-          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 && space_type['service_water_heating_schedule'].nil?
+          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
             next
           else
             # If there is a service hot water load collect the space information
@@ -338,12 +343,12 @@ class NECB2011
       # Skip space types with no data
       next if data.nil?
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-      # Calculate the peak shw flow rate for the space
+      # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
       space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
       space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building
       total_peak_flow_rate += space_peak_flow
-      # Get the tank temperature for the space.  This should olways be 60 C but I added this part in case something changes in the future.
+      # Get the tank temperature for the space.  This should always be 60 C but I added this part in case something changes in the future.
       if data['service_water_heating_target_temperature'].nil? || (data['service_water_heating_target_temperature'] <= 16)
         tank_temperature << 60
       else
@@ -417,16 +422,18 @@ class NECB2011
         end
       end
     end
-    # The shw tank is sized so that it can fulfill the hour with the highest shw needs
-    tank_volume = peak_flow_sched * 60
+    # The shw tank is sized so that it can fulfill the hour with the highest shw needs.  Since the flow is in US Gal/hr
+    # No conversion is necessary.
+    tank_volume = peak_flow_sched
     # Interperite the fractional shw schedules as being the fraction of the hour that the maximum shw rate is used and determine
     # what this fraction is for the entire building.
     peak_time_fraction = 1 - (peak_flow_sched / total_peak_flow_rate)
     # Assume the shw tank needs some minimum amount of time to recover (avoids requiring a ridiculously high capacity).
     # If the recovery time is to short then the tank needs to hold enough water to service the peak shw hour and the one
-    # after.  Then give the tank the entire hour to heat up again.
+    # after.  Then give the tank the entire hour to heat up again.  Note again that since peak flows are per hour, and
+    # we are only looking at an hour, no conversion is necessary.
     if peak_time_fraction <= 0.2
-      tank_volume += (next_hour_flow * 60)
+      tank_volume += (next_hour_flow)
       peak_time_fraction = 1
     end
     tank_volume_SI = OpenStudio.convert(tank_volume, 'gal', 'm^3').get
@@ -439,13 +446,15 @@ class NECB2011
     room_temp = OpenStudio.convert(70, 'F', 'C').get
     u = 0.45
     parasitic_loss = u*tank_area*(tank_temperature.max - room_temp)
+    space_peak_flows_SI = []
+    space_peak_flows.each { |space_peak_flow| space_peak_flows_SI << OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get }
     tank_param = {
         "tank_volume_SI" => tank_volume_SI,
         "tank_capacity_SI" => tank_capacity_SI,
-        "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/min', 'm^3/s').get,
+        "loop_peak_flow_rate_SI" => OpenStudio.convert(total_peak_flow_rate, 'gal/hr', 'm^3/s').get,
         "parasitic_loss" => parasitic_loss,
         "spaces_w_dhw" => shw_spaces,
-        "space_peak_flows" => space_peak_flows,
+        "space_peak_flows_SI" => space_peak_flows_SI,
         "tank_temps" => tank_temperature
     }
     return tank_param
@@ -478,7 +487,7 @@ class NECB2011
       standards_data['space_types']['table'].each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
           # If there is no service hot water load.. Don't bother adding anything.
-          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 && space_type['service_water_heating_schedule'].nil?
+          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
             next
           else
             # If there is a service hot water load collect the space information
@@ -492,7 +501,7 @@ class NECB2011
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space
       space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)
-      shw_space_info['peak_flow'] = OpenStudio.convert(space_peak_flow, 'gal/min', 'm^3/s').get
+      shw_space_info['peak_flow'] = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
       space_min_z = 100000000
       min_surface = nil
       space_surfaces = space.surfaces
