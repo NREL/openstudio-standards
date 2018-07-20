@@ -1,7 +1,7 @@
 
 OS:Version,
-  {9f7dded5-db8e-4929-898a-97c49e1cc20f}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {ba3b4404-fe18-4fc4-99d5-3db687a54ced}, !- Handle
+  2.4.3;                                  !- Version Identifier
 
 OS:Site,
   {c57bbf3e-5555-4e8f-a064-f03eb5a0e42f}, !- Handle
@@ -62,7 +62,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {3962bcf1-689d-4c15-9429-ae054f9de3bc}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Connection,
   {4c0e5a9e-286b-489f-b267-6f34abc63eb3}, !- Handle
@@ -84,7 +86,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {2053599b-ba44-402f-8dd3-3ba65307fe07}, !- Building Story Name
   {d9659683-812f-41df-a639-4493cfdad3d5}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:ConvergenceLimits,
   {70f72b8f-0f12-4d6c-9b47-243771b0e570}, !- Handle
@@ -189,7 +193,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {0e4d49ab-bfaf-4502-af98-19b90ca05d17}, !- Building Story Name
   {bde95b99-6e90-42d2-bc1a-2ca18a34f8f3}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Connection,
   {f7376c8c-aa24-405d-a5e4-3c56fed1b56e}, !- Handle
@@ -211,7 +217,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {d00177cc-b69d-4faa-a280-f42dabadb1d0}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {3d0a89d0-0a71-4089-9adc-9c61c7036422}, !- Handle
@@ -263,7 +271,10 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   7,                                      !- Standards Number of Stories
   6,                                      !- Standards Number of Above Ground Stories
-  LargeHotel;                             !- Standards Building Type
+  LargeHotel,                             !- Standards Building Type
+  ,                                       !- Standards Number of Living Units
+  ,                                       !- Relocatable
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Connection,
   {3090efff-d176-4979-b979-fc01b07b5836}, !- Handle
@@ -285,7 +296,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {2053599b-ba44-402f-8dd3-3ba65307fe07}, !- Building Story Name
   {b61827a4-c99c-4daa-824f-4129d5374d19}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {3478624a-5157-4245-b315-fbf2db6bd787}, !- Handle
@@ -332,8 +345,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {727f620c-8075-4586-8703-48bde7f60f5c}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {82d225ea-f9f0-4298-b589-b6cb5b1f8282}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -363,7 +376,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {8877419b-d115-4293-8da7-69ea34d09c75}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {228be3ab-60a2-4075-a255-0ca7e031bd61}, !- Handle
@@ -536,7 +551,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {7eacd1e3-50f5-4c8b-9bd9-e5923862f51c}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {13861e28-81d3-478c-8e2b-4003e6993767}, !- Handle
@@ -575,7 +592,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {b3482231-5bf5-41ad-8285-61466c4d0b8c}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Connection,
   {c2d24356-613e-45d4-82e8-c890f4fe014c}, !- Handle
@@ -597,7 +616,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {0e4d49ab-bfaf-4502-af98-19b90ca05d17}, !- Building Story Name
   {248d8ce1-b582-476b-952b-8abb6ce113c4}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {c1a54545-58a4-4b92-ba32-c05141dc81ef}, !- Handle
@@ -787,7 +808,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Building Story Name
   {f98f673c-166c-46ce-8d94-e89025806e09}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {ee353920-82ca-4e34-ba33-e311074ca69f}, !- Handle
@@ -795,8 +818,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {53c7fa8b-d0a9-4d59-9f72-ab5b6de28e90}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {f202c5d1-e9da-449b-8c2b-152d6fa4c82d}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -970,8 +993,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {727f620c-8075-4586-8703-48bde7f60f5c}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {ee353920-82ca-4e34-ba33-e311074ca69f}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -2201,8 +2224,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {cb2c0215-3476-427c-ac46-083a99e88a0b}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {bfe2a090-b0b4-4a6f-b5e2-7e3f5027584b}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -3684,8 +3707,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {735c6fa8-525c-45a3-82b3-b38ec3245a8f}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {e677e047-3a59-4936-aa15-82a883a8aa12}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -4143,7 +4166,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
+  {3bf27698-2fd0-46d2-a276-295d9505dcba}; !- Group Rendering Name
 
 OS:BuildingStory,
   {0e4d49ab-bfaf-4502-af98-19b90ca05d17}, !- Handle
@@ -4152,7 +4175,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
+  {3c88cb01-a78f-432e-80d1-8726d67dcf96}; !- Group Rendering Name
 
 OS:BuildingStory,
   {2053599b-ba44-402f-8dd3-3ba65307fe07}, !- Handle
@@ -4161,7 +4184,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
+  {ae420be9-0e11-4b5c-9511-8bc14a890374}; !- Group Rendering Name
 
 OS:BuildingStory,
   {f4639d5b-3224-4500-bf20-cb7454712ad8}, !- Handle
@@ -4170,7 +4193,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
+  {5c58e0ba-b3ff-4070-be7b-e147745c660b}; !- Group Rendering Name
 
 OS:ThermalZone,
   {d9659683-812f-41df-a639-4493cfdad3d5}, !- Handle
@@ -4191,7 +4214,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {150e8f3d-fff3-444a-9ad3-6435ae7b0e70}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4273,7 +4296,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {02c23925-8396-45b7-a2f8-f4f336a365a5}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4355,7 +4378,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {e9d2e1d5-2716-40d9-9d74-f28c709c94bd}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4437,7 +4460,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {753ea762-d8d7-4a20-94f1-053eb1be337b}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4519,7 +4542,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {50683627-b265-4ecf-8107-735e38c64dc4}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4601,7 +4624,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f106145b-561c-4bbf-b675-52e8e69e09c9}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4683,7 +4706,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {a355f92a-1a0b-4de9-84de-b47530863135}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4765,7 +4788,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {b9177403-8c8e-4a32-9340-b531360d5d9d}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4847,7 +4870,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {1bed43ec-9dc9-4f95-9fba-1c3dd4753e08}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -4929,7 +4952,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {3b3f5b27-6ae6-461e-a9a9-875a645d62fd}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5011,7 +5034,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {40aab1ea-67be-417b-9a20-fcdfd4f4e456}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5093,7 +5116,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {89919c84-b4e3-4811-851e-092f0ba320bf}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5175,7 +5198,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ef92e31d-49a9-4c1b-bf72-5ca92a0502fc}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5257,7 +5280,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f51038f1-074e-400f-a8d2-5764749ec1dd}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5339,7 +5362,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f3d7a0c8-e977-4ec0-ad91-be980651415d}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5421,7 +5444,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {33120b3f-d29e-4504-ad91-4ebdea11f99f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5503,7 +5526,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6e17495b-6c27-4b5c-978d-ff7cec8a3b7f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5585,7 +5608,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6014ce47-777d-44ce-aea2-d4239751b042}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5667,7 +5690,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {c6633965-caae-4284-89a0-3bf21ac123dd}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5749,7 +5772,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {0b9264ba-61b1-4056-a4fb-3b0444eabe75}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5831,7 +5854,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {51c454e9-996a-461f-85a0-47fe723b7740}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5913,7 +5936,7 @@ OS:ThermalZone,
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {1e97b382-e09b-4fa5-9416-b030ad3883dc}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
 
@@ -5982,10 +6005,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0de59da8-57c0-4247-98db-94f06e2019a8}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {019125a0-77bb-419d-a7f6-68140c061ebb}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   4.572, 9.449, 19.2,                     !- X,Y,Z Vertex 1 {m}
@@ -5999,10 +6022,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {727f620c-8075-4586-8703-48bde7f60f5c}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {42308ad9-fe2e-428f-a256-cdbd926bb164}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   4.572, 22.86, 19.2,                     !- X,Y,Z Vertex 1 {m}
@@ -6016,10 +6039,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {1c9aeaea-a105-4381-890b-4d9f9ad931ee}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   79.858, 16.154, 10.056,                 !- X,Y,Z Vertex 1 {m}
@@ -6033,10 +6056,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {1c9aeaea-a105-4381-890b-4d9f9ad931ee}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   10.363, 12.497, 10.056,                 !- X,Y,Z Vertex 1 {m}
@@ -6050,10 +6073,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {727f620c-8075-4586-8703-48bde7f60f5c}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   11.278, 9.449, 19.2,                    !- X,Y,Z Vertex 1 {m}
@@ -6067,10 +6090,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {727f620c-8075-4586-8703-48bde7f60f5c}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {74a82d58-f92a-4905-a14a-b51a33462d6d}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   79.553, 12.497, 19.2,                   !- X,Y,Z Vertex 1 {m}
@@ -6348,4 +6371,186 @@ OS:Rendering:Color,
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f51038f1-074e-400f-a8d2-5764749ec1dd}, !- Handle
+  Rendering Color 1,                      !- Name
+  165,                                    !- Rendering Red Value
+  42,                                     !- Rendering Green Value
+  42;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f3d7a0c8-e977-4ec0-ad91-be980651415d}, !- Handle
+  Rendering Color 2,                      !- Name
+  154,                                    !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {33120b3f-d29e-4504-ad91-4ebdea11f99f}, !- Handle
+  Rendering Color 3,                      !- Name
+  30,                                     !- Rendering Red Value
+  144,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6e17495b-6c27-4b5c-978d-ff7cec8a3b7f}, !- Handle
+  Rendering Color 4,                      !- Name
+  106,                                    !- Rendering Red Value
+  90,                                     !- Rendering Green Value
+  205;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6014ce47-777d-44ce-aea2-d4239751b042}, !- Handle
+  Rendering Color 5,                      !- Name
+  250,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  114;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c6633965-caae-4284-89a0-3bf21ac123dd}, !- Handle
+  Rendering Color 6,                      !- Name
+  147,                                    !- Rendering Red Value
+  112,                                    !- Rendering Green Value
+  219;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {0b9264ba-61b1-4056-a4fb-3b0444eabe75}, !- Handle
+  Rendering Color 7,                      !- Name
+  0,                                      !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {51c454e9-996a-461f-85a0-47fe723b7740}, !- Handle
+  Rendering Color 8,                      !- Name
+  240,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  240;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {1e97b382-e09b-4fa5-9416-b030ad3883dc}, !- Handle
+  Rendering Color 9,                      !- Name
+  143,                                    !- Rendering Red Value
+  188,                                    !- Rendering Green Value
+  143;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ef92e31d-49a9-4c1b-bf72-5ca92a0502fc}, !- Handle
+  Rendering Color 10,                     !- Name
+  169,                                    !- Rendering Red Value
+  169,                                    !- Rendering Green Value
+  169;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {40aab1ea-67be-417b-9a20-fcdfd4f4e456}, !- Handle
+  Rendering Color 11,                     !- Name
+  250,                                    !- Rendering Red Value
+  240,                                    !- Rendering Green Value
+  230;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3b3f5b27-6ae6-461e-a9a9-875a645d62fd}, !- Handle
+  Rendering Color 12,                     !- Name
+  128,                                    !- Rendering Red Value
+  128,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {1bed43ec-9dc9-4f95-9fba-1c3dd4753e08}, !- Handle
+  Rendering Color 13,                     !- Name
+  152,                                    !- Rendering Red Value
+  251,                                    !- Rendering Green Value
+  152;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {b9177403-8c8e-4a32-9340-b531360d5d9d}, !- Handle
+  Rendering Color 14,                     !- Name
+  255,                                    !- Rendering Red Value
+  105,                                    !- Rendering Green Value
+  180;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {a355f92a-1a0b-4de9-84de-b47530863135}, !- Handle
+  Rendering Color 15,                     !- Name
+  245,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  250;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {89919c84-b4e3-4811-851e-092f0ba320bf}, !- Handle
+  Rendering Color 16,                     !- Name
+  102,                                    !- Rendering Red Value
+  205,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f106145b-561c-4bbf-b675-52e8e69e09c9}, !- Handle
+  Rendering Color 17,                     !- Name
+  184,                                    !- Rendering Red Value
+  134,                                    !- Rendering Green Value
+  11;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {150e8f3d-fff3-444a-9ad3-6435ae7b0e70}, !- Handle
+  Rendering Color 18,                     !- Name
+  0,                                      !- Rendering Red Value
+  191,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {e9d2e1d5-2716-40d9-9d74-f28c709c94bd}, !- Handle
+  Rendering Color 19,                     !- Name
+  34,                                     !- Rendering Red Value
+  139,                                    !- Rendering Green Value
+  34;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {02c23925-8396-45b7-a2f8-f4f336a365a5}, !- Handle
+  Rendering Color 20,                     !- Name
+  255,                                    !- Rendering Red Value
+  69,                                     !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {753ea762-d8d7-4a20-94f1-053eb1be337b}, !- Handle
+  Rendering Color 21,                     !- Name
+  60,                                     !- Rendering Red Value
+  179,                                    !- Rendering Green Value
+  113;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {50683627-b265-4ecf-8107-735e38c64dc4}, !- Handle
+  Rendering Color 22,                     !- Name
+  205,                                    !- Rendering Red Value
+  133,                                    !- Rendering Green Value
+  63;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {5c58e0ba-b3ff-4070-be7b-e147745c660b}, !- Handle
+  Rendering Color 23,                     !- Name
+  106,                                    !- Rendering Red Value
+  90,                                     !- Rendering Green Value
+  205;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3bf27698-2fd0-46d2-a276-295d9505dcba}, !- Handle
+  Rendering Color 24,                     !- Name
+  245,                                    !- Rendering Red Value
+  222,                                    !- Rendering Green Value
+  179;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3c88cb01-a78f-432e-80d1-8726d67dcf96}, !- Handle
+  Rendering Color 25,                     !- Name
+  248,                                    !- Rendering Red Value
+  248,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ae420be9-0e11-4b5c-9511-8bc14a890374}, !- Handle
+  Rendering Color 26,                     !- Name
+  255,                                    !- Rendering Red Value
+  140,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
 
