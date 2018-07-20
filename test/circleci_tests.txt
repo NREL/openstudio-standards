@@ -63,11 +63,5 @@ necb/test_necb_waterheater_rules.rb
 necb/test_necb_weather.rb
 necb/test_necb_qaqc_single.rb
 necb/test_necb_schedules.rb
-necb/test_necb_hvac_system_1.rb
-necb/test_necb_hvac_system_2.rb
-necb/test_necb_hvac_system_3.rb
-necb/test_necb_hvac_system_4.rb
-necb/test_necb_hvac_system_6.rb
-necb/test_necb_hvac_system_7.rb
 necb/test_necb_pumppower_rules.rb
 
