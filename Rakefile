@@ -1,4 +1,5 @@
 require 'bundler/gem_tasks'
+require 'json'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
@@ -16,18 +17,24 @@ namespace :test do
     # Select only .rb files that exist
     full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
     full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
+    File.open("test/circleci_tests.json","w") do |f|
+      f.write(JSON.pretty_generate(full_file_list.to_a))
+    end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
   end
 
-  desc 'Parallel Run Locally NECB bldgs regression tests'
-  Rake::TestTask.new(:necb_local_bldgs_regression_tests) do |t|
-    file_list = FileList.new('test/necb/test_all_buildings_locally.rb')
+
+  desc 'Run All CircleCI tests'
+  Rake::TestTask.new('local-circ-all-tests') do |t|
+    file_list = FileList.new('test/test_run_all_test_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
-    t.verbose = true
+    t.verbose = false
   end
+
+
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
@@ -46,13 +53,10 @@ namespace :test do
     end
   end
 
-  desc 'Manual Run All CircleCI tests'
-  Rake::TestTask.new('circ-all-tests') do |t|
-    array = full_file_list
-    puts full_file_list
-    #t.libs << 'test'
-    #t.test_files = array
-  end
+
+
+
+
 
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'
@@ -86,6 +90,12 @@ namespace :test do
         puts 'Could not find parallelized list of CI tests.'
       end
     end
+
+
+
+
+
+
 
     desc 'Summarize the test timing'
     task 'times' do |t|
