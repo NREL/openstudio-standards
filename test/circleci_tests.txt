@@ -35,6 +35,7 @@ doe_prototype/test_add_hvac_systems.rb
 necb/test_necb_airloop_sizing_parameters.rb
 necb/test_necb_bldg_full_service_restaurant.rb
 necb/test_necb_bldg_high_rise_apartment.rb
+necb/test_necb_bldg_hospital.rb
 necb/test_necb_bldg_large_hotel.rb
 necb/test_necb_bldg_large_office.rb
 necb/test_necb_bldg_medium_office.rb
@@ -63,11 +64,5 @@ necb/test_necb_waterheater_rules.rb
 necb/test_necb_weather.rb
 necb/test_necb_qaqc_single.rb
 necb/test_necb_schedules.rb
-necb/test_necb_hvac_system_1.rb
-necb/test_necb_hvac_system_2.rb
-necb/test_necb_hvac_system_3.rb
-necb/test_necb_hvac_system_4.rb
-necb/test_necb_hvac_system_6.rb
-necb/test_necb_hvac_system_7.rb
 necb/test_necb_pumppower_rules.rb
 
