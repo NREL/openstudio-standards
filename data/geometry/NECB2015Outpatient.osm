@@ -1,7 +1,7 @@
 
 OS:Version,
-  {4b1a206d-f1b0-4e52-9341-739aceeb5d3f}, !- Handle
-  2.4.1;                                  !- Version Identifier
+  {e70cdc12-ba87-4313-891f-05ff29439121}, !- Handle
+  2.4.3;                                  !- Version Identifier
 
 OS:Site,
   {60c4cd85-d64b-4e19-b936-8f6a234d9ff1}, !- Handle
@@ -68,12 +68,14 @@ OS:Space,
   3.048,                                  !- Z Origin {m}
   {8d24ab9c-279b-4457-9719-9c774ab72027}, !- Building Story Name
   {b3a0ba60-86ab-4e40-aa68-0c39a60db342}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Space,
   {2ae91237-f2ec-4554-9207-69fae185a701}, !- Handle
   Floor 1 Sterile Storage,                !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -152,7 +154,7 @@ OS:Surface,
 OS:Space,
   {006af7b5-d11d-4fe8-af64-4fc32747ca2c}, !- Handle
   Floor 1 Clean,                          !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -259,7 +261,7 @@ OS:Surface,
 OS:Space,
   {a4fb9738-10d0-4f34-ae49-734ffe7d4a6e}, !- Handle
   Floor 3 Physical Therapy Toilet,        !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -273,7 +275,7 @@ OS:Space,
 OS:Space,
   {701af467-61d5-43f4-b841-aa2d005938fd}, !- Handle
   Floor 3 Office Toilet,                  !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -287,7 +289,7 @@ OS:Space,
 OS:Space,
   {985c61fb-783a-4b92-a34d-235dbff8ebc0}, !- Handle
   Floor 1 Utility Room,                   !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -301,7 +303,7 @@ OS:Space,
 OS:Space,
   {59deb157-6cde-47ae-9c2a-6fc9e3049325}, !- Handle
   Floor 1 Nurse Janitor,                  !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -386,7 +388,9 @@ OS:Space,
   6.096,                                  !- Z Origin {m}
   {d66b19da-fd91-4b80-bd09-8bfd21764430}, !- Building Story Name
   {2929f65b-7eae-454b-a0e0-f080bbe3d404}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {27653a86-5e1d-43a3-afa0-679aad100119}, !- Handle
@@ -422,7 +426,7 @@ OS:Space,
 OS:Space,
   {961bf9d6-3ed7-4e94-ad5c-99b459658f3c}, !- Handle
   Floor 2 Reception Toilet,               !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -560,7 +564,7 @@ OS:Surface,
 OS:Space,
   {e1357eb6-9f26-418a-99d4-975b8d640bdd}, !- Handle
   Floor 2 Janitor,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -775,7 +779,9 @@ OS:Space,
   3.048,                                  !- Z Origin {m}
   {8d24ab9c-279b-4457-9719-9c774ab72027}, !- Building Story Name
   {43bdae61-387c-4ce1-9c1a-593c8c8d8ef0}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {8ed19ed0-80fe-493f-9cf4-f3e1211747dc}, !- Handle
@@ -797,7 +803,7 @@ OS:Surface,
 OS:Space,
   {63a04e9f-f484-4770-a926-241efca4ee9b}, !- Handle
   Floor 1 Soil,                           !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1062,7 +1068,7 @@ OS:Surface,
 OS:Space,
   {e783f303-25b1-454b-be2a-838f6fae1447}, !- Handle
   Floor 3 Storage 1,                      !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1119,7 +1125,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {faa479b0-c744-4377-8d20-7db5183673cd}, !- Building Story Name
   {8828a71f-b1c7-4de4-be58-ad9ea799459f}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {3d26f6a1-ead6-4205-81c5-2e112d4d120e}, !- Handle
@@ -1265,7 +1273,7 @@ OS:Surface,
 OS:Space,
   {9a1e77bf-e7d0-445c-83eb-a99775b89fce}, !- Handle
   Floor 3 Utility,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1296,7 +1304,7 @@ OS:Surface,
 OS:Space,
   {2c44660e-7bcb-498f-b7cc-064883bf6c6b}, !- Handle
   Floor 1 Utility Janitor,                !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1561,7 +1569,7 @@ OS:Space,
 OS:Space,
   {d98391c8-8cf0-480c-bcd2-1e0d600b9232}, !- Handle
   Floor 1 Storage,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1750,7 +1758,7 @@ OS:Surface,
 OS:Space,
   {dc080274-d002-4429-bc77-56c7d4fb42c3}, !- Handle
   Floor 2 Work Toilet,                    !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1905,7 +1913,7 @@ OS:Space,
 OS:Space,
   {698bad40-9738-4674-b4aa-82571210ba43}, !- Handle
   Floor 1 Lobby Toilet,                   !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2001,7 +2009,7 @@ OS:Surface,
 OS:Space,
   {2a5880a9-13a4-4de2-ae37-5f659b4768e3}, !- Handle
   Floor 2 Storage 3,                      !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2120,7 +2128,9 @@ OS:Space,
   3.048,                                  !- Z Origin {m}
   {8d24ab9c-279b-4457-9719-9c774ab72027}, !- Building Story Name
   {b12ba084-ea8e-420c-90a0-a0b34cc68722}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {4e8fc835-fc1f-46b5-958a-9d1bcba66d2b}, !- Handle
@@ -2298,7 +2308,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {faa479b0-c744-4377-8d20-7db5183673cd}, !- Building Story Name
   {8611780a-6cc4-497f-8426-9c12c11dbbdb}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {e9d455b4-fcde-48a2-87bb-6e0c86df8cce}, !- Handle
@@ -2320,7 +2332,7 @@ OS:Surface,
 OS:Space,
   {bdde3f51-db77-426b-9d08-f867109e83f7}, !- Handle
   Floor 2 Conference Toilet,              !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2385,7 +2397,7 @@ OS:Surface,
 OS:Space,
   {9fb7b410-03b0-461a-8356-5933393987c6}, !- Handle
   Floor 2 Storage 2,                      !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2450,7 +2462,7 @@ OS:Surface,
 OS:Space,
   {4b040d43-4c35-48ac-a5fb-bb037ebc8ef2}, !- Handle
   Floor 1 MRI Toilet,                     !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2532,7 +2544,7 @@ OS:Surface,
 OS:Space,
   {34fb3292-2238-451a-8c49-9d26eb632d3f}, !- Handle
   Floor 1 Sub-Sterile,                    !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2832,7 +2844,9 @@ OS:Space,
   3.048,                                  !- Z Origin {m}
   {8d24ab9c-279b-4457-9719-9c774ab72027}, !- Building Story Name
   {c660c254-a3e2-40c1-a211-6bae1876714f}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {ff9a9dd9-3188-40a2-aac6-892b7d2d46de}, !- Handle
@@ -2947,7 +2961,7 @@ OS:Space,
 OS:Space,
   {a3be17d1-0736-47a0-8837-648d62a9c4dc}, !- Handle
   Floor 3 Undeveloped 2,                  !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2956,7 +2970,9 @@ OS:Space,
   6.096,                                  !- Z Origin {m}
   {d66b19da-fd91-4b80-bd09-8bfd21764430}, !- Building Story Name
   {91b6d074-32a6-40b2-911c-8c9b7f772b04}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {606caa79-ece8-47f3-88e1-6d1d0525e56b}, !- Handle
@@ -3077,7 +3093,7 @@ OS:Surface,
 OS:Space,
   {fe34d83f-e6b4-40e0-b99c-1247d982382f}, !- Handle
   Floor 3 Undeveloped 1,                  !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3363,7 +3379,9 @@ OS:Space,
   3.048,                                  !- Z Origin {m}
   {8d24ab9c-279b-4457-9719-9c774ab72027}, !- Building Story Name
   {29868f6e-1a9a-43d9-bcb1-9d8f078b0a94}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {0ec8bcd0-cdcf-4de9-9a6c-0ddc6957161f}, !- Handle
@@ -3372,17 +3390,15 @@ OS:Surface,
   ,                                       !- Construction Name
   {e1bc1754-214a-474b-87ec-fa9d8b9bd1b7}, !- Space Name
   Surface,                                !- Outside Boundary Condition
-  {0a8e4bf0-3364-4391-87b4-4aff32a003f3}, !- Outside Boundary Condition Object
+  {939addd2-2d0e-4435-98d4-60d4e6d70a8c}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  -12.192, -10.0584, 3.048,               !- X,Y,Z Vertex 1 {m}
+  -12.192, -3.9624, 3.048,                !- X,Y,Z Vertex 1 {m}
   -12.192, 0, 3.048,                      !- X,Y,Z Vertex 2 {m}
   -15.24, 0, 3.048,                       !- X,Y,Z Vertex 3 {m}
-  -15.24, -3.9624, 3.048,                 !- X,Y,Z Vertex 4 {m}
-  -15.8496, -3.9624, 3.048,               !- X,Y,Z Vertex 5 {m}
-  -15.8496, -10.0584, 3.048;              !- X,Y,Z Vertex 6 {m}
+  -15.24, -3.9624, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {7fde7d05-007a-4891-9825-aa7602762877}, !- Handle
@@ -3557,7 +3573,7 @@ OS:Surface,
 OS:Space,
   {6a8f24be-4b26-450a-b495-5ac986713549}, !- Handle
   Floor 1 Soil Hold,                      !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3909,7 +3925,7 @@ OS:Surface,
 OS:Space,
   {b6f2af45-4490-4dd9-8adc-97ed875fb0f7}, !- Handle
   Floor 3 Janitor,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3923,7 +3939,7 @@ OS:Space,
 OS:Space,
   {a2b498c9-754b-443d-a6bf-5a11e7a517fd}, !- Handle
   Floor 2 Utility,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -3971,7 +3987,7 @@ OS:Surface,
 OS:Space,
   {d2356671-c068-416e-8f8f-15bed204e70a}, !- Handle
   Floor 1 Nurse Toilet,                   !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4381,7 +4397,7 @@ OS:Surface,
 OS:Space,
   {4769a9b6-c376-481c-a6b8-b4ab698133f7}, !- Handle
   Floor 1 Bio Haz,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4514,7 +4530,7 @@ OS:Surface,
 OS:Space,
   {38a62497-5ddf-4a91-ad6c-841bc0e5d2e5}, !- Handle
   Floor 1 Pre-Op Toilet,                  !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4607,7 +4623,7 @@ OS:Surface,
 OS:Space,
   {dd27b62c-190b-46a8-86fd-b911665284a6}, !- Handle
   Floor 1 Clean Work,                     !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4616,7 +4632,9 @@ OS:Space,
   0,                                      !- Z Origin {m}
   {faa479b0-c744-4377-8d20-7db5183673cd}, !- Building Story Name
   {0f97d9c5-05c5-441e-90d1-08d67e28de5d}, !- Thermal Zone Name
-  Yes;                                    !- Part of Total Floor Area
+  Yes,                                    !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Surface,
   {2648c81a-084a-40e8-94b3-4b0beb69882c}, !- Handle
@@ -4837,7 +4855,7 @@ OS:Surface,
   ,                                       !- Construction Name
   {a3be17d1-0736-47a0-8837-648d62a9c4dc}, !- Space Name
   Surface,                                !- Outside Boundary Condition
-  {6d7c5267-a9c2-4a1e-82dc-aeb0f2c361ca}, !- Outside Boundary Condition Object
+  {295ad54d-1b1a-411f-9f3d-28a7679d203d}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -4845,9 +4863,7 @@ OS:Surface,
   13.716, 4.8768, 0,                      !- X,Y,Z Vertex 1 {m}
   13.716, -2.4384, 0,                     !- X,Y,Z Vertex 2 {m}
   3.6576, -2.4384, 0,                     !- X,Y,Z Vertex 3 {m}
-  3.6576, 0, 0,                           !- X,Y,Z Vertex 4 {m}
-  0, 0, 0,                                !- X,Y,Z Vertex 5 {m}
-  0, 4.8768, 0;                           !- X,Y,Z Vertex 6 {m}
+  3.6576, 4.8768, 0;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {c8e0fce4-d99a-4789-a711-6291570f295c}, !- Handle
@@ -5094,7 +5110,7 @@ OS:Surface,
 OS:Space,
   {74015bed-3176-4614-92cf-2c9de6c9b6fb}, !- Handle
   Floor 3 Lounge Toilet,                  !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5150,7 +5166,10 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   3,                                      !- Standards Number of Stories
   3,                                      !- Standards Number of Above Ground Stories
-  Outpatient;                             !- Standards Building Type
+  Outpatient,                             !- Standards Building Type
+  ,                                       !- Standards Number of Living Units
+  ,                                       !- Relocatable
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Surface,
   {d6951edf-993a-42ed-8f8e-33db83db849e}, !- Handle
@@ -5325,7 +5344,7 @@ OS:Surface,
 OS:Space,
   {4ebe8e01-c248-4310-83e3-6e5a2e6a830a}, !- Handle
   Floor 1 Soil Work,                      !- Name
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Space Type Name
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5390,7 +5409,7 @@ OS:Surface,
 OS:Space,
   {78712088-4aac-490a-995d-fa28ef6168ab}, !- Handle
   Floor 2 Storage 1,                      !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5659,7 +5678,7 @@ OS:Surface,
 OS:Space,
   {c8ba28a8-9bf5-4506-ad6c-03ce53868d07}, !- Handle
   Floor 1 Med Gas,                        !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -6812,7 +6831,7 @@ OS:Surface,
 OS:Space,
   {e3d92588-22fa-4fcc-97aa-77385b24bd01}, !- Handle
   Floor 3 Storage 2,                      !- Name
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Space Type Name
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -7436,23 +7455,6 @@ OS:Surface,
   16.764, -0.9144, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
-  {93b25c98-190f-4c65-9af7-b555dc85f76d}, !- Handle
-  B0FF3A,                                 !- Name
-  Wall,                                   !- Surface Type
-  ,                                       !- Construction Name
-  {c3b66626-bec4-4c28-a2d7-9c9565f550e2}, !- Space Name
-  Surface,                                !- Outside Boundary Condition
-  {c39991dc-6436-403a-89eb-8fbe15bbc9a1}, !- Outside Boundary Condition Object
-  NoSun,                                  !- Sun Exposure
-  NoWind,                                 !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  -20.7264, 0, 3.048,                     !- X,Y,Z Vertex 1 {m}
-  -20.7264, 0, 0,                         !- X,Y,Z Vertex 2 {m}
-  -5.4864, 0, 0,                          !- X,Y,Z Vertex 3 {m}
-  -5.4864, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
-
-OS:Surface,
   {92e50312-5548-49ea-a86c-d10ff11b517f}, !- Handle
   Floor 1 Nurse Storage Slab,             !- Name
   Floor,                                  !- Surface Type
@@ -7561,17 +7563,15 @@ OS:Surface,
   ,                                       !- Construction Name
   {8d5f18f1-6b75-4d1b-a576-8f7ffb2b987c}, !- Space Name
   Surface,                                !- Outside Boundary Condition
-  {0ec8bcd0-cdcf-4de9-9a6c-0ddc6957161f}, !- Outside Boundary Condition Object
+  {c55b2b24-bb05-4284-b4c8-80369f3af203}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, 0, 0,                                !- X,Y,Z Vertex 1 {m}
+  0, -3.9624, 0,                          !- X,Y,Z Vertex 1 {m}
   0, -10.0584, 0,                         !- X,Y,Z Vertex 2 {m}
   -3.6576, -10.0584, 0,                   !- X,Y,Z Vertex 3 {m}
-  -3.6576, -3.9624, 0,                    !- X,Y,Z Vertex 4 {m}
-  -3.048, -3.9624, 0,                     !- X,Y,Z Vertex 5 {m}
-  -3.048, 0, 0;                           !- X,Y,Z Vertex 6 {m}
+  -3.6576, -3.9624, 0;                    !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {2458769a-2917-4f13-bc31-3e8eb8882704}, !- Handle
@@ -12218,12 +12218,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  15.8496, -2.4384, 3.048,                !- X,Y,Z Vertex 1 {m}
-  15.8496, 4.8768, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  3.6576, 0, 3.048,                       !- X,Y,Z Vertex 1 {m}
+  3.6576, 4.8768, 3.048,                  !- X,Y,Z Vertex 2 {m}
   0, 4.8768, 3.048,                       !- X,Y,Z Vertex 3 {m}
-  0, 0, 3.048,                            !- X,Y,Z Vertex 4 {m}
-  3.6576, 0, 3.048,                       !- X,Y,Z Vertex 5 {m}
-  3.6576, -2.4384, 3.048;                 !- X,Y,Z Vertex 6 {m}
+  0, 0, 3.048;                            !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {94ae178c-632b-4d75-bfd0-e01654bc0c1d}, !- Handle
@@ -12918,15 +12916,15 @@ OS:Surface,
   ,                                       !- Construction Name
   {bc58df91-93fb-40fa-9070-906063cdba06}, !- Space Name
   Surface,                                !- Outside Boundary Condition
-  {93b25c98-190f-4c65-9af7-b555dc85f76d}, !- Outside Boundary Condition Object
+  {842c8048-ce35-4b1a-a9ee-0d3189462347}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   0, 0, 3.048,                            !- X,Y,Z Vertex 1 {m}
   0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
-  -15.24, 0, 0,                           !- X,Y,Z Vertex 3 {m}
-  -15.24, 0, 3.048;                       !- X,Y,Z Vertex 4 {m}
+  -7.0104, 0, 0,                          !- X,Y,Z Vertex 3 {m}
+  -7.0104, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {6f6cc908-3f57-4a03-aa4d-88093a408af1}, !- Handle
@@ -13467,17 +13465,15 @@ OS:Surface,
   ,                                       !- Construction Name
   {bcc5f281-0488-4a95-ad95-bd7168cfac49}, !- Space Name
   Surface,                                !- Outside Boundary Condition
-  {dc8b61dc-b08b-4fdc-bd2d-26231559a78e}, !- Outside Boundary Condition Object
+  {9c7754e2-e501-4f65-9fab-abfa328a556d}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  13.716, -7.3152, 3.048,                 !- X,Y,Z Vertex 1 {m}
-  13.716, 0, 3.048,                       !- X,Y,Z Vertex 2 {m}
+  3.6576, -4.8768, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  3.6576, 0, 3.048,                       !- X,Y,Z Vertex 2 {m}
   0, 0, 3.048,                            !- X,Y,Z Vertex 3 {m}
-  0, -4.8768, 3.048,                      !- X,Y,Z Vertex 4 {m}
-  3.6576, -4.8768, 3.048,                 !- X,Y,Z Vertex 5 {m}
-  3.6576, -7.3152, 3.048;                 !- X,Y,Z Vertex 6 {m}
+  0, -4.8768, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {96405da5-05c7-4dda-9c88-ede45fbffdc6}, !- Handle
@@ -22200,12 +22196,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0, -10.0584, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  0, -3.9624, 3.048,                      !- X,Y,Z Vertex 1 {m}
   0, 0, 3.048,                            !- X,Y,Z Vertex 2 {m}
   -3.048, 0, 3.048,                       !- X,Y,Z Vertex 3 {m}
-  -3.048, -3.9624, 3.048,                 !- X,Y,Z Vertex 4 {m}
-  -3.6576, -3.9624, 3.048,                !- X,Y,Z Vertex 5 {m}
-  -3.6576, -10.0584, 3.048;               !- X,Y,Z Vertex 6 {m}
+  -3.048, -3.9624, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {5d514b80-74d4-473b-9ca1-18b453a97f93}, !- Handle
@@ -32937,6 +32931,20 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 118,           !- Name
   {8829335a-763f-4d0a-9e7d-bcc6fe199ccf}; !- Thermal Zone
 
+OS:WeatherFile,
+  {dae5a437-5e4f-44ff-9d27-ffed0b3e2c48}, !- Handle
+  Whitehorse,                             !- City
+  YT,                                     !- State Province Region
+  CAN,                                    !- Country
+  WYEC2-B-26316,                          !- Data Source
+  719640,                                 !- WMO Number
+  60.72,                                  !- Latitude {deg}
+  -135.07,                                !- Longitude {deg}
+  -8,                                     !- Time Zone {hr}
+  703,                                    !- Elevation {m}
+  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_YT_Whitehorse.719640_CWEC.epw, !- Url
+  D5EA4C49;                               !- Checksum
+
 OS:Site:WaterMainsTemperature,
   {4405ffcf-bdd4-482b-98e4-d73d2131dacc}, !- Handle
   Correlation,                            !- Calculation Method
@@ -33012,336 +33020,399 @@ OS:SpaceType,
   Space Function Health care facility operating room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {fe305278-2494-45bd-b9ca-875603bd6f79}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility operating room;    !- Standards Space Type
-
-OS:Rendering:Color,
-  {fe305278-2494-45bd-b9ca-875603bd6f79}, !- Handle
-  Space Function Health care facility operating room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {53c7fd92-c46f-4c76-a145-918f0751618f}, !- Handle
   Space Function Health care facility patient room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0bd54ead-7630-421b-af3f-bab15e87570e}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility patient room;      !- Standards Space Type
-
-OS:Rendering:Color,
-  {0bd54ead-7630-421b-af3f-bab15e87570e}, !- Handle
-  Space Function Health care facility patient room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {d240e9f9-b8ba-43b4-8def-ece8d2f70216}, !- Handle
   Space Function Health care facility exam/treatment room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {26cdfeec-fc67-4bbc-9c3d-ca1021636065}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility exam/treatment room; !- Standards Space Type
-
-OS:Rendering:Color,
-  {26cdfeec-fc67-4bbc-9c3d-ca1021636065}, !- Handle
-  Space Function Health care facility exam/treatment room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {824df8f7-e9fd-4305-beb4-34c0d6794334}, !- Handle
   Space Function Corridor/Transition area - hospital-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c4f53260-450f-472d-b04b-c35e62ef7d12}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Corridor/Transition area - hospital-sch-H; !- Standards Space Type
-
-OS:Rendering:Color,
-  {c4f53260-450f-472d-b04b-c35e62ef7d12}, !- Handle
-  Space Function Corridor/Transition area - hospital-sch-H, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {fe6c1bb4-e00c-4f4f-aa89-7ccfde0ca752}, !- Handle
   Space Function Lounge/Break room - health care facility, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {83c8a74a-0dec-46a3-95c0-e54c5a3d48b8}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Lounge/Break room - health care facility; !- Standards Space Type
-
-OS:Rendering:Color,
-  {83c8a74a-0dec-46a3-95c0-e54c5a3d48b8}, !- Handle
-  Space Function Lounge/Break room - health care facility, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b003bb07-9b63-49cb-a76e-56ffbda01639}, !- Handle
   Space Function Health care facility nurses station, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {98167d41-e1e4-49cb-8ad2-915f34083c42}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility nurses station;    !- Standards Space Type
-
-OS:Rendering:Color,
-  {98167d41-e1e4-49cb-8ad2-915f34083c42}, !- Handle
-  Space Function Health care facility nurses station, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {931efada-9c2a-4700-9593-e3140f08a63d}, !- Handle
   Space Function Health care facility imaging room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {e7dc5407-b061-4ecc-a9b4-2fd8463212d2}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility imaging room;      !- Standards Space Type
-
-OS:Rendering:Color,
-  {e7dc5407-b061-4ecc-a9b4-2fd8463212d2}, !- Handle
-  Space Function Health care facility imaging room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {edc461f3-3110-44b5-9f3b-7055e3f2fbf8}, !- Handle
   Space Function Locker room-sch-H,       !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {2b61d5f3-59d9-492c-b697-53bdee4e697a}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Locker room-sch-H;                      !- Standards Space Type
-
-OS:Rendering:Color,
-  {2b61d5f3-59d9-492c-b697-53bdee4e697a}, !- Handle
-  Space Function Locker room-sch-H,       !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {017d213b-c212-40a3-9224-6a057f3374b6}, !- Handle
   Space Function Lobby - elevator,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {cf7403f9-0b06-4c92-94d5-bb3e3d3f26ad}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Lobby - elevator;                       !- Standards Space Type
-
-OS:Rendering:Color,
-  {cf7403f9-0b06-4c92-94d5-bb3e3d3f26ad}, !- Handle
-  Space Function Lobby - elevator,        !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {55eace9e-7864-4483-9b67-32a949a91db4}, !- Handle
   Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {1edbb926-1515-4d4e-b03b-0d5500340df4}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Office enclosed > 25 m2;                !- Standards Space Type
-
-OS:Rendering:Color,
-  {1edbb926-1515-4d4e-b03b-0d5500340df4}, !- Handle
-  Space Function Office enclosed > 25 m2, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {90998f66-fb33-465c-a2b4-6c08b0277f8e}, !- Handle
   Space Function Stairway/Stairwell-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c72133d5-f7ef-4718-bd83-21070bbdaf83}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Stairway/Stairwell-sch-H;               !- Standards Space Type
 
-OS:Rendering:Color,
-  {c72133d5-f7ef-4718-bd83-21070bbdaf83}, !- Handle
-  Space Function Stairway/Stairwell-sch-H, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
 OS:SpaceType,
-  {b5c998ad-77f0-4a38-b4c4-39c51f17ac43}, !- Handle
-  Space Function Washroom - other-sch-H,  !- Name
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {38183595-e1b4-456c-b8e6-7201a6a28741}, !- Group Rendering Name
-  ,                                       !- Design Specification Outdoor Air Object Name
-  Space Function,                         !- Standards Building Type
-  Washroom - other-sch-H;                 !- Standards Space Type
-
-OS:Rendering:Color,
-  {38183595-e1b4-456c-b8e6-7201a6a28741}, !- Handle
-  Space Function Washroom - other-sch-H,  !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
-
-OS:SpaceType,
-  {43f2d463-f4f3-42b7-923c-69a4e947e8b8}, !- Handle
+  {bbccbd1f-4686-4344-91d1-4b951a15b5bc}, !- Handle
   Space Function Storage room <= 5 m2 <= 100 m2-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {325aa6a2-ad0f-43a3-ac42-04c96dbefecc}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Storage room <= 5 m2 <= 100 m2-sch-H;   !- Standards Space Type
-
-OS:Rendering:Color,
-  {325aa6a2-ad0f-43a3-ac42-04c96dbefecc}, !- Handle
-  Space Function Storage room <= 5 m2 <= 100 m2-sch-H, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {76110c72-13a5-4925-839e-cb63f76c1fd8}, !- Handle
   Space Function Health care facility physical therapy room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {f37169c3-c9ef-456c-9c24-1dbed384b669}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility physical therapy room; !- Standards Space Type
-
-OS:Rendering:Color,
-  {f37169c3-c9ef-456c-9c24-1dbed384b669}, !- Handle
-  Space Function Health care facility physical therapy room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {51f724a8-268e-48c4-a6e7-261a91fcea33}, !- Handle
   Space Function Health care facility recovery room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {0274a213-0d65-485a-8e70-388dcb7014bf}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Health care facility recovery room;     !- Standards Space Type
 
-OS:Rendering:Color,
-  {0274a213-0d65-485a-8e70-388dcb7014bf}, !- Handle
-  Space Function Health care facility recovery room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
+OS:SpaceType,
+  {1a37fbe1-1c9a-4666-9778-a8ffa1ec4115}, !- Handle
+  Space Function Washroom - other-sch-H,  !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Washroom - other-sch-H;                 !- Standards Space Type
 
 OS:SpaceType,
   {415e8628-3cb9-47af-80d5-ea697667ea4a}, !- Handle
   Space Function Conference/Meeting/Multi-purpose room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {8996e284-944e-40ab-8a79-7f3048d35d11}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Conference/Meeting/Multi-purpose room;  !- Standards Space Type
-
-OS:Rendering:Color,
-  {8996e284-944e-40ab-8a79-7f3048d35d11}, !- Handle
-  Space Function Conference/Meeting/Multi-purpose room, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {72462bba-6089-4d85-88b6-dffd519d4efe}, !- Handle
   Space Function Electrical/Mechanical room-sch-H, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {ca1614a8-d0ed-4719-a008-164cf2db29da}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Electrical/Mechanical room-sch-H;       !- Standards Space Type
-
-OS:Rendering:Color,
-  {ca1614a8-d0ed-4719-a008-164cf2db29da}, !- Handle
-  Space Function Electrical/Mechanical room-sch-H, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {e83f9e85-d63a-47d7-9071-1c7e037bac6f}, !- Handle
   Space Function Dining area - bar lounge/leisure dining, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {559fdd84-eac8-42f8-8bcd-933c011952c7}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
   Dining area - bar lounge/leisure dining; !- Standards Space Type
 
-OS:Rendering:Color,
-  {559fdd84-eac8-42f8-8bcd-933c011952c7}, !- Handle
-  Space Function Dining area - bar lounge/leisure dining, !- Name
-  255,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  255;                                    !- Rendering Blue Value
+OS:Surface,
+  {0f8b364a-281d-4ba8-bbfd-9df7f91d2590}, !- Handle
+  Surface 1,                              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {c3b66626-bec4-4c28-a2d7-9c9565f550e2}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {33afd77e-2854-4fee-84f9-d3b1718f48d9}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -20.7264, 0, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  -20.7264, 0, 0,                         !- X,Y,Z Vertex 2 {m}
+  -17.3736, 0, 0,                         !- X,Y,Z Vertex 3 {m}
+  -17.3736, 0, 3.048;                     !- X,Y,Z Vertex 4 {m}
 
-OS:ClimateZones,
-  {f08e9b61-570a-43d3-b1fd-8d0ef99a7ba2}, !- Handle
-  ,                                       !- Active Institution
-  ,                                       !- Active Year
-  ,                                       !- Climate Zone Institution Name 1
-  ,                                       !- Climate Zone Document Name 1
-  ,                                       !- Climate Zone Document Year 1
-  ,                                       !- Climate Zone Value 1
-  CEC,                                    !- Climate Zone Institution Name 2
-  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
-  1995,                                   !- Climate Zone Document Year 2
-  ;                                       !- Climate Zone Value 2
+OS:Surface,
+  {c6f22f1a-2e7f-4cf1-a787-0be4dfc571a7}, !- Handle
+  Floor 3 Elevator Hall Roof 1,           !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {8d5f18f1-6b75-4d1b-a576-8f7ffb2b987c}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, -10.0584, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  0, -3.9624, 3.048,                      !- X,Y,Z Vertex 2 {m}
+  -3.6576, -3.9624, 3.048,                !- X,Y,Z Vertex 3 {m}
+  -3.6576, -10.0584, 3.048;               !- X,Y,Z Vertex 4 {m}
 
-OS:Sizing:Parameters,
-  {fd45c8cf-5fc3-43ca-9521-d4bddc46167d}, !- Handle
-  1.25,                                   !- Heating Sizing Factor
-  1.15;                                   !- Cooling Sizing Factor
+OS:Surface,
+  {939addd2-2d0e-4435-98d4-60d4e6d70a8c}, !- Handle
+  D6F20A 1,                               !- Name
+  Floor,                                  !- Surface Type
+  ,                                       !- Construction Name
+  {8d5f18f1-6b75-4d1b-a576-8f7ffb2b987c}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {0ec8bcd0-cdcf-4de9-9a6c-0ddc6957161f}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 0, 0,                                !- X,Y,Z Vertex 1 {m}
+  0, -3.9624, 0,                          !- X,Y,Z Vertex 2 {m}
+  -3.048, -3.9624, 0,                     !- X,Y,Z Vertex 3 {m}
+  -3.048, 0, 0;                           !- X,Y,Z Vertex 4 {m}
 
-OS:LifeCycleCost:Parameters,
-  {51224dff-16cd-4075-9d3e-b70368e87539}, !- Handle
-  ,                                       !- Analysis Type
-  ,                                       !- Discounting Convention
-  ,                                       !- Inflation Approach
-  ,                                       !- Real Discount Rate
-  ,                                       !- Nominal Discount Rate
-  ,                                       !- Inflation
-  ,                                       !- Base Date Month
-  ,                                       !- Base Date Year
-  ,                                       !- Service Date Month
-  ,                                       !- Service Date Year
-  ;                                       !- Length of Study Period in Years
+OS:Surface,
+  {c55b2b24-bb05-4284-b4c8-80369f3af203}, !- Handle
+  F77E4B 1,                               !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {e1bc1754-214a-474b-87ec-fa9d8b9bd1b7}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {0a8e4bf0-3364-4391-87b4-4aff32a003f3}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -12.192, -10.0584, 3.048,               !- X,Y,Z Vertex 1 {m}
+  -12.192, -3.9624, 3.048,                !- X,Y,Z Vertex 2 {m}
+  -15.8496, -3.9624, 3.048,               !- X,Y,Z Vertex 3 {m}
+  -15.8496, -10.0584, 3.048;              !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {b9c72ac2-3297-4af1-b9f5-cacfb27b3392}, !- Handle
+  Floor 3 Undeveloped 2 Roof 1,           !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {a3be17d1-0736-47a0-8837-648d62a9c4dc}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  15.8496, -2.4384, 3.048,                !- X,Y,Z Vertex 1 {m}
+  15.8496, 4.8768, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  3.6576, 4.8768, 3.048,                  !- X,Y,Z Vertex 3 {m}
+  3.6576, -2.4384, 3.048;                 !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {9c7754e2-e501-4f65-9fab-abfa328a556d}, !- Handle
+  9D1FA7 1,                               !- Name
+  Floor,                                  !- Surface Type
+  ,                                       !- Construction Name
+  {a3be17d1-0736-47a0-8837-648d62a9c4dc}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {6d7c5267-a9c2-4a1e-82dc-aeb0f2c361ca}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  3.6576, 4.8768, 0,                      !- X,Y,Z Vertex 1 {m}
+  3.6576, 0, 0,                           !- X,Y,Z Vertex 2 {m}
+  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+  0, 4.8768, 0;                           !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {295ad54d-1b1a-411f-9f3d-28a7679d203d}, !- Handle
+  C39FCC 1,                               !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {bcc5f281-0488-4a95-ad95-bd7168cfac49}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {dc8b61dc-b08b-4fdc-bd2d-26231559a78e}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  13.716, -7.3152, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  13.716, 0, 3.048,                       !- X,Y,Z Vertex 2 {m}
+  3.6576, 0, 3.048,                       !- X,Y,Z Vertex 3 {m}
+  3.6576, -7.3152, 3.048;                 !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {ab5f7f14-e0eb-4cc9-9665-642f4d78314c}, !- Handle
+  Surface 2,                              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {c3b66626-bec4-4c28-a2d7-9c9565f550e2}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {33c10ee2-1565-4a7b-934a-6ca8efcb11b2}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -17.3736, 0, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  -17.3736, 0, 0,                         !- X,Y,Z Vertex 2 {m}
+  -15.24, 0, 0,                           !- X,Y,Z Vertex 3 {m}
+  -15.24, 0, 3.048;                       !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {0f56f14a-04ec-4615-ac80-7a44ecde995e}, !- Handle
+  Surface 3,                              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {c3b66626-bec4-4c28-a2d7-9c9565f550e2}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {1620477f-b0f5-4d03-af4c-3af2485cb944}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -15.24, 0, 3.048,                       !- X,Y,Z Vertex 1 {m}
+  -15.24, 0, 0,                           !- X,Y,Z Vertex 2 {m}
+  -12.4968, 0, 0,                         !- X,Y,Z Vertex 3 {m}
+  -12.4968, 0, 3.048;                     !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {842c8048-ce35-4b1a-a9ee-0d3189462347}, !- Handle
+  Surface 4,                              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {c3b66626-bec4-4c28-a2d7-9c9565f550e2}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {c39991dc-6436-403a-89eb-8fbe15bbc9a1}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -12.4968, 0, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  -12.4968, 0, 0,                         !- X,Y,Z Vertex 2 {m}
+  -5.4864, 0, 0,                          !- X,Y,Z Vertex 3 {m}
+  -5.4864, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {1620477f-b0f5-4d03-af4c-3af2485cb944}, !- Handle
+  34B8D8 1,                               !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {bc58df91-93fb-40fa-9070-906063cdba06}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {0f56f14a-04ec-4615-ac80-7a44ecde995e}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -7.0104, 0, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  -7.0104, 0, 0,                          !- X,Y,Z Vertex 2 {m}
+  -9.7536, 0, 0,                          !- X,Y,Z Vertex 3 {m}
+  -9.7536, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {33c10ee2-1565-4a7b-934a-6ca8efcb11b2}, !- Handle
+  34B8D8 2,                               !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {bc58df91-93fb-40fa-9070-906063cdba06}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {ab5f7f14-e0eb-4cc9-9665-642f4d78314c}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -9.7536, 0, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  -9.7536, 0, 0,                          !- X,Y,Z Vertex 2 {m}
+  -11.8872, 0, 0,                         !- X,Y,Z Vertex 3 {m}
+  -11.8872, 0, 3.048;                     !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {33afd77e-2854-4fee-84f9-d3b1718f48d9}, !- Handle
+  34B8D8 3,                               !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {bc58df91-93fb-40fa-9070-906063cdba06}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {0f8b364a-281d-4ba8-bbfd-9df7f91d2590}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  -11.8872, 0, 3.048,                     !- X,Y,Z Vertex 1 {m}
+  -11.8872, 0, 0,                         !- X,Y,Z Vertex 2 {m}
+  -15.24, 0, 0,                           !- X,Y,Z Vertex 3 {m}
+  -15.24, 0, 3.048;                       !- X,Y,Z Vertex 4 {m}
 
