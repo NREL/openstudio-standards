@@ -60,6 +60,8 @@ Standard.class_eval do
     model_modify_oa_controller(model)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
+    # Apply prototype changes that supersede the HVAC efficiency standard
+    model_apply_prototype_hvac_efficiency_adjustments(model)
     model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
@@ -1111,6 +1113,20 @@ Standard.class_eval do
     model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
+  end
+
+  # Applies the Prototype Building assumptions that contradict/supersede
+  # the given standard.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  def model_apply_prototype_hvac_efficiency_adjustments(model)
+
+    # ERVs
+    # Applies the DOE Prototype Building assumption that ERVs use
+    # enthalpy wheels and therefore exceed the minimum effectiveness specified by 90.1
+    model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(obj)}
+
+    return true
   end
 
   def model_add_debugging_variables(model, type)

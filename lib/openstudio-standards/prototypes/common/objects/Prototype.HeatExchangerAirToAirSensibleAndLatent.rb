@@ -57,4 +57,22 @@ class Standard
 
     return true
   end
+
+  # Sets the minimum effectiveness of the heat exchanger per
+  # the DOE prototype assumptions, which assume that an enthalpy wheel is used, which exceeds
+  # the 50% effectiveness minimum actually defined by 90.1.
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(0.6)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(0.6)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(0.6)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(0.6)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerAirToAirSensibleAndLatent', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}: Changed sensible and latent effectiveness to ~70% per DOE Prototype assumptions for an enthalpy wheel.")
+
+    return true
+  end
 end
