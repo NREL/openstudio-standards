@@ -4,7 +4,7 @@ class NECB2011
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model, climate_zone, epw_file)
-    pump_defaults = auto_size_shw_pump(model)
+    pump_defaults = auto_size_shw_pump(model, true)
 
     # Add the main service water heating loop
 
@@ -343,64 +343,55 @@ class NECB2011
   # Chris Kirney 2018-06-20
   def auto_size_shw_pump(model, auto_sized = false)
     return {head: 179532, motor_efficiency: 0.9} if not auto_sized
-    spaces_peak_flow = []
-    global_max_z = -100000
     shw_spaces = []
-    max_space_centroids = []
     building_centre = Array.new(3,0)
     model.getSpaces.sort.each do |space|
-      shw_space_info = {
-          "space_centroid" => nil,
-          "peak_flow" => 0,
-          "building_cent_dist" => 0
-      }
-      space_surfaces = []
-      min_surface = []
-      space_peak_flow = 0
-      data = nil
+      space_peak_flow_SI = 0
       space_type_name = space.spaceType.get.nameString
       # find the specific space_type properties from standard.json
       standards_data['space_types']['table'].each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
-          # If there is no service hot water load.. Don't bother adding anything.
+          # Check if there is a service hot water load.
           if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
-            next
+            space_peak_flow_SI = 0
           else
             # If there is a service hot water load collect the space information
-            data = space_type
+            space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
+            # Calculate the peak shw flow rate for the space
+            space_peak_flow = (space_type['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
+            space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
           end
         end
       end
-      # If there is no service hot water load.. Don't bother adding anything.
-      # Skip space types with no data
-      next if data.nil?
-      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-      # Calculate the peak shw flow rate for the space
-      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)
-      shw_space_info['peak_flow'] = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
-      space_min_z = 100000000
-      min_surface = nil
+      xOrigin = space.xOrigin
+      yOrigin = space.yOrigin
+      zOrigin = space.zOrigin
       space_surfaces = space.surfaces
-      min_surface = space_surfaces.min_by{|index| index.centroid.z.to_f}
-      shw_space_info["space_centroid"] = min_surface.centroid
+      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f + zOrigin.to_f)}
+      shw_space_info = {
+          "space_centroid" => [min_surf.centroid.x.to_f + xOrigin, min_surf.centroid.y.to_f + yOrigin, min_surf.centroid.z.to_f + zOrigin],
+          "peak_flow_SI" => space_peak_flow_SI,
+          "building_cent_dist" => 0,
+          "space_name" => space.name
+      }
       shw_spaces << shw_space_info
-      building_centre[0] += min_surface.centroid.x.to_f
-      building_centre[1] += min_surface.centroid.y.to_f
+      building_centre[0] += min_surf.centroid.x.to_f + xOrigin
+      building_centre[1] += min_surf.centroid.y.to_f + yOrigin
       building_centre[2] += 1
+      puts "hello"
     end
     building_centre[0] /= building_centre[2]
     building_centre[1] /= building_centre[2]
     min_length = 1000000000
-    space_length = 0
     shw_spaces.each do |shw_space|
-      shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'].x.to_f - building_centre[0])**2) + ((shw_space['space_centroid'].y.to_f - building_centre[1])**2))
+      shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'][0] - building_centre[0])**2) + ((shw_space['space_centroid'][1] - building_centre[1])**2))
       shw_space['building_cent_dist'].round(1) <= min_length ? min_length = shw_space['building_cent_dist'].round(1) : next
     end
     centre_spaces = []
     shw_spaces.each do |shw_space|
       shw_space['building_cent_dist'].round(1) == min_length ? centre_spaces << shw_space : next
     end
-    centre_space = centre_spaces.max_by{|index| index['space_centroid'].z.to_f}
+    centre_space = centre_spaces.min_by{|index| index['space_centroid'][2]}
     put 'hello'
   end
 end
