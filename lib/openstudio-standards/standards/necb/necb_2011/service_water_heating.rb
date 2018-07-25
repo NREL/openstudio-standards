@@ -372,7 +372,8 @@ class NECB2011
           "space_centroid" => [min_surf.centroid.x.to_f + xOrigin, min_surf.centroid.y.to_f + yOrigin, min_surf.centroid.z.to_f + zOrigin],
           "peak_flow_SI" => space_peak_flow_SI,
           "building_cent_dist" => 0,
-          "space_name" => space.name
+          "space_name" => space.name,
+          "shw_piping_coord_dist" => [0, 0, 0],
       }
       shw_spaces << shw_space_info
       building_centre[0] += min_surf.centroid.x.to_f + xOrigin
@@ -391,7 +392,17 @@ class NECB2011
     shw_spaces.each do |shw_space|
       shw_space['building_cent_dist'].round(1) == min_length ? centre_spaces << shw_space : next
     end
+    total_peak_flow = 0
     centre_space = centre_spaces.min_by{|index| index['space_centroid'][2]}
+    shw_spaces.each do |shw_space|
+      if shw_space["peak_flow_SI"] > 0
+        shw_space["space_centroid"].each_with_index do |dist, coord|
+          shw_space["shw_piping_coord_dist"][coord] = (dist - centre_space["space_centroid"][coord]).abs
+          total_peak_flow += shw_space["peak_flow_SI"]
+        end
+      end
+    end
+    sizing_pipe_run = shw_spaces.max_by{|index| index['space_centroid'][2]}
     put 'hello'
   end
 end
