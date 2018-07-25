@@ -200,48 +200,6 @@ class Baseline9012013Test3 < Minitest::Test
     
   end
 
-  # Test Equipment Efficiencies for bldg_5
-  # @author Matt Leach, NORESCO
-  def test_hvac_eff_bldg5
-  
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-    
-    # check fan powers
-    supply_fan_hash = {}
-    # expect test to fail because pressure differential for MERV 13 filter is being added to expected calculation
-    # if pressure differential is set to zero, test passes
-    supply_fan_hash["Field Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 63121.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Main Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 30978.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Concourse Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 25363.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Coaches Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 26168.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Athletic Admin Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 32143,"PressureDifferential" => 0.0}
-    supply_fan_hash["Rooftop Terrace Level VAV_Reheat (Sys7) Fan"] = {"CFM" => 5742.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Athletic Admin Level IDF PSZ-AC Fan"] = {"CFM" => 1038.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Coaches Level IDF 4470 PSZ-AC Fan"] = {"CFM" => 1102.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Concourse Level IDF 315 PSZ-AC Fan"] = {"CFM" => 826.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Concourse Level Kitchen 304 PSZ-AC Fan"] = {"CFM" => 9048.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level IDF 104A PSZ-AC Fan"] = {"CFM" => 1102.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level IDF 122A PSZ-AC Fan"] = {"CFM" => 1080.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level IDF 131 PSZ-AC Fan"] = {"CFM" => 869.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level Laundry 101J PSZ-AC Fan"] = {"CFM" => 2797.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level Pool Hydrotherapy 115 PSZ-AC Fan"] = {"CFM" => 869.0,"PressureDifferential" => 0.0}
-    supply_fan_hash["Field Level Pool Recovery 111 PSZ-AC Fan"] = {"CFM" => 1398.0,"PressureDifferential" => 0.0}
-    
-    failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
-    failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
-    
-    # check plant loop components
-    total_chilled_water_capacity_tons = 542
-    # chw pumps
-    failure_array = check_district_chw_pumps(model, total_chilled_water_capacity_tons, failure_array)    
-    # hw pumps
-    failure_array = check_district_hw_pumps(model, failure_array)
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end
-
   # Test Equipment Efficiencies for bldg_7
   # @author Matt Leach, NORESCO
   # Known failure; this test assumes that all fans should have the SP reset curve,
