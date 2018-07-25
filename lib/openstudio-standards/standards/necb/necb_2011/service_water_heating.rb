@@ -341,10 +341,11 @@ class NECB2011
   # 179532 Pa and motor efficiency of 0.9 (based on the OpenStudio 2.4.1 defaults for a constant speed pump).  Until the
   # auto sizing method is complete only pass false for auto_sized.
   # Chris Kirney 2018-06-20
-  def auto_size_shw_pump(model, auto_sized = false)
+  def auto_size_shw_pump(model, auto_sized = false, pipe_dia_m = 0.01905, kin_visc = 0.0000004736, pipe_rough_m = 0.0000015)
     return {head: 179532, motor_efficiency: 0.9} if not auto_sized
     shw_spaces = []
     building_centre = Array.new(3,0)
+    total_peak_flow = 0
     model.getSpaces.sort.each do |space|
       space_peak_flow_SI = 0
       space_type_name = space.spaceType.get.nameString
@@ -360,6 +361,7 @@ class NECB2011
             # Calculate the peak shw flow rate for the space
             space_peak_flow = (space_type['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
             space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
+            total_peak_flow += space_peak_flow_SI
           end
         end
       end
@@ -392,17 +394,65 @@ class NECB2011
     shw_spaces.each do |shw_space|
       shw_space['building_cent_dist'].round(1) == min_length ? centre_spaces << shw_space : next
     end
-    total_peak_flow = 0
     centre_space = centre_spaces.min_by{|index| index['space_centroid'][2]}
     shw_spaces.each do |shw_space|
       if shw_space["peak_flow_SI"] > 0
         shw_space["space_centroid"].each_with_index do |dist, coord|
           shw_space["shw_piping_coord_dist"][coord] = (dist - centre_space["space_centroid"][coord]).abs
-          total_peak_flow += shw_space["peak_flow_SI"]
         end
       end
     end
-    sizing_pipe_run = shw_spaces.max_by{|index| index['space_centroid'][2]}
+    sizing_pipe_run = shw_spaces.max_by{|index| (index['shw_piping_coord_dist'][0] + index['shw_piping_coord_dist'][1] + index['shw_piping_coord_dist'][2])}
+    sizing_pipe_length = sizing_pipe_run['shw_piping_coord_dist'][0] + sizing_pipe_run['shw_piping_coord_dist'][1] + sizing_pipe_run['shw_piping_coord_dist'][2]
+
+    # With the maximum flow rate and piping run in hand we can begin do a head loss calculation.
+    # Step 1:  Calculate the Reynold's number.  Note kinematic viscosity is set for water at 60 C and pipe diameter is
+    #          set to 3/4".  These can be changed by passing different values to the method.  I got the kinematic
+    #          viscosity from www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html accessed 2018-07-05.
+    #          I got the pipe roughness from www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on
+    #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
+    #          it is for process water but we assume that is not the case).
+    pipe_vel = 4*total_peak_flow/(Math::PI*(pipe_dia_m**2))
+    re_pipe = (pipe_vel*pipe_dia_m)/kin_visc
+    # Step 2:  Figure out what the Darcy-Weisbach friction factor is.
+    relative_rough = pipe_rough_m/pipe_dia_m
+    f = friction_factor(re_pipe, relative_rough)
+    # Step 3:  Calculate the major head loss
+    #          Note that you may be thinking that I forgot to divide the last term by 2 in the equation below.  I didn't.
+    #          I multiplied the piping length by 2 because I did not take pipe bends etc. into account and I calculate the
+    #          maximum piping run in a really approximate way.  Thus I multiply the piping run by 2.  If you can think
+    #          of something better please replace what I have.
+    # hl taken from Fox, Rober W. and McDonald, Alan T., "Introduction to Fluid Mechanics", Fourth Edition, 1992, pg. 349.
+    hl = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)) + sizing_pipe_run['shw_piping_coord_dist'][2]
     put 'hello'
+  end
+
+  def friction_factor(re_pipe, relative_rough)
+    # This method determines the Darcy-Weisbach friction factor assuming the pipe is circular and filled.
+    if re_pipe <= 2100
+      # Laminar flow use the Uagen-Poiseuille equation.  https://neutrium.net/fluid_flow/pressure-loss-in-pipe
+      # accessed 2018-07-25.
+      f = 64/re_pipe
+    elsif re_pipe > 2100 && re_pipe <= 4000
+      # In transition flow region I interpolate by Reynolds number between laminar and turbulent regimes.  Yeah, that's
+      # crap but if you can come up with something better you are welcome to replace what I have below.
+      flam = 16/2100
+      pipe_rough_fact = (relative_rough)/3.7
+      factor_A = -2*Math.log10(pipe_rough_fact + (12/4000))
+      factor_B = -2*Math.log10(pipe_rough_fact + ((2.51*factor_A)/4000))
+      factor_C = -2*Math.log10(pipe_rough_fact + ((2.51*factor_B)/4000))
+      fturb = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
+      re_int = (re_pipe - 2100)/1900
+      f = ((fturb-flam)*re_int) + flam
+    elsif re_pipe > 4000
+      # Turbulent flow use Serghide's Equation which I got from https://neutrium.net/fluid_flow/pressure-loss-in-pipe
+      # accessed 2018-07-25.  Apparently it is good for 4000 < Re < 1x10^10 and relative roughness between 1x10-7 and 1.
+      pipe_rough_fact = (relative_rough)/3.7
+      factor_A = -2*Math.log10(pipe_rough_fact + (12/re_pipe))
+      factor_B = -2*Math.log10(pipe_rough_fact + ((2.51*factor_A)/re_pipe))
+      factor_C = -2*Math.log10(pipe_rough_fact + ((2.51*factor_B)/re_pipe))
+      f = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
+    end
+    return f
   end
 end
