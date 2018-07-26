@@ -174,4 +174,28 @@ Standard.class_eval do
 
     return energy_gj.get
   end
+
+  # Gets all annual energy consumption by enduse and fuel type from the sql file
+  #
+  # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
+  # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
+  # values of 0.0 if none of this end use/fuel type combo was used by the simulation.
+  def model_results_by_end_use_and_fuel_type(model)
+    energy_values = {}
+
+    # List of all fuel types
+    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
+
+    # List of all end uses
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
+
+    # Get the value for each end use/ fuel type combination
+    end_uses.each do |end_use|
+      fuel_types.each do |fuel_type|
+        energy_values["#{end_use}|#{fuel_type}"] = model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
+      end
+    end
+
+    return energy_values
+  end
 end
