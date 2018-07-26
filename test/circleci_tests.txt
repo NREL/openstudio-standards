@@ -93,7 +93,9 @@ necb/test_necb_hvac_system_5_centrifugal.rb
 necb/test_necb_hvac_system_5_reciprocating.rb
 necb/test_necb_hvac_system_5_rotary_screw.rb
 necb/test_necb_hvac_system_5_scroll.rb
-necb/test_necb_hvac_system_6.rb
+necb/test_necb_hvac_system_6_electricity.rb
+necb/test_necb_hvac_system_6_fueloil2.rb
+necb/test_necb_hvac_system_6_naturalgas.rb
 necb/test_necb_hvac_system_7_centrifugal.rb
 necb/test_necb_hvac_system_7_reciprocating.rb
 necb/test_necb_hvac_system_7_rotary_screw.rb
