@@ -1,10 +1,11 @@
 class NECB2011
-  def model_add_swh(model, building_type, climate_zone, prototype_input, epw_file)
+  def model_add_swh(model, climate_zone, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model, climate_zone, epw_file)
-    pump_defaults = auto_size_shw_pump(model, true)
+    shw_pump_head = auto_size_shw_pump_head(model, false)
+    shw_pump_motor_eff = 0.9
 
     # Add the main service water heating loop
 
@@ -14,8 +15,8 @@ class NECB2011
                                        'Main Service Water Loop',
                                        nil,
                                        shw_sizing['max_temp_SI'],
-                                       pump_defaults[:head],
-                                       pump_defaults[:motor_efficiency],
+                                       shw_pump_head,
+                                       shw_pump_motor_eff,
                                        shw_sizing['tank_capacity_SI'],
                                        shw_sizing['tank_volume_SI'],
                                        swh_fueltype,
@@ -164,7 +165,8 @@ class NECB2011
   end
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
-  def auto_size_shw_capacity(model, climate_zone, epw_file)
+  # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
+  def auto_size_shw_capacity(model, climate_zone, epw_file, u = 0.45, height_to_radius = 2)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
@@ -192,13 +194,15 @@ class NECB2011
       # find the specific space_type properties from standard.json
       standards_data['space_types']['table'].each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
+          if space_type['necb_hvac_system_selection_type'] == "- undefined -"
+            break
           # If there is no service hot water load.. Don't bother adding anything.
-          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
-            next
+          elsif space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
+            break
           else
             # If there is a service hot water load collect the space information
             data = space_type
-#            shw_spaces << space
+            break
           end
         end
       end
@@ -319,11 +323,9 @@ class NECB2011
       end
     end
     tank_capacity_SI = tank_volume_SI * 1000 * 4180 * (max_temp - 15)/(3600*peak_time_fraction)
-    height_to_radius = 2
     tank_radius = (tank_volume_SI/(height_to_radius*Math::PI))**(1.0/3)
     tank_area = 2*(1+height_to_radius)*Math::PI*(tank_radius**2)
     room_temp = OpenStudio.convert(70, 'F', 'C').get
-    u = 0.45
     parasitic_loss = u*tank_area*(max_temp - room_temp)
     tank_param = {
         "tank_volume_SI" => tank_volume_SI,
@@ -336,40 +338,70 @@ class NECB2011
     return tank_param
   end
 
-  # Partially completed code to autosize the pump head by calculating the piping length and deriving required head from that.
-  # Will also determine the pump motor efficiency.  If auto_sized is set to false then it returns a default pump head of
-  # 179532 Pa and motor efficiency of 0.9 (based on the OpenStudio 2.4.1 defaults for a constant speed pump).  Until the
-  # auto sizing method is complete only pass false for auto_sized.
-  # Chris Kirney 2018-06-20
-  def auto_size_shw_pump(model, auto_sized = false, pipe_dia_m = 0.01905, kin_visc = 0.0000004736, pipe_rough_m = 0.0000015)
-    return {head: 179532, motor_efficiency: 0.9} if not auto_sized
+  # Autosize the pump head by calculating the piping longest piping length and deriving required head from that.
+  # If default is set to true then it returns a default pump head of 179532 Pa which is based on the OpenStudio 2.4.1
+  # defaults for a constant speed pump.  The method first assumes that the tank and pump are located in the space closest
+  # to the center of the bottom of the building.  It then assumes that water is delivered to the bottom center of every
+  # space that has a demand for shw.  It calculates the x, y, and z components of the vector between the shw space and the
+  # spaces with demand for shw.  The distance of the piping run is calculated by adding the x, y, and z components of the
+  # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
+  # and other minor losses are accounted by doubling the calculated length of the pipe.  the pipe diameter is defaulted to
+  # 0.01905m (3/4") as recommended by Mike Lubun.  The default kinematic viscosity of water is assumed to be that at
+  # 60 C (in m^2/s).  The default density of water is assumed to be 1000 kg/m^3.  The pipe is assumed to be made out of
+  # PVC and have a roughness height of 1.5*10^-6 m as per www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness
+  # accessed on 2018-07-25.
+  # Chris Kirney 2018-07-26.
+  def auto_size_shw_pump_head(model, default = true, pipe_dia_m = 0.01905, kin_visc_SI = 0.0000004736, density_SI = 1000, pipe_rough_m = 0.0000015)
+    return 179532 if default
     shw_spaces = []
     building_centre = Array.new(3,0)
     total_peak_flow = 0
+    conditioned = true
+    lowest_space = 100000000000
+    # Go through all of the spaces, ignore those that are not conditioned
     model.getSpaces.sort.each do |space|
       space_peak_flow_SI = 0
       space_type_name = space.spaceType.get.nameString
-      # find the specific space_type properties from standard.json
+      # Find the specific space_type properties from standard.json
       standards_data['space_types']['table'].each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
-          # Check if there is a service hot water load.
-          if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
+          # If the space is unheated ignore it.
+          if space_type['necb_hvac_system_selection_type'] == "- undefined -"
+            conditioned = false
+            break
+          # Check if the there is a shw load.  If there isn't flag this by setting the peak flow to 0.
+          elsif space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
             space_peak_flow_SI = 0
+            break
           else
             # If there is a service hot water load collect the space information
             space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
             # Calculate the peak shw flow rate for the space
             space_peak_flow = (space_type['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
             space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
+            # Determine the total shw peak flow for the building.
             total_peak_flow += space_peak_flow_SI
+            break
           end
         end
       end
+      if conditioned == false
+        next
+      end
+      # Determine the bottom surface of the space and calculate it's centroid.  This is assumed to be where SHW enters
+      # the space (or leaves the space in the case of the location of the tank).  Note that this is calculated for all
+      # conditioned spaces as the tank may be located in a space that is conditioned but does not actually have a shw
+      # demand (such as a mechanical/electrical room).
+      # Get the coordinates of the origin for the space (This coordinates of points in the space are relative to this).
       xOrigin = space.xOrigin
       yOrigin = space.yOrigin
       zOrigin = space.zOrigin
+      # Get the surfaces for the space.
       space_surfaces = space.surfaces
+      # Find the floor (aka the surface with the lowest centroid).
       min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f + zOrigin.to_f)}
+      # I use centroid for the floor as the location of the source or point of use for the shw system.  What!?! doesn't
+      # everyone wash their hands on the floor?
       shw_space_info = {
           "space_centroid" => [min_surf.centroid.x.to_f + xOrigin, min_surf.centroid.y.to_f + yOrigin, min_surf.centroid.z.to_f + zOrigin],
           "peak_flow_SI" => space_peak_flow_SI,
@@ -377,24 +409,33 @@ class NECB2011
           "space_name" => space.name,
           "shw_piping_coord_dist" => [0, 0, 0],
       }
+      if shw_space_info["space_centroid"][2] < lowest_space
+        lowest_space = shw_space_info["space_centroid"][2]
+      end
       shw_spaces << shw_space_info
+      # This part is used to determine the overall x, y centre of the building.  This is determined by averaging the
+      # x values and y values of the centroids of all of the conditioned spaces.
       building_centre[0] += min_surf.centroid.x.to_f + xOrigin
       building_centre[1] += min_surf.centroid.y.to_f + yOrigin
       building_centre[2] += 1
-      puts "hello"
     end
+    # This is where the average happens
     building_centre[0] /= building_centre[2]
     building_centre[1] /= building_centre[2]
-    min_length = 1000000000
-    shw_spaces.each do |shw_space|
-      shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'][0] - building_centre[0])**2) + ((shw_space['space_centroid'][1] - building_centre[1])**2))
-      shw_space['building_cent_dist'].round(1) <= min_length ? min_length = shw_space['building_cent_dist'].round(1) : next
-    end
+    # Go through each space on the lowest floor of the building and determine the distance between the centroid of the
+    # space's floors and the center of the building I calculated just above.
     centre_spaces = []
     shw_spaces.each do |shw_space|
-      shw_space['building_cent_dist'].round(1) == min_length ? centre_spaces << shw_space : next
+      if shw_space['space_centroid'][2] == lowest_space
+        shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'][0] - building_centre[0])**2) + ((shw_space['space_centroid'][1] - building_centre[1])**2))
+        centre_spaces << shw_space
+      end
     end
-    centre_space = centre_spaces.min_by{|index| index['space_centroid'][2]}
+    # Determine which of the floor spaces is closest to the centre of the building and that one becomes the location of
+    # the shw tank.
+    centre_space = centre_spaces.min_by{|dist| dist['building_cent_dist'].round(1)}
+    # Now go through each space with a shw load and determine the x, y, and z components of a vector from the centroid
+    # of the floor of the space containing the shw_tank and the centroid of the floor of the given space
     shw_spaces.each do |shw_space|
       if shw_space["peak_flow_SI"] > 0
         shw_space["space_centroid"].each_with_index do |dist, coord|
@@ -402,18 +443,26 @@ class NECB2011
         end
       end
     end
+    # The piping run length from the shw tank to a given space is assumed to be the sum of the coordinates of the vector
+    # described above.  The longest piping run becomes the one used for sizing.  Note that I double the length of this
+    # piping run below when calculating head loss.
     sizing_pipe_run = shw_spaces.max_by{|index| (index['shw_piping_coord_dist'][0] + index['shw_piping_coord_dist'][1] + index['shw_piping_coord_dist'][2])}
     sizing_pipe_length = sizing_pipe_run['shw_piping_coord_dist'][0] + sizing_pipe_run['shw_piping_coord_dist'][1] + sizing_pipe_run['shw_piping_coord_dist'][2]
 
-    # With the maximum flow rate and piping run in hand we can begin do a head loss calculation.
+    # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
+    # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
+    # flow rates for the entire building.  The length of the piping run is twice the calculated longest piping run
+    # described above.
     # Step 1:  Calculate the Reynold's number.  Note kinematic viscosity is set for water at 60 C and pipe diameter is
     #          set to 3/4".  These can be changed by passing different values to the method.  I got the kinematic
     #          viscosity from www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html accessed 2018-07-05.
     #          I got the pipe roughness from www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on
     #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
     #          it is for process water but we assume that is not the case).
+    # Determine the bulk velocity of the shw through the pipe.
     pipe_vel = 4*total_peak_flow/(Math::PI*(pipe_dia_m**2))
-    re_pipe = (pipe_vel*pipe_dia_m)/kin_visc
+    # Get the Reynolds number.
+    re_pipe = (pipe_vel*pipe_dia_m)/kin_visc_SI
     # Step 2:  Figure out what the Darcy-Weisbach friction factor is.
     relative_rough = pipe_rough_m/pipe_dia_m
     f = friction_factor(re_pipe, relative_rough)
@@ -422,9 +471,11 @@ class NECB2011
     #          I multiplied the piping length by 2 because I did not take pipe bends etc. into account and I calculate the
     #          maximum piping run in a really approximate way.  Thus I multiply the piping run by 2.  If you can think
     #          of something better please replace what I have.
-    # hl taken from Fox, Rober W. and McDonald, Alan T., "Introduction to Fluid Mechanics", Fourth Edition, 1992, pg. 349.
-    hl = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)) + sizing_pipe_run['shw_piping_coord_dist'][2]
-    put 'hello'
+    # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
+    # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
+    # earth hence g is hard coded to 9.81 m/s^2.
+    hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)/density_SI) + density_SI*sizing_pipe_run['shw_piping_coord_dist'][2]*9.81
+    return hl_Pa
   end
 
   def friction_factor(re_pipe, relative_rough)
@@ -434,7 +485,7 @@ class NECB2011
       # accessed 2018-07-25.
       f = 64/re_pipe
     elsif re_pipe > 2100 && re_pipe <= 4000
-      # In transition flow region I interpolate by Reynolds number between laminar and turbulent regimes.  Yeah, that's
+      # In the transition flow region I interpolate by Reynolds number between laminar and turbulent regimes.  Yeah, that's
       # crap but if you can come up with something better you are welcome to replace what I have below.
       flam = 16/2100
       pipe_rough_fact = (relative_rough)/3.7

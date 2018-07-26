@@ -187,7 +187,7 @@ class NECB2011 < Standard
     end
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
-    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_add_swh(model, climate_zone, epw_file)
     model_apply_sizing_parameters(model)
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
