@@ -1,3 +1,7 @@
+require 'csv'
+
+
+
 class Standard
   attr_accessor :space_multiplier_map
 
@@ -2936,47 +2940,78 @@ class Standard
     return full_epw_path
   end
 
+  # Find the legacy simulation results from a CSV of previously created results.
+  #
+  # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
+  # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
+  # values of 0.0 if none of this end use/fuel type combo was used by the simulation.  Returns nil
+  # if the legacy results couldn't be found.
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+    # Load the legacy idf results CSV file into a ruby hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/standards"
+    temp = ''
+    # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      # load file from embedded files
+      temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
+    else
+      # loaded gem from system path
+      temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
+    end
+    legacy_idf_csv = CSV.new(temp, :headers => true, :converters => :all)
+    legacy_idf_results = legacy_idf_csv.to_a.map {|row| row.to_hash }
+
+    # Get the results for this building
+    search_criteria = {
+        'Building Type' => building_type,
+        'Template' => template,
+        'Climate Zone' => climate_zone
+    }
+    energy_values = model_find_object(legacy_idf_results, search_criteria)
+    if energy_values.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy simulation results for #{search_criteria}")
+      return {}
+    end
+
+    return energy_values
+  end
+
   # Method to gather prototype simulation results for a specific climate zone, building type, and template
   #
   # @param climate_zone [String] string for the ASHRAE climate zone.
   # @param building_type [String] string for prototype building type.
   # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
   def model_process_results_for_datapoint(model, climate_zone, building_type)
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/standards"
-
-    # Load the legacy idf results JSON file into a ruby hash
-    temp = ''
-    begin
-      temp = load_resource_relative('../../../data/standards/legacy_idf_results.json', 'r:UTF-8')
-    rescue NoMethodError
-      temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
-    end
-    legacy_idf_results = JSON.parse(temp)
-
-    # List of all fuel types
-    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
-
-    # List of all end uses
-    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection', 'Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
-
-    # Get legacy idf results
+    # Hash to store the legacy results by fuel and by end use
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
     legacy_results_hash['total_legacy_water_val'] = 0
     legacy_results_hash['total_energy_by_fuel'] = {}
     legacy_results_hash['total_energy_by_end_use'] = {}
+
+    # Get the lecay simulation results
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+    if legacy_values.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
+      return legacy_results_hash
+    end
+
+    # List of all fuel types
+    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
+
+    # List of all end uses
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
+
+    # Sum the legacy results up by fuel and by end use
     fuel_types.each do |fuel_type|
       end_uses.each do |end_use|
         next if end_use == 'Exterior Equipment'
-
-        # Get the legacy results number
-        legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
+        legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
 
         # Combine the exterior lighting and exterior equipment
         if end_use == 'Exterior Lighting'
-          legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
+          legacy_exterior_equipment = legacy_values["Exterior Equipment|#{fuel_type}"]
           unless legacy_exterior_equipment.nil?
             legacy_val += legacy_exterior_equipment
           end
