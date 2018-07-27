@@ -219,7 +219,7 @@ class Baseline9012013TestBldg2 < Minitest::Test
 
   # Gas DHW Test
   # @author Matt Leach, NORESCO
-  def ci_fail_test_dhw_bldg2_naturalgas
+  def test_dhw_bldg2_naturalgas
 
     building_type = "PrimarySchool"
     model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-4B', building_type, 'Xcel Energy CO EDA', false, true)
@@ -472,7 +472,7 @@ class Baseline9012013TestBldg2 < Minitest::Test
 
   # Test Equipment Efficiencies for bldg_2
   # @author Matt Leach, NORESCO
-  def ci_fail_test_hvac_eff_bldg2
+  def test_hvac_eff_bldg2
 
     model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
@@ -552,7 +552,7 @@ class Baseline9012013TestBldg2 < Minitest::Test
 
   # SAT/Zone Sizing/System Sizing Test
   # @author Matt Leach, NORESCO
-  def test_design_supply_air_temp_bldg2_thermostat_mod
+  def ci_fail_test_design_supply_air_temp_bldg2_thermostat_mod
     model = create_baseline_model('bldg_2_thermostat_mod', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
