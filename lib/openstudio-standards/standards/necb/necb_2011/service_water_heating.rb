@@ -350,16 +350,16 @@ class NECB2011
   # 60 C (in m^2/s).  The default density of water is assumed to be 1000 kg/m^3.  The pipe is assumed to be made out of
   # PVC and have a roughness height of 1.5*10^-6 m as per www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness
   # accessed on 2018-07-25.
-  # Chris Kirney 2018-07-26.
-  def auto_size_shw_pump_head(model, default = true, pipe_dia_m = 0.01905, kin_visc_SI = 0.0000004736, density_SI = 1000, pipe_rough_m = 0.0000015)
+  # Chris Kirney 2018-07-27.
+  def auto_size_shw_pump_head(model, default = true, pipe_dia_m = 0.01905, kin_visc_SI = 0.0000004736, density_SI = 983, pipe_rough_m = 0.0000015)
     return 179532 if default
     shw_spaces = []
     building_centre = Array.new(3,0)
     total_peak_flow = 0
-    conditioned = true
     lowest_space = 100000000000
     # Go through all of the spaces, ignore those that are not conditioned
     model.getSpaces.sort.each do |space|
+      conditioned = true
       space_peak_flow_SI = 0
       space_type_name = space.spaceType.get.nameString
       # Find the specific space_type properties from standard.json
@@ -474,7 +474,10 @@ class NECB2011
     # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
     # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
     # earth hence g is hard coded to 9.81 m/s^2.
-    hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)/density_SI) + density_SI*sizing_pipe_run['shw_piping_coord_dist'][2]*9.81
+    hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*sizing_pipe_run['shw_piping_coord_dist'][2]*9.81
+    if hl_Pa < 1
+      hl_Pa = 1
+    end
     return hl_Pa
   end
 
@@ -483,17 +486,17 @@ class NECB2011
     if re_pipe <= 2100
       # Laminar flow use the Uagen-Poiseuille equation.  https://neutrium.net/fluid_flow/pressure-loss-in-pipe
       # accessed 2018-07-25.
-      f = 64/re_pipe
+      f = 64.to_f/re_pipe.to_f
     elsif re_pipe > 2100 && re_pipe <= 4000
       # In the transition flow region I interpolate by Reynolds number between laminar and turbulent regimes.  Yeah, that's
       # crap but if you can come up with something better you are welcome to replace what I have below.
-      flam = 16/2100
+      flam = 64.to_f / 2100.to_f
       pipe_rough_fact = (relative_rough)/3.7
-      factor_A = -2*Math.log10(pipe_rough_fact + (12/4000))
+      factor_A = -2*Math.log10(pipe_rough_fact + (12.to_f/4000.to_f))
       factor_B = -2*Math.log10(pipe_rough_fact + ((2.51*factor_A)/4000))
       factor_C = -2*Math.log10(pipe_rough_fact + ((2.51*factor_B)/4000))
       fturb = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
-      re_int = (re_pipe - 2100)/1900
+      re_int = (re_pipe - 2100.to_f)/1900.to_f
       f = ((fturb-flam)*re_int) + flam
     elsif re_pipe > 4000
       # Turbulent flow use Serghide's Equation which I got from https://neutrium.net/fluid_flow/pressure-loss-in-pipe
