@@ -347,9 +347,9 @@ class NECB2011
   # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
   # and other minor losses are accounted by doubling the calculated length of the pipe.  the pipe diameter is defaulted to
   # 0.01905m (3/4") as recommended by Mike Lubun.  The default kinematic viscosity of water is assumed to be that at
-  # 60 C (in m^2/s).  The default density of water is assumed to be 1000 kg/m^3.  The pipe is assumed to be made out of
-  # PVC and have a roughness height of 1.5*10^-6 m as per www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness
-  # accessed on 2018-07-25.
+  # 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per https://hypertextbook.com/facts/2007/AllenMa.shtml
+  # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
+  # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
   # Chris Kirney 2018-07-27.
   def auto_size_shw_pump_head(model, default = true, pipe_dia_m = 0.01905, kin_visc_SI = 0.0000004736, density_SI = 983, pipe_rough_m = 0.0000015)
     return 179532 if default
