@@ -3420,8 +3420,8 @@ class Standard
 
       # Dummy zero-capacity cooling coil
       clg_coil = create_coil_cooling_dx_single_speed(model,
-                                                     name:"Dummy Always Off DX Coil",
-                                                     schedule:alwaysOffDiscreteSchedule)
+                                                     name: "Dummy Always Off DX Coil",
+                                                     schedule: model.alwaysOffDiscreteSchedule)
       unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
       unitary_system.setName("#{zone.name} Evap Cooler Cycling Fan")
       unitary_system.setSupplyFan(fan)

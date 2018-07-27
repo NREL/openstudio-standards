@@ -469,8 +469,8 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_biquadratic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
-    curve = OpenStudio::Model::CurveBiquadratic.new(self)
+  def create_curve_biquadratic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
+    curve = OpenStudio::Model::CurveBiquadratic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -499,8 +499,8 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_bicubic(coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
-    curve = OpenStudio::Model::CurveBicubic.new(self)
+  def create_curve_bicubic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
+    curve = OpenStudio::Model::CurveBicubic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -533,8 +533,8 @@ class Standard
   # @param max_out [Double] the maximum value of dependent variable Z
   # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
   # and the resulting output dependent variable is considered unitless
-  def create_curve_quadratic(coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
-    curve = OpenStudio::Model::CurveQuadratic.new(self)
+  def create_curve_quadratic(model, coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
+    curve = OpenStudio::Model::CurveQuadratic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])

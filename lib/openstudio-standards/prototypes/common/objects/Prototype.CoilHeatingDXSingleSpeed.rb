@@ -78,14 +78,14 @@ class Standard
       heat_cap_ft_coeffs_si = convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
       heat_eir_ft_coeffs_si = convert_curve_biquadratic(heat_eir_ft_coeffs_ip)
 
-      htg_cap_f_of_temp = create_curve_biquadratic(heat_cap_ft_coeffs_si, 'Heat-Cap-fT', 0, 100, 0, 100, nil, nil)
-      htg_cap_f_of_flow = create_curve_quadratic(heat_cap_fflow_coeffs, 'Heat-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      htg_energy_input_ratio_f_of_temp = create_curve_biquadratic(heat_eir_ft_coeffs_si, 'Heat-EIR-fT', 0, 100, 0, 100, nil, nil)
-      htg_energy_input_ratio_f_of_flow = create_curve_quadratic(heat_eir_fflow_coeffs, 'Heat-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      htg_part_load_fraction = create_curve_quadratic(heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+      htg_cap_f_of_temp = create_curve_biquadratic(model, heat_cap_ft_coeffs_si, 'Heat-Cap-fT', 0, 100, 0, 100, nil, nil)
+      htg_cap_f_of_flow = create_curve_quadratic(model, heat_cap_fflow_coeffs, 'Heat-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      htg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, heat_eir_ft_coeffs_si, 'Heat-EIR-fT', 0, 100, 0, 100, nil, nil)
+      htg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, heat_eir_fflow_coeffs, 'Heat-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      htg_part_load_fraction = create_curve_quadratic(model, heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
       # Heating defrost curve for reverse cycle
-      def_eir_f_of_temp = create_curve_biquadratic(defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
+      def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
 
     else # default curve set
 

@@ -170,11 +170,11 @@ class Standard
       cool_plf_fplr_coeffs = [0.78, 0.22, 0]
 
       # Make the curves
-      clg_cap_f_of_temp = create_curve_biquadratic(cool_cap_ft_coeffs_si, 'RoomAC-Cap-fT', 0, 100, 0, 100, nil, nil)
-      clg_cap_f_of_flow = create_curve_quadratic(cool_cap_fflow_coeffs, 'RoomAC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(cool_eir_ft_coeffs_si, 'RoomAC-EIR-fT', 0, 100, 0, 100, nil, nil)
-      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(cool_eir_fflow_coeffs, 'RoomAC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_part_load_ratio = create_curve_quadratic(cool_plf_fplr_coeffs, 'RoomAC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+      clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'RoomAC-Cap-fT', 0, 100, 0, 100, nil, nil)
+      clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'RoomAC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'RoomAC-EIR-fT', 0, 100, 0, 100, nil, nil)
+      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'RoomAC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'RoomAC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
     elsif type == 'Residential Central AC'
 
@@ -191,11 +191,11 @@ class Standard
       cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
 
       # Make the curves
-      clg_cap_f_of_temp = create_curve_biquadratic(cool_cap_ft_coeffs_si, 'AC-Cap-fT', 0, 100, 0, 100, nil, nil)
-      clg_cap_f_of_flow = create_curve_quadratic(cool_cap_fflow_coeffs, 'AC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(cool_eir_ft_coeffs_si, 'AC-EIR-fT', 0, 100, 0, 100, nil, nil)
-      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(cool_eir_fflow_coeffs, 'AC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_part_load_ratio = create_curve_quadratic(cool_plf_fplr_coeffs, 'AC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+      clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'AC-Cap-fT', 0, 100, 0, 100, nil, nil)
+      clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'AC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'AC-EIR-fT', 0, 100, 0, 100, nil, nil)
+      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'AC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'AC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
     elsif type == 'Residential Central ASHP'
 
@@ -209,11 +209,11 @@ class Standard
       cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
 
       # Make the curves
-      clg_cap_f_of_temp = create_curve_biquadratic(cool_cap_ft_coeffs_si, 'Cool-Cap-fT', 0, 100, 0, 100, nil, nil)
-      clg_cap_f_of_flow = create_curve_quadratic(cool_cap_fflow_coeffs, 'Cool-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(cool_eir_ft_coeffs_si, 'Cool-EIR-fT', 0, 100, 0, 100, nil, nil)
-      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(cool_eir_fflow_coeffs, 'Cool-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-      clg_part_load_ratio = create_curve_quadratic(cool_plf_fplr_coeffs, 'Cool-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+      clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'Cool-Cap-fT', 0, 100, 0, 100, nil, nil)
+      clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'Cool-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'Cool-EIR-fT', 0, 100, 0, 100, nil, nil)
+      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'Cool-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'Cool-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
     else # default curve set, type == 'Split AC' || 'PTAC'
 
