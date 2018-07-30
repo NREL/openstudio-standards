@@ -1,5 +1,23 @@
 require 'fileutils'
 
+def file_out_dir
+  File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
+end
+
+# copied and modified from https://github.com/rubyworks/facets/blob/master/lib/core/facets/string/snakecase.rb
+class String
+  def snek
+    #gsub(/::/, '/').
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr('-', '_').
+        gsub(/\s/, '_').
+        gsub(/__+/, '_').
+        gsub(/#+/, '').
+        downcase
+  end
+end
+
 def generate_ci_bldg_test_files
   templates = ['NECB2011', 'NECB2015']
   building_types = [
@@ -21,8 +39,9 @@ def generate_ci_bldg_test_files
       "Warehouse"
   ]
   fuel_types = ['gas', 'electric']
-  out_dir = File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
+  out_dir = file_out_dir()
   FileUtils.mkdir_p out_dir
+
   templates.each {|template|
     building_types.each {|building_type|
       fuel_types.each {|fuel_type|
@@ -63,7 +82,7 @@ def write_file_path_to_ci_tests_txt
 
   # remove lines which contains the test_necb_bldg_*.rb
   files.each_with_index {|line, i|
-    if line.include?("necb/test_necb_bldg_")
+    if line.include?("necb/test_necb_bldg_") or line.include?("necb/test_necb_hvac_system_1.rb")
       new_file_content = new_file_content - [files[i]]
     end
   }
@@ -86,5 +105,192 @@ def write_file_path_to_ci_tests_txt
 end
 
 
+def generate_hvac_sys1_files
+
+  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
+  mau_types = [true, false]
+  mau_heating_coil_types = ["Hot Water", "Electric"]
+  baseboard_types = ["Hot Water", "Electric"]
+
+  out_dir = file_out_dir()
+  model_dir = File.join(out_dir, 'models')
+  FileUtils.mkpath(model_dir)
+  FileUtils.copy_entry( File.absolute_path(File.join(__dir__, "..", "necb", "models")), model_dir)
+  boiler_fueltypes.each {|boiler_fueltype|
+    mau_types.each {|mau_type|
+      mau_heating_coil_types.each {|mau_heating_coil_type|
+        baseboard_types.each {|baseboard_type|
+        filename = File.join(out_dir,"test_necb_hvac_system_1_#{boiler_fueltype.snek}_#{mau_type.to_s.snek}_#{mau_heating_coil_type.snek}_#{baseboard_type.snek}.rb")
+        puts filename
+        file_string = %q{
+require_relative '../helpers/minitest_helper'
+require_relative '../helpers/create_doe_prototype_helper'
+
+
+#This will run all the combinations possible with the inputs for each system.  The test will.
+#0. Save the baseline file as baseline.osm
+#1.	Add the system to the model using the hvac.rb routines and save that step as *.rb
+#2.	Run the Standards methods and save that as the *.osm.
+#3.	The name of the file will represent the combination used for that system
+#4.	Only after all the system files are created the files will then be simulated.
+#5.	Annual results will be contained in the Annual_results.csv file and failed simulations will be in the Failted.txt file.
+#
+#All output is in the test/output folder.
+#Set the switch true to run the standards in the test
+#PERFORM_STANDARDS = true
+#Set to true to run the simulations.
+#FULL_SIMULATIONS = true
+#
+#NOTE: The test will fail on the first error for each system to save time.
+#NOTE: You can use Kdiff3 three file to select the baseline, *.hvac.rb, and *.osm
+#      file for a three way diff of before sizing, and then standard application.
+#NOTE: To focus on a single system type "dont_" in front of the tests you do not want to run.
+#       EX: def dont_test_system_1()
+# Hopefully this makes is easier to debug the HVAC stuff!
+
+
+class NECB_HVAC_System_1_Test < MiniTest::Test
+
+
+  WEATHER_FILE = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+  Vintages = ['NECB2011']
+
+
+  #System #1 ToDo
+  # mua_types = false will fail. (PTAC Issue Kamel Mentioned)
+  #Control zone for SZ systems.
+
+
+  def test_system_1_$(boiler_fueltypes_snake)_$(mau_types_snake)_$(mau_heating_coil_types_snake)_$(baseboard_types_snake)()
+    boiler_fueltypes = ["$(boiler_fueltypes)"]
+    mau_types = [$(mau_types)]
+    mau_heating_coil_types = ["$(mau_heating_coil_types)"]
+    baseboard_types = ["$(baseboard_types)"]
+    output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_1"
+
+    name = String.new
+
+    #Create folder
+    FileUtils.rm_rf(output_folder)
+    FileUtils::mkdir_p(output_folder)
+
+    #interate through combinations.
+
+    Vintages.each do |vintage|
+      standard = Standard.build(vintage)
+      boiler_fueltypes.each do |boiler_fueltype|
+        baseboard_types.each do |baseboard_type|
+          mau_types.each do |mau_type|
+            hw_loop = nil
+            model = nil
+            if mau_type == true
+              mau_heating_coil_types.each do |mau_heating_coil_type|
+                name = "sys1_Boiler~#{boiler_fueltype}_Mau~#{mau_type}_MauCoil~#{mau_heating_coil_type}_Baseboard~#{baseboard_type}"
+                puts "***************************************#{name}*******************************************************\n"
+                model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
+                BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+                if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
+                  hw_loop = OpenStudio::Model::PlantLoop.new(model)
+                  BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+                end
+                BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
+                    model,
+                    model.getThermalZones,
+                    boiler_fueltype,
+                    mau_type,
+                    mau_heating_coil_type,
+                    baseboard_type,
+                    hw_loop)
+                #Save the model after btap hvac.
+                BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
+                #run the standards
+                result = run_the_measure( model, standard, "#{output_folder}/#{name}/sizing" )
+                #Save the model
+                BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.osm")
+                assert_equal(true, result, "Failure in Standards for #{name}")
+              end
+            else
+              name = "sys1_Boiler~#{boiler_fueltype}_Mau~#{mau_type}_MauCoil~None_Baseboard~#{baseboard_type}"
+              puts "***************************************#{name}*******************************************************\n"
+              model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
+              BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+              if (baseboard_type == "Hot Water")
+                hw_loop = OpenStudio::Model::PlantLoop.new(model)
+                BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+              end
+              BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
+                  model,
+                  model.getThermalZones,
+                  boiler_fueltype,
+                  mau_type,
+                  "Electric", #value will not be used.
+                  baseboard_type,
+                  hw_loop)
+              #Save the model after btap hvac.
+              BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
+
+              result = run_the_measure(model,standard, "#{output_folder}/#{name}/sizing")
+
+              #Save model after standards
+              BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.osm")
+              assert_equal(true, result, "Failure in Standards for #{name}")
+
+            end
+            result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            assert_equal(true, result, "Failure in Standards for #{name}")
+          end
+        end
+      end
+    end
+  end
+
+
+  def run_the_measure(model, standard, sizing_dir)
+      # Hard-code the building vintage
+      building_type = 'FullServiceRestaurant' # Does not use this...
+      climate_zone = 'NECB HDD Method'
+
+      if !Dir.exists?(sizing_dir)
+        FileUtils.mkdir_p(sizing_dir)
+      end
+      # Perform a sizing run
+      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
+        puts "could not find sizing run #{sizing_dir}/SizingRun1"
+        raise("could not find sizing run #{sizing_dir}/SizingRun1")
+        return false
+      else
+        puts "found sizing run #{sizing_dir}/SizingRun1"
+      end
+
+      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+      # need to set prototype assumptions so that HRV added
+      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+      # Apply the HVAC efficiency standard
+      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
+      #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
+      BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+      return true
+    end
+end}
+
+        file_string['$(boiler_fueltypes)'] = boiler_fueltype
+        file_string['$(mau_types)'] = mau_type.to_s
+        file_string['$(mau_heating_coil_types)'] = mau_heating_coil_type
+        file_string['$(baseboard_types)'] = baseboard_type
+
+        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+        file_string['$(mau_types_snake)'] = mau_type.to_s.snek
+        file_string['$(mau_heating_coil_types_snake)'] = mau_heating_coil_type.to_s.snek
+        file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
+
+        File.open(filename, 'w') { |file| file.write(file_string) }
+        }
+      }
+    }
+  }
+
+end
+
 generate_ci_bldg_test_files()
+generate_hvac_sys1_files()
 write_file_path_to_ci_tests_txt()
