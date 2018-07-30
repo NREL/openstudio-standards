@@ -28,15 +28,16 @@ module OpenstudioStandards
   ### Standards ###
   # Standards classes
   require_relative "#{stds}/standard"
-  require_relative "#{stds}/necb/NECB2011/necb_2011"
-  require_relative "#{stds}/necb/NECB2015/necb_2015"
-  require_relative "#{stds}/necb/NECB2011/building_envelope"
-  require_relative "#{stds}/necb/NECB2011/lighting"
-  require_relative "#{stds}/necb/NECB2011/hvac_systems"
-  require_relative "#{stds}/necb/NECB2015/hvac_systems"
-  require_relative "#{stds}/necb/NECB2011/service_water_heating"
-  require_relative "#{stds}/necb/NECB2011/electrical_power_systems_and_motors"
-  require_relative "#{stds}/necb/NECB2011/beps_compliance_path"
+  require_relative "#{stds}/necb/necb_2011/necb_2011"
+  require_relative "#{stds}/necb/necb_2015/necb_2015"
+  require_relative "#{stds}/necb/necb_2011/building_envelope"
+  require_relative "#{stds}/necb/necb_2011/lighting"
+  require_relative "#{stds}/necb/necb_2015/lighting"
+  require_relative "#{stds}/necb/necb_2011/hvac_systems"
+  require_relative "#{stds}/necb/necb_2015/hvac_systems"
+  require_relative "#{stds}/necb/necb_2011/service_water_heating"
+  require_relative "#{stds}/necb/necb_2011/electrical_power_systems_and_motors"
+  require_relative "#{stds}/necb/necb_2011/beps_compliance_path"
 
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
