@@ -64,4 +64,10 @@ class NECB2015 < NECB2011
       return measure_model
     end
   end
+
+  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
+  def set_occ_sensor_spacetypes(model, space_type_map)
+    return true
+  end
+
 end
