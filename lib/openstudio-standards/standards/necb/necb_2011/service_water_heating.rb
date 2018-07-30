@@ -357,6 +357,7 @@ class NECB2011
     building_centre = Array.new(3,0)
     total_peak_flow = 0
     lowest_space = 100000000000
+    floor_centroid = Array.new(3, 0)
     # Go through all of the spaces, ignore those that are not conditioned
     model.getSpaces.sort.each do |space|
       conditioned = true
@@ -399,11 +400,22 @@ class NECB2011
       # Get the surfaces for the space.
       space_surfaces = space.surfaces
       # Find the floor (aka the surface with the lowest centroid).
-      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f + zOrigin.to_f)}
+      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
+      # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
+      floor_centroid = [0, 0, 0]
+      space_surfaces.each do |sp_surface|
+        if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
+          floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+          floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+          floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
+        end
+      end
+      floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
+      floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
       # I use centroid for the floor as the location of the source or point of use for the shw system.  What!?! doesn't
       # everyone wash their hands on the floor?
       shw_space_info = {
-          "space_centroid" => [min_surf.centroid.x.to_f + xOrigin, min_surf.centroid.y.to_f + yOrigin, min_surf.centroid.z.to_f + zOrigin],
+          "space_centroid" => [floor_centroid[0] + xOrigin, floor_centroid[1] + yOrigin, min_surf.centroid.z.to_f + zOrigin],
           "peak_flow_SI" => space_peak_flow_SI,
           "building_cent_dist" => 0,
           "space_name" => space.name,
@@ -413,11 +425,11 @@ class NECB2011
         lowest_space = shw_space_info["space_centroid"][2]
       end
       shw_spaces << shw_space_info
-      # This part is used to determine the overall x, y centre of the building.  This is determined by averaging the
-      # x values and y values of the centroids of all of the conditioned spaces.
-      building_centre[0] += min_surf.centroid.x.to_f + xOrigin
-      building_centre[1] += min_surf.centroid.y.to_f + yOrigin
-      building_centre[2] += 1
+      # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
+      # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
+      building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
+      building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
+      building_centre[2] += floor_centroid[2]
     end
     # This is where the average happens
     building_centre[0] /= building_centre[2]
