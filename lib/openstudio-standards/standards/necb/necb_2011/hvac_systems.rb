@@ -39,6 +39,22 @@ class NECB2011
     # Determine the minimum capacity that requires an economizer
     minimum_capacity_btu_per_hr = 68_243 # NECB requires economizer for cooling cap > 20 kW
 
+    # puts air_loop_hvac.name.to_s
+    # Design Supply Air Flow Rate: This method below reads the value from the sql file.
+    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    min_dsafr_l_per_s = 1500
+    unless dsafr_m3_per_s.empty?
+      dsafr_l_per_s = dsafr_m3_per_s.get()*1000
+      if dsafr_l_per_s > min_dsafr_l_per_s
+        economizer_required = true
+        puts "economizer_required = true for #{air_loop_hvac.name} because dsafr_l_per_s(#{dsafr_l_per_s}) > 1500"
+        if is_dc
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s for data centers.")
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the 'Design Supply Air Flow Rate' of #{dsafr_l_per_s} L/s exceeds the minimum air flow rate of #{min_dsafr_l_per_s} L/s.")
+        end
+      end
+    end
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
@@ -49,6 +65,7 @@ class NECB2011
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
+      puts "economizer_required = true for #{air_loop_hvac.name} because total_cooling_capacity_btu_per_hr(#{total_cooling_capacity_btu_per_hr}) >= #{minimum_capacity_btu_per_hr}"
       economizer_required = true
     else
       if is_dc
@@ -980,17 +997,22 @@ class NECB2011
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
-      template_mod += '-VARIABLE'
+      # Is this a return or supply fan
+      if fan.name.to_s.include?('Supply')
+        template_mod += '-VARIABLE-SUPPLY'
+      elsif fan.name.to_s.include?('Return')
+        template_mod += '-VARIABLE-RETURN'
+      end
       # 0.909 corrects for 10% over sizing implemented upstream
       # 0.7457 is to convert from bhp to kW
       fan_power_kw = 0.909 * 0.7457 * motor_bhp
       power_vs_flow_curve_name = if fan_power_kw >= 25.0
-                                   'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                                 elsif fan_power_kw >= 7.5 && fan_power_kw < 25
-                                   'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
-                                 else
-                                   'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
-                                 end
+                                 'VarVolFan-FCInletVanes-NECB2011-FPLR'
+                               elsif fan_power_kw >= 7.5 && fan_power_kw < 25
+                                 'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
+                               else
+                                 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
+                               end
       power_vs_flow_curve = model_add_curve(fan.model, power_vs_flow_curve_name)
       fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
       fan.setFanPowerCoefficient5(0.0)
@@ -1083,7 +1105,13 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    fan_variable_volume.setPressureRise(self.get_standards_constant('fan_variable_volume_pressure_rise_value'))
+    if(fan_variable_volume.name.to_s.include?('Supply'))
+      sfan_deltaP = self.get_standards_constant('supply_fan_variable_volume_pressure_rise_value')
+      fan_variable_volume.setPressureRise(sfan_deltaP)
+    elsif(fan_variable_volume.name.to_s.include?('Return'))
+      rfan_deltaP = self.get_standards_constant('return_fan_variable_volume_pressure_rise_value')
+      fan_variable_volume.setPressureRise(rfan_deltaP)
+    end
     return true
   end
 
@@ -2291,7 +2319,10 @@ class NECB2011
         sizing_system.setHeatingDesignAirFlowRate(0.0)
         sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
-        fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        supply_fan.setName('Sys6 Supply Fan')
+        return_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
+        return_fan.setName('Sys6 Return Fan')
 
         if heating_coil_type == 'Hot Water'
           htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
@@ -2310,17 +2341,14 @@ class NECB2011
 
         # Add the components to the air loop
         # in order from closest to zone to furthest from zone
-        # TODO: still need to define the return fan (tried to access the air loop "returnAirNode" without success)
-        # TODO: The OS sdk indicates that this keyword should be active but I get a "Not implemented" error when I
-        # TODO: try to access it through "air_loop.returnAirNode"
         supply_inlet_node = air_loop.supplyInletNode
         supply_outlet_node = air_loop.supplyOutletNode
-        fan.addToNode(supply_inlet_node)
+        supply_fan.addToNode(supply_inlet_node)
         htg_coil.addToNode(supply_inlet_node)
         clg_coil.addToNode(supply_inlet_node)
         oa_system.addToNode(supply_inlet_node)
-
-        # return_inlet_node = air_loop.returnAirNode
+        returnAirNode = oa_system.returnAirModelObject.get.to_Node.get
+        return_fan.addToNode(returnAirNode)
 
         # Add a setpoint manager to control the
         # supply air to a constant temperature
@@ -2331,8 +2359,6 @@ class NECB2011
         sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), sat_c)
         sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
         sat_stpt_manager.addToNode(supply_outlet_node)
-
-        # TO-do ask Kamel about zonal assignments per storey.
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
@@ -2562,6 +2588,10 @@ class NECB2011
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
+        # Check if the NECB HVAC system selection type name was found in the standards data
+        if necb_hvac_system_selection_type.nil?
+          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+        end
       end
 
       # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
@@ -2577,75 +2607,57 @@ class NECB2011
       end
 
       # identify space-system_index and assign the right NECB system type 1-7.
+
+      # Check if there is an hvac system selection category associated with the space.
+      if necb_hvac_system_selection_type.nil?
+        raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+      end
+
       system = nil
       is_dwelling_unit = false
-      case necb_hvac_system_selection_type
-        when nil
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        when 0, '- undefined -'
-          # These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
+      is_wildcard = nil
+
+      # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
+      necb_hvac_system_selection_table = []
+      necb_hvac_system_selection_table = standards_data['necb_hvac_system_selection_type']['table']
+
+      # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
+      # main selection loop
+      necb_hvac_system_selection_cooling_desg_load = 0
+      unless cooling_design_load.nil?
+        necb_hvac_system_selection_cooling_desg_load = cooling_design_load
+      end
+
+      # Make sure that we loaded the necb_hvac_system_selection_type.json file properly and that the information is stored in standards_data
+      if necb_hvac_system_selection_table.empty?
+        raise("Could not find necb system selection type table. Please make sure that the necb_havc_system_selection_type.json file is present")
+      else
+        # Loop through the NECB HVAC system selection table entries read from necb_hvac_system_selection_type table.JSON
+        # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
+        # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
+        necb_hvac_system_selection_table.each do |necb_hvac_system_select|
+          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
+            system = necb_hvac_system_select['system_type']
+            is_dwelling_unit = necb_hvac_system_select['dwelling']
+            if necb_hvac_system_select['necb_hvac_system_selection_type']=='Wildcard'
+              is_wildcard = true
+            end
+            break
+          end
+        end
+      end
+
+      # If the previous loop could not find an appropriate NECB HVAC system selection type then "system" will be defined by either nil, 0, or 'Wildcard'.
+      # If 'Wildcard' then the system remains at nil but is_wildard is true and the HVAC is dealt with elsewhere
+      # If 0, then the system will be treated as - undefined -.  Otherwise no system has been chosen so an error will be returned.
+      if system.nil? and is_wildcard.nil?
+        if necb_hvac_system_selection_type == 0
           system = 0
-        when 'Assembly Area' # Assembly Area.
-          system = if number_of_stories <= 4
-                     3
-                   else
-                     6
-                   end
-
-        when 'Automotive Area'
-          system = 4
-
-        when 'Data Processing Area'
-          system = if cooling_design_load > 20 # KW...need a sizing run.
-                     2
-                   else
-                     1
-                   end
-
-        when 'General Area' # [3,6]
-          system = if number_of_stories <= 2
-                     3
-                   else
-                     6
-                   end
-
-        when 'Historical Collections Area' # [2],
-          system = 2
-
-        when 'Hospital Area' # [3],
-          system = 3
-
-        when 'Indoor Arena' # ,[7],
-          system = 7
-
-        when 'Industrial Area' #  [3] this need some thought.
-          system = 3
-
-        when 'Residential/Accomodation Area' # ,[1], this needs some thought.
-          system = 1
-          is_dwelling_unit = true
-
-        when 'Sleeping Area' # [3],
-          system = 3
-          is_dwelling_unit = true
-
-        when 'Supermarket/Food Services Area' # [3,4],
-          system = 3
-
-        when 'Supermarket/Food Services Area - vented'
-          system = 4
-
-        when 'Warehouse Area'
-          system = 4
-
-        when 'Warehouse Area - refrigerated'
-          system = 5
-        when 'Wildcard'
-          system = nil
-          is_wildcard = true
         else
           raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
+        end
       end
+
       # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
       horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
       # dump all info into an array for debugging and iteration.

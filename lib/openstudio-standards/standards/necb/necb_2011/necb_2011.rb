@@ -1,36 +1,47 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
-require 'rubyXL'
 class NECB2011 < Standard
   @template = self.new.class.name # rubocop:disable Style/ClassVars
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
+  attr_accessor :space_type_map
+  attr_accessor :space_multiplier_map
 
-
+  # Combine the data from the JSON files into a single hash
+  # Load JSON files differently depending on whether loading from
+  # the OpenStudio CLI embedded filesystem or from typical gem installation
   def load_standards_database_new()
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/"
-    files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
     @standards_data = {}
     @standards_data["tables"] = []
-    files.each do |file|
-      #puts "loading standards data from #{file}"
-      data = JSON.parse(File.read(file))
-      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-        @standards_data["tables"] << data["tables"].first
-      else
-        @standards_data[data.keys.first] = data[data.keys.first]
+
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      embedded_files_relative('data/', /.*\.json/).each do |file|
+        data = JSON.parse(EmbeddedScripting.getFileAsString(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    else
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files.each do |file|
+        data = JSON.parse(File.read(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
       end
     end
+
     #needed for compatibility of standards database format
     @standards_data['tables'].each do |table|
       @standards_data[table['name']] = table
     end
     return @standards_data
   end
-
 
   # Create a schedule from the openstudio standards dataset and
   # add it to the model.
@@ -67,7 +78,6 @@ class NECB2011 < Standard
     end
   end
 
-
   def initialize
     super()
     @template = self.class.name
@@ -103,7 +113,7 @@ class NECB2011 < Standard
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
     fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise() if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
+    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
 
@@ -131,13 +141,30 @@ class NECB2011 < Standard
     end
   end
 
+  # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, x_scale = 1.0, y_scale = 1.0, z_scale = 1.0)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
+  end
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
+  # Created this method so that additional methods can be addded for bulding the prototype model in later
+  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
+  def build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
     # prototype generation.
-    model = load_initial_osm(@geometry_file) # standard candidate
+    model = load_geometry_osm(@geometry_file) # standard candidate
+    if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
+      scale_model_geometry(model, x_scale, y_scale, z_scale)
+    end
+    self.validate_initial_model(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
@@ -193,13 +220,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    # If measure model is passed, then replace measure model with new model created here.
-    if measure_model.nil?
-      return model
-    else
-      model_replace_model(measure_model, model)
-      return measure_model
-    end
+    model
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
@@ -253,6 +274,8 @@ class NECB2011 < Standard
 
     # Here is a hash to keep track of the m2 running total of spacetypes for each
     # sched type.
+    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
+    # future schedules.
     s = Hash[
         'A', 0,
         'B', 0,
@@ -262,7 +285,15 @@ class NECB2011 < Standard
         'F', 0,
         'G', 0,
         'H', 0,
-        'I', 0
+        'I', 0,
+        'J', 0,
+        'K', 0,
+        'L', 0,
+        'M', 0,
+        'N', 0,
+        'O', 0,
+        'P', 0,
+        'Q', 0
     ]
     # iterate through spaces in building.
     wildcard_spaces = 0
@@ -427,6 +458,5 @@ class NECB2011 < Standard
     end
     return true
   end
-
 
 end

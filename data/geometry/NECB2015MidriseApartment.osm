@@ -1,7 +1,7 @@
 
 OS:Version,
-  {5a956c97-214c-443b-b4bc-dfc9d0a7ee40}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {5ec6722c-5283-4e4f-a627-1f2aa1720d5d}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {6c5ce5cc-dd38-4994-9d2b-3c53e7d62738}, !- Handle
@@ -6408,20 +6408,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 27,            !- Name
   {d41f760b-3f21-45d7-9421-c0f678a8f47f}; !- Thermal Zone
 
-OS:WeatherFile,
-  {ce00bc91-3712-4227-b161-2e9bc379342b}, !- Handle
-  Sherbrooke,                             !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04785,                          !- Data Source
-  716100,                                 !- WMO Number
-  45.43,                                  !- Latitude {deg}
-  -71.68,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  241,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
-  F7B2328B;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {c0ebd23f-775a-4457-ba80-d7e5f7a41fe5}, !- Handle
   Correlation,                            !- Calculation Method
@@ -6494,52 +6480,89 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {ffd7adfe-4499-46ec-bfc5-f7315431281a}, !- Handle
-  Space Function Corr. < 2.4m wide-sch-G, !- Name
+  Space Function Corridor/Transition area - hospital-sch-G, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {d09ba00a-8983-4fa7-9695-dd3c96e1369f}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Corr. < 2.4m wide-sch-G;                !- Standards Space Type
+  Corridor/Transition area - hospital-sch-G;                !- Standards Space Type
 
 OS:Rendering:Color,
   {d09ba00a-8983-4fa7-9695-dd3c96e1369f}, !- Handle
-  Space Function Corr. < 2.4m wide-sch-G, !- Name
+  Space Function Corridor/Transition area - hospital-sch-G, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {c8981956-15db-48cd-9dc9-fdbfec63fa3c}, !- Handle
-  Space Function Dwelling Unit(s),        !- Name
+  Space Function Dwelling units general,  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {66685e04-e4a9-4d08-a887-a6bf4c472239}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Dwelling Unit(s);                       !- Standards Space Type
+  Dwelling units general;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {66685e04-e4a9-4d08-a887-a6bf4c472239}, !- Handle
-  Space Function Dwelling Unit(s),        !- Name
+  Space Function Dwelling units general,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {d878049e-9383-4c78-b237-b3106f3ac989}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {63920e9c-4f6e-4c47-a9a8-3f817c62a709}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Conference/Meeting/Multi-purpose room;              !- Standards Space Type
 
 OS:Rendering:Color,
   {63920e9c-4f6e-4c47-a9a8-3f817c62a709}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {7a9f05a8-d80b-45ca-b30a-2c269c0467d4}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {3ba059ae-fedb-46b6-ae4c-e31d243a9eb8}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {b6137e9a-a008-4117-99b3-1fc74071279d}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:LifeCycleCost:Parameters,
+  {9c21867c-e7a3-465b-b585-c3503278d13c}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 

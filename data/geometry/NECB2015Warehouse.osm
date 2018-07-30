@@ -1,7 +1,7 @@
 
 OS:Version,
-  {990ad3eb-26e2-4b85-9afc-9f5896fc040e}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {1a41e3f1-5b06-486f-9fab-56c2d42b5b3b}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
@@ -1883,20 +1883,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 3,             !- Name
   {28a54465-16b8-402c-b469-8c13db4674de}; !- Thermal Zone
 
-OS:WeatherFile,
-  {d330a933-d91d-402e-a299-cce3daeb0147}, !- Handle
-  Sherbrooke,                             !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04785,                          !- Data Source
-  716100,                                 !- WMO Number
-  45.43,                                  !- Latitude {deg}
-  -71.68,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  241,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
-  F7B2328B;                               !- Checksum
-
 OS:Site,
   {3f226781-5670-4b8b-98cd-6493912cc260}, !- Handle
   Sherbrooke_PQ_CAN,                      !- Name
@@ -1978,52 +1964,84 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {a6aa64ea-d7e8-4be2-93e7-411cbc4acca9}, !- Handle
-  Space Function Warehouse - med/blk,     !- Name
+  Space Function Warehouse storage area medium to bulky palletized items, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {7ef8e62a-e56f-49cf-bdef-a2ed2a634f78}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Warehouse - med/blk;                    !- Standards Space Type
+  Warehouse storage area medium to bulky palletized items; !- Standards Space Type
 
 OS:Rendering:Color,
   {7ef8e62a-e56f-49cf-bdef-a2ed2a634f78}, !- Handle
-  Space Function Warehouse - med/blk,     !- Name
+  Space Function Warehouse storage area medium to bulky palletized items, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {f6907e5f-7752-47ad-bfcd-c6fb8b1f86ab}, !- Handle
-  Space Function Warehouse - fine,        !- Name
+  Space Function Warehouse storage area small hand-carried items(4), !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {8936df75-08a5-4da0-85c6-8b63015e2643}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Warehouse - fine;                       !- Standards Space Type
+  Warehouse storage area small hand-carried items(4); !- Standards Space Type
 
 OS:Rendering:Color,
   {8936df75-08a5-4da0-85c6-8b63015e2643}, !- Handle
-  Space Function Warehouse - fine,        !- Name
+  Space Function Warehouse storage area small hand-carried items(4), !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b0aef65a-6c0f-43e9-b00a-681a7595a4b8}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {f20c7626-c2b9-4128-b80e-20a346a7162a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2;                !- Standards Space Type
 
 OS:Rendering:Color,
   {f20c7626-c2b9-4128-b80e-20a346a7162a}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:SimulationControl,
+  {7e2ca577-0545-4a70-825e-3cb2a0b8e3cc}; !- Handle
+
+OS:Sizing:Parameters,
+  {d1882db6-fcb3-4cb9-993d-ccda6df17267}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {90591796-f83b-44f9-8a24-9f70bd8f79d8}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:HeatBalanceAlgorithm,
+  {ac648b8d-3747-4331-955a-ced3349c0335}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:RunPeriod,
+  {96bed216-07a4-40e9-873f-87fe1b85d402}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  ,                                       !- Use Weather File Holidays and Special Days
+  ,                                       !- Use Weather File Daylight Saving Period
+  ,                                       !- Apply Weekend Holiday Rule
+  ,                                       !- Use Weather File Rain Indicators
+  ,                                       !- Use Weather File Snow Indicators
+  ;                                       !- Number of Times Runperiod to be Repeated
 

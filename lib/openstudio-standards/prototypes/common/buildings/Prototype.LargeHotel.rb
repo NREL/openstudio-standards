@@ -106,8 +106,8 @@ module LargeHotel
           elec_equip_def1.setDesignLevel(457.7)
           elec_equip_def2.setDesignLevel(285)
         else
-          elec_equip_def1.setDesignLevel(99_999.88)
-          elec_equip_def2.setDesignLevel(99_999.99)
+          elec_equip_def1.setDesignLevel(457.7)
+          elec_equip_def2.setDesignLevel(285)
         end
         # Create the electric equipment instance and hook it up to the space type
         elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {f70e9306-48f0-48c2-ba55-52b447d081f0}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {f3c8be8b-7c97-4da6-bcb1-c5ee1a3e26da}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {faecd613-9968-425f-9fdc-e929aa68dc07}, !- Handle
@@ -13183,20 +13183,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 46,            !- Name
   {3aa329b5-b540-4175-93bc-c39d7cd5dc2b}; !- Thermal Zone
 
-OS:WeatherFile,
-  {8ffd588f-4028-4f7b-99b1-0036ac2818fd}, !- Handle
-  Whitehorse,                             !- City
-  YT,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-26316,                          !- Data Source
-  719640,                                 !- WMO Number
-  60.72,                                  !- Latitude {deg}
-  -135.07,                                !- Longitude {deg}
-  -8,                                     !- Time Zone {hr}
-  703,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_YT_Whitehorse.719640_CWEC.epw, !- Url
-  D5EA4C49;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {88ada778-a9d4-47f5-9c61-04dd671111ab}, !- Handle
   Correlation,                            !- Calculation Method
@@ -13269,136 +13255,136 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {64236f32-a171-4ad1-9d65-7ffe6ad711c9}, !- Handle
-  Space Function Audience - auditorium,   !- Name
+  Space Function Audience seating area permanent - auditorium, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {04ef488f-6bf5-45fd-b8b4-a3d9a1c37abc}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Audience - auditorium;                  !- Standards Space Type
+  Audience seating area permanent - auditorium; !- Standards Space Type
 
 OS:Rendering:Color,
   {04ef488f-6bf5-45fd-b8b4-a3d9a1c37abc}, !- Handle
-  Space Function Audience - auditorium,   !- Name
+  Space Function Audience seating area permanent - auditorium, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {bd79e126-48af-437e-9856-c90042856854}, !- Handle
-  Space Function Gym - play,              !- Name
+  Space Function Gymnasium/Fitness centre playing area, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {e0744816-deb6-4e38-8065-586130636ea1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Gym - play;                             !- Standards Space Type
+  Gymnasium/Fitness centre playing area;  !- Standards Space Type
 
 OS:Rendering:Color,
   {e0744816-deb6-4e38-8065-586130636ea1}, !- Handle
-  Space Function Gym - play,              !- Name
+  Space Function Gymnasium/Fitness centre playing area, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {96613a88-79b1-402d-8661-dcdfc5b44c52}, !- Handle
-  Space Function Washroom-sch-D,          !- Name
+  Space Function Washroom - other-sch-D,  !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {f26277d3-adb7-409a-b7ee-e7c12617bd53}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Washroom-sch-D;                         !- Standards Space Type
+  Washroom - other-sch-D;                 !- Standards Space Type
 
 OS:Rendering:Color,
   {f26277d3-adb7-409a-b7ee-e7c12617bd53}, !- Handle
-  Space Function Washroom-sch-D,          !- Name
+  Space Function Washroom - other-sch-D,  !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {3aefa7e4-4df9-4f4c-b29f-5dc0207c78af}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {2c4e9830-5a13-4fb4-8182-8bd375e2aa5b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Conf./meet./multi-purpose;              !- Standards Space Type
+  Conference/Meeting/Multi-purpose room;  !- Standards Space Type
 
 OS:Rendering:Color,
   {2c4e9830-5a13-4fb4-8182-8bd375e2aa5b}, !- Handle
-  Space Function Conf./meet./multi-purpose, !- Name
+  Space Function Conference/Meeting/Multi-purpose room, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {9993251f-78cc-4a26-a604-ddd983d7058e}, !- Handle
-  Space Function Classroom/lecture/training, !- Name
+  Space Function Classroom/Lecture hall/Training room other, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {f853368e-aa7e-4794-b846-11802e45a595}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Classroom/lecture/training;             !- Standards Space Type
+  Classroom/Lecture hall/Training room other; !- Standards Space Type
 
 OS:Rendering:Color,
   {f853368e-aa7e-4794-b846-11802e45a595}, !- Handle
-  Space Function Classroom/lecture/training, !- Name
+  Space Function Classroom/Lecture hall/Training room other, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {300dfc29-04e8-40c8-ad89-e484c0eba578}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-D, !- Name
+  Space Function Corridor/Transition area other-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {941492dc-ea04-40fd-86b9-e39e467da9e5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Corr. >= 2.4m wide-sch-D;               !- Standards Space Type
+  Corridor/Transition area other-sch-D;   !- Standards Space Type
 
 OS:Rendering:Color,
   {941492dc-ea04-40fd-86b9-e39e467da9e5}, !- Handle
-  Space Function Corr. >= 2.4m wide-sch-D, !- Name
+  Space Function Corridor/Transition area other-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {7979a432-5683-4bc2-aa60-70eae818bb8e}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {fe99158a-c7df-4445-9ef9-c63f5a8f28ad}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Food preparation;                       !- Standards Space Type
+  Food preparation area;                  !- Standards Space Type
 
 OS:Rendering:Color,
   {fe99158a-c7df-4445-9ef9-c63f5a8f28ad}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,   !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {f2411550-048c-4e5c-8b84-ccc10dfaa694}, !- Handle
-  Space Function Library - reading,       !- Name
+  Space Function Library reading area,    !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {ce984ebe-1357-453d-a67d-35b57779dfac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Library - reading;                      !- Standards Space Type
+  Library reading area;                   !- Standards Space Type
 
 OS:Rendering:Color,
   {ce984ebe-1357-453d-a67d-35b57779dfac}, !- Handle
-  Space Function Library - reading,       !- Name
+  Space Function Library reading area,    !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
@@ -13422,35 +13408,40 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {62f930c6-ec99-4b15-909a-7cb9df6dc12c}, !- Handle
-  Space Function Electrical/Mechanical-sch-D, !- Name
+  Space Function Electrical/Mechanical room-sch-D, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {7a4ec8f8-c969-4aaf-9175-44b3bd463631}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Electrical/Mechanical-sch-D;            !- Standards Space Type
+  Electrical/Mechanical room-sch-D;       !- Standards Space Type
 
 OS:Rendering:Color,
   {7a4ec8f8-c969-4aaf-9175-44b3bd463631}, !- Handle
-  Space Function Electrical/Mechanical-sch-D, !- Name
+  Space Function Electrical/Mechanical room-sch-D, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {b713d52c-6e76-4c5e-be9a-ec2d5a46bb19}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {8bc6167c-7980-4eca-96ee-7f54ee7a20bf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - enclosed;                      !- Standards Space Type
+  Office enclosed > 25 m2;                !- Standards Space Type
 
 OS:Rendering:Color,
   {8bc6167c-7980-4eca-96ee-7f54ee7a20bf}, !- Handle
-  Space Function Office - enclosed,       !- Name
+  Space Function Office enclosed > 25 m2, !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:Sizing:Parameters,
+  {02627ab6-5403-4c94-80d4-d5c3f4492ae7}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
 

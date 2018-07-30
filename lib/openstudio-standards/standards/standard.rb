@@ -112,9 +112,9 @@ class Standard
     @standards_data = {}
     standards_files.sort.each do |standards_file|
       temp = ''
-      begin
+      if __dir__[0] == ':' # Running from OpenStudio CLI
         temp = load_resource_relative("../../../data/standards/#{standards_file}", 'r:UTF-8')
-      rescue NoMethodError
+      else
         File.open("#{standards_data_dir}/#{standards_file}", 'r:UTF-8') do |f|
           temp = f.read
         end

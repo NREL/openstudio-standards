@@ -19,7 +19,7 @@ Standard.class_eval do
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''
     end
-    model = load_initial_osm(@geometry_file)
+    model = load_geometry_osm(@geometry_file)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     # save new basefile to new geometry folder as class name.
@@ -1444,7 +1444,7 @@ Standard.class_eval do
     # Residential
     # NonResidential
     # Use 90.1-2010 so that retail and publicassembly are not split out
-    zones = model_zones_with_occ_and_fuel_type(model, '90.1-2010', nil)
+    zones = model_zones_with_occ_and_fuel_type(model, nil)
 
     # Ensure that there is at least one conditioned zone
     if zones.size.zero?

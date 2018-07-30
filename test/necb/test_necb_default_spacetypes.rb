@@ -6,7 +6,7 @@ require_relative '../helpers/minitest_helper'
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class NECB2011DefaultSpaceTypesTests < Minitest::Test
   #Standards
-  Templates = ['NECB2011']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
@@ -18,13 +18,15 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
     BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
-    standard = Standard.build('NECB2011')
+#    standard = Standard.build('NECB2015')
 
     header_output = ""
     output = ""
     #Iterate through all spacetypes/buildingtypes. 
     Templates.each do |template|
-      #Get spacetypes from googledoc. 
+      #Get spacetypes from googledoc.
+      standard = Standard.build(template)
+
       search_criteria = {
         "template" => template,
       }
@@ -78,9 +80,9 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         #People / Occupancy
         total_occ_dens = []
         occ_sched = []
-        st.people.each {|people_def| total_occ_dens << people_def.spaceFloorAreaPerPerson.get ; occ_sched << people_def.numberofPeopleSchedule.get.name}
-        assert(total_lpd.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")   
-        
+        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get.name}
+        assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
+
         #Equipment -Gas
         gas_equip_power = []
         gas_equip_sched = []
@@ -117,7 +119,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         shw_heating_target_temperature = []
         shw__schedule = ""
         area_per_occ = 0.0
-        area_per_occ = total_occ_dens[0] unless total_occ_dens[0].nil?
+        area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
         water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
         if water_fixture.nil?
           shw_watts_per_person = 0.0
@@ -155,6 +157,8 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         if total_occ_dens[0].nil?
           total_occ_dens[0] = 0.0
           occ_sched[0] = "NA"
+        else
+          total_occ_dens[0] = 1/total_occ_dens[0].to_f
         end
         header_output << "Occupancy Density (m2/person),"
         output << "#{total_occ_dens[0].round(4)},"
@@ -242,6 +246,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         water_fixture.remove unless water_fixture.nil? 
             
       end #loop spacetypes
+      puts template
     end #loop Template
     #Write test report file. 
     test_result_file = File.join(File.dirname(__FILE__),'data','space_type_test_results.csv')

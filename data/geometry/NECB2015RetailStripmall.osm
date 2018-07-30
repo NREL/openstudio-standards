@@ -1,7 +1,7 @@
 
 OS:Version,
-  {4078520c-14d3-427b-bdb4-17b821410e77}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {e34ec7c6-1927-4e19-af02-50248a1e1f18}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
@@ -2952,20 +2952,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 10,            !- Name
   {f56931ed-4d15-4788-9043-64a52e66fb61}; !- Thermal Zone
 
-OS:WeatherFile,
-  {b7729f74-be76-425a-9ab4-b58b30c19859}, !- Handle
-  Sherbrooke,                             !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-04785,                          !- Data Source
-  716100,                                 !- WMO Number
-  45.43,                                  !- Latitude {deg}
-  -71.68,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  241,                                    !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
-  F7B2328B;                               !- Checksum
-
 OS:Site,
   {1273f654-2b91-4418-8666-ec1096af8b72}, !- Handle
   Sherbrooke_PQ_CAN,                      !- Name
@@ -3047,18 +3033,50 @@ OS:Site:GroundTemperature:BuildingSurface,
 
 OS:SpaceType,
   {164a0580-ffbb-4880-aebc-aa07fcd5fec2}, !- Handle
-  Space Function Retail - sales,          !- Name
+  Space Function Sales area,              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {ab9776b2-a45c-497d-9bfd-711e5d3839a3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Retail - sales;                         !- Standards Space Type
+  Sales area;                         !- Standards Space Type
 
 OS:Rendering:Color,
   {ab9776b2-a45c-497d-9bfd-711e5d3839a3}, !- Handle
-  Space Function Retail - sales,          !- Name
+  Space Function Sales area,          !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:SimulationControl,
+  {f43131b0-8c9f-4b20-9f57-1ccb8ca24e11}; !- Handle
+
+OS:Sizing:Parameters,
+  {2c481f5e-a887-45a8-b94a-ec5870796661}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:ShadowCalculation,
+  {96b939b0-c51f-41bc-84b3-acc564c18c45}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:HeatBalanceAlgorithm,
+  {bf0fcc3b-f4af-4f3c-a10a-183fa7bcf13e}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:RunPeriod,
+  {a0dfb906-f947-4b23-aee9-dcad9a6c5e7a}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  ,                                       !- Use Weather File Holidays and Special Days
+  ,                                       !- Use Weather File Daylight Saving Period
+  ,                                       !- Apply Weekend Holiday Rule
+  ,                                       !- Use Weather File Rain Indicators
+  ,                                       !- Use Weather File Snow Indicators
+  ;                                       !- Number of Times Runperiod to be Repeated
 

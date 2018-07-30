@@ -1,7 +1,7 @@
 
 OS:Version,
-  {573e5786-18b0-4cd7-b4e7-c7c6760e2bd6}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {41014a8d-4f1a-499a-8b0f-ff96cbb8d4cd}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {5131d4fd-bdc3-4987-b252-b00022eb6fa7}, !- Handle
@@ -776,20 +776,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 3,             !- Name
   {bb336d85-c8ac-402b-a8e1-7a30a51fa50a}; !- Thermal Zone
 
-OS:WeatherFile,
-  {82f2e995-2e59-4a20-8410-c14b5a5a72f4}, !- Handle
-  Vancouver Int'l,                        !- City
-  BC,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-94238,                          !- Data Source
-  718920,                                 !- WMO Number
-  49.18,                                  !- Latitude {deg}
-  -123.17,                                !- Longitude {deg}
-  -8,                                     !- Time Zone {hr}
-  2,                                      !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_BC_Vancouver.718920_CWEC.epw, !- Url
-  9D8CC810;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {55cdfa98-f42d-41d3-b471-4f66016078f6}, !- Handle
   Correlation,                            !- Calculation Method
@@ -879,13 +865,13 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {41250f5d-63cc-4f96-b73a-ea200366ec24}, !- Handle
-  Space Function Dining - bar lounge/leisure, !- Name
+  Space Function Dining area - bar lounge/leisure dining, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {3ba1f1b7-2177-4153-acf0-0d281710d632}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Dining - bar lounge/leisure;            !- Standards Space Type
+  Dining area - bar lounge/leisure dining;            !- Standards Space Type
 
 OS:Rendering:Color,
   {3ba1f1b7-2177-4153-acf0-0d281710d632}, !- Handle
@@ -896,18 +882,50 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {5ac54b43-126c-483e-a319-df98961bd312}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {296c2142-b432-4020-8055-887608db05cb}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Food preparation;                       !- Standards Space Type
+  Food preparation area;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {296c2142-b432-4020-8055-887608db05cb}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {38365bd5-e0d0-4c7e-b4ab-4b8b0875ed63}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {dcf0ec24-acf1-41b5-897e-08f8abd86dd7}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {67cb7faf-a44b-45f1-9aa0-81cdc95b9447}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 
