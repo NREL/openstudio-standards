@@ -111,13 +111,13 @@ module LargeHotel
 
     # change rated coil sizing back to EnergyPlus defaults
     # TODO: GET APPROVAL TO ELIMINATE THIS - OVERSIGHT IN ORIGINAL PROTOTYPE
-    rated_inlet_temp_c = OpenStudio.convert(180.0, 'F', 'C')
-    rated_outlet_temp_c = OpenStudio.convert(160.0, 'F', 'C')
-    rated_inlet_air_temp_c = OpenStudio.convert(62.0, 'F', 'C')
+    rated_inlet_temp_c = OpenStudio.convert(180.0, 'F', 'C').get
+    rated_outlet_temp_c = OpenStudio.convert(160.0, 'F', 'C').get
+    rated_inlet_air_temp_c = OpenStudio.convert(62.0, 'F', 'C').get
     model.getCoilHeatingWaters.each do |coil|
       coil.setRatedInletWaterTemperature(rated_inlet_temp_c)
       coil.setRatedOutletWaterTemperature(rated_outlet_temp_c)
-      if coil.name.include? "Reheat Coil" || "Main Htg Coil"
+      if coil.name.to_s.include? "Reheat Coil" || "Main Htg Coil"
         coil.setRatedInletAirTemperature(rated_inlet_air_temp_c)
       end
     end
