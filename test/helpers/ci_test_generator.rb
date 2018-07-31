@@ -82,13 +82,7 @@ def write_file_path_to_ci_tests_txt
 
   # remove lines which contains the test_necb_bldg_*.rb
   files.each_with_index {|line, i|
-    if line.include?("necb/test_necb_bldg_") or line.include?("necb/test_necb_hvac_system_1.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_2.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_3.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_4.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_5.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_6.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_7.rb")
+    if line.include?("necb/test_necb_bldg_") or line.include?("necb/test_necb_hvac")
       new_file_content = new_file_content - [files[i]]
     end
   }
