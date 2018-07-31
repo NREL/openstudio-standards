@@ -20,7 +20,7 @@ class NECB2015
     b=1
 
     #checks which rules to apply based on LPD
-    if lighting_per_area <= 0.7999256505 #8.6 W/m2
+    if lighting_per_area <= 0.799256505 #8.6 W/m2
 
       #do not apply occupancy sensor control
       orig_lighting_sch = space_type_properties['lighting_schedule']
