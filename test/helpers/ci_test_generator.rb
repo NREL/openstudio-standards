@@ -4,6 +4,24 @@ def file_out_dir
   File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
 end
 
+def cleanup_output_folders
+  dirname = File.join(file_out_dir(), 'output')
+  if File.directory?(dirname)
+    puts "Removing hvac output directory : #{dirname}"
+    FileUtils.rm_r(dirname)
+  end
+  necb_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","necb", 'output'))
+  if File.directory?(necb_out_dirname)
+    puts "Removing necb output directory : #{necb_out_dirname}"
+    FileUtils.rm_r(necb_out_dirname)
+  end
+  nrel_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","..", 'output'))
+  if File.directory?(nrel_out_dirname)
+    puts "Removing nrel output directory : #{nrel_out_dirname}"
+    FileUtils.rm_r(nrel_out_dirname)
+  end
+end
+
 # copied and modified from https://github.com/rubyworks/facets/blob/master/lib/core/facets/string/snakecase.rb
 class String
   def snek
@@ -1099,6 +1117,7 @@ end
 
 end
 
+cleanup_output_folders()
 generate_ci_bldg_test_files()
 copy_model_files_for_hvac_tests()
 generate_hvac_sys1_files()
