@@ -25,7 +25,7 @@ class Standard
     chilled_water_loop.addDemandBranchForComponent(clg_coil)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     if name.nil?
@@ -54,14 +54,13 @@ class Standard
     clg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # rated temperatures
-    if !design_inlet_water_temperature.nil?
-      clg_coil.setDesignInletWaterTemperature(design_inlet_water_temperature)
-    else # use loop design exit temperature
-      design_inlet_water_temperature = chilled_water_loop.sizingPlant.designLoopExitTemperature
+    if design_inlet_water_temperature.nil?
+      clg_coil.autosizeDesignInletWaterTemperature
+    else
       clg_coil.setDesignInletWaterTemperature(design_inlet_water_temperature)
     end
-    clg_coil.setDesignInletAirTemperature(design_inlet_air_temperature) if !design_inlet_air_temperature.nil?
-    clg_coil.setDesignOutletAirTemperature(design_outlet_air_temperature) if !design_outlet_air_temperature.nil?
+    clg_coil.setDesignInletAirTemperature(design_inlet_air_temperature) unless design_inlet_air_temperature.nil?
+    clg_coil.setDesignOutletAirTemperature(design_outlet_air_temperature) unless design_outlet_air_temperature.nil?
 
     # defaults
     clg_coil.setHeatExchangerConfiguration('CrossFlow')

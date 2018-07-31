@@ -29,7 +29,7 @@ class Standard
     hot_water_loop.addDemandBranchForComponent(htg_coil)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     if name.nil?
@@ -88,7 +88,7 @@ class Standard
     htg_coil_controller = htg_coil.controllerWaterCoil.get
     htg_coil_controller.setName("#{htg_coil.name.to_s} Controller")
     htg_coil_controller.setMinimumActuatedFlow(0.0)
-    htg_coil_controller.setControllerConvergenceTolerance(controller_convergence_tolerance) if !controller_convergence_tolerance.nil?
+    htg_coil_controller.setControllerConvergenceTolerance(controller_convergence_tolerance) unless controller_convergence_tolerance.nil?
 
     return htg_coil
   end

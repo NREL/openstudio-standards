@@ -20,7 +20,7 @@ class Standard
     htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     htg_coil.setName(name)
@@ -148,12 +148,12 @@ class Standard
       def_eir_f_of_temp.setMaximumValueofy(46.11111)
     end
 
-    htg_coil.setTotalHeatingCapacityFunctionofTemperatureCurve(htg_cap_f_of_temp) if !htg_cap_f_of_temp.nil?
-    htg_coil.setTotalHeatingCapacityFunctionofFlowFractionCurve(htg_cap_f_of_flow) if !htg_cap_f_of_flow.nil?
-    htg_coil.setEnergyInputRatioFunctionofTemperatureCurve(htg_energy_input_ratio_f_of_temp) if !htg_energy_input_ratio_f_of_temp.nil?
-    htg_coil.setEnergyInputRatioFunctionofFlowFractionCurve(htg_energy_input_ratio_f_of_flow) if !htg_energy_input_ratio_f_of_flow.nil?
-    htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction) if !htg_part_load_fraction.nil?
-    htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(def_eir_f_of_temp) if !def_eir_f_of_temp.nil?
+    htg_coil.setTotalHeatingCapacityFunctionofTemperatureCurve(htg_cap_f_of_temp) unless htg_cap_f_of_temp.nil?
+    htg_coil.setTotalHeatingCapacityFunctionofFlowFractionCurve(htg_cap_f_of_flow) unless htg_cap_f_of_flow.nil?
+    htg_coil.setEnergyInputRatioFunctionofTemperatureCurve(htg_energy_input_ratio_f_of_temp) unless htg_energy_input_ratio_f_of_temp.nil?
+    htg_coil.setEnergyInputRatioFunctionofFlowFractionCurve(htg_energy_input_ratio_f_of_flow) unless htg_energy_input_ratio_f_of_flow.nil?
+    htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction) unless htg_part_load_fraction.nil?
+    htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(def_eir_f_of_temp) unless def_eir_f_of_temp.nil?
 
     return htg_coil
   end

@@ -122,9 +122,7 @@ class Standard
           break
         end
       end
-      if !shw_use
-        plant_loop.remove
-      end
+      plant_loop.remove unless shw_use
     end
     return model
   end
@@ -723,11 +721,11 @@ class Standard
     # rename all hvac components on air loops
     model.getHVACComponents.each do |component|
       next if component.to_Node.is_initialized # skip nodes
-      if !component.airLoopHVAC.empty?
+      unless component.airLoopHVAC.empty?
         # rename water to air component outlet nodes
         if component.to_WaterToAirComponent.is_initialized
           component = component.to_WaterToAirComponent.get
-          if !component.airOutletModelObject.empty?
+          unless component.airOutletModelObject.empty?
             component_outlet_object = component.airOutletModelObject.get
             next unless component_outlet_object.to_Node.is_initialized
             component_outlet_object.setName("#{component.name} Outlet Air Node")
@@ -737,12 +735,12 @@ class Standard
         # rename air to air component nodes
         if component.to_AirToAirComponent.is_initialized
           component = component.to_AirToAirComponent.get
-          if !component.primaryAirOutletModelObject.empty?
+          unless component.primaryAirOutletModelObject.empty?
             component_outlet_object = component.primaryAirOutletModelObject.get
             next unless component_outlet_object.to_Node.is_initialized
             component_outlet_object.setName("#{component.name} Primary Outlet Air Node")
           end
-          if !component.secondaryAirInletModelObject.empty?
+          unless component.secondaryAirInletModelObject.empty?
             component_inlet_object = component.secondaryAirInletModelObject.get
             next unless component_inlet_object.to_Node.is_initialized
             component_inlet_object.setName("#{component.name} Secondary Inlet Air Node")
@@ -751,7 +749,7 @@ class Standard
 
         # rename straight component outlet nodes
         if component.to_StraightComponent.is_initialized
-          if !component.to_StraightComponent.get.outletModelObject.empty?
+          unless component.to_StraightComponent.get.outletModelObject.empty?
             component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
             next unless component_outlet_object.to_Node.is_initialized
             component_outlet_object.setName("#{component.name} Outlet Air Node")
@@ -762,12 +760,12 @@ class Standard
       # rename zone hvac component nodes
       if component.to_ZoneHVACComponent.is_initialized
         component = component.to_ZoneHVACComponent.get
-        if !component.airInletModelObject.empty?
+        unless component.airInletModelObject.empty?
           component_inlet_object = component.airInletModelObject.get
           next unless component_inlet_object.to_Node.is_initialized
           component_inlet_object.setName("#{component.name} Inlet Air Node")
         end
-        if !component.airOutletModelObject.empty?
+        unless component.airOutletModelObject.empty?
           component_outlet_object = component.airOutletModelObject.get
           next unless component_outlet_object.to_Node.is_initialized
           component_outlet_object.setName("#{component.name} Outlet Air Node")
@@ -783,20 +781,20 @@ class Standard
       air_loop.supplyInletNode.setName("#{air_loop_name} Supply Inlet Node")
       air_loop.supplyOutletNode.setName("#{air_loop_name} Supply Outlet Node")
 
-      if !air_loop.reliefAirNode.empty?
+      unless air_loop.reliefAirNode.empty?
         relief_node = air_loop.reliefAirNode.get
         relief_node.setName("#{air_loop_name} Relief Air Node")
       end
 
-      if !air_loop.mixedAirNode.empty?
+      unless air_loop.mixedAirNode.empty?
         mixed_node = air_loop.mixedAirNode.get
         mixed_node.setName("#{air_loop_name} Mixed Air Node")
       end
 
       # rename outdoor air system and nodes
-      if !air_loop.airLoopHVACOutdoorAirSystem.empty?
+      unless air_loop.airLoopHVACOutdoorAirSystem.empty?
         oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
-        if !oa_system.outboardOANode.empty?
+        unless oa_system.outboardOANode.empty?
           oa_node = oa_system.outboardOANode.get
           oa_node.setName("#{air_loop_name} Outdoor Air Node")
         end
@@ -807,11 +805,11 @@ class Standard
     model.getThermalZones.each do |zone|
       zone.zoneAirNode.setName("#{zone.name.to_s} Zone Air Node")
 
-      if !zone.returnAirModelObject.empty?
+      unless zone.returnAirModelObject.empty?
         zone.returnAirModelObject.get.setName("#{zone.name.to_s} Return Air Node")
       end
 
-      if !zone.airLoopHVACTerminal.empty?
+      unless zone.airLoopHVACTerminal.empty?
         terminal_unit = zone.airLoopHVACTerminal.get
         if terminal_unit.to_StraightComponent.is_initialized
           component = terminal_unit.to_StraightComponent.get
@@ -835,16 +833,16 @@ class Standard
     # rename all hvac components on plant loops
     model.getHVACComponents.each do |component|
       next if component.to_Node.is_initialized # skip nodes
-      if !component.plantLoop.empty?
+      unless component.plantLoop.empty?
         # rename straight component nodes
         # some inlet or outlet nodes may get renamed again
         if component.to_StraightComponent.is_initialized
-          if !component.to_StraightComponent.get.inletModelObject.empty?
+          unless component.to_StraightComponent.get.inletModelObject.empty?
             component_inlet_object = component.to_StraightComponent.get.inletModelObject.get
             next unless component_inlet_object.to_Node.is_initialized
             component_inlet_object.setName("#{component.name} Inlet Water Node")
           end
-          if !component.to_StraightComponent.get.outletModelObject.empty?
+          unless component.to_StraightComponent.get.outletModelObject.empty?
             component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
             next unless component_outlet_object.to_Node.is_initialized
             component_outlet_object.setName("#{component.name} Outlet Water Node")
@@ -854,12 +852,12 @@ class Standard
         # rename water to air component nodes
         if component.to_WaterToAirComponent.is_initialized
           component = component.to_WaterToAirComponent.get
-          if !component.waterInletModelObject.empty?
+          unless component.waterInletModelObject.empty?
             component_inlet_object = component.waterInletModelObject.get
             next unless component_inlet_object.to_Node.is_initialized
             component_inlet_object.setName("#{component.name} Inlet Water Node")
           end
-          if !component.waterOutletModelObject.empty?
+          unless component.waterOutletModelObject.empty?
             component_outlet_object = component.waterOutletModelObject.get
             next unless component_outlet_object.to_Node.is_initialized
             component_outlet_object.setName("#{component.name} Outlet Water Node")
@@ -869,22 +867,22 @@ class Standard
         # rename water to water component nodes
         if component.to_WaterToWaterComponent.is_initialized
           component = component.to_WaterToWaterComponent.get
-          if !component.demandInletModelObject.empty?
+          unless component.demandInletModelObject.empty?
             demand_inlet_object = component.demandInletModelObject.get
             next unless demand_inlet_object.to_Node.is_initialized
             demand_inlet_object.setName("#{component.name} Demand Inlet Water Node")
           end
-          if !component.demandOutletModelObject.empty?
+          unless component.demandOutletModelObject.empty?
             demand_outlet_object = component.demandOutletModelObject.get
             next unless demand_outlet_object.to_Node.is_initialized
             demand_outlet_object.setName("#{component.name} Demand Outlet Water Node")
           end
-          if !component.supplyInletModelObject.empty?
+          unless component.supplyInletModelObject.empty?
             supply_inlet_object = component.supplyInletModelObject.get
             next unless supply_inlet_object.to_Node.is_initialized
             supply_inlet_object.setName("#{component.name} Supply Inlet Water Node")
           end
-          if !component.supplyOutletModelObject .empty?
+          unless component.supplyOutletModelObject .empty?
             supply_outlet_object = component.supplyOutletModelObject .get
             next unless supply_outlet_object.to_Node.is_initialized
             supply_outlet_object.setName("#{component.name} Supply Outlet Water Node")

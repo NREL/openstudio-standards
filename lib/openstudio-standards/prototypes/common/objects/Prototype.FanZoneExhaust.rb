@@ -56,7 +56,7 @@ class Standard
                                           fan_efficiency: fan_efficiency,
                                           pressure_rise: pressure_rise,
                                           end_use_subcategory: end_use_subcategory)
-    fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) if !system_availability_manager_coupling_mode.nil?
+    fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) unless system_availability_manager_coupling_mode.nil?
     return fan
   end
 

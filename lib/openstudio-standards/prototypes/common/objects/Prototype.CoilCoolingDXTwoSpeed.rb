@@ -16,7 +16,7 @@ class Standard
     clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(model)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     clg_coil.setName(name)
@@ -129,13 +129,13 @@ class Standard
       clg_coil.setBasinHeaterSetpointTemperature(2.0)
     end
 
-    clg_coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp) if !clg_cap_f_of_temp.nil?
-    clg_coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(clg_cap_f_of_flow) if !clg_cap_f_of_flow.nil?
-    clg_coil.setEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp) if !clg_energy_input_ratio_f_of_temp.nil?
-    clg_coil.setEnergyInputRatioFunctionOfFlowFractionCurve(clg_energy_input_ratio_f_of_flow) if !clg_energy_input_ratio_f_of_flow.nil?
-    clg_coil.setPartLoadFractionCorrelationCurve(clg_part_load_ratio) if !clg_part_load_ratio.nil?
-    clg_coil.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp_low_spd) if !clg_cap_f_of_temp_low_spd.nil?
-    clg_coil.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp_low_spd) if !clg_energy_input_ratio_f_of_temp_low_spd.nil?
+    clg_coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp) unless clg_cap_f_of_temp.nil?
+    clg_coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(clg_cap_f_of_flow) unless clg_cap_f_of_flow.nil?
+    clg_coil.setEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp) unless clg_energy_input_ratio_f_of_temp.nil?
+    clg_coil.setEnergyInputRatioFunctionOfFlowFractionCurve(clg_energy_input_ratio_f_of_flow) unless clg_energy_input_ratio_f_of_flow.nil?
+    clg_coil.setPartLoadFractionCorrelationCurve(clg_part_load_ratio) unless clg_part_load_ratio.nil?
+    clg_coil.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp_low_spd) unless clg_cap_f_of_temp_low_spd.nil?
+    clg_coil.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp_low_spd) unless clg_energy_input_ratio_f_of_temp_low_spd.nil?
 
     return clg_coil
   end

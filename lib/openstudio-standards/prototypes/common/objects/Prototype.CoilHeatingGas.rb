@@ -17,7 +17,7 @@ class Standard
     htg_coil = OpenStudio::Model::CoilHeatingGas.new(model)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     htg_coil.setName(name)
@@ -42,9 +42,7 @@ class Standard
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # set capacity
-    if !nominal_capacity.nil?
-      htg_coil.setNominalCapacity(nominal_capacity)
-    end
+    htg_coil.setNominalCapacity(nominal_capacity) unless nominal_capacity.nil?
 
     # set efficiency
     htg_coil.setGasBurnerEfficiency(efficiency)

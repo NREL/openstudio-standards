@@ -147,7 +147,7 @@ class Standard
                                             space_type_name,
                                             space_name,
                                             space_multiplier)
-            if !water_fixture.nil?
+            unless water_fixture.nil?
               water_fixtures << water_fixture
             end
           end

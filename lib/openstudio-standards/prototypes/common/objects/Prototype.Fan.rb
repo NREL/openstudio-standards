@@ -73,10 +73,10 @@ module PrototypeFan
                                     fan_efficiency: nil,
                                     pressure_rise: nil,
                                     end_use_subcategory: nil)
-    fan.setName(fan_name) if !fan_name.nil?
-    fan.setFanEfficiency(fan_efficiency) if !fan_efficiency.nil?
-    fan.setPressureRise(pressure_rise) if !pressure_rise.nil?
-    fan.setEndUseSubcategory(end_use_subcategory) if !end_use_subcategory.nil?
+    fan.setName(fan_name) unless fan_name.nil?
+    fan.setFanEfficiency(fan_efficiency) unless fan_efficiency.nil?
+    fan.setPressureRise(pressure_rise) unless pressure_rise.nil?
+    fan.setEndUseSubcategory(end_use_subcategory) unless end_use_subcategory.nil?
     return fan
   end
 

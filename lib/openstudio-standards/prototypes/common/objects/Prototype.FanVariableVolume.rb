@@ -102,15 +102,15 @@ class Standard
                                           fan_efficiency: fan_efficiency,
                                           pressure_rise: pressure_rise,
                                           end_use_subcategory: end_use_subcategory)
-    fan.setMotorEfficiency(motor_efficiency) if !motor_efficiency.nil?
-    fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) if !motor_in_airstream_fraction.nil?
-    fan.setFanPowerMinimumFlowRateInputMethod(fan_power_minimum_flow_rate_input_method) if !fan_power_minimum_flow_rate_input_method.nil?
-    fan.setFanPowerMinimumFlowFraction(fan_power_minimum_flow_rate_fraction) if !fan_power_minimum_flow_rate_fraction.nil?
-    fan.setFanPowerCoefficient1(fan_power_coefficient_1) if !fan_power_coefficient_1.nil?
-    fan.setFanPowerCoefficient2(fan_power_coefficient_2) if !fan_power_coefficient_2.nil?
-    fan.setFanPowerCoefficient3(fan_power_coefficient_3) if !fan_power_coefficient_3.nil?
-    fan.setFanPowerCoefficient4(fan_power_coefficient_4) if !fan_power_coefficient_4.nil?
-    fan.setFanPowerCoefficient5(fan_power_coefficient_5) if !fan_power_coefficient_5.nil?
+    fan.setMotorEfficiency(motor_efficiency) unless motor_efficiency.nil?
+    fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) unless motor_in_airstream_fraction.nil?
+    fan.setFanPowerMinimumFlowRateInputMethod(fan_power_minimum_flow_rate_input_method) unless fan_power_minimum_flow_rate_input_method.nil?
+    fan.setFanPowerMinimumFlowFraction(fan_power_minimum_flow_rate_fraction) unless fan_power_minimum_flow_rate_fraction.nil?
+    fan.setFanPowerCoefficient1(fan_power_coefficient_1) unless fan_power_coefficient_1.nil?
+    fan.setFanPowerCoefficient2(fan_power_coefficient_2) unless fan_power_coefficient_2.nil?
+    fan.setFanPowerCoefficient3(fan_power_coefficient_3) unless fan_power_coefficient_3.nil?
+    fan.setFanPowerCoefficient4(fan_power_coefficient_4) unless fan_power_coefficient_4.nil?
+    fan.setFanPowerCoefficient5(fan_power_coefficient_5) unless fan_power_coefficient_5.nil?
     return fan
   end
 
@@ -143,7 +143,7 @@ class Standard
     fan_power_coefficient_5 = fan_power_coefficient_5 ? fan_power_coefficient_5 : fan_json['fan_power_coefficient_5']
 
     # convert values
-    pressure_rise_pa = OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get if !pressure_rise.nil?
+    pressure_rise_pa = OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get unless pressure_rise.nil?
 
     # create fan
     fan = create_fan_variable_volume(model,

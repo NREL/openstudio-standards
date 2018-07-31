@@ -55,7 +55,6 @@ class Standard
         # Add the VAV
         model_add_vav_reheat(model,
                              thermal_zones,
-                             building_type: building_type,
                              system_name: system['name'],
                              return_plenum: return_plenum,
                              reheat_type: 'Water',
@@ -148,15 +147,20 @@ class Standard
                                             'NaturalGas',
                                              pump_spd_ctrl: system['hotwater_pump_speed_control'])
                          end
+        case system['electric_reheat']
+        when true
+          electric_reheat = true
+        else
+          electric_reheat = false
+        end
         model_add_pvav(model,
                        thermal_zones,
                        system_name: system['name'],
                        hvac_op_sch: system['operation_schedule'],
                        oa_damper_sch: system['oa_damper_schedule'],
-                       electric_reheat: false,
+                       electric_reheat: electric_reheat,
                        hot_water_loop: hot_water_loop,
-                       return_plenum: return_plenum,
-                       building_type: building_type)
+                       return_plenum: return_plenum)
 
       when 'DOAS Cold Supply'
         # Retrieve the existing hot water loop or add a new one if necessary.

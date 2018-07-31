@@ -86,7 +86,7 @@ class Standard
     if condenser_type == "WaterCooled"
       vrf_outdoor_unit.setString(56, condenser_type)
       # require condenser_loop
-      if !condenser_loop
+      unless condenser_loop
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Must specify condenser_loop for vrf_outdoor_unit if WaterCooled")
       end
       condenser_loop.addDemandBranchForComponent(vrf_outdoor_unit)
@@ -95,7 +95,7 @@ class Standard
     end
 
     # set master zone
-    if !master_zone.to_ThermalZone.empty?
+    unless master_zone.to_ThermalZone.empty?
       vrf_outdoor_unit.setZoneforMasterThermostatLocation(master_zone)
       vrf_outdoor_unit.setMasterThermostatPriorityControlType(priority_control_type)
     end
@@ -404,27 +404,27 @@ class Standard
 
     end
 
-    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_cool_cap_f_of_low_temp) if !vrf_cool_cap_f_of_low_temp.nil?
-    vrf_outdoor_unit.setCoolingCapacityRatioBoundaryCurve(vrf_cool_cap_ratio_boundary) if !vrf_cool_cap_ratio_boundary.nil?
-    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_cool_cap_f_of_high_temp) if !vrf_cool_cap_f_of_high_temp.nil?
-    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_cool_eir_f_of_low_temp) if !vrf_cool_eir_f_of_low_temp.nil?
-    vrf_outdoor_unit.setCoolingEnergyInputRatioBoundaryCurve(vrf_cool_eir_ratio_boundary) if !vrf_cool_eir_ratio_boundary.nil?
-    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_cool_eir_f_of_high_temp) if !vrf_cool_eir_f_of_high_temp.nil?
-    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_cooling_eir_low_plr) if !vrf_cooling_eir_low_plr.nil?
-    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_cooling_eir_high_plr) if !vrf_cooling_eir_high_plr.nil?
-    vrf_outdoor_unit.setCoolingCombinationRatioCorrectionFactorCurve(vrf_cooling_comb_ratio) if !vrf_cooling_comb_ratio.nil?
-    vrf_outdoor_unit.setCoolingPartLoadFractionCorrelationCurve(vrf_cooling_cplffplr) if !vrf_cooling_cplffplr.nil?
-    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_heat_cap_f_of_low_temp) if !vrf_heat_cap_f_of_low_temp.nil?
-    vrf_outdoor_unit.setHeatingCapacityRatioBoundaryCurve(vrf_heat_cap_ratio_boundary) if !vrf_heat_cap_ratio_boundary.nil?
-    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_heat_cap_f_of_high_temp) if !vrf_heat_cap_f_of_high_temp.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_heat_eir_f_of_low_temp) if !vrf_heat_eir_f_of_low_temp.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioBoundaryCurve(vrf_heat_eir_boundary) if !vrf_heat_eir_boundary.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_heat_eir_f_of_high_temp) if !vrf_heat_eir_f_of_high_temp.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_heating_eir_low_plr) if !vrf_heating_eir_low_plr.nil?
-    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_heating_eir_hi_plr) if !vrf_heating_eir_hi_plr.nil?
-    vrf_outdoor_unit.setHeatingCombinationRatioCorrectionFactorCurve(vrf_heating_comb_ratio) if !vrf_heating_comb_ratio.nil?
-    vrf_outdoor_unit.setHeatingPartLoadFractionCorrelationCurve(vrf_heating_cplffplr) if !vrf_heating_cplffplr.nil?
-    vrf_outdoor_unit.setDefrostEnergyInputRatioModifierFunctionofTemperatureCurve(vrf_defrost_eir_f_of_temp) if !vrf_defrost_eir_f_of_temp.nil?
+    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_cool_cap_f_of_low_temp) unless vrf_cool_cap_f_of_low_temp.nil?
+    vrf_outdoor_unit.setCoolingCapacityRatioBoundaryCurve(vrf_cool_cap_ratio_boundary) unless vrf_cool_cap_ratio_boundary.nil?
+    vrf_outdoor_unit.setCoolingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_cool_cap_f_of_high_temp) unless vrf_cool_cap_f_of_high_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_cool_eir_f_of_low_temp) unless vrf_cool_eir_f_of_low_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioBoundaryCurve(vrf_cool_eir_ratio_boundary) unless vrf_cool_eir_ratio_boundary.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_cool_eir_f_of_high_temp) unless vrf_cool_eir_f_of_high_temp.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_cooling_eir_low_plr) unless vrf_cooling_eir_low_plr.nil?
+    vrf_outdoor_unit.setCoolingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_cooling_eir_high_plr) unless vrf_cooling_eir_high_plr.nil?
+    vrf_outdoor_unit.setCoolingCombinationRatioCorrectionFactorCurve(vrf_cooling_comb_ratio) unless vrf_cooling_comb_ratio.nil?
+    vrf_outdoor_unit.setCoolingPartLoadFractionCorrelationCurve(vrf_cooling_cplffplr) unless vrf_cooling_cplffplr.nil?
+    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofLowTemperatureCurve(vrf_heat_cap_f_of_low_temp) unless vrf_heat_cap_f_of_low_temp.nil?
+    vrf_outdoor_unit.setHeatingCapacityRatioBoundaryCurve(vrf_heat_cap_ratio_boundary) unless vrf_heat_cap_ratio_boundary.nil?
+    vrf_outdoor_unit.setHeatingCapacityRatioModifierFunctionofHighTemperatureCurve(vrf_heat_cap_f_of_high_temp) unless vrf_heat_cap_f_of_high_temp.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowTemperatureCurve(vrf_heat_eir_f_of_low_temp) unless vrf_heat_eir_f_of_low_temp.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioBoundaryCurve(vrf_heat_eir_boundary) unless vrf_heat_eir_boundary.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighTemperatureCurve(vrf_heat_eir_f_of_high_temp) unless vrf_heat_eir_f_of_high_temp.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofLowPartLoadRatioCurve(vrf_heating_eir_low_plr) unless vrf_heating_eir_low_plr.nil?
+    vrf_outdoor_unit.setHeatingEnergyInputRatioModifierFunctionofHighPartLoadRatioCurve(vrf_heating_eir_hi_plr) unless vrf_heating_eir_hi_plr.nil?
+    vrf_outdoor_unit.setHeatingCombinationRatioCorrectionFactorCurve(vrf_heating_comb_ratio) unless vrf_heating_comb_ratio.nil?
+    vrf_outdoor_unit.setHeatingPartLoadFractionCorrelationCurve(vrf_heating_cplffplr) unless vrf_heating_cplffplr.nil?
+    vrf_outdoor_unit.setDefrostEnergyInputRatioModifierFunctionofTemperatureCurve(vrf_defrost_eir_f_of_temp) unless vrf_defrost_eir_f_of_temp.nil?
 
     return vrf_outdoor_unit
   end

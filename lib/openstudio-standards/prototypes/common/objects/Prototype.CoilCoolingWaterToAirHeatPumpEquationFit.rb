@@ -18,7 +18,7 @@ class Standard
     clg_coil = OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit.new(model)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     clg_coil.setName(name)

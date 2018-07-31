@@ -6,7 +6,6 @@ module SecondarySchool
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
-    #
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
 
@@ -20,6 +19,18 @@ module SecondarySchool
                            prototype_input['elevator_fan_schedule'],
                            prototype_input['elevator_fan_schedule'],
                            building_type)
+      end
+    end
+
+    # change sizing method for zone
+    model.getThermalZones.each do |zone|
+      air_terminal = zone.airLoopHVACTerminal
+      if air_terminal.is_initialized
+        air_terminal = air_terminal.get
+        if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          sizing_zone = zone.sizingZone
+          sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
+        end
       end
     end
 

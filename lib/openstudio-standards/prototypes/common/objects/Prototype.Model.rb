@@ -209,9 +209,7 @@ Standard.class_eval do
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
-
   def model_add_loads(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -1180,7 +1178,7 @@ Standard.class_eval do
     end
 
     sql_path = nil
-    if use_runmanager == true
+    if use_runmanager
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', 'Running sizing model_run(model)  with RunManager.')
 
       # Find EnergyPlus
@@ -1714,7 +1712,7 @@ Standard.class_eval do
 
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop_hvac_economizer_required?(air_loop, climate_zone) == true
+      if air_loop_hvac_economizer_required?(air_loop, climate_zone)
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = model_economizer_type(model, climate_zone)

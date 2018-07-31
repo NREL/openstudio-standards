@@ -39,9 +39,29 @@ module Hospital
     model_update_exhaust_fan_efficiency(model)
     model_reset_or_room_vav_minimum_damper(prototype_input, model)
 
+    # adjust CAV system sizing
+    model.getAirLoopHVACs.each do |air_loop|
+      if air_loop.name.to_s.include? "CAV_KITCHEN"
+        # system sizing
+        sizing_system = air_loop.sizingSystem
+        prehtg_sa_temp_c = OpenStudio.convert(55.04, 'F', 'C').get
+        htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
+        sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+        sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+        sizing_system.setSizingOption('NonCoincident')
+
+        # zone sizing
+        zone_htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
+        air_loop.thermalZones.each do |zone|
+          sizing_zone = zone.sizingZone
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+        end
+      end
+    end
+
     # Modify the condenser water pump
     if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      cw_pump = model.getPumpConstantSpeedByName('Condenser Water Loop Pump').get
+      cw_pump = model.getPumpConstantSpeedByName('Condenser Water Loop Constant Pump').get
       cw_pump_head_ft_h2o = 60.0
       cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
       cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
@@ -188,16 +208,61 @@ module Hospital
 
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
-      when '90.1-2004', '90.1-2007'
-        return true
-      when '90.1-2010', '90.1-2013'
-        model.getAirTerminalSingleDuctVAVReheats.sort.each do |airterminal|
-          airterminal_name = airterminal.name.get
-          if airterminal_name.include?('OR1') || airterminal_name.include?('OR2') || airterminal_name.include?('OR3') || airterminal_name.include?('OR4')
-            airterminal.setZoneMinimumAirFlowMethod('Scheduled')
-            airterminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
+        vav_name = air_terminal.name.get
+        if vav_name.include?('PatRoom') || vav_name.include?('OR') || vav_name.include?('ICU') || vav_name.include?('Lab') || vav_name.include?('ER') || vav_name.include?('Kitchen')
+          air_terminal.setConstantMinimumAirFlowFraction(1.0)
+        end
+      end
+    when '90.1-2004', '90.1-2007'
+      model.getThermalZones.each do |zone|
+        air_terminal = zone.airLoopHVACTerminal
+        if air_terminal.is_initialized
+          air_terminal = air_terminal.get
+          if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+            # High OA zones
+            # Determine whether or not to use the high minimum guess.
+            # Cutoff was determined by correlating apparent minimum guesses
+            # to OA rates in prototypes since not well documented in papers.
+            zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+            if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+              air_terminal.setConstantMinimumAirFlowFraction(1.0)
+            end
           end
         end
+      end
+    when '90.1-2010', '90.1-2013'
+      model.getThermalZones.each do |zone|
+        air_terminal = zone.airLoopHVACTerminal
+        if air_terminal.is_initialized
+          air_terminal = air_terminal.get
+          if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+            # High OA zones
+            # Determine whether or not to use the high minimum guess.
+            # Cutoff was determined by correlating apparent minimum guesses
+            # to OA rates in prototypes since not well documented in papers.
+            zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+            if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+              air_terminal_name = air_terminal.name.get
+              if air_terminal_name.include? "PatRoom"
+                air_terminal.setConstantMinimumAirFlowFraction(0.5)
+              else
+                air_terminal.setConstantMinimumAirFlowFraction(1.0)
+              end
+            end
+          end
+        end
+      end
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
+        air_terminal_name = air_terminal.name.get
+        if air_terminal_name.include?('OR1') || air_terminal_name.include?('OR2') || air_terminal_name.include?('OR3') || air_terminal_name.include?('OR4')
+          air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
+        end
+      end
     end
   end
 

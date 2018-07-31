@@ -71,6 +71,7 @@
     "oa_damper_schedule": "OutPatientHealthCare BLDG_OA_SCH",
     "hotwater_pump_speed_control":"Constant",
     "heating_type": "Gas",
+    "electric_reheat": true,
     "space_names": [
       "Floor 2 Conference",
       "Floor 2 Conference Toilet",

@@ -18,7 +18,7 @@ class Standard
     htg_coil = OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit.new(model)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     htg_coil.setName(name)

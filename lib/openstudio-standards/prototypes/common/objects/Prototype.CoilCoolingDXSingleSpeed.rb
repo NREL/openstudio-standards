@@ -18,7 +18,7 @@ class Standard
     clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) if !air_loop.nil?
+    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
 
     # set coil name
     clg_coil.setName(name)
@@ -43,9 +43,7 @@ class Standard
     clg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
     # set coil cop
-    if !cop.nil?
-      clg_coil.setRatedCOP(cop)
-    end
+    clg_coil.setRatedCOP(cop) unless cop.nil?
 
     clg_cap_f_of_temp = nil
     clg_cap_f_of_flow = nil
@@ -54,12 +52,11 @@ class Standard
     clg_part_load_ratio = nil
 
     # curve sets
-    if type == 'OS default'
-
+    case type
+    when 'OS default'
       # use OS defaults
 
-    elsif type == 'Heat Pump'
-
+    when 'Heat Pump'
       # "PSZ-AC_Unitary_PackagecoolCapFT"
       clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
       clg_cap_f_of_temp.setCoefficient1Constant(0.766956)
@@ -106,8 +103,7 @@ class Standard
       clg_part_load_ratio.setMinimumValueofx(0.0)
       clg_part_load_ratio.setMaximumValueofx(1.0)
 
-    elsif type == 'PSZ-AC'
-
+    when 'PSZ-AC'
       # Defaults to "DOE Ref DX Clg Coil Cool-Cap-fT"
       clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
       clg_cap_f_of_temp.setCoefficient1Constant(0.9712123)
@@ -158,8 +154,7 @@ class Standard
       clg_part_load_ratio.setMinimumCurveOutput(0.7)
       clg_part_load_ratio.setMaximumCurveOutput(1.0)
 
-    elsif type == 'Window AC'
-
+    when 'Window AC'
       # Performance curves
       # From Frigidaire 10.7 EER unit in Winkler et. al. Lab Testing of Window ACs (2013)
       # NOTE: These coefficients are in SI UNITS
@@ -176,8 +171,7 @@ class Standard
       clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'RoomAC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
       clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'RoomAC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
-    elsif type == 'Residential Central AC'
-
+    when 'Residential Central AC'
       # Performance curves
       # These coefficients are in IP UNITS
       cool_cap_ft_coeffs_ip = [3.670270705, -0.098652414, 0.000955906, 0.006552414, -0.0000156, -0.000131877]
@@ -197,8 +191,7 @@ class Standard
       clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'AC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
       clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'AC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
-    elsif type == 'Residential Central ASHP'
-
+    when 'Residential Central ASHP'
       # Performance curves
       # These coefficients are in IP UNITS
       cool_cap_ft_coeffs_ip = [3.68637657, -0.098352478, 0.000956357, 0.005838141, -0.0000127, -0.000131702]
@@ -216,7 +209,6 @@ class Standard
       clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'Cool-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
 
     else # default curve set, type == 'Split AC' || 'PTAC'
-
       clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
       clg_cap_f_of_temp.setCoefficient1Constant(0.942587793)
       clg_cap_f_of_temp.setCoefficient2x(0.009543347)
@@ -266,11 +258,11 @@ class Standard
 
     end
 
-    clg_coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp) if !clg_cap_f_of_temp.nil?
-    clg_coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(clg_cap_f_of_flow) if !clg_cap_f_of_flow.nil?
-    clg_coil.setEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp) if !clg_energy_input_ratio_f_of_temp.nil?
-    clg_coil.setEnergyInputRatioFunctionOfFlowFractionCurve(clg_energy_input_ratio_f_of_flow) if !clg_energy_input_ratio_f_of_flow.nil?
-    clg_coil.setPartLoadFractionCorrelationCurve(clg_part_load_ratio) if !clg_part_load_ratio.nil?
+    clg_coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(clg_cap_f_of_temp) unless clg_cap_f_of_temp.nil?
+    clg_coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(clg_cap_f_of_flow) unless clg_cap_f_of_flow.nil?
+    clg_coil.setEnergyInputRatioFunctionOfTemperatureCurve(clg_energy_input_ratio_f_of_temp) unless clg_energy_input_ratio_f_of_temp.nil?
+    clg_coil.setEnergyInputRatioFunctionOfFlowFractionCurve(clg_energy_input_ratio_f_of_flow) unless clg_energy_input_ratio_f_of_flow.nil?
+    clg_coil.setPartLoadFractionCorrelationCurve(clg_part_load_ratio) unless clg_part_load_ratio.nil?
 
     return clg_coil
   end

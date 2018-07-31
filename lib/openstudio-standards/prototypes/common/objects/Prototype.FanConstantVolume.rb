@@ -97,8 +97,8 @@ class Standard
                                           fan_efficiency: fan_efficiency,
                                           pressure_rise: pressure_rise,
                                           end_use_subcategory: end_use_subcategory)
-    fan.setMotorEfficiency(motor_efficiency) if !motor_efficiency.nil?
-    fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) if !motor_in_airstream_fraction.nil?
+    fan.setMotorEfficiency(motor_efficiency) unless motor_efficiency.nil?
+    fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) unless motor_in_airstream_fraction.nil?
     return fan
   end
 
