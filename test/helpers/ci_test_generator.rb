@@ -86,7 +86,9 @@ def write_file_path_to_ci_tests_txt
                                                 line.include?("necb/test_necb_hvac_system_2.rb") or \
                                                 line.include?("necb/test_necb_hvac_system_3.rb") or \
                                                 line.include?("necb/test_necb_hvac_system_4.rb") or \
-                                                line.include?("necb/test_necb_hvac_system_5.rb")
+                                                line.include?("necb/test_necb_hvac_system_5.rb") or \
+                                                line.include?("necb/test_necb_hvac_system_6.rb") or \
+                                                line.include?("necb/test_necb_hvac_system_7.rb")
       new_file_content = new_file_content - [files[i]]
     end
   }
