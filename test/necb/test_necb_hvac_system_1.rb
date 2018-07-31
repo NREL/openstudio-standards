@@ -46,7 +46,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     name = String.new
 
     #Create folder
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     #interate through combinations.

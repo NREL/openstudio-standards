@@ -173,7 +173,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     name = String.new
 
     #Create folder
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     #interate through combinations.
@@ -344,7 +344,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
 
     name = String.new
     #create folders
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|
@@ -473,7 +473,7 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|
@@ -605,7 +605,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
 
@@ -741,7 +741,7 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|
@@ -877,7 +877,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     #save baseline
@@ -1021,7 +1021,7 @@ class NECB_HVAC_System_7_Test < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/test_necb_system_7"
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|

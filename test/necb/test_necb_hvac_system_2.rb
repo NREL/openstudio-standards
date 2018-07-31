@@ -40,7 +40,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
 
     name = String.new
     #create folders
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|
