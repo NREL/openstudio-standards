@@ -697,7 +697,7 @@ class Standard
 
     # sensor to read supply inlet temperature
     inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Temperature')
-    inlet_temp_sensor.setName("#{ground_hx.name} Inlet Temp Sensor")
+    inlet_temp_sensor.setName("#{ground_hx.name.gsub(/[ +-.]/,'_')} Inlet Temp Sensor")
     inlet_temp_sensor.setKeyName(ground_hx_loop.supplyInletNode.handle.to_s)
 
     # actuator to set supply outlet temperature
@@ -707,7 +707,7 @@ class Standard
     # program to control outlet temperature
     # adjusts delta-t based on calculation of slope and intercept from control temperatures
     program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    program.setName("#{ground_hx.name} Temperature Control")
+    program.setName("#{ground_hx.name.gsub(/[ +-.]/,'_')} Temperature Control")
     program_body = <<-EMS
       SET Tin = #{inlet_temp_sensor.handle}
       SET Tout = #{slope_c_per_c.round(2)} * Tin + #{intercept_c.round(1)}
@@ -717,7 +717,7 @@ class Standard
 
     # program calling manager
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{program.name} Calling Manager")
+    pcm.setName("#{program.name.gsub(/[ +-.]/,'_')} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(program)
 
@@ -3327,18 +3327,18 @@ class Standard
 
       # Create a sensor to read the zone load
       zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
-      zn_load_sensor.setName("#{zone_name_clean} Clg Load Sensor")
+      zn_load_sensor.setName("#{zone_name_clean.gsub(/[ +-.]/,'_')} Clg Load Sensor")
       zn_load_sensor.setKeyName(zone.handle.to_s)
 
       # Create an actuator to set the airloop availability
       air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch, 'Schedule:Constant', 'Schedule Value')
-      air_loop_avail_actuator.setName("#{air_loop.name} Availability Actuator")
+      air_loop_avail_actuator.setName("#{air_loop.name.gsub(/[ +-.]/,'_')} Availability Actuator")
 
       # Create a program to turn on Evap Cooler if
       # there is a cooling load in the target zone.
       # Load < 0.0 is a cooling load.
       avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      avail_program.setName("#{air_loop.name} Availability Control")
+      avail_program.setName("#{air_loop.name.gsub(/[ +-.]/,'_')} Availability Control")
       avail_program_body = <<-EMS
         IF #{zn_load_sensor.handle} < 0.0
           SET #{air_loop_avail_actuator.handle} = 1
@@ -3427,7 +3427,7 @@ class Standard
 
     # Create a programcallingmanager
     avail_pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    avail_pcm.setName('Evap Cooler Availability Program Calling Manager')
+    avail_pcm.setName('EvapCoolerAvailabilityProgramCallingManager')
     avail_pcm.setCallingPoint('AfterPredictorAfterHVACManagers')
     programs.each do |program|
       avail_pcm.addProgram(program)
