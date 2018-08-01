@@ -2,38 +2,10 @@ require_relative '../helpers/minitest_helper'
 require_relative 'create_performance_rating_method_helper'
 require_relative 'baseline_901_2013_helper'
 
-class Baseline9012013Test2 < Minitest::Test
+class Baseline9012013TestBldg2 < Minitest::Test
 
   include Baseline9012013
 
-  # Test LPDs for bldg_1
-  # @author Matt Leach, NORESCO
-  def test_lpd_bldg1
-
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-    
-    lpd_test_hash = {}
-    lpd_test_hash["Stairs 1"] = {"LPD" => 0.69,"Space_Type" => "Stair"}
-    lpd_test_hash["Lobby 1"] = {"LPD" => 0.90,"Space_Type" => "Lobby"}
-    lpd_test_hash["Office CR 35b"] = {"LPD" => 0.98,"Space_Type" => "Open Office"}
-    lpd_test_hash["RR 14"] = {"LPD" => 0.98,"Space_Type" => "Restroom"}
-    lpd_test_hash["Utility 1"] = {"LPD" => 0.42,"Space_Type" => "Elec/MechRoom"}
-    
-    lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-  
   # Test LPDs for bldg_2
   # @author Matt Leach, NORESCO
   def ci_fail_test_lpd_bldg2 # disable this test, which succeeds locally but fails on circleci for no apparent reason
@@ -59,441 +31,309 @@ class Baseline9012013Test2 < Minitest::Test
     
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
     
-  end  
+  end
 
-  # Test LPDs for bldg_3
+  # Fan Powered Terminal Test
   # @author Matt Leach, NORESCO
-  def test_lpd_bldg3
+  def local_fail_test_fan_powered_terminals_bldg2
 
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
-    
-    lpd_test_hash = {}
-    lpd_test_hash["Base2 Weight 2B55 1B50"] = {"LPD" => 0.72,"Space_Type" => "Exercise"}
-    lpd_test_hash["Flr1 Corridor 115"] = {"LPD" => 0.66,"Space_Type" => "Corridor"}
-    lpd_test_hash["Flr2 Office 280"] = {"LPD" => 1.11,"Space_Type" => "ClosedOfficeOffice"}
-    lpd_test_hash["Flr2 Computer 266"] = {"LPD" => 1.24,"Space_Type" => "Classroom"}
-    lpd_test_hash["Flr1 Dining 150"] = {"LPD" => 0.89,"Space_Type" => "Dining"}
-    lpd_test_hash["Flr2 Kitchen"] = {"LPD" => 1.21,"Space_Type" => "Kitchen"}
-    lpd_test_hash["Flr1 Storage 150F"] = {"LPD" => 0.63,"Space_Type" => "Storage"}
-    
-    lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
 
-  # Test LPDs for bldg_4
-  # @author Matt Leach, NORESCO
-  # Known failure due to currently not having parking space type
-  def known_fail_test_lpd_bldg4
+    # minimum flow fraction should be 30% and max secondary flow should be 50% of terminal size
+    primary_flow_rates_m3_per_s_hash = {}
+    primary_flow_rates_m3_per_s_hash["FLR 1 LOBBY"] = 0.3136
+    primary_flow_rates_m3_per_s_hash["FLR 1 TENANT 2 EAST PERIMETER"] = 0.5821
+    primary_flow_rates_m3_per_s_hash["FLR 1 TENANT 2 NORTH PERIMETER"] = 0.71818
+    primary_flow_rates_m3_per_s_hash["FLR 2 TENANT 2 NORTH PERIMETER"] = 0.634
+    primary_flow_rates_m3_per_s_hash["FLR 2 TENANT 1 CORE"] = 0.8848
 
-    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-    
-    lpd_test_hash = {}
-      lpd_test_hash["Parking Level 1B ParkingLot"] = {"LPD" => 0.19,"Space_Type" => "Parking"} #Interior parking lot is currently not an available space type.
-    lpd_test_hash["Parking Level 1B IDF 1B05"] = {"LPD" => 1.11,"Space_Type" => "IT_Room"}
-    lpd_test_hash["IndoorPracticeField"] = {"LPD" => 0.72,"Space_Type" => "Gym"}
-    
-    lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-
-  # Test LPDs for bldg_5
-  # @author Matt Leach, NORESCO
-  def test_lpd_bldg5
-
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-    
-    lpd_test_hash = {}
-    lpd_test_hash["Field Level Conference 128D"] = {"LPD" => 1.23,"Space_Type" => "Conference"}
-    lpd_test_hash["Field Level Break 101B"] = {"LPD" => 0.73,"Space_Type" => "BreakRoom"}
-    lpd_test_hash["Field Level Laundry 114A"] = {"LPD" => 0.60,"Space_Type" => "Laundry"}
-    lpd_test_hash["Field Level Pool Recovery 111"] = {"LPD" => 0.91,"Space_Type" => "PhysTherapy"}
-    
-    lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-
-  # Test LPDs for bldg_7
-  # @author Matt Leach, NORESCO
-  def test_lpd_bldg7
-
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-    
-    lpd_test_hash = {}
-    lpd_test_hash["L1-ES_apt"] = {"LPD" => 0.45,"Space_Type" => "Apartment"}
-    lpd_test_hash["L1-E_corr"] = {"LPD" => 0.792,"Space_Type" => "Corridor"}
-    lpd_test_hash["L1-W_ret"] = {"LPD" => 2.22,"Space_Type" => "Office"} # Apartment offices have 1.11 W/f^2 extra task lighting according to the DOE prototype buildings
-    
-      lpd_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      lpd_w_per_ft2 = OpenStudio.convert(lpd_w_per_m2,'W/m^2','W/ft^2').get
-      
-      unless (lpd_test_hash[space_name]["LPD"] - lpd_w_per_ft2).abs < 0.01
-        failure_array << "Expected LPD of #{lpd_test_hash[space_name]["LPD"]} W/ft2 for Space #{space_name} of Type #{lpd_test_hash[space_name]["Space_Type"]}; got #{lpd_w_per_ft2.round(2)} W/ft2 instead"
-      end
-    end
-    
-     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-
-  # Test Daylighting for bldg_1
-  # @author Matt Leach, NORESCO
-  def test_daylighting_bldg1
-
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-  
-    daylighting_test_hash = {}
-    daylighting_test_hash["Lobby 1"] = {"PrimaryArea" => 1869.7,"SecondaryArea" => 1631,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Retail 1b"] = {"PrimaryArea" => 870.4,"SecondaryArea" => 557.7,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Office PR 14c"] = {"PrimaryArea" => 2662.2,"SecondaryArea" => 491.6,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Office PR 35d"] = {"PrimaryArea" => 868.7,"SecondaryArea" => 147.1,"ControlType" => "PrimaryAndSecondary"}
-    # currently the measure is not calculating the expected daylighting areas because window width is getting reduced from proposed to baseline 
-    
-    daylighting_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      # get thermal zone
-      if space.thermalZone.is_initialized
-        zone = space.thermalZone.get
-        zone_name = zone.name.get.to_s
-        zone_area_ft2 = zone.floorArea * 10.7639104167
-        # check for zones with multiple spaces.  if multiple spaces, make sure other spaces don't have windows
-        windows_in_one_space = true
-        zone.spaces.each do |space|
-          s_name = space.name.get.to_s
-          next if s_name == space_name
-          space.surfaces.each do |surface|
-            next if not surface.surfaceType.casecmp("Wall").zero?
-            next if not surface.outsideBoundaryCondition.casecmp("Outdoors").zero?
-            unless surface.subSurfaces.length == 0
-              windows_in_one_space = false
-              failure_array << "Thermal Zone #{zone_name} containing space #{space_name} contains one or more other spaces with a window, including space #{s_name}.  Pick a different space for daylighting check"
-            end
-          end
-        end
-        if windows_in_one_space
-          # get daylighting control object(s)
-          if daylighting_test_hash[space_name]["ControlType"] == "PrimaryOnly"
-            # primary
-            if zone.primaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_primary_control_fraction = daylighting_test_hash[space_name]["PrimaryArea"]/zone_area_ft2
-              primary_control_fraction = zone.fractionofZoneControlledbyPrimaryDaylightingControl
-              unless (expected_primary_control_fraction - primary_control_fraction).abs < 0.01
-                failure_array << "Expected Primary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_primary_control_fraction.round(2)}; found #{primary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Primary Daylighting Control object found for Thermal Zone #{zone_name}"
-            end
-          elsif daylighting_test_hash[space_name]["ControlType"] == "PrimaryAndSecondary"
-            # primary
-            if zone.primaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_primary_control_fraction = daylighting_test_hash[space_name]["PrimaryArea"]/zone_area_ft2
-              primary_control_fraction = zone.fractionofZoneControlledbyPrimaryDaylightingControl
-              unless (expected_primary_control_fraction - primary_control_fraction).abs < 0.01
-                failure_array << "Expected Primary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_primary_control_fraction.round(2)}; found #{primary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Primary Daylighting Control object found for Thermal Zone #{zone_name}"
-            end
-          
-            # secondary
-            if zone.secondaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_secondary_control_fraction = daylighting_test_hash[space_name]["SecondaryArea"]/zone_area_ft2
-              secondary_control_fraction = zone.fractionofZoneControlledbySecondaryDaylightingControl
-              unless (expected_secondary_control_fraction - secondary_control_fraction).abs < 0.01
-                failure_array << "Expected Secondary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_secondary_control_fraction.round(2)}; found #{secondary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Secondary Daylighting Control object found for Thermal Zone #{zone_name}"
-            end
-          else
-            failure_array << "Invalid daylighting Control Type #{daylighting_test_hash[space_name]["ControlType"]} specified for Space #{space_name}"
-          end
+    number_of_piu_terminals = 0
+    model.getAirTerminalSingleDuctParallelPIUReheats.each do |piu_terminal|
+      piu_terminal_name = piu_terminal.name.get.to_s
+      zone_name = piu_terminal_name.gsub(" PFP Term","")
+      number_of_piu_terminals += 1
+      # check minimum primary air flow fraction
+      if piu_terminal.minimumPrimaryAirFlowFraction.is_initialized
+        unless piu_terminal.minimumPrimaryAirFlowFraction.get == 0.3
+          failure_array << "Expected Minimum Primary Air Flow Fraction to be set to 0.3 for Parallel PIU Terminal for Zone #{zone_name}; found #{piu_terminal.minimumPrimaryAirFlowFraction.get} instead"
         end
       else
-        failure_array << "Space #{space_name} is not assigned to a thermal zone.  Pick a different space for daylighting check"
+        failure_array << "Expected Minimum Primary Air Flow Fraction to be set for Parallel PIU Terminal for Zone #{zone_name}"
       end
-    end
-  
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-
-  # Test Daylighting for bldg_3
-  # @author Matt Leach, NORESCO
-  def test_daylighting_bldg3
-
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', true, true)
-    failure_array = []
-  
-    daylighting_test_hash = {}
-    daylighting_test_hash["Flr2 Lounge Perimeter 250CD"] = {"PrimaryArea" => 1074.5,"SecondaryArea" => 974.1,"ControlType" => "PrimaryAndSecondary"}
-    # Don't expect daylighting controls in closed offices; assume
-    # that spaces would in reality be broken into multiple rooms
-    # less than the minimum size to require daylighting controls.
-    # daylighting_test_hash["Flr1 Office 130-132 136 138 139"] = {"PrimaryArea" => 340,"SecondaryArea" => 340,"ControlType" => "PrimaryAndSecondary"}
-    daylighting_test_hash["Flr1 Dining 150"] = {"PrimaryArea" => 1725.9,"SecondaryArea" => 1500.4,"ControlType" => "PrimaryAndSecondary"}
-    # currently the measure is not calculating the expected daylighting areas because window width is getting reduced from proposed to baseline 
-    
-    daylighting_test_hash.keys.each do |space_name|
-      space = model.getSpaceByName(space_name).get
-      # get thermal zone
-      if space.thermalZone.is_initialized
-        zone = space.thermalZone.get
-        zone_name = zone.name.get.to_s
-        zone_area_ft2 = zone.floorArea * 10.76
-        # check for zones with multiple spaces.  if multiple spaces, make sure other spaces don't have windows
-        windows_in_one_space = true
-        zone.spaces.each do |space|
-          s_name = space.name.get.to_s
-          next if s_name == space_name
-          space.surfaces.each do |surface|
-            next if not surface.surfaceType.casecmp("Wall").zero?
-            next if not surface.outsideBoundaryCondition.casecmp("Outdoors").zero?
-            unless surface.subSurfaces.length == 0
-              windows_in_one_space = false
-              failure_array << "Thermal Zone #{zone_name} containing space #{space_name} contains one or more other spaces with a window, including space #{s_name}.  Pick a different space for daylighting check"
-            end
-          end
-        end
-        if windows_in_one_space
-          # get daylighting control object(s)
-          if daylighting_test_hash[space_name]["ControlType"] == "PrimaryOnly"
-            # primary
-            if zone.primaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_primary_control_fraction = daylighting_test_hash[space_name]["PrimaryArea"]/zone_area_ft2
-              primary_control_fraction = zone.fractionofZoneControlledbyPrimaryDaylightingControl
-              unless (expected_primary_control_fraction - primary_control_fraction).abs < 0.05
-                failure_array << "Expected Primary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_primary_control_fraction.round(2)}; found #{primary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Primary Daylighting Control object found for Thermal Zone #{zone_name}"
-            end
-          elsif daylighting_test_hash[space_name]["ControlType"] == "PrimaryAndSecondary"
-            # primary
-            if zone.primaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_primary_control_fraction = daylighting_test_hash[space_name]["PrimaryArea"]/zone_area_ft2
-              primary_control_fraction = zone.fractionofZoneControlledbyPrimaryDaylightingControl
-              unless (expected_primary_control_fraction - primary_control_fraction).abs < 0.05
-                failure_array << "Expected Primary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_primary_control_fraction.round(2)}; found #{primary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Primary Daylighting Control object found for Thermal Zone #{zone_name}"
-            end
-          
-            # secondary
-            if zone.secondaryDaylightingControl.is_initialized
-              # check fraction controlled
-              expected_secondary_control_fraction = daylighting_test_hash[space_name]["SecondaryArea"]/zone_area_ft2
-              secondary_control_fraction = zone.fractionofZoneControlledbySecondaryDaylightingControl
-              unless (expected_secondary_control_fraction - secondary_control_fraction).abs < 0.05
-                failure_array << "Expected Secondary Daylighting Control Fraction for Zone #{zone_name} to be #{expected_secondary_control_fraction.round(2)}; found #{secondary_control_fraction.round(2)} instead"
-              end
-            else
-              failure_array << "No Secondary Daylighting Control object found for Thermal Zone #{zone_name}"
+      # look for spot check terminals
+      # puts "Zone Name = #{zone_name}"
+      primary_flow_rates_m3_per_s_hash.keys.each do |spot_check_zone_name|
+        if spot_check_zone_name.casecmp(zone_name).zero?
+          # puts "Zone #{zone_name} is a spot check zone"
+          # check maximum secondary flow rate (equal to half primary air flow rate)
+          if piu_terminal.maximumSecondaryAirFlowRate.is_initialized
+            unless (primary_flow_rates_m3_per_s_hash[spot_check_zone_name]/2 - piu_terminal.maximumSecondaryAirFlowRate.get).abs < 0.005
+              failure_array << "Expected #{(primary_flow_rates_m3_per_s_hash[spot_check_zone_name]*2118.88/2).round()} cfm Maximum Secondary Flow Rate for Zone #{spot_check_zone_name}; found #{(piu_terminal.maximumSecondaryAirFlowRate.get*2118.88).round()} cfm instead"
             end
           else
-            failure_array << "Invalid daylighting Control Type #{daylighting_test_hash[space_name]["ControlType"]} specified for Space #{space_name}"
+            failure_array << "Expected Maximum Secondary Air Flow Rate to be set for Parallel PIU Terminal for Zone #{zone_name}"
           end
         end
-      else
-        failure_array << "Space #{space_name} is not assigned to a thermal zone.  Pick a different space for daylighting check"
       end
     end
-  
+    unless number_of_piu_terminals > 0
+      failure_array << "No Parallel PIU Terminals found, even though Baseline HVAC System Type is 6"
+    end
+
+    # check for failures
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
 
-  # Test System Type for bldg_1
+  end
+
+  # Sizing Factors Test
   # @author Matt Leach, NORESCO
-  def test_system_type_bldg1
+  def ci_fail_test_sizing_factors_bldg2
 
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
-    expected_system_string = "VAV_PFP_Boxes (Sys8)"
-    chillers = []
-    # do not expect any PSZ systems for this model (all fully conditioned zones should be on main baseline system)
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # check for schedule exception systems
-        if (airloop_name.include? "Utility 1" or airloop_name.include? "Elev Lobby 14" or airloop_name.include? "Elev Lobby 35")
-          # systems should be PSZ
-          expected_psz_system_string = "PSZ-HP"
-          unless airloop_name.include? expected_psz_system_string
-            failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_psz_system_string}"
-          end
-          # check terminal type
-          thermal_zones_attached = 0
-          airloop.thermalZones.each do |zone|
-            thermal_zones_attached += 1
-            # look for air terminal for zone
-            if zone.airLoopHVACTerminal.is_initialized
-              terminal = zone.airLoopHVACTerminal.get
-              # get terminal and make sure it is the correct type
-              unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-              end
-            else
-              failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-            end
-          end
-          unless thermal_zones_attached == 1
-            failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-          end
-          # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
-          else
-            # get fan type
-            supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
-            end
-          end
-          # check heating and cooling coil types
-          # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
-          end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
-          end
-          # supplementary heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_Electric'.to_IddObjectType).length == 1
-            failure_array << "Expected supplementary heating coil of type CoilHeatingElectric for System #{airloop_name}"
-          end
-          # PSZ system checks end here
-          next
-        end
+    expected_cooling_sizing_factor = 1.15
+    expected_heating_sizing_factor = 1.25
+
+    sizing_params = model.getSizingParameters
+
+    unless (expected_cooling_sizing_factor - sizing_params.coolingSizingFactor).abs < 0.01
+      failure_array << "Expected Cooling Sizing Factor of #{expected_cooling_sizing_factor}; got #{sizing_params.coolingSizingFactor} instead"
+    end
+
+    unless (expected_heating_sizing_factor - sizing_params.heatingSizingFactor).abs < 0.01
+      failure_array << "Expected Heating Sizing Factor of #{expected_heating_sizing_factor}; got #{sizing_params.heatingSizingFactor} instead"
+    end
+
+    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+
+  end
+
+  # Electric DHW Test
+  # @author Matt Leach, NORESCO
+  def local_fail_test_dhw_bldg2_electric
+
+    building_type = "MediumOffice"
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', building_type, 'Xcel Energy CO EDA', false, true)
+    failure_array = []
+
+    expected_fuel_type = "Electricity"
+
+    # get water heater(s)
+    model.getWaterHeaterMixeds.each do |water_heater|
+      water_heater_name = water_heater.name.get.to_s
+      # check fuel type
+      fuel_type = water_heater.heaterFuelType
+      unless fuel_type == expected_fuel_type
+        failure_array << "Building Type is #{building_type}, so expected Water Heater Fuel Type to be #{expected_fuel_type}, but #{water_heater_name} has Fuel Type #{fuel_type}"
+      end
+      # get water heater capacity
+      next unless water_heater.heaterMaximumCapacity.is_initialized
+      capacity_kw = water_heater.heaterMaximumCapacity.get/1000
+      # get water heater volume
+      next unless water_heater.tankVolume.is_initialized
+      volume_gal = water_heater.tankVolume.get*264.173
+      # get thermal efficiency
+      if water_heater.heaterThermalEfficiency.is_initialized
+        thermal_efficiency = water_heater.heaterThermalEfficiency.get
       else
-        system_type_confirmed = true
+        failure_array << "No Thermal Efficiency assigned to #{water_heater_name}"
       end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-        next
+      # get UA
+      if water_heater.offCycleLossCoefficienttoAmbientTemperature.is_initialized
+        ua_watts_per_k = water_heater.offCycleLossCoefficienttoAmbientTemperature.get
+      else
+        failure_array << "No UA for skin losses assigned to #{water_heater_name}"
       end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctParallelPIUReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
+      # check thermal efficiency and tank losses
+      if fuel_type == "Electricity"
+        # check thermal efficiency
+        expected_thermal_efficiency = 1
+        unless (expected_thermal_efficiency - thermal_efficiency).abs < 0.01
+          failure_array << "Expected Thermal Efficiency for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_thermal_efficiency.round(2)}; found #{thermal_efficiency.round(2)} instead"
+        end
+        # check tank losses
+        if capacity_kw < 12
+          energy_factor = 0.97 - (0.00035*volume_gal)
+          ua_btu_per_hr_per_f = (41_094 * (1 / energy_factor - 1)) / (24 * 67.5)
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
           end
         else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Electric'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingElectric for System #{airloop_name}"
-      end
-      # cooling coil
-      unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected Cooling Coil of type CoilCoolingWater for System #{airloop_name}"
-      else  
-        airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-          unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-            failure_array << "Cooling Coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_Chiller_Electric_EIR'.to_IddObjectType).length > 0
-              failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by ChillerElectricEIR object(s)"
-            else
-              # get chiller(s)
-              plant_loop.supplyComponents('OS_Chiller_Electric_EIR'.to_IddObjectType).each do |chiller|
-                chillers << chiller
-                chillers = chillers.uniq
-              end
-            end
+          standby_loss_fraction = (0.3 + 27/volume_gal)/100
+          standby_loss_btu_per_hr = standby_loss_fraction * volume_gal * 8.25 * 70
+          ua_btu_per_hr_per_f = standby_loss_btu_per_hr / 70
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
           end
         end
-      end
-    end
-    # check chillers
-    chillers.each do |chiller|        
-      chiller = chiller.to_ChillerElectricEIR.get
-      # make sure chiller is water-cooled
-      unless chiller.condenserType == "WaterCooled"
-        failure_array << "Expected Chiller #{chiller.name} to be WaterCooled"
-      else
-        # get condenser loop
-        if chiller.secondaryPlantLoop.is_initialized
-          condenser_loop = chiller.secondaryPlantLoop.get
-          unless condenser_loop.supplyComponents('OS_CoolingTower_VariableSpeed'.to_IddObjectType).length > 0
-            failure_array << "Expected Condenser Water for Chiller #{chiller.name} to be cooled by CoolingTowerVariableSpeed object(s)"
+      elsif fuel_type == "NaturalGas"
+        capacity_btu_per_hr = capacity_kw * 3412.141633
+        if capacity_btu_per_hr <= 75000
+          expected_thermal_efficiency = 0.82
+          unless (expected_thermal_efficiency - thermal_efficiency).abs < 0.01
+            failure_array << "Expected Thermal Efficiency for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_thermal_efficiency.round(2)}; found #{thermal_efficiency.round(2)} instead"
+          end
+          # Calculate the minimum Energy Factor (EF)
+          ef = 0.67 - (0.0005 * volume_gal)
+          # Calculate the Recovery Efficiency (RE)
+          # based on a fixed capacity of 75,000 Btu/hr
+          # and a fixed volume of 40 gallons by solving
+          # this system of equations:
+          # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+          # 0.82 = (ua*67.5+cap*re)/cap
+          cap = 75000.0
+          re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+          # Calculate the skin loss coefficient (UA)
+          # based on the actual capacity.
+          ua_btu_per_hr_per_f = (expected_thermal_efficiency - re) * capacity_btu_per_hr / 67.5
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
           end
         else
-          failure_array << "Expected Chiller #{chiller.name} to be connected to a Condenser Loop"
+          # Thermal efficiency requirement from 90.1
+          et = 0.8
+          # Calculate the max allowable standby loss (SL)
+          standby_loss_btu_per_hr = (capacity_btu_per_hr / 800 + 110 * Math.sqrt(volume_gal))
+          # Calculate the skin loss coefficient (UA)
+          ua_btu_per_hr_per_f = (standby_loss_btu_per_hr * et) / 70
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
+          end
+          # Calculate water heater efficiency
+          expected_thermal_efficiency = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
         end
+      else
+        failure_array << "Unexpected WaterHeater Fuel Type (#{fuel_type}) for #{water_heater_name}; cannot check efficiency and tank losses"
       end
-    end          
-    
+    end
+
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
+
+  end
+
+  # Gas DHW Test
+  # @author Matt Leach, NORESCO
+  def ci_fail_test_dhw_bldg2_naturalgas
+
+    building_type = "PrimarySchool"
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-4B', building_type, 'Xcel Energy CO EDA', false, true)
+    failure_array = []
+
+    expected_fuel_type = "NaturalGas"
+
+    # get water heater(s)
+    model.getWaterHeaterMixeds.each do |water_heater|
+      water_heater_name = water_heater.name.get.to_s
+      # check fuel type
+      fuel_type = water_heater.heaterFuelType
+      unless fuel_type == expected_fuel_type
+        failure_array << "Building Type is #{building_type}, so expected Water Heater Fuel Type to be #{expected_fuel_type}, but #{water_heater_name} has Fuel Type #{fuel_type}"
+      end
+      # get water heater capacity
+      next unless water_heater.heaterMaximumCapacity.is_initialized
+      capacity_kw = water_heater.heaterMaximumCapacity.get/1000
+      # get water heater volume
+      next unless water_heater.tankVolume.is_initialized
+      volume_gal = water_heater.tankVolume.get*264.173
+      # get thermal efficiency
+      if water_heater.heaterThermalEfficiency.is_initialized
+        thermal_efficiency = water_heater.heaterThermalEfficiency.get
+      else
+        failure_array << "No Thermal Efficiency assigned to #{water_heater_name}"
+      end
+      # get UA
+      if water_heater.offCycleLossCoefficienttoAmbientTemperature.is_initialized
+        ua_watts_per_k = water_heater.offCycleLossCoefficienttoAmbientTemperature.get
+      else
+        failure_array << "No UA for skin losses assigned to #{water_heater_name}"
+      end
+      # check thermal efficiency and tank losses
+      if fuel_type == "Electricity"
+        # check thermal efficiency
+        expected_thermal_efficiency = 1
+        unless (expected_thermal_efficiency - thermal_efficiency).abs < 0.01
+          failure_array << "Expected Thermal Efficiency for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_thermal_efficiency.round(2)}; found #{thermal_efficiency.round(2)} instead"
+
+        else
+          puts "    Et pass for #{water_heater_name}"
+
+        end
+        # check tank losses
+        if capacity_kw < 12
+
+          puts "Small Electric Tank"
+
+          energy_factor = 0.97 - (0.00035*volume_gal)
+          ua_btu_per_hr_per_f = (41_094 * (1 / energy_factor - 1)) / (24 * 67.5)
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
+          else
+            puts "    UA pass for #{water_heater_name}"
+
+
+          end
+        else
+          standby_loss_fraction = (0.3 + 27/volume_gal)/100
+          standby_loss_btu_per_hr = standby_loss_fraction * volume_gal * 8.25 * 70
+          ua_btu_per_hr_per_f = standby_loss_btu_per_hr / 70
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
+          end
+        end
+      elsif fuel_type == "NaturalGas"
+        capacity_btu_per_hr = capacity_kw * 3412.141633
+        if capacity_btu_per_hr <= 75000
+          expected_thermal_efficiency = 0.82
+          unless (expected_thermal_efficiency - thermal_efficiency).abs < 0.01
+            failure_array << "Expected Thermal Efficiency for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_thermal_efficiency.round(2)}; found #{thermal_efficiency.round(2)} instead"
+          end
+          # Calculate the minimum Energy Factor (EF)
+          ef = 0.67 - (0.0005 * volume_gal)
+          # Calculate the Recovery Efficiency (RE)
+          # based on a fixed capacity of 75,000 Btu/hr
+          # and a fixed volume of 40 gallons by solving
+          # this system of equations:
+          # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+          # 0.82 = (ua*67.5+cap*re)/cap
+          cap = 75000.0
+          re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+          # Calculate the skin loss coefficient (UA)
+          # based on the actual capacity.
+          ua_btu_per_hr_per_f = (expected_thermal_efficiency - re) * capacity_btu_per_hr / 67.5
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
+          end
+        else
+          # Thermal efficiency requirement from 90.1
+          et = 0.8
+          # Calculate the max allowable standby loss (SL)
+          standby_loss_btu_per_hr = (capacity_btu_per_hr / 800 + 110 * Math.sqrt(volume_gal))
+          # Calculate the skin loss coefficient (UA)
+          ua_btu_per_hr_per_f = (standby_loss_btu_per_hr * et) / 70
+          expected_ua_watts_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+          unless (expected_ua_watts_per_k - ua_watts_per_k).abs < 0.02
+            failure_array << "Expected UA Skin Losses for #{water_heater_name} with Fuel Type #{fuel_type} to be #{expected_ua_watts_per_k.round(2)} W/K; found #{ua_watts_per_k.round(2)} W/K instead"
+          end
+          # Calculate water heater efficiency
+          expected_thermal_efficiency = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+        end
+      else
+        failure_array << "Unexpected WaterHeater Fuel Type (#{fuel_type}) for #{water_heater_name}; cannot check efficiency and tank losses"
+      end
+    end
+
+    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+
+  end
 
   # Test System Type for bldg_2
   # @author Matt Leach, NORESCO
@@ -604,7 +444,7 @@ class Baseline9012013Test2 < Minitest::Test
         failure_array << "Expected cooling coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
       end
     end
-    
+
     # expect heating only equipment for Zone South Stair
     heated_only_zones = ["South Stair"]
     heated_only_zones.each do |heated_only_zone_name|
@@ -623,861 +463,270 @@ class Baseline9012013Test2 < Minitest::Test
         unless unit_heater.heatingCoil.to_CoilHeatingElectric.is_initialized
           failure_array << "Expected Unit Heater in Heated Only Zone #{heated_only_zone_name} to have an Electric Heating Coil"
         end
-      end  
-    end  
-    
+      end
+    end
+
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
 
-  # Test System Type for bldg_3
+  end
+
+  # Test Equipment Efficiencies for bldg_2
   # @author Matt Leach, NORESCO
-  def test_system_type_bldg3
+  def ci_fail_test_hvac_eff_bldg2
 
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
-    # test main system type
-    expected_system_string = "PVAV_Reheat (Sys5)"
-    # expect PSZ systems for: (1) zones without mechanical cooling; (2) zones that meet schedule exception; (3) zones that meet load exception
-    zones_without_mechanical_cooling = ["Base1 LockerOther 1B30", "Base1 LockerPlayer E", "Base1 LockerPlayer NE", "Base1 LockerPlayer SW", "Base2 MechRoom 2B75", "Base2 Weight NE", "Base2 Weight SW", "Flr2 Kitchen"]
-    zones_with_schedule_exception = ["Base1 LockerPlayer SE", "Base1 Lounge 1B33 36", "Base1 Office 1B32", "Base1 Storage 1B38", "Flr1 Treatment NE", "Flr2 Lounge Core"]
-    zones_with_load_exception = ["Flr2 Computer 266"]
-    # hydrotherapy zone likely should be a load exception zone; right now, the measure is applying load exception at the 'floor' level instead of at the 'building' level
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # look for zones without mechanical cooling
-        zones_without_mechanical_cooling.each do |zone_name|
-          # should have district heating but NOT district cooling
-          if airloop_name.include? zone_name
-            # check terminal types
-            thermal_zones_attached = 0
-            airloop.thermalZones.each do |zone|
-              thermal_zones_attached += 1
-              # look for air terminal for zone
-              if zone.airLoopHVACTerminal.is_initialized
-                terminal = zone.airLoopHVACTerminal.get
-                # get terminal and make sure it is the correct type
-                unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                  failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-                end
-              else
-                failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-              end
-            end
-            unless thermal_zones_attached == 1
-              failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-            end
-            # check fan type
-            unless airloop.supplyFan.is_initialized
-              failure_array << "No supply fan attached to System #{airloop_name}"
-            else
-              # get fan type
-              supply_fan = airloop.supplyFan.get
-              unless supply_fan.to_FanConstantVolume.is_initialized
-                failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
-              end
-            end
-            # check heating and cooling coil types
-            # heating coil
-            unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name} (System Type 3 with District Heating)"
-            else
-              airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-                unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-                  failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-                else
-                  plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-                  unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-                    failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-                  end
-                end
-              end
-            end
-            # cooling coil
-            unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name}"
-            end
-          end
-        end
-        # look for zones with schedule or load exception
-        zones_with_exceptions = zones_with_schedule_exception + zones_with_load_exception
-        zones_with_exceptions.each do |zone_name|
-          # should have district heating AND district cooling
-          if airloop_name.include? zone_name
-            # check terminal types
-            thermal_zones_attached = 0
-            airloop.thermalZones.each do |zone|
-              thermal_zones_attached += 1
-              # look for air terminal for zone
-              if zone.airLoopHVACTerminal.is_initialized
-                terminal = zone.airLoopHVACTerminal.get
-                # get terminal and make sure it is the correct type
-                unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                  failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-                end
-              else
-                failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-              end
-            end
-            unless thermal_zones_attached == 1
-              failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-            end
-            # check fan type
-            unless airloop.supplyFan.is_initialized
-              failure_array << "No supply fan attached to System #{airloop_name}"
-            else
-              # get fan type
-              supply_fan = airloop.supplyFan.get
-              unless supply_fan.to_FanConstantVolume.is_initialized
-                failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
-              end
-            end
-            # check heating and cooling coil types
-            # heating coil
-            unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name} (System Type 3 with District Heating)"
-            else
-              airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-                unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-                  failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-                else
-                  plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-                  unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-                    failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-                  end
-                end
-              end
-            end
-            # cooling coil
-            unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 3 with District Cooling)"
-            else  
-              airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-                unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-                  failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-                else
-                  plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-                  unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-                    failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
-                  end
-                end
-              end
-            end
-          end
-        end
-        # PSZ system checks end here
-        next
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-          end
-        else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
-      else
-        airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-          unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-            failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-              failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-            end
-          end
-        end
-      end
-      # cooling coil
-      
-      unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 5 with District Cooling)"
-      else  
-        airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-          unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-            failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-              failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
-            end
-          end
-        end
-      end
-    end
-    
-    # check heated only zones
-    heated_only_zones = ["Base1 Storage 1B06", "Base1 Vestibule 1B20", "Base1 Vestibule CR1B87", "Base1 Vestibule W", "Base2 Storage Perimeter N", "Flr1 Corridor CR125"]
-    heated_only_zones = heated_only_zones + ["Flr1 Storage 101 105", "Flr1 Vestibule 156", "Flr3 MechRoom Core", "Flr3 MechRoom E", "Flr3 MechRoom W"]
-    heated_only_zones.each do |heated_only_zone_name|
-      heated_only_zone = model.getThermalZoneByName(heated_only_zone_name).get
-      unit_heater = heated_only_zone.equipment[0].to_ZoneHVACUnitHeater
-      if unit_heater.is_initialized
-        found_unit_heater = true
-      else
-        found_unit_heater = false
-      end
-      unless found_unit_heater
-        failure_array << "Expected to find a Unit Heater in Heated Only Zone #{heated_only_zone_name} but did not"
-      else
-        unit_heater = unit_heater.get
-        # check heating coil fuel type
-        unless unit_heater.heatingCoil.to_CoilHeatingWater.is_initialized
-          failure_array << "Expected Unit Heater in Heated Only Zone #{heated_only_zone_name} to have a Hot Water Heating Coil"
-        else
-          # make sure heating coil is connected to district heating object
-          plant_loop = unit_heater.heatingCoil.to_CoilHeatingWater.get.to_CoilHeatingWater.get.plantLoop.get
-          unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-            failure_array << "Expected Heating Coil for Unit Heater in Heated Only Zone #{heated_only_zone_name} to be served by a DistrictHeating object"
-          end
-        end
-      end  
-    end  
-    
+    # check coil efficiencies
+    dx_coil_hash = {}
+    dx_coil_hash["Building Story 1 PVAV_PFP_Boxes (Sys6) Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 176.0,"EfficiencyType" => "EER","Efficiency" => 11.0}
+    dx_coil_hash["Building Story 2 PVAV_PFP_Boxes (Sys6) Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 314.0,"EfficiencyType" => "EER","Efficiency" => 10.0}
+    dx_coil_hash["Building Story 3 PVAV_PFP_Boxes (Sys6) Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 317.0,"EfficiencyType" => "EER","Efficiency" => 10.0}
+    dx_coil_hash["Building Story 4 PVAV_PFP_Boxes (Sys6) Clg Coil"] = {"CoilType" => "TwoSpeedCooling","Capacity" => 303.0,"EfficiencyType" => "EER","Efficiency" => 10.0}
+    dx_coil_hash["Flr 1 Tenant 1 Core PSZ-HP 1spd DX HP Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 86.0,"EfficiencyType" => "EER","Efficiency" => 11.2}
+    dx_coil_hash["Flr 1 Tenant 1 East Perimeter PSZ-HP 1spd DX HP Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 13.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+    dx_coil_hash["Flr 1 Tenant 1 North Perimeter PSZ-HP 1spd DX HP Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 44.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+    dx_coil_hash["Flr 1 Tenant 1 South Perimeter PSZ-HP 1spd DX HP Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 40.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+    dx_coil_hash["Flr 1 Tenant 1 West Perimeter PSZ-HP 1spd DX HP Clg Coil"] = {"CoilType" => "SingleSpeedCooling","Capacity" => 77.0,"EfficiencyType" => "SEER","Efficiency" => 14.0}
+    dx_coil_hash["Flr 1 Tenant 1 Core PSZ-HP HP Htg Coil"] = {"CoilType" => "SingleSpeedHeating","Capacity" => 86.5,"EfficiencyType" => "COP","Efficiency" => 3.3}
+    dx_coil_hash["Flr 1 Tenant 1 East Perimeter PSZ-HP HP Htg Coil"] = {"CoilType" => "SingleSpeedHeating","Capacity" => 22.0,"EfficiencyType" => "HSPF","Efficiency" => 7.7}
+    dx_coil_hash["Flr 1 Tenant 1 North Perimeter PSZ-HP HP Htg Coil"] = {"CoilType" => "SingleSpeedHeating","Capacity" => 43.1,"EfficiencyType" => "HSPF","Efficiency" => 7.7}
+    dx_coil_hash["Flr 1 Tenant 1 South Perimeter PSZ-HP HP Htg Coil"] = {"CoilType" => "SingleSpeedHeating","Capacity" => 32.6,"EfficiencyType" => "HSPF","Efficiency" => 7.7}
+    dx_coil_hash["Flr 1 Tenant 1 West Perimeter PSZ-HP HP Htg Coil"] = {"CoilType" => "SingleSpeedHeating","Capacity" => 77.1,"EfficiencyType" => "COP","Efficiency" => 3.3}
+
+    failure_array = check_dx_cooling_single_speed_efficiency(model, dx_coil_hash, failure_array)
+    failure_array = check_dx_cooling_two_speed_efficiency(model, dx_coil_hash, failure_array)
+    failure_array = check_dx_heating_single_speed_efficiency(model, dx_coil_hash, failure_array)
+
+    # check fan powers
+    supply_fan_hash = {}
+    # expect test to fail because pressure differential (0.9) for MERV 13 filter is being added to expected calculation
+    # if pressure differential is set to zero, test passes
+    supply_fan_hash["Building Story 1 PVAV_PFP_Boxes (Sys6) Fan"] = {"CFM" => 5869.0,"PressureDifferential" => 0}
+    supply_fan_hash["Building Story 2 PVAV_PFP_Boxes (Sys6) Fan"] = {"CFM" => 9641.0,"PressureDifferential" => 0}
+    supply_fan_hash["Building Story 3 PVAV_PFP_Boxes (Sys6) Fan"] = {"CFM" => 9916.0,"PressureDifferential" => 0}
+    supply_fan_hash["Building Story 4 PVAV_PFP_Boxes (Sys6) Fan"] = {"CFM" => 9959.0,"PressureDifferential" => 0}
+    supply_fan_hash["Flr 1 Tenant 1 Core PSZ-HP Fan"] = {"CFM" => 2839.0,"PressureDifferential" => 0}
+    supply_fan_hash["Flr 1 Tenant 1 East Perimeter PSZ-HP Fan"] = {"CFM" => 466.0,"PressureDifferential" => 0}
+    supply_fan_hash["Flr 1 Tenant 1 North Perimeter PSZ-HP Fan"] = {"CFM" => 1547.0,"PressureDifferential" => 0}
+    supply_fan_hash["Flr 1 Tenant 1 South Perimeter PSZ-HP Fan"] = {"CFM" => 1144.0,"PressureDifferential" => 0}
+    supply_fan_hash["Flr 1 Tenant 1 West Perimeter PSZ-HP Fan"] = {"CFM" => 2903.0,"PressureDifferential" => 0}
+
+    failure_array = check_variable_speed_fan_power(model, supply_fan_hash, failure_array)
+    failure_array = check_constant_speed_fan_power(model, supply_fan_hash, failure_array)
+
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
 
-  # Test System Type for bldg_4
+  end
+
+  # Non-Predominant Heating Condition Test
   # @author Matt Leach, NORESCO
-  def test_system_type_bldg4
+  def test_non_predominant_heating_condition_bldg_2
 
-    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2_NonPredominantHeating', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
-    # test main system type
-    expected_system_string = "PVAV_Reheat (Sys5)"
-    # do not expect any PSZ systems for this model (all fully conditioned zones should be on main baseline system)
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-          end
-        else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name} (System Type 5 with District Heating)"
-      else
-        airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-          unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-            failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-              failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-            end
-          end
-        end
-      end
-      # cooling coil
-      unless airloop.supplyComponents('OS_Coil_Cooling_DX_TwoSpeed'.to_IddObjectType).length == 1
-        failure_array << "Expected cooling coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
-      end
-    end
-    
-    # check for exhaust fans (should match exhaust fans)
-    number_of_exhaust_fans = 0
-    model.getFanZoneExhausts.each do |exhaust_fan|
-      number_of_exhaust_fans +=1
-      if exhaust_fan.name.get.to_s == "Parking Level 1B ParkingLot Exhaust Fan"
-        expected_efficiency = 0.6
-        expected_pressure_rise = 716.49
-        expected_flow_rate = 35.396
-        # check values
-        unless (exhaust_fan.fanEfficiency - expected_efficiency).abs < 0.01
-          failure_array << "Baseline Fan Efficiency for #{exhaust_fan.name} (#{exhaust_fan.fanEfficiency.round(1)}) expected to matched Proposed Value of #{expected_efficiency}"
-        end
-        unless (exhaust_fan.pressureRise - expected_pressure_rise).abs < 0.01
-          failure_array << "Baseline Fan Pressure Rise for #{exhaust_fan.name} (#{exhaust_fan.pressureRise.round(2)} Pa) expected to matched Proposed Value of #{expected_pressure_rise} Pa"
-        end
-        if exhaust_fan.maximumFlowRate.is_initialized
-          unless (exhaust_fan.maximumFlowRate.get - expected_flow_rate).abs < 0.01
-            failure_array << "Baseline Fan Flow Rate for #{exhaust_fan.name} (#{exhaust_fan.maximumFlowRate.round(3)} m3/s) expected to matched Proposed Value of #{expected_flow_rate} m3/s"
-          end
-        else
-          failure_array << "Baseline Fan Flow Rate for #{exhaust_fan.name} expected to matched Proposed Value of #{expected_flow_rate} m3/s but no value was specified"
-        end  
-      elsif exhaust_fan.name.get.to_s == "Parking Level 2B ParkingLot Exhaust Fan"
-        expected_efficiency = 0.6
-        expected_pressure_rise = 908.41
-        expected_flow_rate = 40.116
-        # check values
-        unless (exhaust_fan.fanEfficiency - expected_efficiency).abs < 0.01
-          failure_array << "Baseline Fan Efficiency for #{exhaust_fan.name} (#{exhaust_fan.fanEfficiency.round(1)}) expected to matched Proposed Value of #{expected_efficiency}"
-        end
-        unless (exhaust_fan.pressureRise - expected_pressure_rise).abs < 0.01
-          failure_array << "Baseline Fan Pressure Rise for #{exhaust_fan.name} (#{exhaust_fan.pressureRise.round(2)} Pa) expected to matched Proposed Value of #{expected_pressure_rise} Pa"
-        end
-        if exhaust_fan.maximumFlowRate.is_initialized
-          unless (exhaust_fan.maximumFlowRate.get - expected_flow_rate).abs < 0.01
-            failure_array << "Baseline Fan Flow Rate for #{exhaust_fan.name} (#{exhaust_fan.maximumFlowRate.round(3)} m3/s) expected to matched Proposed Value of #{expected_flow_rate} m3/s"
-          end
-        else
-          failure_array << "Baseline Fan Flow Rate for #{exhaust_fan.name} expected to matched Proposed Value of #{expected_flow_rate} m3/s but no value was specified"
-        end  
-      else
-        failure_array << "Unexpected Exhaust Fan = #{exhaust_fan.name.get.to_s}"
-      end  
-    end
-    unless number_of_exhaust_fans == 2
-      failure_array << "Expected 2 Exhaust Fans; found #{number_of_exhaust_fans} instead"
-    end
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
+    # modified model so that DOAS serving Flr2 has a gas heating coil instead of an electric heating coil
+    # expect this change to trigger non-predominant heating condition and apply PSZ systems to all zones on Flr 2
 
-  # Test System Type for bldg_5
-  # @author Matt Leach, NORESCO
-  def test_system_type_bldg5
-
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-
-    # test main system type
-    expected_system_string = "PVAV_Reheat (Sys7)"
-    # expect PSZ systems for: (1) zones that meet load exception
-    zones_with_load_exception = ["Athletic Admin Level IDF","Coaches Level IDF 4470","Concourse Level IDF 315","Field Level IDF 104A", "Field Level IDF 122A", "Field Level IDF 131","Concourse Level Kitchen 304","Field Level Laundry 101J","Field Level Pool Hydrotherapy 115","Field Level Pool Recovery 111"]
-    
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # look for zones without mechanical cooling
-        zones_with_load_exception.each do |zone_name|
-          # should have district heating AND district cooling
-          if airloop_name.include? zone_name
-            # check terminal types
-            thermal_zones_attached = 0
-            airloop.thermalZones.each do |zone|
-              thermal_zones_attached += 1
-              # look for air terminal for zone
-              if zone.airLoopHVACTerminal.is_initialized
-                terminal = zone.airLoopHVACTerminal.get
-                # get terminal and make sure it is the correct type
-                unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                  failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-                end
-              else
-                failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-              end
-            end
-            unless thermal_zones_attached == 1
-              failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-            end
-            # check fan type
-            unless airloop.supplyFan.is_initialized
-              failure_array << "No supply fan attached to System #{airloop_name}"
-            else
-              # get fan type
-              supply_fan = airloop.supplyFan.get
-              unless supply_fan.to_FanConstantVolume.is_initialized
-                failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
-              end
-            end
-            # check heating and cooling coil types
-            # heating coil
-            unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name} (System Type 3 with District Heating)"
-            else
-              airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-                unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-                  failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-                else
-                  plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-                  unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-                    failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-                  end
-                end
-              end
-            end
-            # cooling coil
-            unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-              failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 3 with District Cooling)"
-            else
-              airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-                unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-                  failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-                else
-                  plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-                  unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-                    failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a District Cooling object"
-                  end
-                end
-              end
-            end
-          end
-        end
-        # PSZ system checks end here
-        next
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-          end
-        else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name}"
-      else
-        airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-          unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-            failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-              failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
-            end
-          end
-        end
-      end
-      # cooling coil
-      unless airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected cooling coil of type CoilCoolingWater for System #{airloop_name} (System Type 5 with District Cooling)"
-      else  
-        airloop.supplyComponents('OS_Coil_Cooling_Water'.to_IddObjectType).each do |cooling_water_coil|
-          unless cooling_water_coil.to_CoilCoolingWater.get.plantLoop.is_initialized
-            failure_array << "Cooling coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = cooling_water_coil.to_CoilCoolingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictCooling'.to_IddObjectType).length == 1
-              failure_array << "Expected Cooling Coil for System #{airloop_name} to be served by a DistrictCooling object"
-            end
-          end
-        end
-      end
-    end
-    
-    # check heated only zones
-    heated_only_zones = ["Athletic Admin Level Stair ST501", "Athletic Admin Level Stair ST502", "Athletic Admin Level Stair ST503", "Coaches Level Stair ST401"]
-    heated_only_zones = heated_only_zones + ["Coaches Level Stair ST402", "Coaches Level Stair ST403", "Concourse Level Mechanical 326", "Concourse Level Stair ST301"]
-    heated_only_zones = heated_only_zones + ["Concourse Level Stair ST302", "Concourse Level Stair ST303", "Field Level Mechanical Mezzanine", "Field Level Stair ST101"]
-    heated_only_zones = heated_only_zones + ["Field Level Stair ST102", "Field Level Stair ST103", "Field Level Stair ST104", "Field Level Unspecified Quad B Northeast"]
-    heated_only_zones = heated_only_zones + ["Field Level Vestibule 129C", "Field Level Vestibule 687", "Main Level Mechanical 213", "Main Level Stair Quad B", "Main Level Stair ST201"]
-    heated_only_zones = heated_only_zones + ["Main Level Stair ST202", "Main Level Stair ST203", "Rooftop Terrace Level Mechanical 600", "Rooftop Terrace Level Restroom RRM602"]
-    heated_only_zones = heated_only_zones + ["Rooftop Terrace Level Restroom RRW603", "Rooftop Terrace Level Stair ST601", "Rooftop Terrace Level Stair ST602"]
-    heated_only_zones = heated_only_zones + ["Rooftop Terrace Level Stair ST603", "Rooftop Terrace Level Vestibule 352"]
-    heated_only_zones.each do |heated_only_zone_name|
-      heated_only_zone = model.getThermalZoneByName(heated_only_zone_name).get
-      unit_heater = heated_only_zone.equipment[0].to_ZoneHVACUnitHeater
-      if unit_heater.is_initialized
-        found_unit_heater = true
-      else
-        found_unit_heater = false
-      end
-      unless found_unit_heater
-        failure_array << "Expected to find a Unit Heater in Heated Only Zone #{heated_only_zone_name} but did not"
-      else
-        unit_heater = unit_heater.get
-        # check heating coil fuel type
-        unless unit_heater.heatingCoil.to_CoilHeatingWater.is_initialized
-          failure_array << "Expected Unit Heater in Heated Only Zone #{heated_only_zone_name} to have a Hot Water Heating Coil"
-        else
-          # make sure heating coil is connected to district heating object
-          plant_loop = unit_heater.heatingCoil.to_CoilHeatingWater.get.to_CoilHeatingWater.get.plantLoop.get
-          unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
-            failure_array << "Expected Heating Coil for Unit Heater in Heated Only Zone #{heated_only_zone_name} to be served by a DistrictHeating object"
-          end
-        end
-      end  
-    end  
-    
-    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
-
-  # Test System Type for bldg_7
-  # @author Matt Leach, NORESCO
-  def test_system_type_bldg7
-
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
-    failure_array = []
-
-    # test main system type
-    expected_system_string = "PVAV_Reheat (Sys5)"
-    # expect PSZ-AC for L1-W_ret
-    model.getAirLoopHVACs.each do |airloop|
-      airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # look for residential zones
-        if airloop_name.include? "_ret"
-          # systems should be PSZ
-          expected_psz_system_string = "PSZ-AC"
-          unless airloop_name.include? expected_psz_system_string
-            failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_psz_system_string}"
-          end
-          # check terminal type
-          thermal_zones_attached = 0
-          airloop.thermalZones.each do |zone|
-            thermal_zones_attached += 1
-            # look for air terminal for zone
-            if zone.airLoopHVACTerminal.is_initialized
-              terminal = zone.airLoopHVACTerminal.get
-              # get terminal and make sure it is the correct type
-              unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-              end
-            else
-              failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-            end
-          end
-          unless thermal_zones_attached == 1
-            failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-          end
-          # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
-          else
-            # get fan type
-            supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
-            end
-          end
-          # check heating and cooling coil types
-          # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_Gas'.to_IddObjectType).length == 2
-            failure_array << "Expected heating coils of type CoilHeatingGas for System #{airloop_name}"
-          end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
-          end
-          # PSZ system checks end here
-          next
-        end
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctVAVReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
-          end
-        else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
-        end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingWater for System #{airloop_name} (System Type 5 with District Heating)"
-      else
-        airloop.supplyComponents('OS_Coil_Heating_Water'.to_IddObjectType).each do |heating_water_coil|
-          unless heating_water_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-            failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
-          else
-            plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_Boiler_HotWater'.to_IddObjectType).length > 0
-              failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a BoilerHotWater object"
-            end
-          end
-        end
-      end
-      # cooling coil
-      unless airloop.supplyComponents('OS_Coil_Cooling_DX_TwoSpeed'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
-      end
-    end
-    
-    # check for PTACs in residential zones
     model.getThermalZones.each do |zone|
-      next unless zone.name.get.to_s.include? "_apt"
-      found_ptac = false
-      zone.equipment.each do |zone_equipment|
-        if zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-          found_ptac = true
-          ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
-          # check fan
-          fan = ptac.supplyAirFan
-          unless fan.to_FanConstantVolume.is_initialized
-            failure_array << "Expected Fan serving Zone Equipment #{ptac.name} to be of type FanConstantVolume"
-          end
-          # check cooling coil
-          cooling_coil = ptac.coolingCoil
-          unless cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
-            failure_array << "Expected Cooling Coil serving Zone Equipment #{ptac.name} to be of type CoilCoolingDXSingleSpeed"
-          end
-          # check heating coil
-          heating_coil = ptac.heatingCoil
-          unless heating_coil.to_CoilHeatingWater.is_initialized
-            failure_array << "Expected Heating Coil serving Zone Equipment #{ptac.name} to be of type CoilHeatingWater"
-          else
-            unless heating_coil.to_CoilHeatingWater.get.plantLoop.is_initialized
-              failure_array << "Heating coil serving Zone Equipment #{ptac.name} is not attached to a plant loop"
-            else
-              plant_loop = heating_coil.to_CoilHeatingWater.get.plantLoop.get
-              unless plant_loop.supplyComponents('OS_Boiler_HotWater'.to_IddObjectType).length > 0
-                failure_array << "Expected Heating Coil for Zone Equipment #{ptac.name} to be served by a BoilerHotWater object"
-              end
+      zone_name = zone.name.get.to_s
+      if zone_name.include? "Flr2"
+        found_psz_system = false
+        model.getAirLoopHVACs.each do |airloop|
+          airloop_name = airloop.name.get.to_s
+          if airloop_name.include? zone_name
+            found_psz_system = true
+            # check for gas heating coil
+            unless airloop.supplyComponents('OS_Coil_Heating_Gas'.to_IddObjectType).length == 2
+              failure_array << "Expected supplementary heating coils of type CoilHeatingGas for System #{airloop_name}"
             end
           end
         end
       end
-      unless found_ptac
-        failure_array << "Expected Zone #{zone.name} to be served by a PTAC"
-      end
     end
-    
+
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
 
-  # Test System Type for bldg_7
+  end
+
+  # SAT/Zone Sizing/System Sizing Test
   # @author Matt Leach, NORESCO
-  def test_system_type_bldg7_electric
-
-    model = create_baseline_model('bldg_7_electric', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+  def ci_fail_test_design_supply_air_temp_bldg2_thermostat_mod
+    model = create_baseline_model('bldg_2_thermostat_mod', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
-    # test main system type
-    expected_system_string = "PVAV_PFP_Boxes (Sys6)"
-    # expect PSZ-AC for L1-W_ret
+    # check zone sizing objects
+    zone_sizing_test_hash = {}
+    zone_sizing_test_hash["North Stair"] = {"Clg_Design_Temp" => (((80 - 20) - 32)/1.8),"Htg_Design_Temp" => (((55 + 20) - 32)/1.8)}
+    zone_sizing_test_hash["Flr 1 Tenant 2 East Perimeter"] = {"Clg_Design_Temp" => (24 - 20/1.8),"Htg_Design_Temp" => (21 + 20/1.8)}
+    zone_sizing_test_hash["Flr 1 Tenant 1 Core"] = {"Clg_Design_Temp" => (((73 - 20) - 32)/1.8),"Htg_Design_Temp" => (((72 + 20) - 32)/1.8)}
+
+    zone_sizing_test_hash.keys.each do |zone_name|
+      zone = model.getThermalZoneByName(zone_name).get
+      sizing_zone = zone.sizingZone
+      clg_design_temp_c = sizing_zone.zoneCoolingDesignSupplyAirTemperature
+      htg_design_temp_c = sizing_zone.zoneHeatingDesignSupplyAirTemperature
+      clg_design_temp_delta_c = sizing_zone.zoneCoolingDesignSupplyAirTemperatureDifference
+      htg_design_temp_delta_c = sizing_zone.zoneHeatingDesignSupplyAirTemperatureDifference
+
+      # verify that design temperature difference is set correctly
+      # cooling
+      unless (20/1.8 - clg_design_temp_delta_c).abs < 0.01
+        failure_array << "Expected Design Cooling Temperature Difference of 20 F for Zone #{zone_name}; got #{(clg_design_temp_delta_c*1.8+32).round(2)} F instead"
+      end
+      # heating
+      unless (20/1.8 - htg_design_temp_delta_c).abs < 0.01
+        failure_array << "Expected Design Heating Temperature Difference of 20 F for Zone #{zone_name}; got #{(htg_design_temp_delta_c*1.8+32).round(2)} F instead"
+      end
+
+      # verify that design temperatures are set correctly
+      # cooling
+      unless (zone_sizing_test_hash[zone_name]["Clg_Design_Temp"] - clg_design_temp_c).abs < 0.01
+        failure_array << "Expected Design Cooling Temperature of #{(zone_sizing_test_hash[zone_name]["Clg_Design_Temp"]*1.8+32).round(2)} F for Zone #{zone_name}; got #{(clg_design_temp_c*1.8+32).round(2)} F instead"
+      end
+      # heating
+      unless (zone_sizing_test_hash[zone_name]["Htg_Design_Temp"] - htg_design_temp_c).abs < 0.01
+        failure_array << "Expected Design Cooling Temperature of #{(zone_sizing_test_hash[zone_name]["Htg_Design_Temp"]*1.8+32).round(2)} F for Zone #{zone_name}; got #{(htg_design_temp_c*1.8+32).round(2)} F instead"
+      end
+    end
+
+    # check system sizing objects
+    system_sizing_test_hash = {}
+    #system_sizing_test_hash["Building Story 1 PVAV_PFP_Boxes (Sys6)"] = {"Clg_Design_Temp" => ((73 - 20) - 32)/1.8,"Htg_Design_Temp" => ((73 - 20) - 32)/1.8}
+    system_sizing_test_hash["Building Story 2 PVAV_PFP_Boxes (Sys6)"] = {"Clg_Design_Temp" => 24 - 20/1.8,"Htg_Design_Temp" => 24 - 20/1.8}
+
+    system_sizing_test_hash.keys.each do |airloop_name|
+      airloop = model.getAirLoopHVACByName(airloop_name).get
+      system_sizing = airloop.sizingSystem
+      central_clg_design_temp_c = system_sizing.centralCoolingDesignSupplyAirTemperature
+      central_htg_design_temp_c = system_sizing.centralHeatingDesignSupplyAirTemperature
+      # verify that design temperatures are set correctly
+      # cooling
+      unless (system_sizing_test_hash[airloop_name]["Clg_Design_Temp"] - central_clg_design_temp_c).abs < 0.01
+        failure_array << "Expected Design Cooling Temperature of #{(system_sizing_test_hash[airloop_name]["Clg_Design_Temp"]*1.8+32).round(2)} F for System #{airloop_name}; got #{(central_clg_design_temp_c*1.8+32).round(2)} F instead"
+      end
+      # heating
+      unless (system_sizing_test_hash[airloop_name]["Htg_Design_Temp"] - central_htg_design_temp_c).abs < 0.01
+        failure_array << "Expected Design Cooling Temperature of #{(system_sizing_test_hash[airloop_name]["Htg_Design_Temp"]*1.8+32).round(2)} F for System #{airloop_name}; got #{(central_htg_design_temp_c*1.8+32).round(2)} F instead"
+      end
+    end
+
+    # check airloop setpoint managers
+    # PSZ systems should have single zone reheat setpoint managers
+    # VAV systems should have warmest setpoint managers (low setpoint temperature should match system sizing central cooling design temperature; high setpoint temperature should be 5 F higher)
     model.getAirLoopHVACs.each do |airloop|
       airloop_name = airloop.name.get.to_s
-      unless airloop_name.include? expected_system_string
-        system_type_confirmed = false
-        # look for residential zones
-        if airloop_name.include? "_ret"
-          # systems should be PSZ
-          expected_psz_system_string = "PSZ-HP"
-          unless airloop_name.include? expected_psz_system_string
-            failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_psz_system_string}"
+      if airloop_name.include? "PSZ"
+        # PSZ airloop (expect SZR setpoint manager)
+        found_correct_setpoint_manager = false
+        # check airloop setpoint manager
+        model.getSetpointManagerSingleZoneReheats.each do |szr_reset_manager|
+          if szr_reset_manager.airLoopHVAC.is_initialized
+            airloop_to_match = szr_reset_manager.airLoopHVAC.get
+            next unless airloop_to_match == airloop
+            found_correct_setpoint_manager = true
+          else
+            failure_array << "#{szr_reset_manager.name} not connected to an airloop"
           end
-          # check terminal type
-          thermal_zones_attached = 0
-          airloop.thermalZones.each do |zone|
-            thermal_zones_attached += 1
-            # look for air terminal for zone
-            if zone.airLoopHVACTerminal.is_initialized
-              terminal = zone.airLoopHVACTerminal.get
-              # get terminal and make sure it is the correct type
-              unless terminal.to_AirTerminalSingleDuctUncontrolled.is_initialized
-                failure_array << "Expected terminals to be of type AirTerminalSingleDuctUncontrolled for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
+        end
+        unless found_correct_setpoint_manager
+          failure_array << "Expected to find Setpoint Manager of Type Single Zone Reheat for #{airloop.name} but did not"
+        end
+      else
+        # VAV airloop (system 5-8; expect warmest setpoint manager)
+        found_correct_setpoint_manager = false
+        # check airloop setpoint manager
+        model.getSetpointManagerWarmests.each do |warmest_setpoint_manager|
+          if warmest_setpoint_manager.airLoopHVAC.is_initialized
+            airloop_to_match = warmest_setpoint_manager.airLoopHVAC.get
+            next unless airloop_to_match == airloop
+            found_correct_setpoint_manager = true
+          else
+            failure_array << "#{warmest_setpoint_manager.name} not connected to an airloop"
+          end
+          # check setpoint manager setpoints
+          next unless system_sizing_test_hash.keys.include? airloop_name
+          # minimum setpoint temperature
+          minimum_setpoint_temperature_c = warmest_setpoint_manager.minimumSetpointTemperature
+          unless (system_sizing_test_hash[airloop_name]["Clg_Design_Temp"] - minimum_setpoint_temperature_c).abs < 0.01
+            failure_array << "Expected Minimum Setpoint Temperature of #{(system_sizing_test_hash[airloop_name]["Clg_Design_Temp"]*1.8+32).round(2)} F for System #{airloop_name}; got #{(minimum_setpoint_temperature_c*1.8+32).round(2)} F instead"
+          end
+          # maximum setpoint temperature
+          maximum_setpoint_temperature_c = warmest_setpoint_manager.maximumSetpointTemperature
+          unless (system_sizing_test_hash[airloop_name]["Clg_Design_Temp"] + 5/1.8 - maximum_setpoint_temperature_c).abs < 0.01
+            failure_array << "Expected Maximum Setpoint Temperature of #{(system_sizing_test_hash[airloop_name]["Clg_Design_Temp"]*1.8+32+5).round(2)} F for System #{airloop_name}; got #{(maximum_setpoint_temperature_c*1.8+32).round(2)} F instead"
+          end
+        end
+        unless found_correct_setpoint_manager
+          failure_array << "Expected to find Setpoint Manager of Type Warmest for #{airloop.name} but did not"
+        end
+      end
+    end
+
+    # check for failures
+    assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
+
+  end
+
+  # Fan Operation Mode Test
+  # @author Matt Leach, NORESCO
+  def local_fail_test_fan_operation_bldg2
+
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    failure_array = []
+
+    model.getAirLoopHVACs.each do |airloop|
+      # check for night cycle manager for all airloops
+      if airloop.availabilityManager.is_initialized
+        availability_manager = airloop.availabilityManager.get
+        # check availability manager type
+        unless availability_manager.to_AvailabilityManagerNightCycle.is_initialized
+          failure_array << "Expected Availability Manager of Type NightCycle for Airloop #{airloop.name}"
+        end
+      else
+        failure_array << "No Availability Manager found for Airloop #{airloop.name}"
+      end
+      # check fan operation schedule
+      # check for fan powers less than 0.75 hp
+      systems_with_small_fans = ["Flr 1 Tenant 1 East Perimeter PSZ-HP"]
+      if systems_with_small_fans.include? airloop.name.get.to_s
+        # fan schedule should be set to always on discrete
+        if airloop.supplyFan.is_initialized
+          supply_fan = airloop.supplyFan.get
+          if airloop.name.get.to_s.include? "PSZ"
+            # look for constant volume fan
+            if airloop.supplyFan.get.to_FanConstantVolume.is_initialized
+              supply_fan = airloop.supplyFan.get.to_FanConstantVolume.get
+              # check availability schedule
+              unless supply_fan.availabilitySchedule.name.get.to_s == "Always On Discrete"
+                failure_array << "Expected SupplyFan Availability Schedule to be set to Always On Discrete for Airloop #{airloop.name} because fan is smaller than 0.75 hp"
+              else
               end
             else
-              failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
+              failure_array << "Expected Supply Fan of Type ConstantVolume for Airloop #{airloop.name}"
             end
-          end
-          unless thermal_zones_attached == 1
-            failure_array << "Expected 1 Thermal Zone to be attached to System #{airloop_name}; found #{thermal_zones_attached} Zone(s) attached"
-          end
-          # check fan type
-          unless airloop.supplyFan.is_initialized
-            failure_array << "No supply fan attached to System #{airloop_name}"
           else
-            # get fan type
-            supply_fan = airloop.supplyFan.get
-            unless supply_fan.to_FanConstantVolume.is_initialized
-              failure_array << "Expected fan of type ConstantVolume for System #{airloop_name}"
+            # look for variable volume fan
+            if airloop.supplyFan.get.to_FanVariableVolume.is_initialized
+              supply_fan = airloop.supplyFan.get.to_FanVariableVolume.get
+              # check availability schedule
+              unless supply_fan.availabilitySchedule.name.get.to_s == "Always On Discrete"
+                failure_array << "Expected SupplyFan Availability Schedule to be set to Always On Discrete for Airloop #{airloop.name} because fan is smaller than 0.75 hp"
+              end
+            else
+              failure_array << "Expected Supply Fan of Type VariableVolume for Airloop #{airloop.name}"
             end
-          end
-          # check heating and cooling coil types
-          # heating coil
-          unless airloop.supplyComponents('OS_Coil_Heating_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected heating coil of type CoilHeatingDXSingleSpeed for System #{airloop_name}"
-          end
-          # cooling coil
-          unless airloop.supplyComponents('OS_Coil_Cooling_DX_SingleSpeed'.to_IddObjectType).length == 1
-            failure_array << "Expected cooling coil of type CoilCoolingDXSingleSpeed for System #{airloop_name}"
-          end
-          # PSZ system checks end here
-          next
-        end
-      else
-        system_type_confirmed = true
-      end
-      unless system_type_confirmed
-        failure_array << "System Type for Airloop #{airloop_name} is Unexpected.  Expected Type #{expected_system_string}"
-      end
-      # check terminal types
-      thermal_zones_attached = 0
-      airloop.thermalZones.each do |zone|
-        thermal_zones_attached += 1
-        # look for air terminal for zone
-        if zone.airLoopHVACTerminal.is_initialized
-          terminal = zone.airLoopHVACTerminal.get
-          # get terminal and make sure it is the correct type
-          unless terminal.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
-            failure_array << "Expected terminals to be of type AirTerminalSingleDuctParallelPIUReheat for System #{airloop_name}; this is not true for Terminal #{terminal.name}"
           end
         else
-          failure_array << "No terminal attaching Zone #{zone} to System #{airloop_name}"
+          failure_array << "Expected to find Supply Fan for Airloop #{airloop.name}"
         end
-      end
-      unless thermal_zones_attached > 0
-        failure_array << "No thermal zones attached to System #{airloop_name}"
-      end
-      # check fan type
-      unless airloop.supplyFan.is_initialized
-        failure_array << "No supply fan attached to System #{airloop_name}"
-      else
-        # get fan type
-        supply_fan = airloop.supplyFan.get
-        unless supply_fan.to_FanVariableVolume.is_initialized
-          failure_array << "Expected fan of type VariableVolume for System #{airloop_name}"
-        end
-      end
-      # check heating and cooling coil types
-      # heating coil
-      unless airloop.supplyComponents('OS_Coil_Heating_Electric'.to_IddObjectType).length == 1
-        failure_array << "Expected heating coil of type CoilHeatingElectric for System #{airloop_name}"
-      end
-      # cooling coil
-      unless airloop.supplyComponents('OS_Coil_Cooling_DX_TwoSpeed'.to_IddObjectType).length == 1
-        failure_array << "Expected cooling coil of type CoilCoolingDXTwoSpeed for System #{airloop_name}"
       end
     end
-    
-    # check for PTHPs in residential zones
-    model.getThermalZones.each do |zone|
-      next unless zone.name.get.to_s.include? "_apt"
-      found_pthp = false
-      zone.equipment.each do |zone_equipment|
-        if zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-          found_pthp = true
-          pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
-          # check fan
-          fan = pthp.supplyAirFan
-          unless fan.to_FanConstantVolume.is_initialized
-            failure_array << "Expected Fan serving Zone Equipment #{pthp.name} to be of type FanConstantVolume"
-          end
-          # check cooling coil
-          cooling_coil = pthp.coolingCoil
-          unless cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
-            failure_array << "Expected Cooling Coil serving Zone Equipment #{pthp.name} to be of type CoilCoolingDXSingleSpeed"
-          end
-          # check heating coil
-          heating_coil = pthp.heatingCoil
-          unless heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
-            failure_array << "Expected Heating Coil serving Zone Equipment #{pthp.name} to be of type CoilHeatingDXSingleSpeed"
-          end
-        end
-      end
-      unless found_pthp
-        failure_array << "Expected Zone #{zone.name} to be served by a PTHP"
-      end
-    end
-    
+
+    # check for failures
     assert_equal(0, failure_array.length, "There were #{failure_array.length} failures:  #{failure_array.join('.  ')}")
-    
-  end  
+
+  end
 
 end

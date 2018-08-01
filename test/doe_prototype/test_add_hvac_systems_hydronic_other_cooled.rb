@@ -1,8 +1,8 @@
 require_relative '../helpers/minitest_helper'
 
-class TestAddHVACSystems < Minitest::Test
+class TestAddHVACSystemsHydronicOtherCooled < Minitest::Test
 
-  def test_add_hvac_systems
+  def test_add_hvac_systems_hydronic_other_cooled
 
     # Make the output directory if it doesn't exist
     output_dir = File.expand_path('output', File.dirname(__FILE__))
@@ -10,60 +10,7 @@ class TestAddHVACSystems < Minitest::Test
 
     # List all the HVAC system types to test
     hvac_systems = [
-
-      ## Forced Air ##
-
-      # Gas, Electric, forced air
-      ['PTAC', 'NaturalGas', nil, 'Electricity'],
-      ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
-      # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-      ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
-
-      # Electric, Electric, forced air
-      ['PTHP', 'Electricity', nil, 'Electricity'],
-      ['PSZ-HP', 'Electricity', nil, 'Electricity'],
-      ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
-      ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
-
-      # District Hot Water, Electric, forced air
-      ['PTAC', 'DistrictHeating', nil, 'Electricity'],
-      # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-      ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-
-      # Ambient Loop, Ambient Loop, forced air
-      # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-      # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-
-      # Gas, District Chilled Water, forced air
-      ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
-      ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
-      ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
-
-      # Electric, District Chilled Water, forced air
-      ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
-      ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
-      ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
-
-      # District Hot Water, District Chilled Water, forced air
-      ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
-      ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
-
       ## Hydronic ##
-
-      # Gas, Electric, hydronic
-      ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
-      ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
-      ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
-
-      # Electric, Electric, hydronic
-      ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
-      ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
-      ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
-
-      # District Hot Water, Electric, hydronic
-      ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
-      ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
       # Ambient Loop, Ambient Loop, hydronic
       ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
