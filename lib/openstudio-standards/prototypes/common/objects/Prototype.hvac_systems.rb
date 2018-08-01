@@ -4449,10 +4449,10 @@ class Standard
     when 'Unit Heaters'
       model_add_unitheater(model,
                            zones,
-                           hvac_op_sch = nil,
-                           fan_control_type = 'ConstantVolume',
-                           fan_pressure_rise = 0.2,
-                           main_heat_fuel)
+                           hvac_op_sch: nil,
+                           fan_control_type: 'ConstantVolume',
+                           fan_pressure_rise: 0.2,
+                           heating_type: main_heat_fuel)
 
     when 'Window AC'
       model_add_window_ac(model,
