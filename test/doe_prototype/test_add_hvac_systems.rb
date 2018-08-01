@@ -1,8 +1,8 @@
 require_relative '../helpers/minitest_helper'
 
-class TestAddHVACSystemsForcedAir < Minitest::Test
+class TestAddHVACSystems < Minitest::Test
 
-  def test_add_hvac_systems_forced_air
+  def test_add_hvac_systems
 
     # Make the output directory if it doesn't exist
     output_dir = File.expand_path('output', File.dirname(__FILE__))
