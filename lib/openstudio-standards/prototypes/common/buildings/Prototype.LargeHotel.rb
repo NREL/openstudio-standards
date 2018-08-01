@@ -27,7 +27,7 @@ module LargeHotel
       end
 
       exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_schedule'])
-      if exhaust_schedule.class.to_s == 'NilClass'
+      unless exhaust_schedule
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end

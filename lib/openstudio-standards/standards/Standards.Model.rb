@@ -2111,9 +2111,7 @@ class Standard
     rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-      sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-      sch_ruleset.setName("NOT ACTUALLY #{schedule_name}")
-      return sch_ruleset
+      return false
     end
 
     # Make a schedule ruleset
