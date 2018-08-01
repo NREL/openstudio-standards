@@ -23,7 +23,11 @@ class TestMidRiseApartment < CreateDOEPrototypeBuildingTest
   compare_results = false
   
   debug = false
-  
+
+  def create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+    super(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
+  end
+
   TestMidRiseApartment.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
   
   # TestMidRiseApartment.compare_test_results(building_types, templates, climate_zones, file_ext="")
