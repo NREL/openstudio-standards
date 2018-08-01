@@ -37,7 +37,7 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
     Vintages.each do |vintage|
@@ -93,13 +93,13 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
       puts "found sizing run #{sizing_dir}/SizingRun1"
     end
 
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+    # BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
     # need to set prototype assumptions so that HRV added
     standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
     # Apply the HVAC efficiency standard
     standard.model_apply_hvac_efficiency_standard(model, climate_zone)
     #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+    # BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
     return true
   end
 end

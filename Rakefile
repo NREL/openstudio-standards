@@ -34,6 +34,13 @@ namespace :test do
     t.verbose = false
   end
 
+  desc 'Generate CircleCI test files'
+  Rake::TestTask.new('gen-circ-files') do |t|
+    file_list = FileList.new('test/helpers/ci_test_generator.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = false
+  end
 
 
   desc 'Run BTAP.perform_qaqc() test'
