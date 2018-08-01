@@ -42,7 +42,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   # Dynamically create a test for each building type/template/climate zone
   # so that if one combo fails the others still run
-  def CreateDOEPrototypeBuildingTest.create_run_model_tests(building_types, 
+  def create_run_model_tests(building_types,
       templates, 
       climate_zones, 
       epw_files,
@@ -72,7 +72,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
  
   end
   
-  def CreateDOEPrototypeBuildingTest.create_building(building_type, 
+  def create_building(building_type,
       template, 
       climate_zone, 
       epw_file,
@@ -396,7 +396,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
   
 
   # create more detailed csv for results comparison (from previous codes)
-  def CreateDOEPrototypeBuildingTest.compare_test_results(bldg_types, vintages, climate_zones, file_ext="")
+  def compare_test_results(bldg_types, vintages, climate_zones, file_ext="")
   
     #### Compare results against legacy idf results      
     acceptable_error_percentage = 10 # Max 5% error for any end use/fuel type combo
