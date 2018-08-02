@@ -5,6 +5,7 @@
 # Developer installation
 /.bundle/
 /Gemfile.lock
+/vendor
 
 # Build output
 /pkg/
@@ -25,8 +26,8 @@ coverage/
 /test/necb/data/*test_results.csv
 
 # auto generated CI files
-/test/ci_test_files
-test/circleci_tests.json
+/test/ci_test_files/models
+/test/ci_test_files/*.rb
 
 # Miscelaneous
 /lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
