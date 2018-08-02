@@ -321,15 +321,19 @@ class Standard
       elevator_lights_schedule = prototype_input['exterior_fuel_equipment2_schedule']
     else
 
-      # identify occupancy schedule from largest space type of this building type
+      # identify occupancy schedule from largest space type in the building
       space_type_size = {}
       space_type_hash.each do |space_type, hash|
-        next unless building_type.include?(hash[:stds_bldg_type])
+        # next unless building_type.include?(hash[:stds_bldg_type]) # TODO re-enable this code after fixing the building_type vs. lookup_building_type discrepancies
         space_type_size[space_type] = hash[:floor_area]
       end
 
       # Get the largest space type
       largest_space_type = space_type_size.key(space_type_size.values.max)
+      if largest_space_type.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find a space type to put the elevator in, cannot add elevators.")
+        return nil
+      end
 
       # Get the occ sch, if one is specified
       occ_sch = nil
