@@ -1,7 +1,7 @@
 
 OS:Version,
-  {35a9703a-a55b-4c7f-8dc8-f5db1a57b9cd}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {939ff737-e172-45d0-b2f6-1de41efc8ce9}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {4401af15-c546-44f8-96c5-410b73437a27}, !- Handle
@@ -4444,20 +4444,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 18,            !- Name
   {c184d74f-7742-4292-99f3-68ea078a297f}; !- Thermal Zone
 
-OS:WeatherFile,
-  {c78d9253-5739-47ab-9b26-0e1b5f59728d}, !- Handle
-  Resolute,                               !- City
-  NU,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-17901,                          !- Data Source
-  719240,                                 !- WMO Number
-  74.72,                                  !- Latitude {deg}
-  -94.98,                                 !- Longitude {deg}
-  -6,                                     !- Time Zone {hr}
-  67,                                     !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_NU_Resolute.719240_CWEC.epw, !- Url
-  3BE3070E;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {f43b7a75-2487-474a-9cdf-155c5bb24cd4}, !- Handle
   Correlation,                            !- Calculation Method
@@ -4547,18 +4533,23 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {8f7231b3-464c-4562-ac89-338688999efe}, !- Handle
-  Space Function Office - open plan,      !- Name
+  Space Function Office open plan,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {5c12f30a-202e-4a85-90a5-cae355c14167}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Office - open plan;                     !- Standards Space Type
+  Office open plan;                     !- Standards Space Type
 
 OS:Rendering:Color,
   {5c12f30a-202e-4a85-90a5-cae355c14167}, !- Handle
-  Space Function Office - open plan,      !- Name
+  Space Function Office open plan,      !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:Sizing:Parameters,
+  {1782bc78-b8a8-45e9-93e9-4d1538678a6a}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
 

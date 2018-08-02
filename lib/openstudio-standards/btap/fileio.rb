@@ -18,7 +18,7 @@
 # **********************************************************************/
 
 
-require "#{File.dirname(__FILE__)}/btap"
+
 require 'fileutils'
 require 'csv'
 require 'securerandom'
@@ -77,18 +77,18 @@ module BTAP
     def self.get_find_files_from_folder_by_extension(folder, ext)
       Dir.glob("#{folder}/**/*#{ext}")
     end
-    
+
     def self.delete_files_in_folder_by_extention(folder,ext)
       BTAP::FileIO::get_find_files_from_folder_by_extension(folder, ext).each do |file|
         FileUtils.rm(file)
         #puts "#{file} deleted."
       end
     end
-    
+
     def self.find_file_in_folder_by_filename(folder,filename)
       Dir.glob("#{folder}/**/*#{filename}")
     end
-    
+
     def self.fix_url_to_path(url_string)
       if  url_string =~/\/([a-zA-Z]:.*)/
         return $1
@@ -158,10 +158,10 @@ module BTAP
       model.addObjects( new_model.toIdfFile.objects )
       BTAP::runner_register("Info",  "Model name is now #{model.building.get.name}.", runner)
     end
-    
-    
-    
-    
+
+
+
+
 
     # This method loads an Openstudio file into the model.
     # @author Phylroy A. Lopez
@@ -261,10 +261,10 @@ module BTAP
       # add new file to empty model
       model.addObjects( new_model.toIdfFile.objects )
       BTAP::runner_register("Info",  "Model name is now #{model.building.get.name}.", runner)
-      
-      
-      
-      
+
+
+
+
     end
 
     # This method will save the model to an osm file.
@@ -303,7 +303,7 @@ module BTAP
       }
     end
 
-   
+
 
 
 
@@ -311,7 +311,7 @@ module BTAP
       column_data = get_timeseries_arrays(sql, env_period, hourly_time_step, "Boiler Fan Coil Part Load Ratio")
     end
 
-    
+
     def self.convert_all_eso_to_csv(in_folder,out_folder)
       list_of_csv_files = Array.new
       FileUtils.mkdir_p(out_folder)
@@ -324,7 +324,7 @@ module BTAP
         #puts File.dirname(eso_file_path)
         Dir.chdir(File.dirname(eso_file_path))
         if File.exist?("eplustbl.htm")
-          File.open("dummy.rvi", 'w') {|f| f.write("") } 
+          File.open("dummy.rvi", 'w') {|f| f.write("") }
 
 
           system("#{BTAP::SimManager::ProcessManager::find_read_vars_eso()} dummy.rvi unlimited")
@@ -347,7 +347,7 @@ module BTAP
           #puts "copy sql results to #{out_folder}/#{runname}_eplusout.sql"
           FileUtils.cp("eplusout.sql","#{out_folder}/#{runname}_eplusout.sql")
 
-          
+
           list_of_csv_files << "#{out_folder}/#{runname}_eplusout.csv"
         end
         Dir.chdir(root_folder)
@@ -363,8 +363,8 @@ module BTAP
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_rows(file, searchHash)
       options = {
-        :headers =>       true,
-        :converters =>     :numeric }
+          :headers =>       true,
+          :converters =>     :numeric }
       table = CSV.read( file, options )
       # we'll save the matches here
       matches = nil
@@ -392,7 +392,7 @@ module BTAP
     # This method will read a CSV file and return the unique values in a given column header.
     # @author Phylroy Lopez
     # @param file The path to the csv file.
-    # @param colHeader The header name in teh csv file. 
+    # @param colHeader The header name in teh csv file.
     # @return matches A Array of rows that match the searchHash. The row is a Hash itself.
     def self.csv_look_up_unique_col_data(file, colHeader)
       column_data = Array.new
@@ -413,10 +413,10 @@ module BTAP
       #puts "reading #{csv_file} being processed"
       #reads csv file into memory.
       original = CSV.read(csv_file,
-        {
-          :headers =>       true, #This flag tell the parser that there are headers.
-          :converters =>     :numeric  #This tell it to convert string data into numeric when possible.
-        }
+                          {
+                              :headers =>       true, #This flag tell the parser that there are headers.
+                              :converters =>     :numeric  #This tell it to convert string data into numeric when possible.
+                          }
       )
       #puts "done reading #{csv_file} being processed"
       # We are going to collect the header names  that fit a pattern. But first we need to
@@ -481,18 +481,18 @@ module BTAP
       CSV.open("#{csv_file}.terminus_hourly.csv", 'w') do |csv|
         #Create header row for new terminus hourly file.
         csv << [
-          "Date/Time",
-          "water_heater_gas_rate_total",
-          "water_heater_electric_rate_total",
-          "water_heater_heating_rate_total",
-          "cooling_coil_electric_power_total",
-          "cooling_coil_total_cooling_rate_total",
-          "heating_coil_air_heating_rate_total",
-          "heating_coil_gas_rate_total",
-          "heating_coil_electric_power_total",
-          "plant_supply_heating_demand_rate_total",
-          "facility_total_electrical_demand_total",
-          "boiler_gas_rate_total"
+            "Date/Time",
+            "water_heater_gas_rate_total",
+            "water_heater_electric_rate_total",
+            "water_heater_heating_rate_total",
+            "cooling_coil_electric_power_total",
+            "cooling_coil_total_cooling_rate_total",
+            "heating_coil_air_heating_rate_total",
+            "heating_coil_gas_rate_total",
+            "heating_coil_electric_power_total",
+            "plant_supply_heating_demand_rate_total",
+            "facility_total_electrical_demand_total",
+            "boiler_gas_rate_total"
         ]
         original.each do |row|
 
@@ -516,18 +516,18 @@ module BTAP
 
           #Write the data out. Should match header row as above.
           csv << [
-            row["Date/Time"], #Time index is hardcoded because every file will have a "Date/Time" column header.
-            water_heater_gas_rate_total,
-            water_heater_electric_rate_total,
-            water_heater_heating_rate_total,
-            cooling_coil_electric_power_total,
-            cooling_coil_total_cooling_rate_total,
-            heating_coil_air_heating_rate_total,
-            heating_coil_gas_rate_total,
-            heating_coil_electric_power_total,
-            plant_supply_heating_demand_rate_total,
-            facility_total_electrical_demand_total,
-            boiler_gas_rate_headers_total
+              row["Date/Time"], #Time index is hardcoded because every file will have a "Date/Time" column header.
+              water_heater_gas_rate_total,
+              water_heater_electric_rate_total,
+              water_heater_heating_rate_total,
+              cooling_coil_electric_power_total,
+              cooling_coil_total_cooling_rate_total,
+              heating_coil_air_heating_rate_total,
+              heating_coil_gas_rate_total,
+              heating_coil_electric_power_total,
+              plant_supply_heating_demand_rate_total,
+              facility_total_electrical_demand_total,
+              boiler_gas_rate_headers_total
           ]
         end
       end
@@ -697,7 +697,7 @@ module BTAP
       full_json = []
       Dir.foreach("#{output_folder}") do |folder|
         next if folder == '.' or folder == '..'
-        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item| 
+        Dir.glob("#{output_folder}/#{folder}/qaqc.json") { |item|
           puts "Reading #{output_folder}/#{folder}/qaqc.json"
           json = JSON.parse(File.read(item))
           json['eplusout_err']['warnings'] = json['eplusout_err']['warnings'].size
@@ -712,66 +712,136 @@ module BTAP
       end
       File.open("#{output_folder}/../RESULTS-#{Time.now.strftime("%m-%d-%Y")}.json", 'w') {|f| f.write(JSON.pretty_generate(full_json)) }
     end
-    
-    # This is a simple example which uses rubyzip to
-    # recursively generate a zip file from the contents of
-    # a specified directory. The directory itself is not
-    # included in the archive, rather just its contents.
-    #
-    # Usage:
-    # require /path/to/the/ZipFileGenerator/Class
-    # directoryToZip = "/tmp/input"
-    # outputFile = "/tmp/out.zip"
-    # zf = BTAP::FileIO::ZipFileGenerator.new(directoryToZip, outputFile)
-    # zf.write()
-    #
-    #    class ZipFileGenerator
-    #      # Initialize with the directory to zip and the location of the output archive.
-    #      def initialize(input_dir, output_file)
-    #        @input_dir = input_dir
-    #        @output_file = output_file
-    #        self.write()
-    #      end
-    #
-    #      # Zip the input directory.
-    #      def write
-    #        entries = Dir.entries(@input_dir) - %w(. ..)
-    #
-    #        ::Zip::File.open(@output_file, ::Zip::File::CREATE) do |io|
-    #          write_entries entries, '', io
-    #        end
-    #      end
-    #
-    #      private
-    #
-    #      # A helper method to make the recursion work.
-    #      def write_entries(entries, path, io)
-    #        entries.each do |e|
-    #          zip_file_path = path == '' ? e : File.join(path, e)
-    #          disk_file_path = File.join(@input_dir, zip_file_path)
-    #          puts "Deflating #{disk_file_path}"
-    #
-    #          if File.directory? disk_file_path
-    #            recursively_deflate_directory(disk_file_path, io, zip_file_path)
-    #          else
-    #            put_into_archive(disk_file_path, io, zip_file_path)
-    #          end
-    #        end
-    #      end
-    #
-    #      def recursively_deflate_directory(disk_file_path, io, zip_file_path)
-    #        io.mkdir zip_file_path
-    #        subdir = Dir.entries(disk_file_path) - %w(. ..)
-    #        write_entries subdir, zip_file_path, io
-    #      end
-    #
-    #      def put_into_archive(disk_file_path, io, zip_file_path)
-    #        io.get_output_stream(zip_file_path) do |f|
-    #          f.puts(File.open(disk_file_path, 'rb').read)
-    #        end
-    #      end
-    #    end
-    #      
+
+    def self.compare_osm_files(model_true, model_compare)
+      only_model_true = [] # objects only found in the true model
+      only_model_compare = [] # objects only found in the compare model
+      both_models = [] # objects found in both models
+      diffs = [] # differences between the two models
+      num_ignored = 0 # objects not compared because they don't have names
+
+      # Define types of objects to skip entirely during the comparison
+      object_types_to_skip = [
+          'OS:EnergyManagementSystem:Sensor', # Names are UIDs
+          'OS:EnergyManagementSystem:Program', # Names are UIDs
+          'OS:EnergyManagementSystem:Actuator', # Names are UIDs
+          'OS:Connection', # Names are UIDs
+          'OS:PortList', # Names are UIDs
+          'OS:Building', # Name includes timestamp of creation
+          'OS:ModelObjectList' # Names are UIDs
+      ]
+
+      # Find objects in the true model only or in both models
+      model_true.getModelObjects.sort.each do |true_object|
+
+        # Skip comparison of certain object types
+        next if object_types_to_skip.include?(true_object.iddObject.name)
+
+        # Skip comparison for objects with no name
+        unless true_object.iddObject.hasNameField
+          num_ignored += 1
+          next
+        end
+
+        # Find the object with the same name in the other model
+        compare_object = model_compare.getObjectByTypeAndName(true_object.iddObject.type, true_object.name.to_s)
+        if compare_object.empty?
+          only_model_true << true_object
+        else
+          both_models << [true_object, compare_object.get]
+        end
+      end
+
+      # Report a diff for each object found in only the true model
+      only_model_true.each do |true_object|
+        diffs << "A #{true_object.iddObject.name} called '#{true_object.name}' was found only in the before model"
+      end
+
+      # Find objects in compare model only
+      model_compare.getModelObjects.sort.each do |compare_object|
+
+        # Skip comparison of certain object types
+        next if object_types_to_skip.include?(compare_object.iddObject.name)
+
+        # Skip comparison for objects with no name
+        unless compare_object.iddObject.hasNameField
+          num_ignored += 1
+          next
+        end
+
+        # Find the object with the same name in the other model
+        true_object = model_true.getObjectByTypeAndName(compare_object.iddObject.type, compare_object.name.to_s)
+        if true_object.empty?
+          only_model_compare << compare_object
+        end
+      end
+
+      # Report a diff for each object found in only the compare model
+      only_model_compare.each do |compare_object|
+        #diffs << "An object called #{compare_object.name} of type #{compare_object.iddObject.name} was found only in the compare model"
+        diffs << "A #{compare_object.iddObject.name} called '#{compare_object.name}' was found only in the after model"
+      end
+
+      # Compare objects found in both models field by field
+      both_models.each do |b|
+        true_object = b[0]
+        compare_object = b[1]
+        idd_object = true_object.iddObject
+
+        true_object_num_fields = true_object.numFields
+        compare_object_num_fields = compare_object.numFields
+
+        # loop over fields skipping handle
+        (1...[true_object_num_fields, compare_object_num_fields].max).each do |i|
+
+          field_name = idd_object.getField(i).get.name
+
+          # Don't compare node, branch, or port names because they are populated with IDs
+          next if field_name.include?('Node Name')
+          next if field_name.include?('Branch Name')
+          next if field_name.include?('Inlet Port')
+          next if field_name.include?('Outlet Port')
+          next if field_name.include?('Inlet Node')
+          next if field_name.include?('Outlet Node')
+          next if field_name.include?('Port List')
+          next if field_name.include?('Cooling Control Zone or Zone List Name')
+          next if field_name.include?('Heating Control Zone or Zone List Name')
+          next if field_name.include?('Heating Zone Fans Only Zone or Zone List Name')
+
+          # Don't compare the names of schedule type limits
+          # because they appear to be created non-deteministically
+          next if field_name.include?('Schedule Type Limits Name')
+
+          # Get the value from the true object
+          true_value = ""
+          if i < true_object_num_fields
+            true_value = true_object.getString(i).to_s
+          end
+          true_value = "-" if true_value.empty?
+
+          # Get the same value from the compare object
+          compare_value = ""
+          if i < compare_object_num_fields
+            compare_value = compare_object.getString(i).to_s
+          end
+          compare_value = "-" if compare_value.empty?
+
+          # Round long numeric fields
+          true_value = true_value.to_f.round(5) unless true_value.to_f.zero?
+          compare_value = compare_value.to_f.round(5) unless compare_value.to_f.zero?
+
+          # Move to the next field if no difference was found
+          next if true_value == compare_value
+
+          # Report the difference
+          diffs << "For #{true_object.iddObject.name} called '#{true_object.name}' field '#{field_name}': before model = #{true_value}, after model = #{compare_value}"
+
+        end
+
+      end
+
+      return diffs
+    end
 
   end #FileIO
 

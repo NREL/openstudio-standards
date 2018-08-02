@@ -5,6 +5,8 @@ class NECB2011 < Standard
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
+  attr_accessor :space_type_map
+  attr_accessor :space_multiplier_map
 
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
@@ -41,7 +43,6 @@ class NECB2011 < Standard
     return @standards_data
   end
 
-
   # Create a schedule from the openstudio standards dataset and
   # add it to the model.
   #
@@ -76,7 +77,6 @@ class NECB2011 < Standard
       return return_objects
     end
   end
-
 
   def initialize
     super()
@@ -141,13 +141,30 @@ class NECB2011 < Standard
     end
   end
 
+  # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, x_scale = 1.0, y_scale = 1.0, z_scale = 1.0)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
+    # If measure model is passed, then replace measure model with new model created here.
+    if measure_model.nil?
+      return model
+    else
+      model_replace_model(measure_model, model)
+      return measure_model
+    end
+  end
 
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
+  # Created this method so that additional methods can be addded for bulding the prototype model in later
+  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
+  def build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
     # prototype generation.
     model = load_geometry_osm(@geometry_file) # standard candidate
+    if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
+      scale_model_geometry(model, x_scale, y_scale, z_scale)
+    end
+    self.validate_initial_model(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
@@ -203,13 +220,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    # If measure model is passed, then replace measure model with new model created here.
-    if measure_model.nil?
-      return model
-    else
-      model_replace_model(measure_model, model)
-      return measure_model
-    end
+    model
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
@@ -263,6 +274,8 @@ class NECB2011 < Standard
 
     # Here is a hash to keep track of the m2 running total of spacetypes for each
     # sched type.
+    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
+    # future schedules.
     s = Hash[
         'A', 0,
         'B', 0,
@@ -272,7 +285,15 @@ class NECB2011 < Standard
         'F', 0,
         'G', 0,
         'H', 0,
-        'I', 0
+        'I', 0,
+        'J', 0,
+        'K', 0,
+        'L', 0,
+        'M', 0,
+        'N', 0,
+        'O', 0,
+        'P', 0,
+        'Q', 0
     ]
     # iterate through spaces in building.
     wildcard_spaces = 0
@@ -437,6 +458,5 @@ class NECB2011 < Standard
     end
     return true
   end
-
 
 end

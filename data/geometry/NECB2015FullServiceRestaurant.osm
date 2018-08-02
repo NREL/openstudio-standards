@@ -1,7 +1,7 @@
 
 OS:Version,
-  {0fc18537-2e42-46fc-af53-184a75944c32}, !- Handle
-  2.2.1;                                  !- Version Identifier
+  {572cf363-9c98-49b4-b377-4620f6a6704c}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:Site,
   {780cebd4-d970-49f6-8a67-996a6b51b6bf}, !- Handle
@@ -763,20 +763,6 @@ OS:ZoneHVAC:EquipmentList,
   Zone HVAC Equipment List 3,             !- Name
   {783a6fd7-6496-4e75-84cc-12b5a4635d04}; !- Thermal Zone
 
-OS:WeatherFile,
-  {591e076f-b1ff-4f98-9dd0-4f1873bc12ec}, !- Handle
-  Kuujjuarapik,                           !- City
-  PQ,                                     !- State Province Region
-  CAN,                                    !- Country
-  WYEC2-B-15701,                          !- Data Source
-  719050,                                 !- WMO Number
-  55.28,                                  !- Latitude {deg}
-  -77.77,                                 !- Longitude {deg}
-  -5,                                     !- Time Zone {hr}
-  12,                                     !- Elevation {m}
-  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Kuujjuarapik.719050_CWEC.epw, !- Url
-  010D2BDA;                               !- Checksum
-
 OS:Site:WaterMainsTemperature,
   {d4488da0-43af-4769-8758-7b0d3a753888}, !- Handle
   Correlation,                            !- Calculation Method
@@ -866,35 +852,67 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {74d79ecf-87d4-4cbb-ba37-86cfde5c20bb}, !- Handle
-  Space Function Dining - family space,   !- Name
+  Space Function Dining area - family dining,         !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {7a9e8539-9cb5-4ca2-908b-238e9d319c5c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Dining - family space;                  !- Standards Space Type
+  Dining area - family dining;                  !- Standards Space Type
 
 OS:Rendering:Color,
   {7a9e8539-9cb5-4ca2-908b-238e9d319c5c}, !- Handle
-  Space Function Dining - family space,   !- Name
+  Space Function Dining area - family dining,   !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {f72f339a-7251-400d-abf7-c267ec6d3b23}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,   !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {03141d71-f229-4289-b14b-a6ad922f5827}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Food preparation;                       !- Standards Space Type
+  Food preparation area;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {03141d71-f229-4289-b14b-a6ad922f5827}, !- Handle
-  Space Function Food preparation,        !- Name
+  Space Function Food preparation area,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value
+
+OS:ClimateZones,
+  {8d39fd3e-8895-4785-94de-069713bbe219}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:Sizing:Parameters,
+  {d3e46da3-7703-4a6b-bdf3-7eaf13c89b25}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:LifeCycleCost:Parameters,
+  {639753d2-617a-4d09-9918-5616d70277fe}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
 

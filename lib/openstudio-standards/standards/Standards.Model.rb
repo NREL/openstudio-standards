@@ -267,7 +267,7 @@ class Standard
       end
     end
 
-    return { 'residential' => res_area_m2, 'nonresidential' => nonres_area_m2 }
+    return {'residential' => res_area_m2, 'nonresidential' => nonres_area_m2}
   end
 
   # Determine the number of stories spanned by the
@@ -378,8 +378,8 @@ class Standard
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
+    type_to_area = Hash.new {0.0}
+    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -387,7 +387,7 @@ class Standard
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
+    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
@@ -440,15 +440,15 @@ class Standard
 
       # Determine the dominant fuel type
       # from the subset of the dominant area type zones
-      fuel_to_area = Hash.new { 0.0 }
-      zones_grouped_by_fuel = dom_occ_zns.group_by { |z| z['fuel'] }
+      fuel_to_area = Hash.new {0.0}
+      zones_grouped_by_fuel = dom_occ_zns.group_by {|z| z['fuel']}
       zones_grouped_by_fuel.each do |fuel, zns_by_fuel|
         zns_by_fuel.each do |zn|
           fuel_to_area[fuel] += zn['area']
         end
       end
 
-      sorted_by_area = fuel_to_area.sort_by { |k, v| v }.reverse
+      sorted_by_area = fuel_to_area.sort_by {|k, v| v}.reverse
       dom_fuel = sorted_by_area[0][0]
 
       # Don't allow unconditioned to be the dominant fuel,
@@ -658,7 +658,7 @@ class Standard
     fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
 
     # Define the lookup by row and by fuel type
-    sys_lookup = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
+    sys_lookup = Hash.new {|h, k| h[k] = Hash.new(&h.default_proc)}
 
     # fossil, fossil and electric, purchased heat, purchased heat and cooling
     sys_lookup['1_or_2']['fossil'] = ['PTAC', 'NaturalGas', nil, 'Electricity']
@@ -937,7 +937,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_Reheat (Sys5)"
 
           # If and only if there are primary zones to attach to the loop
@@ -999,7 +999,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1094,7 +1094,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_Reheat (Sys7)"
 
           # If and only if there are primary zones to attach to the loop
@@ -1176,7 +1176,7 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by { |nm, z| z }[0][0]
+          story_name = stories.sort_by {|nm, z| z}[0][0]
           sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
@@ -1301,10 +1301,10 @@ class Standard
           # Determine the secondary system type
           sec_system_type = nil
           case pri_system_type
-          when 'PVAV_Reheat', 'VAV_Reheat'
-            sec_system_type = 'PSZ_AC'
-          when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
-            sec_system_type = 'PSZ_HP'
+            when 'PVAV_Reheat', 'VAV_Reheat'
+              sec_system_type = 'PSZ_AC'
+            when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
+              sec_system_type = 'PSZ_HP'
           end
 
           # Group zones by story
@@ -1335,7 +1335,7 @@ class Standard
   # with the keys 'zone',
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
-    array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
+    array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
 
     # Calculate the area-weighted average
     total = 0.0
@@ -1518,7 +1518,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return { 'primary' => pri_zones, 'secondary' => sec_zones }
+    return {'primary' => pri_zones, 'secondary' => sec_zones}
   end
 
   # Group an array of zones into multiple arrays, one
@@ -1590,7 +1590,7 @@ class Standard
     end
 
     # Pre-sort spaces
-    sorted_spaces = sorted_spaces.sort_by { |a| a[1] }
+    sorted_spaces = sorted_spaces.sort_by {|a| a[1]}
 
     # Take the sorted list and assign/make stories
     sorted_spaces.each do |space|
@@ -1803,7 +1803,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
     # Multi-zone VAV outdoor air sizing
-    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj) }
+    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
@@ -1816,7 +1816,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Air Loop Controls
-    model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_standard_controls(obj, climate_zone)}
 
     # Plant Loop Controls
     # TODO refactor: enable this code (missing before refactor)
@@ -1825,44 +1825,44 @@ class Standard
     ##### Apply equipment efficiencies
 
     # Fans
-    model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
-    model.getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    model.getFanVariableVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanConstantVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanOnOffs.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanZoneExhausts.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
 
     # Pumps
-    model.getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    model.getPumpConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getPumpVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getHeaderedPumpsConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getHeaderedPumpsVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paried DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
 
     # Unitary ACs
-    model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
-    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXTwoSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
+    model.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
 
     # Chillers
     clg_tower_objs = model.getCoolingTowerSingleSpeeds
-    model.getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs) }
+    model.getChillerElectricEIRs.sort.each {|obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs)}
 
     # Boilers
-    model.getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj) }
+    model.getBoilerHotWaters.sort.each {|obj| boiler_hot_water_apply_efficiency_and_curves(obj)}
 
     # Water Heaters
-    model.getWaterHeaterMixeds.sort.each { |obj| water_heater_mixed_apply_efficiency(obj) }
+    model.getWaterHeaterMixeds.sort.each {|obj| water_heater_mixed_apply_efficiency(obj)}
 
     # Cooling Towers
-    model.getCoolingTowerSingleSpeeds.sort.each { |obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj) }
-    model.getCoolingTowerTwoSpeeds.sort.each { |obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj) }
-    model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
+    model.getCoolingTowerSingleSpeeds.sort.each {|obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj)}
+    model.getCoolingTowerTwoSpeeds.sort.each {|obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj)}
+    model.getCoolingTowerVariableSpeeds.sort.each {|obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj)}
 
     # ERVs
-    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
+    model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
@@ -2197,7 +2197,7 @@ class Standard
     end
 
     # Make a schedule ruleset
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new( model )
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
     sch_ruleset.setName(schedule_name.to_s)
 
     # Loop through the rules, making one for each row in the spreadsheet
@@ -2236,14 +2236,14 @@ class Standard
 
       # Other days (weekdays, weekends, etc)
       if day_types.include?('Wknd') ||
-         day_types.include?('Wkdy') ||
-         day_types.include?('Sat') ||
-         day_types.include?('Sun') ||
-         day_types.include?('Mon') ||
-         day_types.include?('Tue') ||
-         day_types.include?('Wed') ||
-         day_types.include?('Thu') ||
-         day_types.include?('Fri')
+          day_types.include?('Wkdy') ||
+          day_types.include?('Sat') ||
+          day_types.include?('Sun') ||
+          day_types.include?('Mon') ||
+          day_types.include?('Tue') ||
+          day_types.include?('Wed') ||
+          day_types.include?('Thu') ||
+          day_types.include?('Fri')
 
         # Make the Rule
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
@@ -2451,7 +2451,7 @@ class Standard
         else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
           # Set the U-Value
           construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-        # else
+          # else
           # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
         end
 
@@ -2510,10 +2510,10 @@ class Standard
     # AKA the info in Tables 5.5-1-5.5-8
 
     props = model_find_object(standards_data['construction_properties'], 'template' => template,
-                                                                         'climate_zone_set' => climate_zone_set,
-                                                                         'intended_surface_type' => intended_surface_type,
-                                                                         'standards_construction_type' => standards_construction_type,
-                                                                         'building_category' => building_category)
+                              'climate_zone_set' => climate_zone_set,
+                              'intended_surface_type' => intended_surface_type,
+                              'standards_construction_type' => standards_construction_type,
+                              'building_category' => building_category)
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -2751,91 +2751,91 @@ class Standard
 
     # Make the correct type of curve
     case data['form']
-    when 'Linear'
-      curve = OpenStudio::Model::CurveLinear.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    when 'Cubic'
-      curve = OpenStudio::Model::CurveCubic.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setCoefficient3xPOW2(data['coeff_3'])
-      curve.setCoefficient4xPOW3(data['coeff_4'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    when 'Quadratic'
-      curve = OpenStudio::Model::CurveQuadratic.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setCoefficient3xPOW2(data['coeff_3'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    when 'BiCubic'
-      curve = OpenStudio::Model::CurveBicubic.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setCoefficient3xPOW2(data['coeff_3'])
-      curve.setCoefficient4y(data['coeff_4'])
-      curve.setCoefficient5yPOW2(data['coeff_5'])
-      curve.setCoefficient6xTIMESY(data['coeff_6'])
-      curve.setCoefficient7xPOW3(data['coeff_7'])
-      curve.setCoefficient8yPOW3(data['coeff_8'])
-      curve.setCoefficient9xPOW2TIMESY(data['coeff_9'])
-      curve.setCoefficient10xTIMESYPOW2(data['coeff_10'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
-      curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    when 'BiQuadratic'
-      curve = OpenStudio::Model::CurveBiquadratic.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setCoefficient3xPOW2(data['coeff_3'])
-      curve.setCoefficient4y(data['coeff_4'])
-      curve.setCoefficient5yPOW2(data['coeff_5'])
-      curve.setCoefficient6xTIMESY(data['coeff_6'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
-      curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    when 'BiLinear'
-      curve = OpenStudio::Model::CurveBiquadratic.new(model)
-      curve.setName(data['name'])
-      curve.setCoefficient1Constant(data['coeff_1'])
-      curve.setCoefficient2x(data['coeff_2'])
-      curve.setCoefficient4y(data['coeff_3'])
-      curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
-      curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
-      curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
-      curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
-      curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
-      curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
-      return curve
-    else
-      OpenStudio::logFree(OpenStudio::Error, "openstudio.Model.Model", "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
-      return nil
+      when 'Linear'
+        curve = OpenStudio::Model::CurveLinear.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'Cubic'
+        curve = OpenStudio::Model::CurveCubic.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4xPOW3(data['coeff_4'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'Quadratic'
+        curve = OpenStudio::Model::CurveQuadratic.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiCubic'
+        curve = OpenStudio::Model::CurveBicubic.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5yPOW2(data['coeff_5'])
+        curve.setCoefficient6xTIMESY(data['coeff_6'])
+        curve.setCoefficient7xPOW3(data['coeff_7'])
+        curve.setCoefficient8yPOW3(data['coeff_8'])
+        curve.setCoefficient9xPOW2TIMESY(data['coeff_9'])
+        curve.setCoefficient10xTIMESYPOW2(data['coeff_10'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiQuadratic'
+        curve = OpenStudio::Model::CurveBiquadratic.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient3xPOW2(data['coeff_3'])
+        curve.setCoefficient4y(data['coeff_4'])
+        curve.setCoefficient5yPOW2(data['coeff_5'])
+        curve.setCoefficient6xTIMESY(data['coeff_6'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      when 'BiLinear'
+        curve = OpenStudio::Model::CurveBiquadratic.new(model)
+        curve.setName(data['name'])
+        curve.setCoefficient1Constant(data['coeff_1'])
+        curve.setCoefficient2x(data['coeff_2'])
+        curve.setCoefficient4y(data['coeff_3'])
+        curve.setMinimumValueofx(data['minimum_independent_variable_1']) if data['minimum_independent_variable_1']
+        curve.setMaximumValueofx(data['maximum_independent_variable_1']) if data['maximum_independent_variable_1']
+        curve.setMinimumValueofy(data['minimum_independent_variable_2']) if data['minimum_independent_variable_2']
+        curve.setMaximumValueofy(data['maximum_independent_variable_2']) if data['maximum_independent_variable_2']
+        curve.setMinimumCurveOutput(data['minimum_dependent_variable_output']) if data['minimum_dependent_variable_output']
+        curve.setMaximumCurveOutput(data['maximum_dependent_variable_output']) if data['maximum_dependent_variable_output']
+        return curve
+      else
+        OpenStudio::logFree(OpenStudio::Error, "openstudio.Model.Model", "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
+        return nil
     end
   end
 
@@ -3160,10 +3160,10 @@ class Standard
 
       # Can't handle incomplete construction sets
       if ext_surfs.empty? ||
-         int_surfs.empty? ||
-         gnd_surfs.empty? ||
-         ext_subsurfs.empty? ||
-         int_subsurfs.empty?
+          int_surfs.empty? ||
+          gnd_surfs.empty? ||
+          ext_subsurfs.empty? ||
+          int_subsurfs.empty?
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
         next
@@ -3441,11 +3441,11 @@ class Standard
 
     # populate search hash
     search_criteria = {
-      'template' => template,
-      'climate_zone_set' => climate_zone_set,
-      'intended_surface_type' => intended_surface_type,
-      'standards_construction_type' => standards_construction_type,
-      'building_category' => building_category
+        'template' => template,
+        'climate_zone_set' => climate_zone_set,
+        'intended_surface_type' => intended_surface_type,
+        'standards_construction_type' => standards_construction_type,
+        'building_category' => building_category
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
@@ -3867,31 +3867,31 @@ class Standard
 
     result = []
     if building_type == 'FullServiceRestaurant'
-      result << { units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4 }
+      result << {units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4}
     elsif building_type == 'Hospital'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif ['LargeHotel', 'SmallHotel'].include? building_type
-      result << { units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0 }
-      result << { units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0 }
-      result << { units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0 }
+      result << {units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0}
+      result << {units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0}
+      result << {units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0}
     elsif building_type == 'MidriseApartment'
-      result << { units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0 }
-      result << { units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0 }
-      result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
-      result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
-      result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
+      result << {units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0}
+      result << {units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0}
+      result << {units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0}
+      result << {units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0}
+      result << {units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0}
     elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
-      result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
+      result << {units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0}
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'PrimarySchool'
-      result << { units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6 }
+      result << {units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6}
     elsif building_type == 'QuickServiceRestaurant'
-      result << { units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7 }
+      result << {units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7}
     elsif building_type == 'Retail'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SecondarySchool'
-      result << { units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8 }
+      result << {units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8}
     elsif building_type == 'StripMall'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SuperMarket'
@@ -4063,9 +4063,9 @@ class Standard
           next
         else
           search_criteria = {
-            'template' => template,
-            'building_type' => space.spaceType.get.standardsBuildingType.get,
-            'space_type' => space.spaceType.get.standardsSpaceType.get
+              'template' => template,
+              'building_type' => space.spaceType.get.standardsBuildingType.get,
+              'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
           space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
@@ -4155,7 +4155,7 @@ class Standard
     end
 
     # sort hash by min_z low to high
-    story_hash = story_hash.sort_by { |k, v| v[:min_z] }
+    story_hash = story_hash.sort_by {|k, v| v[:min_z]}
 
     # reassemble into hash after sorting
     hash = {}
@@ -4288,6 +4288,85 @@ class Standard
     return space_type_hash.sort.to_h
   end
 
+
+  # This method will apply the a FDWR to a model. It will remove any existing windows and doors and use the
+  # Default contruction to set to apply the window construction. Sill height is in meters
+  def apply_max_fdwr(model, runner, sillHeight_si, wwr)
+    empty_const_warning = false
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        zone = surface.space.get.thermalZone
+        zone_multiplier = nil
+        next if zone.empty?
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == "Wall"
+          surface.subSurfaces.each {|ss| ss.remove}
+          new_window = surface.setWindowToWallRatio(wwr, sillHeight_si, true)
+          raise "#{surface.name.get} did not get set to #{wwr}. The size of the surface is #{surface.grossArea}" unless surface.windowToWallRatio.round(3) == wwr.round(3)
+          if new_window.empty?
+            runner.registerWarning("The requested window to wall ratio for surface '#{surface.name}' was too large. Fenestration was not altered for this surface.")
+          else
+            windows_added = true
+            # warn user if resulting window doesn't have a construction, as it will result in failed simulation. In the future may use logic from starting windows to apply construction to new window.
+            if new_window.get.construction.empty? && (empty_const_warning == false)
+              runner.registerWarning('one or more resulting windows do not have constructions. This script is intended to be used with models using construction sets versus hard assigned constructions.')
+              empty_const_warning = true
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # This method will apply the a SRR to a model. It will remove any existing skylights and use the
+  # Default contruction to set to apply the skylight construction. A default skylight square area of 0.25^2 is used.
+  def apply_max_srr(model, runner, srr, skylight_area = 0.25 * 0.25)
+    spaces = []
+    surface_type = "RoofCeiling"
+    model.getSpaces.sort.each do |space|
+      space.surfaces.sort.each do |surface|
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == surface_type
+          spaces << space
+          break
+        end
+      end
+    end
+    pattern = OpenStudio::Model.generateSkylightPattern(spaces, spaces[0].directionofRelativeNorth, srr, Math.sqrt(skylight_area), Math.sqrt(skylight_area)) # ratio, x value, y value
+    # applying skylight pattern
+    skylights = OpenStudio::Model.applySkylightPattern(pattern, spaces, OpenStudio::Model::OptionalConstructionBase.new)
+    spacenames = spaces.map {|space| space.name.get}
+    runner.registerInfo("Adding #{skylights.size} skylights to #{spacenames}")
+  end
+
+  # This method will limit the subsurface of a given surface_type ("Wall" or "RoofCeiling") to the ratio for the building.
+  # This method only reduces subsurface sizes at most.
+  def apply_limit_to_subsurface_ratio(model, ratio, surface_type = "Wall")
+    fdwr = get_outdoor_subsurface_ratio(model, surface_type)
+    if fdwr <= ratio
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Building FDWR of #{fdwr} is already lower than limit of #{ratio.round}%.")
+      return true
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by shrinking to centroid) to reduce window area down to the limit of #{ratio.round}%.")
+    # Determine the factors by which to reduce the window / door area
+    mult = ratio / fdwr
+    # Reduce the window area if any of the categories necessary
+    model.getSpaces.sort.each do |space|
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == surface_type
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |ss|
+          # Reduce the size of the window
+          red = 1.0 - mult
+          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+        end
+      end
+    end
+    return true
+  end
+
   # Converts the climate zone in the model into the format used
   # by the openstudio-standards lookup tables.  For example:
   # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
@@ -4331,9 +4410,88 @@ class Standard
       model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
     elsif climate_zone.include? 'CEC T24-CEC'
       model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
+
     end
     return true
   end
+
+
+  # This method return the building ratio of subsurface_area / surface_type_area where surface_type can be "Wall" or "RoofCeiling"
+  def get_outdoor_subsurface_ratio(model, surface_type = "Wall")
+    surface_area = 0.0
+    sub_surface_area = 0
+    all_surfaces = []
+    all_sub_surfaces = []
+    model.getSpaces.sort.each do |space|
+      zone = space.thermalZone
+      zone_multiplier = nil
+      next if zone.empty?
+      zone_multiplier = zone.get.multiplier
+      space.surfaces.sort.each do |surface|
+        if surface.outsideBoundaryCondition == 'Outdoors' and surface.surfaceType == surface_type
+          surface_area += surface.grossArea * zone_multiplier
+          surface.subSurfaces.sort.each do |sub_surface|
+            sub_surface_area += sub_surface.grossArea * sub_surface.multiplier * zone_multiplier
+          end
+        end
+      end
+    end
+    return fdwr = (sub_surface_area / surface_area)
+  end
+
+  # Loads a osm as a starting point.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def load_initial_osm(osm_file)
+    # Load the geometry .osm
+    unless File.exist?(osm_file)
+      raise("The initial osm path: #{osm_file} does not exist.")
+    end
+    osm_model_path = OpenStudio::Path.new(osm_file.to_s)
+    # Upgrade version if required.
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(osm_model_path).get
+    validate_initial_model(model)
+    return model
+  end
+
+  def validate_initial_model(model)
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
+      end
+    end
+
+    # ensure that model is intersected correctly.
+    model.getSpaces.each {|space1| model.getSpaces.each {|space2| space1.intersectSurfaces(space2)}}
+    # Get multipliers from TZ in model. Need this for HVAC contruction.
+    @space_multiplier_map = {}
+    model.getSpaces.sort.each do |space|
+      @space_multiplier_map[space.name.get] = space.multiplier if space.multiplier > 1
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
+    unless @space_multiplier_map.empty?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
+    end
+  end
+
 
   # Determines how ventilation for the standard is specified.
   # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
@@ -4346,7 +4504,6 @@ class Standard
     return ventilation_method
   end
 
-  private
 
   # Helper method to fill in hourly values
   def model_add_vals_to_sch(model, day_sch, sch_type, values)
@@ -4382,12 +4539,12 @@ class Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
-         htg_fuels.include?('PropaneGas') ||
-         htg_fuels.include?('FuelOil#1') ||
-         htg_fuels.include?('FuelOil#2') ||
-         htg_fuels.include?('Coal') ||
-         htg_fuels.include?('Diesel') ||
-         htg_fuels.include?('Gasoline')
+          htg_fuels.include?('PropaneGas') ||
+          htg_fuels.include?('FuelOil#1') ||
+          htg_fuels.include?('FuelOil#2') ||
+          htg_fuels.include?('Coal') ||
+          htg_fuels.include?('Diesel') ||
+          htg_fuels.include?('Gasoline')
         electric = false
       end
 
@@ -4471,6 +4628,7 @@ class Standard
     return true
   end
 
+
   # Loads a osm as a starting point.
   #
   # @param osm_file [String] path to the .osm file, relative to the /data folder
@@ -4522,18 +4680,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
       end
     end
-
-    # ensure that model is intersected correctly.
-    model.getSpaces.each { |space1| model.getSpaces.each { |space2| space1.intersectSurfaces(space2) } }
-    # Get multipliers from TZ in model. Need this for HVAC contruction.
-    @space_multiplier_map = {}
-    model.getSpaces.sort.each do |space|
-      @space_multiplier_map[space.name.get] = space.multiplier if space.multiplier > 1
-    end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
-    unless @space_multiplier_map.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
-    end
     return model
+
   end
 end
