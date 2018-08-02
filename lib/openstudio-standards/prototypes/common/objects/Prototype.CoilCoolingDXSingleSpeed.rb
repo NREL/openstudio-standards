@@ -196,6 +196,9 @@ class Standard
       # These coefficients are in IP UNITS
       cool_cap_ft_coeffs_ip = [3.68637657, -0.098352478, 0.000956357, 0.005838141, -0.0000127, -0.000131702]
       cool_eir_ft_coeffs_ip = [-3.437356399, 0.136656369, -0.001049231, -0.0079378, 0.000185435, -0.0001441]
+      cool_cap_fflow_coeffs = [0.718664047, 0.41797409, -0.136638137]
+      cool_eir_fflow_coeffs = [1.143487507, -0.13943972, -0.004047787]
+      cool_plf_fplr_coeffs = [0.8, 0.2, 0]
 
       # Convert coefficients from IP to SI
       cool_cap_ft_coeffs_si = convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
