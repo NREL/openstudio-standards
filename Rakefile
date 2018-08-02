@@ -28,7 +28,7 @@ namespace :test do
 
   desc 'Run All CircleCI tests'
   Rake::TestTask.new('local-circ-all-tests') do |t|
-    file_list = FileList.new('test/test_run_all_test_locally.rb')
+    file_list = FileList.new('test/helpers/ci_test_generator.rb', 'test/test_run_all_test_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
