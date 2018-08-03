@@ -83,7 +83,7 @@ class TestAddExteriorLights < Minitest::Test
     assert(exterior_lights["Base Site Allowance"].exteriorLightsDefinition.designLevel > 0.0)
   end
 
-  def test_add_exterior_lights_base_site_allowance_nil
+  def test_add_exterior_lights_base_site_allowance_false
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -98,16 +98,14 @@ class TestAddExteriorLights < Minitest::Test
     exterior_lighting_zone_number = 3
 
     # add lights
-    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number,1.0,true)
+    exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone_number,1.0,false)
 
     # check results
-    assert(exterior_lights.size == 5)
+    assert(exterior_lights.size == 4)
     assert(exterior_lights.has_key?("Parking Areas and Drives"))
     assert(exterior_lights.has_key?("Building Facades"))
     assert(exterior_lights.has_key?("Main Entries"))
     assert(exterior_lights.has_key?("Other Doors"))
-    assert(exterior_lights.has_key?("Base Site Allowance"))
-    assert(exterior_lights["Base Site Allowance"].exteriorLightsDefinition.designLevel == 0.0)
   end
 
   def test_add_exterior_lights_small_hotel
