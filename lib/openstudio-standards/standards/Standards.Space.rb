@@ -96,7 +96,7 @@ class Standard
 
     # Make sure there is one floor surface
     if floor_surface.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not find a floor in space #{name.get}, cannot determine daylighted areas.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Could not find a floor in space #{space.name}, cannot determine daylighted areas.")
       return result
     end
 
