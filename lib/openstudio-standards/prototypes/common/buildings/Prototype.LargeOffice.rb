@@ -41,6 +41,39 @@ module LargeOffice
       end
     end
 
+    # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
+    model.getPlantLoops.each do |plant_loop|
+      next unless plant_loop.name.to_s.include? "Heat Pump Loop"
+
+      sup_wtr_high_temp_c = OpenStudio.convert(65.0, 'F', 'C').get
+      sup_wtr_low_temp_c = OpenStudio.convert(41.0, 'F', 'C').get
+      hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                             sup_wtr_high_temp_c,
+                                                             name = "#{heat_pump_water_loop.name} High Temp #{sup_wtr_high_temp}F")
+      hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                            sup_wtr_low_temp_c,
+                                                            name = "#{heat_pump_water_loop.name} Low Temp #{sup_wtr_low_temp}F")
+
+      # add cooling tower object
+      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
+      cooling_tower.setName("#{plant_loop.name} Central Tower")
+      plant_loop.addSupplyBranchForComponent(cooling_tower)
+      #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
+      cooling_tower_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
+      cooling_tower_stpt_manager.setName("#{plant_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+      cooling_tower_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
+      cooling_tower_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
+      cooling_tower_stpt_manager.addToNode(cooling_tower.outletModelObject.get.to_Node.get)
+
+      # remove EvaporativeFluidCoolerSingleSpeed object
+      model.getEvaporativeFluidCoolerSingleSpeeds.each do |fluid_cooler|
+        if fluid_cooler.plantLoop.get.name.to_s == plant_loop.name.to_s
+          fluid_cooler.remove
+          break
+        end
+      end
+    end
+
     return true
   end
 

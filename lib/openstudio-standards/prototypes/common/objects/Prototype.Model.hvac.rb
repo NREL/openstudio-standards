@@ -105,8 +105,7 @@ class Standard
                       oa_damper_sch: system['oa_damper_schedule'],
                       fan_efficiency: 0.62,
                       fan_motor_efficiency: 0.9,
-                      fan_pressure_rise: 4.0,
-                      building_type: building_type)
+                      fan_pressure_rise: 4.0)
 
       when 'PSZ-AC'
         # Special logic to make unitary heat pumps all blow-through
@@ -119,7 +118,7 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = model_add_hp_loop(model, building_type)
+          heat_pump_loop = model_add_hp_loop(model)
         end
 
         model_add_psz_ac(model,
@@ -230,7 +229,7 @@ class Standard
         heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                            model.getPlantLoopByName('Heat Pump Loop').get
                          else
-                           model_add_hp_loop(model, building_type)
+                           model_add_hp_loop(model)
                          end
         model_add_data_center_hvac(model,
                                    thermal_zones,

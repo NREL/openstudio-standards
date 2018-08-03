@@ -504,7 +504,6 @@ class Standard
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
   # TODO: replace cooling tower with fluid cooler after fixing sizing inputs
   def model_add_hp_loop(model,
-                        building_type = nil,
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,
@@ -568,28 +567,15 @@ class Standard
 
     # create cooling towers or fluid coolers
     # TODO: replace this system with a FluidCoolor:TwoSpeed once the simulation failures are resolved
-    # TODO: remove building type specific logic
-    if building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
-      # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
-      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
-      cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
-      heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-      #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
-      cooling_tower_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
-      cooling_tower_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
-      cooling_tower_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
-      cooling_tower_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
-      cooling_tower_stpt_manager.addToNode(cooling_tower.outletModelObject.get.to_Node.get)
-    else
-      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-      # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-      # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-      fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
-      fluid_cooler.setName("#{heat_pump_water_loop.name} Fluid Cooler")
-      fluid_cooler.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
-      fluid_cooler.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
-      heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
-    end
+    # This logic is overridden Prototype.LargeOffice.rb to use a CoolingTowerTwoSpeed object instead change this
+    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
+    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
+    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
+    fluid_cooler.setName("#{heat_pump_water_loop.name} Fluid Cooler")
+    fluid_cooler.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
+    fluid_cooler.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
+    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
 
     # create boiler
     boiler = create_boiler_hot_water(model,
@@ -2002,7 +1988,6 @@ class Standard
   # Creates a CAV system and adds it to the model.
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
-  # @param building_type [String] the building type
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param hot_water_loop [String] hot water loop to connect to heating and reheat coils.
   # @param chilled_water_loop [String] chilled water loop to connect to the cooling coil.
@@ -2014,7 +1999,6 @@ class Standard
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
   def model_add_cav(model,
                     thermal_zones,
-                    building_type: nil,
                     system_name: nil,
                     hot_water_loop: nil,
                     chilled_water_loop: nil,
@@ -2088,21 +2072,13 @@ class Standard
     sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
     # create fan
-    # TODO: remove building type specific logic
-    if building_type == 'Hospital'
-      fan = create_fan_by_name(model,
-                               'Hospital_CAV_Sytem_Fan',
-                               fan_name: "#{air_loop.name} Fan",
-                               end_use_subcategory: 'CAV System Fans')
-    else
-      fan = create_fan_by_name(model,
-                               'Packaged_RTU_SZ_AC_CAV_Fan',
-                               fan_name: "#{air_loop.name} Fan",
-                               fan_efficiency: fan_efficiency,
-                               pressure_rise: fan_pressure_rise,
-                               motor_efficiency: fan_motor_efficiency,
-                               end_use_subcategory: 'CAV System Fans')
-    end
+    fan = create_fan_by_name(model,
+                             'Packaged_RTU_SZ_AC_CAV_Fan',
+                             fan_name: "#{air_loop.name} Fan",
+                             fan_efficiency: fan_efficiency,
+                             pressure_rise: fan_pressure_rise,
+                             motor_efficiency: fan_motor_efficiency,
+                             end_use_subcategory: 'CAV System Fans')
     fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
     fan.addToNode(air_loop.supplyInletNode)
 
@@ -2150,29 +2126,22 @@ class Standard
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "Adding CAV for #{zone.name}")
 
-      # TODO: remove building type specific logic
-      if building_type == 'Hospital'
-        # CAV terminal
-        terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-        terminal.setName("#{zone.name} CAV Terminal")
-      else
-        # Reheat coil
-        rht_coil = create_coil_heating_water(model,
-                                             hot_water_loop,
-                                             name: "#{zone.name} Reheat Coil",
-                                             rated_inlet_water_temperature: hw_temp_c,
-                                             rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                             rated_inlet_air_temperature: htg_sa_temp_c,
-                                             rated_outlet_air_temperature: rht_sa_temp_c)
-        # VAV terminal
-        terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
-        terminal.setName("#{zone.name} VAV Terminal")
-        terminal.setZoneMinimumAirFlowMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-        terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
-        terminal.setMaximumFlowFractionDuringReheat(0.5)
-        terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
-      end
+      # Reheat coil
+      rht_coil = create_coil_heating_water(model,
+                                           hot_water_loop,
+                                           name: "#{zone.name} Reheat Coil",
+                                           rated_inlet_water_temperature: hw_temp_c,
+                                           rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
+                                           rated_inlet_air_temperature: htg_sa_temp_c,
+                                           rated_outlet_air_temperature: rht_sa_temp_c)
+      # VAV terminal
+      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
+      terminal.setName("#{zone.name} VAV Terminal")
+      terminal.setZoneMinimumAirFlowMethod('Constant')
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
+      terminal.setMaximumFlowFractionDuringReheat(0.5)
+      terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
       air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
 
       # zone sizing

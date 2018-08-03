@@ -50,6 +50,33 @@ module Hospital
         sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
         sizing_system.setSizingOption('NonCoincident')
 
+        # replace main supply air fan
+        air_loop.supplyFan.get.remove
+        fan = create_fan_by_name(model,
+                                 'Hospital_CAV_Sytem_Fan',
+                                 fan_name: "#{air_loop.name} Fan",
+                                 end_use_subcategory: 'CAV System Fans')
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+        fan.addToNode(air_loop.supplyOutletNode)
+
+        # replace AirTerminalSingleDuctVAVReheat with AirTerminalSingleDuctUncontrolled
+        air_loop.thermalZones.each do |zone|
+          # remove old terminal and reheat coil
+          old_terminal = zone.airLoopHVACTerminal.get.to_AirTerminalSingleDuctVAVReheat.get
+          reheat_coil = old_terminal.reheatCoil
+          reheat_coil.remove
+          # in future, may need to remove plant loop if empty at end of this
+          old_terminal.remove
+          air_loop.removeBranchForZone(zone)
+
+          # make new terminal
+          new_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+          new_terminal.setName("#{zone.name} CAV Terminal")
+          air_loop.addBranchForZone(zone, new_terminal.to_StraightComponent)
+          zone.setCoolingPriority(new_terminal.to_ModelObject.get, 1)
+          zone.setHeatingPriority(new_terminal.to_ModelObject.get, 1)
+        end
+
         # zone sizing
         zone_htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
         air_loop.thermalZones.each do |zone|
