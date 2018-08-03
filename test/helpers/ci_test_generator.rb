@@ -26,7 +26,7 @@ def cleanup_output_folders
   end
   if File.directory?(file_out_dir())
     puts "Removing and recreating ci_test_files directory : #{file_out_dir()}"
-    FileUtils.rm_r(necb_out_dirname)
+    FileUtils.rm_r(file_out_dir())
   end
   FileUtils.mkdir_p(file_out_dir())
 end
