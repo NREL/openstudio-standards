@@ -24,8 +24,10 @@ def cleanup_output_folders
     puts "Removing nrel output directory : #{nrel_out_dirname}"
     FileUtils.rm_r(nrel_out_dirname)
   end
-
-  FileUtils.rm_r(file_out_dir())
+  if File.directory?(file_out_dir())
+    puts "Removing and recreating ci_test_files directory : #{file_out_dir()}"
+    FileUtils.rm_r(necb_out_dirname)
+  end
   FileUtils.mkdir_p(file_out_dir())
 end
 
