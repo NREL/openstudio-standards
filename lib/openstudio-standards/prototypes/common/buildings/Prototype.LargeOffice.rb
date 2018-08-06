@@ -44,15 +44,16 @@ module LargeOffice
     # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
     model.getPlantLoops.each do |plant_loop|
       next unless plant_loop.name.to_s.include? "Heat Pump Loop"
-
-      sup_wtr_high_temp_c = OpenStudio.convert(65.0, 'F', 'C').get
-      sup_wtr_low_temp_c = OpenStudio.convert(41.0, 'F', 'C').get
+      sup_wtr_high_temp_f = 65.0
+      sup_wtr_low_temp_f = 41.0
+      sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
+      sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp_f, 'F', 'C').get
       hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
                                                              sup_wtr_high_temp_c,
-                                                             name = "#{heat_pump_water_loop.name} High Temp #{sup_wtr_high_temp}F")
+                                                             name = "#{plant_loop.name} High Temp #{sup_wtr_high_temp_f.round(1)}F")
       hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
                                                             sup_wtr_low_temp_c,
-                                                            name = "#{heat_pump_water_loop.name} Low Temp #{sup_wtr_low_temp}F")
+                                                            name = "#{plant_loop.name} Low Temp #{sup_wtr_low_temp_f.round(1)}F")
 
       # add cooling tower object
       cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
