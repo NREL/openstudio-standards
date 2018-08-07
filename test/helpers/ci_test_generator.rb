@@ -11,21 +11,21 @@ end
 def cleanup_output_folders
   dirname = File.join(file_out_dir(), 'output')
   if File.directory?(dirname)
-    puts "Removing hvac output directory : #{dirname}"
+    puts "Removing hvac output directory : [#{dirname}]"
     FileUtils.rm_r(dirname)
   end
   necb_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","necb", 'output'))
   if File.directory?(necb_out_dirname)
-    puts "Removing necb output directory : #{necb_out_dirname}"
+    puts "Removing necb output directory : [#{necb_out_dirname}]"
     FileUtils.rm_r(necb_out_dirname)
   end
   nrel_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","..", 'output'))
   if File.directory?(nrel_out_dirname)
-    puts "Removing nrel output directory : #{nrel_out_dirname}"
+    puts "Removing nrel output directory : [#{nrel_out_dirname}]"
     FileUtils.rm_r(nrel_out_dirname)
   end
   if File.directory?(file_out_dir())
-    puts "Removing and recreating ci_test_files directory : #{file_out_dir()}"
+    puts "Removing and recreating ci_test_files directory : [#{file_out_dir()}]"
     FileUtils.rm_r(file_out_dir())
   end
   FileUtils.mkdir_p(file_out_dir())
