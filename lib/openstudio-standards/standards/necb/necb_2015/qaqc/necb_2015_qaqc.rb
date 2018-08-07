@@ -174,7 +174,7 @@ class NECB2015
     necb_economizer_compliance(qaqc) # [DONE-NC]
 
     #NECB code regarding MURBS (§5.2.10.4) has not been implemented in both NECB 2011 and 2015
-    necb_hrv_compliance(qaqc, model) # [DONE-NC]
+    necb_hrv_compliance_inc_murb(qaqc, model) # [DONE-NC]
 
     necb_vav_fan_power_compliance(qaqc) # [DONE-NC]
 
