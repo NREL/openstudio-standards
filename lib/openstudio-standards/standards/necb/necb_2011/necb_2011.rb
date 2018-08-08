@@ -5,6 +5,8 @@ class NECB2011 < Standard
   register_standard(@template)
   attr_reader :template
   attr_accessor :standards_data
+  attr_accessor :space_type_map
+  attr_accessor :space_multiplier_map
 
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
@@ -140,8 +142,8 @@ class NECB2011 < Standard
   end
 
   # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
-  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil)
-    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+  def model_create_prototype_model(climate_zone, epw_file, sizing_run_dir = Dir.pwd, debug = false, measure_model = nil, x_scale = 1.0, y_scale = 1.0, z_scale = 1.0)
+    model = build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
     # If measure model is passed, then replace measure model with new model created here.
     if measure_model.nil?
       return model
@@ -153,12 +155,15 @@ class NECB2011 < Standard
 
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir)
+  def build_prototype_model(climate_zone, debug, epw_file, sizing_run_dir, x_scale, y_scale, z_scale)
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
     # prototype generation.
     model = load_geometry_osm(@geometry_file) # standard candidate
+    if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
+      scale_model_geometry(model, x_scale, y_scale, z_scale)
+    end
     self.validate_initial_model(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
@@ -182,7 +187,7 @@ class NECB2011 < Standard
     end
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
-    model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_add_swh(model, climate_zone, epw_file)
     model_apply_sizing_parameters(model)
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C

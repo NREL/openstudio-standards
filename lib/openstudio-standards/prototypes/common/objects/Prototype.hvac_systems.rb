@@ -6441,4 +6441,46 @@ class Standard
 
     return system_type
   end
+
+  # This method will add an swh water fixture to the model for the space.
+  # if the it will return a water fixture object, or NIL if there is no water load at all.
+  def model_add_swh_end_uses_by_spaceonly(model, space, swh_loop)
+    # Water use connection
+    swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
+
+    # Water fixture definition
+    water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
+
+    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_sensible_frac_sch.setValue(0.2)
+    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_latent_frac_sch.setValue(0.05)
+    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_SI'], 'm^3/s', 'gal/min').get
+    water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
+    water_use_latent_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
+    water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
+    water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
+    water_fixture_def.setPeakFlowRate(space['shw_peakflow_SI'])
+    water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    # Target mixed water temperature
+    mixed_water_temp_c = space['shw_temp_SI']
+    mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), mixed_water_temp_c)
+    water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
+
+    # Water use equipment
+    water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
+    schedule = model_add_schedule(model, space['shw_sched'])
+    water_fixture.setFlowRateFractionSchedule(schedule)
+    water_fixture.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    swh_connection.addWaterUseEquipment(water_fixture)
+    # Assign water fixture to a space
+    water_fixture.setSpace(space['shw_spaces']) if model_attach_water_fixtures_to_spaces?(model)
+
+    # Connect the water use connection to the SWH loop
+    swh_loop.addDemandBranchForComponent(swh_connection)
+    return water_fixture
+  end
 end

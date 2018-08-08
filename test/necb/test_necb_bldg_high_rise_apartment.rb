@@ -8,14 +8,14 @@ class TestNECBHighriseApartment < NECBRegressionHelper
     super()
     @building_type = 'HighriseApartment'
   end
-  def test_necb_2011_regression_natural_gas()
+  def test_necb_2011_HighriseApartment_regression_natural_gas()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @gas_location,
                                                    'NECB2011'
     )
     assert(result, msg)
   end
-  def test_necb_2011_regression_electric()
+  def test_necb_2011_HighriseApartment_regression_electric()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
                                                    'NECB2011'
@@ -23,14 +23,14 @@ class TestNECBHighriseApartment < NECBRegressionHelper
     assert(result, msg)
   end
 
-  def test_necb_2015_regression_natural_gas()
+  def test_necb_2015_HighriseApartment_regression_natural_gas()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @gas_location,
                                                    'NECB2015'
     )
     assert(result, msg)
   end
-  def test_necb_2015_regression_electric()
+  def test_necb_2015_HighriseApartment_regression_electric()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
                                                    'NECB2015'
