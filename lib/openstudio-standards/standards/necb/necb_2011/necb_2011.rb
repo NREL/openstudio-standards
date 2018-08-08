@@ -149,14 +149,16 @@ class NECB2011 < Standard
                                    measure_model: nil,
                                    x_scale: 1.0,
                                    y_scale: 1.0,
-                                   z_scale: 1.0)
+                                   z_scale: 1.0,
+                                   osm_model_path:)
     model = build_prototype_model(climate_zone: climate_zone,
                                   debug: false,
                                   epw_file: epw_file,
                                   sizing_run_dir: sizing_run_dir,
                                   x_scale: x_scale,
                                   y_scale: y_scale,
-                                  z_scale: z_scale)
+                                  z_scale: z_scale,
+                                  osm_model_path: osm_model_path)
     # If measure model is passed, then replace measure model with new model created here.
     if measure_model.nil?
       return model
@@ -176,12 +178,13 @@ class NECB2011 < Standard
                              sizing_run_dir:  Dir.pwd,
                              x_scale: 1.0,
                              y_scale: 1.0,
-                             z_scale: 1.0)
-    building_type = @instvarbuilding_type
-    raise 'no building_type!' if @instvarbuilding_type.nil?
+                             z_scale: 1.0,
+                             osm_model_path:
+  )
+
     model = nil
     # prototype generation.
-    model = load_geometry_osm(@geometry_file) # standard candidate
+    model = load_user_geometry_osm(osm_model_path: osm_model_path) # standard candidate
     if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
       scale_model_geometry(model, x_scale, y_scale, z_scale)
     end
@@ -189,14 +192,14 @@ class NECB2011 < Standard
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone) # prototype candidate
+    model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
     model.getBuilding.setName(self.class.to_s)
-    model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone}-#{epw_file} created: #{Time.new}")
+    model.getBuilding.setName("-#{File.basename(osm_model_path,'.osm')}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model) # standards candidate
     model_apply_infiltration_standard(model) # standards candidate
     model_modify_surface_convection_algorithm(model) # standards
-    model_add_constructions(model, @instvarbuilding_type, climate_zone) # prototype candidate
+    model_add_constructions(model, 'FullServiceRestaurant', climate_zone) # prototype candidate
     apply_standard_construction_properties(model) # standards candidate
     apply_standard_window_to_wall_ratio(model) # standards candidate
     apply_standard_skylight_to_roof_ratio(model) # standards candidate
@@ -223,13 +226,8 @@ class NECB2011 < Standard
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
-    model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-    # AHU1 doesn't have economizer
-    model_modify_oa_controller(model)
-    # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
-    model_reset_or_room_vav_minimum_damper(@prototype_input, model)
-    model_modify_oa_controller(model)
+    model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
+
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     # Fix EMS references.
