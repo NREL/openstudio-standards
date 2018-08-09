@@ -46,7 +46,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
       boiler_fueltypes.each do |boiler_fueltype|
         baseboard_types.each do |baseboard_type|
           heating_coil_types_sys4.each do |heating_coil|
-            name = "sys4_Boiler~#{boiler_fueltype}_HeatingCoilType#~#{heating_coil}_BaseboardType~#{baseboard_type}"
+            name = "sys4_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
