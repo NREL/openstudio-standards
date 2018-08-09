@@ -94,7 +94,7 @@ class Standard
 
       # TODO: Yixing. Add the temperature setpoint will cost the simulation with
       # thousands of Severe Errors. Need to figure this out later.
-      # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,hw_temp_sch)
+      # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
       # boiler_stpt_manager.setName("Boiler outlet setpoint manager")
       # boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
     else
@@ -250,7 +250,7 @@ class Standard
         # TODO: Yixing. Add the temperature setpoint and change the flow mode will cost the simulation with
         # thousands of Severe Errors. Need to figure this out later.
         # chiller.setChillerFlowMode('LeavingSetpointModulated')
-        # chiller_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self,chw_temp_sch)
+        # chiller_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
         # chiller_stpt_manager.setName("chiller outlet setpoint manager")
         # chiller_stpt_manager.addToNode(chiller.supplyOutletModelObject.get.to_Node.get)
         # end
@@ -452,7 +452,7 @@ class Standard
     if building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
       # TODO: For some reason the FluidCoolorTwoSpeed is causing simulation failures.
       # might need to look into the defaults
-      # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(self)
+      # cooling_tower = OpenStudio::Model::FluidCoolerTwoSpeed.new(model)
       cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
       cooling_tower.setName("#{heat_pump_water_loop.name} Central Tower")
       heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
@@ -464,7 +464,7 @@ class Standard
 
     else
       # TODO: replace with FluidCooler:TwoSpeed when available
-      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
+      # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
       # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
       # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
       fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
@@ -3940,7 +3940,7 @@ class Standard
       # Dummy zero-capacity cooling coil
       clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
       clg_coil.setName('Zero-capacity DX Coil')
-      clg_coil.setAvailabilitySchedule(alwaysOffDiscreteSchedule)
+      clg_coil.setAvailabilitySchedule(model.alwaysOffDiscreteSchedule)
 
       unitary_system = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
       unitary_system.setName("#{zone.name} Evap Cooler Cycling Fan")
@@ -3952,7 +3952,7 @@ class Standard
       unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
       unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
       unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       unitary_system.addToNode(air_loop.supplyInletNode)
 
       # Outdoor air intake system
@@ -4445,9 +4445,9 @@ class Standard
     rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s, 'm^3/s', 'gal/min').get
     frac_sensible = 0.2
     frac_latent = 0.05
-    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(model)
     # water_use_sensible_frac_sch.setValue(0.2)
-    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(model)
     # water_use_latent_frac_sch.setValue(0.05)
     water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     water_use_sensible_frac_sch.setName("Fraction Sensible - #{frac_sensible}")
@@ -4532,9 +4532,9 @@ class Standard
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour / 60 # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min, 'gal/min', 'm^3/s').get
 
-    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(model)
     # water_use_sensible_frac_sch.setValue(0.2)
-    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(model)
     # water_use_latent_frac_sch.setValue(0.05)
     water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
@@ -5038,7 +5038,7 @@ class Standard
                                                                            htg_coil,
                                                                            clg_coil)
       ptac.setName("#{zone.name} Window AC")
-      ptac.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      ptac.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       ptac.addToThermalZone(zone)
 
       acs << ptac
@@ -5167,7 +5167,7 @@ class Standard
       oa_intake.addToNode(air_loop.supplyInletNode)
       unless ventilation
         # Disable the OA
-        oa_intake_controller.setMinimumOutdoorAirSchedule(alwaysOffDiscreteSchedule)
+        oa_intake_controller.setMinimumOutdoorAirSchedule(model.alwaysOffDiscreteSchedule)
       end
 
       # Unitary System (holds the coils and fan)
@@ -5188,7 +5188,7 @@ class Standard
       unitary.setCoolingCoil(clg_coil) if clg_coil
       unitary.setSupplyFan(fan)
       unitary.setFanPlacement('BlowThrough')
-      unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      unitary.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
 
       # Diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
@@ -5353,7 +5353,7 @@ class Standard
       oa_intake.addToNode(air_loop.supplyInletNode)
       unless ventilation
         # Disable the OA
-        oa_intake_controller.setMinimumOutdoorAirSchedule(alwaysOffDiscreteSchedule)
+        oa_intake_controller.setMinimumOutdoorAirSchedule(model.alwaysOffDiscreteSchedule)
       end
 
       # Unitary System (holds the coils and fan)
@@ -5374,7 +5374,7 @@ class Standard
       unitary.setSupplementalHeatingCoil(supp_htg_coil) if supp_htg_coil
       unitary.setSupplyFan(fan)
       unitary.setFanPlacement('BlowThrough')
-      unitary.setSupplyAirFanOperatingModeSchedule(alwaysOffDiscreteSchedule)
+      unitary.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
 
       # Diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
@@ -5506,7 +5506,7 @@ class Standard
       erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
       # erv_controller.setExhaustAirTemperatureLimit("NoExhaustAirTemperatureLimit")
       # erv_controller.setExhaustAirEnthalpyLimit("NoExhaustAirEnthalpyLimit")
-      # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
+      # erv_controller.setTimeofDayEconomizerFlowControlSchedule(model.alwaysOnDiscreteSchedule)
       # erv_controller.setHighHumidityControlFlag(false)
 
       heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
