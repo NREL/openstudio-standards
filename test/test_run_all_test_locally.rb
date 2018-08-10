@@ -6,7 +6,7 @@ require 'open3'
 
 TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
 TestOutputFolder = File.join(File.dirname(__FILE__), 'local_test_output')
-ProcessorsUsed = ( 4 ).round
+ProcessorsUsed = ( Parallel.processor_count * 2 / 3 ).floor
 
 class String
   # colorization
@@ -75,7 +75,7 @@ class RunAllTests< Minitest::Test
 
     puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} of available cpus."
     puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
-    Parallel.each(@full_file_list, in_threads: (ProcessorsUsed)) do |test_file|
+    Parallel.each(@full_file_list, in_threads: (ProcessorsUsed), progress: "Progress :" ) do |test_file|
       write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
     end
   end
