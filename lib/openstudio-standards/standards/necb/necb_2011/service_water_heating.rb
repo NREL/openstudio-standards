@@ -1,10 +1,14 @@
 class NECB2011
-  def model_add_swh(model, climate_zone, epw_file)
+  def model_add_swh(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Calculate the tank size and service water pump information
-    shw_sizing = auto_size_shw_capacity(model, climate_zone, epw_file)
-    shw_pump_head = auto_size_shw_pump_head(model, false)
+    shw_sizing = auto_size_shw_capacity(model)
+    if shw_sizing["loop_peak_flow_rate_SI"] == 0
+      shw_pump_head = auto_size_shw_pump_head(model, true)
+    else
+      shw_pump_head = auto_size_shw_pump_head(model, false)
+    end
     shw_pump_motor_eff = 0.9
 
     # Add the main service water heating loop
@@ -23,10 +27,12 @@ class NECB2011
                                        shw_sizing['parasitic_loss'],
                                        nil)
 
-    shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
-
+    if shw_sizing["loop_peak_flow_rate_SI"] == 0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
+    else
+      shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
+    end
     return true
   end
 
@@ -166,7 +172,7 @@ class NECB2011
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
   # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
-  def auto_size_shw_capacity(model, climate_zone, epw_file, u = 0.45, height_to_radius = 2)
+  def auto_size_shw_capacity(model, u = 0.45, height_to_radius = 2)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
@@ -265,6 +271,24 @@ class NECB2011
           end
         end
       end
+    end
+    if shw_spaces.empty?
+      space_info = {
+          'shw_spaces' => nil,
+          'shw_peakflow_SI' => 0,
+          'shw_temp_SI' => 60,
+          'shw_sched' => []
+      }
+      shw_spaces << space_info
+      tank_param = {
+          "tank_volume_SI" => 0,
+          "tank_capacity_SI" => 0,
+          "max_temp_SI" => 60,
+          "loop_peak_flow_rate_SI" => 0,
+          "parasitic_loss" => 0,
+          "spaces_w_dhw" => shw_spaces
+      }
+      return tank_param
     end
     next_day_test = nil
     next_hour_test = 0

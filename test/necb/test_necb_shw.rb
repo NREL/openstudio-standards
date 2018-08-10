@@ -6,7 +6,9 @@ require_relative '../helpers/create_doe_prototype_helper'
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
 class SHW_test < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+  # Templates = ['NECB2011', 'NECB2015']
+  Templates = ['NECB2015']
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
 
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
@@ -14,230 +16,106 @@ class SHW_test < Minitest::Test
   # @return [Bool] true if successful. 
   def test_shw_test()
     output_array = []
+    climate_zone = 'none'
     #Iterate through all spacetypes/buildingtypes. 
-    Templates.each do |template|
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/NECB2011Outpatient.osm")
-      #Get spacetypes from JSON.
-      standard = Standard.build(template)
+    Templates.sort.each do |template|
+      Epw_files.sort.each do |epw_file|
+        index = 0
+        break_time = false
+        while break_time == false do
+          model = nil
+          standard = nil
+          model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/#{template}Outpatient.osm")
+          BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+          #Get spacetypes from JSON.
+          standard = Standard.build(template)
 
-      search_criteria = {
-          "template" => template,
-          "building_type" => "Space Function"
-      }
-      space_type_data = standard.model_find_objects(standard.standards_data["space_types"], search_criteria)
-      space_types = model.getSpaceTypes
-      space_types_size = space_types.size
-      space_type_data_size = space_type_data.size
-      index = 0
-
-      space_types.sort.each do |space_type|
-        test = space_type.name.get
-        space_type.name.set = "Space Function" + space_type_data[index]["space_type"]
-        puts "hello"
-      end
-
-      # lookup space type properties
-      standard.model_find_objects(standard.standards_data["space_types"], search_criteria).each do |space_type_properties|
-        # Create a space type
-        st = OpenStudio::Model::SpaceType.new(@model)
-        st.setStandardsBuildingType(space_type_properties['building_type'])
-        st.setStandardsSpaceType(space_type_properties['space_type'])
-        st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
-        standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
-  
-        #Set all spaces to spacetype
-        @model.getSpaces.each do |space|
-          space.setSpaceType(st)
-        end
-          
-        #Add Infiltration rates to the space objects themselves. 
-        standard.model_apply_infiltration_standard(@model)
-          
-        #Get handle for space. 
-        space = @model.getSpaces[0]
-        space_area = space.floorArea #m2
-
-        space_sched_array = []
-        header_info = {
-            "Space_Type" => st.name,
-            "StandardsSpaceType" => st.standardsSpaceType.get,
-            "StandardsBuildingType" => st.standardsBuildingType.get
-        }
-
-        unless header_info.nil?
-          space_sched_array << header_info
-        end
-
-        #People / Occupancy
-        occ_scheds = []
-        total_occ_dens = []
-        occ_sched = []
-        st.people.each {|people_def| total_occ_dens << people_def.peoplePerFloorArea ; occ_sched << people_def.numberofPeopleSchedule.get}
-        assert(total_occ_dens.size <= 1 , "#{total_occ_dens.size} people definitions given. Expecting <= 1.")
-
-        #Get occupancy rules from default occupancy ruleset and add to schedule array for this space type.
-        unless occ_sched[0].nil?
-          occ_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |occ_day|
-            sched_entry = {
-                "ScheduleName" => occ_day.daySchedule.name.get,
-                "ScheduleTimes" => occ_day.daySchedule.times,
-                "ScheduleValues" => occ_day.daySchedule.values
-            }
-            occ_scheds << sched_entry
-          end
-          occ_entry = {
-              "ScheduleType" => occ_sched[0].name.get,
-              "Schedules" => occ_scheds
+          search_criteria = {
+              "template" => template,
+              "building_type" => "Space Function"
           }
-          space_sched_array << occ_entry
-        end
-
-        #Lights
-        lpd_scheds = []
-        lpd_sched = []
-        st.lights.each {|light| lpd_sched << light.schedule.get}
-        assert(lpd_sched.size <= 1 , "#{lpd_sched.size} light definitions given. Expecting <= 1.")
-
-        #Get lighting rules from default lighting ruleset and add to schedule array for this space type.
-        unless lpd_sched[0].nil?
-          lpd_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |lpd_day|
-            sched_entry = {
-                "ScheduleName" => lpd_day.daySchedule.name.get,
-                "ScheduleTimes" => lpd_day.daySchedule.times,
-                "ScheduleValues" => lpd_day.daySchedule.values
-            }
-            lpd_scheds << sched_entry
-          end
-          lpd_entry = {
-              "ScheduleType" => lpd_sched[0].name.get,
-              "Schedules" => lpd_scheds
-          }
-          space_sched_array << lpd_entry
-        end
-
-        #Equipment -Electric
-        elec_equip_scheds = []
-        elec_equip_sched = []
-        st.electricEquipment.each {|elec_equip| elec_equip_sched << elec_equip.schedule.get}
-        assert( elec_equip_sched.size <= 1 , "#{elec_equip_sched.size} electric definitions given. Expecting <= 1." )
-
-        #Get electrical equipment rules from default electrical equipment ruleset and add to schedule array for this space type.
-        unless elec_equip_sched[0].nil?
-          elec_equip_sched[0].to_ScheduleRuleset.get.scheduleRules.sort.each do |elec_day|
-            sched_entry = {
-                "ScheduleName" => elec_day.daySchedule.name.get,
-                "ScheduleTimes" => elec_day.daySchedule.times,
-                "ScheduleValues" => elec_day.daySchedule.values
-            }
-            elec_equip_scheds << sched_entry
-          end
-          elec_equip_entry = {
-              "ScheduleType" => elec_equip_sched[0].name.get,
-              "Schedules" => elec_equip_scheds
-          }
-          space_sched_array << elec_equip_entry
-        end
-
-        #Hot Water Equipment
-        shw_scheds = []
-        hw_equip_power = []
-        hw_equip_sched = []
-        st.hotWaterEquipment.each {|equip| hw_equip_power << equip.powerPerFloorArea.get ; hw_equip_sched << equip.schedule.get.name}
-        assert( hw_equip_power.size <= 1 , "#{hw_equip_power.size} hw definitions given. Expecting <= 1." )
-
-        #SHW
-        shw_loop = OpenStudio::Model::PlantLoop.new(@model)
-        shw_peak_flow_per_area = []
-        shw_heating_target_temperature = []
-        shw__schedule = ""
-        area_per_occ = 0.0
-        area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
-        water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
-
-        #Get shw schedule rules from shw equipment for this space type and add to schedule array for this space type.
-
-        unless water_fixture.nil?
-          shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
-          water_fixture.flowRateFractionSchedule.get.to_ScheduleRuleset.get.scheduleRules.sort.each do |shw_day|
-            sched_entry = {
-                "ScheduleName" => shw_day.daySchedule.name.get,
-                "ScheduleTimes" => shw_day.daySchedule.times,
-                "ScheduleValues" => shw_day.daySchedule.values
-            }
-            shw_scheds << sched_entry
-          end
-          shw_entry = {
-              "ScheduleType" => shw__fraction_schedule,
-              "Schedules" => shw_scheds
-          }
-          space_sched_array << shw_entry
-        end
-
-        # Cycle through rulesets and determine which are the NECB heating and cooling setpoint schedules.  Get the
-        # appropriate rules from these schedules and add them to the schedule array for this space type.
-
-        @model.getScheduleRulesets.sort.each do |sched_ruleset|
-          ruleset_name = sched_ruleset.name.get
-          if sched_ruleset.name.get.start_with?("NECB")
-            if sched_ruleset.name.get.end_with?("Thermostat Setpoint-Heating")
-              heat_sched = []
-              sched_ruleset.scheduleRules.sort.each do |heat_set_day|
-                sched_entry = {
-                    "ScheduleName" => heat_set_day.daySchedule.name.get,
-                    "ScheduleTimes" => heat_set_day.daySchedule.times,
-                    "ScheduleValues" => heat_set_day.daySchedule.values
-                }
-                heat_sched << sched_entry
-              end
-              heat_entry = {
-                  "ScheduleType" => sched_ruleset.name.get,
-                  "Schedules" => heat_sched
-              }
-              space_sched_array << heat_entry
-            elsif sched_ruleset.name.get.end_with?("Thermostat Setpoint-Cooling")
-              cool_sched = []
-              sched_ruleset.scheduleRules.sort.each do |cool_set_day|
-                sched_entry = {
-                    "ScheduleName" => cool_set_day.daySchedule.name.get,
-                    "ScheduleTimes" => cool_set_day.daySchedule.times,
-                    "ScheduleValues" => cool_set_day.daySchedule.values
-                }
-                cool_sched << sched_entry
-              end
-              cool_entry = {
-                  "ScheduleType" => sched_ruleset.name.get,
-                  "Schedules" => cool_sched
-              }
-              space_sched_array << cool_entry
+          space_type_data = standard.model_find_objects(standard.standards_data["space_types"], search_criteria)
+          space_types = model.getSpaceTypes
+          space_type_data_size = space_type_data.size
+          space_type_names = []
+          space_types.sort.each do |space_type|
+            space_type.setNameProtected("Space Function" + " " + space_type_data[index]["space_type"])
+            space_type_names << space_type.name
+            if index >= (space_type_data_size - 1)
+              index = 0
+              break_time = true
+            else
+              index += 1
             end
           end
-          # remove the the schedule ruleset when done with it.  This prevents irrelevant schedules being carried over
-          # to the next space type test.
-          sched_ruleset.remove
+          standard.model_add_swh(model)
+          plantloops = model.getPlantLoops
+          demand_comps = plantloops[0].demandComponents
+          water_conns = []
+          demand_equip_info = []
+          demand_comps.sort.each do |demand_comp|
+            if demand_comp.iddObjectType.valueName.to_s == "OS_WaterUse_Connections"
+              water_conns << demand_comp.to_WaterUseConnections.get
+            end
+          end
+          water_conns.sort.each do |water_conn|
+            day_scheds = []
+            water_equip = water_conn.waterUseEquipment
+            flow_rate_fract_sched = water_equip[0].flowRateFractionSchedule.get.to_ScheduleRuleset.get
+            flow_rate_fract_sched.scheduleRules.sort.each do |sched_rule|
+              day_sched = {
+                  "day_sched_name" => sched_rule.daySchedule.name,
+                  "times" => sched_rule.daySchedule.times,
+                  "values" => sched_rule.daySchedule.values
+              }
+              day_scheds << day_sched
+            end
+            water_equip_def = water_equip[0].waterUseEquipmentDefinition
+            equip_info = {
+                "equip_name" => water_equip[0].name,
+                "flow_rate_m3_per_s" => water_equip_def.peakFlowRate,
+                "day_schedules" => day_scheds
+            }
+            demand_equip_info << equip_info
+          end
+          pumps = []
+          water_heaters = []
+          supply_comps = plantloops[0].supplyComponents
+          supply_comps.sort.each do |supplycomp|
+            case supplycomp.iddObjectType.valueName.to_s
+              when 'OS_Pump_ConstantSpeed'
+                pumps << supplycomp.to_PumpConstantSpeed.get
+              when 'OS_WaterHeater_Mixed'
+                water_heaters << supplycomp.to_WaterHeaterMixed.get
+            end
+          end
+          supply_equip_info = {
+              "water_heater_vol_m3" => water_heaters[0].tankVolume,
+              "water_heater_capacity_w" => water_heaters[0].heaterMaximumCapacity,
+              "pump_head_Pa" => pumps[0].ratedPumpHead,
+              "pump_motor_eff" => pumps[0].motorEfficiency
+          }
+          set_output = {
+              "template" => template,
+              "epw_file" => epw_file,
+              "water_heater_name" => water_heaters[0].name,
+              "space_types" => space_type_names,
+              "suppy_equipment" => supply_equip_info,
+              "demand_equipment" => demand_equip_info
+          }
+          output_array << set_output
         end
-
-        # Add the schedules for this spacetype to giant output array.
-
-        unless space_sched_array.empty?
-          output_array << space_sched_array
-        end
-
-        #remove space_type (This speeds things up a bit. 
-        st.remove
-        shw_loop.remove
-        water_fixture.remove unless water_fixture.nil?
-      end #loop spacetypes
+      end #loop epw_file
     end #loop Template
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'data','schedule_test_results.json')
+    test_result_file = File.join(File.dirname(__FILE__),'data','shw_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'data','schedule_expected_results.json')
+    expected_result_file = File.join(File.dirname(__FILE__),'data','shw_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
-      "Schedule test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
+      "shw test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
     )
   end
 end
