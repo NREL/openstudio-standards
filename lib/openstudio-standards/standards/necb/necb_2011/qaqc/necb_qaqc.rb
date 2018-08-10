@@ -923,6 +923,11 @@ class NECB2011
         next
       end
 
+      if pump_power_hp < 1.0
+        qaqc[:warnings] << "necb_plantloop_sanity [SKIP] [PLANT LOOP][#{plant_loop_info[:name]}][:pumps][0][:electric_power_hp] because  pump_power_hp: [#{pump_power_hp}] < 1 hp"
+        next
+      end
+
       necb_section_test(
           qaqc,
           percent_diff,

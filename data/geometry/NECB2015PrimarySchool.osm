@@ -3698,7 +3698,7 @@ OS:Surface,
 
 OS:ShadowCalculation,
   {76c65a8c-1c8d-4b21-a8e0-22f75d606263}, !- Handle
-  15000,                                  !- Calculation Frequency
+  20,                                     !- Calculation Frequency
   15000;                                  !- Maximum Figures in Shadow Overlap Calculations
 
 OS:Surface,
