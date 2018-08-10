@@ -5086,6 +5086,9 @@ class Standard
     crank_case_heat_w = 0
     crank_case_max_temp_f = 55
 
+    sat_htg_c = OpenStudio.convert(sat_htg_f, 'F', 'C').get
+    sat_clg_c = OpenStudio.convert(sat_clg_f, 'F', 'C').get
+
     # Performance curves
     # These coefficients are in IP UNITS
     cool_cap_ft_coeffs_ip = [3.670270705, -0.098652414, 0.000955906, 0.006552414, -0.0000156, -0.000131877]
@@ -5115,6 +5118,14 @@ class Standard
       air_loop_name = "#{zone.name} #{equip_name}"
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
       air_loop.setName(air_loop_name.to_s)
+
+      sizing_system = air_loop.sizingSystem
+      sizing_system.setCentralCoolingDesignSupplyAirTemperature(sat_clg_c)
+      sizing_system.setCentralHeatingDesignSupplyAirTemperature(sat_htg_c)
+      sizing_system.setSizingOption('Coincident')
+      sizing_system.setAllOutdoorAirinCooling(false)
+      sizing_system.setAllOutdoorAirinHeating(false)
+      sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
       # Heating Coil
       htg_coil = nil
