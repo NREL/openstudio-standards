@@ -141,36 +141,12 @@ class NECB2011 < Standard
     end
   end
 
-  # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
-  def model_create_prototype_model(epw_file:,
-                                   sizing_run_dir: Dir.pwd,
-                                   debug: false,
-                                   measure_model: nil,
-                                   x_scale: 1.0,
-                                   y_scale: 1.0,
-                                   z_scale: 1.0,
-                                   osm_model_path:)
-
-    model = build_prototype_model(debug: false,
-                                  epw_file: epw_file,
-                                  sizing_run_dir: sizing_run_dir,
-                                  x_scale: x_scale,
-                                  y_scale: y_scale,
-                                  z_scale: z_scale,
-                                  osm_model_path: osm_model_path)
-    # If measure model is passed, then replace measure model with new model created here.
-    if measure_model.nil?
-      return model
-    else
-      model_replace_model(measure_model, model)
-      return measure_model
-    end
-  end
 
 
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def build_prototype_model(osm_model_path:,
+  def model_create_prototype_model(template:,
+                            building_type:,
                             epw_file:,
                             debug: false,
                             sizing_run_dir: Dir.pwd,
@@ -178,11 +154,27 @@ class NECB2011 < Standard
                             y_scale: 1.0,
                             z_scale: 1.0
   )
+    osm_model_path = File.absolute_path(File.join(__FILE__,'..','..','..',"necb/#{template}/data/geometry/#{building_type}.osm"))
+    model = BTAP::FileIO::load_osm(osm_model_path)
+    model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
+    return model_apply_standard(model: model, epw_file: epw_file, x_scale: x_scale,  y_scale: y_scale, z_scale: z_scale, sizing_run_dir: sizing_run_dir )
+  end
+
+
+  # Created this method so that additional methods can be addded for bulding the prototype model in later
+  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
+  def model_apply_standard(model:,
+                           epw_file:,
+                           debug: false,
+                           sizing_run_dir: Dir.pwd,
+                           x_scale: 1.0,
+                           y_scale: 1.0,
+                           z_scale: 1.0
+  )
 
     climate_zone = 'NECB HDD Method'
-    model = nil
-    # prototype generation.I'm curre
-    model = load_user_geometry_osm(osm_model_path: osm_model_path) # standard candidate
+
+    # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     return false unless validate_initial_model(model)
     return false unless validate_space_types(model)
@@ -190,8 +182,6 @@ class NECB2011 < Standard
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
     model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
-    model.getBuilding.setName(self.class.to_s)
-    model.getBuilding.setName("-#{File.basename(osm_model_path, '.osm')}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model) # standards candidate
     model_apply_infiltration_standard(model) # standards candidate
@@ -236,7 +226,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    model
+    return model
   end
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.

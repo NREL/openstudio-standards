@@ -85,7 +85,7 @@ class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
   end
   def test_#{template}_#{building_type}_regression_#{fuel_type}()
 
-    result, msg = create_model_and_regression_test(osm_model_path: File.absolute_path(File.join(__FILE__, '..', '..','..','lib/openstudio-standards/standards/necb/#{template}/data/geometry/#{building_type}.osm')),
+    result, msg = create_model_and_regression_test(building_type: '#{building_type}',
                                                    epw_file: @#{fuel_type}_location,
                                                    template: '#{template}'
     )

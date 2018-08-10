@@ -251,6 +251,7 @@ class NECB2011
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
+
   def apply_standard_construction_properties(model,
                                              runner = nil,
                                              scale_wall = 1.0,

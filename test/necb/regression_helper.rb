@@ -12,7 +12,7 @@ class NECBRegressionHelper < Minitest::Test
   def create_model_and_regression_test(epw_file:,
                                        template:,
                                        performQAQC: false,
-                                       osm_model_path:
+                                       building_type:
   )
     begin
       diffs = []
@@ -20,7 +20,7 @@ class NECBRegressionHelper < Minitest::Test
       if !Dir.exists?(test_dir)
         Dir.mkdir(test_dir)
       end
-      model_name = "#{File.basename(osm_model_path,'.osm')}-#{template}-#{File.basename(epw_file, '.epw')}"
+      model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
       run_dir = "#{test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
@@ -28,7 +28,8 @@ class NECBRegressionHelper < Minitest::Test
 
       model = Standard.build("#{template}").model_create_prototype_model( epw_file: epw_file,
                                                                                 sizing_run_dir: run_dir,
-                                                                                osm_model_path: osm_model_path )
+                                                                                template: template,
+                                                                                building_type: building_type)
       print model.class.name
       unless model.instance_of?( OpenStudio::Model::Model )
         puts "Creation of Model for #{osm_model_path} failed. Please check output for errors."
