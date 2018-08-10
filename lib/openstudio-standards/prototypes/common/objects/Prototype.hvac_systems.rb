@@ -5123,8 +5123,8 @@ class Standard
       sizing_system.setCentralCoolingDesignSupplyAirTemperature(sat_clg_c)
       sizing_system.setCentralHeatingDesignSupplyAirTemperature(sat_htg_c)
       sizing_system.setSizingOption('Coincident')
-      sizing_system.setAllOutdoorAirinCooling(false)
-      sizing_system.setAllOutdoorAirinHeating(false)
+      sizing_system.setAllOutdoorAirinCooling(true)
+      sizing_system.setAllOutdoorAirinHeating(true)
       sizing_system.setSystemOutdoorAirMethod('ZoneSum')
 
       # Heating Coil
@@ -5177,8 +5177,10 @@ class Standard
       oa_intake.setName("#{air_loop.name} OA Sys")
       oa_intake.addToNode(air_loop.supplyInletNode)
       unless ventilation
-        # Disable the OA
+        # Disable the OA and remove OA from sizing
         oa_intake_controller.setMinimumOutdoorAirSchedule(model.alwaysOffDiscreteSchedule)
+        sizing_system.setAllOutdoorAirinCooling(false)
+        sizing_system.setAllOutdoorAirinHeating(false)
       end
 
       # Unitary System (holds the coils and fan)
