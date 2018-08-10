@@ -81,7 +81,6 @@ require_relative '../necb/regression_helper'
 class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
   def setup()
     super()
-    @building_type = '#{building_type}'
   end
   def test_#{template}_#{building_type}_regression_#{fuel_type}()
 
