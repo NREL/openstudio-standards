@@ -460,7 +460,9 @@ class NECB2011
   end
 
 
-  def model_add_construction_set_from_osm(model: , construction_set_name:'BTAP-Mass', osm_path: '/home/osdev/openstudio-standards/lib/openstudio-standards/standards/necb/necb_2011/data/construction_defaults.osm')
+  def model_add_construction_set_from_osm(model: ,
+                                          construction_set_name:'BTAP-Mass',
+                                          osm_path: File.absolute_path(File.join(__FILE__, '..', '..','common/construction_defaults.osm')))
     # load resources model
     construction_library = BTAP::FileIO::load_osm(osm_path)
 

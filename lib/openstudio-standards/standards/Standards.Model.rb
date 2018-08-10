@@ -4601,7 +4601,6 @@ class Standard
     # Check that the model loaded successfully
     if model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
-      raise('hell')
       return false
     end
     model = model.get

@@ -168,16 +168,15 @@ class NECB2011 < Standard
   end
 
 
-
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def build_prototype_model( osm_model_path:,
-                             epw_file:,
-                             debug: false,
-                             sizing_run_dir:  Dir.pwd,
-                             x_scale: 1.0,
-                             y_scale: 1.0,
-                             z_scale: 1.0
+  def build_prototype_model(osm_model_path:,
+                            epw_file:,
+                            debug: false,
+                            sizing_run_dir: Dir.pwd,
+                            x_scale: 1.0,
+                            y_scale: 1.0,
+                            z_scale: 1.0
   )
 
     climate_zone = 'NECB HDD Method'
@@ -192,7 +191,7 @@ class NECB2011 < Standard
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
     model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
     model.getBuilding.setName(self.class.to_s)
-    model.getBuilding.setName("-#{File.basename(osm_model_path,'.osm')}-#{climate_zone}-#{epw_file} created: #{Time.new}")
+    model.getBuilding.setName("-#{File.basename(osm_model_path, '.osm')}-#{climate_zone}-#{epw_file} created: #{Time.new}")
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model) # standards candidate
     model_apply_infiltration_standard(model) # standards candidate
@@ -242,14 +241,16 @@ class NECB2011 < Standard
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
   def validate_space_types(model)
-    space_type_list = get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + spacetype[1].to_s]}
-    space_type_names = model.getSpaceTypes.map {|spacetype| [spacetype.standardsBuildingType.get.to_s + spacetype.standardsSpaceType.get.to_s]}
+    space_type_list = get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' +spacetype[1].to_s]}
+    space_type_names = model.getSpaceTypes.map {|spacetype| [spacetype.standardsBuildingType.get.to_s + '-' + spacetype.standardsSpaceType.get.to_s]}
     unknown_spacetypes = []
     space_type_names.each do |space_type_name|
       unknown_spacetypes << space_type_name unless space_type_list.include?(space_type_name)
     end
     if unknown_spacetypes.size > 0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', "These spacetypes are not part of the defined #{self.class.name.to_s} standard.\n #{unknown_spacetypes}\n please ensure all spacetype in model are correct.")
+      message = "These spacetypes are not part of the defined #{self.class.name.to_s} standard.\n #{unknown_spacetypes}\n please ensure all spacetype in model are correct."
+      puts "Error: #{message}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', message)
       return false
     end
     return true

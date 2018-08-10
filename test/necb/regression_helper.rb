@@ -9,8 +9,7 @@ class NECBRegressionHelper < Minitest::Test
   end
 
 
-  def create_model_and_regression_test(building_type:,
-                                       epw_file:,
+  def create_model_and_regression_test(epw_file:,
                                        template:,
                                        performQAQC: false,
                                        osm_model_path:
@@ -21,7 +20,7 @@ class NECBRegressionHelper < Minitest::Test
       if !Dir.exists?(test_dir)
         Dir.mkdir(test_dir)
       end
-      model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
+      model_name = "#{File.basename(osm_model_path,'.osm')}-#{template}-#{File.basename(epw_file, '.epw')}"
       run_dir = "#{test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
@@ -30,7 +29,10 @@ class NECBRegressionHelper < Minitest::Test
       model = Standard.build("#{template}").model_create_prototype_model( epw_file: epw_file,
                                                                                 sizing_run_dir: run_dir,
                                                                                 osm_model_path: osm_model_path )
-
+      print model.class.name
+      unless model.instance_of?( OpenStudio::Model::Model )
+        puts "Creation of Model for #{osm_model_path} failed. Please check output for errors."
+      end
       #Save osm file.
       filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
       FileUtils.mkdir_p(File.dirname(filename))
@@ -64,7 +66,7 @@ class NECBRegressionHelper < Minitest::Test
     FileUtils.rm(diff_file) if File.exists?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))
-      msg = "There were #{diffs.size} differences/errors in #{building_type} #{template} #{epw_file} :\n#{diffs.join("\n")}"
+      msg = "There were #{diffs.size} differences/errors in #{osm_file} #{template} #{epw_file} :\n#{diffs.join("\n")}"
       return false, msg
     else
       return true, nil
