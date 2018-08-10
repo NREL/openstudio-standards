@@ -142,8 +142,7 @@ class NECB2011 < Standard
   end
 
   # This method first calls build_prototype_model and then replaces the existing model with the new prototype model.
-  def model_create_prototype_model(climate_zone:,
-                                   epw_file:,
+  def model_create_prototype_model(epw_file:,
                                    sizing_run_dir: Dir.pwd,
                                    debug: false,
                                    measure_model: nil,
@@ -151,8 +150,8 @@ class NECB2011 < Standard
                                    y_scale: 1.0,
                                    z_scale: 1.0,
                                    osm_model_path:)
-    model = build_prototype_model(climate_zone: climate_zone,
-                                  debug: false,
+
+    model = build_prototype_model(debug: false,
                                   epw_file: epw_file,
                                   sizing_run_dir: sizing_run_dir,
                                   x_scale: x_scale,
@@ -172,23 +171,22 @@ class NECB2011 < Standard
 
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def build_prototype_model( climate_zone:,
-                             debug: false,
+  def build_prototype_model( osm_model_path:,
                              epw_file:,
+                             debug: false,
                              sizing_run_dir:  Dir.pwd,
                              x_scale: 1.0,
                              y_scale: 1.0,
-                             z_scale: 1.0,
-                             osm_model_path:
+                             z_scale: 1.0
   )
 
+    climate_zone = 'NECB HDD Method'
     model = nil
-    # prototype generation.
+    # prototype generation.I'm curre
     model = load_user_geometry_osm(osm_model_path: osm_model_path) # standard candidate
-    if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
-      scale_model_geometry(model, x_scale, y_scale, z_scale)
-    end
-    self.validate_initial_model(model)
+    scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
+    return false unless validate_initial_model(model)
+    return false unless validate_space_types(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
@@ -240,6 +238,21 @@ class NECB2011 < Standard
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
     model
+  end
+
+  # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
+  def validate_space_types(model)
+    space_type_list = get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + spacetype[1].to_s]}
+    space_type_names = model.getSpaceTypes.map {|spacetype| [spacetype.standardsBuildingType.get.to_s + spacetype.standardsSpaceType.get.to_s]}
+    unknown_spacetypes = []
+    space_type_names.each do |space_type_name|
+      unknown_spacetypes << space_type_name unless space_type_list.include?(space_type_name)
+    end
+    if unknown_spacetypes.size > 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', "These spacetypes are not part of the defined #{self.class.name.to_s} standard.\n #{unknown_spacetypes}\n please ensure all spacetype in model are correct.")
+      return false
+    end
+    return true
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)

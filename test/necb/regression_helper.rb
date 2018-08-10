@@ -27,10 +27,9 @@ class NECBRegressionHelper < Minitest::Test
         Dir.mkdir(run_dir)
       end
 
-      model = Standard.build("#{template}").model_create_prototype_model(climate_zone: 'NECB HDD Method',
-                                                                                          epw_file: epw_file,
-                                                                                          sizing_run_dir: run_dir,
-                                                                         osm_model_path: osm_model_path)
+      model = Standard.build("#{template}").model_create_prototype_model( epw_file: epw_file,
+                                                                                sizing_run_dir: run_dir,
+                                                                                osm_model_path: osm_model_path )
 
       #Save osm file.
       filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
