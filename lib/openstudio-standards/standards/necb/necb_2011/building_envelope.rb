@@ -462,11 +462,8 @@ class NECB2011
 
   def model_add_construction_set_from_osm(model: , construction_set_name:'BTAP-Mass', osm_path: '/home/osdev/openstudio-standards/lib/openstudio-standards/standards/necb/necb_2011/data/construction_defaults.osm')
     # load resources model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new(osm_path)
-    construction_library = translator.loadModel(path)
-    construction_library = construction_library.get
-    # clone construction into model
+    construction_library = BTAP::FileIO::load_osm(osm_path)
+
     if not construction_library.getDefaultConstructionSetByName(construction_set_name.to_s).is_initialized
       runner.registerError('Did not find the expected construction in library.')
       return false
@@ -476,50 +473,6 @@ class NECB2011
     return new_construction_set
   end
 
-
-  # Helper method to find a particular construction and add it to the model
-  # after modifying the insulation value if necessary.
-  def model_find_and_add_construction(model:,
-                                      climate_zone_set:'NECB-CNEB ClimatZone 4-8',
-                                      intended_surface_type:,
-                                      standards_construction_type:,
-                                      building_category:)
-    # Get the construction properties,
-    # which specifies properties by construction category by climate zone set.
-    # AKA the info in Tables 5.5-1-5.5-8
-
-    props = model_find_object(standards_data['construction_properties'], 'template' => template,
-                              'climate_zone_set' => climate_zone_set,
-                              'intended_surface_type' => intended_surface_type,
-                              'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category)
-
-    if !props
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
-      # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(model)
-      construction.setName('Could not find construction properties set to Adiabatic ')
-      almost_adiabatic = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 500)
-      construction.insertLayer(0, almost_adiabatic)
-      return construction
-    else
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category} = #{props}.")
-    end
-
-    # Make sure that a construction is specified
-    if props['construction'].nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No typical construction is specified for construction properties of: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.  Make sure it is entered in the spreadsheet.")
-      # Return an empty construction
-      construction = OpenStudio::Model::Construction.new(model)
-      construction.setName('No typical construction was specified')
-      return construction
-    end
-
-    # Add the construction, modifying properties as necessary
-    construction = model_add_construction(model, props['construction'], props)
-
-    return construction
-  end
 
 
   def assign_contruction_to_adiabatic_surfaces(model)
