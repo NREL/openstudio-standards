@@ -143,8 +143,7 @@ class NECB2011 < Standard
 
 
 
-  # Created this method so that additional methods can be addded for bulding the prototype model in later
-  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
+  # This method is a wrapper to create the 16 archetypes easily.
   def model_create_prototype_model(template:,
                             building_type:,
                             epw_file:,
@@ -157,7 +156,12 @@ class NECB2011 < Standard
     osm_model_path = File.absolute_path(File.join(__FILE__,'..','..','..',"necb/#{template}/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
-    return model_apply_standard(model: model, epw_file: epw_file, x_scale: x_scale,  y_scale: y_scale, z_scale: z_scale, sizing_run_dir: sizing_run_dir )
+    return model_apply_standard( model: model,
+                                 epw_file: epw_file,
+                                 x_scale: x_scale,
+                                 y_scale: y_scale,
+                                 z_scale: z_scale,
+                                 sizing_run_dir: sizing_run_dir )
   end
 
 
@@ -176,26 +180,52 @@ class NECB2011 < Standard
 
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
+    #validate that model has information required.
     return false unless validate_initial_model(model)
+
+    #Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
+
+    #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
+
+    #Set simulation start day to be consistent.
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
+
+    #Set climate data.
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
     model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
-    set_occ_sensor_spacetypes(model, @space_type_map)
-    model_add_loads(model) # standards candidate
-    model_apply_infiltration_standard(model) # standards candidate
-    model_modify_surface_convection_algorithm(model) # standards
-    model_add_constructions(model, 'FullServiceRestaurant', climate_zone) # prototype candidate
-    apply_standard_construction_properties(model) # standards candidate
-    apply_standard_window_to_wall_ratio(model) # standards candidate
-    apply_standard_skylight_to_roof_ratio(model) # standards candidate
-    model_create_thermal_zones(model, @space_multiplier_map) # standards candidate
-    # For some building types, stories are defined explicitly
 
+    #Add Occ sensor schedule adjustments where needed.
+    set_occ_sensor_spacetypes(model, @space_type_map)
+
+    #Set Loads/Schedules
+    model_add_loads(model)
+
+    #Add Infiltration
+    model_apply_infiltration_standard(model)
+
+    #Modify_surface_convection_algorithm
+    model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+    model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+
+    #Add default constructions
+    model_add_constructions(model)
+    apply_standard_construction_properties(model)
+
+    #Set FDWR and SSR
+    apply_standard_window_to_wall_ratio(model)
+    apply_standard_skylight_to_roof_ratio(model)
+
+    #Set up thermal zones for initial sizing run.
+    model_create_thermal_zones(model, @space_multiplier_map)
+
+
+    #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
       raise("sizing run 0 failed!")
     end
+
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
     model_add_swh(model, climate_zone, epw_file)
@@ -204,6 +234,8 @@ class NECB2011 < Standard
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
     model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
     model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
+
+    #Do a second sizing run for the plant and loops.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
       raise("sizing run 1 failed!")
     end

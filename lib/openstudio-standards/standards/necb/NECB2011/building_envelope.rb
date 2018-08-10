@@ -404,7 +404,7 @@ class NECB2011
   # @param building_type [String] the type of building
   # @param climate_zone [String] the name of the climate zone the building is in
   # @return [Bool] returns true if successful, false if not
-  def model_add_constructions(model, building_type, climate_zone)
+  def model_add_constructions(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
 
     # Assign construction to adiabatic construction
@@ -412,15 +412,14 @@ class NECB2011
     assign_contruction_to_adiabatic_surfaces(model)
     # The constructions lookup table uses a slightly different list of
     # building types.
-    apply_building_default_constructionset(building_type, climate_zone, model)
+    apply_building_default_constructionset(model)
     # Make a construction set for each space type, if one is specified
     #apply_default_constructionsets_to_spacetypes(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
     return true
   end
 
-  def apply_building_default_constructionset(building_type, climate_zone, model)
-    @lookup_building_type = model_get_lookup_name(building_type)
+  def apply_building_default_constructionset(model)
 
     bldg_def_const_set = model_add_construction_set_from_osm(model: model)
     model.getBuilding.setDefaultConstructionSet(bldg_def_const_set)
