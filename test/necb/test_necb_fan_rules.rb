@@ -2,7 +2,7 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class HVACEfficienciesTest < MiniTest::Test
+class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -10,7 +10,8 @@ class HVACEfficienciesTest < MiniTest::Test
 
   # Test to validate variable volume fan performance curves and pressure rise
   def test_NECB2011_vav_fan_rules
-    standard_NECB2011 = Standard.build('NECB2011')
+    template = "NECB2011"
+    standard_NECB2011 = Standard.build(template)
     output_folder = "#{File.dirname(__FILE__)}/output/vavfan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -64,7 +65,7 @@ class HVACEfficienciesTest < MiniTest::Test
         ifan.setMaximumFlowRate(flow_rate)
       end
       # run the standards
-      result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+      result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
       # Save the model
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
       assert_equal(true, result, "test_vavfan_rules: Failure in Standards for #{name}")
@@ -116,7 +117,8 @@ class HVACEfficienciesTest < MiniTest::Test
   
   # Test to validate constant volume fan pressure rise and total efficiency
   def test_NECB2011_const_vol_fan_rules
-    standard_NECB2011 = Standard.build('NECB2011')
+    template = "NECB2011"
+    standard_NECB2011 = Standard.build(template)
     output_folder = "#{File.dirname(__FILE__)}/output/const_vol_fan_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -144,7 +146,7 @@ class HVACEfficienciesTest < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
     assert_equal(true, result, "test_const_vol_fan_rules: Failure in Standards for #{name}")
@@ -174,10 +176,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
   end
 
-  def run_the_measure(model, sizing_dir)
+  def run_the_measure(model, template, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB2011'
+      building_vintage = template
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)
