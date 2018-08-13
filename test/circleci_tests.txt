@@ -76,3 +76,4 @@ necb/test_necb_weather.rb
 necb/test_necb_qaqc_single.rb
 necb/test_necb_schedules.rb
 necb/test_necb_pumppower_rules.rb
+necb/test_necb_shw.rb
