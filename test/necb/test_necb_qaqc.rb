@@ -60,7 +60,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   processess =  (Parallel::processor_count * 2.0 / 3.0).round
   puts "processess #{processess}"
-  Parallel.map(run_argument_array, in_processes: processess) { |info|
+  Parallel.map(run_argument_array, in_processes: processess,  progress: "Progress :") { |info|
     test_name = "#{info['building']}_#{info['epw']}"
     puts info
     puts "creating #{test_name}"
