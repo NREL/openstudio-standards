@@ -71,9 +71,18 @@ class SHW_test < Minitest::Test
               day_scheds << day_sched
             end
             water_equip_def = water_equip[0].waterUseEquipmentDefinition
+            digit_exponent = 10**7
+            last_digit_check = water_equip_def.peakFlowRate*digit_exponent
+            if last_digit_check >= 10
+              digit_exponent = 10**6
+            end
+            exponent_mult =(10**12)*digit_exponent
+            last_digit_check = (water_equip_def.peakFlowRate*exponent_mult).to_i
+            water_flow_out = last_digit_check.to_f/exponent_mult
+            check_val = water_equip_def.peakFlowRate
             equip_info = {
                 "equip_name" => water_equip[0].name,
-                "flow_rate_m3_per_s" => water_equip_def.peakFlowRate,
+                "flow_rate_m3_per_s" => water_flow_out,
                 "day_schedules" => day_scheds
             }
             demand_equip_info << equip_info

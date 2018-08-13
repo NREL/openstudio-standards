@@ -5,9 +5,9 @@ class NECB2011
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
     if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      shw_pump_head = auto_size_shw_pump_head(model, true)
+      shw_pump_head = auto_size_shw_pump_head(model, default: true)
     else
-      shw_pump_head = auto_size_shw_pump_head(model, false)
+      shw_pump_head = auto_size_shw_pump_head(model, default: false)
     end
     shw_pump_motor_eff = 0.9
 
@@ -172,7 +172,7 @@ class NECB2011
 
   # This calculates the volume and capacity of one mixed tank that is assumed to service all shw in the building
   # u is the tank insulation in W/(m^2*K), height_to_radius is the ratio of tank radius to tank height and is dimensionless
-  def auto_size_shw_capacity(model, u = 0.45, height_to_radius = 2)
+  def auto_size_shw_capacity(model, u: 0.45, height_to_radius: 2)
     peak_flow_rate = 0
     shw_space_types = []
     space_peak_flows = []
@@ -375,7 +375,7 @@ class NECB2011
   # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
   # Chris Kirney 2018-07-27.
-  def auto_size_shw_pump_head(model, default = true, pipe_dia_m = 0.01905, kin_visc_SI = 0.0000004736, density_SI = 983, pipe_rough_m = 0.0000015)
+  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.0000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
     shw_spaces = []
     building_centre = Array.new(3,0)
