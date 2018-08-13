@@ -4425,23 +4425,29 @@ class Standard
   end
 
   def validate_initial_model(model)
+    is_valid = true
     if model.getBuildingStorys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
+      is_valid = false
     end
     if model.getThermalZones.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
+      is_valid = false
     end
 
     if @space_type_map.nil? || @space_type_map.empty?
       @space_type_map = get_space_type_maps_from_model(model)
       if @space_type_map.nil? || @space_type_map.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
+        is_valid = false
       else
         @space_type_map = @space_type_map.sort.to_h
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
@@ -4459,6 +4465,7 @@ class Standard
     unless @space_multiplier_map.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
     end
+    return is_valid
   end
 
 
@@ -4594,7 +4601,6 @@ class Standard
     # Check that the model loaded successfully
     if model.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
-      raise('hell')
       return false
     end
     model = model.get

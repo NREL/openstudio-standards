@@ -9,11 +9,10 @@ class NECBRegressionHelper < Minitest::Test
   end
 
 
-  def create_model_and_regression_test(building_type:,
-                                       epw_file:,
+  def create_model_and_regression_test(epw_file:,
                                        template:,
                                        performQAQC: false,
-                                       osm_model_path:
+                                       building_type:
   )
     begin
       diffs = []
@@ -27,11 +26,14 @@ class NECBRegressionHelper < Minitest::Test
         Dir.mkdir(run_dir)
       end
 
-      model = Standard.build("#{template}").model_create_prototype_model(climate_zone: 'NECB HDD Method',
-                                                                                          epw_file: epw_file,
-                                                                                          sizing_run_dir: run_dir,
-                                                                         osm_model_path: osm_model_path)
-
+      model = Standard.build("#{template}").model_create_prototype_model( epw_file: epw_file,
+                                                                                sizing_run_dir: run_dir,
+                                                                                template: template,
+                                                                                building_type: building_type)
+      print model.class.name
+      unless model.instance_of?( OpenStudio::Model::Model )
+        puts "Creation of Model for #{osm_model_path} failed. Please check output for errors."
+      end
       #Save osm file.
       filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
       FileUtils.mkdir_p(File.dirname(filename))
@@ -65,7 +67,7 @@ class NECBRegressionHelper < Minitest::Test
     FileUtils.rm(diff_file) if File.exists?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))
-      msg = "There were #{diffs.size} differences/errors in #{building_type} #{template} #{epw_file} :\n#{diffs.join("\n")}"
+      msg = "There were #{diffs.size} differences/errors in #{osm_file} #{template} #{epw_file} :\n#{diffs.join("\n")}"
       return false, msg
     else
       return true, nil
