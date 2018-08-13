@@ -217,7 +217,10 @@ def eleminate_duplicate_objs(model, model_obj_type = "OS:Material")
   grouped_objs.each {|key, dup_array|
     dup_array.each_with_index {|object, index |
       next if index == 0
-      next unless object.key?('Name')
+       unless object.key?('Name')
+         puts "Skipping ModelObject of type [#{model_obj_type}] With data [#{object.inspect}] does not have a field called 'Name'"
+         next
+       end
       name = object['Name']
       # puts "object: [#{object}]"
       puts "object['Name']: [#{object['Name']}]"
