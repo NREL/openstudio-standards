@@ -283,18 +283,24 @@ def eleminate_duplicate_objs(model, model_obj_type) # = "OS:Material")
   # puts JSON.pretty_generate(grouped_mats)
 end
 
-# read a sample model called fsr model present within the test/necb/models/fsr.osm
-translator = OpenStudio::OSVersion::VersionTranslator.new
-osm_path = File.join(File.dirname(__FILE__), 'models', 'fsr.osm')
-path = OpenStudio::Path.new(osm_path)
-model = translator.loadModel(path)
-model = model.get
 
-prototype_creator = Standard.build("NECB2011")
+
+class TestRemoveDuplicateModelObjects < CreateDOEPrototypeBuildingTest
+
+  def test_remove_duplicate_model_objects
+    # read a sample model called fsr model present within the test/necb/models/fsr.osm
+    translator = OpenStudio::OSVersion::VersionTranslator.new
+    osm_path = File.join(File.dirname(__FILE__), 'models', 'fsr.osm')
+    path = OpenStudio::Path.new(osm_path)
+    model = translator.loadModel(path)
+    model = model.get
+
+    old_number_of_objects = model.getModelObjects.length
+    prototype_creator = Standard.build("NECB2011")
 
 # add duplicate constructions and materials for testing purposes
-default_cons_osm = File.join(File.absolute_path(File.dirname(__FILE__)),'..' , '..', 'lib','openstudio-standards','standards','necb','necb_2011','data','construction_defaults.osm')
-puts default_cons_osm
+    default_cons_osm = File.join(File.absolute_path(File.dirname(__FILE__)),'..' , '..', 'lib','openstudio-standards','standards','necb','necb_2011','data','construction_defaults.osm')
+    puts default_cons_osm
 
 # add duplicate construction sets
 # prototype_creator.model_add_construction_set_from_osm(:model =>model, :osm_path => default_cons_osm)
@@ -314,32 +320,38 @@ model.getModelObjects.sort.each{|obj|
 p obj_types.uniq.sort.reverse
 =end
 
-new_model = model
+    new_model = model
 
 # eleminate dplicate Material objects
-obj_types = [
- "OS:Material",
- "OS:Material:NoMass",
- "OS:WindowMaterial:SimpleGlazingSystem",
- "OS:WindowMaterial:Glazing",
- "OS:WindowMaterial:Gas",
- "OS:StandardsInformation:Material"
-]
+    obj_types = [
+        "OS:Material",
+        "OS:Material:NoMass",
+        "OS:WindowMaterial:SimpleGlazingSystem",
+        "OS:WindowMaterial:Glazing",
+        "OS:WindowMaterial:Gas",
+        "OS:StandardsInformation:Material"
+    ]
 
-obj_types.each {|model_obj_type|
-  new_model = eleminate_duplicate_objs(new_model, model_obj_type)
-}
+    obj_types.each {|model_obj_type|
+      new_model = eleminate_duplicate_objs(new_model, model_obj_type)
+    }
 
 # eleminate dplicate Construction objects
-obj_types = [
-  "OS:Construction",
-  "OS:DefaultSurfaceConstructions",
-  "OS:DefaultSubSurfaceConstructions",
-  "OS:DefaultConstructionSet",
-  "OS:StandardsInformation:Construction",
-  ]
-obj_types.each {|model_obj_type|
-  new_model = eleminate_duplicate_objs(new_model, model_obj_type)
-}
+    obj_types = [
+        "OS:Construction",
+        "OS:DefaultSurfaceConstructions",
+        "OS:DefaultSubSurfaceConstructions",
+        "OS:DefaultConstructionSet",
+        "OS:StandardsInformation:Construction",
+    ]
+    obj_types.each {|model_obj_type|
+      new_model = eleminate_duplicate_objs(new_model, model_obj_type)
+    }
 
 
+    new_number_of_objects = new_model.getModelObjects.length
+
+    puts "Number of objects removed: #{old_number_of_objects - new_number_of_objects}"
+    assert((old_number_of_objects - new_number_of_objects > 0))
+  end
+end
