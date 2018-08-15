@@ -77,3 +77,4 @@ necb/test_necb_qaqc_single.rb
 necb/test_necb_schedules.rb
 necb/test_necb_pumppower_rules.rb
 necb/test_necb_shw.rb
+necb/test_remove_duplicate_materials_and_constructions.rb
