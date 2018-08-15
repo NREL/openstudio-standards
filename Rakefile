@@ -156,6 +156,14 @@ namespace :test do
       end
     end
 
+    desc 'Print the test timing'
+    task 'print_times' do |t|
+      Dir['test/reports/*.xml'].each do |xml|
+        puts File.read(xml)
+        puts '='*30
+      end
+    end
+
   end
 end
 

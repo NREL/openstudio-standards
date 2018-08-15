@@ -29,6 +29,10 @@ jobs:
           name: Summarize test times
           command: |
             bundle exec rake test:times
+      - run:
+          name: Print test XML
+          command: |
+            bundle exec rake test:print_times
       - store_test_results:
           path: test/reports/
       - store_artifacts:
