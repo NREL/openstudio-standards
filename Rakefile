@@ -139,6 +139,7 @@ namespace :test do
       File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
         html.puts '<table><tr><th>File Name</th><th>Time (min)</th></tr>'
         files_to_times.each do |f, time_s|
+          puts "[#{time_s}]\t\t#{f}"
           s = (time_s / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
@@ -149,18 +150,11 @@ namespace :test do
       File.open("#{Dir.pwd}/timing/test_by_name.html", 'w') do |html|
         html.puts '<table><tr><th>Test Name</th><th>Time (min)</th></tr>'
         tests_to_times.each do |f, time_s|
+          puts "[#{time_s}]\t\t#{f}"
           s = (time_s / 60).round(1) # convert time from sec to min
           html.puts "<tr><td>#{f}</td><td>#{s}</td></tr>"
         end
         html.puts '</table>'
-      end
-    end
-
-    desc 'Print the test timing'
-    task 'print_times' do |t|
-      Dir['test/reports/*.xml'].each do |xml|
-        puts File.read(xml)
-        puts '='*30
       end
     end
 
