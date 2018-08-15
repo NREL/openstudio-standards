@@ -6,7 +6,7 @@ require 'open3'
 
 TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
 TestOutputFolder = File.join(File.dirname(__FILE__), 'local_test_output')
-ProcessorsUsed = ( Parallel.processor_count * 2 / 3 ).floor
+ProcessorsUsed = ( 40).round
 
 class String
   # colorization
@@ -58,6 +58,9 @@ end
 
 class RunAllTests< Minitest::Test
   def test_all()
+    require_relative './helpers/ci_test_generator'
+    CITestGenerator::generate(true)
+
     @full_file_list = nil
     FileUtils.rm_rf(TestOutputFolder)
     FileUtils.mkpath(TestOutputFolder)
