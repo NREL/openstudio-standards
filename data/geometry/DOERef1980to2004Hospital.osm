@@ -1506,10 +1506,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  9.144, 7.62, 21.3415,                   !- X,Y,Z Vertex 1 {m}
-  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 2 {m}
-  0, 7.622, 21.3415,                      !- X,Y,Z Vertex 3 {m}
-  0, 7.62, 21.3415;                       !- X,Y,Z Vertex 4 {m}
+  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 1 {m}
+  9.144, 15.24, 21.3415,                  !- X,Y,Z Vertex 2 {m}
+  0, 15.24, 21.3415,                      !- X,Y,Z Vertex 3 {m}
+  0, 7.622, 21.3415;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Connection,
   {756cc636-3a51-4938-bf3f-67bf5be6d00b}, !- Handle
