@@ -6,7 +6,7 @@ require 'open3'
 
 TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
 TestOutputFolder = File.join(File.dirname(__FILE__), 'local_test_output')
-ProcessorsUsed = ( 40).round
+ProcessorsUsed = ( Parallel.processor_count * 2 / 3 ).floor
 
 class String
   # colorization
