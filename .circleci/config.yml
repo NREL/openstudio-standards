@@ -29,6 +29,10 @@ jobs:
           name: Summarize test times
           command: |
             bundle exec rake test:times
+      - run:
+          name: Copy test result Timings
+          command: |
+            cp -R test/reports timing/
       - store_test_results:
           path: test/reports/
       - store_artifacts:
