@@ -2562,6 +2562,10 @@ class NECB2011
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
+        # Check if the NECB HVAC system selection type name was found in the standards data
+        if necb_hvac_system_selection_type.nil?
+          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+        end
       end
 
       # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
@@ -2577,75 +2581,57 @@ class NECB2011
       end
 
       # identify space-system_index and assign the right NECB system type 1-7.
+
+      # Check if there is an hvac system selection category associated with the space.
+      if necb_hvac_system_selection_type.nil?
+        raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+      end
+
       system = nil
       is_dwelling_unit = false
-      case necb_hvac_system_selection_type
-        when nil
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        when 0, '- undefined -'
-          # These are spaces are undefined...so they are unconditioned and have no loads other than infiltration and no systems
+      is_wildcard = nil
+
+      # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
+      necb_hvac_system_selection_table = []
+      necb_hvac_system_selection_table = standards_data['necb_hvac_system_selection_type']['table']
+
+      # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
+      # main selection loop
+      necb_hvac_system_selection_cooling_desg_load = 0
+      unless cooling_design_load.nil?
+        necb_hvac_system_selection_cooling_desg_load = cooling_design_load
+      end
+
+      # Make sure that we loaded the necb_hvac_system_selection_type.json file properly and that the information is stored in standards_data
+      if necb_hvac_system_selection_table.empty?
+        raise("Could not find necb system selection type table. Please make sure that the necb_havc_system_selection_type.json file is present")
+      else
+        # Loop through the NECB HVAC system selection table entries read from necb_hvac_system_selection_type table.JSON
+        # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
+        # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
+        necb_hvac_system_selection_table.each do |necb_hvac_system_select|
+          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
+            system = necb_hvac_system_select['system_type']
+            is_dwelling_unit = necb_hvac_system_select['dwelling']
+            if necb_hvac_system_select['necb_hvac_system_selection_type']=='Wildcard'
+              is_wildcard = true
+            end
+            break
+          end
+        end
+      end
+
+      # If the previous loop could not find an appropriate NECB HVAC system selection type then "system" will be defined by either nil, 0, or 'Wildcard'.
+      # If 'Wildcard' then the system remains at nil but is_wildard is true and the HVAC is dealt with elsewhere
+      # If 0, then the system will be treated as - undefined -.  Otherwise no system has been chosen so an error will be returned.
+      if system.nil? and is_wildcard.nil?
+        if necb_hvac_system_selection_type == 0
           system = 0
-        when 'Assembly Area' # Assembly Area.
-          system = if number_of_stories <= 4
-                     3
-                   else
-                     6
-                   end
-
-        when 'Automotive Area'
-          system = 4
-
-        when 'Data Processing Area'
-          system = if cooling_design_load > 20 # KW...need a sizing run.
-                     2
-                   else
-                     1
-                   end
-
-        when 'General Area' # [3,6]
-          system = if number_of_stories <= 2
-                     3
-                   else
-                     6
-                   end
-
-        when 'Historical Collections Area' # [2],
-          system = 2
-
-        when 'Hospital Area' # [3],
-          system = 3
-
-        when 'Indoor Arena' # ,[7],
-          system = 7
-
-        when 'Industrial Area' #  [3] this need some thought.
-          system = 3
-
-        when 'Residential/Accomodation Area' # ,[1], this needs some thought.
-          system = 1
-          is_dwelling_unit = true
-
-        when 'Sleeping Area' # [3],
-          system = 3
-          is_dwelling_unit = true
-
-        when 'Supermarket/Food Services Area' # [3,4],
-          system = 3
-
-        when 'Supermarket/Food Services Area - vented'
-          system = 4
-
-        when 'Warehouse Area'
-          system = 4
-
-        when 'Warehouse Area - refrigerated'
-          system = 5
-        when 'Wildcard'
-          system = nil
-          is_wildcard = true
         else
           raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
+        end
       end
+
       # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
       horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
       # dump all info into an array for debugging and iteration.
