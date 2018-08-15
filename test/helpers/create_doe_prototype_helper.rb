@@ -23,22 +23,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
-    # Make a file to store the model comparisons
-    @results_csv_file = "#{@test_dir}/prototype_buildings_results.csv"
-    # Add a header row on file creation
-    if !File.exist?(@results_csv_file)
-      File.open(@results_csv_file, 'a') do |file|
-        file.puts "building_type,template,climate_zone,fuel_type,end_use,legacy_val,osm_val,percent_error,difference,absolute_percent_error"
-      end
-    end
-    # Make a file that combines all the run logs
-    @combined_results_log = "#{@test_dir}/prototype_buildings_run.log"
-    if !File.exist?(@combined_results_log)
-      File.open(@combined_results_log, 'a') do |file|
-        file.puts "Started @ #{Time.new}"
-      end
-    end    
-    
   end
 
   # Dynamically create a test for each building type/template/climate zone
@@ -121,6 +105,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       idf_path = OpenStudio::Path.new(idf_path_string)            
       osm_path_string = "#{run_dir}/#{model_name}.osm"
       osm_path = OpenStudio::Path.new(osm_path_string)
+      sql_path_string = "#{full_sim_dir}/run/eplusout.sql"
+      sql_path = OpenStudio::Path.new(sql_path_string)
       truth_osm_path_string = "#{Dir.pwd}/regression_models/#{model_name}.osm"
       truth_osm_path = OpenStudio::Path.new(truth_osm_path_string)
 
@@ -156,7 +142,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             "Cooling Tower Fan Electric Power",
             "Cooling Tower Fan Electric Energy"
           ]
-          BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
+          # BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
 
           # Save the model
           model.save(osm_path, true)
@@ -187,12 +173,120 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
 
       end           
-            
-                      
-            
-      # Compare the model against the regression model, if requested.
-      diffs = []
+
+      # Compare the model and model results, if requested
+      model_diffs = []
+      result_diffs = []
       if compare_results
+
+        # Load the model and sql file from disk if not already in memory
+        if model.nil?
+          model = prototype_creator.safe_load_model(osm_path_string)
+          sql_file = OpenStudio::SqlFile.new(sql_path)
+          model.setSqlFile(sql_file)
+        end
+
+        ### Compare simulation results ###
+
+        acceptable_error_percentage = 0.0
+
+        # Get the legacy simulation results
+        legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+        if legacy_values.nil?
+          result_diffs << "Could not find legacy simulation results for #{building_type} #{template} #{climate_zone}, cannot compare results."
+        else
+          # Store the comparisons for viewing
+          results_comparison = []
+          results_comparison << ['Building Type', 'Template', 'Climate Zone', 'Fuel Type', 'End Use', 'Legacy Value', 'Current Value', 'Percent Error', 'Difference']
+
+          # Get the current simulation results
+          current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+
+          # Get the osm values for all fuel type/end use pairs
+          # and compare to the legacy simulation results
+          total_legacy_energy = 0.0
+          total_current_energy = 0.0
+          total_legacy_water = 0.0
+          total_current_water = 0.0
+          current_values.each_key do |end_use_fuel_type|
+            end_use = end_use_fuel_type.split('|')[0]
+            fuel_type = end_use_fuel_type.split('|')[1]
+
+            legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
+            current_val = current_values["#{end_use}|#{fuel_type}"]
+
+            # Add the energy to the total
+            if fuel_type == 'Water'
+              total_legacy_water += legacy_val
+              total_current_water += current_val
+            else
+              total_legacy_energy += legacy_val
+              total_current_energy += current_val
+            end
+
+            # Calculate the error and check if less than acceptable_error_percentage
+            percent_error = nil
+            add_to_results_comparison = true
+            if current_val > 0 && legacy_val > 0
+              # If both
+              percent_error = ((current_val - legacy_val)/legacy_val) * 100
+              if percent_error.abs > acceptable_error_percentage
+                result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{current_val}, #{legacy_val})"
+              end
+            elsif current_val > 0 && legacy_val.abs < 1e-6
+              # The current model has a fuel/end use that the legacy model does not
+              percent_error = 1000
+              result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = current model has extra fuel/end use that legacy model does not (#{current_val})"
+            elsif current_val.abs < 1e-6 && legacy_val > 0
+              # The current model has a fuel/end use that the legacy model does not
+              percent_error = 1000
+              result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = current model is missing a fuel/end use that legacy model has (#{legacy_val})"
+            else
+              # Both current model and legacy model are == 0 for this fuel/end use, no error
+              percent_error = 0
+              add_to_results_comparison = false
+            end
+
+            if add_to_results_comparison
+              results_comparison << [building_type, template, climate_zone, fuel_type, end_use, legacy_val.round(2), current_val.round(2), percent_error.round(2), (legacy_val-current_val).abs.round(2)]
+            end
+          end
+
+          # Calculate the overall energy error
+          total_energy_percent_error = nil
+          if total_current_energy > 0 && total_legacy_energy > 0
+            # If both
+            total_energy_percent_error = ((total_current_energy - total_legacy_energy)/total_legacy_energy) * 100
+            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+          elsif total_current_energy > 0 && total_legacy_energy == 0
+            # The osm has a fuel/end use that the legacy idf does not
+            total_energy_percent_error = 1000
+            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm has extra fuel/end use that legacy idf does not (#{total_current_energy})"
+          elsif total_current_energy == 0 && total_legacy_energy > 0
+            # The osm has a fuel/end use that the legacy idf does not
+            total_energy_percent_error = 1000
+            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = osm is missing a fuel/end use that legacy idf has (#{total_legacy_energy})"
+          else
+            # Both osm and legacy are == 0 for, no error
+            total_energy_percent_error = 0
+            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
+          end
+
+          results_comparison << [building_type, template, climate_zone, 'Total Energy', 'Total', total_legacy_energy.round(2), total_current_energy.round(2), total_energy_percent_error.round(2), (total_legacy_energy-total_current_energy).abs.round(2)]
+
+        end
+
+        # Write the results diffs to a file
+        if results_comparison.size > 0
+          diff_file_path = "#{run_dir}/compare_results.csv"
+          CSV.open(diff_file_path, 'w') do |csv|
+            results_comparison.each do |d|
+              csv << d
+            end
+          end
+        end
+
+        ### Compare models object by object ###
 
         # Load the model from disk if not already in memory
         if model.nil?
@@ -202,16 +296,18 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         # Load the truth model from disk and compare to the newly-created model
         if File.exist?(truth_osm_path_string)
           truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
-          diffs = compare_osm_files(truth_model, model)
+          # Remove unused resources to make comparison cleaner
+          prototype_creator.model_remove_unused_resource_objects(truth_model)
+          model_diffs = compare_osm_files(truth_model, model)
         else
-          diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
+          model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
         end
 
-        # Write the diffs to a file
-        if diffs.size > 0
-          diff_file_path = "#{run_dir}/regression.log"
+        # Write the model diffs to a file
+        if model_diffs.size > 0
+          diff_file_path = "#{run_dir}/compare_models.log"
           File.open(diff_file_path, 'w') do |file|
-            diffs.each do |d|
+            model_diffs.each do |d|
               file.puts d
             end
           end
@@ -226,20 +322,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       log_file_path = "#{run_dir}/openstudio-standards.log"
       messages = log_messages_to_file(log_file_path, debug)
       errors = get_logs(OpenStudio::Error)
-            
-      # Copy errors to combined log file
-      File.open(@combined_results_log, 'a') do |file|
-        file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
-        messages.each do |message|
-          file.puts message
-        end
-      end
 
-      # Add any regression differences to the errors
-      errors += diffs
-            
+      # Add any comparison differences to the errors
+      # errors += model_diffs
+      # errors += result_diffs
+
       # Assert if there were any errors
-      assert(errors.size == 0, errors.reverse)
+      assert(errors.size == 0, errors.reverse.join("\n"))
 
     end
   end
