@@ -1,78 +1,67 @@
 require 'fileutils'
+module CITestGenerator
 
-def file_out_dir
-  File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
-end
+  @@ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "circleci_tests.txt"))
+  @@local_ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "local_circleci_tests.txt"))
 
-def doe_dir
-  File.absolute_path(File.join(__FILE__,"..","..","doe_prototype"))
-end
+  def self.file_out_dir
+    File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
+  end
 
-def cleanup_output_folders
-  dirname = File.join(file_out_dir(), 'output')
-  if File.directory?(dirname)
-    puts "Removing hvac output directory : [#{dirname}]"
-    FileUtils.rm_r(dirname)
+  def self.doe_dir
+    File.absolute_path(File.join(__FILE__,"..","..","doe_prototype"))
   end
-  necb_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","necb", 'output'))
-  if File.directory?(necb_out_dirname)
-    puts "Removing necb output directory : [#{necb_out_dirname}]"
-    FileUtils.rm_r(necb_out_dirname)
-  end
-  nrel_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","..", 'output'))
-  if File.directory?(nrel_out_dirname)
-    puts "Removing nrel output directory : [#{nrel_out_dirname}]"
-    FileUtils.rm_r(nrel_out_dirname)
-  end
-  if File.directory?(file_out_dir())
-    puts "Removing and recreating ci_test_files directory : [#{file_out_dir()}]"
-    FileUtils.rm_r(file_out_dir())
-  end
-  FileUtils.mkdir_p(file_out_dir())
-end
 
-# copied and modified from https://github.com/rubyworks/facets/blob/master/lib/core/facets/string/snakecase.rb
-class String
-  def snek
-    #gsub(/::/, '/').
-    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-        gsub(/([a-z\d])([A-Z])/,'\1_\2').
-        tr('-', '_').
-        gsub(/\s/, '_').
-        gsub(/__+/, '_').
-        gsub(/#+/, '').
-        gsub(/\"/, '').
-        downcase
+  def self.cleanup_output_folders
+    dirname = File.join(file_out_dir(), 'output')
+    if File.directory?(dirname)
+      puts "Removing hvac output directory : [#{dirname}]"
+      FileUtils.rm_r(dirname)
+    end
+    necb_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","necb", 'output'))
+    if File.directory?(necb_out_dirname)
+      puts "Removing necb output directory : [#{necb_out_dirname}]"
+      FileUtils.rm_r(necb_out_dirname)
+    end
+    nrel_out_dirname = File.absolute_path(File.join(__FILE__,"..","..","..", 'output'))
+    if File.directory?(nrel_out_dirname)
+      puts "Removing nrel output directory : [#{nrel_out_dirname}]"
+      FileUtils.rm_r(nrel_out_dirname)
+    end
+    if File.directory?(file_out_dir())
+      puts "Removing and recreating ci_test_files directory : [#{file_out_dir()}]"
+      FileUtils.rm_r(file_out_dir())
+    end
+    FileUtils.mkdir_p(file_out_dir())
   end
-end
 
-def generate_ci_bldg_test_files
-  templates = ['NECB2011', 'NECB2015']
-  building_types = [
-      "FullServiceRestaurant",
-      "HighriseApartment",
-      "Hospital",
-      "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "RetailStripmall",
-      "SecondarySchool",
-      "SmallHotel",
-      "SmallOffice",
-      "Warehouse"
-  ]
-  fuel_types = ['gas', 'electric']
-  out_dir = file_out_dir()
-  templates.each {|template|
-    building_types.each {|building_type|
-      fuel_types.each {|fuel_type|
-        filename = File.join(out_dir,"test_necb_bldg_#{building_type}_#{template}_#{fuel_type}.rb")
-        file_string =%Q{
+  def self.generate_ci_bldg_test_files
+    templates = ['NECB2011', 'NECB2015']
+    building_types = [
+        "FullServiceRestaurant",
+        "HighriseApartment",
+        "Hospital",
+        "LargeHotel",
+        "LargeOffice",
+        "MediumOffice",
+        "MidriseApartment",
+        "Outpatient",
+        "PrimarySchool",
+        "QuickServiceRestaurant",
+        "RetailStandalone",
+        "RetailStripmall",
+        "SecondarySchool",
+        "SmallHotel",
+        "SmallOffice",
+        "Warehouse"
+    ]
+    fuel_types = ['gas', 'electric']
+    out_dir = file_out_dir()
+    templates.each {|template|
+      building_types.each {|building_type|
+        fuel_types.each {|fuel_type|
+          filename = File.join(out_dir,"test_necb_bldg_#{building_type}_#{template}_#{fuel_type}.rb")
+          file_string =%Q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 require_relative '../helpers/compare_models_helper'
@@ -92,23 +81,28 @@ class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
   end
 end
 }
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
-end
+  end
 
-def write_file_path_to_ci_tests_txt
-  circleci_tests_txt_path = File.absolute_path(File.join(__FILE__, "..", "..", "circleci_tests.txt"))
-  #puts circleci_tests_txt_path
+  def self.write_file_path_to_ci_tests_txt(local_run)
+    circleci_tests_txt_path = @@ci_test_path
 
-  # get the content of circleci_tests.txt file
-  files = IO.readlines(circleci_tests_txt_path)
-  new_file_content = files.clone
+    if local_run
+      FileUtils.copy(@@ci_test_path, @@local_ci_test_path)
+      circleci_tests_txt_path = @@local_ci_test_path
+    end
+    #puts circleci_tests_txt_path
 
-  # remove lines which contains the test_necb_bldg_*.rb
-  files.each_with_index {|line, i|
-    if  line.include?("necb/test_necb_bldg_") or \
+    # get the content of circleci_tests.txt file
+    files = IO.readlines(circleci_tests_txt_path)
+    new_file_content = files.clone
+
+    # remove lines which contains the test_necb_bldg_*.rb
+    files.each_with_index {|line, i|
+      if  line.include?("necb/test_necb_bldg_") or \
         line.include?("necb/test_necb_hvac") or \
         line.include?("doe_prototype/test_add_hvac_systems") or \
         line.include?("doe_prototype/test_full_service_restaurant.rb") or \
@@ -130,63 +124,63 @@ def write_file_path_to_ci_tests_txt
         line.include?("doe_prototype/test_warehouse.rb") or \
         line.include?("ci_test_files/") # remove all previously written ci_test_files
 
-      new_file_content = new_file_content - [files[i]]
-    end
-  }
-
-  # overwrite circleci_tests.txt without the test_necb_bldg_*.rb lines
-  File.open(circleci_tests_txt_path, 'w') { |f|
-    new_file_content.each {|line|
-      f.puts line
+        new_file_content = new_file_content - [files[i]]
+      end
     }
-  }
 
-  # add the new nrcan files generated by this script to the circleci_tests.txt
-  File.open(circleci_tests_txt_path, 'a') { |f|
-    files_path = File.expand_path(File.join(__FILE__,"..","..","ci_test_files", "test_necb_*.rb"))
-    puts files_path
-    Dir[files_path].sort.each {|path|
-      f.puts(path.to_s.gsub(/^.+(openstudio-standards\/test\/)/,''))
+    # overwrite circleci_tests.txt without the test_necb_bldg_*.rb lines
+    File.open(circleci_tests_txt_path, 'w') { |f|
+      new_file_content.each {|line|
+        f.puts line
+      }
     }
-  }
 
-  # add the new doe files generated by this script to the circleci_tests.txt
-  File.open(circleci_tests_txt_path, 'a') { |f|
-    files_path = File.expand_path(File.join(__FILE__,"..","..","ci_test_files", "doe_test*.rb"))
-    puts files_path
-    Dir[files_path].sort.each {|path|
-      f.puts(path.to_s.gsub(/^.+(openstudio-standards\/test\/)/,''))
+    # add the new nrcan files generated by this script to the circleci_tests.txt
+    File.open(circleci_tests_txt_path, 'a') { |f|
+      files_path = File.expand_path(File.join(__FILE__,"..","..","ci_test_files", "test_necb_*.rb"))
+      puts files_path
+      Dir[files_path].sort.each {|path|
+        f.puts(path.to_s.gsub(/^.+(openstudio-standards\/test\/)/,''))
+      }
     }
-  }
-end
 
-def copy_model_files_for_hvac_tests
-  out_dir = file_out_dir()
-  model_dir = File.join(out_dir, 'models')
-  FileUtils.mkpath(model_dir)
-  FileUtils.copy_entry( File.absolute_path(File.join(__dir__, "..", "necb", "models")), model_dir)
-end
+    # add the new doe files generated by this script to the circleci_tests.txt
+    File.open(circleci_tests_txt_path, 'a') { |f|
+      files_path = File.expand_path(File.join(__FILE__,"..","..","ci_test_files", "doe_test*.rb"))
+      puts files_path
+      Dir[files_path].sort.each {|path|
+        f.puts(path.to_s.gsub(/^.+(openstudio-standards\/test\/)/,''))
+      }
+    }
+  end
 
-def copy_doe_model_files_for_hvac_tests
-  model_dir = File.join(file_out_dir(), 'models')
-  FileUtils.mkpath(model_dir)
-  FileUtils.copy_entry( File.absolute_path(File.join(doe_dir(), "models")), model_dir)
-end
+  def self.copy_model_files_for_hvac_tests
+    out_dir = file_out_dir()
+    model_dir = File.join(out_dir, 'models')
+    FileUtils.mkpath(model_dir)
+    FileUtils.copy_entry( File.absolute_path(File.join(__dir__, "..", "necb", "models")), model_dir)
+  end
 
-def generate_hvac_sys1_files
+  def self.copy_doe_model_files_for_hvac_tests
+    model_dir = File.join(file_out_dir(), 'models')
+    FileUtils.mkpath(model_dir)
+    FileUtils.copy_entry( File.absolute_path(File.join(doe_dir(), "models")), model_dir)
+  end
 
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
-  mau_types = [true, false]
-  mau_heating_coil_types = ["Hot Water", "Electric"]
-  baseboard_types = ["Hot Water", "Electric"]
+  def self.generate_hvac_sys1_files
 
-  boiler_fueltypes.each {|boiler_fueltype|
-    mau_types.each {|mau_type|
-      mau_heating_coil_types.each {|mau_heating_coil_type|
-        baseboard_types.each {|baseboard_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_1-#{boiler_fueltype.snek}-#{mau_type.to_s.snek}-#{mau_heating_coil_type.snek}-#{baseboard_type.snek}.rb")
-        puts filename
-        file_string = %q{
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
+    mau_types = [true, false]
+    mau_heating_coil_types = ["Hot Water", "Electric"]
+    baseboard_types = ["Hot Water", "Electric"]
+
+    boiler_fueltypes.each {|boiler_fueltype|
+      mau_types.each {|mau_type|
+        mau_heating_coil_types.each {|mau_heating_coil_type|
+          baseboard_types.each {|baseboard_type|
+            filename = File.join(file_out_dir(),"test_necb_hvac_system_1-#{boiler_fueltype.snek}-#{mau_type.to_s.snek}-#{mau_heating_coil_type.snek}-#{baseboard_type.snek}.rb")
+            puts filename
+            file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -337,34 +331,34 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
     end
 end}
 
-        file_string['$(boiler_fueltypes)'] = boiler_fueltype
-        file_string['$(mau_types)'] = mau_type.to_s
-        file_string['$(mau_heating_coil_types)'] = mau_heating_coil_type
-        file_string['$(baseboard_types)'] = baseboard_type
+            file_string['$(boiler_fueltypes)'] = boiler_fueltype
+            file_string['$(mau_types)'] = mau_type.to_s
+            file_string['$(mau_heating_coil_types)'] = mau_heating_coil_type
+            file_string['$(baseboard_types)'] = baseboard_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(mau_types_snake)'] = mau_type.to_s.snek
-        file_string['$(mau_heating_coil_types_snake)'] = mau_heating_coil_type.to_s.snek
-        file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
+            file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+            file_string['$(mau_types_snake)'] = mau_type.to_s.snek
+            file_string['$(mau_heating_coil_types_snake)'] = mau_heating_coil_type.to_s.snek
+            file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+            File.open(filename, 'w') { |file| file.write(file_string) }
+          }
         }
       }
     }
-  }
 
-end
+  end
 
-def generate_hvac_sys2_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
-  chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
-  mua_cooling_types = ["Hydronic", "DX"]
-  boiler_fueltypes.each {|boiler_fueltype|
-    chiller_types.each {|chiller_type|
-      mua_cooling_types.each {|mua_cooling_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_2_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
-        puts filename
-        file_string = %q{require_relative '../helpers/minitest_helper'
+  def self.generate_hvac_sys2_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
+    chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
+    mua_cooling_types = ["Hydronic", "DX"]
+    boiler_fueltypes.each {|boiler_fueltype|
+      chiller_types.each {|chiller_type|
+        mua_cooling_types.each {|mua_cooling_type|
+          filename = File.join(file_out_dir(),"test_necb_hvac_system_2_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
+          puts filename
+          file_string = %q{require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
@@ -470,32 +464,32 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
   end
 end
 }
-        file_string['$(boiler_fueltype)'] = boiler_fueltype
-        file_string['$(chiller_type)'] = chiller_type.to_s
-        file_string['$(mua_cooling_type)'] = mua_cooling_type
+          file_string['$(boiler_fueltype)'] = boiler_fueltype
+          file_string['$(chiller_type)'] = chiller_type.to_s
+          file_string['$(mua_cooling_type)'] = mua_cooling_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
-        file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
+          file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+          file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
+          file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-def generate_hvac_sys3_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
-  baseboard_types = ["Hot Water", "Electric"]
-  heating_coil_types_sys3 = ["Electric", "Gas", "DX"]
+  def self.generate_hvac_sys3_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
+    baseboard_types = ["Hot Water", "Electric"]
+    heating_coil_types_sys3 = ["Electric", "Gas", "DX"]
 
-  boiler_fueltypes.each {|boiler_fueltype|
-    baseboard_types.each {|baseboard_type|
-      heating_coil_types_sys3.each {|heating_coil_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_3_#{boiler_fueltype.snek}-#{baseboard_type.to_s.snek}-#{heating_coil_type.snek}.rb")
-        puts filename
-        file_string = %q{
+    boiler_fueltypes.each {|boiler_fueltype|
+      baseboard_types.each {|baseboard_type|
+        heating_coil_types_sys3.each {|heating_coil_type|
+          filename = File.join(file_out_dir(),"test_necb_hvac_system_3_#{boiler_fueltype.snek}-#{baseboard_type.to_s.snek}-#{heating_coil_type.snek}.rb")
+          puts filename
+          file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -602,33 +596,33 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
   end
 end
 }
-        file_string['$(boiler_fueltype)'] = boiler_fueltype
-        file_string['$(baseboard_type)'] = baseboard_type.to_s
-        file_string['$(heating_coil_type)'] = heating_coil_type
+          file_string['$(boiler_fueltype)'] = boiler_fueltype
+          file_string['$(baseboard_type)'] = baseboard_type.to_s
+          file_string['$(heating_coil_type)'] = heating_coil_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
-        file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
+          file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+          file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
+          file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-def generate_hvac_sys4_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
-  baseboard_types = ["Hot Water", "Electric"]
-  heating_coil_types_sys4 = ["Electric", "Gas"]
+  def self.generate_hvac_sys4_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
+    baseboard_types = ["Hot Water", "Electric"]
+    heating_coil_types_sys4 = ["Electric", "Gas"]
 
-  boiler_fueltypes.each {|boiler_fueltype|
-    baseboard_types.each {|baseboard_type|
-      heating_coil_types_sys4.each {|heating_coil_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_4_#{boiler_fueltype.snek}-#{baseboard_type.to_s.snek}-#{heating_coil_type.snek}.rb")
-        puts filename
+    boiler_fueltypes.each {|boiler_fueltype|
+      baseboard_types.each {|baseboard_type|
+        heating_coil_types_sys4.each {|heating_coil_type|
+          filename = File.join(file_out_dir(),"test_necb_hvac_system_4_#{boiler_fueltype.snek}-#{baseboard_type.to_s.snek}-#{heating_coil_type.snek}.rb")
+          puts filename
 
-        file_string = %q{require_relative '../helpers/minitest_helper'
+          file_string = %q{require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
@@ -735,31 +729,31 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
   end
 end
 }
-        file_string['$(boiler_fueltype)'] = boiler_fueltype
-        file_string['$(baseboard_type)'] = baseboard_type.to_s
-        file_string['$(heating_coil_type)'] = heating_coil_type
+          file_string['$(boiler_fueltype)'] = boiler_fueltype
+          file_string['$(baseboard_type)'] = baseboard_type.to_s
+          file_string['$(heating_coil_type)'] = heating_coil_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
-        file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
+          file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+          file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
+          file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-def generate_hvac_sys5_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
-  chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
-  mua_cooling_types = ["DX", "Hydronic"]
-  boiler_fueltypes.each {|boiler_fueltype|
-    chiller_types.each {|chiller_type|
-      mua_cooling_types.each {|mua_cooling_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_5_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
-        puts filename
-        file_string = %q{
+  def self.generate_hvac_sys5_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
+    chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
+    mua_cooling_types = ["DX", "Hydronic"]
+    boiler_fueltypes.each {|boiler_fueltype|
+      chiller_types.each {|chiller_type|
+        mua_cooling_types.each {|mua_cooling_type|
+          filename = File.join(file_out_dir(),"test_necb_hvac_system_5_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
+          puts filename
+          file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -869,36 +863,36 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
 
 end
 }
-        file_string['$(boiler_fueltype)'] = boiler_fueltype
-        file_string['$(chiller_type)'] = chiller_type.to_s
-        file_string['$(mua_cooling_type)'] = mua_cooling_type
+          file_string['$(boiler_fueltype)'] = boiler_fueltype
+          file_string['$(chiller_type)'] = chiller_type.to_s
+          file_string['$(mua_cooling_type)'] = mua_cooling_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
-        file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
+          file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+          file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
+          file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-def generate_hvac_sys6_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
-  baseboard_types = ["Hot Water", "Electric"]
-  chiller_types = ["Scroll"] #,"Centrifugal","Rotary Screw","Reciprocating"] are not working.
-  heating_coil_types_sys6 = ["Electric", "Hot Water"]
-  fan_types = ["AF_or_BI_rdg_fancurve", "AF_or_BI_inletvanes", "fc_inletvanes", "var_speed_drive"]
+  def self.generate_hvac_sys6_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
+    baseboard_types = ["Hot Water", "Electric"]
+    chiller_types = ["Scroll"] #,"Centrifugal","Rotary Screw","Reciprocating"] are not working.
+    heating_coil_types_sys6 = ["Electric", "Hot Water"]
+    fan_types = ["AF_or_BI_rdg_fancurve", "AF_or_BI_inletvanes", "fc_inletvanes", "var_speed_drive"]
 
-  boiler_fueltypes.each {|boiler_fueltype|
-    baseboard_types.each {|baseboard_type|
-      chiller_types.each {|chiller_type|
-        heating_coil_types_sys6.each {|heating_coil_type|
-          fan_types.each {|fan_type|
-            filename = File.join(file_out_dir(),"test_necb_hvac_system_6_#{boiler_fueltype.snek}-#{baseboard_type.snek}-#{chiller_type.to_s.snek}-#{heating_coil_type.snek}-#{fan_type.to_s.snek}.rb")
-            puts filename
-            file_string = %q{
+    boiler_fueltypes.each {|boiler_fueltype|
+      baseboard_types.each {|baseboard_type|
+        chiller_types.each {|chiller_type|
+          heating_coil_types_sys6.each {|heating_coil_type|
+            fan_types.each {|fan_type|
+              filename = File.join(file_out_dir(),"test_necb_hvac_system_6_#{boiler_fueltype.snek}-#{baseboard_type.snek}-#{chiller_type.to_s.snek}-#{heating_coil_type.snek}-#{fan_type.to_s.snek}.rb")
+              puts filename
+              file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -1013,36 +1007,36 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
   end
 end
 }
-            file_string['$(boiler_fueltype)'] = boiler_fueltype
-            file_string['$(baseboard_type)'] = baseboard_type
-            file_string['$(chiller_type)'] = chiller_type
-            file_string['$(heating_coil_type)'] = heating_coil_type
-            file_string['$(fan_type)'] = fan_type
+              file_string['$(boiler_fueltype)'] = boiler_fueltype
+              file_string['$(baseboard_type)'] = baseboard_type
+              file_string['$(chiller_type)'] = chiller_type
+              file_string['$(heating_coil_type)'] = heating_coil_type
+              file_string['$(fan_type)'] = fan_type
 
-            file_string['$(boiler_fueltype_snake)'] = boiler_fueltype.to_s.snek
-            file_string['$(baseboard_type_snake)'] = baseboard_type.to_s.snek
-            file_string['$(chiller_type_snake)'] = chiller_type.to_s.snek
-            file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
-            file_string['$(fan_type_snake)'] = fan_type.to_s.snek
+              file_string['$(boiler_fueltype_snake)'] = boiler_fueltype.to_s.snek
+              file_string['$(baseboard_type_snake)'] = baseboard_type.to_s.snek
+              file_string['$(chiller_type_snake)'] = chiller_type.to_s.snek
+              file_string['$(heating_coil_type_snake)'] = heating_coil_type.to_s.snek
+              file_string['$(fan_type_snake)'] = fan_type.to_s.snek
 
-            File.open(filename, 'w') { |file| file.write(file_string) }
+              File.open(filename, 'w') { |file| file.write(file_string) }
+            }
           }
         }
       }
     }
-  }
-end
+  end
 
-def generate_hvac_sys7_files
-  boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
-  chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
-  mua_cooling_types = ["Hydronic", "DX"]
-  boiler_fueltypes.each {|boiler_fueltype|
-    chiller_types.each {|chiller_type|
-      mua_cooling_types.each {|mua_cooling_type|
-        filename = File.join(file_out_dir(),"test_necb_hvac_system_7_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
-        puts filename
-        file_string = %q{
+  def self.generate_hvac_sys7_files
+    boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
+    chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
+    mua_cooling_types = ["Hydronic", "DX"]
+    boiler_fueltypes.each {|boiler_fueltype|
+      chiller_types.each {|chiller_type|
+        mua_cooling_types.each {|mua_cooling_type|
+          filename = File.join(file_out_dir(),"test_necb_hvac_system_7_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
+          puts filename
+          file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -1146,103 +1140,103 @@ class NECB_HVAC_System_7_Test < MiniTest::Test
   end
 end
 }
-        file_string['$(boiler_fueltype)'] = boiler_fueltype
-        file_string['$(chiller_type)'] = chiller_type.to_s
-        file_string['$(mua_cooling_type)'] = mua_cooling_type
+          file_string['$(boiler_fueltype)'] = boiler_fueltype
+          file_string['$(chiller_type)'] = chiller_type.to_s
+          file_string['$(mua_cooling_type)'] = mua_cooling_type
 
-        file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
-        file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
-        file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
+          file_string['$(boiler_fueltypes_snake)'] = boiler_fueltype.to_s.snek
+          file_string['$(chiller_types_snake)'] = chiller_type.to_s.snek
+          file_string['$(mua_cooling_types_snake)'] = mua_cooling_type.to_s.snek
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-def generate_doe_hvac_files
+  def self.generate_doe_hvac_files
 
-  hvac_systems = [
-    ## Forced Air ##
+    hvac_systems = [
+        ## Forced Air ##
 
-    # Gas, Electric, forced air
-    ['PTAC', 'NaturalGas', nil, 'Electricity'],
-    ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
-    # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-    ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
+        # Gas, Electric, forced air
+        ['PTAC', 'NaturalGas', nil, 'Electricity'],
+        ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
+        # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+        ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-    # Electric, Electric, forced air
-    ['PTHP', 'Electricity', nil, 'Electricity'],
-    ['PSZ-HP', 'Electricity', nil, 'Electricity'],
-    ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
-    ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
+        # Electric, Electric, forced air
+        ['PTHP', 'Electricity', nil, 'Electricity'],
+        ['PSZ-HP', 'Electricity', nil, 'Electricity'],
+        ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
+        ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
 
-    # District Hot Water, Electric, forced air
-    ['PTAC', 'DistrictHeating', nil, 'Electricity'],
-    # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
-    ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+        # District Hot Water, Electric, forced air
+        ['PTAC', 'DistrictHeating', nil, 'Electricity'],
+        # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+        ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
-    # Ambient Loop, Ambient Loop, forced air
-    # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-    # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+        # Ambient Loop, Ambient Loop, forced air
+        # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+        # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
 
-    # Gas, District Chilled Water, forced air
-    ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
-    ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
-    ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+        # Gas, District Chilled Water, forced air
+        ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
+        ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+        ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
-    # Electric, District Chilled Water, forced air
-    ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
-    ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
-    ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+        # Electric, District Chilled Water, forced air
+        ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
+        ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+        ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
 
-    # District Hot Water, District Chilled Water, forced air
-    ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
-    ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+        # District Hot Water, District Chilled Water, forced air
+        ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+        ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
-    ## Hydronic ##
+        ## Hydronic ##
 
-    # Gas, Electric, hydronic
-    ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
-    ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
-    ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
+        # Gas, Electric, hydronic
+        ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
+        ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
+        ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-    # Electric, Electric, hydronic
-    ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
-    ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
-    ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
+        # Electric, Electric, hydronic
+        ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
+        ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
+        ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
 
-    # District Hot Water, Electric, hydronic
-    ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
-    ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-    ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+        # District Hot Water, Electric, hydronic
+        ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
+        ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+        ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
-    # Ambient Loop, Ambient Loop, hydronic
-    ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
-    ['Water Source Heat Pumps with DOAS', 'HeatPump', nil, 'HeatPump'],
-    ['Water Source Heat Pumps with DOAS', 'HeatPump', 'HeatPump', 'HeatPump'],
+        # Ambient Loop, Ambient Loop, hydronic
+        ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
+        ['Water Source Heat Pumps with DOAS', 'HeatPump', nil, 'HeatPump'],
+        ['Water Source Heat Pumps with DOAS', 'HeatPump', 'HeatPump', 'HeatPump'],
 
-    # Gas, District Chilled Water, hydronic
-    ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
-    ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+        # Gas, District Chilled Water, hydronic
+        ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
+        ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
-    # Electric, District Chilled Water, hydronic
-    ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
-    ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
+        # Electric, District Chilled Water, hydronic
+        ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
+        ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
-    # District Hot Water, District Chilled Water, hydronic
-    ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
-    ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-    ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
-  ]
+        # District Hot Water, District Chilled Water, hydronic
+        ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
+        ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
+        ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
+    ]
 
-  hvac_systems.each {|hvac_system|
-    # puts hvac_system.inspect
-    filename = File.join(file_out_dir(),"doe_test_add_hvac_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}.rb")
-    puts filename
-    classname = "doe_test_add_HVAC_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}".snek.split('_').collect(&:capitalize).join
-    file_string = %q{
+    hvac_systems.each {|hvac_system|
+      # puts hvac_system.inspect
+      filename = File.join(file_out_dir(),"doe_test_add_hvac_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}.rb")
+      puts filename
+      classname = "doe_test_add_HVAC_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}".snek.split('_').collect(&:capitalize).join
+      file_string = %q{
 require_relative '../helpers/minitest_helper'
 
 class $(classname) < Minitest::Test
@@ -1326,80 +1320,80 @@ class $(classname) < Minitest::Test
   end
 end
 }
-    file_string["$(classname)"] = classname
-    file_string["$(hvac_system)"] = hvac_system.inspect
-    file_string["$(0)"] = hvac_system[0].inspect.snek
-    file_string["$(1)"] = hvac_system[1].inspect.snek
-    file_string["$(2)"] = hvac_system[2].inspect.snek
-    file_string["$(3)"] = hvac_system[3].inspect.snek
+      file_string["$(classname)"] = classname
+      file_string["$(hvac_system)"] = hvac_system.inspect
+      file_string["$(0)"] = hvac_system[0].inspect.snek
+      file_string["$(1)"] = hvac_system[1].inspect.snek
+      file_string["$(2)"] = hvac_system[2].inspect.snek
+      file_string["$(3)"] = hvac_system[3].inspect.snek
 
-    File.open(filename, 'w') { |file| file.write(file_string) }
-  }
+      File.open(filename, 'w') { |file| file.write(file_string) }
+    }
 
-end
+  end
 
-def generate_doe_building_test_files
-  building_types ={
-    'FullServiceRestaurant' =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'HighriseApartment'     =>  {'templates'     => ['90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A']
-                                },
-    'Hospital'              =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
-                                'climate_zones'  => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'LargeHotel'            =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'LargeOffice'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'MediumOffice'          =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'MidriseApartment'      =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'Outpatient'            =>  {'templates'     => ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'PrimarySchool'         =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'QuickServiceRestaurant'=>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'RetailStandalone'      =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'SecondarySchool'       =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'SmallHotel'            =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'SmallOffice'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'RetailStripmall'       =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'SuperMarket'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                },
-    'Warehouse'             =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
-                                 'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
-                                }
-  }
+  def self.generate_doe_building_test_files
+    building_types ={
+        'FullServiceRestaurant' =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'HighriseApartment'     =>  {'templates'     => ['90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A']
+        },
+        'Hospital'              =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
+                                     'climate_zones'  => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'LargeHotel'            =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'LargeOffice'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'MediumOffice'          =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'MidriseApartment'      =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'Outpatient'            =>  {'templates'     => ['DOE Ref 1980-2004', 'DOE Ref Pre-1980', '90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'PrimarySchool'         =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'QuickServiceRestaurant'=>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'RetailStandalone'      =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'SecondarySchool'       =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004', '90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'SmallHotel'            =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'SmallOffice'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'RetailStripmall'       =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'SuperMarket'           =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2004','90.1-2007','90.1-2010','90.1-2013'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        },
+        'Warehouse'             =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
+                                     'climate_zones' => ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-4A','ASHRAE 169-2006-5A']
+        }
+    }
 
-  building_types.keys.sort.each {|building_type|
-    building_types[building_type]['templates'].each {|template|
-      building_types[building_type]['climate_zones'].each {|climate_zone|
-        filename = File.join(file_out_dir(),"doe_test_bldg_#{building_type.snek}-#{template.snek}-#{climate_zone.to_s.snek}.rb")
-        puts filename
-        method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_').gsub('-','_').gsub('.','_')
-        file_string = %q{
+    building_types.keys.sort.each {|building_type|
+      building_types[building_type]['templates'].each {|template|
+        building_types[building_type]['climate_zones'].each {|climate_zone|
+          filename = File.join(file_out_dir(),"doe_test_bldg_#{building_type.snek}-#{template.snek}-#{climate_zone.to_s.snek}.rb")
+          puts filename
+          method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_').gsub('-','_').gsub('.','_')
+          file_string = %q{
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
@@ -1733,61 +1727,79 @@ class Test$(building_type) < CreateDOEPrototypeBuildingTest
 
 end
 }
-        file_string.gsub!('$(method_name)',"#{method_name}")
-        file_string.gsub!('$(building_type)',"#{building_type}")
-        file_string.gsub!('$(template)',"#{template}")
-        file_string.gsub!('$(climate_zone)',"#{climate_zone}")
+          file_string.gsub!('$(method_name)',"#{method_name}")
+          file_string.gsub!('$(building_type)',"#{building_type}")
+          file_string.gsub!('$(template)',"#{template}")
+          file_string.gsub!('$(climate_zone)',"#{climate_zone}")
 
-        File.open(filename, 'w') { |file| file.write(file_string) }
+          File.open(filename, 'w') { |file| file.write(file_string) }
+        }
       }
     }
-  }
 
-end
+  end
 
-
-def sort_files_by_timing
-  require_relative 'ci_test_helper/lpt'
-  ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "circleci_tests.txt"))
-
-  timings = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'ci_test_helper', 'timings.json')))
-  existing_ci_tests = File.read(ci_test_path).split("\n")
-  #p existing_ci_tests
-  existing_ci_tests.each {|test_file|
-    next if timings.key?(test_file)
-    next unless test_file.include?('.rb')
-    timings[test_file] = {}
-    puts "Setting default time of 240s for #{test_file} to timings"
-    timings[test_file]['total'] = 240 # set default of 240s if test file is not part of the timings file
-  }
-
-  # puts JSON.pretty_generate(timings)
-  procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
-  sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
-
-  sorted_timings.each_with_index {|files,i|
-    File.open(File.join(File.dirname(__FILE__), 'ci_test_helper' ,"#{i}.txt"), "w") do |f|
-      f.puts(files)
+  def self.sort_files_by_timing(local_run)
+    require_relative 'ci_test_helper/lpt'
+    ci_test_path = @@ci_test_path
+    if local_run
+      ci_test_path = @@local_ci_test_path
     end
-  }
-  if !!(ENV['CIRCLE_BRANCH'] =~ /nrcan/i)
-    puts "CIRCLE_BRANCH: #{ENV['CIRCLE_BRANCH']}"
+    timings = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'ci_test_helper', 'timings.json')))
+    existing_ci_tests = File.read(ci_test_path).split("\n")
+    #p existing_ci_tests
+    existing_ci_tests.each {|test_file|
+      next if timings.key?(test_file)
+      next unless test_file.include?('.rb')
+      timings[test_file] = {}
+      puts "Setting default time of 240s for #{test_file} to timings"
+      timings[test_file]['total'] = 240 # set default of 240s if test file is not part of the timings file
+    }
+
+    # puts JSON.pretty_generate(timings)
+    procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
+    sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
+
+    sorted_timings.each_with_index {|files,i|
+      File.open(File.join(File.dirname(__FILE__), 'ci_test_helper' ,"#{i}.txt"), "w") do |f|
+        f.puts(files)
+      end
+    }
+    if !!(ENV['CIRCLE_BRANCH'] =~ /nrcan/i)
+      puts "CIRCLE_BRANCH: #{ENV['CIRCLE_BRANCH']}"
+    end
+  end
+
+  def self.generate(local_run = false)
+    cleanup_output_folders()
+    copy_doe_model_files_for_hvac_tests()
+    generate_doe_hvac_files()
+    generate_ci_bldg_test_files()
+    copy_model_files_for_hvac_tests()
+    generate_hvac_sys1_files()
+    generate_hvac_sys2_files()
+    generate_hvac_sys3_files()
+    generate_hvac_sys4_files()
+# generate_hvac_sys5_files() # known failure
+    generate_hvac_sys6_files()
+    generate_hvac_sys7_files()
+    generate_doe_building_test_files()
+    write_file_path_to_ci_tests_txt(local_run)
+    sort_files_by_timing(local_run)
   end
 end
 
-
-cleanup_output_folders()
-copy_doe_model_files_for_hvac_tests()
-generate_doe_hvac_files()
-generate_ci_bldg_test_files()
-copy_model_files_for_hvac_tests()
-generate_hvac_sys1_files()
-generate_hvac_sys2_files()
-generate_hvac_sys3_files()
-generate_hvac_sys4_files()
-# generate_hvac_sys5_files() # known failure
-generate_hvac_sys6_files()
-generate_hvac_sys7_files()
-generate_doe_building_test_files()
-write_file_path_to_ci_tests_txt()
-sort_files_by_timing()
+# copied and modified from https://github.com/rubyworks/facets/blob/master/lib/core/facets/string/snakecase.rb
+class String
+  def snek
+    #gsub(/::/, '/').
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr('-', '_').
+        gsub(/\s/, '_').
+        gsub(/__+/, '_').
+        gsub(/#+/, '').
+        gsub(/\"/, '').
+        downcase
+  end
+end
