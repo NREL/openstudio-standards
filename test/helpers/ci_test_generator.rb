@@ -1241,13 +1241,14 @@ def generate_doe_hvac_files
     # puts hvac_system.inspect
     filename = File.join(file_out_dir(),"doe_test_add_hvac_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}.rb")
     puts filename
+    classname = "doe_test_add_HVAC_systems_#{hvac_system[0].snek}-#{hvac_system[1].to_s.snek}-#{hvac_system[2].inspect.snek}-#{hvac_system[3].snek}".snek.split('_').collect(&:capitalize).join
     file_string = %q{
 require_relative '../helpers/minitest_helper'
 
-class TestAddHVACSystems < Minitest::Test
+class $(classname) < Minitest::Test
 
   def test_add_hvac_systems_$(0)_$(1)_$(2)_$(3)
-
+    assert(true)
     # Make the output directory if it doesn't exist
     output_dir = File.expand_path('output', File.dirname(__FILE__))
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
@@ -1325,6 +1326,7 @@ class TestAddHVACSystems < Minitest::Test
   end
 end
 }
+    file_string["$(classname)"] = classname
     file_string["$(hvac_system)"] = hvac_system.inspect
     file_string["$(0)"] = hvac_system[0].inspect.snek
     file_string["$(1)"] = hvac_system[1].inspect.snek
