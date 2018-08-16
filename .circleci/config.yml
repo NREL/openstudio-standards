@@ -4,7 +4,7 @@ jobs:
     working_directory: ~/openstudio-standards
     docker:
       - image: canmet/docker-openstudio:2.4.3
-    parallelism: 6
+    parallelism: 7
     steps:
       - checkout
       - run:
