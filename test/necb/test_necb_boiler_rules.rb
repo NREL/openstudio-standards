@@ -1,7 +1,7 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
-class NECB2011HVACEfficienciesTests < MiniTest::Test
+class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -13,7 +13,6 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/boiler_efficiency"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
     boiler_fueltypes = ['Electricity', 'NaturalGas', 'FuelOil#2']
@@ -26,6 +25,7 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     templates.each do |template|
+      standard = Standard.build(template)
       boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
 
       # Initialize hashes for storing expected boiler efficiency data from file
@@ -84,9 +84,9 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
           model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
-          always_on = model.alwaysOnDiscreteSchedule	
-          BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-          BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys1(
+          always_on = model.alwaysOnDiscreteSchedule
+          standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+          standard.add_sys1_unitary_ac_baseboard_heating(
             model,
             model.getThermalZones,
             boiler_fueltype,
@@ -155,6 +155,8 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/num_of_boilers"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     first_cutoff_blr_cap = 176000.0
     second_cutoff_blr_cap = 352000.0
     tol = 1.0e-3
@@ -174,9 +176,9 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
       model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule	
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys3(
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
         model,
         model.getThermalZones,
         boiler_fueltype,
@@ -237,6 +239,8 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     output_folder = "#{File.dirname(__FILE__)}/output/boiler_plf_vs_plr_curve"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     # Generate the osm files for all relevant cases to generate the test data for system 1
     boiler_res_file_output_text = "Name,Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
     boiler_fueltype = 'NaturalGas'
@@ -251,9 +255,9 @@ class NECB2011HVACEfficienciesTests < MiniTest::Test
     name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys1(
+    always_on = model.alwaysOnDiscreteSchedule
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys1_unitary_ac_baseboard_heating(
       model,
       model.getThermalZones,
       boiler_fueltype,
