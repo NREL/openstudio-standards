@@ -2590,6 +2590,23 @@ OS:Surface,
   0, 8.992, 17.0732;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
+  {0c5017de-39bb-4dfc-b09d-3fe9258b75c3}, !- Handle
+  Office2_Mult5_Flr_5_Ceiling,            !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 1 {m}
+  9.144, 15.24, 21.3415,                  !- X,Y,Z Vertex 2 {m}
+  0, 15.24, 21.3415,                      !- X,Y,Z Vertex 3 {m}
+  0, 7.622, 21.3415;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
   {bb934a54-fb38-40c7-a354-5794884e56cc}, !- Handle
   PatRoom1_Mult10_Flr_3_Wall_South,       !- Name
   Wall,                                   !- Surface Type
