@@ -58,6 +58,9 @@ end
 
 class RunAllTests< Minitest::Test
   def test_all()
+    require_relative './helpers/ci_test_generator'
+    CITestGenerator::generate(true)
+
     @full_file_list = nil
     FileUtils.rm_rf(TestOutputFolder)
     FileUtils.mkpath(TestOutputFolder)
@@ -75,9 +78,16 @@ class RunAllTests< Minitest::Test
 
     puts "Running #{@full_file_list.size} tests suites in parallel using #{ProcessorsUsed} of available cpus."
     puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
+    timings_json = Hash.new()
     Parallel.each(@full_file_list, in_threads: (ProcessorsUsed), progress: "Progress :" ) do |test_file|
+      file_name = File.basename(test_file, '.rb')
+      timings_json[test_file.to_s] = {}
+      timings_json[test_file.to_s]['start'] = Time.now.to_i
       write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
+      timings_json[test_file.to_s]['end'] = Time.now.to_i
+      timings_json[test_file.to_s]['total'] =timings_json[test_file.to_s]['end'] - timings_json[test_file.to_s]['start']
     end
+    File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') { |file| file.puts(JSON.pretty_generate(timings_json))}
   end
 
 end
