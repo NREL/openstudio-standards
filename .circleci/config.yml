@@ -19,7 +19,7 @@ jobs:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            echo "circleci tests split --index=$CIRCLE_NODE_INDEX test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt > node_tests.txt" | bash
+            echo "cat test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt > node_tests.txt" | bash
             cat node_tests.txt
       - run:
           name: Run tests
