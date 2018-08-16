@@ -209,14 +209,13 @@ module Hospital
         humidifier.addToNode(heating_coil_outlet_node)
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
-            extra_elec_htg_coil.setName("#{space_name} Electric Htg Coil")
-            extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-            extra_water_htg_coil.setName("#{space_name} Water Htg Coil")
-            hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
-            extra_elec_htg_coil.addToNode(supply_outlet_node)
-            extra_water_htg_coil.addToNode(supply_outlet_node)
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          extra_elec_htg_coil = create_coil_heating_electric(model, name: "#{space_name} Electric Htg Coil")
+          extra_elec_htg_coil.addToNode(supply_outlet_node)
+          extra_water_htg_coil = create_coil_heating_water(model,
+                                                           hot_water_loop,
+                                                           name: "#{space_name} Water Htg Coil")
+          extra_water_htg_coil.addToNode(supply_outlet_node)
         end
         # humidity_spm.addToNode(supply_outlet_node)
         humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)

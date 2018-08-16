@@ -115,7 +115,7 @@ class NRELZNEReady2017 < ASHRAE901
     end
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
-    oa_control.setEconomizerMinimumLimitDryBulbTemperature(-100.0)
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
 
     case economizer_type
     when 'NoEconomizer'

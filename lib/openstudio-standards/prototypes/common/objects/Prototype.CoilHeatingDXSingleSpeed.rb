@@ -11,11 +11,11 @@ class Standard
   # @param defrost_strategy [String] type of defrost strategy. options are reverse-cycle or resistive
   def create_coil_heating_dx_single_speed(model,
                                           air_loop: nil,
-                                          name: "1spd DX Htg Coil",
+                                          name: '1spd DX Htg Coil',
                                           schedule: nil,
                                           type: nil,
                                           cop: 3.3,
-                                          defrost_strategy: "ReverseCycle")
+                                          defrost_strategy: 'ReverseCycle')
 
     htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
 
@@ -32,7 +32,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -90,6 +90,7 @@ class Standard
     else # default curve set
 
       htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
+      htg_cap_f_of_temp.setName("#{htg_coil.name} Htg Cap Func of Temp Curve")
       htg_cap_f_of_temp.setCoefficient1Constant(0.758746)
       htg_cap_f_of_temp.setCoefficient2x(0.027626)
       htg_cap_f_of_temp.setCoefficient3xPOW2(0.000148716)
@@ -98,6 +99,7 @@ class Standard
       htg_cap_f_of_temp.setMaximumValueofx(20.0)
 
       htg_cap_f_of_flow = OpenStudio::Model::CurveCubic.new(model)
+      htg_cap_f_of_flow.setName("#{htg_coil.name} Htg Cap Func of Flow Frac Curve")
       htg_cap_f_of_flow.setCoefficient1Constant(0.84)
       htg_cap_f_of_flow.setCoefficient2x(0.16)
       htg_cap_f_of_flow.setCoefficient3xPOW2(0.0)
@@ -106,6 +108,7 @@ class Standard
       htg_cap_f_of_flow.setMaximumValueofx(1.5)
 
       htg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
+      htg_energy_input_ratio_f_of_temp.setName("#{htg_coil.name} EIR Func of Temp Curve")
       htg_energy_input_ratio_f_of_temp.setCoefficient1Constant(1.19248)
       htg_energy_input_ratio_f_of_temp.setCoefficient2x(-0.0300438)
       htg_energy_input_ratio_f_of_temp.setCoefficient3xPOW2(0.00103745)
@@ -114,6 +117,7 @@ class Standard
       htg_energy_input_ratio_f_of_temp.setMaximumValueofx(20.0)
 
       htg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+      htg_energy_input_ratio_f_of_flow.setName("#{htg_coil.name} EIR Func of Flow Frac Curve")
       htg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.3824)
       htg_energy_input_ratio_f_of_flow.setCoefficient2x(-0.4336)
       htg_energy_input_ratio_f_of_flow.setCoefficient3xPOW2(0.0512)
@@ -121,6 +125,7 @@ class Standard
       htg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
 
       htg_part_load_fraction = OpenStudio::Model::CurveQuadratic.new(model)
+      htg_part_load_fraction.setName("#{htg_coil.name} PLR Correlation Curve")
       htg_part_load_fraction.setCoefficient1Constant(0.85)
       htg_part_load_fraction.setCoefficient2x(0.15)
       htg_part_load_fraction.setCoefficient3xPOW2(0.0)
@@ -136,6 +141,7 @@ class Standard
       htg_coil.setDefrostControl('OnDemand')
 
       def_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+      def_eir_f_of_temp.setName("#{htg_coil.name} Defrost EIR Func of Temp Curve")
       def_eir_f_of_temp.setCoefficient1Constant(0.297145)
       def_eir_f_of_temp.setCoefficient2x(0.0430933)
       def_eir_f_of_temp.setCoefficient3xPOW2(-0.000748766)
@@ -154,6 +160,8 @@ class Standard
     htg_coil.setEnergyInputRatioFunctionofFlowFractionCurve(htg_energy_input_ratio_f_of_flow) unless htg_energy_input_ratio_f_of_flow.nil?
     htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction) unless htg_part_load_fraction.nil?
     htg_coil.setDefrostEnergyInputRatioFunctionofTemperatureCurve(def_eir_f_of_temp) unless def_eir_f_of_temp.nil?
+    htg_coil.setDefrostStrategy(defrost_strategy)
+    htg_coil.setDefrostControl('OnDemand')
 
     return htg_coil
   end
