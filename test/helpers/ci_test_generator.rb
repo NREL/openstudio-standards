@@ -91,25 +91,24 @@ module CITestGenerator
         fuel_types.each {|fuel_type|
           filename = File.join(out_dir,"test_necb_bldg_#{building_type}_#{template}_#{fuel_type}.rb")
           file_string =%Q{
-  require_relative '../helpers/minitest_helper'
-  require_relative '../helpers/create_doe_prototype_helper'
-  require_relative '../helpers/compare_models_helper'
-  require_relative '../necb/regression_helper'
-
-  class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
-    def setup()
-      super()
-    end
-    def test_#{template}_#{building_type}_regression_#{fuel_type}()
-
-      result, msg = create_model_and_regression_test(building_type: '#{building_type}',
-                                                     epw_file: @#{fuel_type}_location,
-                                                     template: '#{template}'
-      )
-      assert(result, msg)
-    end
+require_relative '../helpers/minitest_helper'
+require_relative '../helpers/create_doe_prototype_helper'
+require_relative '../helpers/compare_models_helper'
+require_relative '../necb/regression_helper'
+class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
+  def setup()
+    super()
+    @building_type = '#{building_type}'
   end
-  }
+  def test_#{template}_#{building_type}_regression_#{fuel_type}()
+    result, msg = create_model_and_regression_test(@building_type,
+                                                   @#{fuel_type}_location,
+                                                   '#{template}'
+    )
+    assert(result, msg)
+  end
+end
+}
           File.open(filename, 'w') { |file| file.write(file_string) }
         }
       }
