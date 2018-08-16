@@ -1745,6 +1745,37 @@ end
 
 end
 
+
+def sort_files_by_timing
+  require_relative 'ci_test_helper/lpt'
+  ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "circleci_tests.txt"))
+
+  timings = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'ci_test_helper', 'timings.json')))
+  existing_ci_tests = File.read(ci_test_path).split("\n")
+  #p existing_ci_tests
+  existing_ci_tests.each {|test_file|
+    next if timings.key?(test_file)
+    next unless test_file.include?('.rb')
+    timings[test_file] = {}
+    puts "Setting default time of 240s for #{test_file} to timings"
+    timings[test_file]['total'] = 240 # set default of 240s if test file is not part of the timings file
+  }
+
+  # puts JSON.pretty_generate(timings)
+  procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
+  sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
+
+  sorted_timings.each_with_index {|files,i|
+    File.open(File.join(File.dirname(__FILE__), 'ci_test_helper' ,"#{i}.txt"), "w") do |f|
+      f.puts(files)
+    end
+  }
+  if !!(ENV['CIRCLE_BRANCH'] =~ /nrcan/i)
+    puts "CIRCLE_BRANCH: #{ENV['CIRCLE_BRANCH']}"
+  end
+end
+
+
 cleanup_output_folders()
 copy_doe_model_files_for_hvac_tests()
 generate_doe_hvac_files()
@@ -1759,3 +1790,4 @@ generate_hvac_sys6_files()
 generate_hvac_sys7_files()
 generate_doe_building_test_files()
 write_file_path_to_ci_tests_txt()
+sort_files_by_timing()

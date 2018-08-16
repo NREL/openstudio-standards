@@ -19,7 +19,7 @@ jobs:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            circleci tests split --split-by=timings --timings-type=classname test/circleci_tests.txt > node_tests.txt
+            circleci tests split --index=$CIRCLE_NODE_INDEX test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt > node_tests.txt
             cat node_tests.txt
       - run:
           name: Run tests
