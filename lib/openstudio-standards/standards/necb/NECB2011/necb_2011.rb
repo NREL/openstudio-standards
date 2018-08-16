@@ -228,7 +228,7 @@ class NECB2011 < Standard
 
     # Create Reference HVAC Systems.
     model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
-    model_add_swh(model, climate_zone, epw_file)
+    model_add_swh(model)
     model_apply_sizing_parameters(model)
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
@@ -258,6 +258,8 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
+    # Remove duplicate materials and constructions
+    model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
     return model
   end
 
