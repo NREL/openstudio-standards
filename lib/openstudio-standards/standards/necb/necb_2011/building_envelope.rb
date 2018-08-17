@@ -594,9 +594,12 @@ class NECB2011
                                                                                data['exterior_door_standards_construction_type'],
                                                                                data['exterior_door_building_category']))
     end
-    construction_name = data['exterior_glass_doors']
-    unless construction_name.nil?
-      exterior_subsurfaces.setGlassDoorConstruction(model_add_construction(model, construction_name))
+    if data['exterior_glass_door_standards_construction_type'] && data['exterior_glass_door_building_category']
+      exterior_subsurfaces.setGlassDoorConstruction(model_find_and_add_construction(model,
+                                                                                    climate_zone_set,
+                                                                                    'GlassDoor',
+                                                                                    data['exterior_glass_door_standards_construction_type'],
+                                                                                    data['exterior_glass_door_building_category']))
     end
     if data['exterior_overhead_door_standards_construction_type'] && data['exterior_overhead_door_building_category']
       exterior_subsurfaces.setOverheadDoorConstruction(model_find_and_add_construction(model,
