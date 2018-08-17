@@ -58,6 +58,9 @@ end
 
 class RunAllTests< Minitest::Test
   def test_all()
+    require_relative './helpers/ci_test_generator'
+    CITestGenerator::generate(true)
+
     @full_file_list = nil
     FileUtils.rm_rf(TestOutputFolder)
     FileUtils.mkpath(TestOutputFolder)
