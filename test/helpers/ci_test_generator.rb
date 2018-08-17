@@ -1757,7 +1757,7 @@ end
     }
 
     # puts JSON.pretty_generate(timings)
-    procs = ENV['CIRCLE_NODE_TOTAL'] || File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
+    procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
     sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
 
     sorted_timings.each_with_index {|files,i|
