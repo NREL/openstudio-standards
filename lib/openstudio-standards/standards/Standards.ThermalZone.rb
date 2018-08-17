@@ -1329,6 +1329,39 @@ class Standard
     return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
   end
 
+  # Returns the building type that represents the majority of floor area
+  #
+  # @return [String] the building type
+  def thermal_zone_building_type(thermal_zone)
+
+    # determine areas of each building type
+    building_type_areas = {}
+    thermal_zone.spaces.each do |space|
+      # ignore space if not part of total area
+      next unless space.partofTotalFloorArea
+      if space.spaceType.is_initialized
+        space_type = space.spaceType.get
+        if space_type.standardsBuildingType.is_initialized
+          building_type = space_type.standardsBuildingType.get
+          if building_type_areas[building_type].nil?
+            building_type_areas[building_type] = space.floorArea
+          else
+            building_type_areas[building_type] += space.floorArea
+          end
+        end
+      end
+    end
+
+    # return largest building type area
+    building_type = building_type_areas.key(building_type_areas.values.max)
+
+    if building_type.nil?
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.ThermalZone", "Thermal zone #{thermal_zone.name} does not have standards building type.")
+    end
+
+    return building_type
+  end
+
   # Determine the thermal zone's occupancy type category.
   # Options are: residential, nonresidential
   #

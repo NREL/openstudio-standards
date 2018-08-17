@@ -23,6 +23,22 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
+    # Make a file to store the model comparisons
+    @results_csv_file = "#{@test_dir}/prototype_buildings_results.csv"
+    # Add a header row on file creation
+    if !File.exist?(@results_csv_file)
+      File.open(@results_csv_file, 'a') do |file|
+        file.puts "building_type,template,climate_zone,fuel_type,end_use,legacy_val,osm_val,percent_error,difference,absolute_percent_error"
+      end
+    end
+    # Make a file that combines all the run logs
+    @combined_results_log = "#{@test_dir}/prototype_buildings_run.log"
+    if !File.exist?(@combined_results_log)
+      File.open(@combined_results_log, 'a') do |file|
+        file.puts "Started @ #{Time.new}"
+      end
+    end
+
   end
 
   # Dynamically create a test for each building type/template/climate zone
@@ -49,14 +65,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             epw_file = ""
             create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
           end
-          
-          
         end
       end
-    end  
- 
+    end
   end
-  
+
   def CreateDOEPrototypeBuildingTest.create_building(building_type, 
       template, 
       climate_zone, 
@@ -78,15 +91,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
 
     define_method(method_name) do
-            
+
       # Start time
       start_time = Time.new
-            
+
       # Reset the log for this test
       reset_log
-            
+
       # Paths for this test run
-      
+
     model_name = nil
     case template
     when 'NECB2011'
@@ -153,17 +166,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           idf.save(idf_path,true)
         end
       end
-         
+
       # TO DO: call add_output routine (btap)
-            
-            
-            
+
       # Run the simulation, if requested
       if run_models
 
         # Delete previous run directories if they exist
         FileUtils.rm_rf(full_sim_dir)
-            
+
         # Load the model from disk if not already in memory
         if model.nil?
           model = prototype_creator.safe_load_model(osm_path_string)
@@ -314,37 +325,41 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         end
 
       end
-            
+
       # Calculate run time
       run_time = Time.new - start_time
-            
+
       # Report out errors
       log_file_path = "#{run_dir}/openstudio-standards.log"
       messages = log_messages_to_file(log_file_path, debug)
       errors = get_logs(OpenStudio::Error)
 
-      # Add any comparison differences to the errors
-      # errors += model_diffs
-      # errors += result_diffs
+      # Copy errors to combined log file
+      File.open(@combined_results_log, 'a') do |file|
+        file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
+        messages.each do |message|
+          file.puts message
+        end
+      end
 
       # Assert if there were any errors
       assert(errors.size == 0, errors.reverse.join("\n"))
 
     end
   end
-  
+
 
   # create more detailed csv for results comparison (from previous codes)
   def CreateDOEPrototypeBuildingTest.compare_test_results(bldg_types, vintages, climate_zones, file_ext="")
-  
+
     #### Compare results against legacy idf results      
     acceptable_error_percentage = 10 # Max 5% error for any end use/fuel type combo
     failures = []
-    
+
     # Load the legacy idf results JSON file into a ruby hash
     temp = File.read("#{Dir.pwd}/legacy_idf_results.json")
     legacy_idf_results = JSON.parse(temp)    
-         
+
     # List of all fuel types
     fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
 
@@ -353,7 +368,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
     # Create a hash of hashes to store all the results from each file
     all_results_hash = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
-          
+
     # Create a hash of hashes to store the results from each file
     results_total_hash = Hash.new{|h,k| h[k]=Hash.new(&h.default_proc) }
 
@@ -511,7 +526,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             total_percent_error = 0
             failures << "#{building_type}-#{building_vintage}-#{climate_zone} *** Total Energy Error = both idf and osm don't use any energy."
           end
-          
+
           results_total_hash[building_type][building_vintage][climate_zone] = total_percent_error
 
           # Save the results to JSON
@@ -563,7 +578,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         end_uses_names.push(end_use)
       end
     end
-    
+
     #######
     # results_total_hash[building_type][building_vintage][climate_zone]
     csv_file_total = File.open("#{Dir.pwd}/output/comparison_total#{file_ext}.csv", 'w')
@@ -586,8 +601,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     end
 
     csv_file_total.close 
-    
-    
 
     # Create a CSV to store the results
     csv_file = File.open("#{Dir.pwd}/output/comparison#{file_ext}.csv", 'w')

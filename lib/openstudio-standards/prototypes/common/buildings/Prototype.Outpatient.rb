@@ -37,7 +37,7 @@ module Outpatient
 
     # Some exceptions for the Outpatient
     # TODO Refactor: not sure if this is actually enabled in the original code
-    #     if sys_name.include? 'PVAV Outpatient F1'
+    #     if system_name.include? 'PVAV Outpatient F1'
     #       # Outpatient two AHU1 and AHU2 have different HVAC schedule
     #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU1-Fan_Pre2004')
     #       # Outpatient has different temperature settings for sizing
@@ -49,7 +49,7 @@ module Outpatient
     #                               end
     #       zn_dsn_clg_sa_temp_f = 52 # zone cooling design SAT
     #       zn_dsn_htg_sa_temp_f = 104 # zone heating design SAT
-    #     elsif sys_name.include? 'PVAV Outpatient F2 F3'
+    #     elsif system_name.include? 'PVAV Outpatient F2 F3'
     #       hvac_op_sch = model_add_schedule(model, 'OutPatientHealthCare AHU2-Fan_Pre2004')
     #       clg_sa_temp_f = 55 # for AHU2 in Outpatient, SAT is 55F
     #       sys_dsn_clg_sa_temp_f = 52
@@ -205,12 +205,11 @@ module Outpatient
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            extra_elec_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
-            extra_elec_htg_coil.setName('AHU1 extra Electric Htg Coil')
-            extra_water_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
-            extra_water_htg_coil.setName('AHU1 extra Water Htg Coil')
-            hot_water_loop.addDemandBranchForComponent(extra_water_htg_coil)
+            extra_elec_htg_coil = create_coil_heating_electric(model, name: 'AHU1 extra Electric Htg Coil')
             extra_elec_htg_coil.addToNode(supply_outlet_node)
+            extra_water_htg_coil = create_coil_heating_water(model,
+                                                             hot_water_loop,
+                                                             name: "AHU1 extra Water Htg Coil")
             extra_water_htg_coil.addToNode(supply_outlet_node)
         end
         # humidity_spm.addToNode(supply_outlet_node)
@@ -245,16 +244,54 @@ module Outpatient
   # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
   def model_reset_or_room_vav_minimum_damper(prototype_input, model)
     case template
-      when '90.1-2004', '90.1-2007'
-        return true
-      when '90.1-2010', '90.1-2013'
-        model.getAirTerminalSingleDuctVAVReheats.sort.each do |airterminal|
-          airterminal_name = airterminal.name.get
-          if airterminal_name.include?('Floor 1 Operating Room 1') || airterminal_name.include?('Floor 1 Operating Room 2')
-            airterminal.setZoneMinimumAirFlowMethod('Scheduled')
-            airterminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'OutPatientHealthCare OR_MinSA_Sched'))
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
+        vav_name = air_terminal.name.get
+        air_terminal.setConstantMinimumAirFlowFraction(1.0) if vav_name.include?('Floor 1')
+      end
+    when '90.1-2004', '90.1-2007'
+      model.getThermalZones.each do |zone|
+        air_terminal = zone.airLoopHVACTerminal
+        if air_terminal.is_initialized
+          air_terminal = air_terminal.get
+          unless air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+            # High OA zones
+            # Determine whether or not to use the high minimum guess.
+            # Cutoff was determined by correlating apparent minimum guesses
+            # to OA rates in prototypes since not well documented in papers.
+            zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+            if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+              air_terminal.setConstantMinimumAirFlowFraction(1.0)
+            end
           end
         end
+      end
+    when '90.1-2010', '90.1-2013'
+      model.getThermalZones.each do |zone|
+        air_terminal = zone.airLoopHVACTerminal
+        if air_terminal.is_initialized
+          air_terminal = air_terminal.get
+          if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+            air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+            # High OA zones
+            # Determine whether or not to use the high minimum guess.
+            # Cutoff was determined by correlating apparent minimum guesses
+            # to OA rates in prototypes since not well documented in papers.
+            zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+            if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+              air_terminal.setConstantMinimumAirFlowFraction(1.0)
+            end
+          end
+        end
+      end
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
+        airterminal_name = air_terminal.name.get
+        if airterminal_name.include?('Floor 1 Operating Room 1') || airterminal_name.include?('Floor 1 Operating Room 2')
+          air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'OutPatientHealthCare OR_MinSA_Sched'))
+        end
+      end
     end
   end
 

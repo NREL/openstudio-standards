@@ -198,4 +198,18 @@ Standard.class_eval do
 
     return energy_values
   end
+
+  def model_annual_eui_kbtu_per_ft2_by_fuel_and_enduse(model, fuel_type, end_use)
+
+    energy_gj = model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
+    energy_kbtu = OpenStudio.convert(energy_gj, 'GJ', 'kBtu').get
+
+    building = model.getBuilding
+
+    floor_area_ft2 = OpenStudio.convert(building.floorArea, 'm^2', 'ft^2').get
+
+    eui_kbtu_per_ft2 = energy_kbtu / floor_area_ft2
+
+    return eui_kbtu_per_ft2
+  end
 end
