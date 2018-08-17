@@ -6080,13 +6080,9 @@ class OpenStudio::Model::Model
                      vav_fan_pressure_rise=OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                      return_plenum=nil,
                      reheat_type='Water')
-
-      # add water-to-water heat pumps in place of the boilers and chillers
-      # add_water_source_hp(condenser_loop, zones, ventilation=false)
     else
       raise "Unknown primary system '#{primary_system}' for #{__method__}"
     end
-
   end
 
 
