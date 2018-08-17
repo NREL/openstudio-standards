@@ -1757,7 +1757,7 @@ end
     }
 
     # puts JSON.pretty_generate(timings)
-    procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
+    procs = ENV['CIRCLE_NODE_TOTAL'] || File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
     sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
 
     sorted_timings.each_with_index {|files,i|
@@ -1785,7 +1785,7 @@ end
     generate_hvac_sys7_files()
     generate_doe_building_test_files()
     write_file_path_to_ci_tests_txt(local_run)
-    sort_files_by_timing(local_run)
+    sort_files_by_timing(local_run) # unless local_run
   end
 end
 
