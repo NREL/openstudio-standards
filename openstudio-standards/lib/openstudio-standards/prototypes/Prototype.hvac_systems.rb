@@ -6062,7 +6062,7 @@ class OpenStudio::Model::Model
     if primary_system.downcase == 'water-to-air heat pump'
       condenser_loop = get_or_add_ambient_water_loop
 
-      add_water_source_hp(condenser_loop, zones, ventilation=false)
+      add_water_source_hp(condenser_loop, zones, ventilation=true)
     elsif primary_system.downcase == 'water-to-water heat pump'
       ambient_loop = get_or_add_ambient_water_loop
       hot_water_loop = get_or_add_hot_water_loop('HeatPump', ambient_loop)
