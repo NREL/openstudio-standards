@@ -26,8 +26,8 @@ module SmallHotel
       infiltration_corridor.setSpace(corridor_space)
     end
 
-    # hardsize corridor1. put in standards in the future  #TODO
     unless template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+      # hardsize corridor1. put in standards in the future  #TODO
       model.getZoneHVACPackagedTerminalAirConditioners.sort.each do |ptac|
         zone = ptac.thermalZone.get
         if zone.spaces.include?(corridor_space)
@@ -41,6 +41,10 @@ module SmallHotel
           end
         end
       end
+
+      # add HotelSmall SAC_Econ_MaxOAFrac_Sch
+      oa_controller = model.getControllerOutdoorAirByName('ExerciseCenterFlr1 ZN - EmployeeLoungeFlr1 ZN - RestroomFlr1 ZN SAC OA System Controller').get
+      oa_controller.setMaximumFractionofOutdoorAirSchedule(model_add_schedule(model, 'HotelSmall SAC_Econ_MaxOAFrac_Sch'))
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
