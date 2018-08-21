@@ -6,6 +6,7 @@
     "fan_type": "ConstantVolume",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
     "space_names": [
       "G SW Apartment"
     ]
