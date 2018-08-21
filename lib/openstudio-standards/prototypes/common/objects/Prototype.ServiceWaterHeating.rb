@@ -447,11 +447,11 @@ class Standard
     water_use_sensible_frac_sch = model_add_constant_schedule_ruleset(model,
                                                                       frac_sensible,
                                                                       name = "Fraction Sensible - #{frac_sensible}",
-                                                                      sch_type_limit: 'Fraction')
+                                                                      sch_type_limit: 'Fractional')
     water_use_latent_frac_sch = model_add_constant_schedule_ruleset(model,
                                                                     frac_latent,
                                                                     name = "Fraction Latent - #{frac_latent}",
-                                                                    sch_type_limit: 'Fraction')
+                                                                    sch_type_limit: 'Fractional')
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
@@ -531,11 +531,11 @@ class Standard
     water_use_sensible_frac_sch = model_add_constant_schedule_ruleset(model,
                                                                       0.2,
                                                                       name = 'Fraction Sensible - 0.2',
-                                                                      sch_type_limit: 'Fraction')
+                                                                      sch_type_limit: 'Fractional')
     water_use_latent_frac_sch = model_add_constant_schedule_ruleset(model,
                                                                     0.05,
                                                                     name = 'Fraction Latent - 0.05',
-                                                                    sch_type_limit: 'Fraction')
+                                                                    sch_type_limit: 'Fractional')
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)

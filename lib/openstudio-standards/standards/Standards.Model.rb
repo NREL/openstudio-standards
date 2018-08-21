@@ -2058,7 +2058,7 @@ class Standard
             schedule_type_limits.setNumericType("Continuous")
             schedule_type_limits.setUnitType("Dimensionless")
 
-          when 'fraction'
+          when 'fraction', 'fractional'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
             schedule_type_limits.setName("Fraction")
             schedule_type_limits.setLowerLimitValue(0.0)

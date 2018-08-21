@@ -74,6 +74,10 @@ Standard.class_eval do
     model_custom_daylighting_tweaks(building_type, climate_zone, @prototype_input, model)
     model_update_exhaust_fan_efficiency(model)
     model_update_fan_efficiency(model)
+    # rename air loop and plant loop nodes for readability
+    rename_air_loop_nodes(model)
+    rename_plant_loop_nodes(model)
+    # remove unused objects
     model_remove_unused_resource_objects(model)
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
