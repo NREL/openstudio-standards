@@ -3,12 +3,12 @@ class Standard
 
   # Prototype CoilCoolingDXTwoSpeed object
   # Enters in default curves for coil by type of coil
-  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param type [String] the type of two speed DX coil to reference the correct curve set
   def create_coil_cooling_dx_two_speed(model,
-                                       air_loop: nil,
+                                       air_loop_node: nil,
                                        name: "2spd DX Clg Coil",
                                        schedule: nil,
                                        type: nil)
@@ -16,7 +16,7 @@ class Standard
     clg_coil = OpenStudio::Model::CoilCoolingDXTwoSpeed.new(model)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
+    clg_coil.addToNode(air_loop_node) unless air_loop_node.nil?
 
     # set coil name
     clg_coil.setName(name)

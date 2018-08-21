@@ -172,7 +172,6 @@ class Standard
   # @param chiller_condenser_type [String] valid choices are WithCondenser, WithoutCondenser, nil
   # @param chiller_compressor_type [String] valid choices are Centrifugal, Reciprocating, Rotary Screw, Scroll, nil
   # @param num_chillers [Integer] the number of chillers
-  # @param chiller_sizing_factor [Double] chiller oversizing factor
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop for water-cooled chillers.
   #   If this is not passed in, the chillers will be air cooled.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
@@ -186,7 +185,6 @@ class Standard
                          chiller_condenser_type: nil,
                          chiller_compressor_type: nil,
                          num_chillers: 1,
-                         chiller_sizing_factor: nil,
                          condenser_water_loop: nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding chilled water loop.')
 
@@ -287,6 +285,7 @@ class Standard
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     else
       # make the correct type of chiller based these properties
+      chiller_sizing_factor = (1.0 / num_chillers).round(2)
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
@@ -299,7 +298,7 @@ class Standard
         chiller.setOptimumPartLoadRatio(1.0)
         chiller.setMinimumUnloadingRatio(0.25)
         chiller.setChillerFlowMode('ConstantFlow')
-        chiller.setSizingFactor(chiller_sizing_factor) unless chiller_sizing_factor.nil?
+        chiller.setSizingFactor(chiller_sizing_factor)
 
         # connect the chiller to the condenser loop if one was supplied
         if condenser_water_loop.nil?
@@ -904,16 +903,16 @@ class Standard
     if hot_water_loop.nil?
       # electric backup heating coil
       create_coil_heating_electric(model,
-                                   air_loop: air_loop,
+                                   air_loop_node: air_loop.supplyInletNode,
                                    name: "#{air_loop.name} Backup Htg Coil")
       # heat pump coil
       create_coil_heating_dx_single_speed(model,
-                                          air_loop: air_loop,
+                                          air_loop_node: air_loop.supplyInletNode,
                                           name: "#{air_loop.name} Htg Coil")
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Htg Coil",
                                 controller_convergence_tolerance: 0.0001)
     end
@@ -921,13 +920,13 @@ class Standard
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil",
                                        type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -1132,16 +1131,16 @@ class Standard
     if hot_water_loop.nil?
       # electric backup heating coil
       create_coil_heating_electric(model,
-                                   air_loop: air_loop,
+                                   air_loop_node: air_loop.supplyInletNode,
                                    name: "#{air_loop.name} Backup Htg Coil")
       # heat pump coil
       create_coil_heating_dx_single_speed(model,
-                                          air_loop: air_loop,
+                                          air_loop_node: air_loop.supplyInletNode,
                                           name: "#{air_loop.name} Htg Coil")
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Htg Coil",
                                 controller_convergence_tolerance: 0.0001)
     end
@@ -1161,13 +1160,13 @@ class Standard
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil",
                                        type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -1418,12 +1417,12 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       create_coil_heating_gas(model,
-                              air_loop: air_loop,
+                              air_loop_node: air_loop.supplyInletNode,
                               name: 'Main Gas Htg Coil')
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Main Htg Coil",
                                 rated_inlet_water_temperature: hw_temp_c,
                                 rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
@@ -1434,13 +1433,13 @@ class Standard
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil",
                                        type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -1614,13 +1613,13 @@ class Standard
 
     # create heating coil
     create_coil_heating_electric(model,
-                                 air_loop: air_loop,
+                                 air_loop_node: air_loop.supplyInletNode,
                                  name: "#{air_loop.name} Htg Coil")
 
     # create cooling coil
     create_coil_cooling_water(model,
                               chilled_water_loop,
-                              air_loop: air_loop,
+                              air_loop_node: air_loop.supplyInletNode,
                               name: "#{air_loop.name} Clg Coil")
 
     # create outdoor air intake system
@@ -1771,12 +1770,12 @@ class Standard
     # create heating coil
     if hot_water_loop.nil?
       create_coil_heating_gas(model,
-                              air_loop: air_loop,
+                              air_loop_node: air_loop.supplyInletNode,
                               name: "#{air_loop.name} Main Gas Htg Coil")
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Main Htg Coil",
                                 rated_inlet_water_temperature: hw_temp_c,
                                 rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
@@ -1787,13 +1786,13 @@ class Standard
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil",
                                        type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -1946,18 +1945,18 @@ class Standard
 
     # create heating coil
     create_coil_heating_electric(model,
-                                 air_loop: air_loop,
+                                 air_loop_node: air_loop.supplyInletNode,
                                  name: "#{air_loop.name} Main Htg Coil")
 
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil", type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -2111,7 +2110,7 @@ class Standard
     # create heating coil
     create_coil_heating_water(model,
                               hot_water_loop,
-                              air_loop: air_loop,
+                              air_loop_node: air_loop.supplyInletNode,
                               name: "#{air_loop.name} Main Htg Coil",
                               rated_inlet_water_temperature: hw_temp_c,
                               rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
@@ -2121,13 +2120,13 @@ class Standard
     # create cooling coil
     if chilled_water_loop.nil?
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX Clg Coil",
                                        type: 'OS default')
     else
       create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: air_loop,
+                                air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Clg Coil")
     end
 
@@ -2736,7 +2735,7 @@ class Standard
         # extra water heating coil
         create_coil_heating_water(model,
                                   hot_water_loop,
-                                  air_loop: air_loop,
+                                  air_loop_node: air_loop.supplyInletNode,
                                   name: "#{air_loop.name} Water Htg Coil",
                                   rated_inlet_water_temperature: hw_temp_c,
                                   rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
@@ -2744,7 +2743,7 @@ class Standard
                                   rated_outlet_air_temperature: htg_sa_temp_c)
         # extra electric heating coil
         create_coil_heating_electric(model,
-                                     air_loop: air_loop,
+                                     air_loop_node: air_loop.supplyInletNode,
                                      name: "#{air_loop.name} Electric Htg Coil")
 
         # humidity controllers
@@ -2903,18 +2902,18 @@ class Standard
     # create supplemental heating coil
     if supplemental_heating_type == 'Electric'
       create_coil_heating_electric(model,
-                                   air_loop: air_loop,
+                                   air_loop_node: air_loop.supplyInletNode,
                                    name: "#{air_loop.name} PSZ-AC Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
       create_coil_heating_gas(model,
-                              air_loop: air_loop,
+                              air_loop_node: air_loop.supplyInletNode,
                               name: "#{air_loop.name} PSZ-AC Gas Backup Htg Coil")
     end
 
     # create heating coil
     if heating_type == 'Gas'
       htg_coil = create_coil_heating_gas(model,
-                                         air_loop: air_loop,
+                                         air_loop_node: air_loop.supplyInletNode,
                                          name: "#{air_loop.name} Gas Htg Coil")
       htg_part_load_fraction_correlation = OpenStudio::Model::CurveCubic.new(model)
       htg_part_load_fraction_correlation.setCoefficient1Constant(0.8)
@@ -2926,22 +2925,22 @@ class Standard
       htg_coil.setPartLoadFractionCorrelationCurve(htg_part_load_fraction_correlation)
     elsif heating_type == 'Single Speed Heat Pump'
       create_coil_heating_dx_single_speed(model,
-                                          air_loop: air_loop,
+                                          air_loop_node: air_loop.supplyInletNode,
                                           name: "#{air_loop.name} HP Htg Coil")
     end
 
     # create cooling coil
     if cooling_type == 'Two Speed DX AC'
       create_coil_cooling_dx_two_speed(model,
-                                       air_loop: air_loop,
+                                       air_loop_node: air_loop.supplyInletNode,
                                        name: "#{air_loop.name} 2spd DX AC Clg Coil")
     elsif cooling_type == 'Single Speed DX AC'
       create_coil_cooling_dx_single_speed(model,
-                                          air_loop: air_loop,
+                                          air_loop_node: air_loop.supplyInletNode,
                                           name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
     elsif cooling_type == 'Single Speed Heat Pump'
       create_coil_cooling_dx_single_speed(model,
-                                          air_loop: air_loop,
+                                          air_loop_node: air_loop.supplyInletNode,
                                           name: "#{air_loop.name} 1spd DX HP Clg Coil", type: 'Heat Pump')
     end
 

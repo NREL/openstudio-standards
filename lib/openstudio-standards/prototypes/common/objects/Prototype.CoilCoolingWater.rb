@@ -3,8 +3,7 @@ class Standard
 
   # Prototype CoilCoolingWater object
   # @param chilled_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
-  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
-  #   Note: if the coil is added to an air loop outside of this function, coil controller properties will need to be reset
+  # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param design_inlet_water_temperature [Double] design inlet water temperature in degrees Celsius, default is nil
@@ -12,8 +11,8 @@ class Standard
   # @param design_outlet_air_temperature [Double] design outlet air temperature in degrees Celsius, default is nil
   def create_coil_cooling_water(model,
                                 chilled_water_loop,
-                                air_loop: nil,
-                                name: "Clg Coil",
+                                air_loop_node: nil,
+                                name: 'Clg Coil',
                                 schedule: nil,
                                 design_inlet_water_temperature: nil,
                                 design_inlet_air_temperature: nil,
@@ -25,11 +24,11 @@ class Standard
     chilled_water_loop.addDemandBranchForComponent(clg_coil)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
+    clg_coil.addToNode(air_loop_node) unless air_loop_node.nil?
 
     # set coil name
     if name.nil?
-      clg_coil.setName("Clg Coil")
+      clg_coil.setName('Clg Coil')
     else
       clg_coil.setName(name)
     end
@@ -41,7 +40,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -69,7 +68,7 @@ class Standard
     # NOTE: These inputs will get overwritten if addToNode or addDemandBranchForComponent is called on the htg_coil object after this
     clg_coil_controller = clg_coil.controllerWaterCoil.get
     clg_coil_controller.setName("#{clg_coil.name.to_s} Controller")
-    clg_coil_controller.setAction("Reverse")
+    clg_coil_controller.setAction('Reverse')
     clg_coil_controller.setMinimumActuatedFlow(0.0)
 
     return clg_coil

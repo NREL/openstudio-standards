@@ -205,12 +205,14 @@ module Outpatient
         humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
         case template
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            extra_elec_htg_coil = create_coil_heating_electric(model, name: 'AHU1 extra Electric Htg Coil')
-            extra_elec_htg_coil.addToNode(supply_outlet_node)
-            extra_water_htg_coil = create_coil_heating_water(model,
-                                                             hot_water_loop,
-                                                             name: "AHU1 extra Water Htg Coil")
-            extra_water_htg_coil.addToNode(supply_outlet_node)
+            create_coil_heating_electric(model,
+                                         air_loop_node: supply_outlet_node,
+                                         name: 'AHU1 extra Electric Htg Coil')
+            create_coil_heating_water(model,
+                                      hot_water_loop,
+                                      air_loop_node: supply_outlet_node,
+                                      name: 'AHU1 extra Water Htg Coil')
+
         end
         # humidity_spm.addToNode(supply_outlet_node)
         humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)

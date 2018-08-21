@@ -4,13 +4,13 @@ class Standard
   # Prototype CoilCoolingWaterToAirHeatPumpEquationFit object
   # Enters in default curves for coil by type of coil
   # @param plant_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
-  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param type [String] the type of coil to reference the correct curve set
   # @param cop [Double] rated cooling coefficient of performance
   def create_coil_cooling_water_to_air_heat_pump_equation_fit(model,
                                                               plant_loop,
-                                                              air_loop: nil,
+                                                              air_loop_node: nil,
                                                               name: "Water-to-Air HP Clg Coil",
                                                               type: nil,
                                                               cop: 3.4)
@@ -18,7 +18,7 @@ class Standard
     clg_coil = OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit.new(model)
 
     # add to air loop if specified
-    clg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
+    clg_coil.addToNode(air_loop_node) unless air_loop_node.nil?
 
     # set coil name
     clg_coil.setName(name)

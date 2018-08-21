@@ -48,7 +48,6 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  chiller_sizing_factor: system['chiller_sizing_factor'],
                                                   condenser_water_loop: condenser_water_loop)
         end
 
@@ -91,7 +90,6 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  chiller_sizing_factor: system['chiller_sizing_factor'],
                                                   condenser_water_loop: condenser_water_loop)
         end
 
@@ -192,7 +190,6 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  chiller_sizing_factor: system['chiller_sizing_factor'],
                                                   condenser_water_loop: condenser_water_loop)
         end
         model_add_doas_cold_supply(model,

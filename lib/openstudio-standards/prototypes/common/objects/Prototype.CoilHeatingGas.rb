@@ -2,14 +2,14 @@ class Standard
   # @!group CoilHeatingGas
 
   # Prototype CoilHeatingGas object
-  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
+  # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param nominal_capacity [Double] rated nominal capacity
   # @param efficiency [Double] rated heating efficiency
   def create_coil_heating_gas(model,
-                              air_loop: nil,
-                              name: "Gas Htg Coil",
+                              air_loop_node: nil,
+                              name: 'Gas Htg Coil',
                               schedule: nil,
                               nominal_capacity: nil,
                               efficiency: 0.80)
@@ -17,7 +17,7 @@ class Standard
     htg_coil = OpenStudio::Model::CoilHeatingGas.new(model)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
+    htg_coil.addToNode(air_loop_node) unless air_loop_node.nil?
 
     # set coil name
     htg_coil.setName(name)
@@ -29,7 +29,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule

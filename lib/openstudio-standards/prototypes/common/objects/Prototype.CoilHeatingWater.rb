@@ -3,8 +3,7 @@ class Standard
 
   # Prototype CoilHeatingWater object
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
-  # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] the coil will be placed on the supply side of this air loop
-  #   Note: if the coil is added to an air loop outside of this function, coil controller properties will need to be reset
+  # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the coil, or nil in which case it will be defaulted
   # @param schedule [String] name of the availability schedule, or [<OpenStudio::Model::Schedule>] Schedule object, or nil in which case default to always on
   # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Celsius, default is hot water loop design exit temperature
@@ -14,8 +13,8 @@ class Standard
   # @parama [Double] controller convergence tolerance
   def create_coil_heating_water(model,
                                 hot_water_loop,
-                                air_loop: nil,
-                                name: "Htg Coil",
+                                air_loop_node: nil,
+                                name: 'Htg Coil',
                                 schedule: nil,
                                 rated_inlet_water_temperature: nil,
                                 rated_outlet_water_temperature: nil,
@@ -29,11 +28,11 @@ class Standard
     hot_water_loop.addDemandBranchForComponent(htg_coil)
 
     # add to air loop if specified
-    htg_coil.addToNode(air_loop.supplyInletNode) unless air_loop.nil?
+    htg_coil.addToNode(air_loop_node) unless air_loop_node.nil?
 
     # set coil name
     if name.nil?
-      htg_coil.setName("Htg Coil")
+      htg_coil.setName('Htg Coil')
     else
       htg_coil.setName(name)
     end
@@ -45,7 +44,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule
