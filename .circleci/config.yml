@@ -12,6 +12,10 @@ jobs:
           command: |
             bundle install
       - run:
+          name: Generate test files
+          command: |
+            bundle exec rake test:gen-circ-files
+      - run:
           name: Parallelize Tests
           command: |
             >node_tests.txt

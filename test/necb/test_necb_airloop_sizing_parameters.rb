@@ -209,7 +209,7 @@ end
         puts "found sizing run #{sizing_dir}/SizingRun1"
       end
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
       standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
@@ -217,7 +217,7 @@ end
       standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
 
       return true
     end
