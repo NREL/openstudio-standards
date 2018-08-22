@@ -332,19 +332,24 @@ module Baseline9012013
           # tests against 90.1-2013 efficiencies
           if size < 65000
             seer = 14.0
-            cop = -0.0076 * seer * seer + 0.3796 * seer
+            # Per PNNL, convert SEER to COP with fan
+            eer = -0.0182 * seer * seer + 1.1088 * seer
+            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
           elsif size >= 65000 && size < 135000
             eer = 11.0
-            cop = 7.84e-8 * eer * size + 0.338 * eer
+            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
           elsif size >= 135000 && size < 240000
             eer = 10.8
-            cop = 7.84e-8 * eer * size + 0.338 * eer
+            # Per PNNL, covert EER to COP using a capacity-agnostic formula
+            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
           elsif size >= 240000 && size < 760000
             eer = 9.8
-            cop = 7.84e-8 * eer * size + 0.338 * eer
+            # Per PNNL, covert EER to COP using a capacity-agnostic formula
+            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
           else # size >= 760000
             eer = 9.5
-            cop = 7.84e-8 * eer * size + 0.338 * eer
+            # Per PNNL, covert EER to COP using a capacity-agnostic formula
+            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
           end
         
           if (coil_cop - cop).abs >= 0.1
