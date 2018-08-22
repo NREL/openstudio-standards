@@ -37,7 +37,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
 
     name = String.new
 
-    FileUtils.rm_rf(output_folder)
+    # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
 
 
@@ -46,7 +46,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
       boiler_fueltypes.each do |boiler_fueltype|
         baseboard_types.each do |baseboard_type|
           heating_coil_types_sys4.each do |heating_coil|
-            name = "sys4_Boiler~#{boiler_fueltype}_HeatingCoilType#~#{heating_coil}_BaseboardType~#{baseboard_type}"
+            name = "sys4_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
@@ -94,13 +94,13 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
       puts "found sizing run #{sizing_dir}/SizingRun1"
     end
 
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+    # BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
     # need to set prototype assumptions so that HRV added
     standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
     # Apply the HVAC efficiency standard
     standard.model_apply_hvac_efficiency_standard(model, climate_zone)
     #self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-    BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+    # BTAP::FileIO::save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
     return true
   end
 end

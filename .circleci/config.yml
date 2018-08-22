@@ -12,10 +12,15 @@ jobs:
           command: |
             bundle install
       - run:
+          name: Generate test files
+          command: |
+            bundle exec rake test:gen-circ-files
+      - run:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            circleci tests split --split-by=timings test/circleci_tests.txt > node_tests.txt
+            echo "cat test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt"
+            echo "cat test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt > node_tests.txt" | bash
             cat node_tests.txt
       - run:
           name: Run tests
@@ -25,6 +30,10 @@ jobs:
           name: Summarize test times
           command: |
             bundle exec rake test:times
+      - run:
+          name: Copy test result Timings
+          command: |
+            cp -R test/reports timing/
       - store_test_results:
           path: test/reports/
       - store_artifacts:

@@ -26,7 +26,7 @@ namespace :test do
   end
 
 
-  desc 'Run All CircleCI tests'
+  desc 'Run All CircleCI tests locally'
   Rake::TestTask.new('local-circ-all-tests') do |t|
     file_list = FileList.new('test/test_run_all_test_locally.rb')
     t.libs << 'test'
@@ -34,6 +34,11 @@ namespace :test do
     t.verbose = false
   end
 
+  desc 'Generate CircleCI test files'
+  task :'gen-circ-files' do
+    require_relative './test/helpers/ci_test_generator'
+    CITestGenerator::generate(local_run: false)
+  end
 
 
   desc 'Run BTAP.perform_qaqc() test'
