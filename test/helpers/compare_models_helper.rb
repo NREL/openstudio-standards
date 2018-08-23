@@ -68,20 +68,16 @@ def compare_osm_files(model_true, model_compare)
 
   # Report a diff for each object found in only the true model
   if only_model_true.size > 0
-    diffs << "*** Objects only found in true model ***"
     only_model_true.each do |true_object|
-      diffs << "A #{true_object.iddObject.name} called '#{true_object.name}'"
+      diffs << "A #{true_object.iddObject.name} called '#{true_object.name}' only found in true model"
     end
-    diffs << ""
   end
 
   # Report a diff for each object found in only the compare model
   if only_model_true.size > 0
-    diffs << "*** Objects only found in compare model ***"
     only_model_compare.each do |compare_object|
-      diffs << "A #{compare_object.iddObject.name} called '#{compare_object.name}'"
+      diffs << "A #{compare_object.iddObject.name} called '#{compare_object.name}' only found in compare model"
     end
-    diffs << ""
   end
 
   # Compare objects found in both models field by field 
@@ -89,11 +85,11 @@ def compare_osm_files(model_true, model_compare)
     true_object = b[0]
     compare_object = b[1]
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, renamed_object_aliases)
-    if obj_diffs.size > 0
-      diffs << "For #{true_object.iddObject.name} called '#{true_object.name}'"
-      diffs << "  'Name': true model = #{true_object.name}, compare model = '#{compare_object.name}'" unless true_object.name.get.to_s == compare_object.name.get.to_s
-      diffs += obj_diffs
-      diffs << ""
+    obj_diffs.each do |obj_diff|
+      msg = "For #{true_object.iddObject.name} called '#{true_object.name}'"
+      msg += "  'Name': true model = #{true_object.name}, compare model = '#{compare_object.name}'" unless true_object.name.get.to_s == compare_object.name.get.to_s
+      msg += obj_diff
+      diffs << msg
     end
   end
 

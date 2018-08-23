@@ -53,12 +53,11 @@ Standard.class_eval do
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
     model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-    # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
-    # AHU1 doesn't have economizer
+    # custom economizer controls
+    # For 90.1-2010 Outpatient, AHU1 doesn't have economizer and AHU2 set minimum outdoor air flow rate as 0
     model_modify_oa_controller(model)
     # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
     model_reset_or_room_vav_minimum_damper(@prototype_input, model)
-    model_modify_oa_controller(model)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     # Apply prototype changes that supersede the HVAC efficiency standard

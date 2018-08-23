@@ -50,10 +50,10 @@ module LargeOffice
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp_f, 'F', 'C').get
       hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
                                                              sup_wtr_high_temp_c,
-                                                             name = "#{plant_loop.name} High Temp #{sup_wtr_high_temp_f.round(1)}F")
+                                                             name = "#{plant_loop.name} High Temp - #{sup_wtr_high_temp_f.round(0)}F")
       hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
                                                             sup_wtr_low_temp_c,
-                                                            name = "#{plant_loop.name} Low Temp #{sup_wtr_low_temp_f.round(1)}F")
+                                                            name = "#{plant_loop.name} Low Temp - #{sup_wtr_low_temp_f.round(0)}F")
 
       # add cooling tower object
       cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)

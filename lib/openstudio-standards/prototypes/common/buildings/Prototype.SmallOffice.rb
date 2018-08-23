@@ -12,6 +12,10 @@ module SmallOffice
     add_attic_infiltration(template, climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added attic infiltration')
 
+    # reset defrost time fraction
+    # TODO: set this to a reasonable defrost time fraction based on research and implement in Prototype.CoilHeatingDXSingleSpeed
+    model.getCoilHeatingDXSingleSpeeds.each { |coil| coil.resetDefrostTimePeriodFraction }
+
     return true
   end
 

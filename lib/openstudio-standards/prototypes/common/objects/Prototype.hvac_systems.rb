@@ -959,8 +959,9 @@ class Standard
     controller_oa.setHeatRecoveryBypassControlType('BypassWhenWithinEconomizerLimits')
 
     # create outdoor air system
-    system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
-    system_oa.addToNode(air_loop.supplyInletNode)
+    oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
+    oa_system.setName("#{air_loop.name} OA System")
+    oa_system.addToNode(air_loop.supplyInletNode)
 
     # create a setpoint manager
     sat_oa_reset = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
@@ -1201,8 +1202,9 @@ class Standard
     controller_mech_vent.setSystemOutdoorAirMethod('ZoneSum')
 
     # create outdoor air system
-    system_oa = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
-    system_oa.addToNode(air_loop.supplyInletNode)
+    oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, controller_oa)
+    oa_system.setName("#{air_loop.name} OA System")
+    oa_system.addToNode(air_loop.supplyInletNode)
 
     # create an exhaust fan
     if include_exhaust_fan
@@ -1426,8 +1428,8 @@ class Standard
                                 name: "#{air_loop.name} Main Htg Coil",
                                 rated_inlet_water_temperature: hw_temp_c,
                                 rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
-                                rated_inlet_air_temperature: htg_sa_temp_c,
-                                rated_outlet_air_temperature: rht_sa_temp_c)
+                                rated_inlet_air_temperature: prehtg_sa_temp_c,
+                                rated_outlet_air_temperature: htg_sa_temp_c)
     end
 
     # create cooling coil
@@ -1780,7 +1782,7 @@ class Standard
                                 rated_inlet_water_temperature: hw_temp_c,
                                 rated_outlet_water_temperature: (hw_temp_c - hw_delta_t_k),
                                 rated_inlet_air_temperature: sys_dsn_prhtg_temp_c,
-                                rated_outlet_air_temperature: rht_rated_air_out_temp_c)
+                                rated_outlet_air_temperature: sys_dsn_htg_sa_temp_c)
     end
 
     # create cooling coil

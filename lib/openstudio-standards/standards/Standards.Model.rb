@@ -1991,7 +1991,19 @@ class Standard
   def model_add_constant_schedule_ruleset(model,
                                           value,
                                           name = nil,
-                                          sch_type_limit: "Temperature")
+                                          sch_type_limit: 'Temperature')
+    # check to see if schedule exists with same name and constant value and return if true
+    unless name.nil?
+      existing_sch = model.getScheduleRulesetByName(name)
+      if existing_sch.is_initialized
+        existing_sch = existing_sch.get
+        existing_day_sch_vals = existing_sch.defaultDaySchedule.values
+        if existing_day_sch_vals.size == 1 && existing_day_sch_vals[0] == value
+          return existing_sch
+        end
+      end
+    end
+
     schedule = OpenStudio::Model::ScheduleRuleset.new(model)
     unless name.nil?
       schedule.setName(name)
