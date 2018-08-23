@@ -31,7 +31,7 @@ To produce just the files, run
 bundle exec rake test:gen-circ-files
 ```
 Running this command will
-1.Calls the module `CITestGenerator::generate(local_run: false)`
+1.Calls the module `CITestGenerator::generate(local_run: false)` (invoked from Rakefile)
 2. delete the output folders if it exists
 3. generate the test files, 
 4. Remove tests that were auto-generated from the __**`circleci_tests.txt`**__ file
@@ -47,7 +47,7 @@ bundle exec rake test:local-circ-all-tests
 ```
 
 Running this command will 
-1. Calls the module `CITestGenerator::generate(local_run: true)`
+1. Calls the module `CITestGenerator::generate(local_run: true)` (invoked from from ci_test_generator.rb)
 2. delete the output folders if it exists
 3. generate the test files, 
 4. Remove tests that were auto-generated from the `circleci_tests.txt` file
@@ -80,6 +80,7 @@ This method is only valid to tests that use the same code with different variabl
 5. After creating the method, add it to the `generate` method.
 6. test that everything is working by running `bundle exec rake test:gen-circ-files`.
 
+__**NOTE**__: _It is important to make each tests' method name and file name are unique_
 ```ruby
     templates = ['NECB2011', 'NECB2015'] # input variable 1
     building_types = [ # input variable 2

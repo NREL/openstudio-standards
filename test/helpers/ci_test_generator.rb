@@ -1,17 +1,22 @@
 require 'fileutils'
 module CITestGenerator
-
+  # default loation circleci_tests.txt file when run on
   @@ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "circleci_tests.txt"))
   @@local_ci_test_path = File.absolute_path(File.join(__FILE__, "..", "..", "local_circleci_tests.txt"))
 
+  #:@return [String] Path of the directory where the test files are written
   def self.file_out_dir
     File.absolute_path(File.join(__FILE__,"..","..","ci_test_files"))
   end
 
+  #:@return [String] Path of the doe_prototype directory
+  # used to copy the models directory present within the doe_prototype directory
   def self.doe_dir
     File.absolute_path(File.join(__FILE__,"..","..","doe_prototype"))
   end
 
+  # Method that is used to delete output directories, and recreate the folder
+  # that will have the test files written
   def self.cleanup_output_folders
     dirname = File.join(file_out_dir(), 'output')
     if File.directory?(dirname)
@@ -35,7 +40,8 @@ module CITestGenerator
     FileUtils.mkdir_p(file_out_dir())
   end
 
-  def self.generate_ci_bldg_test_files
+  # Method that will generate the necb building test files.
+  def self.generate_necb_bldg_test_files
     templates = ['NECB2011', 'NECB2015']
     building_types = [
         "FullServiceRestaurant",
@@ -87,11 +93,14 @@ end
     }
   end
 
+  #:@param local_run [Boolean] set to true if the run is a local run
   def self.write_file_path_to_ci_tests_txt(local_run)
-    circleci_tests_txt_path = @@ci_test_path
+    circleci_tests_txt_path = @@ci_test_path # use the default location os the circleci_tests.txt
 
+    # if the run is a local, make a copy of the default circleci_tests.txt, and rename it
     if local_run
       FileUtils.copy(@@ci_test_path, @@local_ci_test_path)
+      # point circleci_tests_txt_path to the newly created copy of the circleci_tests.txt
       circleci_tests_txt_path = @@local_ci_test_path
     end
     #puts circleci_tests_txt_path
@@ -100,7 +109,8 @@ end
     files = IO.readlines(circleci_tests_txt_path)
     new_file_content = files.clone
 
-    # remove lines which contains the test_necb_bldg_*.rb
+    # remove lines which contains the test_necb_bldg_*.rb, or other
+    # test files that this module auto-generates.
     files.each_with_index {|line, i|
       if  line.include?("necb/test_necb_bldg_") or \
         line.include?("necb/test_necb_hvac") or \
@@ -154,6 +164,7 @@ end
     }
   end
 
+  # This method copies the model directory used ny necb hvac tests
   def self.copy_model_files_for_hvac_tests
     out_dir = file_out_dir()
     model_dir = File.join(out_dir, 'models')
@@ -161,12 +172,14 @@ end
     FileUtils.copy_entry( File.absolute_path(File.join(__dir__, "..", "necb", "models")), model_dir)
   end
 
+  # This method copies the model directory used ny doe hvac tests
   def self.copy_doe_model_files_for_hvac_tests
     model_dir = File.join(file_out_dir(), 'models')
     FileUtils.mkpath(model_dir)
     FileUtils.copy_entry( File.absolute_path(File.join(doe_dir(), "models")), model_dir)
   end
 
+  # This method is used to generate NECB HVAC system 1 test
   def self.generate_hvac_sys1_files
 
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
@@ -174,10 +187,12 @@ end
     mau_heating_coil_types = ["Hot Water", "Electric"]
     baseboard_types = ["Hot Water", "Electric"]
 
+    # iterate through variables
     boiler_fueltypes.each {|boiler_fueltype|
       mau_types.each {|mau_type|
         mau_heating_coil_types.each {|mau_heating_coil_type|
           baseboard_types.each {|baseboard_type|
+            # generate unique filename
             filename = File.join(file_out_dir(),"test_necb_hvac_system_1-#{boiler_fueltype.snek}-#{mau_type.to_s.snek}-#{mau_heating_coil_type.snek}-#{baseboard_type.snek}.rb")
             puts filename
             file_string = %q{
@@ -330,7 +345,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
       return true
     end
 end}
-
+            # string substitution for file
             file_string['$(boiler_fueltypes)'] = boiler_fueltype
             file_string['$(mau_types)'] = mau_type.to_s
             file_string['$(mau_heating_coil_types)'] = mau_heating_coil_type
@@ -341,6 +356,7 @@ end}
             file_string['$(mau_heating_coil_types_snake)'] = mau_heating_coil_type.to_s.snek
             file_string['$(baseboard_types_snake)'] = baseboard_type.to_s.snek
 
+            # write file
             File.open(filename, 'w') { |file| file.write(file_string) }
           }
         }
@@ -349,13 +365,16 @@ end}
 
   end
 
+  #  This method is used to generate NECB HVAC system 2 test
   def self.generate_hvac_sys2_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
     chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
     mua_cooling_types = ["Hydronic", "DX"]
+    # iterate through variables
     boiler_fueltypes.each {|boiler_fueltype|
       chiller_types.each {|chiller_type|
         mua_cooling_types.each {|mua_cooling_type|
+          # generate unique filename
           filename = File.join(file_out_dir(),"test_necb_hvac_system_2_#{boiler_fueltype.snek}-#{chiller_type.to_s.snek}-#{mua_cooling_type.snek}.rb")
           puts filename
           file_string = %q{require_relative '../helpers/minitest_helper'
@@ -479,6 +498,7 @@ end
 
   end
 
+  # This method is used to generate NECB HVAC system 3 test
   def self.generate_hvac_sys3_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
     baseboard_types = ["Hot Water", "Electric"]
@@ -611,6 +631,7 @@ end
 
   end
 
+  # This method is used to generate NECB HVAC system 4 test
   def self.generate_hvac_sys4_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
     baseboard_types = ["Hot Water", "Electric"]
@@ -744,6 +765,7 @@ end
 
   end
 
+  # This method is used to generate NECB HVAC system 5 test
   def self.generate_hvac_sys5_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
     chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
@@ -878,6 +900,7 @@ end
 
   end
 
+  # This method is used to generate NECB HVAC system 6 test
   def self.generate_hvac_sys6_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2",]
     baseboard_types = ["Hot Water", "Electric"]
@@ -1027,6 +1050,7 @@ end
     }
   end
 
+  # This method is used to generate NECB HVAC system 7 test
   def self.generate_hvac_sys7_files
     boiler_fueltypes = ["NaturalGas", "Electricity", "FuelOil#2"]
     chiller_types = ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"]
@@ -1155,6 +1179,7 @@ end
 
   end
 
+  # This method is used to generate DOE HVAC tests
   def self.generate_doe_hvac_files
 
     hvac_systems = [
@@ -1332,6 +1357,7 @@ end
 
   end
 
+  # This method is used to generate DOE building tests qith ASHRAE climate zones
   def self.generate_doe_building_test_files
     building_types ={
         'FullServiceRestaurant' =>  {'templates'     => ['DOE Ref Pre-1980','DOE Ref 1980-2004','90.1-2010'],
@@ -1739,52 +1765,93 @@ end
 
   end
 
+  # Splits the tests by the previously generated timing data. This is the
+  # alternative for split by timings method provided by CircleCI. This method
+  # reads the timings.json file for timings, and reads the CircleCI's config
+  # file to determine the number of splits. After splitting up the tests, it
+  # writes the tests' file names (similar to circleci-tests.txt) into
+  # separate files. These will be read by each container of CircleCI depending
+  # on the container number.
   def self.sort_files_by_timing(local_run)
-    require_relative 'ci_test_helper/lpt'
-    ci_test_path = @@ci_test_path
+    require_relative 'ci_test_helper/lpt' # contains the algorithm to sort by timing data
+    ci_test_path = @@ci_test_path # use default circleci-tests.txt file path
+    # use different circleci-tests.txt file path when run locally
     if local_run
       ci_test_path = @@local_ci_test_path
     end
+    # read the timing data
     timings = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'ci_test_helper', 'timings.json')))
+    # read the contents of the circleci-tests.txt file
     existing_ci_tests = File.read(ci_test_path).split("\n")
     #p existing_ci_tests
+
+    # check if the timing data for each of the test is available or not.
+    # If it does not exist, assign a default timng of 240s
     existing_ci_tests.each {|test_file|
       next if timings.key?(test_file)
       next unless test_file.include?('.rb')
       timings[test_file] = {}
+      # output message to console
       puts "Setting default time of 240s for #{test_file} to timings"
       timings[test_file]['total'] = 240 # set default of 240s if test file is not part of the timings file
     }
 
     # puts JSON.pretty_generate(timings)
+    # read the number of splits ot be done by reading the config file of CircleCI
     procs = File.read(File.join(File.dirname(__FILE__), '..', '..' , '.circleci', 'config.yml')).match(/(?<=parallelism:\s)(\d*)/).to_s.to_i
+
+    # use the longes processing time algorithm to distribute
+    # the load accross all the containers
     sorted_timings = LPT.new(timings , procs).lpt_algorithm()[0]
 
+    # write the sorted tests to each file in the `ci_test_helper` folder
     sorted_timings.each_with_index {|files,i|
       File.open(File.join(File.dirname(__FILE__), 'ci_test_helper' ,"#{i}.txt"), "w") do |f|
         f.puts(files)
       end
     }
+    # test code to see if the circleci built-in environment variables
+    # are accessible by the ruby script
     if !!(ENV['CIRCLE_BRANCH'] =~ /nrcan/i)
       puts "CIRCLE_BRANCH: #{ENV['CIRCLE_BRANCH']}"
     end
   end
 
+  # This is the method that will organize this module such that each of the tests
+  # are auto-generated properly. This is the method taht is called to generate the
+  # full suite of test files
   def self.generate(local_run = false)
+    # remove the previous output folder if it exists, and perform a cleanup
     cleanup_output_folders()
+
+    # generate the doe hvac test, and make sure that the dependancies
+    # for the run copied to the correct folders
     copy_doe_model_files_for_hvac_tests()
     generate_doe_hvac_files()
-    generate_ci_bldg_test_files()
+
+    # generate NECB builging tests
+    generate_necb_bldg_test_files()
+
+    # generate the necb hvac test, and make sure that the dependancies
+    # for the run copied to the correct folders
     copy_model_files_for_hvac_tests()
     generate_hvac_sys1_files()
     generate_hvac_sys2_files()
     generate_hvac_sys3_files()
     generate_hvac_sys4_files()
-# generate_hvac_sys5_files() # known failure
+    # generate_hvac_sys5_files() # known failure
     generate_hvac_sys6_files()
     generate_hvac_sys7_files()
+
+    # generate ODE building tests
     generate_doe_building_test_files()
+
+    # write the generated test files to circleci_tests.txt file,
+    # and remove large tests that were split
     write_file_path_to_ci_tests_txt(local_run)
+
+    # soet the test files based on the timings and
+    # write the files that would be read by each of the containers on circleci
     sort_files_by_timing(local_run) # unless local_run
   end
 end
