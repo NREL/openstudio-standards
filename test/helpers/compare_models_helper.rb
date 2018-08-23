@@ -34,13 +34,11 @@ def compare_osm_files(model_true, model_compare)
   # Fill model object lists with all object types to be compared
   model_true.getModelObjects.sort.each do |obj|
     next if object_types_to_skip.include?(obj.iddObject.name) # Skip comparison of certain object types
-    next unless obj.iddObject.hasNameField # Skip comparison for objects with no name
     only_model_true << obj
   end
 
   model_compare.getModelObjects.sort.each do |obj|
     next if object_types_to_skip.include?(obj.iddObject.name) # Skip comparison of certain object types
-    next unless obj.iddObject.hasNameField # Skip comparison for objects with no name
     only_model_compare << obj
   end
 
@@ -68,20 +66,16 @@ def compare_osm_files(model_true, model_compare)
 
   # Report a diff for each object found in only the true model
   if only_model_true.size > 0
-    diffs << "*** Objects only found in true model ***"
     only_model_true.each do |true_object|
-      diffs << "A #{true_object.iddObject.name} called '#{true_object.name}'"
+      diffs << "A #{true_object.iddObject.name} called '#{object_name(true_object)}' only found in true model"
     end
-    diffs << ""
   end
 
   # Report a diff for each object found in only the compare model
   if only_model_true.size > 0
-    diffs << "*** Objects only found in compare model ***"
     only_model_compare.each do |compare_object|
-      diffs << "A #{compare_object.iddObject.name} called '#{compare_object.name}'"
+      diffs << "A #{compare_object.iddObject.name} called '#{object_name(compare_object)}' only found in compare model"
     end
-    diffs << ""
   end
 
   # Compare objects found in both models field by field 
@@ -89,15 +83,53 @@ def compare_osm_files(model_true, model_compare)
     true_object = b[0]
     compare_object = b[1]
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, renamed_object_aliases)
-    if obj_diffs.size > 0
-      diffs << "For #{true_object.iddObject.name} called '#{true_object.name}'"
-      diffs << "  'Name': true model = #{true_object.name}, compare model = '#{compare_object.name}'" unless true_object.name.get.to_s == compare_object.name.get.to_s
-      diffs += obj_diffs
-      diffs << ""
+    obj_diffs.each do |obj_diff|
+      msg = "For #{true_object.iddObject.name} called '#{true_object.name}'"
+      msg += "  'Name': true model = #{object_name(true_object)}, compare model = '#{object_name(compare_object)}'" unless object_name(true_object) == object_name(compare_object)
+      msg += obj_diff
+      diffs << msg
     end
   end
 
   return diffs
+end
+
+# Gets the "Name" of the object.  For objects with a Name field,
+# it returns that value.  For other objects, it returns a customized value
+# depending on the object type
+def object_name(object)
+  # For objects with a name, return the name
+  return object.name.get.to_s if object.iddObject.hasNameField
+
+  object_type = object.iddObject.name
+  case object_type
+  when'OS:StandardsInformation:Construction',
+      'OS:RunPeriodControl:DaylightSavingTime',
+      'OS:SimulationControl',
+      'OS:Sizing:Parameters',
+      'OS:SurfaceConvectionAlgorithm:Inside',
+      'OS:SurfaceConvectionAlgorithm:Outside',
+      'OS:Timestep',
+      'OS:YearDescription',
+      'OS:ClimateZones',
+      'OS:Site:GroundTemperature:BuildingSurface',
+      'OS:Site:WaterMainsTemperature',
+      'OS:WeatherFile',
+      'OS:LifeCycleCost:Parameters',
+      'OS:Facility'
+    # Objects that are unique (1 per model)
+    name = object_type
+  when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System'
+    # Objects referencing a parent in the first field
+    parent = object.getTarget(1).get
+    name = "#{object_type} #{parent.name.get.to_s}"
+  when 'OS:LifeCycleCost:Parameters'
+  else
+    name = "#{object.iddObject.name}"
+    puts "ERROR - no name defined for #{object.iddObject.name}"
+  end
+
+  return name
 end
 
 # Returns an array of differences between two objects, on a field-by-field
@@ -207,7 +239,7 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
 
     # Report the difference
     diffs << "  '#{field_name}': true model = '#{true_value}', compare model = '#{compare_value}'"
-    # diffs << "For #{true_object.iddObject.name} called '#{true_object.name}' field '#{field_name}': true model = #{true_value}, compare model = #{compare_value}"
+    # diffs << "For #{true_object.iddObject.name} called '#{object_name(true_object)}' field '#{field_name}': true model = #{true_value}, compare model = #{compare_value}"
   end
 
   return diffs
@@ -228,7 +260,7 @@ def find_object_matches_field_by_field(true_object, compare_model, alias_hash = 
     # If there are no differences, this is an obvious match
     if obj_diffs.size.zero?
       matching_objects << compare_object
-      # puts "renamed: #{true_object.name} matches #{compare_object.name}"
+      # puts "renamed: #{object_name(true_object)} matches #{object_name(compare_object)}"
       next
     end
     # Give large non-resource objects some fuzzy matching.
@@ -238,7 +270,7 @@ def find_object_matches_field_by_field(true_object, compare_model, alias_hash = 
     # num_fields = [true_object.numFields, compare_object.numFields].max
     # if num_fields > 10 && obj_diffs.size/num_fields < 0.2
     #   matching_objects << compare_object
-    #   puts "renamed: #{true_object.name} fuzzy matches #{compare_object.name}"
+    #   puts "renamed: #{object_name(true_object)} fuzzy matches #{object_name(compare_object)}"
     # end
   end
 
@@ -260,14 +292,22 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
   # Find objects in the true model only or in both models
   model_true.getModelObjects.sort.each do |true_object|
     next if object_types_to_skip.include?(true_object.iddObject.name) # Skip comparison of certain object types
-    next unless true_object.iddObject.hasNameField # Skip comparison for objects with no name
 
-    # Start by finding an object with the same name
-    compare_workspace_object = model_compare.getObjectByTypeAndName(true_object.iddObject.type, true_object.name.to_s)
+    # Start by looking for unique model objects
+    get_unique_object_method = "get#{true_object.iddObject.name.gsub('OS:','').gsub(':','')}"
+    if model_compare.respond_to?(get_unique_object_method) && model_compare.method(get_unique_object_method).arity.zero?
+      compare_object = model_compare.send(get_unique_object_method)
+      object_pairs << [true_object, compare_object]
+      # puts "compare '#{object_name(compare_object)}' matches true '#{object_name(true_object)}'"
+      next
+    end
+
+    # Next, look for an object with the same name
+    compare_workspace_object = model_compare.getObjectByTypeAndName(true_object.iddObject.type, object_name(true_object))
     if compare_workspace_object.is_initialized
       compare_object = model_compare.getModelObject(compare_workspace_object.get.handle).get
       object_pairs << [true_object, compare_object]
-      # puts "compare '#{compare_object.name}' matches true '#{true_object.name}'"
+      # puts "compare '#{object_name(compare_object)}' matches true '#{object_name(true_object)}'"
       next
     end
 
@@ -276,8 +316,8 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
     if matching_compare_objects.size > 0
       matching_compare_objects.each do |matching_compare_object|
         object_pairs << [true_object, matching_compare_object]
-        # puts "compare '#{matching_compare_object.name}' renamed matches true '#{true_object.name}'"
-        renamed_object_aliases[matching_compare_object.name.get.to_s] += [true_object.name.get.to_s] # Record the alias
+        # puts "compare '#{object_name(matching_compare_object)}' renamed matches true '#{object_name(true_object)}'"
+        renamed_object_aliases[object_name(matching_compare_object)] += [object_name(true_object)] # Record the alias
       end
       next
     end
@@ -286,13 +326,12 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
   # Find objects in compare model or in both models
   model_compare.getModelObjects.sort.each do |compare_object|
     next if object_types_to_skip.include?(compare_object.iddObject.name) # Skip comparison of certain object types
-    next unless compare_object.iddObject.hasNameField # Skip comparison for objects with no name
     # Start by finding an object with the same name
-    true_workspace_object = model_true.getObjectByTypeAndName(compare_object.iddObject.type, compare_object.name.to_s)
+    true_workspace_object = model_true.getObjectByTypeAndName(compare_object.iddObject.type, object_name(compare_object))
     if true_workspace_object.is_initialized
       true_object = model_true.getModelObject(true_workspace_object.get.handle).get
       object_pairs << [true_object, compare_object]
-      # puts "true '#{true_object.name}' matches compare '#{compare_object.name}'"
+      # puts "true '#{object_name(true_object)}' matches compare '#{object_name(compare_object)}'"
       next
     end
 
@@ -301,8 +340,8 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
     if matching_true_objects.size > 0
       matching_true_objects.each do |matching_true_object|
         object_pairs << [matching_true_object, compare_object]
-        # puts "true '#{matching_true_object.name}' renamed matches compare '#{compare_object.name}'"
-        renamed_object_aliases[matching_true_object.name.get.to_s] += [compare_object.name.get.to_s] # Record the alias
+        # puts "true '#{object_name(matching_true_object)}' renamed matches compare '#{object_name(compare_object)}'"
+        renamed_object_aliases[object_name(matching_true_object)] += [object_name(compare_object)] # Record the alias
       end
       next
     end
