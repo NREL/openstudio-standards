@@ -73,12 +73,7 @@ module LargeHotel
 
     # adjust VAV system sizing
     model.getAirLoopHVACs.each do |air_loop|
-      if air_loop.name.to_s.include? "VAV WITH REHEAT"
-        # system sizing
-        sizing_system = air_loop.sizingSystem
-        htg_sa_temp_c = OpenStudio.convert(62.0, 'F', 'C').get
-        sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
-
+      if air_loop.name.to_s.include? 'VAV WITH REHEAT'
         # economizer type
         oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
         oa_intake_controller = oa_system.getControllerOutdoorAir
@@ -108,19 +103,6 @@ module LargeHotel
 
     zone_sizing = model.getSpaceByName('Laundry_Flr_1').get.thermalZone.get.sizingZone
     zone_sizing.setCoolingMinimumAirFlow(0.23567919336)
-
-    # change rated coil sizing back to EnergyPlus defaults
-    # TODO: GET APPROVAL TO ELIMINATE THIS - OVERSIGHT IN ORIGINAL PROTOTYPE
-    rated_inlet_temp_c = OpenStudio.convert(180.0, 'F', 'C').get
-    rated_outlet_temp_c = OpenStudio.convert(160.0, 'F', 'C').get
-    rated_inlet_air_temp_c = OpenStudio.convert(62.0, 'F', 'C').get
-    model.getCoilHeatingWaters.each do |coil|
-      coil.setRatedInletWaterTemperature(rated_inlet_temp_c)
-      coil.setRatedOutletWaterTemperature(rated_outlet_temp_c)
-      if coil.name.to_s.include? "Reheat Coil" || "Main Htg Coil"
-        coil.setRatedInletAirTemperature(rated_inlet_air_temp_c)
-      end
-    end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
