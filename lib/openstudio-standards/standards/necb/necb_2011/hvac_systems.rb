@@ -1289,6 +1289,7 @@ class NECB2011
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
       # oa_controller.setEconomizerControlType("DifferentialEnthalpy")
 
       # oa_system
@@ -1526,6 +1527,7 @@ class NECB2011
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
       # oa_controller.setEconomizerControlType("DifferentialEnthalpy")
 
       # oa_system
@@ -1740,6 +1742,7 @@ class NECB2011
 
     # does MAU have an economizer?
     oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_controller.autosizeMinimumOutdoorAirFlowRate
 
     # oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model,oa_controller)
     oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
@@ -1882,6 +1885,7 @@ class NECB2011
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
 
       # oa_system
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
@@ -2075,6 +2079,7 @@ class NECB2011
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
 
       # oa_system
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
@@ -2200,6 +2205,7 @@ class NECB2011
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
 
       # oa_system
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
@@ -2336,6 +2342,7 @@ class NECB2011
         chw_loop.addDemandBranchForComponent(clg_coil)
 
         oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+        oa_controller.autosizeMinimumOutdoorAirFlowRate
 
         oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
 
