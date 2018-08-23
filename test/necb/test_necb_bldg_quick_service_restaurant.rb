@@ -15,6 +15,7 @@ class TestNECBQuickServiceRestaurant < NECBRegressionHelper
     )
     assert(result, msg)
   end
+
   def test_necb_2011_QuickServiceRestaurant_regression_electric()
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
@@ -34,6 +35,21 @@ class TestNECBQuickServiceRestaurant < NECBRegressionHelper
     result, msg = create_model_and_regression_test(@building_type,
                                                    @electric_location,
                                                    'NECB2015'
+    )
+    assert(result, msg)
+  end
+
+  def test_necb_2017_QuickServiceRestaurant_regression_natural_gas()
+    result, msg = create_model_and_regression_test(@building_type,
+                                                   @gas_location,
+                                                   'NECB2017'
+    )
+    assert(result, msg)
+  end
+  def test_necb_2017_QuickServiceRestaurant_regression_electric()
+    result, msg = create_model_and_regression_test(@building_type,
+                                                   @electric_location,
+                                                   'NECB2017'
     )
     assert(result, msg)
   end

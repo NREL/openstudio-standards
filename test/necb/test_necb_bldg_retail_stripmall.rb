@@ -37,4 +37,19 @@ class TestNECBRetailStripmall < NECBRegressionHelper
     )
     assert(result, msg)
   end
+
+  def test_necb_2017_RetailStripmall_regression_natural_gas()
+    result, msg = create_model_and_regression_test(@building_type,
+                                                   @gas_location,
+                                                   'NECB2017'
+    )
+    assert(result, msg)
+  end
+  def test_necb_2017_RetailStripmall_regression_electric()
+    result, msg = create_model_and_regression_test(@building_type,
+                                                   @electric_location,
+                                                   'NECB2017'
+    )
+    assert(result, msg)
+  end
 end
