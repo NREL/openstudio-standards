@@ -131,6 +131,22 @@ class Standard
       htg_part_load_fraction.setCoefficient3xPOW2(0.0)
       htg_part_load_fraction.setMinimumValueofx(0.0)
       htg_part_load_fraction.setMaximumValueofx(1.0)
+
+      unless defrost_strategy == 'Resistive'
+        def_eir_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+        def_eir_f_of_temp.setName("#{htg_coil.name} Defrost EIR Func of Temp Curve")
+        def_eir_f_of_temp.setCoefficient1Constant(0.297145)
+        def_eir_f_of_temp.setCoefficient2x(0.0430933)
+        def_eir_f_of_temp.setCoefficient3xPOW2(-0.000748766)
+        def_eir_f_of_temp.setCoefficient4y(0.00597727)
+        def_eir_f_of_temp.setCoefficient5yPOW2(0.000482112)
+        def_eir_f_of_temp.setCoefficient6xTIMESY(-0.000956448)
+        def_eir_f_of_temp.setMinimumValueofx(12.77778)
+        def_eir_f_of_temp.setMaximumValueofx(23.88889)
+        def_eir_f_of_temp.setMinimumValueofy(21.11111)
+        def_eir_f_of_temp.setMaximumValueofy(46.11111)
+      end
+
     end
 
     if type == 'PSZ-AC'
