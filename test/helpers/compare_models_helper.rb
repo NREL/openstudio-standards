@@ -7,7 +7,6 @@
 # @param model_compare [OpenStudio::Model::Model] the model to be
 # compared to the "true" model
 # @return [Array<String>] a list of differences between the two models
-# @todo Handle comparison of objects without names
 def compare_osm_files(model_true, model_compare)
 
   only_model_true = [] # objects only found in the true model
@@ -28,7 +27,8 @@ def compare_osm_files(model_true, model_compare)
     'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deteministically
     'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
     'OS:Schedule:Rule', # Names appear to be created non-deteministically
-    'OS:Rendering:Color' # Rendering colors don't matter
+    'OS:Rendering:Color', # Rendering colors don't matter
+    'OS:Output:Meter' # Output meter objects may be different and don't affect results
   ]
 
   # Fill model object lists with all object types to be compared
@@ -84,7 +84,7 @@ def compare_osm_files(model_true, model_compare)
     compare_object = b[1]
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, renamed_object_aliases)
     obj_diffs.each do |obj_diff|
-      msg = "For #{true_object.iddObject.name} called '#{true_object.name}'"
+      msg = "For #{true_object.iddObject.name} called '#{object_name(true_object)}'"
       msg += "  'Name': true model = #{object_name(true_object)}, compare model = '#{object_name(compare_object)}'" unless object_name(true_object) == object_name(compare_object)
       msg += obj_diff
       diffs << msg
@@ -103,8 +103,7 @@ def object_name(object)
 
   object_type = object.iddObject.name
   case object_type
-  when'OS:StandardsInformation:Construction',
-      'OS:RunPeriodControl:DaylightSavingTime',
+  when'OS:RunPeriodControl:DaylightSavingTime',
       'OS:SimulationControl',
       'OS:Sizing:Parameters',
       'OS:SurfaceConvectionAlgorithm:Inside',
@@ -116,20 +115,37 @@ def object_name(object)
       'OS:Site:WaterMainsTemperature',
       'OS:WeatherFile',
       'OS:LifeCycleCost:Parameters',
-      'OS:Facility'
+      'OS:Facility',
+      'OS:ConvergenceLimits',
+      'OS:HeatBalanceAlgorithm',
+      'OS:ShadowCalculation'
     # Objects that are unique (1 per model)
     name = object_type
-  when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System'
+  when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System', 'OS:StandardsInformation:Construction'
     # Objects referencing a parent in the first field
     parent = object.getTarget(1).get
     name = "#{object_type} #{parent.name.get.to_s}"
-  when 'OS:LifeCycleCost:Parameters'
   else
     name = "#{object.iddObject.name}"
     puts "ERROR - no name defined for #{object.iddObject.name}"
   end
 
   return name
+end
+
+
+
+# Finds object by compare_name if object does not have name field
+def get_unnamed_object_by_compare_name(model_compare, object)
+  get_objects_method = "get#{object.iddObject.name.gsub('OS:','').gsub(':','')}s"
+  if model_compare.respond_to?(get_objects_method)
+    model_compare.send(get_objects_method).each do |compare_object|
+      if object_name(compare_object) == object_name(object)
+        return compare_object
+      end
+     end
+  end
+  return nil
 end
 
 # Returns an array of differences between two objects, on a field-by-field
@@ -300,6 +316,17 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
       object_pairs << [true_object, compare_object]
       # puts "compare '#{object_name(compare_object)}' matches true '#{object_name(true_object)}'"
       next
+    end
+
+    # Look for non-unique model objects without a name
+    unless true_object.iddObject.hasNameField
+      # get objects with no name
+      compare_object = get_unnamed_object_by_compare_name(model_compare, true_object)
+      unless compare_object.nil?
+        object_pairs << [true_object, compare_object]
+        # puts "compare '#{object_name(compare_object)}' matches true '#{object_name(true_object)}'"
+        next
+      end
     end
 
     # Next, look for an object with the same name
