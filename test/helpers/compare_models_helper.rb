@@ -216,6 +216,7 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
 
     # Fields that don't matter
     next if field_name.include?('Group Rendering Name')
+    next if field_name.include?('Url') # Location EPW file is stored on disk
 
     # Don't compare curve names (temporarily, for PNNL merge)
     next if field_name.include?('Curve Name')
