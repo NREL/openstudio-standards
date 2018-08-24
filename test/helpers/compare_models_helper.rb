@@ -84,7 +84,7 @@ def compare_osm_files(model_true, model_compare)
     compare_object = b[1]
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, renamed_object_aliases)
     obj_diffs.each do |obj_diff|
-      msg = "For #{true_object.iddObject.name} called '#{true_object.name}'"
+      msg = "For #{true_object.iddObject.name} called '#{object_name(true_object)}'"
       msg += "  'Name': true model = #{object_name(true_object)}, compare model = '#{object_name(compare_object)}'" unless object_name(true_object) == object_name(compare_object)
       msg += obj_diff
       diffs << msg
@@ -196,6 +196,7 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
 
     # Fields that don't matter
     next if field_name.include?('Group Rendering Name')
+    next if field_name.include?('Url') # Location EPW file is stored on disk
 
     # Don't compare curve names (temporarily, for PNNL merge)
     next if field_name.include?('Curve Name')
