@@ -103,22 +103,28 @@ def object_name(object)
 
   object_type = object.iddObject.name
   case object_type
-  when'OS:RunPeriodControl:DaylightSavingTime',
-      'OS:SimulationControl',
-      'OS:Sizing:Parameters',
-      'OS:SurfaceConvectionAlgorithm:Inside',
-      'OS:SurfaceConvectionAlgorithm:Outside',
-      'OS:Timestep',
-      'OS:YearDescription',
-      'OS:ClimateZones',
-      'OS:Site:GroundTemperature:BuildingSurface',
-      'OS:Site:WaterMainsTemperature',
-      'OS:WeatherFile',
-      'OS:LifeCycleCost:Parameters',
-      'OS:Facility',
-      'OS:ConvergenceLimits',
-      'OS:HeatBalanceAlgorithm',
-      'OS:ShadowCalculation'
+  when 'OS:ClimateZones',
+       'OS:ConvergenceLimits',
+       'OS:Facility',
+       'OS:HeatBalanceAlgorithm',
+       'OS:LifeCycleCost:Parameters',
+       'OS:OutputControl:ReportingTolerances',
+       'OS:ProgramControl',
+       'OS:RadianceParameters',
+       'OS:RunPeriodControl:DaylightSavingTime',
+       'OS:ShadowCalculation',
+       'OS:SimulationControl',
+       'OS:Site:GroundTemperature:BuildingSurface',
+       'OS:Site:WaterMainsTemperature',
+       'OS:Sizing:Parameters',
+       'OS:SurfaceConvectionAlgorithm:Inside',
+       'OS:SurfaceConvectionAlgorithm:Outside',
+       'OS:Timestep',
+       'OS:WeatherFile',
+       'OS:YearDescription',
+       'OS:ZoneAirContaminantBalance',
+       'OS:ZoneAirHeatBalanceAlgorithm',
+       'OS:ZoneCapacitanceMultiplier:ResearchSpecial'
     # Objects that are unique (1 per model)
     name = object_type
   when 'OS:Sizing:Zone', 'OS:Sizing:Plant', 'OS:Sizing:System', 'OS:StandardsInformation:Construction'
@@ -132,8 +138,6 @@ def object_name(object)
 
   return name
 end
-
-
 
 # Finds object by compare_name if object does not have name field
 def get_unnamed_object_by_compare_name(model_compare, object)
