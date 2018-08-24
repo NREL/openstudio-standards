@@ -40,6 +40,14 @@ namespace :test do
     CITestGenerator::generate(local_run: false)
   end
 
+  desc 'Run NECB Building regression test'
+  Rake::TestTask.new(:necb_regression_test) do |t|
+    file_list = FileList.new('test/necb/necb_bldg_regression.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = true
+  end
+
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
