@@ -374,7 +374,8 @@ class Standard
     if set_ventilation && ventilation_have_info
 
       # Modify the ventilation properties
-      ventilation.setOutdoorAirMethod('Sum')
+      ventilation_method = model_ventilation_method(space_type.model)
+      ventilation.setOutdoorAirMethod(ventilation_method)
       unless ventilation_per_area.zero?
         ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
@@ -479,7 +480,6 @@ class Standard
     # People
     if set_people
       occupancy_sch = space_type_properties['occupancy_schedule']
-      puts space_type_properties
       unless occupancy_sch.nil?
         default_sch_set.setNumberofPeopleSchedule(model_add_schedule(space_type.model, occupancy_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set occupancy schedule to #{occupancy_sch}.")
