@@ -19,7 +19,7 @@ class Standard
                            model.getPlantLoopByName('Hot Water Loop').get
                          else
                            model_add_hw_loop(model,
-                                            'NaturalGas',
+                                             'NaturalGas',
                                              dsgn_sup_wtr_temp: system['hot_water_design_supply_water_temperature'],
                                              boiler_lvg_temp_dsgn: system['boiler_leaving_temperature_design'],
                                              boiler_out_temp_lmt: system['boiler_outlet_temperature_limit'],
@@ -141,7 +141,7 @@ class Standard
                            nil
                          else
                            model_add_hw_loop(model,
-                                            'NaturalGas',
+                                             'NaturalGas',
                                              pump_spd_ctrl: system['hotwater_pump_speed_control'])
                          end
         case system['electric_reheat']
@@ -328,7 +328,7 @@ class Standard
         end
         case system['cooling_type']
         when 'Electricity', 'DistrictCooling'
-          chilled_water_loop = model_get_or_add_chilled_water_loop(model, system['cooling_type'], air_cooled: true)
+          chilled_water_loop = model_get_or_add_chilled_water_loop(model, system['cooling_type'], chilled_water_loop_cooling_type: 'AirCooled')
         when nil
           chilled_water_loop = nil
         end
