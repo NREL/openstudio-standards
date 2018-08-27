@@ -45,6 +45,7 @@ def write_results(result, test_file)
   if result[2].success?
     test_result = true
     puts "PASSED: #{test_file}".green
+    return true
   else
     test_result = false
     output = {"test" => test_file, "test_result" => test_result, "output" => {"status" => result[2], "std_out" => result[0], "std_err" => result[1]}}
@@ -53,11 +54,14 @@ def write_results(result, test_file)
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
     puts "FAILED: #{test_file_output}".red
+    return false
   end
 end
 
-class RunAllTests< Minitest::Test
-  def test_all()
+class RunAllTests< Minitest::Test  
+
+   def test_all()
+    did_all_tests_pass = true
     require_relative './helpers/ci_test_generator'
     CITestGenerator::generate(true)
 
@@ -83,11 +87,11 @@ class RunAllTests< Minitest::Test
       file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/,'')
       timings_json[file_name.to_s] = {}
       timings_json[file_name.to_s]['start'] = Time.now.to_i
-      write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
+      did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}'"), test_file)
       timings_json[file_name.to_s]['end'] = Time.now.to_i
       timings_json[file_name.to_s]['total'] =timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
     end
     File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') { |file| file.puts(JSON.pretty_generate(timings_json))}
+    assert(did_all_tests_pass, "Some tests failed please ensure all test pass and tests have been updated to reflect the changes you expect before issuing a pull request")
   end
-
 end

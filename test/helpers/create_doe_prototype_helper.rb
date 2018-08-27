@@ -128,34 +128,36 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         prototype_creator = Standard.build("#{template}_#{building_type}")
         model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
         @current_model = model
-        puts model.class
-        output_variable_array =
-          [
-          "Facility Total Electric Demand Power",
-          "Water Heater Gas Rate",
-          "Plant Supply Side Heating Demand Rate",
-          "Heating Coil Gas Rate",
-          "Cooling Coil Electric Power",
-          "Boiler Gas Rate",
-          "Heating Coil Air Heating Rate",
-          "Heating Coil Electric Power",
-          "Cooling Coil Total Cooling Rate",
-          "Water Heater Heating Rate",
-          "Zone Air Temperature",
-          "Water Heater Electric Power",
-          "Chiller Electric Power",
-          "Chiller Electric Energy",
-          "Cooling Tower Heat Transfer Rate",
-          "Cooling Tower Fan Electric Power",
-          "Cooling Tower Fan Electric Energy"
-        ]
-        BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
-              
-        # Convert the model to energyplus idf
-        forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-        idf = forward_translator.translateModel(model)
-        idf.save(idf_path,true)  
-            
+        if model.is_a?(FalseClass)
+          OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Model for #{template}_#{building_type} was not created successfully.")
+        else
+          output_variable_array =
+            [
+            "Facility Total Electric Demand Power",
+            "Water Heater Gas Rate",
+            "Plant Supply Side Heating Demand Rate",
+            "Heating Coil Gas Rate",
+            "Cooling Coil Electric Power",
+            "Boiler Gas Rate",
+            "Heating Coil Air Heating Rate",
+            "Heating Coil Electric Power",
+            "Cooling Coil Total Cooling Rate",
+            "Water Heater Heating Rate",
+            "Zone Air Temperature",
+            "Water Heater Electric Power",
+            "Chiller Electric Power",
+            "Chiller Electric Energy",
+            "Cooling Tower Heat Transfer Rate",
+            "Cooling Tower Fan Electric Power",
+            "Cooling Tower Fan Electric Energy"
+          ]
+          BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
+
+          # Convert the model to energyplus idf
+          forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+          idf = forward_translator.translateModel(model)
+          idf.save(idf_path,true)
+        end
       end
          
       # TO DO: call add_output routine (btap)
@@ -389,7 +391,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       end
             
       # Assert if there were any errors
-      assert(errors.size == 0, errors)
+      assert(errors.size == 0, errors.reverse)
 
     end
   end
