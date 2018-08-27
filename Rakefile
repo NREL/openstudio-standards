@@ -20,6 +20,18 @@ namespace :test do
     File.open("test/circleci_tests.json","w") do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
+
+
+    require_relative './test/helpers/ci_test_generator'
+    CITestGenerator::generate(true, false)
+    # load test files from file.
+    local_full_file_list = FileList.new(File.readlines('test/local_circleci_tests.txt'))
+    # Select only .rb files that exist
+    local_full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
+    local_full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
+    File.open("test/local_circleci_tests.json","w") do |f|
+      f.write(JSON.pretty_generate(local_full_file_list.to_a))
+    end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
@@ -57,10 +69,10 @@ namespace :test do
     t.verbose = true
   end
 
-  ['90_1_prm', '90_1_general', 'doe_prototype', 'necb', 'necb_bldg'].each do |type|
+  ['90_1_prm', '90_1_general', 'doe','doe_test_add_hvac_systems', 'doe_test_bldg' ,'necb', 'necb_bldg'].each do |type|
     desc "Manual Run CircleCI tests #{type}"
-    Rake::TestTask.new("circ-#{type}") do |t|
-      array = full_file_list.select { |item| item.include?(type.to_s) }
+    Rake::TestTask.new("local-circ-#{type}") do |t|
+      array = local_full_file_list.select { |item| item.include?(type.to_s) }
       t.libs << 'test'
       t.test_files = array
     end
