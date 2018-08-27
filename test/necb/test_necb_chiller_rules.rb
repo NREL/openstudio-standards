@@ -2,7 +2,7 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class HVACEfficienciesTest < MiniTest::Test
+class NECB_HVAC_Test < MiniTest::Test
   #set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   #set to true to run the simulations.
@@ -10,11 +10,12 @@ class HVACEfficienciesTest < MiniTest::Test
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
-  def test_chiller_cop
+  def test_NECB2011_chiller_cop
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_cop"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_expected_results.csv')
+    standard = Standard.build('NECB2011')
 
     # Initialize hashes for storing expected chiller cop data from file
     chiller_type_min_cap = {}
@@ -83,13 +84,14 @@ class HVACEfficienciesTest < MiniTest::Test
         model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule	
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys2(
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.add_sys2_FPFC_sys5_TPFC(
           model,
           model.getThermalZones,
           boiler_fueltype,
           chiller_type,
+          "FPFC",
           mua_cooling_type,
           hw_loop)
         # Save the model after btap hvac. 
@@ -131,10 +133,12 @@ class HVACEfficienciesTest < MiniTest::Test
   # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
-  def test_number_of_chillers
+  def test_NECB2011_number_of_chillers
     output_folder = "#{File.dirname(__FILE__)}/output/num_of_chillers"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
@@ -155,9 +159,9 @@ class HVACEfficienciesTest < MiniTest::Test
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule	
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys6(
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
           model,
           model.getThermalZones,
           boiler_fueltype,
@@ -214,10 +218,12 @@ class HVACEfficienciesTest < MiniTest::Test
   end
 
   # Test to validate the chiller performance curves
-  def test_chiller_curves
+  def test_NECB2011_chiller_curves
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_expected_results.csv')
     chiller_curve_names = {}
     chiller_curve_names['Scroll'] = []
@@ -242,13 +248,14 @@ class HVACEfficienciesTest < MiniTest::Test
       model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule	
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys5(
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.add_sys2_FPFC_sys5_TPFC(
           model,
           model.getThermalZones,
           boiler_fueltype,
           chiller_type,
+          "TPFC",
           mua_cooling_type,
           hw_loop)
       # Save the model after btap hvac.
