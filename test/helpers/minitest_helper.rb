@@ -1,3 +1,4 @@
+=begin
 require 'simplecov'
 require 'codecov'
 
@@ -21,6 +22,7 @@ SimpleCov.start do
   add_filter '/hvac_sizing/'
   add_filter 'version'  
 end
+=end
 
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
@@ -30,7 +32,7 @@ else
   require 'minitest/reporters'
 end
 
-require '/usr/Ruby/openstudio'
+require 'openstudio'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'json'
 require 'fileutils'

@@ -1,0 +1,27 @@
+[
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "RetailStandalone HVACOperationSchd",
+    "oa_damper_schedule": "RetailStandalone MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Two Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Back_Space",
+      "Core_Retail",
+      "Point_Of_Sale",
+      "Front_Retail"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "RetailStandalone FrontEntry_FanSched",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 4.4584,
+    "heating_type": "Gas",
+    "space_names": [
+      "Front_Entry"
+    ]
+  }
+]
