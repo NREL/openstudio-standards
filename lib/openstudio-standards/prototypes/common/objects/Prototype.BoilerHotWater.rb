@@ -18,12 +18,12 @@ class Standard
   # @param sizing_factor [Double] boiler oversizing factor
   def create_boiler_hot_water(model,
                               hot_water_loop: nil,
-                              name: "Boiler",
-                              fuel_type: "NaturalGas",
-                              draft_type: "Natural",
+                              name: 'Boiler',
+                              fuel_type: 'NaturalGas',
+                              draft_type: 'Natural',
                               nominal_thermal_efficiency: 0.80,
-                              eff_curve_temp_eval_var: "LeavingBoiler",
-                              flow_mode: "LeavingSetpointModulated",
+                              eff_curve_temp_eval_var: 'LeavingBoiler',
+                              flow_mode: 'LeavingSetpointModulated',
                               lvg_temp_dsgn: 180.0,
                               out_temp_lmt: 203.0, # 95C
                               min_plr: 0.0,
@@ -37,14 +37,14 @@ class Standard
       if !hot_water_loop.nil?
         boiler.setName("#{hot_water_loop.name.to_s} Boiler")
       else
-        boiler.setName("Boiler")
+        boiler.setName('Boiler')
       end
     else
       boiler.setName(name)
     end
 
-    if fuel_type.nil?
-      boiler.setFuelType("NaturalGas")
+    if fuel_type.nil? || fuel_type == 'Gas'
+      boiler.setFuelType('NaturalGas')
     else
       boiler.setFuelType(fuel_type)
     end
@@ -56,13 +56,13 @@ class Standard
     end
 
     if eff_curve_temp_eval_var.nil?
-      boiler.setEfficiencyCurveTemperatureEvaluationVariable("LeavingBoiler")
+      boiler.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
     else
       boiler.setEfficiencyCurveTemperatureEvaluationVariable(eff_curve_temp_eval_var)
     end
 
     if flow_mode.nil?
-      boiler.setBoilerFlowMode("LeavingSetpointModulated")
+      boiler.setBoilerFlowMode('LeavingSetpointModulated')
     else
       boiler.setBoilerFlowMode(flow_mode)
     end
@@ -80,7 +80,7 @@ class Standard
     end
 
     # logic to set different defaults for condensing boilers if not specified
-    if draft_type == "Condensing"
+    if draft_type == 'Condensing'
       boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get) if lvg_temp_dsgn.nil?
       boiler.setNominalThermalEfficiency(0.96) if nominal_thermal_efficiency.nil?
     end
