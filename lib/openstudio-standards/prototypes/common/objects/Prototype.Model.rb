@@ -250,8 +250,7 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
-    # The constructions lookup table uses a slightly different list of
-    # building types.
+    # The constructions lookup table uses a slightly different list of building types.
     @lookup_building_type = model_get_lookup_name(building_type)
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
@@ -263,7 +262,6 @@ Standard.class_eval do
     end
 
     # Assign construction to adiabatic construction
-    # Assign a material to all internal mass objects
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
     cp02_carpet_pad.setName('CP02 CARPET PAD')
     cp02_carpet_pad.setRoughness('VeryRough')
@@ -384,14 +382,12 @@ Standard.class_eval do
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards space type.")
       end
 
-      # If the standards space type is Attic,
-      # the building type should be blank.
+      # If the standards space type is Attic the building type should be blank.
       if stds_spc_type == 'Attic'
         stds_building_type = ''
       end
 
-      # Attempt to make a construction set for this space type
-      # and assign it if it can be created.
+      # Attempt to make a construction set for this space type and assign it if it can be created.
       spc_type_const_set = model_add_construction_set(model, climate_zone, stds_building_type, stds_spc_type, is_residential)
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
@@ -429,8 +425,7 @@ Standard.class_eval do
           end
         end
       end
-      # Standars: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
-
+      # Standards: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
     end
 
     # Make skylights have the same construction as fixed windows

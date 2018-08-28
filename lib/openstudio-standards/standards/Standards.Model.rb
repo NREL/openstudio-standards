@@ -2339,19 +2339,14 @@ class Standard
     end
 
     # Get the object data
-
     data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
       # Search again without the is_residential criteria in the case that this field is not specified for a standard
       data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
-        # Search again without the building type to find attics
-        data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'space_type' => spc_type, 'is_residential' => is_residential)
-        unless data
-          # if nothing matches say that we could not find it.
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
-          return construction_set
-        end
+        # if nothing matches say that we could not find it
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
+        return construction_set
       end
     end
 
@@ -2366,8 +2361,7 @@ class Standard
     # Exterior surfaces constructions
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
-    # Special condition for attics, where the insulation is actually on the floor
-    # but the soffit is uninsulated
+    # Special condition for attics, where the insulation is actually on the floor but the soffit is uninsulated
     if spc_type == 'Attic'
       exterior_surfaces.setFloorConstruction(model_add_construction(model, 'Typical Attic Soffit'))
     else
@@ -2386,8 +2380,7 @@ class Standard
                                                                             data['exterior_wall_standards_construction_type'],
                                                                             data['exterior_wall_building_category']))
     end
-    # Special condition for attics, where the insulation is actually on the floor
-    # and the roof itself is uninsulated
+    # Special condition for attics, where the insulation is actually on the floor and the roof itself is uninsulated
     if spc_type == 'Attic'
       if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
         exterior_surfaces.setRoofCeilingConstruction(model_add_construction(model, 'Typical Uninsulated Wood Joist Attic Roof'))
@@ -2405,8 +2398,7 @@ class Standard
     interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = data['interior_floors']
-    # Special condition for attics, where the insulation is actually on the floor
-    # and the roof itself is uninsulated
+    # Special condition for attics, where the insulation is actually on the floor and the roof itself is uninsulated
     if spc_type == 'Attic'
       if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
         interior_surfaces.setFloorConstruction(model_find_and_add_construction(model,

@@ -13,10 +13,6 @@ class Standard
                              space_type.standardsSpaceType.get
                            end
 
-    if standards_space_type == 'Plenum'
-      return {}
-    end
-
     # populate search hash
     search_criteria = {
       'template' => template,
