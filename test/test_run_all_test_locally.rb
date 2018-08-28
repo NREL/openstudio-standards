@@ -91,7 +91,7 @@ class RunAllTests< Minitest::Test
       timings_json[file_name.to_s]['end'] = Time.now.to_i
       timings_json[file_name.to_s]['total'] =timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
     end
-    File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') { |file| file.puts(JSON.pretty_generate(timings_json))}
+    File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') { |file| file.puts(JSON.pretty_generate(timings_json.sort{|a,z|a<=>z}.to_h))}
     assert(did_all_tests_pass, "Some tests failed please ensure all test pass and tests have been updated to reflect the changes you expect before issuing a pull request")
   end
 end
