@@ -13,6 +13,10 @@ class Standard
                              space_type.standardsSpaceType.get
                            end
 
+    if standards_space_type == 'Plenum'
+      return {}
+    end
+
     # populate search hash
     search_criteria = {
       'template' => template,
@@ -21,7 +25,6 @@ class Standard
     }
 
     # lookup space type properties
-
     space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
 
     if space_type_properties.nil?
