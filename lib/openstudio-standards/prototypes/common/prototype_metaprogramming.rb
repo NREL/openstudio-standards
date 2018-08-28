@@ -70,8 +70,8 @@ end
     end
     @lookup_building_type = self.model_get_lookup_name(@@building_type)
     #ideally we should map the data required to a instance variable.
-    @geometry_file = 'geometry/' + self.class.name + '.osm'
-    hvac_map_file =  'geometry/' + self.class.name + '.hvac_map.json'
+    @geometry_file = 'geometry/' + @prototype_input['geometry_osm']
+    hvac_map_file =  'geometry/' + @prototype_input['hvac_json']
     @system_to_space_map = load_hvac_map(hvac_map_file)
     self.set_variables()
   end
@@ -138,6 +138,14 @@ end
         lookup_name = 'Office'
     end
     return lookup_name
+  end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
   end
 end
 "
@@ -593,6 +601,14 @@ end
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
 end
 "
       end
@@ -748,6 +764,14 @@ end
   #
   # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  # Makes changes to the daylighting sensors that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
     return true
   end
 end

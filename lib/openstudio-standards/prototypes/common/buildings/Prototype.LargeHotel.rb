@@ -27,7 +27,7 @@ module LargeHotel
       end
 
       exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_schedule'])
-      if exhaust_schedule.class.to_s == 'NilClass'
+      unless exhaust_schedule
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
       end
@@ -67,6 +67,32 @@ module LargeHotel
           exhaust_fan_elec_equip.setName("#{space_name} Exhaust Fan Equipment")
           exhaust_fan_elec_equip.setSchedule(exhaust_schedule)
           exhaust_fan_elec_equip.setSpaceType(space.spaceType.get)
+        end
+      end
+    end
+
+    # adjust VAV system sizing
+    model.getAirLoopHVACs.each do |air_loop|
+      if air_loop.name.to_s.include? 'VAV WITH REHEAT'
+        # economizer type
+        oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
+        oa_intake_controller = oa_system.getControllerOutdoorAir
+        oa_intake_controller.setEconomizerControlType('DifferentialEnthalpy')
+
+        # zone sizing
+        rht_sa_temp_c = OpenStudio.convert(90.0, 'F', 'C').get
+        air_loop.thermalZones.each do |zone|
+          air_terminal = zone.airLoopHVACTerminal
+          if air_terminal.is_initialized
+            air_terminal = air_terminal.get
+            if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+              air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+              air_terminal.setMaximumReheatAirTemperature(rht_sa_temp_c)
+              reheat_coil = air_terminal.reheatCoil
+              reheat_coil = reheat_coil.to_CoilHeatingWater.get
+              reheat_coil.setRatedOutletAirTemperature(rht_sa_temp_c)
+            end
+          end
         end
       end
     end

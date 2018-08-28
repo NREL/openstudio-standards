@@ -1107,7 +1107,7 @@ OS:Lights:Definition,
   90.1-2010 - Office - Conference Lights Definition, !- Name
   Watts/Area,                             !- Design Level Calculation Method
   ,                                       !- Lighting Level {W}
-  132.39609812553,                        !- Watts per Space Floor Area {W/m2}
+  13.239609812553,                        !- Watts per Space Floor Area {W/m2}
   ;                                       !- Watts per Person {W/person}
 
 OS:Lights,

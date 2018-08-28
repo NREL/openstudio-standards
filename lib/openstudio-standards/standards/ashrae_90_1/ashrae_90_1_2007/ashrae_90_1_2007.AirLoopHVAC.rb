@@ -24,10 +24,10 @@ class ASHRAE9012007 < ASHRAE901
         'ASHRAE 169-2006-3A',
         'ASHRAE 169-2006-3B',
         'ASHRAE 169-2006-3C',
-      minimum_oa_flow_cfm = 300
+      minimum_oa_flow_cfm = 0
       maximum_stories = 999 # Any number of stories
     else
-      minimum_oa_flow_cfm = 300
+      minimum_oa_flow_cfm = 0
       maximum_stories = 3
     end
 

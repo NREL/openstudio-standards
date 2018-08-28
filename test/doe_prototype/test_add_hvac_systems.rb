@@ -11,6 +11,9 @@ class TestAddHVACSystems < Minitest::Test
     # List all the HVAC system types to test
     hvac_systems = [
 
+      # input
+      # [system_type, main_heat_fuel, zone_heat_fuel, cool_fuel]
+
       ## Forced Air ##
 
       # Gas, Electric, forced air
@@ -24,6 +27,9 @@ class TestAddHVACSystems < Minitest::Test
       ['PSZ-HP', 'Electricity', nil, 'Electricity'],
       ['PVAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
       ['VAV PFP Boxes', 'Electricity', 'Electricity', 'Electricity'],
+
+      # VRF
+      ['VRF with DOAS', 'nil', 'nil', 'nil'],
 
       # District Hot Water, Electric, forced air
       ['PTAC', 'DistrictHeating', nil, 'Electricity'],
@@ -75,13 +81,16 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
       # Electric, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
+      #['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
+      #['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+
+      # DOAS Variations
+      ['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
     ]
 
     template = '90.1-2013'
@@ -137,15 +146,22 @@ class TestAddHVACSystems < Minitest::Test
       errs << "For #{type_desc} there was no conditioned area." if standard.model_net_conditioned_floor_area(model) == 0
 
       # Check the unmet hours
+      unmet_heating_hrs = standard.model_annual_occupied_unmet_heating_hours(model)
+      unmet_cooling_hrs = standard.model_annual_occupied_unmet_cooling_hours(model)
       unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
       max_unmet_hrs = 550
       if unmet_hrs
-        errs << "For #{type_desc} there were #{unmet_hrs} unmet occupied heating and cooling hours, more than the limit of #{max_unmet_hrs}." if unmet_hrs > max_unmet_hrs
+        errs << "For #{type_desc} there were #{unmet_heating_hrs.round(1)} unmet occupied heating hours and #{unmet_cooling_hrs.round(1)} unmet occupied cooling hours (total: #{unmet_hrs.round(1)}), more than the limit of #{max_unmet_hrs}." if unmet_hrs > max_unmet_hrs
       else
         errs << "For #{type_desc} could not determine unmet hours; simulation may have failed."
       end
     end
-  
+
+    # write errors to a log file
+    File.open("#{File.dirname(__FILE__)}/output/test_add_hvac_systems.log", 'w') do |file|
+      errs.each { |err| file.puts(err) }
+    end
+
     assert(errs.size == 0, errs.join("\n"))
 
     return true

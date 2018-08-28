@@ -13,38 +13,112 @@ module RetailStandalone
 
     # Add the door infiltration for template 2004,2007,2010,2013
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        entry_space = model.getSpaceByName('Front_Entry').get
-        infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-        infiltration_entry.setName('Entry door Infiltration')
+    when '90.1-2004'
+      entry_space = model.getSpaceByName('Front_Entry').get
+      infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_entry.setName('Entry door Infiltration')
+      infiltration_per_zone = 1.418672682
+      infiltration_entry.setDesignFlowRate(infiltration_per_zone)
+      infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
+      infiltration_entry.setSpace(entry_space)
+
+      # temporal solution for CZ dependent door infiltration rate.  In fact other standards need similar change as well
+    when '90.1-2007', '90.1-2010', '90.1-2013'
+      entry_space = model.getSpaceByName('Front_Entry').get
+      infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+      infiltration_entry.setName('Entry door Infiltration')
+      case climate_zone
+      when 'ASHRAE 169-2006-1A','ASHRAE 169-2006-1B','ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
         infiltration_per_zone = 1.418672682
-        infiltration_entry.setDesignFlowRate(infiltration_per_zone)
         infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
-        infiltration_entry.setSpace(entry_space)
-    end
-
-    # Update the zone sizing SAT
-    if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-      model.getSizingZones.each do |sizing_zone|
-        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(14)
+      else
+        infiltration_per_zone = 0.937286742
+        infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH_2013'))
       end
+      infiltration_entry.setDesignFlowRate(infiltration_per_zone)
+      infiltration_entry.setSpace(entry_space)
     end
 
-    # Add economizer max fraction schedules
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
-        econ_eff_sch = model_add_schedule(model, 'RetailStandalone PSZ_Econ_MaxOAFrac_Sch')
-        model.getAirLoopHVACs.each do |air_loop|
-          oa_sys = air_loop.airLoopHVACOutdoorAirSystem
-          if oa_sys.is_initialized
-            oa_sys = oa_sys.get
-            oa_controller = oa_sys.getControllerOutdoorAir
-            oa_controller.setMaximumFractionofOutdoorAirSchedule(econ_eff_sch)
-          end
-        end
+    # add these additional coefficient inputs
+    if infiltration_entry
+      infiltration_entry.setConstantTermCoefficient(1.0)
+      infiltration_entry.setTemperatureTermCoefficient(0.0)
+      infiltration_entry.setVelocityTermCoefficient(0.0)
+      infiltration_entry.setVelocitySquaredTermCoefficient(0.0)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
+
+    return true
+  end
+
+  def model_custom_daylighting_tweaks(building_type, climate_zone, prototype_input, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
+
+    adjustments = case climate_zone
+    when 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A'
+      [
+          { 'stds_spc_type' => 'Core_Retail',
+            'sensor_1_frac' => 0.1724,
+            'sensor_1_xyz' => [14.2, 14.2, 0],
+            'sensor_2_frac' => 0.1724,
+            'sensor_2_xyz' => [3.4, 14.2, 0]
+          }
+      ]
+    else
+      [
+          { 'stds_spc_type' => 'Core_Retail',
+            'sensor_1_frac' => 0.25,
+            'sensor_1_xyz' => [14.2, 14.2, 0],
+            'sensor_2_frac' => 0.25,
+            'sensor_2_xyz' => [3.4, 14.2, 0]
+          }
+      ]
+    end
+
+    # Adjust daylight sensors in each space
+    model.getSpaces.each do |space|
+      next if space.thermalZone.empty?
+      zone = space.thermalZone.get
+      next if space.spaceType.empty?
+      spc_type = space.spaceType.get
+      next if spc_type.standardsSpaceType.empty?
+      stds_spc_type = spc_type.standardsSpaceType.get
+      adjustments.each do |adj|
+        next unless adj['stds_spc_type'] == stds_spc_type
+        # Adjust the primary sensor
+        if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
+          zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+          pri_ctrl = zone.primaryDaylightingControl.get
+          if adj['sensor_1_xyz']
+            x = adj['sensor_1_xyz'][0]
+            y = adj['sensor_1_xyz'][1]
+            z = adj['sensor_1_xyz'][2]
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
+            pri_ctrl.setPositionXCoordinate(x)
+            pri_ctrl.setPositionYCoordinate(y)
+            pri_ctrl.setPositionZCoordinate(z)
+          end
+        end
+        # Adjust the secondary sensor
+        if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
+          zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+          sec_ctrl = zone.secondaryDaylightingControl.get
+          if adj['sensor_2_xyz']
+            x = adj['sensor_2_xyz'][0]
+            y = adj['sensor_2_xyz'][1]
+            z = adj['sensor_2_xyz'][2]
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
+            sec_ctrl.setPositionXCoordinate(x)
+            sec_ctrl.setPositionYCoordinate(y)
+            sec_ctrl.setPositionZCoordinate(z)
+          end
+        end
+
+      end
+    end
 
     return true
   end

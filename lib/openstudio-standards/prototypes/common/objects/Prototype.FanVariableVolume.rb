@@ -80,5 +80,87 @@ class Standard
                            end
 
     return pressure_rise_in_h2o
+    end
+
+  def create_fan_variable_volume(model,
+                                 fan_name: nil,
+                                 fan_efficiency: nil,
+                                 pressure_rise: nil,
+                                 motor_efficiency: nil,
+                                 motor_in_airstream_fraction: nil,
+                                 fan_power_minimum_flow_rate_input_method: nil,
+                                 fan_power_minimum_flow_rate_fraction: nil,
+                                 fan_power_coefficient_1: nil,
+                                 fan_power_coefficient_2: nil,
+                                 fan_power_coefficient_3: nil,
+                                 fan_power_coefficient_4: nil,
+                                 fan_power_coefficient_5: nil,
+                                 end_use_subcategory: nil)
+    fan = OpenStudio::Model::FanVariableVolume.new(model)
+    PrototypeFan.apply_base_fan_variables(fan,
+                                          fan_name: fan_name,
+                                          fan_efficiency: fan_efficiency,
+                                          pressure_rise: pressure_rise,
+                                          end_use_subcategory: end_use_subcategory)
+    fan.setMotorEfficiency(motor_efficiency) unless motor_efficiency.nil?
+    fan.setMotorInAirstreamFraction(motor_in_airstream_fraction) unless motor_in_airstream_fraction.nil?
+    fan.setFanPowerMinimumFlowRateInputMethod(fan_power_minimum_flow_rate_input_method) unless fan_power_minimum_flow_rate_input_method.nil?
+    fan.setFanPowerMinimumFlowFraction(fan_power_minimum_flow_rate_fraction) unless fan_power_minimum_flow_rate_fraction.nil?
+    fan.setFanPowerCoefficient1(fan_power_coefficient_1) unless fan_power_coefficient_1.nil?
+    fan.setFanPowerCoefficient2(fan_power_coefficient_2) unless fan_power_coefficient_2.nil?
+    fan.setFanPowerCoefficient3(fan_power_coefficient_3) unless fan_power_coefficient_3.nil?
+    fan.setFanPowerCoefficient4(fan_power_coefficient_4) unless fan_power_coefficient_4.nil?
+    fan.setFanPowerCoefficient5(fan_power_coefficient_5) unless fan_power_coefficient_5.nil?
+    return fan
   end
+
+  def create_fan_variable_volume_from_json(model,
+                                           fan_json,
+                                           fan_name: nil,
+                                           fan_efficiency: nil,
+                                           pressure_rise: nil,
+                                           motor_efficiency: nil,
+                                           motor_in_airstream_fraction: nil,
+                                           fan_power_minimum_flow_rate_input_method: nil,
+                                           fan_power_minimum_flow_rate_fraction: nil,
+                                           end_use_subcategory: nil,
+                                           fan_power_coefficient_1: nil,
+                                           fan_power_coefficient_2: nil,
+                                           fan_power_coefficient_3: nil,
+                                           fan_power_coefficient_4: nil,
+                                           fan_power_coefficient_5: nil)
+    # check values to use
+    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
+    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
+    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
+    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
+    fan_power_minimum_flow_rate_input_method = fan_power_minimum_flow_rate_input_method ? fan_power_minimum_flow_rate_input_method : fan_json['fan_power_minimum_flow_rate_input_method']
+    fan_power_minimum_flow_rate_fraction = fan_power_minimum_flow_rate_fraction ? fan_power_minimum_flow_rate_fraction : fan_json['fan_power_minimum_flow_rate_fraction']
+    fan_power_coefficient_1 = fan_power_coefficient_1 ? fan_power_coefficient_1 : fan_json['fan_power_coefficient_1']
+    fan_power_coefficient_2 = fan_power_coefficient_2 ? fan_power_coefficient_2 : fan_json['fan_power_coefficient_2']
+    fan_power_coefficient_3 = fan_power_coefficient_3 ? fan_power_coefficient_3 : fan_json['fan_power_coefficient_3']
+    fan_power_coefficient_4 = fan_power_coefficient_4 ? fan_power_coefficient_4 : fan_json['fan_power_coefficient_4']
+    fan_power_coefficient_5 = fan_power_coefficient_5 ? fan_power_coefficient_5 : fan_json['fan_power_coefficient_5']
+
+    # convert values
+    pressure_rise_pa = OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get unless pressure_rise.nil?
+
+    # create fan
+    fan = create_fan_variable_volume(model,
+                                     fan_name:fan_name,
+                                     fan_efficiency: fan_efficiency,
+                                     pressure_rise: pressure_rise_pa,
+                                     motor_efficiency: motor_efficiency,
+                                     motor_in_airstream_fraction: motor_in_airstream_fraction,
+                                     fan_power_minimum_flow_rate_input_method: fan_power_minimum_flow_rate_input_method,
+                                     fan_power_minimum_flow_rate_fraction: fan_power_minimum_flow_rate_fraction,
+                                     end_use_subcategory: end_use_subcategory,
+                                     fan_power_coefficient_1: fan_power_coefficient_1,
+                                     fan_power_coefficient_2: fan_power_coefficient_2,
+                                     fan_power_coefficient_3: fan_power_coefficient_3,
+                                     fan_power_coefficient_4: fan_power_coefficient_4,
+                                     fan_power_coefficient_5: fan_power_coefficient_5)
+    return fan
+  end
+
 end

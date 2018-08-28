@@ -286,8 +286,6 @@ module Fan
       zone_hvac = fan.containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         is_small = true
-      elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
-        is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized

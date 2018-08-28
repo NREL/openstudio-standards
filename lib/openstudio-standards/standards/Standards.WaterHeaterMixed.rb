@@ -45,7 +45,7 @@ class Standard
     search_criteria['fuel_type'] = fuel_type
     wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
     unless wh_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
       return false
     end
 
@@ -149,6 +149,7 @@ class Standard
 
     # Convert to SI
     ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_btu_per_hr_per_c} W/K.")
 
     # Set the water heater properties
     # Efficiency

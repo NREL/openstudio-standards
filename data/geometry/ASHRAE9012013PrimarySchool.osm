@@ -76,7 +76,7 @@ OS:Connection,
 OS:Space,
   {6fb8450c-0f97-450e-95a8-2b09bde8ba0e}, !- Handle
   Library_Media_Center_ZN_1_FLR_1,        !- Name
-  {3ae0e4f0-0b6b-41f1-92bc-64c51ae1646c}, !- Space Type Name
+  {167ab0d2-fe39-46d4-bb03-41aa6d55af0a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -322,7 +322,7 @@ OS:Connection,
 OS:Space,
   {597eb46d-eacc-454e-8b06-a06f770e9515}, !- Handle
   Computer_Class_ZN_1_FLR_1,              !- Name
-  {3ae0e4f0-0b6b-41f1-92bc-64c51ae1646c}, !- Space Type Name
+  {5fa21c44-72fb-4c23-8777-8205c75d81ce}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4125,7 +4125,7 @@ OS:SubSurface,
 
 OS:Building,
   {9a5048da-f51f-4a23-bf2e-fd970cdf8aae}, !- Handle
-  A90_1_2013PrimarySchool,                !- Name
+  DOE Prototype PrimarySchool,            !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -6455,4 +6455,38 @@ OS:Rendering:Color,
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {5fa21c44-72fb-4c23-8777-8205c75d81ce}, !- Handle
+  PrimarySchool ComputerRoom,             !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {5523923f-6128-48f7-b361-279399792ff5}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  PrimarySchool,                          !- Standards Building Type
+  ComputerRoom;                           !- Standards Space Type
+
+OS:Rendering:Color,
+  {5523923f-6128-48f7-b361-279399792ff5}, !- Handle
+  PrimarySchool ComputerRoom,             !- Name
+  120,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  199;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {167ab0d2-fe39-46d4-bb03-41aa6d55af0a}, !- Handle
+  PrimarySchool Library,                  !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {b36531a2-a0fd-4d78-a02d-531890427a29}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  PrimarySchool,                          !- Standards Building Type
+  Library;                                !- Standards Space Type
+
+OS:Rendering:Color,
+  {b36531a2-a0fd-4d78-a02d-531890427a29}, !- Handle
+  PrimarySchool Library,                  !- Name
+  230,                                    !- Rendering Red Value
+  196,                                    !- Rendering Green Value
+  120;                                    !- Rendering Blue Value
 

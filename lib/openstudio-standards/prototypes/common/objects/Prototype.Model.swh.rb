@@ -4,12 +4,29 @@ class Standard
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
+      # Get the thermal zone for the water heater, if specified
+      water_heater_zone = nil
+      if prototype_input['main_water_heater_space_name']
+        wh_space_name = prototype_input['main_water_heater_space_name']
+        wh_space = model.getSpaceByName(wh_space_name)
+        if wh_space.empty?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Cannot find a space called #{wh_space_name} in the model, water heater will not be placed in a zone.")
+        else
+          wh_zone = wh_space.get.thermalZone
+          if wh_zone.empty?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Cannot find a zone that contains the space #{wh_space_name} in the model, water heater will not be placed in a zone.")
+          else
+            water_heater_zone = wh_zone.get
+          end
+        end
+      end
+
       swh_fueltype = prototype_input['main_water_heater_fuel']
       # Add the main service water loop
       unless building_type == 'RetailStripmall' && template != 'NECB2011'
         main_swh_loop = model_add_swh_loop(model,
                                            'Main Service Water Loop',
-                                           nil,
+                                           water_heater_zone,
                                            OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
                                            prototype_input['main_service_water_pump_head'],
                                            prototype_input['main_service_water_pump_motor_efficiency'],
@@ -147,7 +164,7 @@ class Standard
                                             space_type_name,
                                             space_name,
                                             space_multiplier)
-            if !water_fixture.nil?
+            unless water_fixture.nil?
               water_fixtures << water_fixture
             end
           end
@@ -318,7 +335,7 @@ class Standard
           # gather inputs for add_swh_loop
           # default fuel, capacity, and volume from Table A.1. Water Heating Equipment Enhancements to ASHRAE Standard 90.1 Prototype Building Models
           # temperature, pump head, motor efficiency, and parasitic load from Prototype Inputs
-          sys_name = "#{space_type.name} Service Water Loop #{i + 1}"
+          system_name = "#{space_type.name} Service Water Loop #{i + 1}"
           water_heater_thermal_zone = nil
           service_water_temperature = service_water_temperature_si
           service_water_pump_head = 0.01
@@ -340,7 +357,7 @@ class Standard
 
           # make loop for each unit and add on water use equipment
           unit_hot_water_loop = model_add_swh_loop(model,
-                                                   sys_name,
+                                                   system_name,
                                                    water_heater_thermal_zone,
                                                    service_water_temperature,
                                                    service_water_pump_head,
@@ -411,7 +428,7 @@ class Standard
         water_use_connection.setName("#{space_type.name} WUC")
 
         # gather inputs for add_swh_loop
-        sys_name = "#{space_type.name} Service Water Loop"
+        system_name = "#{space_type.name} Service Water Loop"
         water_heater_thermal_zone = nil
         water_heater_temp_si = 60.0 # C
         service_water_pump_head = 0.01
@@ -431,7 +448,7 @@ class Standard
 
         # make loop for each unit and add on water use equipment
         dedicated_hot_water_loop = model_add_swh_loop(model,
-                                                      sys_name,
+                                                      system_name,
                                                       water_heater_thermal_zone,
                                                       water_heater_temp_si,
                                                       service_water_pump_head,
@@ -560,7 +577,7 @@ class Standard
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
     water_use_equipment_hash.sort.each do |stds_bldg_type, water_use_equipment_array|
       # gather inputs for add_swh_loop
-      sys_name = "#{stds_bldg_type} Shared Service Water Loop"
+      system_name = "#{stds_bldg_type} Shared Service Water Loop"
       water_heater_thermal_zone = nil
       water_heater_temp_si = 60.0
 
@@ -627,7 +644,7 @@ class Standard
 
       # make loop for each unit and add on water use equipment
       shared_hot_water_loop = model_add_swh_loop(model,
-                                                 sys_name,
+                                                 system_name,
                                                  water_heater_thermal_zone,
                                                  water_heater_temp_si,
                                                  service_water_pump_head,

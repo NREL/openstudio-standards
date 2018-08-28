@@ -86,8 +86,8 @@ module MidriseApartment
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(46.288874618)
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.012559766)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.012559766)
         end
     end
   end
@@ -108,7 +108,7 @@ module MidriseApartment
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
           when '90.1-2007'
             case climate_zone
-              when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+              when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
                 infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
               else
                 infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
@@ -116,13 +116,19 @@ module MidriseApartment
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2004_2007'))
           when '90.1-2010', '90.1-2013'
             case climate_zone
-              when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+              when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
                 infiltration_g_corridor_door.setDesignFlowRate(0.520557541)
               else
                 infiltration_g_corridor_door.setDesignFlowRate(0.327531218)
             end
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentMidRise INFIL_Door_Opening_SCH_2010_2013'))
         end
+
+      # Door infiltration in model not impacted by wind or temperature
+      infiltration_g_corridor_door.setConstantTermCoefficient(1.0)
+      infiltration_g_corridor_door.setTemperatureTermCoefficient(0.0)
+      infiltration_g_corridor_door.setVelocityTermCoefficient(0.0)
+      infiltration_g_corridor_door.setVelocitySquaredTermCoefficient(0.0)
     end
   end
 

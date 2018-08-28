@@ -3779,7 +3779,7 @@ OS:Surface,
 
 OS:Building,
   {0c9c6400-3f70-4920-9294-fbad88591bdf}, !- Handle
-  A90_1_2010LargeHotel,                   !- Name
+  DOE Prototype LargeHotel,               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

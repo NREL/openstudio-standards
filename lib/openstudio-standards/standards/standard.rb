@@ -82,6 +82,7 @@ class Standard
     standards_files << 'OpenStudio_Standards_construction_sets.json'
     standards_files << 'OpenStudio_Standards_constructions.json'
     standards_files << 'OpenStudio_Standards_curves.json'
+    standards_files << 'OpenStudio_Standards_fans.json'
     standards_files << 'OpenStudio_Standards_ground_temperatures.json'
     standards_files << 'OpenStudio_Standards_heat_pumps_heating.json'
     standards_files << 'OpenStudio_Standards_heat_pumps.json'

@@ -30,6 +30,74 @@ class NRELZNEReady2017 < ASHRAE901
     return true
   end
 
+  # Apply all standard required controls to the airloop
+  #
+  # @param (see #economizer_required?)
+  # @return [Bool] returns true if successful, false if not
+  def air_loop_hvac_apply_standard_controls(air_loop_hvac, climate_zone)
+
+    # logic for multizone VAV Reheat systems
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && air_loop_hvac_terminal_reheat?(air_loop_hvac)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "Applying multizone VAV Reheat system controls.")
+
+      # economizer controls
+      air_loop_hvac_apply_economizer_limits(air_loop_hvac, climate_zone)
+      air_loop_hvac_apply_economizer_integration(air_loop_hvac, climate_zone)
+
+      # VAV Reheat Control
+      air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
+
+      # # Multizone VAV Optimization
+      # if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
+      #   air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
+      # else
+      air_loop_hvac_disable_multizone_vav_optimization(air_loop_hvac)
+      # end
+
+      # Static Pressure Reset
+      # Per 5.2.2.16 (Halverson et al 2014), all multiple zone VAV systems are assumed to have DDC for all years of DOE 90.1 prototypes
+      # air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
+      #   if fan.to_FanVariableVolume.is_initialized
+      #     plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan)
+      #     # Part Load Fan Pressure Control
+      #     if plr_req
+      #       fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with VSD and SP Setpoint Reset')
+      #       # No Part Load Fan Pressure Control
+      #     else
+      #       fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with discharge dampers')
+      #     end
+      #   else
+      #     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan}: This is not a multizone VAV fan system.")
+      #   end
+      # end
+
+      # enable DCV
+      air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
+
+      # add warmest zone based SAT reset
+      if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
+        air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
+      end
+    end
+
+  end
+
+  # Determine whether or not this system is required to have an economizer.
+  #
+  # @param climate_zone [String] valid choices: 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
+  # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C',
+  # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
+  # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+  # @return [Bool] returns true if an economizer is required, false if not
+  def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
+    economizer_required = false
+    # require economizer for multizone VAV Reheat systems
+    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && air_loop_hvac_terminal_reheat?(air_loop_hvac)
+      economizer_required = true
+    end
+    return economizer_required
+  end
+
   # Determine the limits for the type of economizer present
   # on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
@@ -47,9 +115,11 @@ class NRELZNEReady2017 < ASHRAE901
     end
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
 
     case economizer_type
     when 'NoEconomizer'
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} no economizer")
       return [nil, nil, nil]
     when 'FixedDryBulb'
       case climate_zone
@@ -66,17 +136,21 @@ class NRELZNEReady2017 < ASHRAE901
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
           'ASHRAE 169-2006-8B'
-        drybulb_limit_f = 75
+        drybulb_limit_f = 75.0
       when 'ASHRAE 169-2006-5A',
           'ASHRAE 169-2006-6A'
-        drybulb_limit_f = 70
+        drybulb_limit_f = 70.0
       end
     when 'FixedEnthalpy'
-      enthalpy_limit_btu_per_lb = 28
+      enthalpy_limit_btu_per_lb = 28.0
     when 'FixedDewPointAndDryBulb'
-      drybulb_limit_f = 75
-      dewpoint_limit_f = 55
+      drybulb_limit_f = 75.0
+      dewpoint_limit_f = 55.0
+    when 'DifferentialDryBulb', 'DifferentialEnthalpy'
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, no limits defined.")
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, limits [#{drybulb_limit_f},#{enthalpy_limit_btu_per_lb},#{dewpoint_limit_f}]")
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
@@ -275,10 +349,10 @@ class NRELZNEReady2017 < ASHRAE901
         'ASHRAE 169-2006-3A',
         'ASHRAE 169-2006-3B',
         'ASHRAE 169-2006-3C',
-      minimum_oa_flow_cfm = 300
+      minimum_oa_flow_cfm = 0
       maximum_stories = 999 # Any number of stories
     else
-      minimum_oa_flow_cfm = 300
+      minimum_oa_flow_cfm = 0
       maximum_stories = 0
     end
 

@@ -56,8 +56,8 @@ module HighriseApartment
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(46.288874618)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(46.288874618)
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.97876623686364)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.97876623686364)
         end
     end
   end

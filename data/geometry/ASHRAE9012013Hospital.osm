@@ -564,7 +564,7 @@ OS:Connection,
 OS:Space,
   {75111445-9889-4e0e-bf8b-33e4ad0474cb}, !- Handle
   Office1_Flr_5,                          !- Name
-  {cb0a001f-6a1c-416a-8bcd-3c4c1f787aa6}, !- Space Type Name
+  {e16e2f13-8913-4e76-85ca-a94b278fae94}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1444,7 +1444,7 @@ OS:Connection,
 OS:Space,
   {e02691e9-a447-40e1-aa67-039878424ae6}, !- Handle
   Office3_Flr_5,                          !- Name
-  {cb0a001f-6a1c-416a-8bcd-3c4c1f787aa6}, !- Space Type Name
+  {e16e2f13-8913-4e76-85ca-a94b278fae94}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1483,7 +1483,7 @@ OS:Connection,
 OS:Space,
   {1c76f8a5-14f0-4ef9-aedd-f22672148afa}, !- Handle
   Office1_Mult4_Flr_1,                    !- Name
-  {cb0a001f-6a1c-416a-8bcd-3c4c1f787aa6}, !- Space Type Name
+  {8e47d111-61b4-4e37-8995-bb97008b8d13}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1493,23 +1493,6 @@ OS:Space,
   {2f9b93ac-e3ee-4d8f-aca2-cc220a8ca3b2}, !- Building Story Name
   {b09335c3-d2bd-43d7-83fb-091f1c3251e3}, !- Thermal Zone Name
   Yes;                                    !- Part of Total Floor Area
-
-OS:Surface,
-  {0c5017de-39bb-4dfc-b09d-3fe9258b75c3}, !- Handle
-  Office2_Mult5_Flr_5_Ceiling,            !- Name
-  RoofCeiling,                            !- Surface Type
-  ,                                       !- Construction Name
-  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  9.144, 7.62, 21.3415,                   !- X,Y,Z Vertex 1 {m}
-  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 2 {m}
-  0, 7.622, 21.3415,                      !- X,Y,Z Vertex 3 {m}
-  0, 7.62, 21.3415;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Connection,
   {756cc636-3a51-4938-bf3f-67bf5be6d00b}, !- Handle
@@ -1522,7 +1505,7 @@ OS:Connection,
 OS:Space,
   {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Handle
   Office2_Mult5_Flr_5,                    !- Name
-  {cb0a001f-6a1c-416a-8bcd-3c4c1f787aa6}, !- Space Type Name
+  {e16e2f13-8913-4e76-85ca-a94b278fae94}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -1859,7 +1842,7 @@ OS:Connection,
 OS:Space,
   {c8b8007f-d842-489f-b119-fad0f32ca54d}, !- Handle
   Office4_Mult6_Flr_5,                    !- Name
-  {cb0a001f-6a1c-416a-8bcd-3c4c1f787aa6}, !- Space Type Name
+  {e16e2f13-8913-4e76-85ca-a94b278fae94}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2605,6 +2588,23 @@ OS:Surface,
   4.572, 7.622, 17.0732,                  !- X,Y,Z Vertex 2 {m}
   0, 7.622, 17.0732,                      !- X,Y,Z Vertex 3 {m}
   0, 8.992, 17.0732;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {0c5017de-39bb-4dfc-b09d-3fe9258b75c3}, !- Handle
+  Office2_Mult5_Flr_5_Ceiling,            !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {dc66d323-72f5-4969-aebb-d547b4919d13}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  9.144, 7.622, 21.3415,                  !- X,Y,Z Vertex 1 {m}
+  9.144, 15.24, 21.3415,                  !- X,Y,Z Vertex 2 {m}
+  0, 15.24, 21.3415,                      !- X,Y,Z Vertex 3 {m}
+  0, 7.622, 21.3415;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {bb934a54-fb38-40c7-a354-5794884e56cc}, !- Handle
@@ -8832,7 +8832,7 @@ OS:YearDescription,
 
 OS:Building,
   {9e9ffdf1-e55b-430a-815c-d47b238cd08f}, !- Handle
-  A90_1_2013Hospital,                     !- Name
+  DOE Prototype Hospital,                 !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -16790,4 +16790,38 @@ OS:Rendering:Color,
   136,                                    !- Rendering Red Value
   78,                                     !- Rendering Green Value
   222;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {8e47d111-61b4-4e37-8995-bb97008b8d13}, !- Handle
+  Hospital HospitalOfficeFlr1,            !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {8b254af2-01f3-4936-b806-2f9b2c2d6b3c}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Hospital,                               !- Standards Building Type
+  HospitalOfficeFlr1;                     !- Standards Space Type
+
+OS:Rendering:Color,
+  {8b254af2-01f3-4936-b806-2f9b2c2d6b3c}, !- Handle
+  Hospital HospitalOfficeFlr1,            !- Name
+  120,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  199;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {e16e2f13-8913-4e76-85ca-a94b278fae94}, !- Handle
+  Hospital HospitalOfficeFlr5,            !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {336e5569-9e3e-49c7-9a9b-1d1a45169673}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Hospital,                               !- Standards Building Type
+  HospitalOfficeFlr5;                     !- Standards Space Type
+
+OS:Rendering:Color,
+  {336e5569-9e3e-49c7-9a9b-1d1a45169673}, !- Handle
+  Hospital HospitalOfficeFlr5,            !- Name
+  120,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  199;                                    !- Rendering Blue Value
 
