@@ -30,6 +30,27 @@ class TestSpace < Minitest::Test
     
     # trying to make sure this does not hang
     result = standard.space_daylighted_areas(space)
+    puts result
+    
+    space.surfaces.each do |surface|
+      if surface.surfaceType == 'Wall'
+        surface.setWindowToWallRatio(0.5)
+      end
+    end
+    
+    # trying to make sure this does not hang
+    result = standard.space_daylighted_areas(space)
+    puts result   
+    
+    space.surfaces.each do |surface|
+      if surface.surfaceType == 'Wall'
+        surface.setWindowToWallRatio(0.9)
+      end
+    end
+    
+    # trying to make sure this does not hang
+    result = standard.space_daylighted_areas(space)
+    puts result
   end
 
 end
