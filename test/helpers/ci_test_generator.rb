@@ -73,11 +73,18 @@ class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
   end
   def test_#{template}_#{building_type}_regression_#{fuel_type}()
 
-    result, msg = create_model_and_regression_test(building_type: '#{building_type}',
+    result, diff = create_model_and_regression_test(building_type: '#{building_type}',
                                                    epw_file: @#{fuel_type}_location,
                                                    template: '#{template}'
     )
-    assert(result, msg)
+    if result == false
+      puts "JSON terse listing of diff-errors."
+      puts diff
+      puts "Pretty listing of diff-errors for readability."
+      puts JSON.pretty_generate( diff )
+      puts "You can find the saved json diff file here test/necb/regression_models/#{building_type}-#{template}-#\{@#{fuel_type}_location\}.epw_diffs.json"
+    end
+    assert(result, diff)
   end
 end
 }
