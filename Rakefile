@@ -15,10 +15,22 @@ namespace :test do
     # load test files from file.
     full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
     # Select only .rb files that exist
-    full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
-    full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
-    File.open("test/circleci_tests.json","w") do |f|
+    full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
+    full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+    File.open("test/circleci_tests.json", "w") do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
+    end
+
+
+    require_relative './test/helpers/ci_test_generator'
+    CITestGenerator::generate(true, false)
+    # load test files from file.
+    local_full_file_list = FileList.new(File.readlines('test/local_circleci_tests.txt'))
+    # Select only .rb files that exist
+    local_full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
+    local_full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+    File.open("test/local_circleci_tests.json", "w") do |f|
+      f.write(JSON.pretty_generate(local_full_file_list.to_a))
     end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
@@ -40,6 +52,15 @@ namespace :test do
     CITestGenerator::generate(local_run: false)
   end
 
+=begin
+  desc 'Run NECB Building regression test'
+  Rake::TestTask.new(:necb_regression_test) do |t|
+    file_list = FileList.new('test/necb/necb_bldg_regression.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = true
+  end
+
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
@@ -49,21 +70,18 @@ namespace :test do
     t.verbose = true
   end
 
-  ['90_1_prm', '90_1_general', 'doe_prototype', 'necb', 'necb_bldg'].each do |type|
+  ['90_1_prm', '90_1_general', 'doe','doe_test_add_hvac_systems', 'doe_test_bldg' ,'necb', 'necb_bldg'].each do |type|
     desc "Manual Run CircleCI tests #{type}"
-    Rake::TestTask.new("circ-#{type}") do |t|
-      array = full_file_list.select { |item| item.include?(type.to_s) }
+    Rake::TestTask.new("local-circ-#{type}") do |t|
+      array = local_full_file_list.select { |item| item.include?(type.to_s) }
       t.libs << 'test'
       t.test_files = array
     end
-  end
 
+end
+=end
 
-
-
-
-
-  # These tests only available in the CI environment
+# These tests only available in the CI environment
   if ENV['CI'] == 'true'
 
     desc 'Run CircleCI tests'
@@ -97,11 +115,6 @@ namespace :test do
     end
 
 
-
-
-
-
-
     desc 'Summarize the test timing'
     task 'times' do |t|
       require 'nokogiri'
@@ -109,7 +122,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) { |f| Nokogiri::XML(f) }
+        doc = File.open(xml) {|f| Nokogiri::XML(f)}
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')
