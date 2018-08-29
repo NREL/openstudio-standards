@@ -1,7 +1,8 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model)
+  def apply_standard_window_to_wall_ratio(model, fdwr_set: 'MAXIMIZE')
+    return apply_max_fdwr(model) if fdwr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -140,7 +141,8 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model)
+  def apply_standard_skylight_to_roof_ratio(model, ssr_set: 'MAXIMIZE')
+    return apply_max_ssr(model) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -584,4 +586,51 @@ class NECB2011
     return model
   end
 
+  def apply_max_fdwr(model)
+    exp_surf_info = find_exposed_conditioned_vertical_surfaces(model)
+    if exp_surf_info["total_exp_wall_area_m2"] < 0.1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "This building has no exposed walls adjacent to heated spaces.")
+      return false
+    end
+    hdd = self.get_necb_hdd18(model)
+    fdwr_lim = (max_fwdr(hdd))
+
+    if fdwr_lim > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger window area than there is wall area.")
+      return false
+    end
+    win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
+    if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
+      nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        exp_surf.setWindowToWallRatio(nonplenum_fdwr)
+      end
+    else
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        exp_surf.setWindowToWallRatio(fdwr_lim)
+      end
+      exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
+        exp_surf.setWindowToWallRatio(fdwr_lim)
+      end
+    end
+    return true
+  end
+
+  def apply_max_ssr(model)
+    exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
+    if exp_surf_info["exp_nonplenum_roof_area_m2"] < 0.1
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "This building has no exposed ceilings adjacent to spaces that are not attics or plenums.")
+      return false
+    end
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
+
+    if srr_lim > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger skylight area than there is roof area.")
+      return false
+    end
+    exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
+      roof.setWindowToWallRatio(srr_lim)
+    end
+    return true
+  end
 end

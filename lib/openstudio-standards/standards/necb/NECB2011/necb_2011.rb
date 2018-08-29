@@ -151,7 +151,10 @@ class NECB2011 < Standard
                             sizing_run_dir: Dir.pwd,
                             x_scale: 1.0,
                             y_scale: 1.0,
-                            z_scale: 1.0
+                            z_scale: 1.0,
+                            fdwr_set: 'MAXIMIZE',
+                            ssr_set: 'MAXIMIZE'
+
   )
     osm_model_path = File.absolute_path(File.join(__FILE__,'..','..','..',"necb/#{template}/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
@@ -161,7 +164,9 @@ class NECB2011 < Standard
                                  x_scale: x_scale,
                                  y_scale: y_scale,
                                  z_scale: z_scale,
-                                 sizing_run_dir: sizing_run_dir )
+                                 sizing_run_dir: sizing_run_dir,
+                                 fdwr_set: fdwr_set,
+                                 ssr_set: ssr_set)
   end
 
 
@@ -173,7 +178,9 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            x_scale: 1.0,
                            y_scale: 1.0,
-                           z_scale: 1.0
+                           z_scale: 1.0,
+                           fdwr_set: 'MAXIMIZE',
+                           ssr_set: 'MAXIMIZE'
   )
 
     climate_zone = 'NECB HDD Method'
@@ -213,13 +220,12 @@ class NECB2011 < Standard
     model_add_constructions(model)
     apply_standard_construction_properties(model)
 
-    #Set FDWR and SSR
-    apply_standard_window_to_wall_ratio(model)
-    apply_standard_skylight_to_roof_ratio(model)
-
     #Set up thermal zones for initial sizing run.
     model_create_thermal_zones(model, @space_multiplier_map)
 
+    #Set FDWR and SSR
+    apply_standard_window_to_wall_ratio(model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model, ssr_set: ssr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false

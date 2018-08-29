@@ -81,9 +81,7 @@ class Standard
   # height and window height defined passed via sill_heght_m and window_height_m (0.9 m, and 1.8 m respectively for
   # NECB2015).  The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
   def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
-    max_angle = 91
-    min_angle = 89
-    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
+    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model)
     vertical_surfaces.each do |vertical_surface|
       vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
         # Need to fix this so that error show up in right place
@@ -111,8 +109,12 @@ class Standard
 
   # Chris Kirney 2018-05-17:  This method searches through a model a returns vertical exterior surfaces which help
   # enclose a conditioned space.
-  def find_exposed_conditioned_vertical_surfaces(model, max_angle, min_angle)
+  def find_exposed_conditioned_vertical_surfaces(model, max_angle: 91, min_angle: 89)
     exposed_surfaces = []
+    plenum_surfaces = []
+    exp_plenum_area = 0
+    total_exp_area = 0
+    exp_nonplenum_area = 0
     model.getSpaces.sort.each do |space|
       cooled = space_cooled?(space)
       heated = space_heated?(space)
@@ -123,11 +125,59 @@ class Standard
           tilt_radian = surface.tilt
           tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
           if tilt_degrees <= max_angle and tilt_degrees >= min_angle
-            exposed_surfaces << surface
+            if space_plenum?(space)
+              plenum_surfaces << surface
+              exp_plenum_area += surface.grossArea
+            else
+              exposed_surfaces << surface
+              exp_nonplenum_area += surface.grossArea
+            end
+            total_exp_area += surface.grossArea
           end
         end
       end
     end
-    return exposed_surfaces
+    exp_surf_info = {
+        "total_exp_wall_area_m2" => total_exp_area,
+        "exp_plenum_wall_area_m2" => exp_plenum_area,
+        "exp_nonplenum_wall_area_m2" => exp_nonplenum_area,
+        "exp_plenum_walls" => plenum_surfaces,
+        "exp_nonplenum_walls" => exposed_surfaces
+    }
+    return exp_surf_info
+  end
+
+  def find_exposed_conditioned_roof_surfaces(model)
+    exposed_surfaces = []
+    plenum_surfaces = []
+    exp_plenum_area = 0
+    total_exp_area = 0
+    exp_nonplenum_area = 0
+    model.getSpaces.sort.each do |space|
+      cooled = space_cooled?(space)
+      heated = space_heated?(space)
+      if heated || cooled
+        space.surfaces.sort.each do |surface|
+          next unless surface.surfaceType == 'RoofCeiling'
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          if space_plenum?(space)
+            plenum_surfaces << surface
+            exp_plenum_area += surface.grossArea
+          else
+            exposed_surfaces << surface
+            exp_nonplenum_area += surface.grossArea
+          end
+          total_exp_area += surface.grossArea
+        end
+      end
+    end
+    exp_surf_info = {
+        "total_exp_roof_area_m2" => total_exp_area,
+        "exp_plenum_roof_area_m2" => exp_plenum_area,
+        "exp_nonplenum_roof_area_m2" => exp_nonplenum_area,
+        "exp_plenum_roofs" => plenum_surfaces,
+        "exp_nonplenum_roofs" => exposed_surfaces
+    }
+    return exp_surf_info
   end
 end
