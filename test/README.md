@@ -20,6 +20,13 @@ __**NOTE**__: _The number of splits is determined by reading the `parallelism` f
 
 __**NOTE**__: _If the timing for a new test file does not exist, a default timing of 240 seconds is assumed and stated as part of the console output._
 
+__**NOTE**__: Whenever Rake is invoked (e.g. `bundle exec rake -T` or some other command using Rake): 
+  1. The CI test files would be generated into a file called `local_circleci_tests.txt`, 
+  2. The following folders would be deleted if it exists
+      + `/output`
+      + `/test/necb/output` and
+      + `/test/ci_test_files`
+
 To generate new timing data, see [`Local testing and generating local timing data`](#local-testing-and-generating-local-timing-data)topic below. Additionally, running the tests locally, it would also produce sample files of how the tests were split up for CircleCI.
 
 ## Local testing and generating local timing data
@@ -29,9 +36,11 @@ To produce just the files, run
 ```bash
 bundle exec rake test:gen-circ-files
 ```
+
 Running this command will
-1.Calls the module `CITestGenerator::generate(local_run: false)` (invoked from Rakefile)
-2. delete the output folders if it exists
+
+1. Call the module `CITestGenerator::generate(local_run: false)` (invoked from Rakefile)
+2. Delete the output folders if it exists (See __**NOTE**__ above)
 3. generate the test files, 
 4. Remove tests that were auto-generated from the __**`circleci_tests.txt`**__ file
 5. writes all the newly generated test file locations whose file names begin with `test_necb` and `doe_test` to `circleci_tests.txt`
@@ -46,6 +55,7 @@ bundle exec rake test:local-circ-all-tests
 ```
 
 Running this command will 
+
 1. Calls the module `CITestGenerator::generate(local_run: true)` (invoked from from ci_test_generator.rb)
 2. delete the output folders if it exists
 3. generate the test files, 
@@ -66,6 +76,7 @@ To learn more about the built-in environment variables used in CircleCI visit [h
 Follow the instructions for local testing
 
 ## Creating a new auto-generated test
+
 This method is only valid to tests that use the same code with different variables.
 
 1. First create the working test
