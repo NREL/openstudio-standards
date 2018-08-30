@@ -73,7 +73,46 @@ __**NOTE**__:The container number of a CircleCI run is determined by using the b
 To learn more about the built-in environment variables used in CircleCI visit [here](https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables)
 
 ## Regression testing and updating expected values
-Follow the instructions for local testing
+
+To run the NECB Building regression tests, execute the following command:
+```bash
+bundle exec rake test:necb_regression_test
+```
+
+To run any tests that has 90_1_prm in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-90_1_prm`
+```
+
+To run any tests that has 90_1_general in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-90_1_general`
+```
+
+To run any tests that has doe in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-doe`
+```
+
+To run any tests that has doe_test_add_hvac_systems in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-doe_test_add_hvac_systems`
+```
+
+To run any tests that has doe_test_bldg in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-doe_test_bldg`
+```
+
+To run any tests that has necb in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-necb`
+```
+
+To run any tests that has necb_bldg in the file name/path, execute the following command:
+```bash
+`bundle exec rake test:local-circ-necb_bldg`
+```
 
 ## Creating a new auto-generated test
 
@@ -90,7 +129,7 @@ This method is only valid to tests that use the same code with different variabl
 5. After creating the method, add it to the `generate` method.
 6. test that everything is working by running `bundle exec rake test:gen-circ-files`.
 
-__**NOTE**__: _It is important to make each tests' method name and file name are unique_
+__**NOTE**__: _It is important to make each tests' method name and file name are unique **AND** consistent for each CircelCI run_
 
 #### Sample code
 ```ruby
