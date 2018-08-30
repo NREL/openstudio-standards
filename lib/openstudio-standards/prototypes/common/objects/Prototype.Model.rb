@@ -428,6 +428,23 @@ Standard.class_eval do
       # Standards: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
     end
 
+    # loop through ceiling surfaces and assign the plenum acoustical tile construction if the adjacent surface is a plenum floor
+    model.getSurfaces.each do |surface|
+      next unless surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Surface'
+      adj_surface = surface.adjacentSurface.get
+      adj_space = adj_surface.space.get
+      if adj_space.spaceType.is_initialized && adj_space.spaceType.get.standardsSpaceType.is_initialized
+        adj_std_space_type = adj_space.spaceType.get.standardsSpaceType.get
+        if adj_std_space_type == 'Plenum'
+          plenum_construction = adj_surface.construction
+          if plenum_construction.is_initialized
+            plenum_construction = plenum_construction.get
+            surface.setConstruction(plenum_construction)
+          end
+        end
+      end
+    end
+
     # Make skylights have the same construction as fixed windows
     # sub_surface = self.getBuilding.defaultConstructionSet.get.defaultExteriorSubSurfaceConstructions.get
     # window_construction = sub_surface.fixedWindowConstruction.get
@@ -459,7 +476,6 @@ Standard.class_eval do
     end
 
     # get all the space types that are conditioned
-
     # not required for NECB2011
     unless template == 'NECB2011'
       conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
