@@ -145,7 +145,8 @@ end
   end
 
   ['NECB2011',
-   'NECB2015'].each do |template|
+   'NECB2015',
+   'NECB2017'].each do |template|
     # Create Prototype base class (May not be needed...)
     # Ex: class NECB2011_Prototype < NECB2011
     class_array << "
