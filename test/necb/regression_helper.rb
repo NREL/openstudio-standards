@@ -67,10 +67,10 @@ class NECBRegressionHelper < Minitest::Test
     FileUtils.rm(diff_file) if File.exists?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))
-      msg = "There were #{diffs.size} differences/errors in #{osm_file} #{template} #{epw_file} :\n#{diffs.join("\n")}"
-      return false, msg
+      puts "There were #{diffs.size} differences/errors in #{osm_file} #{template} #{epw_file}"
+      return false, {"diffs-errors" => diffs}
     else
-      return true, nil
+      return true, []
     end
   end
 
