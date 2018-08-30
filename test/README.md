@@ -20,12 +20,13 @@ __**NOTE**__: _The number of splits is determined by reading the `parallelism` f
 
 __**NOTE**__: _If the timing for a new test file does not exist, a default timing of 240 seconds is assumed and stated as part of the console output._
 
-__**NOTE**__: Whenever Rake is invoked (e.g. `bundle exec rake -T` or some other command using Rake): 
-  1. The CI test files would be generated into a file called `local_circleci_tests.txt`, 
-  2. The following folders would be deleted if it exists
-      + `/output`
-      + `/test/necb/output` and
-      + `/test/ci_test_files`
+__**NOTE**__: Whenever Rake is invoked (e.g. `bundle exec rake -T` or some other command using Rake):
+  + It will invoke the following command: `CITestGenerator::generate(local_run: true, verbose: false)`
+    + The CI test files would be generated into a file called `local_circleci_tests.txt`, 
+    + The following folders would be deleted if it exists
+        + `/output`
+        + `/test/necb/output` and
+        + `/test/ci_test_files`
 
 To generate new timing data, see [`Local testing and generating local timing data`](#local-testing-and-generating-local-timing-data)topic below. Additionally, running the tests locally, it would also produce sample files of how the tests were split up for CircleCI.
 
@@ -39,7 +40,7 @@ bundle exec rake test:gen-circ-files
 
 Running this command will
 
-1. Call the module `CITestGenerator::generate(local_run: false)` (invoked from Rakefile)
+1. Call the module `CITestGenerator::generate(local_run: false, verbose: true)` (invoked from Rakefile)
 2. Delete the output folders if it exists (See __**NOTE**__ above)
 3. generate the test files, 
 4. Remove tests that were auto-generated from the __**`circleci_tests.txt`**__ file
@@ -47,16 +48,19 @@ Running this command will
 6. copies the required files for some specific tests (e.g. models used for necb and doe hvac tests)
 7. splits the tests based on the timing data, and writes it to `openstudio-standards/test/helpers/ci_test_helper` folder in the format of `<container number>.txt` (e.g. `0.txt`, `1.txt`)
 
-__**NOTE**__: _Running this command will overwrite the `circleci_tests.txt` file_
+__**NOTE**__: _Running the command above will overwrite the `circleci_tests.txt` file_
 
-To run the tests, execute the following command
+
+________
+
+To run **ALL** the tests, execute the following command
 ```bash
 bundle exec rake test:local-circ-all-tests
 ```
 
 Running this command will 
 
-1. Calls the module `CITestGenerator::generate(local_run: true)` (invoked from from ci_test_generator.rb)
+1. call the module `CITestGenerator::generate(local_run: true, verbose: true)` (invoked from from ci_test_generator.rb)
 2. delete the output folders if it exists
 3. generate the test files, 
 4. Remove tests that were auto-generated from the `circleci_tests.txt` file
@@ -78,6 +82,8 @@ To run the NECB Building regression tests, execute the following command:
 ```bash
 bundle exec rake test:necb_regression_test
 ```
+
+__**The commands listed below will read the `local_circleci_tests.txt` (genereted whenever Rake is called e.g. `bundle exec rake -T`) files for the location of the test files, and filter them based on the command invoked from Rake**__
 
 To run any tests that has 90_1_prm in the file name/path, execute the following command:
 ```bash
