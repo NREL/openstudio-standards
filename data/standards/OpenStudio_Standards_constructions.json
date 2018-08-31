@@ -589,6 +589,16 @@
       ]
     },
     {
+      "name": "Plenum Acoustical Tile",
+      "intended_surface_type": "InteriorCeiling",
+      "standards_construction_type": null,
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "Acoustic Tile - 1/2 in."
+      ]
+    },
+    {
       "name": "Smallhotel 2010 Slab Floor",
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",

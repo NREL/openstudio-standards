@@ -21,7 +21,6 @@ class Standard
     }
 
     # lookup space type properties
-
     space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
 
     if space_type_properties.nil?

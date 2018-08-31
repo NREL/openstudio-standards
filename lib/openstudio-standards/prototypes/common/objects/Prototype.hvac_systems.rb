@@ -105,7 +105,7 @@ class Standard
         end
         ambient_loop.addDemandBranchForComponent(water_to_water_hp)
       # Boiler
-      when 'Electricity', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+      when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
         if boiler_lvg_temp_dsgn.nil?
           lvg_temp_dsgn = dsgn_sup_wtr_temp
         else

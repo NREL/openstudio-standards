@@ -56,15 +56,13 @@ class Standard
   #
   # @return [Double] capacity in W to be used for find object
   def chiller_electric_eir_find_capacity(chiller_electric_eir)
-    capacity_w = nil
     if chiller_electric_eir.referenceCapacity.is_initialized
       capacity_w = chiller_electric_eir.referenceCapacity.get
     elsif chiller_electric_eir.autosizedReferenceCapacity.is_initialized
       capacity_w = chiller_electric_eir.autosizedReferenceCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     return capacity_w
@@ -76,17 +74,20 @@ class Standard
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get
+    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+    unless capacity_w
+      return nil
+    end
+    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
-    # lookup the efficiency value
-    kw_per_ton = nil
-    cop = nil
-    if chlr_props['minimum_full_load_efficiency']
+    if chlr_props.nil? || !chlr_props['minimum_full_load_efficiency']
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
+      return nil
+    else
+      # lookup the efficiency value
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
       cop = kw_per_ton_to_cop(kw_per_ton)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
     end
 
     return cop

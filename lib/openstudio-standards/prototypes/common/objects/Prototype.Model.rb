@@ -250,8 +250,7 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
 
-    # The constructions lookup table uses a slightly different list of
-    # building types.
+    # The constructions lookup table uses a slightly different list of building types.
     @lookup_building_type = model_get_lookup_name(building_type)
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
@@ -263,7 +262,6 @@ Standard.class_eval do
     end
 
     # Assign construction to adiabatic construction
-    # Assign a material to all internal mass objects
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
     cp02_carpet_pad.setName('CP02 CARPET PAD')
     cp02_carpet_pad.setRoughness('VeryRough')
@@ -384,14 +382,12 @@ Standard.class_eval do
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Space type called '#{space_type.name}' has no standards space type.")
       end
 
-      # If the standards space type is Attic,
-      # the building type should be blank.
+      # If the standards space type is Attic the building type should be blank.
       if stds_spc_type == 'Attic'
         stds_building_type = ''
       end
 
-      # Attempt to make a construction set for this space type
-      # and assign it if it can be created.
+      # Attempt to make a construction set for this space type and assign it if it can be created.
       spc_type_const_set = model_add_construction_set(model, climate_zone, stds_building_type, stds_spc_type, is_residential)
       if spc_type_const_set.is_initialized
         space_type.setDefaultConstructionSet(spc_type_const_set.get)
@@ -429,8 +425,24 @@ Standard.class_eval do
           end
         end
       end
-      # Standars: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
+      # Standards: For whole buildings or floors where 50% or more of the spaces adjacent to exterior walls are used primarily for living and sleeping quarters
+    end
 
+    # loop through ceiling surfaces and assign the plenum acoustical tile construction if the adjacent surface is a plenum floor
+    model.getSurfaces.each do |surface|
+      next unless surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Surface'
+      adj_surface = surface.adjacentSurface.get
+      adj_space = adj_surface.space.get
+      if adj_space.spaceType.is_initialized && adj_space.spaceType.get.standardsSpaceType.is_initialized
+        adj_std_space_type = adj_space.spaceType.get.standardsSpaceType.get
+        if adj_std_space_type == 'Plenum'
+          plenum_construction = adj_surface.construction
+          if plenum_construction.is_initialized
+            plenum_construction = plenum_construction.get
+            surface.setConstruction(plenum_construction)
+          end
+        end
+      end
     end
 
     # Make skylights have the same construction as fixed windows
@@ -464,7 +476,6 @@ Standard.class_eval do
     end
 
     # get all the space types that are conditioned
-
     # not required for NECB2011
     unless template == 'NECB2011'
       conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)

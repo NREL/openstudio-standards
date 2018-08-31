@@ -136,10 +136,10 @@ class Standard
       ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
       ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
         # Import the 99.6% Heating and 0.4% Cooling design days
-        ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)/
+        ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)|(Clg 0.4% Condns DB=>MCWB)/
         if d.name.get =~ ddy_list
           model.addObject(d.clone)
-          # OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
+          OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
       end
       # Check to ensure that some design days were added
