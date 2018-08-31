@@ -1,9 +1,13 @@
 
-# Code Structure
+# Repository Structure
 
 ## /data
 
 The raw data used by the library.  Files in this directory should not contain code.
+
+### /costing
+
+These files contain information on construction and material costs.  Not used by most Standards.
 
 ### /geometry
 
@@ -22,7 +26,7 @@ These files contain weather information for representative locations. The `.epw`
 
 ## /lib/openstudio-standards
 
-The functional code that makes up this library.
+The functional code that makes up the openstudio-standards library.
 
 ### /btap
 
@@ -36,9 +40,19 @@ These files extend OpenStudio classes to allow users to run a sizing run and acc
 
 These files apply typical assumptions that are not governed by a standard, and for which reasonable values exist.  For example, the configuration of the HVAC systems, assumptions for fan pressure drops, etc.  These assumptions come from sources like the DOE Prototype, the DOE Reference Buildings, and the Canadian Archetype Buildings.
 
+### /refs
+
+This file contains a list of codes, standards, technical reports, and other documents that are referenced in the documentation for methods in the library.
+
+### /utilities
+
+These files contain methods to perform common tasks such as runnning simulations, logging errors, etc.
+
 ### /standards
 
 These files modify model inputs to meet a specific standard.  For example, there is a method that modifies a Chiller:Electric:EIR and sets its COP and performance curves based on the selected standard, the capacity, and the compressor type.  These methods rely on the information in the `/data/standards` directory for lookups.
+
+Each subdirectory contains methods for a specific standard.  Methods that are defined higher up in the directory structure may be re-implemented (and therefore overwritten) by methods further down in the structure.
 
 ### /weather
 

@@ -10,7 +10,7 @@ class Standard
   # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Celsius, default is hot water loop design return temperature
   # @param rated_inlet_air_temperature [Double] rated inlet air temperature in degrees Celsius, default is 16.6 (62F)
   # @param rated_outlet_air_temperature [Double] rated outlet air temperature in degrees Celsius, default is 32.2 (90F)
-  # @parama [Double] controller convergence tolerance
+  # @param controller_convergence_tolerance [Double] controller convergence tolerance
   def create_coil_heating_water(model,
                                 hot_water_loop,
                                 air_loop_node: nil,

@@ -641,7 +641,7 @@ class Standard
   # Sets the T-vis of a simple glazing construction to a specified value
   # by modifying the thickness of the insulation layer.
   #
-  # @param target_shgc [Double] Visible Transmittance
+  # @param target_tvis [Double] Visible Transmittance
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)
     if target_tvis >= 1.0
