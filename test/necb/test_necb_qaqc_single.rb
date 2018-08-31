@@ -44,7 +44,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     # "Warehouse"
   ]
 
-  templates =  ['NECB2011','NECB2015']
+  templates =  ['NECB2011','NECB2015', 'NECB2017']
   climate_zones = 'NECB HDD Method'
   epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
 
@@ -58,7 +58,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     end
   end
 
-  processess =  (Parallel::processor_count - 1)
+  processess =  (Parallel::processor_count * 2.0 / 3.0).round
   puts "processess #{processess}"
   Parallel.map(run_argument_array, in_processes: processess) { |info| 
     test_name = "#{info['building']}_#{info['epw']}"
@@ -79,8 +79,12 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
       FileUtils.rm(model_out_path(test_name,info))
     end
     output_folder = run_dir(test_name,info)
-    prototype_creator = Standard.build("#{info['template']}_#{info['building']}")
-    model = prototype_creator.model_create_prototype_model(climate_zones, info['epw'], output_folder)
+    prototype_creator = Standard.build(info['template'])
+    model = prototype_creator.model_create_prototype_model(template: info['template'],
+                                                           building_type: info['building'],
+                                                           epw_file: info['epw'],
+                                                           debug: false,
+                                                           sizing_run_dir: output_folder)
 
 
     BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)

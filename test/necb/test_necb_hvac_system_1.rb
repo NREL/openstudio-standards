@@ -60,7 +60,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
             model = nil
             if mau_type == true
               mau_heating_coil_types.each do |mau_heating_coil_type|
-                name = "sys1_Boiler~#{boiler_fueltype}_Mau~#{mau_type}_MauCoil~#{mau_heating_coil_type}_Baseboard~#{baseboard_type}"
+                name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
                 BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
@@ -85,7 +85,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                 assert_equal(true, result, "Failure in Standards for #{name}")
               end
             else
-              name = "sys1_Boiler~#{boiler_fueltype}_Mau~#{mau_type}_MauCoil~None_Baseboard~#{baseboard_type}"
+              name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-None_Baseboard-#{baseboard_type}"
               puts "***************************************#{name}*******************************************************\n"
               model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
               BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)

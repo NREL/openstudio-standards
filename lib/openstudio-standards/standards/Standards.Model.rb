@@ -2146,7 +2146,7 @@ class Standard
       desired_object = matching_objects[0]
     else
       desired_object = matching_objects[0]
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n #{matching_objects.join("\n")}")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n#{matching_objects.join("\n")}")
     end
 
     return desired_object
@@ -2375,7 +2375,7 @@ class Standard
       end
 
     else
-      puts "Unknown material type #{material_type}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Unknown material type #{material_type}, cannot add material called #{material_name}.")
       exit
     end
 
@@ -3004,19 +3004,7 @@ class Standard
   # @return [hash] key for climate zone and building type, both values are strings
   def model_get_building_climate_zone_and_building_type(model, remap_office = true)
     # get climate zone from model
-    # get ashrae climate zone from model
-    climate_zone = ''
-    model.getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
-        climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2006-#{cz.value}A"
-                       else
-                         "ASHRAE 169-2006-#{cz.value}"
-                       end
-      elsif cz.institution == 'CEC'
-        climate_zone = "CEC T24-CEC#{cz.value}"
-      end
-    end
+    climate_zone = model_standards_climate_zone(model)
 
     # get building type from model
     building_type = ''
@@ -3943,13 +3931,7 @@ class Standard
     end
 
     # get climate zone value
-    climate_zone_value = ''
-    model.getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
-        climate_zone_value = cz.value
-        next
-      end
-    end
+    climate_zone = model_standards_climate_zone(model)
 
     internal_loads = {}
     internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
@@ -4385,6 +4367,55 @@ class Standard
     return true
   end
 
+  # Converts the climate zone in the model into the format used
+  # by the openstudio-standards lookup tables.  For example:
+  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
+  # institution: CEC, value: 3  becomes: CEC T24-CEC3.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [String] the string representation of the climate zone,
+  # empty string if no climate zone is present in the model.
+  def model_standards_climate_zone(model)
+    climate_zone = ''
+    model.getClimateZones.climateZones.each do |cz|
+      if cz.institution == 'ASHRAE'
+        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
+        climate_zone = if cz.value == '7' || cz.value == '8'
+                         "ASHRAE 169-2006-#{cz.value}A"
+                       else
+                         "ASHRAE 169-2006-#{cz.value}"
+                       end
+      elsif cz.institution == 'CEC'
+        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
+        climate_zone = "CEC T24-CEC#{cz.value}"
+      end
+    end
+    return climate_zone
+  end
+
+  # Sets the climate zone object in the model using
+  # the correct institution based on the climate zone specified
+  # in the format used by the openstudio-standards lookups.
+  # Clears out any climate zones previously added to the model.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param climate_zone [String] the climate zone in openstudio-standards format.
+  # For example: ASHRAE 169-2006-2A, CEC T24-CEC3
+  # @return [Boolean] returns true if successful, false if not
+  def model_set_climate_zone(model, climate_zone)
+    # Remove previous climate zones from the model
+    model.getClimateZones.clear
+    # Split the string into the correct institution and value
+    if climate_zone.include? 'ASHRAE 169-2006-'
+      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+    elsif climate_zone.include? 'CEC T24-CEC'
+      model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
+
+    end
+    return true
+  end
+
+
   # This method return the building ratio of subsurface_area / surface_type_area where surface_type can be "Wall" or "RoofCeiling"
   def get_outdoor_subsurface_ratio(model, surface_type = "Wall")
     surface_area = 0.0
@@ -4425,23 +4456,29 @@ class Standard
   end
 
   def validate_initial_model(model)
+    is_valid = true
     if model.getBuildingStorys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
+      is_valid = false
     end
     if model.getThermalZones.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
+      is_valid = false
     end
 
     if @space_type_map.nil? || @space_type_map.empty?
       @space_type_map = get_space_type_maps_from_model(model)
       if @space_type_map.nil? || @space_type_map.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
+        is_valid = false
       else
         @space_type_map = @space_type_map.sort.to_h
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
@@ -4459,6 +4496,19 @@ class Standard
     unless @space_multiplier_map.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
     end
+    return is_valid
+  end
+
+
+  # Determines how ventilation for the standard is specified.
+  # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
+  # When 'Maximum', only the biggest OA flow rate.  Used by T24.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [String] the ventilation method, either Sum or Maximum
+  def model_ventilation_method(model)
+    ventilation_method = 'Sum'
+    return ventilation_method
   end
 
 
@@ -4584,6 +4634,49 @@ class Standard
 
     return true
   end
+
+
+
+  def load_user_geometry_osm(osm_model_path:)
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(osm_model_path)
+
+    # Check that the model loaded successfully
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
+      return false
+    end
+    model = model.get
+
+    # Check for expected characteristics of geometry model
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
+      end
+    end
+    return model
+  end
+
+
+
+
 
 
   # Loads a osm as a starting point.

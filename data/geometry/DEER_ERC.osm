@@ -36,7 +36,8 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {ea4a1b6e-0c84-4f5b-aaa2-68e16ee1b95d}, !- Building Story Name
-  {0bdcf29b-8101-4f22-ae51-7e943d636b8a}; !- Thermal Zone Name
+  {0bdcf29b-8101-4f22-ae51-7e943d636b8a}, !- Thermal Zone Name
+  No;                                     !- Part of Total Floor Area
 
 OS:Space,
   {6b971eb5-c3ac-47df-8a43-d0d49a8b7e40}, !- Handle
