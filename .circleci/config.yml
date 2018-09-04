@@ -21,7 +21,6 @@ jobs:
           name: Run tests
           command: |
             bundle exec rake test:circleci
-          no_output_timeout: 3h
       - run:
           name: Summarize test times
           command: |

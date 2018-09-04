@@ -865,7 +865,7 @@ OS:Surface,
   ,                                       !- Number of Vertices
   4.572, 28.3464, 2.7432,                 !- X,Y,Z Vertex 1 {m}
   4.572, 28.3464, 0,                      !- X,Y,Z Vertex 2 {m}
-  0, 32.9184, 0,                         !- X,Y,Z Vertex 3 {m}
+  0, 32.9184, 0,                          !- X,Y,Z Vertex 3 {m}
   0, 32.9184, 2.7432;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
@@ -3823,68 +3823,40 @@ OS:SpaceType,
   LobbyWaiting,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {561350f0-cd65-4fe8-963b-d630eceeeebf}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
   LobbyWaiting;                           !- Standards Space Type
-
-OS:Rendering:Color,
-  {561350f0-cd65-4fe8-963b-d630eceeeebf}, !- Handle
-  Rendering Color 1,                      !- Name
-  184,                                    !- Rendering Red Value
-  134,                                    !- Rendering Green Value
-  11;                                     !- Rendering Blue Value
 
 OS:SpaceType,
   {5ee851b4-f2ae-4075-a7e1-6fa593c0b3ba}, !- Handle
   MechElecRoom,                           !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {6496e501-1f88-49f2-b0ed-d58ac7ae2f19}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
   MechElecRoom;                           !- Standards Space Type
-
-OS:Rendering:Color,
-  {6496e501-1f88-49f2-b0ed-d58ac7ae2f19}, !- Handle
-  Rendering Color 2,                      !- Name
-  238,                                    !- Rendering Red Value
-  130,                                    !- Rendering Green Value
-  238;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {5e3fa265-0065-479f-911e-999552d05f79}, !- Handle
   OfficeOpen,                             !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {070f0d59-8598-497e-85d1-ae70f9522cd5}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
   OfficeOpen;                             !- Standards Space Type
-
-OS:Rendering:Color,
-  {070f0d59-8598-497e-85d1-ae70f9522cd5}, !- Handle
-  Rendering Color 3,                      !- Name
-  135,                                    !- Rendering Red Value
-  206,                                    !- Rendering Green Value
-  235;                                    !- Rendering Blue Value
 
 OS:SpaceType,
   {f35b22f1-af66-4882-99e4-271aef07eaa2}, !- Handle
   OfficeSmall,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {6f7aa142-dd37-4538-ad11-eeda0b49fbee}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
   OfficeSmall;                            !- Standards Space Type
-
-OS:Rendering:Color,
-  {6f7aa142-dd37-4538-ad11-eeda0b49fbee}, !- Handle
-  Rendering Color 4,                      !- Name
-  0,                                      !- Rendering Red Value
-  128,                                    !- Rendering Green Value
-  0;                                      !- Rendering Blue Value
 
 OS:ThermalZone,
   {17dd05f8-8bf8-481c-9e27-6cc23e9e4f82}, !- Handle

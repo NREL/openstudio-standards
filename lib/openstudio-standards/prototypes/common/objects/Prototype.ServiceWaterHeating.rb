@@ -143,7 +143,6 @@ class Standard
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
-  # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterHeaterMixed]
   # the resulting water heater.
   def model_add_water_heater(model,

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {682daf9e-c940-4654-b799-9bd269b1170d}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {e8446e62-f4cd-465d-bc89-b3e27056465b}, !- Handle
+  2.6.0;                                  !- Version Identifier
 
 OS:BuildingStory,
   {ff3af51f-045c-4c90-bab9-13e6536ee5c2}, !- Handle
@@ -10,7 +10,7 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {ff2474da-7e39-4a42-aba5-615e74c84abf}; !- Group Rendering Name
+  ;                                       !- Group Rendering Name
 
 OS:Space,
   {b53f31a4-4a6d-403d-b967-293e74261980}, !- Handle
@@ -39,7 +39,10 @@ OS:Space,
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
   {ff3af51f-045c-4c90-bab9-13e6536ee5c2}, !- Building Story Name
-  {0ae5351c-7c4c-44a2-b168-c43c80f37058}; !- Thermal Zone Name
+  {0ae5351c-7c4c-44a2-b168-c43c80f37058}, !- Thermal Zone Name
+  ,                                       !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ;                                       !- Building Unit Name
 
 OS:Space,
   {506416dc-4b51-414d-b52d-757cabbd98dd}, !- Handle
@@ -83,8 +86,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0, 0, 3.048,                            !- X,Y,Z Vertex 1 {m}
   0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
-  27.26436, -6.67784224096021e-15, 0,     !- X,Y,Z Vertex 3 {m}
-  27.26436, -6.67784224096021e-15, 3.048; !- X,Y,Z Vertex 4 {m}
+  27.2644, 0, 0,                          !- X,Y,Z Vertex 3 {m}
+  27.2644, 0, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {621ef0d9-1a84-4f2e-b12a-65e1c744717c}, !- Handle
@@ -115,10 +118,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, -6.67784224096021e-15, 3.048, !- X,Y,Z Vertex 1 {m}
-  27.26436, -6.67784224096021e-15, 0,     !- X,Y,Z Vertex 2 {m}
-  27.26436, 27.26436, 0,                  !- X,Y,Z Vertex 3 {m}
-  27.26436, 27.26436, 3.048;              !- X,Y,Z Vertex 4 {m}
+  27.2644, 0, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  27.2644, 0, 0,                          !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 0,                    !- X,Y,Z Vertex 3 {m}
+  27.2644, 27.2644, 3.048;                !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {fb244f52-6bcf-487e-89e4-848d64c22423}, !- Handle
@@ -132,10 +135,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  27.26436, 1.88029900799999, 2.505456,   !- X,Y,Z Vertex 1 {m}
-  27.26436, 1.88029900799999, 0.9144,     !- X,Y,Z Vertex 2 {m}
-  27.26436, 13.633691808, 0.9144,         !- X,Y,Z Vertex 3 {m}
-  27.26436, 13.633691808, 2.505456;       !- X,Y,Z Vertex 4 {m}
+  27.2644, 1.88029900799999, 2.505456,    !- X,Y,Z Vertex 1 {m}
+  27.2644, 1.88029900799999, 0.9144,      !- X,Y,Z Vertex 2 {m}
+  27.2644, 13.633691808, 0.9144,          !- X,Y,Z Vertex 3 {m}
+  27.2644, 13.633691808, 2.505456;        !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {b83aed35-afc4-4ea2-8ba2-ab785ceb5d57}, !- Handle
@@ -149,10 +152,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 27.26436, 0,          !- X,Y,Z Vertex 2 {m}
-  6.67784224096021e-15, 27.26436, 0,      !- X,Y,Z Vertex 3 {m}
-  6.67784224096021e-15, 27.26436, 3.048;  !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  2.7249, 27.2644, 0,                     !- X,Y,Z Vertex 2 {m}
+  0, 27.2644, 0,                          !- X,Y,Z Vertex 3 {m}
+  0, 27.2644, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {c733168d-a1a9-44fc-a800-4cba2d0ee210}, !- Handle
@@ -166,10 +169,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  4.17365249648012e-15, 13.63218, 3.048,  !- X,Y,Z Vertex 1 {m}
-  4.17365249648012e-15, 13.63218, 0,      !- X,Y,Z Vertex 2 {m}
-  -1.66945946436009e-15, 2.74829295516222e-46, 0, !- X,Y,Z Vertex 3 {m}
-  -1.66945946436009e-15, 2.74829295516222e-46, 3.048; !- X,Y,Z Vertex 4 {m}
+  0, 13.6322, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  0, 13.6322, 0,                          !- X,Y,Z Vertex 2 {m}
+  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+  0, 0, 3.048;                            !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {519182a2-48a3-4233-a289-d0813681f826}, !- Handle
@@ -183,10 +186,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 13.633704, 3.048,             !- X,Y,Z Vertex 1 {m}
-  27.26436, 13.633704, 0,                 !- X,Y,Z Vertex 2 {m}
-  27.26436, 27.26436, 0,                  !- X,Y,Z Vertex 3 {m}
-  27.26436, 27.26436, 3.048;              !- X,Y,Z Vertex 4 {m}
+  27.2644, 13.6337, 3.048,                !- X,Y,Z Vertex 1 {m}
+  27.2644, 13.6337, 0,                    !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 0,                    !- X,Y,Z Vertex 3 {m}
+  27.2644, 27.2644, 3.048;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {15979f32-1740-45ab-9d1b-5709cb188f39}, !- Handle
@@ -200,10 +203,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 1 {m}
-  27.26436, 27.26436, 0,                  !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 0,                   !- X,Y,Z Vertex 3 {m}
-  24.5364, 27.26436, 3.048;               !- X,Y,Z Vertex 4 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  27.2644, 27.2644, 0,                    !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 0,                    !- X,Y,Z Vertex 3 {m}
+  24.5364, 27.2644, 3.048;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {d9b24143-8243-494a-9548-a834ca3805d2}, !- Handle
@@ -217,10 +220,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 0,                   !- X,Y,Z Vertex 2 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.048;              !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 0,                    !- X,Y,Z Vertex 2 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {2285e818-3e0d-4ddd-96c7-1d6308904587}, !- Handle
@@ -234,10 +237,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 0,                   !- X,Y,Z Vertex 3 {m}
-  24.5364, 27.26436, 3.048;               !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 0,                    !- X,Y,Z Vertex 3 {m}
+  24.5364, 27.2644, 3.048;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {f914e8ca-469f-4cd2-8e7a-8229bc2b143c}, !- Handle
@@ -251,10 +254,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 20.449032, 0,         !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 20.449032, 3.048;     !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.048;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {ee630398-053b-491c-aa34-17fb4218fdb8}, !- Handle
@@ -268,10 +271,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 20.449032, 0,         !- X,Y,Z Vertex 2 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.048;              !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 1 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 2 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {4881c5c6-1b67-4d5b-b0a5-208421fbf2b7}, !- Handle
@@ -285,10 +288,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 20.449032, 0,         !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 27.26436, 0,          !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 27.26436, 3.048;      !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 1 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 0,                     !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {7d614567-fa05-47cd-804f-6357406e9859}, !- Handle
@@ -302,10 +305,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 27.26436, 0,          !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 20.449032, 0,         !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 20.449032, 3.048;     !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  2.7249, 27.2644, 0,                     !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.048;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {1f34bd21-fc38-4e6b-9d5d-9ce2ed423cf3}, !- Handle
@@ -319,10 +322,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  6.67784224096021e-15, 27.26436, 3.048,  !- X,Y,Z Vertex 1 {m}
-  6.67784224096021e-15, 27.26436, 0,      !- X,Y,Z Vertex 2 {m}
-  8.34730280120028e-16, 13.63218, 0,      !- X,Y,Z Vertex 3 {m}
-  8.34730280120028e-16, 13.63218, 3.048;  !- X,Y,Z Vertex 4 {m}
+  0, 27.2644, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  0, 27.2644, 0,                          !- X,Y,Z Vertex 2 {m}
+  0, 13.6322, 0,                          !- X,Y,Z Vertex 3 {m}
+  0, 13.6322, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {7a7d1ecb-70fb-4ab9-9b1c-240bdca56038}, !- Handle
@@ -336,13 +339,13 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, -6.67784224096021e-15, 3.048, !- X,Y,Z Vertex 1 {m}
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 4 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 5 {m}
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 6 {m}
-  6.67784224096021e-15, 27.26436, 3.048,  !- X,Y,Z Vertex 7 {m}
+  27.2644, 0, 3.048,                      !- X,Y,Z Vertex 1 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 5 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 6 {m}
+  0, 27.2644, 3.048,                      !- X,Y,Z Vertex 7 {m}
   0, 0, 3.048;                            !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
@@ -357,14 +360,14 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 1 {m}
-  27.26436, -6.67784224096021e-15, 3.048, !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  27.2644, 0, 3.048,                      !- X,Y,Z Vertex 2 {m}
   0, 0, 3.048,                            !- X,Y,Z Vertex 3 {m}
-  6.67784224096021e-15, 27.26436, 3.048,  !- X,Y,Z Vertex 4 {m}
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 5 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 6 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 7 {m}
-  24.5364, 27.26436, 3.048;               !- X,Y,Z Vertex 8 {m}
+  0, 27.2644, 3.048,                      !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 5 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 6 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 7 {m}
+  24.5364, 27.2644, 3.048;                !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
   {77ebdbef-27d3-4e6b-ba4b-f842e79815cf}, !- Handle
@@ -378,14 +381,14 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 27.26436, 0,                  !- X,Y,Z Vertex 1 {m}
-  27.26436, -6.67784224096021e-15, 0,     !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 0,                    !- X,Y,Z Vertex 1 {m}
+  27.2644, 0, 0,                          !- X,Y,Z Vertex 2 {m}
   0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
-  6.67784224096021e-15, 27.26436, 0,      !- X,Y,Z Vertex 4 {m}
-  2.72491200000001, 27.26436, 0,          !- X,Y,Z Vertex 5 {m}
-  2.72491200000001, 20.449032, 0,         !- X,Y,Z Vertex 6 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 7 {m}
-  24.5364, 27.26436, 0;                   !- X,Y,Z Vertex 8 {m}
+  0, 27.2644, 0,                          !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 0,                     !- X,Y,Z Vertex 5 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 6 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 7 {m}
+  24.5364, 27.2644, 0;                    !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
   {3933fd35-b185-46f7-ba04-d7df627eba1c}, !- Handle
@@ -399,10 +402,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  13.63218, 27.26436, 3.048,              !- X,Y,Z Vertex 1 {m}
-  13.63218, 27.26436, 0,                  !- X,Y,Z Vertex 2 {m}
-  2.724912, 27.26436, 0,                  !- X,Y,Z Vertex 3 {m}
-  2.724912, 27.26436, 3.048;              !- X,Y,Z Vertex 4 {m}
+  13.6322, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  13.6322, 27.2644, 0,                    !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 0,                     !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {44c4601a-aa08-41bd-b405-0851b94e59d4}, !- Handle
@@ -416,10 +419,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 0,                   !- X,Y,Z Vertex 2 {m}
-  13.63218, 27.26436, 0,                  !- X,Y,Z Vertex 3 {m}
-  13.63218, 27.26436, 3.048;              !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 0,                    !- X,Y,Z Vertex 2 {m}
+  13.6322, 27.2644, 0,                    !- X,Y,Z Vertex 3 {m}
+  13.6322, 27.2644, 3.048;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {88310136-8b91-4c71-97fd-1512e8f34e65}, !- Handle
@@ -433,10 +436,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 2 {m}
-  2.724912, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
-  2.724912, 20.449032, 3.048;             !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.048;                  !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {62b7c080-c430-447f-9f41-024e29e7080a}, !- Handle
@@ -450,10 +453,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 2 {m}
-  2.724912, 20.449032, 3.048,             !- X,Y,Z Vertex 3 {m}
-  2.724912, 27.26436, 3.048;              !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 3.048;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {54df29c4-ccf7-456e-a0ff-defbe3e7922e}, !- Handle
@@ -467,10 +470,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 0,                   !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 0,                  !- X,Y,Z Vertex 2 {m}
-  2.724912, 20.449032, 0,                 !- X,Y,Z Vertex 3 {m}
-  2.724912, 27.26436, 0;                  !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 0,                    !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 0,                     !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 0,                      !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 0;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {a75ab1a6-ce18-4aae-afec-73243778aed8}, !- Handle
@@ -486,8 +489,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0, 0, 3.6576,                           !- X,Y,Z Vertex 1 {m}
   0, 0, 3.048,                            !- X,Y,Z Vertex 2 {m}
-  27.26436, -6.67784224096021e-15, 3.048, !- X,Y,Z Vertex 3 {m}
-  27.26436, -6.67784224096021e-15, 3.6576; !- X,Y,Z Vertex 4 {m}
+  27.2644, 0, 3.048,                      !- X,Y,Z Vertex 3 {m}
+  27.2644, 0, 3.6576;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {5c6c292b-4508-4778-9f2a-3c32a54dbaf5}, !- Handle
@@ -501,10 +504,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, -6.67784224096021e-15, 3.6576, !- X,Y,Z Vertex 1 {m}
-  27.26436, -6.67784224096021e-15, 3.048, !- X,Y,Z Vertex 2 {m}
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
-  27.26436, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  27.2644, 0, 3.6576,                     !- X,Y,Z Vertex 1 {m}
+  27.2644, 0, 3.048,                      !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  27.2644, 27.2644, 3.6576;               !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {a9ff1f10-cfb1-46c6-9744-e7df09d618f3}, !- Handle
@@ -518,10 +521,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 27.26436, 3.6576,     !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 2 {m}
-  6.67784224096021e-15, 27.26436, 3.048,  !- X,Y,Z Vertex 3 {m}
-  6.67784224096021e-15, 27.26436, 3.6576; !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 3.6576,                !- X,Y,Z Vertex 1 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  0, 27.2644, 3.048,                      !- X,Y,Z Vertex 3 {m}
+  0, 27.2644, 3.6576;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {f44e292f-67c6-47bf-832b-4a041bb0e05c}, !- Handle
@@ -535,10 +538,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  4.17365249648012e-15, 13.63218, 3.6576, !- X,Y,Z Vertex 1 {m}
-  4.17365249648012e-15, 13.63218, 3.048,  !- X,Y,Z Vertex 2 {m}
-  -1.66945946436009e-15, -1.37414647758111e-46, 3.048, !- X,Y,Z Vertex 3 {m}
-  -1.66945946436009e-15, -1.37414647758111e-46, 3.6576; !- X,Y,Z Vertex 4 {m}
+  0, 13.6322, 3.6576,                     !- X,Y,Z Vertex 1 {m}
+  0, 13.6322, 3.048,                      !- X,Y,Z Vertex 2 {m}
+  0, 0, 3.048,                            !- X,Y,Z Vertex 3 {m}
+  0, 0, 3.6576;                           !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {632c13ed-d85e-4486-a2af-f87e7fd84f82}, !- Handle
@@ -552,13 +555,13 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, -6.67784224096021e-15, 3.6576, !- X,Y,Z Vertex 1 {m}
-  27.26436, 27.26436, 3.6576,             !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 3.6576,              !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.6576,             !- X,Y,Z Vertex 4 {m}
-  2.72491200000001, 20.449032, 3.6576,    !- X,Y,Z Vertex 5 {m}
-  2.72491200000001, 27.26436, 3.6576,     !- X,Y,Z Vertex 6 {m}
-  6.67784224096021e-15, 27.26436, 3.6576, !- X,Y,Z Vertex 7 {m}
+  27.2644, 0, 3.6576,                     !- X,Y,Z Vertex 1 {m}
+  27.2644, 27.2644, 3.6576,               !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 3.6576,               !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.6576,                !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.6576,                 !- X,Y,Z Vertex 5 {m}
+  2.7249, 27.2644, 3.6576,                !- X,Y,Z Vertex 6 {m}
+  0, 27.2644, 3.6576,                     !- X,Y,Z Vertex 7 {m}
   0, 0, 3.6576;                           !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
@@ -573,10 +576,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 13.633704, 3.6576,            !- X,Y,Z Vertex 1 {m}
-  27.26436, 13.633704, 3.048,             !- X,Y,Z Vertex 2 {m}
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
-  27.26436, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  27.2644, 13.6337, 3.6576,               !- X,Y,Z Vertex 1 {m}
+  27.2644, 13.6337, 3.048,                !- X,Y,Z Vertex 2 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  27.2644, 27.2644, 3.6576;               !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {47b2e3ed-01aa-402f-9dd9-94a61b72287a}, !- Handle
@@ -590,10 +593,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.26436, 27.26436, 3.6576,             !- X,Y,Z Vertex 1 {m}
-  27.26436, 27.26436, 3.048,              !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 3 {m}
-  24.5364, 27.26436, 3.6576;              !- X,Y,Z Vertex 4 {m}
+  27.2644, 27.2644, 3.6576,               !- X,Y,Z Vertex 1 {m}
+  27.2644, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  24.5364, 27.2644, 3.6576;               !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {bc7ee020-71b2-4bf2-a325-3ab8a8e3949b}, !- Handle
@@ -607,10 +610,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 3.6576,              !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 2 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 3.6576,               !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.6576;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {485e832c-c5ad-41fd-a53c-98ad41b8a58d}, !- Handle
@@ -624,10 +627,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.6576,             !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 2 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 3 {m}
-  24.5364, 27.26436, 3.6576;              !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.6576,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  24.5364, 27.2644, 3.6576;               !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {6c60bfab-f847-4f36-997a-0740a47d8c72}, !- Handle
@@ -641,10 +644,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.6576,             !- X,Y,Z Vertex 1 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 20.449032, 3.6576;    !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.6576,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.6576;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {f5af1e48-a134-4951-86ae-8fac18c05c76}, !- Handle
@@ -658,10 +661,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 20.449032, 3.6576,    !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 2 {m}
-  24.5364, 20.449032, 3.048,              !- X,Y,Z Vertex 3 {m}
-  24.5364, 20.449032, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.6576,                 !- X,Y,Z Vertex 1 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 2 {m}
+  24.5364, 20.449, 3.048,                 !- X,Y,Z Vertex 3 {m}
+  24.5364, 20.449, 3.6576;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {d5a7c563-d645-4592-9788-4a685822a76b}, !- Handle
@@ -675,10 +678,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 20.449032, 3.6576,    !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 27.26436, 3.6576;     !- X,Y,Z Vertex 4 {m}
+  2.7249, 20.449, 3.6576,                 !- X,Y,Z Vertex 1 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 3.6576;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {81686fa1-3304-4a52-a4f7-41b8cafe950d}, !- Handle
@@ -692,10 +695,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  2.72491200000001, 27.26436, 3.6576,     !- X,Y,Z Vertex 1 {m}
-  2.72491200000001, 27.26436, 3.048,      !- X,Y,Z Vertex 2 {m}
-  2.72491200000001, 20.449032, 3.048,     !- X,Y,Z Vertex 3 {m}
-  2.72491200000001, 20.449032, 3.6576;    !- X,Y,Z Vertex 4 {m}
+  2.7249, 27.2644, 3.6576,                !- X,Y,Z Vertex 1 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 2 {m}
+  2.7249, 20.449, 3.048,                  !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.6576;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {83e5521a-1190-4266-9938-2132611be247}, !- Handle
@@ -709,10 +712,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  6.67784224096021e-15, 27.26436, 3.6576, !- X,Y,Z Vertex 1 {m}
-  6.67784224096021e-15, 27.26436, 3.048,  !- X,Y,Z Vertex 2 {m}
-  8.3473028012003e-16, 13.63218, 3.048,   !- X,Y,Z Vertex 3 {m}
-  8.3473028012003e-16, 13.63218, 3.6576;  !- X,Y,Z Vertex 4 {m}
+  0, 27.2644, 3.6576,                     !- X,Y,Z Vertex 1 {m}
+  0, 27.2644, 3.048,                      !- X,Y,Z Vertex 2 {m}
+  0, 13.6322, 3.048,                      !- X,Y,Z Vertex 3 {m}
+  0, 13.6322, 3.6576;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {6b6325ab-b631-4204-aa15-1a70289c4114}, !- Handle
@@ -726,10 +729,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  13.63218, 27.26436, 3.6576,             !- X,Y,Z Vertex 1 {m}
-  13.63218, 27.26436, 3.048,              !- X,Y,Z Vertex 2 {m}
-  2.724912, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
-  2.724912, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  13.6322, 27.2644, 3.6576,               !- X,Y,Z Vertex 1 {m}
+  13.6322, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 3.048,                 !- X,Y,Z Vertex 3 {m}
+  2.7249, 27.2644, 3.6576;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {4b32d41d-fd1c-4641-8c33-918720778024}, !- Handle
@@ -743,10 +746,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 20.449032, 3.6576,             !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 3.6576,              !- X,Y,Z Vertex 2 {m}
-  2.724912, 27.26436, 3.6576,             !- X,Y,Z Vertex 3 {m}
-  2.724912, 20.449032, 3.6576;            !- X,Y,Z Vertex 4 {m}
+  24.5364, 20.449, 3.6576,                !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 3.6576,               !- X,Y,Z Vertex 2 {m}
+  2.7249, 27.2644, 3.6576,                !- X,Y,Z Vertex 3 {m}
+  2.7249, 20.449, 3.6576;                 !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {14811ee5-047f-499f-bb7e-a5a6ea1ad52f}, !- Handle
@@ -760,10 +763,10 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  24.5364, 27.26436, 3.6576,              !- X,Y,Z Vertex 1 {m}
-  24.5364, 27.26436, 3.048,               !- X,Y,Z Vertex 2 {m}
-  13.63218, 27.26436, 3.048,              !- X,Y,Z Vertex 3 {m}
-  13.63218, 27.26436, 3.6576;             !- X,Y,Z Vertex 4 {m}
+  24.5364, 27.2644, 3.6576,               !- X,Y,Z Vertex 1 {m}
+  24.5364, 27.2644, 3.048,                !- X,Y,Z Vertex 2 {m}
+  13.6322, 27.2644, 3.048,                !- X,Y,Z Vertex 3 {m}
+  13.6322, 27.2644, 3.6576;               !- X,Y,Z Vertex 4 {m}
 
 OS:Facility,
   {deee7c3b-5120-4b61-8ce5-8a6455de1dc9}; !- Handle
@@ -783,34 +786,6 @@ OS:Building,
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
-
-OS:Rendering:Color,
-  {eae6ac4a-49d1-42f6-a9d8-a27ac8d1e116}, !- Handle
-  Rendering Color 1,                      !- Name
-  106,                                    !- Rendering Red Value
-  90,                                     !- Rendering Green Value
-  205;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {e6de8fc3-d4a2-4bd4-befa-b0a851caaff9}, !- Handle
-  Rendering Color 2,                      !- Name
-  255,                                    !- Rendering Red Value
-  240,                                    !- Rendering Green Value
-  245;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {da045f9b-06f6-41ee-86dd-cc22b6ebe6b0}, !- Handle
-  Rendering Color 3,                      !- Name
-  165,                                    !- Rendering Red Value
-  42,                                     !- Rendering Green Value
-  42;                                     !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {ff2474da-7e39-4a42-aba5-615e74c84abf}, !- Handle
-  Rendering Color 4,                      !- Name
-  50,                                     !- Rendering Red Value
-  205,                                    !- Rendering Green Value
-  50;                                     !- Rendering Blue Value
 
 OS:Site,
   {1fc00989-f1d0-46aa-bf8b-869cbb16db81}, !- Handle
@@ -892,35 +867,20 @@ OS:SpaceType,
   RetailSales,                            !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {aa1f044b-9bb6-40f7-adc8-d0f146ab27bf}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtS,                                    !- Standards Building Type
   RetailSales;                            !- Standards Space Type
-
-OS:Rendering:Color,
-  {aa1f044b-9bb6-40f7-adc8-d0f146ab27bf}, !- Handle
-  Rendering Color 5,                      !- Name
-  49,                                     !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  44,                                     !- Rendering Blue Value
-  255;                                    !- Rendering Alpha Value
 
 OS:SpaceType,
   {6d0a25b7-7aca-469d-9977-c6b57fcef994}, !- Handle
   StockRoom,                              !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {c30dde4c-395a-4321-b40d-0d7139cef657}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtS,                                    !- Standards Building Type
   StockRoom;                              !- Standards Space Type
-
-OS:Rendering:Color,
-  {c30dde4c-395a-4321-b40d-0d7139cef657}, !- Handle
-  Rendering Color 6,                      !- Name
-  205,                                    !- Rendering Red Value
-  133,                                    !- Rendering Green Value
-  63;                                     !- Rendering Blue Value
 
 OS:ThermalZone,
   {e6092d3d-ae3a-479c-8911-ad18f73ef51d}, !- Handle
