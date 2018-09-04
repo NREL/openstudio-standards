@@ -4020,17 +4020,156 @@ class Standard
 
   # Adds ideal air loads systems for each zone.
   #
-  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add heat pumps to.
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to enable ideal air loads
+  # @param hvac_op_sch [String] name of the HVAC operation schedule, default is always on
+  # @param heat_avail_sch [String] name of the heating availability schedule, default is always on
+  # @param cool_avail_sch [String] name of the cooling availability schedule, default is always on
+  # @param heat_limit_type [String] heating limit type
+  #   options are 'NoLimit', 'LimitFlowRate', 'LimitCapacity', and 'LimitFlowRateAndCapacity'
+  # @param cool_limit_type [String] cooling limit type
+  #   options are 'NoLimit', 'LimitFlowRate', 'LimitCapacity', and 'LimitFlowRateAndCapacity'
+  # @param dehumid_limit_type [String] dehumidification limit type
+  #   options are 'None', 'ConstantSensibleHeatRatio', 'Humidistat', 'ConstantSupplyHumidityRatio'
+  # @param cool_sensible_heat_ratio [Double] cooling sensible heat ratio if dehumidification limit type is 'ConstantSensibleHeatRatio'
+  # @param humid_ctrl_type [String] humidification control type
+  #   options are 'None', 'Humidistat', 'ConstantSupplyHumidityRatio'
+  # @param include_outdoor_air [Boolean] include design specification outdoor air ventilation
+  # @param enable_dcv [Boolean] include demand control ventilation, uses occupancy schedule if true
+  # @param econo_ctrl_mthd [String] economizer control method (require a cool_limit_type and include_outdoor_air set to true)
+  #   options are 'NoEconomizer', 'DifferentialDryBulb', 'DifferentialEnthalpy'
+  # @param heat_recovery_type [String] heat recovery type
+  #   options are 'None', 'Sensible', 'Enthalpy'
+  # @param heat_recovery_sensible_eff [Double] heat recovery sensible effectivness if heat recovery specified
+  # @param heat_recovery_latent_eff [Double] heat recovery latent effectivness if heat recovery specified
+  # @param add_output_meters [Boolean] include and output custom meter objects to sum all ideal air loads values
   # @return [Array<OpenStudio::Model::ZoneHVACIdealLoadsAirSystem>] an array of ideal air loads systems
-  # TODO: enable default ventilation settings, see https://github.com/UnmetHours/openstudio-measures/tree/master/ideal_loads_options
   def model_add_ideal_air_loads(model,
-                                thermal_zones)
+                                thermal_zones,
+                                hvac_op_sch: nil,
+                                heat_avail_sch: nil,
+                                cool_avail_sch: nil,
+                                heat_limit_type: 'NoLimit',
+                                cool_limit_type: 'NoLimit',
+                                dehumid_limit_type: 'ConstantSensibleHeatRatio',
+                                cool_sensible_heat_ratio: 0.7,
+                                humid_ctrl_type: 'None',
+                                include_outdoor_air: true,
+                                enable_dcv: false,
+                                econo_ctrl_mthd: 'NoEconomizer',
+                                heat_recovery_type: 'None',
+                                heat_recovery_sensible_eff: 0.7,
+                                heat_recovery_latent_eff: 0.65,
+                                add_output_meters: false)
+
+    # set availability schedules
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
+
+    # set heating availability schedules
+    if heat_avail_sch.nil?
+      heat_avail_sch = model.alwaysOnDiscreteSchedule
+    else
+      heat_avail_sch = model_add_schedule(model, heat_avail_sch)
+    end
+
+    # set cooling availability schedules
+    if cool_avail_sch.nil?
+      cool_avail_sch = model.alwaysOnDiscreteSchedule
+    else
+      cool_avail_sch = model_add_schedule(model, cool_avail_sch)
+    end
+
     ideal_systems = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ideal air loads for for #{zone.name}.")
       ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+      ideal_loads.setName("#{zone.name} Ideal Loads Air System")
+      ideal_loads.setAvailabilitySchedule(hvac_op_sch)
+      ideal_loads.setHeatingAvailabilitySchedule(heat_avail_sch)
+      ideal_loads.setCoolingAvailabilitySchedule(cool_avail_sch)
+      ideal_loads.setHeatingLimit(heat_limit_type)
+      ideal_loads.setCoolingLimit(cool_limit_type)
+      ideal_loads.setDehumidificationControlType(dehumid_limit_type)
+      ideal_loads.setCoolingSensibleHeatRatio(cool_sensible_heat_ratio)
+      ideal_loads.setHumidificationControlType(humid_ctrl_type)
+      if include_outdoor_air
+        # get the design specification outdoor air of the largest space in the zone
+        # TODO: create a new design specification outdoor air object that sums ventilation rates and schedules if multiple design specification outdoor air objects
+        space_areas = zone.spaces.map { |s| s.floorArea }
+        largest_space = zone.spaces.select { |s| s.floorArea == space_areas.max }
+        largest_space = largest_space[0]
+        design_spec_oa = largest_space.designSpecificationOutdoorAir
+        if design_spec_oa.is_initialized
+          design_spec_oa = design_spec_oa.get
+          ideal_loads.setDesignSpecificationOutdoorAirObject(design_spec_oa)
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Outdoor air requested for ideal loads object, but space #{largest_space.name} in thermal zone #{zone.name} does not have a design specification outdoor air object.")
+        end
+      end
+      if enable_dcv
+        ideal_loads.setDemandControlledVentilationType('OccupancySchedule')
+      else
+        ideal_loads.setDemandControlledVentilationType('None')
+      end
+      ideal_loads.setOutdoorAirEconomizerType(econo_ctrl_mthd)
+      ideal_loads.setHeatRecoveryType(heat_recovery_type)
+      ideal_loads.setSensibleHeatRecoveryEffectiveness(heat_recovery_sensible_eff)
+      ideal_loads.setLatentHeatRecoveryEffectiveness(heat_recovery_latent_eff)
       ideal_loads.addToThermalZone(zone)
       ideal_systems << ideal_loads
+    end
+
+    if add_output_meters
+      # ideal air loads system variables to include
+      ideal_air_loads_system_variables = [
+        'Zone Ideal Loads Supply Air Sensible Heating Energy',
+        'Zone Ideal Loads Supply Air Latent Heating Energy',
+        'Zone Ideal Loads Supply Air Total Heating Energy',
+        'Zone Ideal Loads Supply Air Sensible Cooling Energy',
+        'Zone Ideal Loads Supply Air Latent Cooling Energy',
+        'Zone Ideal Loads Supply Air Total Cooling Energy',
+        'Zone Ideal Loads Zone Sensible Heating Energy',
+        'Zone Ideal Loads Zone Latent Heating Energy',
+        'Zone Ideal Loads Zone Total Heating Energy',
+        'Zone Ideal Loads Zone Sensible Cooling Energy',
+        'Zone Ideal Loads Zone Latent Cooling Energy',
+        'Zone Ideal Loads Zone Total Cooling Energy',
+        'Zone Ideal Loads Outdoor Air Sensible Heating Energy',
+        'Zone Ideal Loads Outdoor Air Latent Heating Energy',
+        'Zone Ideal Loads Outdoor Air Total Heating Energy',
+        'Zone Ideal Loads Outdoor Air Sensible Cooling Energy',
+        'Zone Ideal Loads Outdoor Air Latent Cooling Energy',
+        'Zone Ideal Loads Outdoor Air Total Cooling Energy',
+        'Zone Ideal Loads Heat Recovery Sensible Heating Energy',
+        'Zone Ideal Loads Heat Recovery Latent Heating Energy',
+        'Zone Ideal Loads Heat Recovery Total Heating Energy',
+        'Zone Ideal Loads Heat Recovery Sensible Cooling Energy',
+        'Zone Ideal Loads Heat Recovery Latent Cooling Energy',
+        'Zone Ideal Loads Heat Recovery Total Cooling Energy'
+      ]
+
+      meters_added = 0
+      outputs_added = 0
+      ideal_air_loads_system_variables.each do |variable|
+        # create meter definition for variable
+        meter_definition = OpenStudio::Model::MeterCustom.new(model)
+        meter_definition.setName("Sum #{variable}")
+        meter_definition.setFuelType('Generic')
+        model.getZoneHVACIdealLoadsAirSystems.each { |sys| meter_definition.addKeyVarGroup(sys.name.to_s, variable) }
+        meters_added += 1
+
+        # add output meter
+        output_meter_definition = OpenStudio::Model::OutputMeter.new(model)
+        output_meter_definition.setName("Sum #{variable}")
+        output_meter_definition.setReportingFrequency('Hourly')
+        output_meter_definition.setMeterFileOnly(true)
+        output_meter_definition.setCumulative(false)
+        outputs_added += 1
+      end
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{meters_added} custom meter objects and #{outputs_added} meter outputs for ideal loads air systems.")
     end
 
     return ideal_systems
