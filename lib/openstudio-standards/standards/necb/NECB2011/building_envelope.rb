@@ -603,7 +603,8 @@ class NECB2011
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
       nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
-        exp_surf.setWindowToWallRatio(nonplenum_fdwr)
+        sub_surface_create_centered_subsurface_from_scaled_surface(exp_surf, nonplenum_fdwr, model)
+        # exp_surf.setWindowToWallRatio(nonplenum_fdwr)
       end
     else
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
@@ -629,6 +630,7 @@ class NECB2011
       return false
     end
     exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
+      sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
       roof.setWindowToWallRatio(srr_lim)
     end
     return true

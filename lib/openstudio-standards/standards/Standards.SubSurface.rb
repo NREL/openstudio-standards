@@ -183,4 +183,42 @@ class Standard
     # If here, we have a rectangle
     return true
   end
+
+  def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
+    sub_const = nil
+    surface.subSurfaces.sort.each do |sub_surf|
+      sub_const = sub_surf.construction.get
+      sub_surf.remove
+    end
+    surf_cent = surface.centroid
+    scale_factor = Math.sqrt(area_fraction)
+
+    # Create an array to collect the new vertices
+    new_vertices = []
+
+    # Loop on vertices (Point3ds)
+    surface.vertices.each do |vertex|
+      # Point3d - Point3d = Vector3d
+      # Vector from centroid to vertex (GA, GB, GC, etc)
+      centroid_vector = vertex - surf_cent
+
+      # Resize the vector (done in place) according to scale_factor
+      centroid_vector.setLength(centroid_vector.length * scale_factor)
+
+      # Move the vertex toward the centroid
+      new_vertex = surf_cent + centroid_vector
+
+      new_vertices << new_vertex
+    end
+    new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+    new_sub_surface.setSurface(surface)
+    type = new_sub_surface.subSurfaceType
+    new_name = surface.name.to_s + ' ' + type.to_s
+    new_sub_surface.setName(new_name)
+    unless sub_const.nil?
+      new_sub_surface.setConstruction(sub_const)
+    end
+    new_sub_surface.setMultiplier(1)
+    puts "hello"
+  end
 end

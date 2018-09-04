@@ -127,12 +127,12 @@ class Standard
           if tilt_degrees <= max_angle and tilt_degrees >= min_angle
             if space_plenum?(space)
               plenum_surfaces << surface
-              exp_plenum_area += surface.grossArea
+              exp_plenum_area += surface.grossArea*space.multiplier
             else
               exposed_surfaces << surface
-              exp_nonplenum_area += surface.grossArea
+              exp_nonplenum_area += surface.grossArea*space.multiplier
             end
-            total_exp_area += surface.grossArea
+            total_exp_area += surface.grossArea*space.multiplier
           end
         end
       end
@@ -162,12 +162,12 @@ class Standard
           next unless surface.outsideBoundaryCondition == 'Outdoors'
           if space_plenum?(space)
             plenum_surfaces << surface
-            exp_plenum_area += surface.grossArea
+            exp_plenum_area += surface.grossArea*space.multiplier
           else
             exposed_surfaces << surface
-            exp_nonplenum_area += surface.grossArea
+            exp_nonplenum_area += surface.grossArea*space.multiplier
           end
-          total_exp_area += surface.grossArea
+          total_exp_area += surface.grossArea*space.multiplier
         end
       end
     end
