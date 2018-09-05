@@ -187,7 +187,9 @@ class Standard
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     sub_const = nil
     surface.subSurfaces.sort.each do |sub_surf|
-      sub_const = sub_surf.construction.get
+      unless sub_surf.subSurfaceType == 'Door' || sub_surf.subSurfaceType == 'OverheadDoor' || sub_surf.subSurfaceType == 'Door' || sub_surf.subSurfaceType == 'TubularDaylightingDome' || 'TubularDaylightingDiffuser'
+        sub_const = sub_surf.construction.get
+      end
       sub_surf.remove
     end
     surf_cent = surface.centroid
@@ -213,12 +215,11 @@ class Standard
     new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
     new_sub_surface.setSurface(surface)
     type = new_sub_surface.subSurfaceType
-    new_name = surface.name.to_s + ' ' + type.to_s
+    new_name = surface.name.to_s + '_' + type.to_s
     new_sub_surface.setName(new_name)
     unless sub_const.nil?
       new_sub_surface.setConstruction(sub_const)
     end
     new_sub_surface.setMultiplier(1)
-    puts "hello"
   end
 end
