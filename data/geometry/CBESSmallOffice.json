@@ -1,0 +1,67 @@
+[
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-2",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_MotorizedDamper_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Perimeter_ZN_1"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-3",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_MotorizedDamper_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Perimeter_ZN_2"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-4",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_MotorizedDamper_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Perimeter_ZN_3"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-5",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_MotorizedDamper_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Perimeter_ZN_4"
+    ]
+  },
+  {
+    "type": "PSZ-AC",
+    "name": "PSZ-AC-1",
+    "operation_schedule": "OfficeSmall HVACOperationSchd",
+    "oa_damper_schedule": "OfficeSmall MinOA_MotorizedDamper_Sched",
+    "fan_type": "Cycling",
+    "cooling_type": "Single Speed Heat Pump",
+    "heating_type": "Single Speed Heat Pump",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Core_ZN"
+    ]
+  }
+]

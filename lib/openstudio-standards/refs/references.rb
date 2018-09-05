@@ -89,6 +89,12 @@ module References
   # The International Code Council's International Energy Conservation Code is widely
   # used across the United States.
   # @see https://codes.iccsafe.org/public/document/toc/545/
-  class ICCIECC2015; end  
+  class ICCIECC2015; end
+
+  # CBES
+  # The LBNL Commercial Building Energy Saver is an online tool that is used to perform
+  # benchmarking and retrofit analysis for small to medium sized office buildings in California.
+  # @see http://cbes.lbl.gov/
+  class CBES; end
 
 end
