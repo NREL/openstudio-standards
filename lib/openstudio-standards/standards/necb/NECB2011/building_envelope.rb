@@ -142,7 +142,7 @@ class NECB2011
   # will be done by shrinking vertices toward the centroid.
   #
   def apply_standard_skylight_to_roof_ratio(model, ssr_set: 'MAXIMIZE')
-    return apply_max_ssr(model) if ssr_set == 'MAXIMIZE'
+    # return apply_max_ssr(model) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -603,7 +603,16 @@ class NECB2011
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
       nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
-        sub_surface_create_centered_subsurface_from_scaled_surface(exp_surf, nonplenum_fdwr, model)
+        #start test here
+        window_area = 0
+        exp_surf.subSurfaces.sort.each do |subsurface|
+          window_area += subsurface.grossArea
+        end
+        nonplenum_fdwr = window_area/exp_surf.grossArea
+        unless window_area == 0
+          sub_surface_create_centered_subsurface_from_scaled_surface(exp_surf, nonplenum_fdwr, model)
+        end
+        #end testing here
         # exp_surf.setWindowToWallRatio(nonplenum_fdwr)
       end
     else

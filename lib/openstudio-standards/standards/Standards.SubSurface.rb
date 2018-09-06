@@ -187,7 +187,7 @@ class Standard
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     sub_const = nil
     surface.subSurfaces.sort.each do |sub_surf|
-      unless sub_surf.subSurfaceType == 'Door' || sub_surf.subSurfaceType == 'OverheadDoor' || sub_surf.subSurfaceType == 'Door' || sub_surf.subSurfaceType == 'TubularDaylightingDome' || 'TubularDaylightingDiffuser'
+      if sub_surf.subSurfaceType == 'FixedWindow' || sub_surf.subSurfaceType == 'OperableWindow' || sub_surf.subSurfaceType == 'Skylight'
         sub_const = sub_surf.construction.get
       end
       sub_surf.remove
