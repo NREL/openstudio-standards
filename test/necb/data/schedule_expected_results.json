@@ -65221,10 +65221,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -65243,7 +65243,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -65262,7 +65262,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -65568,10 +65568,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -65590,7 +65590,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -65609,7 +65609,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -65923,10 +65923,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -65951,7 +65951,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -65960,7 +65960,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -66254,10 +66254,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -66276,7 +66276,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -66295,7 +66295,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -66693,10 +66693,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -66715,7 +66715,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -66734,7 +66734,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -67132,10 +67132,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -67154,7 +67154,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -67173,7 +67173,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -67978,10 +67978,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -68000,7 +68000,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -68019,7 +68019,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -68928,10 +68928,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -68950,7 +68950,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -68969,7 +68969,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -69307,10 +69307,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -69335,7 +69335,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -69344,7 +69344,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -69560,10 +69560,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -69572,7 +69572,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -69581,7 +69581,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -69825,10 +69825,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -69863,7 +69863,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -69898,7 +69898,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -70348,10 +70348,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -70370,7 +70370,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -70389,7 +70389,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -71583,10 +71583,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -71611,7 +71611,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -71620,7 +71620,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -72700,10 +72700,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -72722,7 +72722,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -72741,7 +72741,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -73055,10 +73055,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -73083,7 +73083,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73092,7 +73092,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73308,10 +73308,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73320,7 +73320,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73329,7 +73329,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73585,10 +73585,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -73607,7 +73607,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -73626,7 +73626,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -73922,10 +73922,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73934,7 +73934,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -73943,7 +73943,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -74157,10 +74157,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -74185,7 +74185,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -74194,7 +74194,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -74458,10 +74458,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
@@ -74478,7 +74478,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -74503,7 +74503,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -74831,10 +74831,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -74853,7 +74853,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -74872,7 +74872,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -75186,10 +75186,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -75212,7 +75212,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -75221,7 +75221,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -75515,10 +75515,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -75537,7 +75537,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -75556,7 +75556,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -76095,10 +76095,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -76121,7 +76121,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -76130,7 +76130,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -76852,10 +76852,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -76880,7 +76880,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -76889,7 +76889,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.0-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -86793,10 +86793,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -86806,16 +86806,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -86825,16 +86825,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -86842,10 +86842,10 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
-            0.05
+            0.0433
           ]
         }
       ]
@@ -87569,10 +87569,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -87591,7 +87591,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -87610,7 +87610,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -88363,10 +88363,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -88385,7 +88385,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -88404,7 +88404,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -88748,10 +88748,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.3-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.3-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
@@ -88760,15 +88760,15 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
+            0.3995,
+            0.03995,
+            0.3995,
             0.8,
             0.9
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.3-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -88781,19 +88781,19 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
+            0.3995,
+            0.03995,
+            0.3995,
             0.8,
             0.9,
             0.8,
-            0.6,
+            0.4794,
             0.8,
             0.9
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.3-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -88802,11 +88802,11 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03995,
+            0.3995,
             0.9,
-            0.5,
-            0.05
+            0.3995,
+            0.03995
           ]
         }
       ]
@@ -93345,10 +93345,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -93373,7 +93373,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -93382,7 +93382,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -93616,10 +93616,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -93631,32 +93631,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.9,
             0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.3325,
+            0.4655,
+            0.1995,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -93885,10 +93885,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -93900,32 +93900,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.9,
             0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.3325,
+            0.4655,
+            0.1995,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -94154,14 +94154,16 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "14:00:00",
             "17:00:00",
             "18:00:00",
             "19:00:00",
@@ -94170,33 +94172,35 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.02655,
+            0.1593,
             0.8,
             0.9,
+            0.4779,
+            0.9,
             0.8,
-            0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2655,
+            0.1593,
+            0.0531,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.02655
           ]
         }
       ]
@@ -94485,61 +94489,81 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
             "09:00:00",
             "10:00:00",
             "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "19:00:00",
+            "22:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
+            0.4779,
+            0.2655,
+            0.0531,
+            0.2655,
+            0.3717,
+            0.4779,
             0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
+            0.4779,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
             "09:00:00",
             "10:00:00",
             "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "19:00:00",
+            "22:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
+            0.4779,
+            0.2655,
+            0.0531,
+            0.2655,
+            0.3717,
+            0.4779,
             0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
+            0.4779,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
             "11:00:00",
+            "19:00:00",
+            "21:00:00",
             "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.1,
-            0.5,
+            0.2655,
+            0.0531,
+            0.2655,
+            0.4779,
             0.9,
-            0.5
+            0.4779,
+            0.2655
           ]
         }
       ]
@@ -94906,59 +94930,71 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "18:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.02655,
+            0.2655,
+            0.4779,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.4779,
+            0.3186,
+            0.2655,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "18:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.02655,
+            0.2655,
+            0.4779,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.4779,
+            0.3186,
+            0.2655,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "18:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.02655,
+            0.2655,
+            0.4779,
             0.9,
-            0.05
+            0.4779,
+            0.02655
           ]
         }
       ]
@@ -95261,10 +95297,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -95276,32 +95312,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.02655,
+            0.1593,
             0.9,
-            0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.3717,
+            0.2655,
+            0.3717,
+            0.1593,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.02655
           ]
         }
       ]
@@ -95534,29 +95570,33 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
             "10:00:00",
+            "14:00:00",
+            "15:00:00",
             "18:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.4,
+            0.02655,
+            0.2124,
             0.7,
             0.9,
-            0.4,
-            0.05
+            0.4779,
+            0.9,
+            0.2124,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -95566,21 +95606,21 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.05
+            0.02655,
+            0.2655,
+            0.4779,
+            0.3717,
+            0.2655,
+            0.02655
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.02655
           ]
         }
       ]
@@ -95869,10 +95909,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -95890,24 +95930,24 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
-            0.42
+            0.11151,
+            0.07434,
+            0.03717,
+            0.07434,
+            0.14868,
+            0.18585,
+            0.14868,
+            0.11151,
+            0.07434,
+            0.22302,
+            0.29736,
+            0.33453,
+            0.29736,
+            0.22302
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -95925,24 +95965,24 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
-            0.42
+            0.11151,
+            0.07434,
+            0.03717,
+            0.07434,
+            0.14868,
+            0.18585,
+            0.14868,
+            0.11151,
+            0.07434,
+            0.22302,
+            0.29736,
+            0.33453,
+            0.29736,
+            0.22302
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -95960,20 +96000,20 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.21,
-            0.14,
-            0.07,
-            0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
-            0.42
+            0.11151,
+            0.07434,
+            0.03717,
+            0.07434,
+            0.14868,
+            0.18585,
+            0.14868,
+            0.11151,
+            0.07434,
+            0.22302,
+            0.29736,
+            0.33453,
+            0.29736,
+            0.22302
           ]
         }
       ]
@@ -96358,14 +96398,15 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -96377,6 +96418,7 @@
             0.0,
             0.2,
             0.5,
+            0.2655,
             0.0,
             0.9,
             0.8,
@@ -96384,11 +96426,12 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -96400,6 +96443,7 @@
             0.0,
             0.2,
             0.5,
+            0.2655,
             0.0,
             0.9,
             0.8,
@@ -96407,11 +96451,12 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -96423,6 +96468,7 @@
             0.0,
             0.2,
             0.5,
+            0.2655,
             0.0,
             0.9,
             0.8,
@@ -96739,10 +96785,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -96751,7 +96797,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -96760,7 +96806,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -97004,65 +97050,77 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
             "18:00:00",
             "19:00:00",
+            "22:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
-            0.9
+            0.2655,
+            0.02655,
+            0.2655,
+            0.4248,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
             "13:00:00",
             "14:00:00",
+            "15:00:00",
+            "16:00:00",
             "17:00:00",
             "18:00:00",
             "19:00:00",
             "20:00:00",
+            "22:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
+            0.2655,
+            0.02655,
+            0.2655,
+            0.4248,
+            0.4779,
             0.9,
-            0.8,
-            0.6,
-            0.8,
-            0.9
+            0.4779,
+            0.4248,
+            0.3186,
+            0.4248,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
+            "12:00:00",
             "13:00:00",
             "14:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.02655,
+            0.2655,
+            0.4779,
             0.9,
-            0.5,
-            0.05
+            0.4779,
+            0.2655,
+            0.02655
           ]
         }
       ]
@@ -97371,18 +97429,23 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
+            "10:00:00",
             "11:00:00",
             "12:00:00",
+            "14:00:00",
+            "17:00:00",
             "18:00:00",
             "19:00:00",
+            "20:00:00",
             "23:00:00",
             "24:00:00"
           ],
@@ -97391,23 +97454,33 @@
             0.3,
             0.5,
             0.7,
+            0.3717,
+            0.7,
             0.6,
+            0.2655,
             0.5,
-            0.6,
+            0.2655,
+            0.3186,
+            0.3717,
             0.7,
             0.3
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
+            "10:00:00",
             "11:00:00",
             "12:00:00",
+            "14:00:00",
+            "17:00:00",
             "18:00:00",
             "19:00:00",
+            "20:00:00",
             "23:00:00",
             "24:00:00"
           ],
@@ -97416,23 +97489,33 @@
             0.3,
             0.5,
             0.7,
+            0.3717,
+            0.7,
             0.6,
+            0.2655,
             0.5,
-            0.6,
+            0.2655,
+            0.3186,
+            0.3717,
             0.7,
             0.3
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
+            "10:00:00",
             "11:00:00",
             "12:00:00",
+            "14:00:00",
+            "17:00:00",
             "18:00:00",
             "19:00:00",
+            "20:00:00",
             "23:00:00",
             "24:00:00"
           ],
@@ -97441,9 +97524,14 @@
             0.3,
             0.5,
             0.7,
+            0.3717,
+            0.7,
             0.6,
+            0.2655,
             0.5,
-            0.6,
+            0.2655,
+            0.3186,
+            0.3717,
             0.7,
             0.3
           ]
@@ -97824,33 +97912,57 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.7-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.7-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "08:00:00",
+            "16:00:00",
+            "18:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.4779,
+            0.9,
+            0.4779,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.7-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "08:00:00",
+            "16:00:00",
+            "18:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.4779,
+            0.9,
+            0.4779,
+            0.9,
+            0.4779
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.7-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "08:00:00",
+            "16:00:00",
+            "18:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.4779,
+            0.9,
+            0.4779,
+            0.9,
+            0.4779
           ]
         }
       ]
@@ -98083,59 +98195,65 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.05
+            0.03325
           ]
         }
       ]
@@ -98446,10 +98564,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -98472,7 +98590,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -98495,7 +98613,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -99036,10 +99154,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -99064,7 +99182,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -99073,7 +99191,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -99275,10 +99393,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -99297,7 +99415,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -99316,7 +99434,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -99532,10 +99650,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -99554,7 +99672,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -99573,7 +99691,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -99741,10 +99859,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -99767,7 +99885,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -99776,7 +99894,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -99922,10 +100040,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -99944,7 +100062,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -99963,7 +100081,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -100145,10 +100263,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -100183,7 +100301,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -100218,7 +100336,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -100402,10 +100520,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -100428,7 +100546,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -100451,7 +100569,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -100597,10 +100715,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -100609,7 +100727,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -100618,7 +100736,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -100798,10 +100916,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
@@ -100818,7 +100936,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -100843,7 +100961,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -101041,10 +101159,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -101069,7 +101187,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -101094,7 +101212,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -101290,10 +101408,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -101302,7 +101420,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -101311,7 +101429,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -103850,10 +103968,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -103878,7 +103996,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -103887,7 +104005,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -104089,10 +104207,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -104111,7 +104229,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -104130,7 +104248,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -104346,10 +104464,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -104368,7 +104486,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -104387,7 +104505,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -104555,10 +104673,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -104581,7 +104699,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -104590,7 +104708,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -104736,10 +104854,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -104758,7 +104876,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -104777,7 +104895,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -104959,10 +105077,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -104997,7 +105115,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -105032,7 +105150,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -105216,10 +105334,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -105242,7 +105360,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -105265,7 +105383,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -105411,10 +105529,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -105423,7 +105541,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -105432,7 +105550,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -105612,10 +105730,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
@@ -105632,7 +105750,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -105657,7 +105775,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -105855,10 +105973,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -105883,7 +106001,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -105908,7 +106026,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -106104,10 +106222,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -106116,7 +106234,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -106125,7 +106243,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -108664,10 +108782,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -108680,33 +108798,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.0433,
+            0.2598,
             0.8,
             0.9,
             0.8,
             0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2598,
+            0.0866,
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0433
           ]
         }
       ]
@@ -108995,10 +109113,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -109017,7 +109135,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -109036,7 +109154,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -109873,10 +109991,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -109895,7 +110013,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -109914,7 +110032,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -110312,10 +110430,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -110334,7 +110452,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -110353,7 +110471,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -110751,10 +110869,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -110773,7 +110891,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -110792,7 +110910,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -115320,10 +115438,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -115342,7 +115460,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -115361,7 +115479,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -116210,10 +116328,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.4-0.1-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.4-0.1-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -116225,32 +116343,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.0316,
+            0.1896,
             0.9,
             0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.316,
+            0.4424,
+            0.1896,
+            0.0316
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.4-0.1-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0316
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.4-0.1-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0316
           ]
         }
       ]
@@ -116479,10 +116597,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -116507,7 +116625,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -116516,7 +116634,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -117591,10 +117709,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -117603,7 +117721,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -117612,7 +117730,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -118177,10 +118295,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -118199,7 +118317,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -118218,7 +118336,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -118504,10 +118622,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -118526,7 +118644,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -118545,7 +118663,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -118925,10 +119043,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -118947,7 +119065,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -118966,7 +119084,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -122329,10 +122447,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -122351,7 +122469,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -122370,7 +122488,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -123147,10 +123265,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -123163,33 +123281,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03495,
+            0.2097,
             0.8,
             0.9,
             0.8,
             0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2097,
+            0.0699,
+            0.03495
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03495
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03495
           ]
         }
       ]
@@ -123418,10 +123536,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -123434,33 +123552,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03495,
+            0.2097,
             0.8,
             0.9,
             0.8,
             0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2097,
+            0.0699,
+            0.03495
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03495
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.1-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03495
           ]
         }
       ]
@@ -123689,10 +123807,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.1-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.1-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -123705,33 +123823,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.0383,
+            0.2298,
             0.8,
             0.9,
             0.8,
             0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2298,
+            0.0766,
+            0.0383
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.1-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0383
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.2-0.1-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0383
           ]
         }
       ]
@@ -124002,10 +124120,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -124024,7 +124142,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -124043,7 +124161,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -124399,10 +124517,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -124421,7 +124539,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -124440,7 +124558,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -130579,14 +130697,16 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "14:00:00",
             "17:00:00",
             "18:00:00",
             "19:00:00",
@@ -130595,33 +130715,35 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.0299,
+            0.1794,
             0.8,
             0.9,
+            0.5382,
+            0.9,
             0.8,
-            0.5,
-            0.3,
-            0.1,
-            0.05
+            0.299,
+            0.1794,
+            0.0598,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0299
           ]
         }
       ]
@@ -130862,61 +130984,79 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
             "09:00:00",
             "10:00:00",
             "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
-          "ScheduleTimes": [
-            "02:00:00",
-            "10:00:00",
-            "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "18:00:00",
             "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.1,
-            0.5,
+            0.5382,
+            0.299,
+            0.0598,
+            0.299,
+            0.4186,
+            0.5382,
             0.9,
-            0.5
+            0.5382,
+            0.9,
+            0.5382
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.6-0.0-0.67-Sat-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "18:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.5382,
+            0.299,
+            0.0598,
+            0.299,
+            0.4186,
+            0.5382,
+            0.9,
+            0.5382,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
+          "ScheduleTimes": [
+            "02:00:00",
+            "10:00:00",
+            "11:00:00",
+            "19:00:00",
+            "21:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.299,
+            0.0598,
+            0.299,
+            0.5382,
+            0.9,
+            0.5382,
+            0.299
           ]
         }
       ]
@@ -131179,59 +131319,71 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "12:00:00",
+            "18:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0299,
+            0.299,
+            0.5382,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.5382,
+            0.3588,
+            0.299,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "11:00:00",
+            "18:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0299,
+            0.299,
+            0.5382,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.5382,
+            0.3588,
+            0.299,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "11:00:00",
+            "18:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0299,
+            0.299,
+            0.5382,
             0.9,
-            0.05
+            0.5382,
+            0.0299
           ]
         }
       ]
@@ -131446,10 +131598,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -131461,32 +131613,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.0299,
+            0.1794,
             0.9,
-            0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.4186,
+            0.299,
+            0.4186,
+            0.1794,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0299
           ]
         }
       ]
@@ -131673,29 +131825,33 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
             "10:00:00",
+            "14:00:00",
+            "15:00:00",
             "18:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.4,
+            0.0299,
+            0.2392,
             0.7,
             0.9,
-            0.4,
-            0.05
+            0.5382,
+            0.9,
+            0.2392,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -131705,21 +131861,21 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.05
+            0.0299,
+            0.299,
+            0.5382,
+            0.4186,
+            0.299,
+            0.0299
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.0299
           ]
         }
       ]
@@ -131948,10 +132104,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -131973,20 +132129,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
+            0.16744,
+            0.2093,
+            0.16744,
+            0.12558,
+            0.08372,
+            0.25116,
+            0.33488,
+            0.37674,
+            0.33488,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -132008,20 +132164,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
+            0.16744,
+            0.2093,
+            0.16744,
+            0.12558,
+            0.08372,
+            0.25116,
+            0.33488,
+            0.37674,
+            0.33488,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -132043,15 +132199,15 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
-            0.56,
+            0.16744,
+            0.2093,
+            0.16744,
+            0.12558,
+            0.08372,
+            0.25116,
+            0.33488,
+            0.37674,
+            0.33488,
             0.42
           ]
         }
@@ -132315,14 +132471,15 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -132334,6 +132491,7 @@
             0.0,
             0.2,
             0.5,
+            0.299,
             0.0,
             0.9,
             0.8,
@@ -132341,11 +132499,12 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -132357,6 +132516,7 @@
             0.0,
             0.2,
             0.5,
+            0.299,
             0.0,
             0.9,
             0.8,
@@ -132364,11 +132524,12 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
             "07:00:00",
+            "08:00:00",
             "09:00:00",
             "19:00:00",
             "22:00:00",
@@ -132380,6 +132541,7 @@
             0.0,
             0.2,
             0.5,
+            0.299,
             0.0,
             0.9,
             0.8,
@@ -132590,10 +132752,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -132602,7 +132764,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -132611,7 +132773,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -132823,27 +132985,29 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
             "18:00:00",
             "19:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
-            0.9
+            0.299,
+            0.0299,
+            0.299,
+            0.4784,
+            0.9,
+            0.5382
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -132853,35 +133017,41 @@
             "18:00:00",
             "19:00:00",
             "20:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
+            0.299,
+            0.0299,
+            0.299,
+            0.4784,
             0.9,
-            0.8,
-            0.6,
-            0.8,
-            0.9
+            0.4784,
+            0.3588,
+            0.4784,
+            0.9,
+            0.5382
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
+            "12:00:00",
             "13:00:00",
             "14:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0299,
+            0.299,
+            0.5382,
             0.9,
-            0.5,
-            0.05
+            0.5382,
+            0.299,
+            0.0299
           ]
         }
       ]
@@ -133112,10 +133282,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -133140,7 +133310,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -133165,7 +133335,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -133471,33 +133641,57 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.6-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.6-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5382,
+            0.9,
+            0.5382,
+            0.9,
+            0.5382
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.6-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5382,
+            0.9,
+            0.5382,
+            0.9,
+            0.5382
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.6-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
+            "07:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5382,
+            0.9,
+            0.5382,
+            0.9,
+            0.5382
           ]
         }
       ]
@@ -140399,10 +140593,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -140415,33 +140609,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.8,
             0.9,
             0.8,
-            0.5,
-            0.3,
-            0.1,
-            0.05
+            0.3325,
+            0.1995,
+            0.0665,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -140682,61 +140876,79 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
             "09:00:00",
             "10:00:00",
             "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
-          "ScheduleTimes": [
-            "02:00:00",
-            "10:00:00",
-            "11:00:00",
+            "15:00:00",
+            "18:00:00",
             "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.1,
-            0.5,
+            0.5985,
+            0.3325,
+            0.0665,
+            0.3325,
+            0.4655,
             0.9,
-            0.5
+            0.5985,
+            0.9,
+            0.5985
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Sat-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "15:00:00",
+            "18:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9,
+            0.3325,
+            0.0665,
+            0.3325,
+            0.4655,
+            0.9,
+            0.5985,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
+          "ScheduleTimes": [
+            "02:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "18:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.3325,
+            0.0665,
+            0.3325,
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985,
+            0.3325
           ]
         }
       ]
@@ -140999,59 +141211,65 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.05
+            0.03325
           ]
         }
       ]
@@ -141266,10 +141484,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -141281,32 +141499,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.9,
             0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.3325,
+            0.4655,
+            0.1995,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -141493,10 +141711,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -141506,16 +141724,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.4,
+            0.03325,
+            0.266,
             0.7,
             0.9,
-            0.4,
-            0.05
+            0.266,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -141525,21 +141743,21 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.05
+            0.03325,
+            0.3325,
+            0.5985,
+            0.4655,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -141768,10 +141986,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -141793,20 +142011,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -141828,20 +142046,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -141863,14 +142081,14 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
@@ -142135,10 +142353,35 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "19:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.3,
+            0.0,
+            0.2,
+            0.5,
+            0.3325,
+            0.0,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -142161,30 +142404,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "06:00:00",
-            "07:00:00",
-            "09:00:00",
-            "19:00:00",
-            "22:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.3,
-            0.0,
-            0.2,
-            0.5,
-            0.0,
-            0.9,
-            0.8,
-            0.6
-          ]
-        },
-        {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -142410,10 +142630,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -142422,7 +142642,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -142431,7 +142651,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -142643,27 +142863,29 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
             "18:00:00",
             "19:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
-            0.9
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -142673,35 +142895,41 @@
             "18:00:00",
             "19:00:00",
             "20:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
             0.9,
-            0.8,
-            0.6,
-            0.8,
-            0.9
+            0.532,
+            0.399,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
+            "12:00:00",
             "13:00:00",
             "14:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.5,
-            0.05
+            0.5985,
+            0.3325,
+            0.03325
           ]
         }
       ]
@@ -142932,10 +143160,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -142960,7 +143188,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -142985,7 +143213,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -143291,33 +143519,57 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         }
       ]
@@ -143476,10 +143728,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -143492,33 +143744,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.8,
             0.9,
             0.8,
-            0.5,
-            0.3,
-            0.1,
-            0.05
+            0.3325,
+            0.1995,
+            0.0665,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -143759,61 +144011,79 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
             "09:00:00",
             "10:00:00",
             "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
-          "ScheduleTimes": [
-            "02:00:00",
-            "10:00:00",
-            "11:00:00",
+            "15:00:00",
+            "18:00:00",
             "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.1,
-            0.5,
+            0.5985,
+            0.3325,
+            0.0665,
+            0.3325,
+            0.4655,
             0.9,
-            0.5
+            0.5985,
+            0.9,
+            0.5985
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Sat-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "15:00:00",
+            "18:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9,
+            0.3325,
+            0.0665,
+            0.3325,
+            0.4655,
+            0.9,
+            0.5985,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
+          "ScheduleTimes": [
+            "02:00:00",
+            "10:00:00",
+            "11:00:00",
+            "12:00:00",
+            "14:00:00",
+            "18:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.3325,
+            0.0665,
+            0.3325,
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985,
+            0.3325
           ]
         }
       ]
@@ -144076,59 +144346,65 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.399,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.05
+            0.03325
           ]
         }
       ]
@@ -144343,10 +144619,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-D-Lighting",
+      "ScheduleType": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-D-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -144358,32 +144634,32 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.9,
             0.7,
-            0.5,
-            0.7,
-            0.3,
-            0.05
+            0.3325,
+            0.4655,
+            0.1995,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sat Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-D-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-D-Occupancy-NECB-D-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -144570,10 +144846,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-E-Lighting",
+      "ScheduleType": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-E-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -144583,16 +144859,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.4,
+            0.03325,
+            0.266,
             0.7,
             0.9,
-            0.4,
-            0.05
+            0.266,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sat Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "09:00:00",
             "10:00:00",
@@ -144602,21 +144878,21 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
-            0.9,
-            0.7,
-            0.5,
-            0.05
+            0.03325,
+            0.3325,
+            0.5985,
+            0.4655,
+            0.3325,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-E-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-E-Occupancy-NECB-E-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
@@ -144845,10 +145121,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-F-Lighting",
+      "ScheduleType": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-F-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -144870,20 +145146,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sat Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -144905,20 +145181,20 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
         },
         {
-          "ScheduleName": "NECB-F-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-F-Occupancy-NECB-F-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "03:00:00",
@@ -144940,14 +145216,14 @@
             0.14,
             0.07,
             0.14,
-            0.28,
-            0.35,
-            0.28,
-            0.21,
-            0.14,
-            0.42,
-            0.56,
-            0.63,
+            0.1862,
+            0.23275,
+            0.1862,
+            0.13965,
+            0.0931,
+            0.2793,
+            0.3724,
+            0.41895,
             0.56,
             0.42
           ]
@@ -145212,10 +145488,35 @@
       ]
     },
     {
-      "ScheduleType": "NECB-G-Lighting",
+      "ScheduleType": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-G-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "06:00:00",
+            "07:00:00",
+            "08:00:00",
+            "09:00:00",
+            "19:00:00",
+            "22:00:00",
+            "23:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.3,
+            0.0,
+            0.2,
+            0.5,
+            0.3325,
+            0.0,
+            0.9,
+            0.8,
+            0.6
+          ]
+        },
+        {
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -145238,30 +145539,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-G-Lighting Sat Day",
-          "ScheduleTimes": [
-            "01:00:00",
-            "06:00:00",
-            "07:00:00",
-            "09:00:00",
-            "19:00:00",
-            "22:00:00",
-            "23:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.3,
-            0.0,
-            0.2,
-            0.5,
-            0.0,
-            0.9,
-            0.8,
-            0.6
-          ]
-        },
-        {
-          "ScheduleName": "NECB-G-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-G-Occupancy-NECB-G-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "06:00:00",
@@ -145487,10 +145765,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -145499,7 +145777,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -145508,7 +145786,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -145720,27 +145998,29 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
             "18:00:00",
             "19:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
-            0.9
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -145750,35 +146030,41 @@
             "18:00:00",
             "19:00:00",
             "20:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
             0.9,
-            0.8,
-            0.6,
-            0.8,
-            0.9
+            0.532,
+            0.399,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
+            "12:00:00",
             "13:00:00",
             "14:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.5,
-            0.05
+            0.5985,
+            0.3325,
+            0.03325
           ]
         }
       ]
@@ -146009,10 +146295,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-J-Lighting",
+      "ScheduleType": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-J-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -146037,7 +146323,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sat Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -146062,7 +146348,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-J-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-J-Occupancy-NECB-J-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "05:00:00",
             "06:00:00",
@@ -146368,33 +146654,57 @@
       ]
     },
     {
-      "ScheduleType": "NECB-K-Lighting",
+      "ScheduleType": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-K-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sat Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-K-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-K-Occupancy-NECB-K-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
+            "06:00:00",
+            "09:00:00",
+            "16:00:00",
+            "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.9
+            0.5985,
+            0.9,
+            0.5985,
+            0.9,
+            0.5985
           ]
         }
       ]
@@ -146553,10 +146863,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -146581,7 +146891,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -146590,7 +146900,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -146866,10 +147176,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -146888,7 +147198,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -146907,7 +147217,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -149382,10 +149692,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -149404,7 +149714,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -149423,7 +149733,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -149803,59 +150113,65 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.3-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.3-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03995,
+            0.3995,
+            0.7191,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.03995
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.3-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "20:00:00",
             "21:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03995,
+            0.3995,
+            0.7191,
             0.9,
-            0.6,
-            0.5,
-            0.05
+            0.4794,
+            0.3995,
+            0.03995
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.3-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
             "19:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03995,
+            0.3995,
+            0.7191,
             0.9,
-            0.05
+            0.03995
           ]
         }
       ]
@@ -150140,10 +150456,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150152,7 +150468,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150161,7 +150477,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150542,10 +150858,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150554,7 +150870,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150563,7 +150879,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150976,10 +151292,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.1-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.1-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150988,7 +151304,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.1-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -150997,7 +151313,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.1-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -151470,10 +151786,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -151483,16 +151799,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -151502,16 +151818,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -151519,10 +151835,10 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
-            0.05
+            0.0433
           ]
         }
       ]
@@ -151807,10 +152123,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -151819,7 +152135,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -151828,7 +152144,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -152084,10 +152400,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152106,7 +152422,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152125,7 +152441,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152481,10 +152797,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152503,7 +152819,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152522,7 +152838,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -152778,10 +153094,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -152806,7 +153122,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -152815,7 +153131,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153320,10 +153636,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -153348,7 +153664,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153357,7 +153673,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153591,10 +153907,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -153619,7 +153935,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153628,7 +153944,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153862,10 +154178,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -153890,7 +154206,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -153899,7 +154215,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -154175,10 +154491,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -154188,16 +154504,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -154207,16 +154523,16 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
             0.6,
             0.5,
-            0.05
+            0.0433
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.2-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -154224,10 +154540,10 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.0433,
+            0.433,
             0.9,
-            0.05
+            0.0433
           ]
         }
       ]
@@ -154530,10 +154846,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -154546,33 +154862,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03995,
+            0.2397,
             0.8,
             0.9,
             0.8,
             0.5,
-            0.3,
-            0.1,
-            0.05
+            0.2397,
+            0.0799,
+            0.03995
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03995
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.3-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03995
           ]
         }
       ]
@@ -154801,10 +155117,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -154829,7 +155145,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -154838,7 +155154,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -155499,10 +155815,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.1-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.1-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
@@ -155512,14 +155828,14 @@
           ],
           "ScheduleValues": [
             0.5,
-            0.05,
+            0.04665,
             0.5,
             0.8,
             0.9
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.1-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -155533,7 +155849,7 @@
           ],
           "ScheduleValues": [
             0.5,
-            0.05,
+            0.04665,
             0.5,
             0.8,
             0.9,
@@ -155544,7 +155860,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.1-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -155553,11 +155869,11 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
+            0.04665,
             0.5,
             0.9,
             0.5,
-            0.05
+            0.04665
           ]
         }
       ]
@@ -156269,10 +156585,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-C-Lighting",
+      "ScheduleType": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-C-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -156291,7 +156607,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sat Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -156310,7 +156626,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-C-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-C-Occupancy-NECB-C-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
@@ -156654,27 +156970,29 @@
       ]
     },
     {
-      "ScheduleType": "NECB-I-Lighting",
+      "ScheduleType": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-I-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "15:00:00",
             "18:00:00",
             "19:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
-            0.9
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sat Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "10:00:00",
@@ -156684,35 +157002,41 @@
             "18:00:00",
             "19:00:00",
             "20:00:00",
+            "23:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.5,
-            0.05,
-            0.5,
-            0.8,
+            0.3325,
+            0.03325,
+            0.3325,
+            0.532,
             0.9,
-            0.8,
-            0.6,
-            0.8,
-            0.9
+            0.532,
+            0.399,
+            0.532,
+            0.9,
+            0.5985
           ]
         },
         {
-          "ScheduleName": "NECB-I-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-I-Occupancy-NECB-I-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "08:00:00",
             "09:00:00",
+            "10:00:00",
+            "12:00:00",
             "13:00:00",
             "14:00:00",
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.5,
+            0.03325,
+            0.3325,
+            0.5985,
             0.9,
-            0.5,
-            0.05
+            0.5985,
+            0.3325,
+            0.03325
           ]
         }
       ]
@@ -157045,10 +157369,29 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.2-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.2-0.0-0.67-Default|Wkdy-Light Day",
+          "ScheduleTimes": [
+            "01:00:00",
+            "02:00:00",
+            "09:00:00",
+            "10:00:00",
+            "11:00:00",
+            "24:00:00"
+          ],
+          "ScheduleValues": [
+            0.9,
+            0.433,
+            0.0866,
+            0.433,
+            0.7,
+            0.9
+          ]
+        },
+        {
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.2-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -157060,34 +157403,16 @@
           "ScheduleValues": [
             0.9,
             0.5,
-            0.1,
-            0.5,
+            0.0866,
+            0.433,
             0.7,
             0.9
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.2-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "01:00:00",
-            "02:00:00",
-            "09:00:00",
-            "10:00:00",
-            "11:00:00",
-            "24:00:00"
-          ],
-          "ScheduleValues": [
-            0.9,
-            0.5,
-            0.1,
-            0.5,
-            0.7,
-            0.9
-          ]
-        },
-        {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
-          "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
             "11:00:00",
@@ -157095,11 +157420,12 @@
             "24:00:00"
           ],
           "ScheduleValues": [
+            0.433,
             0.5,
-            0.1,
-            0.5,
+            0.0866,
+            0.433,
             0.9,
-            0.5
+            0.433
           ]
         }
       ]
@@ -157484,10 +157810,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -157506,7 +157832,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -157525,7 +157851,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -157923,10 +158249,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -157945,7 +158271,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -157964,7 +158290,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -158362,10 +158688,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -158384,7 +158710,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -158403,7 +158729,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -158801,10 +159127,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-B-Lighting",
+      "ScheduleType": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-B-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -158823,7 +159149,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sat Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "01:00:00",
             "02:00:00",
@@ -158842,7 +159168,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-B-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-B-Occupancy-NECB-B-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "02:00:00",
             "10:00:00",
@@ -159564,10 +159890,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-H-Lighting",
+      "ScheduleType": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-H-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -159576,7 +159902,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sat Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -159585,7 +159911,7 @@
           ]
         },
         {
-          "ScheduleName": "NECB-H-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-H-Occupancy-NECB-H-Lighting-0.0-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
@@ -160070,10 +160396,10 @@
       ]
     },
     {
-      "ScheduleType": "NECB-A-Lighting",
+      "ScheduleType": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Light Ruleset",
       "Schedules": [
         {
-          "ScheduleName": "NECB-A-Lighting Default|Wkdy Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Default|Wkdy-Light Day",
           "ScheduleTimes": [
             "07:00:00",
             "08:00:00",
@@ -160086,33 +160412,33 @@
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05,
-            0.3,
+            0.03325,
+            0.1995,
             0.8,
             0.9,
             0.8,
-            0.5,
-            0.3,
-            0.1,
-            0.05
+            0.3325,
+            0.1995,
+            0.0665,
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sat Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sat-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         },
         {
-          "ScheduleName": "NECB-A-Lighting Sun|Hol Day",
+          "ScheduleName": "NECB-A-Occupancy-NECB-A-Lighting-0.5-0.0-0.67-Sun|Hol-Light Day",
           "ScheduleTimes": [
             "24:00:00"
           ],
           "ScheduleValues": [
-            0.05
+            0.03325
           ]
         }
       ]
