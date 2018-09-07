@@ -44,6 +44,7 @@ class NECB2015
             unless exisiting_light_ruleset.nil?
               default_sch_set.setLightingSchedule(exisiting_light_ruleset)
               OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name.to_s} set lighting schedule to #{exisiting_light_ruleset}.")
+              return true
             end
           end
         end
