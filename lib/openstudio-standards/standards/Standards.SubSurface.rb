@@ -222,4 +222,21 @@ class Standard
     end
     new_sub_surface.setMultiplier(1)
   end
+
+  def set_Window_To_Wall_Ratio_set_name_keep_construction(surface, area_fraction)
+    sub_const = nil
+    surface.subSurfaces.sort.each do |sub_surf|
+      if sub_surf.subSurfaceType == 'FixedWindow' || sub_surf.subSurfaceType == 'OperableWindow' || sub_surf.subSurfaceType == 'Skylight'
+        sub_const = sub_surf.construction.get
+      end
+    end
+    surface.setWindowToWallRatio(area_fraction)
+    surface.subSurfaces.sort.each do |sub_surf|
+      new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
+      sub_surf.setName(new_name)
+      unless sub_const.nil?
+        sub_surf.setConstruction(sub_const)
+      end
+    end
+  end
 end
