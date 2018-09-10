@@ -186,12 +186,6 @@ class Standard
 
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     sub_const = nil
-    surface.subSurfaces.sort.each do |sub_surf|
-      if sub_surf.subSurfaceType == 'FixedWindow' || sub_surf.subSurfaceType == 'OperableWindow' || sub_surf.subSurfaceType == 'Skylight'
-        sub_const = sub_surf.construction.get
-      end
-      sub_surf.remove
-    end
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
 
@@ -214,29 +208,16 @@ class Standard
     end
     new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
     new_sub_surface.setSurface(surface)
-    type = new_sub_surface.subSurfaceType
-    new_name = surface.name.to_s + '_' + type.to_s
+    new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
     new_sub_surface.setName(new_name)
-    unless sub_const.nil?
-      new_sub_surface.setConstruction(sub_const)
-    end
     new_sub_surface.setMultiplier(1)
   end
 
-  def set_Window_To_Wall_Ratio_set_name_keep_construction(surface, area_fraction)
-    sub_const = nil
-    surface.subSurfaces.sort.each do |sub_surf|
-      if sub_surf.subSurfaceType == 'FixedWindow' || sub_surf.subSurfaceType == 'OperableWindow' || sub_surf.subSurfaceType == 'Skylight'
-        sub_const = sub_surf.construction.get
-      end
-    end
+  def set_Window_To_Wall_Ratio_set_name(surface, area_fraction)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
       new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
       sub_surf.setName(new_name)
-      unless sub_const.nil?
-        sub_surf.setConstruction(sub_const)
-      end
     end
   end
 end

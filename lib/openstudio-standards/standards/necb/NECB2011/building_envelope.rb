@@ -603,14 +603,14 @@ class NECB2011
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
       nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
-        set_Window_To_Wall_Ratio_set_name_keep_construction(exp_surf, nonplenum_fdwr)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
       end
     else
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
-        set_Window_To_Wall_Ratio_set_name_keep_construction(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
-        set_Window_To_Wall_Ratio_set_name_keep_construction(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
       end
     end
     return true
