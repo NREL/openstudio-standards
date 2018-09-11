@@ -133,7 +133,7 @@ OS:Connection,
 OS:Space,
   {af409fa8-d6d1-4cb3-ab07-78dd65cb9800}, !- Handle
   FirstFloor_Plenum,                      !- Name
-  {b4c6ba40-df3d-4fc8-8af6-36a240325345}, !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -174,7 +174,7 @@ OS:Connection,
 OS:Space,
   {a6db022f-dfaa-45fa-9573-a2cb4bec5f66}, !- Handle
   TopFloor_Plenum,                        !- Name
-  {b4c6ba40-df3d-4fc8-8af6-36a240325345}, !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -293,7 +293,7 @@ OS:Connection,
 OS:Space,
   {7b5df7a4-7bf7-4b0e-9c4c-233b5f3bc4d7}, !- Handle
   MidFloor_Plenum,                        !- Name
-  {b4c6ba40-df3d-4fc8-8af6-36a240325345}, !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -4462,19 +4462,11 @@ OS:Rendering:Color,
   199;                                    !- Rendering Blue Value
 
 OS:SpaceType,
-  {b4c6ba40-df3d-4fc8-8af6-36a240325345}, !- Handle
-  Office - undefined -,                   !- Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Handle
+  Plenum,                                 !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {f11e7eb6-22b5-4b8c-abb9-401beee42b6c}, !- Group Rendering Name
+  ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
-  Office,                                 !- Standards Building Type
-  - undefined -;                          !- Standards Space Type
-
-OS:Rendering:Color,
-  {f11e7eb6-22b5-4b8c-abb9-401beee42b6c}, !- Handle
-  Office - undefined -,                   !- Name
-  120,                                    !- Rendering Red Value
-  149,                                    !- Rendering Green Value
-  230;                                    !- Rendering Blue Value
-
+  ,                                       !- Standards Building Type
+  Plenum;                                 !- Standards Space Type
