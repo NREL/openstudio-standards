@@ -34,6 +34,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2011/building_envelope"
   require_relative "#{stds}/necb/NECB2011/lighting"
   require_relative "#{stds}/necb/NECB2011/hvac_systems"
+  require_relative "#{stds}/necb/NECB2015/lighting"
   require_relative "#{stds}/necb/NECB2015/hvac_systems"
   require_relative "#{stds}/necb/NECB2017/hvac_systems"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"

@@ -92,4 +92,9 @@ class NECB2015 < NECB2011
     model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
     return model
   end
+
+  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
+  def set_occ_sensor_spacetypes(model, space_type_map)
+    return true
+  end
 end
