@@ -223,7 +223,8 @@ class NECB2011 < Standard
     #Set up thermal zones for initial sizing run.
     model_create_thermal_zones(model, @space_multiplier_map)
 
-    #Set FDWR and SSR
+    # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
+    # are adjacent to conditioned spaces.
     apply_standard_window_to_wall_ratio(model, fdwr_set: fdwr_set)
     apply_standard_skylight_to_roof_ratio(model, ssr_set: ssr_set)
 

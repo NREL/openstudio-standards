@@ -184,8 +184,16 @@ class Standard
     return true
   end
 
+  # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
+  # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
+  # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
+  # themselves (like an 'L' or a 'V').
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
-    sub_const = nil
+    # Get rid of all existing subsurfaces.
+    surface.subSurfaces.sort.each do |sub_surface|
+      sub_surface.remove
+    end
+    # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
 
@@ -204,15 +212,23 @@ class Standard
       # Move the vertex toward the centroid
       new_vertex = surf_cent + centroid_vector
 
+      # Add the new vertices to an array of vertices.
       new_vertices << new_vertex
     end
+    # Create a new subsurface with the vertices determined above.
     new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+    # Put this sub-surface on the surface.
     new_sub_surface.setSurface(surface)
+    # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
+    # 'skylight').
     new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
     new_sub_surface.setName(new_name)
+    # There is now only one surface on the subsurface.  Enforce this
     new_sub_surface.setMultiplier(1)
   end
 
+  # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
+  # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
   def set_Window_To_Wall_Ratio_set_name(surface, area_fraction)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|

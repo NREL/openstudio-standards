@@ -107,36 +107,54 @@ class Standard
     end
   end
 
-  # Chris Kirney 2018-05-17:  This method searches through a model a returns vertical exterior surfaces which help
-  # enclose a conditioned space.
+  # Chris Kirney 2018-09-12:  This method searches through a model a returns vertical exterior surfaces which help
+  # enclose a conditioned space.  It distinguishes between walls adjacent to plenums and wall adjacent to other
+  # conditioned spaces (as attics in OpenStudio are considered plenums and conditioned spaces though many would
+  # not agree).  It returns a hash of the total exposed wall area adjacent to conditioned spaces (including plenums), the
+  # total exposed plenum wall area, the total exposed non-plenum area (adjacent to conditioned spaces), the exposed
+  # plenum walls and the exposed non-plenum walls (adjacent to conditioned spaces).
   def find_exposed_conditioned_vertical_surfaces(model, max_angle: 91, min_angle: 89)
     exposed_surfaces = []
     plenum_surfaces = []
     exp_plenum_area = 0
     total_exp_area = 0
     exp_nonplenum_area = 0
+    # Sort through each space
     model.getSpaces.sort.each do |space|
+      # Is the space heated or cooled?
       cooled = space_cooled?(space)
       heated = space_heated?(space)
+      # Assume conditioned means the space is heated, cooled, or both.
       if heated || cooled
+        # If the space is conditioned then go through each surface and determine if it a vertial exterior wall.
         space.surfaces.sort.each do |surface|
+          # I define an exterior wall as one that is called a wall and that has a boundary contion of Outdoors.
+          # Note that this will not include foundation walls.
           next unless surface.surfaceType == 'Wall'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Determine if the wall is vertical which I define as being between 89 and 91 degrees from horizontal.
           tilt_radian = surface.tilt
           tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
           if tilt_degrees <= max_angle and tilt_degrees >= min_angle
+            # If the wall is vertical determine if it is adjacent to a plenum.  If yes include it in the array of
+            # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
             if space_plenum?(space)
               plenum_surfaces << surface
               exp_plenum_area += surface.grossArea*space.multiplier
             else
+              # If not a plenum then include it in the array of non-plenum walls and add it to the non-plenum area
+              # counter (accounting for space multipliers).
               exposed_surfaces << surface
               exp_nonplenum_area += surface.grossArea*space.multiplier
             end
+            # Regardless of if the wall is adjacent to a plenum or not add it to the exposed wall area adjacent to
+            # conditioned spaces (accounting for space multipliers).
             total_exp_area += surface.grossArea*space.multiplier
           end
         end
       end
     end
+    # Add everything into a hash and return that hash to whomever called the method.
     exp_surf_info = {
         "total_exp_wall_area_m2" => total_exp_area,
         "exp_plenum_wall_area_m2" => exp_plenum_area,
@@ -147,30 +165,43 @@ class Standard
     return exp_surf_info
   end
 
+  # This method is similar to the 'find_exposed_conditioned_vertical_surfaces' above only it is for roofs.  Again, it
+  # distinguishes between plenum and non plenum roof area but collects and returns both.
   def find_exposed_conditioned_roof_surfaces(model)
     exposed_surfaces = []
     plenum_surfaces = []
     exp_plenum_area = 0
     total_exp_area = 0
     exp_nonplenum_area = 0
+    # Sort through each space and determine if it conditioned.  Conditioned meaning it is either heated, cooled, or both.
     model.getSpaces.sort.each do |space|
       cooled = space_cooled?(space)
       heated = space_heated?(space)
+      # If the space is conditioned sort through the surfaces looking for outdoor roofs.
       if heated || cooled
         space.surfaces.sort.each do |surface|
+          # Assume a roof is of type 'RoofCeiling' and has an 'Outdoors' boundary condition.
           next unless surface.surfaceType == 'RoofCeiling'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Determine if the roof is adjacent to a plenum.
           if space_plenum?(space)
+            # If the roof is adjacent to a plenum add it to the plenum roof array and the plenum roof area counter
+            # (accounting for space multipliers).
             plenum_surfaces << surface
             exp_plenum_area += surface.grossArea*space.multiplier
           else
+            # If the roof is not adjacent to a plenum add it to the non-plenum roof array and the non-plenum roof area
+            # counter (accounting for space multipliers).
             exposed_surfaces << surface
             exp_nonplenum_area += surface.grossArea*space.multiplier
           end
+          # Regardless of if the roof is adjacent to a plenum or not add it to the total roof area counter (accounting
+          # for space multipliers).
           total_exp_area += surface.grossArea*space.multiplier
         end
       end
     end
+    # Put the information into a hash and return it to whomever called this method.
     exp_surf_info = {
         "total_exp_roof_area_m2" => total_exp_area,
         "exp_plenum_roof_area_m2" => exp_plenum_area,
