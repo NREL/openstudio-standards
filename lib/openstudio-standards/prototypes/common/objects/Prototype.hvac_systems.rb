@@ -4183,6 +4183,7 @@ class Standard
   # @param flow_fraction_schedule_name [String] the name of the flow fraction schedule
   # @param balanced_exhaust_fraction_schedule_name [String] the name of the balanced exhaust fraction schedule
   # @return [Array<OpenStudio::Model::FanZoneExhaust>] an array of exhaust fans created
+  # @todo: use the create_fan_zone_exhaust method, default to 1.25 inH2O pressure rise and fan efficiency of 0.6
   def model_add_exhaust_fan(model,
                             thermal_zones,
                             flow_rate: nil,

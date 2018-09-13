@@ -263,9 +263,9 @@ class Standard
                        fan_type: system['fan_type'])
 
       when 'PTHP'
-          model_add_pthp(model,
-                         thermal_zones,
-                         fan_type: system['fan_type'])
+        model_add_pthp(model,
+                       thermal_zones,
+                       fan_type: system['fan_type'])
 
       when 'Exhaust Fan'
         model_add_exhaust_fan(model,
