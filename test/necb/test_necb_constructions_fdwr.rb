@@ -17,7 +17,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ] 
   #Set Compliance vintage
-  Templates = ['NECB2011','NECB2015', 'NECB2017']
+  Templates = ['NECB2011','NECB2015','NECB2017']
   
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -132,10 +132,10 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     standard.model_create_thermal_zones(@model)
     
     #Iterate through the weather files. 
-    NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
+    NECB_epw_files_for_cdn_climate_zones.sort.each do |weather_file|
 
       #Iterate through the vintage templates 'NECB2011', etc..
-      Templates.each do |template|
+      Templates.sort.each do |template|
             
         #Add weather file, HDD.
         standard.model_add_design_days_and_weather_file(@model, 'NECB HDD Method', File.basename(weather_file))
@@ -198,7 +198,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @output << "#{template},#{weather_file},#{@hdd.round(0)},#{BTAP::Geometry::get_fwdr(@model).round(4)},#{BTAP::Geometry::get_srr(@model).round(4)},"
         @output << "#{outdoor_walls_average_conductance.round(4)} ,#{outdoor_roofs_average_conductance.round(4)} , #{outdoor_floors_average_conductance.round(4)},"
         @output << "#{ground_walls_average_conductances.round(4)},#{ground_roofs_average_conductances.round(4)},#{ground_floors_average_conductances.round(4)},"
-        @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)},"
+        if overhead_doors_average_conductance == "NA"
+          @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance},"
+        else
+          @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)},"
+        end
         
         #infiltration test
         # Get the effective infiltration rate through the walls and roof only.
