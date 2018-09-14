@@ -1560,153 +1560,25 @@ class Standard
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
-  #   rules = model_find_objects(self, standards_data['schedules'], {'name'=>schedule_name})
-  #   if rules.size == 0
-  #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-  #     return false #TODO change to return empty optional schedule:ruleset?
+  #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
+  #   if rules.size.zero?
+  #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+  #     return false
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil)
-    #    matching_objects = hash_of_objects.clone
-    #    #new
-    #    puts "searching"
-    #    puts search_criteria
-    #    raise ("hash of objects is nil or empty. #{hash_of_objects}") if hash_of_objects.nil? || hash_of_objects.empty? || matching_objects[0].nil?
-    #
-    #    search_criteria.each do |key,value|
-    #      puts "#{key}-#{value}"
-    #      puts matching_objects.size
-    #      #if size has already reduced to zero. Get out of loop.
-    #      break if matching_objects.size == 0
-    #      #if there are no keys that match, skip search... (This seems odd)
-    #      next unless  matching_objects[0].has_key?(key)
-    #      matching_objects.select!{ |k| k[key] == value }
-    #    end
-    #    if not capacity.nil?
-    #      puts "Capacity = #{capacity}"
-    #      capacity = capacity + (capacity * 0.01) if capacity == capacity.round
-    #      matching_objects.select!{|k| capacity.to_f > k['minimum_capacity'].to_f}
-    #      matching_objects.select!{|k| capacity.to_f <= k['maximum_capacity'].to_f}
-    #    end
-    #
-    #
-    #    # Check the number of matching objects found
-    #    if matching_objects.size == 0
-    #      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
-    #
-    #    end
-    #    new_matching_objects =  matching_objects
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
 
-    # old
-    desired_object = nil
-    search_criteria_matching_objects = []
     matching_objects = []
-
-    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
+    if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
     end
-
-    # Compare each of the objects against the search criteria
-    hash_of_objects.each do |object|
-      meets_all_search_criteria = true
-      search_criteria.each do |key, value|
-        # Don't check non-existent search criteria
-        next unless object.key?(key)
-        # Stop as soon as one of the search criteria is not met
-        # 'Any' is a special key that matches anything
-        unless object[key] == value || object[key] == 'Any'
-          meets_all_search_criteria = false
-          break
-        end
-      end
-      # Skip objects that don't meet all search criteria
-      next if meets_all_search_criteria == false
-      # If made it here, object matches all search criteria
-      search_criteria_matching_objects << object
-    end
-
-    # If capacity was specified, narrow down the matching objects
-    if capacity.nil?
-      matching_objects = search_criteria_matching_objects
-    else
-      # Round up if capacity is an integer
-      if capacity == capacity.round
-        capacity += (capacity * 0.01)
-      end
-      search_criteria_matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-        # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-        next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-        # Skip objects whose the minimum capacity is below the specified capacity
-        next if capacity.to_f <= object['minimum_capacity'].to_f
-        # Skip objects whose max
-        next if capacity.to_f > object['maximum_capacity'].to_f
-        # Found a matching object
-        matching_objects << object
-      end
-      # If no object was found, round the capacity down a little
-      # to avoid issues where the number fell between the limits
-      # in the json file.
-      if matching_objects.size.zero?
-        capacity *= 0.99
-        search_criteria_matching_objects.each do |object|
-          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-          # Skip objects whose the minimum capacity is below the specified capacity
-          next if capacity <= object['minimum_capacity'].to_f
-          # Skip objects whose max
-          next if capacity > object['maximum_capacity'].to_f
-          # Found a matching object
-          matching_objects << object
-        end
-      end
-    end
-
-    # Check the number of matching objects found
-    if matching_objects.size.zero?
-      desired_object = nil
-      # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
-    end
-
-    #    if new_matching_objects != matching_objects
-    #      puts "new..."
-    #      puts new_matching_objects
-    #      puts "is not.."
-    #      puts matching_objects
-    #      raise ("Hell")
-    #    end
-    return matching_objects
-  end
-
-  # Method to search through a hash for an object that meets the desired search criteria, as passed via a hash.
-  # If capacity is supplied, the object will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
-  #
-  # @param hash_of_objects [Hash] hash of objects to search through
-  # @param search_criteria [Hash] hash of search criteria
-  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
-  #   the objects will only be returned if the specified capacity is between
-  #   the minimum_capacity and maximum_capacity values.
-  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
-  # @example Find the motor that meets these size criteria
-  #   search_criteria = {
-  #   'template' => template,
-  #   'number_of_poles' => 4.0,
-  #   'type' => 'Enclosed',
-  #   }
-  #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
-    #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
-
-    if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
-      hash_of_objects = hash_of_objects['table']
-    end
-    desired_object = nil
-    search_criteria_matching_objects = []
-    matching_objects = []
 
     # Compare each of the objects against the search criteria
     hash_of_objects.each do |object|
@@ -1724,69 +1596,107 @@ class Standard
       # Skip objects that don't meet all search criteria
       next unless meets_all_search_criteria
       # If made it here, object matches all search criteria
-      search_criteria_matching_objects << object
+      matching_objects << object
     end
 
     # If capacity was specified, narrow down the matching objects
-    if capacity.nil?
-      matching_objects = search_criteria_matching_objects
-    else
+    unless capacity.nil?
+      # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity') || !object.key?('maximum_capacity') }
+
+      # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
+
       # Round up if capacity is an integer
       if capacity == capacity.round
         capacity += (capacity * 0.01)
       end
-      search_criteria_matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-        # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-        next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-        # Skip objects whose the minimum capacity is below the specified capacity
-        next if capacity <= object['minimum_capacity'].to_f
-        # Skip objects whose max
-        next if capacity > object['maximum_capacity'].to_f
-        # Found a matching object
-        matching_objects << object
-      end
-      # If no object was found, round the capacity down a little
-      # to avoid issues where the number fell between the limits
-      # in the json file.
-      if matching_objects.size.zero?
+      # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
+      matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+
+      # If no object was found, round the capacity down in case the number fell between the limits in the json file.
+      if matching_capacity_objects.size.zero?
         capacity *= 0.99
-        search_criteria_matching_objects.each do |object|
-          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-          # Skip objects whose the minimum capacity is below the specified capacity
-          next if capacity <= object['minimum_capacity'].to_f
-          # Skip objects whose max
-          next if capacity > object['maximum_capacity'].to_f
-          # Found a matching object
-          matching_objects << object
-        end
+        # Skip objects whose minimum capacity is below or maximum capacity above the specified capacity
+        matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+      else
+        matching_objects = matching_capacity_objects
       end
     end
 
     # If date was specified, narrow down the matching objects
     unless date.nil?
-      date_matching_objects = []
-      matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('start_date') || !object.key?('end_date')
-        # Skip objects whose the start date is earlier than the specified date
-        next if date <= Date.parse(object['start_date'])
-        # Skip objects whose end date is beyond the specified date
-        next if date > Date.parse(object['end_date'])
-        # Found a matching object
-        date_matching_objects << object
-      end
-      matching_objects = date_matching_objects
+      # Skip objects that don't have fields for start_date and end_date
+      matching_objects = matching_objects.reject { |object| !object.key?('start_date') || !object.key?('end_date') }
+
+      # Skip objects whose start date is earlier than the specified date
+      matching_objects = matching_objects.reject { |object| date <= Date.parse(object['start_date']) }
+
+      # Skip objects whose end date is later than the specified date
+      matching_objects = matching_objects.reject { |object| date > Date.parse(object['end_date']) }
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless area.nil?
+      # Skip objects that don't have fields for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_area') || !object.key?('maximum_area') }
+
+      # Skip objects that don't have values specified for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| object['minimum_area'].nil? || object['maximum_area'].nil? }
+
+      # Skip objects whose minimum area is below or maximum area is above area
+      matching_objects = matching_objects.reject { |object| area.to_f <= object['minimum_area'].to_f || area.to_f > object['maximum_area'].to_f }
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless num_floors.nil?
+      # Skip objects that don't have fields for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_floors') || !object.key?('maximum_floors') }
+
+      # Skip objects that don't have values specified for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| object['minimum_floors'].nil? || object['maximum_floors'].nil? }
+
+      # Skip objects whose minimum floors is below or maximum floors is above num_floors
+      matching_objects = matching_objects.reject { |object| num_floors.to_f < object['minimum_floors'].to_f || num_floors.to_f > object['maximum_floors'].to_f }
     end
 
     # Check the number of matching objects found
     if matching_objects.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
+    end
+
+    return matching_objects
+  end
+
+  # Method to search through a hash for an object that meets the desired search criteria, as passed via a hash.
+  # If capacity is supplied, the object will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  #
+  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param search_criteria [Hash] hash of search criteria
+  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @example Find the motor that meets these size criteria
+  #   search_criteria = {
+  #   'template' => template,
+  #   'number_of_poles' => 4.0,
+  #   'type' => 'Enclosed',
+  #   }
+  #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
+
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors)
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
       desired_object = nil
-      # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
     elsif matching_objects.size == 1
       desired_object = matching_objects[0]
     else
