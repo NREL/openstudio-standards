@@ -1338,11 +1338,11 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
 
     # hvac operation schedule
-    hvac_op_sch = if hvac_op_sch.nil?
-                    model.alwaysOnDiscreteSchedule
-                  else
-                    model_add_schedule(model, hvac_op_sch)
-                  end
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
 
     # oa damper schedule
     if oa_damper_sch.nil?
