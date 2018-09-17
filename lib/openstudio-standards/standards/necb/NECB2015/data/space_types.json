@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "space_types",
+  "tables": {
+    "space_types": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -25210,5 +25209,5 @@
         }
       ]
     }
-  ]
+  }
 }

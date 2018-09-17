@@ -254,7 +254,7 @@ class NECB2011
             'name' => data['service_water_heating_schedule'],
             'day_types' => day_peak_sched[0]
         }
-        day_sched = model_find_object(standards_data['schedules'], search_criteria)
+        day_sched = model_find_object(table_name: 'schedules', search_criteria: search_criteria)
         # Make sure the schedule is not empty and contains 24 hours.
         if day_sched.empty? || day_sched['values'].size != 24
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The water use schedule called #{data['service_water_heating_schedule']} for #{space_type_name} is corrupted or could not be found.  Please check that the schedules.json file is available and that the schedule names are spelled correctly")

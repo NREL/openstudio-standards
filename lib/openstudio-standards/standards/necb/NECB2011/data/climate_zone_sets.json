@@ -1,8 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "climate_zone_sets",
-      "data_type": "table",
+  "tables": {
+    "climate_zone_sets": {
       "refs": [
         "assumption"
       ],
@@ -15,5 +13,5 @@
         }
       ]
     }
-  ]
+  }
 }

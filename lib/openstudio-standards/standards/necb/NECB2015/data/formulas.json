@@ -1,7 +1,6 @@
 {
-  "formulas": [
-    {
-      "name": "fdwr_formula",
+  "formulas": {
+    "fdwr_formula": {
       "data_type": "formula",
       "refs": [
         "NECB2011_S_3.2.1.4(1)"
@@ -13,8 +12,7 @@
       "units": "ratio",
       "notes": "Requires hdd to be defined to be evaluated in code."
     },
-    {
-      "name": "occupancy_sensors_space_types_formula",
+    "occupancy_sensors_space_types_formula": {
       "data_type": "formula",
       "refs": [
         "NECB2011_S_8.4.4.6(3)"
@@ -27,5 +25,5 @@
       "units": "bool",
       "notes": " using eval returns true if spaces require occupancy sensors"
     }
-  ]
+  }
 }

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "surface_thermal_transmittance",
+  "tables": {
+    "surface_thermal_transmittance": {
       "data_type": "table",
       "notes": "Requires hdd to be defined to be evaluated in code. Never have ground windows or doors.",
       "refs": [
@@ -54,5 +53,5 @@
         }
       ]
     }
-  ]
+  }
 }

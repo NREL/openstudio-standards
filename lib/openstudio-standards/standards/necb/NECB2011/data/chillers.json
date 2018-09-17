@@ -1,8 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "chillers",
-      "data_type": "table",
+  "tables": {
+    "chillers": {
       "refs": [
         "assumption"
       ],
@@ -297,5 +295,5 @@
         }
       ]
     }
-  ]
+  }
 }

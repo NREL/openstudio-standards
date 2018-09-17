@@ -17,7 +17,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ]
   #Set Compliance vintage
-  Templates = ['NECB2011', 'NECB2015']
+  Templates = ['NECB2011','NECB2015']
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -122,8 +122,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         climate_zone = 'NECB HDD Method'
         standard = Standard.build(template)
 
-        space_type_properties = standard.model_find_object(standard.standards_data["space_types"], {"template" => template, "building_type" => building_type, "space_type" => space_type})
-
+        table = standard.standards_data['tables']['space_types']['table']
+        space_type_properties = table.detect {|st| st["template"] == template && st["building_type"] == building_type && st["space_type"] == space_type }
         st = OpenStudio::Model::SpaceType.new(@model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
         st.setStandardsSpaceType(space_type_properties['space_type'])

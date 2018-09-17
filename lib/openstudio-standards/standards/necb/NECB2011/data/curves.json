@@ -1,8 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "curves",
-      "data_type": "table",
+  "tables": {
+    "curves": {
       "refs": [
         "assumption"
       ],
@@ -734,5 +732,5 @@
         }
       ]
     }
-  ]
+  }
 }
