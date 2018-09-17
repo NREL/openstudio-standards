@@ -28,7 +28,7 @@ class NECB2015 < NECB2011
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
         if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-          @standards_data["tables"] << data["tables"].first
+          @standards_data["tables"] = [*@standards_data["tables"],  *data["tables"] ].to_h
         else
           @standards_data[data.keys.first] = data[data.keys.first]
         end

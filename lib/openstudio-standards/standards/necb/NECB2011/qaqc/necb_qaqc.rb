@@ -6,33 +6,33 @@ class NECB2011
     # Combine the data from the JSON files into a single hash
     files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
     @qaqc_data = {}
-    @qaqc_data["tables"] = []
+    @qaqc_data["tables"] = {}
     files.each do |file|
       #puts "loading qaqc data from #{file}"
       data = JSON.parse(File.read(file))
-      if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-        @qaqc_data["tables"] << data["tables"].first
+      if not data["tables"].nil?
+        @qaqc_data["tables"] = [*@qaqc_data["tables"],  *data["tables"] ].to_h
       else
         @qaqc_data[data.keys.first] = data[data.keys.first]
       end
     end
-    #needed for compatibility of qaqc database format
-    @qaqc_data['tables'].each do |table|
-      @qaqc_data[table['name']] = table
-    end
+
     return @qaqc_data
   end
 
   def get_qaqc_table(table_name, search_criteria = nil)
     return_objects = nil
-    object = @qaqc_data['tables'].detect {|table| table['name'] == table_name}
-    raise("could not find #{table_name} in qaqc table database. ") if object.nil? or object['table'].nil?
+    table = @qaqc_data['tables'][table_name]['table']
+    raise("could not find #{table_name} in qaqc table database. ") if table.nil?
     if search_criteria.nil?
       #return object['table']
-      return object  # removed table beause need to use the object['refs']
+      return table  # removed table beause need to use the object['refs']
     else
-      return_objects = standards_lookup_table_many(object['table'], search_criteria)
-      return return_objects
+      rows = table
+      search_criteria.each do |key, value|
+        rows = row.select{|row| row[key] == value}
+      end
+      return rows
     end
   end
 
