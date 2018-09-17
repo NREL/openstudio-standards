@@ -105,12 +105,15 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     # Todo - Roughly 1 day of work (phylroy) 
 
     #Create report string. 
-    @output = ""
+
+    @json_test_output = {}
+    #Iterate through the vintage templates 'NECB2011', etc..
+    Templates.each do |template|
+      @json_test_output[template] = {}
     #Iterate through the weather files.
     NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
 
-      #Iterate through the vintage templates 'NECB2011', etc..
-      Templates.each do |template|
+
 
         #Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditions spaces.. So we need conditioning data.
 
@@ -182,56 +185,61 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
 
-        #Create headers.
 
-        @header_output = ""
-        @header_output << "Vintage,WeatherFile,HDD,FDWR,SRR,"
-        @header_output << "outdoor_walls_average_conductance,outdoor_roofs_average_conductance,outdoor_floors_average_conductance,"
-        @header_output << "ground_walls_average_conductances, ground_roofs_average_conductances, ground_floors_average_conductances,"
-        @header_output << "windows_average_conductance,skylights_average_conductance,doors_average_conductance,overhead_doors_average_conductance,"
+        #Output conductances
+        @json_test_output[template][@hdd] = {}
+        @json_test_output[template][@hdd]['fdwr'] = BTAP::Geometry::get_fwdr(@model).round(4)
+        @json_test_output[template][@hdd]['srr'] = BTAP::Geometry::get_srr(@model).round(4)
+        @json_test_output[template][@hdd]['outdoor_roofs_average_conductances'] = outdoor_roofs_average_conductance.round(4)
+        @json_test_output[template][@hdd]['outdoor_walls_average_conductances'] = outdoor_walls_average_conductance.round(4)
+        @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = outdoor_floors_average_conductance.round(4)
+        @json_test_output[template][@hdd]['ground_roofs_average_conductances'] = ground_roofs_average_conductances.round(4)
+        @json_test_output[template][@hdd]['ground_walls_average_conductances'] = ground_walls_average_conductances.round(4)
+        @json_test_output[template][@hdd]['ground_floors_average_conductances'] = ground_floors_average_conductances.round(4)
+        @json_test_output[template][@hdd]['windows_average_conductance'] = windows_average_conductance.round(4)
+        @json_test_output[template][@hdd]['skylights_average_conductance'] = skylights_average_conductance.round(4)
+        @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance.round(4)
 
 
-        #Output conductances 
-        @output << "#{template},#{weather_file},#{@hdd.round(0)},#{BTAP::Geometry::get_fwdr(@model).round(4)},#{BTAP::Geometry::get_srr(@model).round(4)},"
-        @output << "#{outdoor_walls_average_conductance.round(4)} ,#{outdoor_roofs_average_conductance.round(4)} , #{outdoor_floors_average_conductance.round(4)},"
-        @output << "#{ground_walls_average_conductances.round(4)},#{ground_roofs_average_conductances.round(4)},#{ground_floors_average_conductances.round(4)},"
-        @output << "#{windows_average_conductance.round(4)},#{skylights_average_conductance.round(4)},#{doors_average_conductance.round(4)},#{overhead_doors_average_conductance.round(4)},"
 
         #infiltration test
         # Get the effective infiltration rate through the walls and roof only.
         sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by {|space| space.name.get}
         #Need to sort spaces otherwise the output order is random.
+        @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'] = {}
         sorted_spaces.each do |space|
-
-          @header_output << "#{space.name} - Wall/Roof infil rate (L/s/m2),"
           assert(space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}")
           #If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
           if space.spaceInfiltrationDesignFlowRates.size == 0
-            @output << "NA,"
+            @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "NA,"
           else
             #Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
             wall_roof_infiltration_rate = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get * space.exteriorArea / standard.space_exterior_wall_and_roof_and_subsurface_area(space)
             #Output effective infiltration rate
-            @output << "#{(wall_roof_infiltration_rate * 1000).round(3)},"
+            @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "#{(wall_roof_infiltration_rate * 1000).round(3)},"
+
           end
         end
-        @header_output << "\n"
-        @output << "\n"
+
         BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__), "output", "#{template}-hdd#{@hdd}-envelope_test.osm"))
       end #Weather file loop.
     end # Template vintage loop
 
-    #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_test_results.csv')
-    File.open(test_result_file, 'w') {|f| f.write(@header_output + @output)}
+    #Write test report file.
+    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_test_results.json')
+    File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(@json_test_output))}
+
+
+
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_expected_results.csv')
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__), 'envelope_test.osm'))
     assert(b_result,
            "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
     )
+
   end # test_envelope()
 
 end #Class NECBHDDTests

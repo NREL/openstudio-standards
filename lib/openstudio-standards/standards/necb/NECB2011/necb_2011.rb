@@ -8,6 +8,18 @@ class NECB2011 < Standard
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
 
+  def get_standards_table(table_name:)
+
+  end
+
+  def get_standard_constant_value(constand_name:)
+
+  end
+
+
+
+
+
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
   # the OpenStudio CLI embedded filesystem or from typical gem installation
