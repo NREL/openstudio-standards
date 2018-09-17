@@ -190,6 +190,9 @@ class Standard
   # themselves (like an 'L' or a 'V').
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
+    # ckirney start
+    # BTAP::Geometry::Surfaces.delaunay_triangulation_2d(surface)
+    # ckirney end
     surface.subSurfaces.sort.each do |sub_surface|
       sub_surface.remove
     end
