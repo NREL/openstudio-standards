@@ -31,7 +31,7 @@ class NECB2011
       #return object['table']
       return object  # removed table beause need to use the object['refs']
     else
-      return_objects = model_find_objects(object['table'], search_criteria)
+      return_objects = standards_lookup_table_many(object['table'], search_criteria)
       return return_objects
     end
   end

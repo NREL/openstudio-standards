@@ -99,7 +99,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types']['table'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return standards_lookup_table_many(table_name: 'space_types').map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -123,7 +123,7 @@ class NECB2011 < Standard
   def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
+    fuel_sources = standards_lookup_table_many(table_name: 'regional_fuel_use').detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
@@ -399,12 +399,7 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
-    spacetype_data = nil
-    if @standards_data['space_types'].is_a?(Hash) == true
-      spacetype_data = @standards_data['space_types']['table']
-    else
-      spacetype_data = @standards_data['space_types']
-    end
+    spacetype_data = standards_lookup_table_many(table_name: 'space_types')
     raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}

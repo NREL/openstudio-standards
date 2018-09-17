@@ -304,7 +304,7 @@ class Standard
       'building_type' => building_type
     }
 
-    prototype_input = model_find_object(table_name: 'prototype_inputs', search_criteria: search_criteria)
+    prototype_input = standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: search_criteria)
     if prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find prototype inputs for #{search_criteria}, cannot add elevators.")
       return nil

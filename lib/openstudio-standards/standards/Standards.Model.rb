@@ -1625,17 +1625,17 @@ class Standard
     end
 
     # Get the object data
-    data = model_find_object(table_name: 'construction_sets',
-                             search_criteria: {'template' => template,
+    data = standards_lookup_table_first(table_name: 'construction_sets',
+                                        search_criteria: {'template' => template,
                                                'climate_zone_set' => climate_zone_set,
                                                'building_type' => building_type,
                                                'space_type' => spc_type,
                                                'is_residential' => is_residential})
     unless data
-      data = model_find_object(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                  'climate_zone_set' => climate_zone_set,
-                                                                                  'building_type' => building_type,
-                                                                                  'space_type' => spc_type})
+      data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
+                                                                                             'climate_zone_set' => climate_zone_set,
+                                                                                             'building_type' => building_type,
+                                                                                             'space_type' => spc_type})
       unless data
         return construction_set
       end
@@ -1916,7 +1916,7 @@ class Standard
   # desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [Hash] name of table in standards database.
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between
@@ -1928,7 +1928,7 @@ class Standard
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false #TODO change to return empty optional schedule:ruleset?
   #   end
-  def model_find_objects(table_name: , search_criteria: {} , capacity: nil)
+  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil)
     #    matching_objects = hash_of_objects.clone
     #    #new
     #    puts "searching"
@@ -2052,7 +2052,7 @@ class Standard
   # the minimum_capacity and maximum_capacity values.
   #
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [String] name of table
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between
@@ -2065,7 +2065,7 @@ class Standard
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
-  def model_find_object(table_name:, search_criteria: {}, capacity: nil, date: nil)
+  def standards_lookup_table_first(table_name:, search_criteria: {}, capacity: nil, date: nil)
 
     #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
     hash_of_objects = @standards_data[table_name]
@@ -2202,7 +2202,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
 
     # Find all the schedule rules that match the name
-    rules = model_find_objects(table_name: 'schedules', search_criteria: {'name' => schedule_name})
+    rules = standards_lookup_table_many(table_name: 'schedules', search_criteria: {'name' => schedule_name})
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -2310,7 +2310,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = model_find_object(table_name: 'materials', search_criteria: {'name' => material_name})
+    data = standards_lookup_table_first(table_name: 'materials', search_criteria: {'name' => material_name})
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false # TODO: change to return empty optional material
@@ -2411,7 +2411,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = model_find_object( table_name: 'constructions', search_criteria: {'name' => construction_name})
+    data = standards_lookup_table_first(table_name: 'constructions', search_criteria: {'name' => construction_name})
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2523,8 +2523,8 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(table_name:'construction_properties',
-                              search_criteria: {'template' => template,
+    props = standards_lookup_table_first(table_name:'construction_properties',
+                                         search_criteria: {'template' => template,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,
@@ -2570,16 +2570,16 @@ class Standard
 
     # Get the object data
 
-    data = model_find_object(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                'climate_zone_set' => climate_zone_set,
-                                                                                'building_type' => building_type,
-                                                                                'space_type' => spc_type,
-                                                                                'is_residential' => is_residential})
+    data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
+                                                                                           'climate_zone_set' => climate_zone_set,
+                                                                                           'building_type' => building_type,
+                                                                                           'space_type' => spc_type,
+                                                                                           'is_residential' => is_residential})
     unless data
-      data = model_find_object(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                  'climate_zone_set' => climate_zone_set,
-                                                                                  'building_type' => building_type,
-                                                                                  'space_type' => spc_type, })
+      data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
+                                                                                             'climate_zone_set' => climate_zone_set,
+                                                                                             'building_type' => building_type,
+                                                                                             'space_type' => spc_type, })
       unless data
         # if nothing matches say that we could not find it.
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
@@ -2765,7 +2765,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
-    data = model_find_object(table_name: 'curves', search_criteria: {'name' => curve_name})
+    data = standards_lookup_table_first(table_name: 'curves', search_criteria: {'name' => curve_name})
     if data.nil?
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.Model.Model", "Could not find a curve called '#{curve_name}' in the standards.")
       return nil
@@ -3471,7 +3471,7 @@ class Standard
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object(table_name: 'construction_properties', search_criteria: search_criteria)
+    construction_properties = standards_lookup_table_first(table_name: 'construction_properties', search_criteria: search_criteria)
 
     return construction_properties
   end
@@ -4090,7 +4090,7 @@ class Standard
               'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = model_find_object(table_name: 'space_types', search_criteria: search_criteria)
+          space_type_properties = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}
