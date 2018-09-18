@@ -16,14 +16,14 @@ class Standard
 
     # populate search hash
     search_criteria = {
-      'template' => self.class.name,
+      'template' => template,
       'building_type' => standards_building_type,
       'space_type' => standards_space_type
     }
 
     # lookup space type properties
-
-    space_type_properties = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
+    space_type_properties = standards_lookup_table_first(table_name: 'space_types',
+                                                         search_criteria: search_criteria)
 
     if space_type_properties.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
