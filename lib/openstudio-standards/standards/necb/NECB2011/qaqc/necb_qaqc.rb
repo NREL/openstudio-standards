@@ -1488,6 +1488,151 @@ class NECB2011
     # end
   end
 
+  # This methos is not used as part of the QAQC process,
+  # because support for MURBS has not been implemented for HRV
+  # in NECB 2011 and 2015
+  def necb_hrv_compliance_inc_murb(qaqc, model)
+    murb_hrv_compliance = get_qaqc_table("murb_hrv_compliance")
+    hrv_spacetpye_ignore_regex = murb_hrv_compliance['ignored_spacetypes_regex']
+    hrv_dwelling_unit_spacetpye_regex = murb_hrv_compliance['dwelling_unit_spacetype_regex']
+    necb_section_name = murb_hrv_compliance['refs'].join(",")
+
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      air_loop_info = {}
+
+      qaqc[:air_loops].each do |air_loop_i|
+        next unless air_loop_i[:name] == air_loop.name.get
+        air_loop_info = air_loop_i
+      end
+
+      zones = air_loop.thermalZones()
+      if zones.length ==1
+        # here the Airloop is serving only one zone
+
+        # So, next we need to determine if the zone has only
+        # one dwelling unit and no other space types other than stairs, corridor, and lobby
+
+        zone = zones.first
+        # get the spaces and keep track of the number of spaces and dewlling units
+        num_of_served_spaces = zone.spaces().length
+        contains_dwelling_unit = false
+        if num_of_served_spaces == 0
+          qaqc[:warnings] << "[necb_murb_hrv_compliance] Thermal Zone [#{zone.name.to_s}] does not serve any Spaces"
+        else
+          spaces = zone.spaces()
+          spaces.each {|z_space|
+            spacetype = z_space.spaceType()
+            spacetype = validate_optional(spacetype, model, nil)
+            if spacetype.nil?
+              qaqc[:warnings] << "[necb_murb_hrv_compliance] Space [#{z_space.name.to_s}] does not have a SpaceType"
+            else
+              # reduce the number of spaces if the space served by the thermal zone is a
+              # stairwell/staircase/lobby/corridor
+              spacetype_name = spacetype.name.to_s
+              ignored_spacetypes_regex = Regexp.new(hrv_spacetpye_ignore_regex, Regexp::IGNORECASE)
+              if ignored_spacetypes_regex =~ spacetype_name
+                num_of_served_spaces -= 1
+              end
+              # detect is the thermal zone serves a Dwelling Unit
+              dwelling_unit_regex = Regexp.new(hrv_dwelling_unit_spacetpye_regex, Regexp::IGNORECASE)
+              if dwelling_unit_regex =~ spacetype_name
+                contains_dwelling_unit = true
+              end
+            end
+          }
+          if num_of_served_spaces == 1 and contains_dwelling_unit
+            # here the Thermal zone serves one space that is a dwelling unit
+            # and other space types such as lobby, stairs, or corridors are ignored
+            # So in this case, an HRV is required
+            test_text = "[AIR LOOP][:heat_exchanger] (murb) for [#{air_loop_info[:name]}] is present?"
+            result_value = murb_hrv_compliance['table']['expected_value']
+            necb_section_test(
+                qaqc,
+                result_value,
+                "==",
+                true,
+                necb_section_name,
+                test_text,
+                nil
+            )
+          else
+            # Here either the number of served spaces exceed 1 or
+            # does not contain a dwelling unit, So a regular HRV check has to be done for this air loop
+            qaqc[:warnings] << "[necb_murb_hrv_compliance] Regular HRV compliance check for airloop: [#{air_loop.name.to_s}], because (it does not serve a single dwelling unit) OR (serves multiple spacetypes)"
+            necb_hrv_compliance_for_single_airloop(qaqc, model, air_loop_info)
+          end
+        end
+      else
+        # here the Airloop does not serve any zones, or it serves more than one zone
+        # So, a regular hrv compliance must be done for this air loop
+        qaqc[:warnings] << "[necb_murb_hrv_compliance] Regular HRV compliance check for airloop: [#{air_loop.name.to_s}], because it serves multiple Thermal zones"
+        necb_hrv_compliance_for_single_airloop(qaqc, model, air_loop_info)
+      end
+    end
+  end
+
+  # This methos is not used as part of the QAQC process,
+  # because support for MURBS has not been implemented for HRV
+  # in NECB 2011 and 2015
+  #
+  # This method will run the HRV compliance for a single air loop
+  #
+  # @param qaqc [:hash] Hash that contains the base data with qaqc keys
+  # @param model [:OS:Model] Openstudio Model
+  # @param  air_loop_info [:hash]  single air_loop object from the qaqc hash
+  def necb_hrv_compliance_for_single_airloop(qaqc, model, air_loop_info)
+    # HRV check
+    hrv_compliance = get_qaqc_table("hrv_compliance")['table']
+    necb_section_name = get_qaqc_table("hrv_compliance")['refs'].join(",")
+    hrv_compliance.each {|compliance|
+      data = {}
+
+      # puts "\nspaceinfo[#{compliance['var']}]"
+      result_value = !air_loop_info[:heat_exchanger].empty?
+      # puts "#{compliance['test_text']}"
+      test_text = "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
+      # puts "result_value: #{result_value}"
+      # puts "test_text: #{test_text}\n"
+      # data[:infiltration_method]    = [ "Flow/ExteriorArea", spaceinfo[:infiltration_method] , nil ]
+      # data[:infiltration_flow_per_m2] = [ 0.00025,       spaceinfo[:infiltration_flow_per_m2], 5 ]
+      # data.each do |key,value|
+      #puts key
+      outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
+      db990 = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).db990
+      necb_section_test(
+          qaqc,
+          result_value,
+          "==",
+          eval(compliance["expected_value"]),
+          necb_section_name,
+          test_text,
+          compliance["tolerance"]
+      )
+    }
+    # necb_section_name = "NECB2011-5.2.10.1"
+    # qaqc[:air_loops].each do |air_loop_info|
+    #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
+    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     hrv_reqd = hrv_calc > 150 ? true : false
+    #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
+    #     hrv_present = false
+    #     unless air_loop_info[:heat_exchanger].empty?
+    #       hrv_present = true
+    #     end
+    #     necb_section_test(
+    #       qaqc,
+    #       hrv_reqd,
+    #       '==',
+    #       hrv_present,
+    #       necb_section_name,
+    #       "[AIR LOOP][:heat_exchanger] for [#{air_loop_info[:name]}] is present?"
+    #     )
+    #   else
+    #     qaqc['warnings'] << "[hrv_compliance] air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0 for [#{air_loop_info[:name]}]"
+    #   end
+    # end
+  end
+
   def necb_vav_fan_power_compliance(qaqc)
     necb_section_name = get_qaqc_table("vav_fan_power_compliance")['refs'].join(",")
     qaqc_table = get_qaqc_table("vav_fan_power_compliance")
