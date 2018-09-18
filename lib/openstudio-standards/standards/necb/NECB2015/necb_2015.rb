@@ -48,9 +48,8 @@ class NECB2015 < NECB2011
         end
       end
     end
-    #Write test report file.
-    test_result_file = File.join(File.dirname(__FILE__), '..', 'NECB2015.json')
-    File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
+    # Write database to file.
+    # File.open(File.join(File.dirname(__FILE__), '..', 'NECB2017.json'), 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
 
     return @standards_data
   end

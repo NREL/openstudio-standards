@@ -2,7 +2,8 @@ require 'json'
 require 'yaml'
 require 'deep_merge'
 require 'rubyXL'
-
+#Note this script is no longer nor updated since the team now prefers to use JSON directly than excel.
+# This file is only kept for reference if it is needed.
 
 #monkey patch for recursive hash sorting.
 class Hash
