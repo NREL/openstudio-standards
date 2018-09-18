@@ -28,11 +28,11 @@ class NECB2015 < NECB2011
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
         if !data['tables'].nil?
-          @standards_data['tables'] = [*@standards_data['tables'],  *data['tables'] ].to_h
+          @standards_data['tables'] = [*@standards_data['tables'], *data['tables']].to_h
         elsif !data['constants'].nil?
-          @standards_data['constants'] = [*@standards_data['constants'],  *data['constants'] ].to_h
+          @standards_data['constants'] = [*@standards_data['constants'], *data['constants']].to_h
         elsif !data['constants'].nil?
-          @standards_data['formulas'] = [*@standards_data['formulas'],  *data['formulas'] ].to_h
+          @standards_data['formulas'] = [*@standards_data['formulas'], *data['formulas']].to_h
         end
       end
     else
@@ -40,14 +40,17 @@ class NECB2015 < NECB2011
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?
-          @standards_data['tables'] = [*@standards_data['tables'],  *data['tables'] ].to_h
+          @standards_data['tables'] = [*@standards_data['tables'], *data['tables']].to_h
         elsif !data['constants'].nil?
-          @standards_data['constants'] = [*@standards_data['constants'],  *data['constants'] ].to_h
-        elsif !data['constants'].nil?
-          @standards_data['formulas'] = [*@standards_data['formulas'],  *data['formulas'] ].to_h
+          @standards_data['constants'] = [*@standards_data['constants'], *data['constants']].to_h
+        elsif !data['formulas'].nil?
+          @standards_data['formulas'] = [*@standards_data['formulas'], *data['formulas']].to_h
         end
       end
     end
+    #Write test report file.
+    test_result_file = File.join(File.dirname(__FILE__), '..', 'NECB2015.json')
+    File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
 
     return @standards_data
   end

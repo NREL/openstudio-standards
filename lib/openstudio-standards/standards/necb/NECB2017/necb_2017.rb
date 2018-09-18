@@ -42,11 +42,14 @@ class NECB2017 < NECB2015
           @standards_data['tables'] = [*@standards_data['tables'],  *data['tables'] ].to_h
         elsif !data['constants'].nil?
           @standards_data['constants'] = [*@standards_data['constants'],  *data['constants'] ].to_h
-        elsif !data['constants'].nil?
+        elsif !data['formulas'].nil?
           @standards_data['formulas'] = [*@standards_data['formulas'],  *data['formulas'] ].to_h
         end
       end
     end
+    #Write test report file.
+    test_result_file = File.join(File.dirname(__FILE__), '..', 'NECB2017.json')
+    File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
 
     return @standards_data
   end
