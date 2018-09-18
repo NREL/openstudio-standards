@@ -1,2587 +1,2747 @@
 {
   "90_1_general/test_boiler_hot_water.rb": {
-    "start": 1537285960,
-    "end": 1537285968,
-    "total": 8
+    "start": 1536689767,
+    "end": 1536689773,
+    "total": 6
   },
   "90_1_general/test_chiller_electric_eir.rb": {
-    "start": 1537286000,
-    "end": 1537286007,
-    "total": 7
+    "start": 1536690944,
+    "end": 1536690950,
+    "total": 6
   },
   "90_1_general/test_coil_dx.rb": {
-    "start": 1537285482,
-    "end": 1537285492,
-    "total": 10
+    "start": 1536689967,
+    "end": 1536689976,
+    "total": 9
   },
   "90_1_general/test_find_construction_properties_data.rb": {
-    "start": 1537284982,
-    "end": 1537284989,
+    "start": 1536689511,
+    "end": 1536689518,
     "total": 7
   },
   "90_1_general/test_find_space_type_standards_data.rb": {
-    "start": 1537286023,
-    "end": 1537286029,
+    "start": 1536690763,
+    "end": 1536690769,
     "total": 6
   },
   "90_1_general/test_find_target_eui.rb": {
-    "start": 1537285472,
-    "end": 1537285479,
-    "total": 7
-  },
-  "90_1_general/test_find_target_eui_by_end_use.rb": {
-    "start": 1537285507,
-    "end": 1537285513,
-    "total": 6
-  },
-  "90_1_general/test_get_building_climate_zone_and_building_type.rb": {
-    "start": 1537285363,
-    "end": 1537285368,
+    "start": 1536689670,
+    "end": 1536689675,
     "total": 5
   },
+  "90_1_general/test_find_target_eui_by_end_use.rb": {
+    "start": 1536689858,
+    "end": 1536689863,
+    "total": 5
+  },
+  "90_1_general/test_get_building_climate_zone_and_building_type.rb": {
+    "start": 1536689839,
+    "end": 1536689845,
+    "total": 6
+  },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_10.rb": {
-    "start": 1537285449,
-    "end": 1537285507,
-    "total": 58
+    "start": 1536690832,
+    "end": 1536690888,
+    "total": 56
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_11.rb": {
-    "start": 1537286082,
-    "end": 1537286452,
-    "total": 370
+    "start": 1536689476,
+    "end": 1536689864,
+    "total": 388
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_12.rb": {
-    "start": 1537284924,
-    "end": 1537285068,
-    "total": 144
+    "start": 1536690840,
+    "end": 1536690979,
+    "total": 139
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_13.rb": {
-    "start": 1537284854,
-    "end": 1537284913,
-    "total": 59
+    "start": 1536690230,
+    "end": 1536690297,
+    "total": 67
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_2.rb": {
-    "start": 1537284944,
-    "end": 1537284951,
-    "total": 7
+    "start": 1536689845,
+    "end": 1536689851,
+    "total": 6
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_3.rb": {
-    "start": 1537286007,
-    "end": 1537286060,
-    "total": 53
+    "start": 1536689623,
+    "end": 1536689670,
+    "total": 47
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_4.rb": {
-    "start": 1537285821,
-    "end": 1537285828,
-    "total": 7
+    "start": 1536690997,
+    "end": 1536691002,
+    "total": 5
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_5.rb": {
-    "start": 1537285463,
-    "end": 1537285523,
-    "total": 60
+    "start": 1536689958,
+    "end": 1536690015,
+    "total": 57
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_7.rb": {
-    "start": 1537285407,
-    "end": 1537285421,
-    "total": 14
+    "start": 1536690894,
+    "end": 1536690906,
+    "total": 12
   },
   "90_1_prm/test_create_performance_rating_method_baseline_bldg_9.rb": {
-    "start": 1537285900,
-    "end": 1537285924,
-    "total": 24
+    "start": 1536689496,
+    "end": 1536689525,
+    "total": 29
   },
   "90_1_prm/test_create_performance_rating_method_baseline_building.rb": {
-    "start": 1537284913,
-    "end": 1537284928,
-    "total": 15
+    "start": 1536689688,
+    "end": 1536689700,
+    "total": 12
   },
   "cbes_prototype/test_medium_office.rb": {
-    "start": 1537286858,
-    "end": 1537286891,
-    "total": 33
+    "start": 1536690173,
+    "end": 1536690254,
+    "total": 81
   },
   "cbes_prototype/test_retail_standalone.rb": {
-    "start": 1537286858,
-    "end": 1537286893,
-    "total": 35
+    "start": 1536689433,
+    "end": 1536689490,
+    "total": 57
   },
   "cbes_prototype/test_small_office.rb": {
-    "start": 1537286858,
-    "end": 1537286891,
-    "total": 33
+    "start": 1536690666,
+    "end": 1536690763,
+    "total": 97
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-district_heating-district_heating-district_cooling.rb": {
-    "start": 1537284910,
-    "end": 1537285038,
-    "total": 128
+    "start": 1536691048,
+    "end": 1536691153,
+    "total": 105
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-district_heating-district_heating-electricity.rb": {
-    "start": 1537285164,
-    "end": 1537285297,
-    "total": 133
+    "start": 1536690063,
+    "end": 1536690197,
+    "total": 134
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-district_heating-nil-district_cooling.rb": {
-    "start": 1537285856,
-    "end": 1537285982,
-    "total": 126
+    "start": 1536689686,
+    "end": 1536689821,
+    "total": 135
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-district_heating-nil-electricity.rb": {
-    "start": 1537285603,
-    "end": 1537285725,
+    "start": 1536690432,
+    "end": 1536690554,
     "total": 122
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-electricity-electricity-district_cooling.rb": {
-    "start": 1537285685,
-    "end": 1537285804,
-    "total": 119
-  },
-  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-natural_gas-district_cooling.rb": {
-    "start": 1537284821,
-    "end": 1537284934,
-    "total": 113
-  },
-  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-natural_gas-electricity.rb": {
-    "start": 1537285321,
-    "end": 1537285449,
-    "total": 128
-  },
-  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-nil-district_cooling.rb": {
-    "start": 1537285234,
-    "end": 1537285352,
-    "total": 118
-  },
-  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-nil-electricity.rb": {
-    "start": 1537285579,
-    "end": 1537285704,
+    "start": 1536689760,
+    "end": 1536689885,
     "total": 125
   },
+  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-natural_gas-district_cooling.rb": {
+    "start": 1536690424,
+    "end": 1536690533,
+    "total": 109
+  },
+  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-natural_gas-electricity.rb": {
+    "start": 1536689460,
+    "end": 1536689586,
+    "total": 126
+  },
+  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-nil-district_cooling.rb": {
+    "start": 1536690463,
+    "end": 1536690576,
+    "total": 113
+  },
+  "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_doas-natural_gas-nil-electricity.rb": {
+    "start": 1536690652,
+    "end": 1536690789,
+    "total": 137
+  },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_er_vs-district_heating-nil-district_cooling.rb": {
-    "start": 1537284977,
-    "end": 1537285075,
-    "total": 98
+    "start": 1536690585,
+    "end": 1536690692,
+    "total": 107
   },
   "ci_test_files/doe_test_add_hvac_systems_fan_coil_with_er_vs-electricity-nil-district_cooling.rb": {
-    "start": 1537285854,
-    "end": 1537285959,
-    "total": 105
+    "start": 1536690073,
+    "end": 1536690196,
+    "total": 123
   },
   "ci_test_files/doe_test_add_hvac_systems_ground_source_heat_pumps_with_doas-electricity-electricity-electricity.rb": {
-    "start": 1537284821,
-    "end": 1537285049,
-    "total": 228
+    "start": 1536690426,
+    "end": 1536690628,
+    "total": 202
   },
   "ci_test_files/doe_test_add_hvac_systems_ground_source_heat_pumps_with_doas-electricity-nil-electricity.rb": {
-    "start": 1537285198,
-    "end": 1537285392,
-    "total": 194
+    "start": 1536690706,
+    "end": 1536690916,
+    "total": 210
   },
   "ci_test_files/doe_test_add_hvac_systems_ground_source_heat_pumps_with_er_vs-electricity-nil-electricity.rb": {
-    "start": 1537285352,
-    "end": 1537285455,
-    "total": 103
+    "start": 1536690640,
+    "end": 1536690737,
+    "total": 97
   },
   "ci_test_files/doe_test_add_hvac_systems_psz_ac-electricity-nil-district_cooling.rb": {
-    "start": 1537285599,
-    "end": 1537285656,
-    "total": 57
+    "start": 1536690886,
+    "end": 1536690942,
+    "total": 56
   },
   "ci_test_files/doe_test_add_hvac_systems_psz_ac-natural_gas-nil-district_cooling.rb": {
-    "start": 1537284934,
-    "end": 1537284989,
-    "total": 55
+    "start": 1536690737,
+    "end": 1536690793,
+    "total": 56
   },
   "ci_test_files/doe_test_add_hvac_systems_psz_ac-natural_gas-nil-electricity.rb": {
-    "start": 1537285036,
-    "end": 1537285083,
+    "start": 1536689655,
+    "end": 1536689702,
     "total": 47
   },
   "ci_test_files/doe_test_add_hvac_systems_psz_hp-electricity-nil-electricity.rb": {
-    "start": 1537285080,
-    "end": 1537285139,
-    "total": 59
+    "start": 1536690971,
+    "end": 1536691020,
+    "total": 49
   },
   "ci_test_files/doe_test_add_hvac_systems_ptac-district_heating-nil-electricity.rb": {
-    "start": 1537285476,
-    "end": 1537285529,
-    "total": 53
+    "start": 1536689433,
+    "end": 1536689488,
+    "total": 55
   },
   "ci_test_files/doe_test_add_hvac_systems_ptac-natural_gas-nil-electricity.rb": {
-    "start": 1537285045,
-    "end": 1537285099,
-    "total": 54
+    "start": 1536689831,
+    "end": 1536689886,
+    "total": 55
   },
   "ci_test_files/doe_test_add_hvac_systems_pthp-electricity-nil-electricity.rb": {
-    "start": 1537284821,
-    "end": 1537284869,
-    "total": 48
+    "start": 1536690720,
+    "end": 1536690763,
+    "total": 43
   },
   "ci_test_files/doe_test_add_hvac_systems_pvav_pfp_boxes-electricity-electricity-electricity.rb": {
-    "start": 1537285529,
-    "end": 1537285582,
-    "total": 53
+    "start": 1536690378,
+    "end": 1536690430,
+    "total": 52
   },
   "ci_test_files/doe_test_add_hvac_systems_pvav_reheat-district_heating-district_heating-district_cooling.rb": {
-    "start": 1537285941,
-    "end": 1537286000,
-    "total": 59
+    "start": 1536690785,
+    "end": 1536690842,
+    "total": 57
   },
   "ci_test_files/doe_test_add_hvac_systems_pvav_reheat-electricity-electricity-district_cooling.rb": {
-    "start": 1537285214,
-    "end": 1537285260,
-    "total": 46
+    "start": 1536689842,
+    "end": 1536689887,
+    "total": 45
   },
   "ci_test_files/doe_test_add_hvac_systems_pvav_reheat-natural_gas-natural_gas-district_cooling.rb": {
-    "start": 1537285025,
-    "end": 1537285086,
-    "total": 61
+    "start": 1536690724,
+    "end": 1536690780,
+    "total": 56
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_pfp_boxes-electricity-electricity-electricity.rb": {
-    "start": 1537284821,
-    "end": 1537284912,
-    "total": 91
+    "start": 1536690286,
+    "end": 1536690380,
+    "total": 94
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_reheat-district_heating-district_heating-district_cooling.rb": {
-    "start": 1537285289,
-    "end": 1537285353,
+    "start": 1536690156,
+    "end": 1536690220,
     "total": 64
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_reheat-district_heating-district_heating-electricity.rb": {
-    "start": 1537284821,
-    "end": 1537284923,
-    "total": 102
+    "start": 1536690862,
+    "end": 1536690955,
+    "total": 93
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_reheat-electricity-electricity-district_cooling.rb": {
-    "start": 1537284821,
-    "end": 1537284874,
+    "start": 1536689432,
+    "end": 1536689485,
     "total": 53
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_reheat-natural_gas-natural_gas-district_cooling.rb": {
-    "start": 1537285322,
-    "end": 1537285383,
-    "total": 61
+    "start": 1536689534,
+    "end": 1536689592,
+    "total": 58
   },
   "ci_test_files/doe_test_add_hvac_systems_vav_reheat-natural_gas-natural_gas-electricity.rb": {
-    "start": 1537285377,
-    "end": 1537285472,
-    "total": 95
+    "start": 1536690634,
+    "end": 1536690724,
+    "total": 90
   },
   "ci_test_files/doe_test_add_hvac_systems_water_source_heat_pumps_with_doas-district_heating-district_heating-electricity.rb": {
-    "start": 1537285548,
-    "end": 1537285798,
-    "total": 250
+    "start": 1536689507,
+    "end": 1536689768,
+    "total": 261
   },
   "ci_test_files/doe_test_add_hvac_systems_water_source_heat_pumps_with_doas-heat_pump-heat_pump-heat_pump.rb": {
-    "start": 1537285784,
-    "end": 1537286042,
-    "total": 258
+    "start": 1536690230,
+    "end": 1536690471,
+    "total": 241
   },
   "ci_test_files/doe_test_add_hvac_systems_water_source_heat_pumps_with_doas-heat_pump-nil-heat_pump.rb": {
-    "start": 1537285599,
-    "end": 1537285846,
-    "total": 247
+    "start": 1536689955,
+    "end": 1536690226,
+    "total": 271
   },
   "ci_test_files/doe_test_add_hvac_systems_water_source_heat_pumps_with_doas-natural_gas-nil-electricity.rb": {
-    "start": 1537285282,
-    "end": 1537285472,
-    "total": 190
+    "start": 1536690307,
+    "end": 1536690510,
+    "total": 203
   },
   "ci_test_files/doe_test_add_hvac_systems_water_source_heat_pumps_with_er_vs-heat_pump-nil-heat_pump.rb": {
-    "start": 1537285126,
-    "end": 1537285242,
-    "total": 116
+    "start": 1536690793,
+    "end": 1536690905,
+    "total": 112
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537286106,
-    "end": 1537286122,
+    "start": 1536689973,
+    "end": 1536689989,
     "total": 16
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285740,
-    "end": 1537285756,
-    "total": 16
+    "start": 1536689869,
+    "end": 1536689884,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537284821,
-    "end": 1537284837,
-    "total": 16
+    "start": 1536690976,
+    "end": 1536690991,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285418,
-    "end": 1537285437,
-    "total": 19
+    "start": 1536689432,
+    "end": 1536689447,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537284881,
-    "end": 1537284895,
-    "total": 14
+    "start": 1536690772,
+    "end": 1536690784,
+    "total": 12
   },
   "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285538,
-    "end": 1537285553,
-    "total": 15
-  },
-  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285260,
-    "end": 1537285273,
-    "total": 13
-  },
-  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285173,
-    "end": 1537285189,
-    "total": 16
-  },
-  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285220,
-    "end": 1537285234,
+    "start": 1536690662,
+    "end": 1536690676,
     "total": 14
   },
-  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537284988,
-    "end": 1537285003,
-    "total": 15
+  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536689432,
+    "end": 1536689448,
+    "total": 16
   },
-  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285733,
-    "end": 1537285746,
+  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536689447,
+    "end": 1536689460,
     "total": 13
   },
+  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536690647,
+    "end": 1536690662,
+    "total": 15
+  },
+  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536689957,
+    "end": 1536689971,
+    "total": 14
+  },
+  "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536690592,
+    "end": 1536690604,
+    "total": 12
+  },
   "ci_test_files/doe_test_bldg_full_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537284821,
-    "end": 1537284839,
-    "total": 18
+    "start": 1536690372,
+    "end": 1536690386,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_highrise_apartment-90.1_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285782,
-    "end": 1537286134,
-    "total": 352
+    "start": 1536690569,
+    "end": 1536690892,
+    "total": 323
   },
   "ci_test_files/doe_test_bldg_highrise_apartment-90.1_2007-ashrae_169_2006_2_a.rb": {
-    "start": 1537285308,
-    "end": 1537285647,
-    "total": 339
+    "start": 1536689990,
+    "end": 1536690350,
+    "total": 360
   },
   "ci_test_files/doe_test_bldg_highrise_apartment-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285189,
-    "end": 1537285540,
-    "total": 351
+    "start": 1536690682,
+    "end": 1536691014,
+    "total": 332
   },
   "ci_test_files/doe_test_bldg_highrise_apartment-90.1_2013-ashrae_169_2006_2_a.rb": {
-    "start": 1537285630,
-    "end": 1537285977,
-    "total": 347
+    "start": 1536689482,
+    "end": 1536689824,
+    "total": 342
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285945,
-    "end": 1537286008,
-    "total": 63
+    "start": 1536689759,
+    "end": 1536689814,
+    "total": 55
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537284896,
-    "end": 1537284956,
-    "total": 60
+    "start": 1536690550,
+    "end": 1536690605,
+    "total": 55
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537284889,
-    "end": 1537284943,
-    "total": 54
+    "start": 1536690763,
+    "end": 1536690818,
+    "total": 55
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285270,
-    "end": 1537285328,
-    "total": 58
+    "start": 1536691020,
+    "end": 1536691069,
+    "total": 49
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2007-ashrae_169_2006_2_a.rb": {
-    "start": 1537285100,
-    "end": 1537285162,
-    "total": 62
+    "start": 1536690609,
+    "end": 1536690660,
+    "total": 51
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2007-ashrae_169_2006_3_b.rb": {
-    "start": 1537286072,
-    "end": 1537286130,
-    "total": 58
+    "start": 1536689586,
+    "end": 1536689648,
+    "total": 62
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2007-ashrae_169_2006_4_a.rb": {
-    "start": 1537284915,
-    "end": 1537284977,
-    "total": 62
+    "start": 1536689556,
+    "end": 1536689616,
+    "total": 60
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2007-ashrae_169_2006_5_a.rb": {
-    "start": 1537285549,
-    "end": 1537285714,
-    "total": 165
+    "start": 1536690703,
+    "end": 1536690851,
+    "total": 148
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285656,
-    "end": 1537285716,
-    "total": 60
+    "start": 1536689432,
+    "end": 1536689501,
+    "total": 69
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285380,
-    "end": 1537285436,
-    "total": 56
+    "start": 1536690063,
+    "end": 1536690117,
+    "total": 54
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285535,
-    "end": 1537285592,
-    "total": 57
+    "start": 1536689869,
+    "end": 1536689923,
+    "total": 54
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285073,
-    "end": 1537285139,
-    "total": 66
+    "start": 1536690282,
+    "end": 1536690351,
+    "total": 69
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_2_a.rb": {
-    "start": 1537285901,
-    "end": 1537285967,
-    "total": 66
+    "start": 1536689648,
+    "end": 1536689705,
+    "total": 57
   },
   "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_3_b.rb": {
-    "start": 1537285513,
-    "end": 1537285579,
-    "total": 66
-  },
-  "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_4_a.rb": {
-    "start": 1537285555,
-    "end": 1537285615,
-    "total": 60
-  },
-  "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_5_a.rb": {
-    "start": 1537285988,
-    "end": 1537286054,
-    "total": 66
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537286029,
-    "end": 1537286084,
-    "total": 55
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285953,
-    "end": 1537286008,
-    "total": 55
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285201,
-    "end": 1537285261,
-    "total": 60
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285336,
-    "end": 1537285389,
-    "total": 53
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285091,
-    "end": 1537285141,
-    "total": 50
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285188,
-    "end": 1537285267,
-    "total": 79
-  },
-  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285301,
-    "end": 1537285363,
+    "start": 1536689666,
+    "end": 1536689728,
     "total": 62
   },
+  "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_4_a.rb": {
+    "start": 1536689615,
+    "end": 1536689680,
+    "total": 65
+  },
+  "ci_test_files/doe_test_bldg_hospital-90.1_2013-ashrae_169_2006_5_a.rb": {
+    "start": 1536690905,
+    "end": 1536690964,
+    "total": 59
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536690181,
+    "end": 1536690230,
+    "total": 49
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536690233,
+    "end": 1536690286,
+    "total": 53
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536690056,
+    "end": 1536690122,
+    "total": 66
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536690856,
+    "end": 1536690908,
+    "total": 52
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536690727,
+    "end": 1536690784,
+    "total": 57
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536690780,
+    "end": 1536690853,
+    "total": 73
+  },
+  "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536689599,
+    "end": 1536689655,
+    "total": 56
+  },
   "ci_test_files/doe_test_bldg_hospital-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285194,
-    "end": 1537285249,
-    "total": 55
+    "start": 1536689702,
+    "end": 1536689764,
+    "total": 62
   },
   "ci_test_files/doe_test_bldg_large_hotel-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285326,
-    "end": 1537285360,
-    "total": 34
+    "start": 1536689520,
+    "end": 1536689556,
+    "total": 36
   },
   "ci_test_files/doe_test_bldg_large_hotel-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285247,
-    "end": 1537285282,
+    "start": 1536689588,
+    "end": 1536689623,
     "total": 35
   },
   "ci_test_files/doe_test_bldg_large_hotel-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285521,
-    "end": 1537285554,
-    "total": 33
+    "start": 1536689668,
+    "end": 1536689699,
+    "total": 31
   },
   "ci_test_files/doe_test_bldg_large_hotel-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285273,
-    "end": 1537285313,
-    "total": 40
+    "start": 1536689432,
+    "end": 1536689469,
+    "total": 37
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285083,
-    "end": 1537285114,
+    "start": 1536691030,
+    "end": 1536691061,
     "total": 31
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285828,
-    "end": 1537285856,
-    "total": 28
+    "start": 1536689655,
+    "end": 1536689684,
+    "total": 29
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285042,
-    "end": 1537285080,
-    "total": 38
+    "start": 1536690750,
+    "end": 1536690785,
+    "total": 35
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537284874,
-    "end": 1537284910,
-    "total": 36
+    "start": 1536689432,
+    "end": 1536689467,
+    "total": 35
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285143,
-    "end": 1537285173,
+    "start": 1536690206,
+    "end": 1536690236,
     "total": 30
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285512,
-    "end": 1537285549,
-    "total": 37
+    "start": 1536690386,
+    "end": 1536690417,
+    "total": 31
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537284920,
-    "end": 1537284954,
-    "total": 34
+    "start": 1536689474,
+    "end": 1536689507,
+    "total": 33
   },
   "ci_test_files/doe_test_bldg_large_hotel-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285783,
-    "end": 1537285828,
-    "total": 45
+    "start": 1536690598,
+    "end": 1536690634,
+    "total": 36
   },
   "ci_test_files/doe_test_bldg_large_office-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285406,
-    "end": 1537285438,
-    "total": 32
-  },
-  "ci_test_files/doe_test_bldg_large_office-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285911,
-    "end": 1537285941,
+    "start": 1536690967,
+    "end": 1536690997,
     "total": 30
   },
+  "ci_test_files/doe_test_bldg_large_office-90.1_2010-ashrae_169_2006_3_b.rb": {
+    "start": 1536690201,
+    "end": 1536690236,
+    "total": 35
+  },
   "ci_test_files/doe_test_bldg_large_office-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537284974,
-    "end": 1537285013,
-    "total": 39
+    "start": 1536689461,
+    "end": 1536689496,
+    "total": 35
   },
   "ci_test_files/doe_test_bldg_large_office-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537284985,
-    "end": 1537285026,
-    "total": 41
+    "start": 1536690409,
+    "end": 1536690445,
+    "total": 36
   },
   "ci_test_files/doe_test_bldg_large_office-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285812,
-    "end": 1537285832,
-    "total": 20
+    "start": 1536690823,
+    "end": 1536690842,
+    "total": 19
   },
   "ci_test_files/doe_test_bldg_large_office-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285301,
-    "end": 1537285321,
-    "total": 20
+    "start": 1536689647,
+    "end": 1536689668,
+    "total": 21
   },
   "ci_test_files/doe_test_bldg_large_office-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537284943,
-    "end": 1537284964,
+    "start": 1536689490,
+    "end": 1536689511,
     "total": 21
   },
   "ci_test_files/doe_test_bldg_large_office-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285519,
-    "end": 1537285543,
-    "total": 24
+    "start": 1536690836,
+    "end": 1536690856,
+    "total": 20
   },
   "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285977,
-    "end": 1537285997,
-    "total": 20
-  },
-  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285783,
-    "end": 1537285807,
-    "total": 24
-  },
-  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285159,
-    "end": 1537285182,
-    "total": 23
-  },
-  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285801,
-    "end": 1537285821,
-    "total": 20
-  },
-  "ci_test_files/doe_test_bldg_medium_office-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537284821,
-    "end": 1537284842,
+    "start": 1536689824,
+    "end": 1536689845,
     "total": 21
   },
+  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536690873,
+    "end": 1536690892,
+    "total": 19
+  },
+  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536690920,
+    "end": 1536690941,
+    "total": 21
+  },
+  "ci_test_files/doe_test_bldg_large_office-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
+    "start": 1536690998,
+    "end": 1536691019,
+    "total": 21
+  },
+  "ci_test_files/doe_test_bldg_medium_office-90.1_2010-ashrae_169_2006_2_a.rb": {
+    "start": 1536690692,
+    "end": 1536690710,
+    "total": 18
+  },
   "ci_test_files/doe_test_bldg_medium_office-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285779,
-    "end": 1537285800,
+    "start": 1536689432,
+    "end": 1536689453,
     "total": 21
   },
   "ci_test_files/doe_test_bldg_medium_office-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285795,
-    "end": 1537285816,
+    "start": 1536690004,
+    "end": 1536690025,
     "total": 21
   },
   "ci_test_files/doe_test_bldg_medium_office-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285762,
-    "end": 1537285784,
-    "total": 22
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285088,
-    "end": 1537285111,
-    "total": 23
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285849,
-    "end": 1537285872,
-    "total": 23
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537284920,
-    "end": 1537284938,
-    "total": 18
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285360,
-    "end": 1537285380,
-    "total": 20
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285382,
-    "end": 1537285407,
-    "total": 25
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285123,
-    "end": 1537285147,
-    "total": 24
-  },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285271,
-    "end": 1537285290,
+    "start": 1536690154,
+    "end": 1536690173,
     "total": 19
   },
-  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285966,
-    "end": 1537285988,
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536689494,
+    "end": 1536689516,
     "total": 22
   },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536691010,
+    "end": 1536691030,
+    "total": 20
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536689432,
+    "end": 1536689452,
+    "total": 20
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536690058,
+    "end": 1536690082,
+    "total": 24
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536689491,
+    "end": 1536689513,
+    "total": 22
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536689713,
+    "end": 1536689739,
+    "total": 26
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536689488,
+    "end": 1536689510,
+    "total": 22
+  },
+  "ci_test_files/doe_test_bldg_medium_office-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
+    "start": 1536690998,
+    "end": 1536691022,
+    "total": 24
+  },
   "ci_test_files/doe_test_bldg_midrise_apartment-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285615,
-    "end": 1537285648,
-    "total": 33
+    "start": 1536689876,
+    "end": 1536689908,
+    "total": 32
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285209,
-    "end": 1537285247,
-    "total": 38
+    "start": 1536689525,
+    "end": 1536689558,
+    "total": 33
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285793,
-    "end": 1537285827,
+    "start": 1536690039,
+    "end": 1536690073,
     "total": 34
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537284873,
-    "end": 1537284910,
-    "total": 37
+    "start": 1536690869,
+    "end": 1536690905,
+    "total": 36
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537284954,
-    "end": 1537284989,
-    "total": 35
+    "start": 1536690647,
+    "end": 1536690680,
+    "total": 33
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285267,
-    "end": 1537285300,
+    "start": 1536690082,
+    "end": 1536690115,
     "total": 33
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537286047,
-    "end": 1537286082,
-    "total": 35
+    "start": 1536690661,
+    "end": 1536690690,
+    "total": 29
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285060,
-    "end": 1537285093,
-    "total": 33
+    "start": 1536691002,
+    "end": 1536691033,
+    "total": 31
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285827,
-    "end": 1537285861,
-    "total": 34
+    "start": 1536689806,
+    "end": 1536689839,
+    "total": 33
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285692,
-    "end": 1537285726,
+    "start": 1536690943,
+    "end": 1536690977,
     "total": 34
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285353,
-    "end": 1537285389,
-    "total": 36
+    "start": 1536691019,
+    "end": 1536691053,
+    "total": 34
   },
   "ci_test_files/doe_test_bldg_midrise_apartment-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285823,
-    "end": 1537285858,
-    "total": 35
+    "start": 1536689884,
+    "end": 1536689918,
+    "total": 34
   },
   "ci_test_files/doe_test_bldg_outpatient-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537284964,
-    "end": 1537285067,
-    "total": 103
+    "start": 1536689501,
+    "end": 1536689598,
+    "total": 97
   },
   "ci_test_files/doe_test_bldg_outpatient-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537284928,
-    "end": 1537285032,
-    "total": 104
+    "start": 1536689728,
+    "end": 1536689838,
+    "total": 110
   },
   "ci_test_files/doe_test_bldg_outpatient-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537284916,
-    "end": 1537285036,
-    "total": 120
+    "start": 1536690723,
+    "end": 1536690821,
+    "total": 98
   },
   "ci_test_files/doe_test_bldg_outpatient-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285115,
-    "end": 1537285220,
-    "total": 105
-  },
-  "ci_test_files/doe_test_bldg_outpatient-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537284821,
-    "end": 1537284914,
+    "start": 1536690723,
+    "end": 1536690816,
     "total": 93
   },
+  "ci_test_files/doe_test_bldg_outpatient-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536691019,
+    "end": 1536691093,
+    "total": 74
+  },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285383,
-    "end": 1537285463,
-    "total": 80
+    "start": 1536689793,
+    "end": 1536689884,
+    "total": 91
   },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537284905,
-    "end": 1537284990,
-    "total": 85
+    "start": 1536690445,
+    "end": 1536690532,
+    "total": 87
   },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537286042,
-    "end": 1537286131,
-    "total": 89
-  },
-  "ci_test_files/doe_test_bldg_outpatient-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285995,
-    "end": 1537286087,
+    "start": 1536690942,
+    "end": 1536691034,
     "total": 92
   },
+  "ci_test_files/doe_test_bldg_outpatient-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536689488,
+    "end": 1536689571,
+    "total": 83
+  },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285013,
-    "end": 1537285103,
-    "total": 90
+    "start": 1536689702,
+    "end": 1536689781,
+    "total": 79
   },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537286084,
-    "end": 1537286157,
-    "total": 73
+    "start": 1536690294,
+    "end": 1536690372,
+    "total": 78
   },
   "ci_test_files/doe_test_bldg_outpatient-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285907,
-    "end": 1537285995,
-    "total": 88
+    "start": 1536689433,
+    "end": 1536689515,
+    "total": 82
   },
   "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285089,
-    "end": 1537285123,
-    "total": 34
+    "start": 1536689768,
+    "end": 1536689799,
+    "total": 31
   },
   "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285235,
-    "end": 1537285270,
-    "total": 35
-  },
-  "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285591,
-    "end": 1537285625,
-    "total": 34
-  },
-  "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537286087,
-    "end": 1537286122,
-    "total": 35
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285470,
-    "end": 1537285498,
-    "total": 28
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285754,
-    "end": 1537285782,
-    "total": 28
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285261,
-    "end": 1537285291,
-    "total": 30
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537286027,
-    "end": 1537286055,
-    "total": 28
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285681,
-    "end": 1537285709,
-    "total": 28
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285565,
-    "end": 1537285597,
-    "total": 32
-  },
-  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537284821,
-    "end": 1537284854,
+    "start": 1536689485,
+    "end": 1536689518,
     "total": 33
   },
+  "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_4_a.rb": {
+    "start": 1536690476,
+    "end": 1536690505,
+    "total": 29
+  },
+  "ci_test_files/doe_test_bldg_primary_school-90.1_2010-ashrae_169_2006_5_a.rb": {
+    "start": 1536689516,
+    "end": 1536689547,
+    "total": 31
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536690853,
+    "end": 1536690883,
+    "total": 30
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536690122,
+    "end": 1536690157,
+    "total": 35
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536690570,
+    "end": 1536690598,
+    "total": 28
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536689579,
+    "end": 1536689608,
+    "total": 29
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536690047,
+    "end": 1536690078,
+    "total": 31
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536689989,
+    "end": 1536690020,
+    "total": 31
+  },
+  "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536690617,
+    "end": 1536690647,
+    "total": 30
+  },
   "ci_test_files/doe_test_bldg_primary_school-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537284854,
-    "end": 1537284881,
-    "total": 27
+    "start": 1536690038,
+    "end": 1536690068,
+    "total": 30
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285828,
-    "end": 1537285842,
+    "start": 1536689453,
+    "end": 1536689467,
     "total": 14
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285580,
-    "end": 1537285599,
-    "total": 19
+    "start": 1536689816,
+    "end": 1536689833,
+    "total": 17
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537286019,
-    "end": 1537286037,
-    "total": 18
+    "start": 1536690175,
+    "end": 1536690188,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537284882,
-    "end": 1537284896,
-    "total": 14
+    "start": 1536690690,
+    "end": 1536690703,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537284866,
-    "end": 1537284882,
-    "total": 16
+    "start": 1536689991,
+    "end": 1536690005,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537284821,
-    "end": 1537284838,
+    "start": 1536690068,
+    "end": 1536690085,
     "total": 17
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285763,
-    "end": 1537285779,
-    "total": 16
-  },
-  "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537284855,
-    "end": 1537284869,
-    "total": 14
-  },
-  "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285553,
-    "end": 1537285566,
+    "start": 1536690683,
+    "end": 1536690696,
     "total": 13
   },
+  "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536690467,
+    "end": 1536690482,
+    "total": 15
+  },
+  "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536690351,
+    "end": 1536690367,
+    "total": 16
+  },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285766,
-    "end": 1537285780,
-    "total": 14
+    "start": 1536690206,
+    "end": 1536690218,
+    "total": 12
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285113,
-    "end": 1537285127,
-    "total": 14
+    "start": 1536689945,
+    "end": 1536689958,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_quick_service_restaurant-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285746,
-    "end": 1537285760,
-    "total": 14
+    "start": 1536689513,
+    "end": 1536689526,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_retail_standalone-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285751,
-    "end": 1537285766,
-    "total": 15
+    "start": 1536691020,
+    "end": 1536691033,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_retail_standalone-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285565,
-    "end": 1537285580,
-    "total": 15
+    "start": 1536690572,
+    "end": 1536690585,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_retail_standalone-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285532,
-    "end": 1537285547,
+    "start": 1536690236,
+    "end": 1536690251,
     "total": 15
   },
   "ci_test_files/doe_test_bldg_retail_standalone-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537284866,
-    "end": 1537284883,
-    "total": 17
+    "start": 1536690921,
+    "end": 1536690936,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285291,
-    "end": 1537285305,
-    "total": 14
+    "start": 1536689720,
+    "end": 1536689731,
+    "total": 11
   },
   "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285313,
-    "end": 1537285326,
-    "total": 13
+    "start": 1536689433,
+    "end": 1536689447,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285005,
-    "end": 1537285018,
+    "start": 1536690604,
+    "end": 1536690617,
     "total": 13
   },
   "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285322,
-    "end": 1537285336,
-    "total": 14
-  },
-  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285029,
-    "end": 1537285045,
-    "total": 16
-  },
-  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285872,
-    "end": 1537285886,
-    "total": 14
-  },
-  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285995,
-    "end": 1537286011,
-    "total": 16
-  },
-  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285861,
-    "end": 1537285874,
+    "start": 1536689863,
+    "end": 1536689876,
     "total": 13
   },
+  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
+    "start": 1536689518,
+    "end": 1536689529,
+    "total": 11
+  },
+  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536690655,
+    "end": 1536690668,
+    "total": 13
+  },
+  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536689432,
+    "end": 1536689444,
+    "total": 12
+  },
+  "ci_test_files/doe_test_bldg_retail_standalone-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
+    "start": 1536690964,
+    "end": 1536690976,
+    "total": 12
+  },
   "ci_test_files/doe_test_bldg_retail_stripmall-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537284873,
-    "end": 1537284898,
+    "start": 1536690263,
+    "end": 1536690288,
     "total": 25
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285182,
-    "end": 1537285208,
-    "total": 26
+    "start": 1536690696,
+    "end": 1536690720,
+    "total": 24
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285392,
-    "end": 1537285419,
-    "total": 27
+    "start": 1536690359,
+    "end": 1536690383,
+    "total": 24
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285893,
-    "end": 1537285923,
-    "total": 30
-  },
-  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285286,
-    "end": 1537285303,
-    "total": 17
-  },
-  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285982,
-    "end": 1537286002,
+    "start": 1536690869,
+    "end": 1536690889,
     "total": 20
   },
-  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285842,
-    "end": 1537285859,
+  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536690704,
+    "end": 1536690719,
+    "total": 15
+  },
+  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536690533,
+    "end": 1536690550,
     "total": 17
   },
+  "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536689773,
+    "end": 1536689789,
+    "total": 16
+  },
   "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285141,
-    "end": 1537285159,
+    "start": 1536690245,
+    "end": 1536690263,
     "total": 18
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285959,
-    "end": 1537285974,
-    "total": 15
+    "start": 1536690437,
+    "end": 1536690453,
+    "total": 16
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537286054,
-    "end": 1537286073,
-    "total": 19
+    "start": 1536689698,
+    "end": 1536689714,
+    "total": 16
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285240,
-    "end": 1537285260,
-    "total": 20
+    "start": 1536691014,
+    "end": 1536691030,
+    "total": 16
   },
   "ci_test_files/doe_test_bldg_retail_stripmall-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537286000,
-    "end": 1537286017,
+    "start": 1536690978,
+    "end": 1536690995,
     "total": 17
   },
   "ci_test_files/doe_test_bldg_secondary_school-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285140,
-    "end": 1537285194,
-    "total": 54
+    "start": 1536689714,
+    "end": 1536689767,
+    "total": 53
   },
   "ci_test_files/doe_test_bldg_secondary_school-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285832,
-    "end": 1537285893,
+    "start": 1536690909,
+    "end": 1536690970,
     "total": 61
   },
   "ci_test_files/doe_test_bldg_secondary_school-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285846,
-    "end": 1537285907,
-    "total": 61
+    "start": 1536690924,
+    "end": 1536690998,
+    "total": 74
   },
   "ci_test_files/doe_test_bldg_secondary_school-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285380,
-    "end": 1537285517,
-    "total": 137
+    "start": 1536690821,
+    "end": 1536690943,
+    "total": 122
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285603,
-    "end": 1537285648,
-    "total": 45
+    "start": 1536689791,
+    "end": 1536689840,
+    "total": 49
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285064,
-    "end": 1537285115,
-    "total": 51
+    "start": 1536689533,
+    "end": 1536689587,
+    "total": 54
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285328,
-    "end": 1537285371,
-    "total": 43
+    "start": 1536689918,
+    "end": 1536689957,
+    "total": 39
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537284837,
-    "end": 1537284881,
+    "start": 1536690683,
+    "end": 1536690727,
     "total": 44
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537286073,
-    "end": 1537286114,
-    "total": 41
+    "start": 1536689669,
+    "end": 1536689713,
+    "total": 44
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285003,
-    "end": 1537285045,
+    "start": 1536690605,
+    "end": 1536690647,
     "total": 42
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285760,
-    "end": 1537285801,
-    "total": 41
+    "start": 1536689781,
+    "end": 1536689825,
+    "total": 44
   },
   "ci_test_files/doe_test_bldg_secondary_school-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285320,
-    "end": 1537285358,
-    "total": 38
+    "start": 1536690684,
+    "end": 1536690723,
+    "total": 39
   },
   "ci_test_files/doe_test_bldg_small_hotel-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285547,
-    "end": 1537285603,
-    "total": 56
+    "start": 1536690453,
+    "end": 1536690514,
+    "total": 61
   },
   "ci_test_files/doe_test_bldg_small_hotel-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285737,
-    "end": 1537285793,
-    "total": 56
-  },
-  "ci_test_files/doe_test_bldg_small_hotel-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285032,
-    "end": 1537285091,
+    "start": 1536689432,
+    "end": 1536689491,
     "total": 59
   },
+  "ci_test_files/doe_test_bldg_small_hotel-90.1_2010-ashrae_169_2006_4_a.rb": {
+    "start": 1536690783,
+    "end": 1536690840,
+    "total": 57
+  },
   "ci_test_files/doe_test_bldg_small_hotel-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285062,
-    "end": 1537285120,
-    "total": 58
+    "start": 1536690621,
+    "end": 1536690682,
+    "total": 61
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285807,
-    "end": 1537285881,
+    "start": 1536689899,
+    "end": 1536689973,
     "total": 74
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537284842,
-    "end": 1537284915,
-    "total": 73
+    "start": 1536689591,
+    "end": 1536689658,
+    "total": 67
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285215,
-    "end": 1537285281,
-    "total": 66
+    "start": 1536690188,
+    "end": 1536690255,
+    "total": 67
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285717,
-    "end": 1537285788,
-    "total": 71
+    "start": 1536690370,
+    "end": 1536690448,
+    "total": 78
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285473,
-    "end": 1537285542,
-    "total": 69
+    "start": 1536690986,
+    "end": 1536691048,
+    "total": 62
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537286075,
-    "end": 1537286133,
-    "total": 58
+    "start": 1536690892,
+    "end": 1536690967,
+    "total": 75
   },
   "ci_test_files/doe_test_bldg_small_hotel-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285699,
-    "end": 1537285760,
-    "total": 61
-  },
-  "ci_test_files/doe_test_bldg_small_hotel-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537284956,
-    "end": 1537285025,
+    "start": 1536690872,
+    "end": 1536690941,
     "total": 69
   },
+  "ci_test_files/doe_test_bldg_small_hotel-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
+    "start": 1536689971,
+    "end": 1536690038,
+    "total": 67
+  },
   "ci_test_files/doe_test_bldg_small_office-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537284989,
-    "end": 1537285005,
-    "total": 16
+    "start": 1536690668,
+    "end": 1536690683,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_small_office-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537284910,
-    "end": 1537284928,
-    "total": 18
+    "start": 1536690529,
+    "end": 1536690544,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_small_office-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285517,
-    "end": 1537285535,
-    "total": 18
+    "start": 1536689931,
+    "end": 1536689945,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_small_office-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285725,
-    "end": 1537285740,
-    "total": 15
+    "start": 1536690818,
+    "end": 1536690832,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285633,
-    "end": 1537285649,
-    "total": 16
-  },
-  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537284914,
-    "end": 1537284929,
+    "start": 1536690448,
+    "end": 1536690463,
     "total": 15
   },
-  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537284928,
-    "end": 1537284945,
-    "total": 17
-  },
-  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285288,
-    "end": 1537285301,
+  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536691028,
+    "end": 1536691041,
     "total": 13
   },
+  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536690196,
+    "end": 1536690211,
+    "total": 15
+  },
+  "ci_test_files/doe_test_bldg_small_office-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536689575,
+    "end": 1536689591,
+    "total": 16
+  },
   "ci_test_files/doe_test_bldg_small_office-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285297,
-    "end": 1537285313,
+    "start": 1536690334,
+    "end": 1536690350,
     "total": 16
   },
   "ci_test_files/doe_test_bldg_small_office-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285147,
-    "end": 1537285161,
-    "total": 14
-  },
-  "ci_test_files/doe_test_bldg_small_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537284995,
-    "end": 1537285008,
+    "start": 1536689616,
+    "end": 1536689629,
     "total": 13
   },
+  "ci_test_files/doe_test_bldg_small_office-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536690783,
+    "end": 1536690799,
+    "total": 16
+  },
   "ci_test_files/doe_test_bldg_small_office-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285303,
-    "end": 1537285320,
-    "total": 17
+    "start": 1536690719,
+    "end": 1536690735,
+    "total": 16
   },
   "ci_test_files/doe_test_bldg_super_market-90.1_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285313,
-    "end": 1537285346,
-    "total": 33
+    "start": 1536689942,
+    "end": 1536689971,
+    "total": 29
   },
   "ci_test_files/doe_test_bldg_super_market-90.1_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537286037,
-    "end": 1537286068,
-    "total": 31
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285162,
-    "end": 1537285195,
+    "start": 1536690576,
+    "end": 1536690609,
     "total": 33
   },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536691022,
+    "end": 1536691051,
+    "total": 29
+  },
   "ci_test_files/doe_test_bldg_super_market-90.1_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285123,
-    "end": 1537285151,
-    "total": 28
+    "start": 1536689884,
+    "end": 1536689916,
+    "total": 32
   },
   "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_2_a.rb": {
-    "start": 1537285585,
-    "end": 1537285614,
-    "total": 29
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_3_b.rb": {
-    "start": 1537285389,
-    "end": 1537285425,
-    "total": 36
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_4_a.rb": {
-    "start": 1537286035,
-    "end": 1537286070,
-    "total": 35
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_5_a.rb": {
-    "start": 1537284888,
-    "end": 1537284920,
-    "total": 32
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285013,
-    "end": 1537285049,
-    "total": 36
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285859,
-    "end": 1537285898,
-    "total": 39
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537285064,
-    "end": 1537285099,
-    "total": 35
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285924,
-    "end": 1537285959,
-    "total": 35
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_2_a.rb": {
-    "start": 1537285471,
-    "end": 1537285499,
-    "total": 28
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_3_b.rb": {
-    "start": 1537285345,
-    "end": 1537285382,
-    "total": 37
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_4_a.rb": {
-    "start": 1537284878,
-    "end": 1537284908,
-    "total": 30
-  },
-  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_5_a.rb": {
-    "start": 1537285242,
-    "end": 1537285271,
-    "total": 29
-  },
-  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285709,
-    "end": 1537285746,
-    "total": 37
-  },
-  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285828,
-    "end": 1537285860,
-    "total": 32
-  },
-  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285026,
-    "end": 1537285055,
-    "total": 29
-  },
-  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537285166,
-    "end": 1537285197,
+    "start": 1536690994,
+    "end": 1536691025,
     "total": 31
   },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_3_b.rb": {
+    "start": 1536690970,
+    "end": 1536691002,
+    "total": 32
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_4_a.rb": {
+    "start": 1536689448,
+    "end": 1536689476,
+    "total": 28
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2007-ashrae_169_2006_5_a.rb": {
+    "start": 1536689464,
+    "end": 1536689494,
+    "total": 30
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_2_a.rb": {
+    "start": 1536690263,
+    "end": 1536690296,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_3_b.rb": {
+    "start": 1536689764,
+    "end": 1536689793,
+    "total": 29
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_4_a.rb": {
+    "start": 1536690345,
+    "end": 1536690378,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2010-ashrae_169_2006_5_a.rb": {
+    "start": 1536689485,
+    "end": 1536689518,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_2_a.rb": {
+    "start": 1536689958,
+    "end": 1536689991,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_3_b.rb": {
+    "start": 1536689432,
+    "end": 1536689465,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_4_a.rb": {
+    "start": 1536690020,
+    "end": 1536690056,
+    "total": 36
+  },
+  "ci_test_files/doe_test_bldg_super_market-90.1_2013-ashrae_169_2006_5_a.rb": {
+    "start": 1536690482,
+    "end": 1536690515,
+    "total": 33
+  },
+  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
+    "start": 1536689467,
+    "end": 1536689496,
+    "total": 29
+  },
+  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
+    "start": 1536689467,
+    "end": 1536689497,
+    "total": 30
+  },
+  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
+    "start": 1536689937,
+    "end": 1536689967,
+    "total": 30
+  },
+  "ci_test_files/doe_test_bldg_super_market-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
+    "start": 1536690588,
+    "end": 1536690618,
+    "total": 30
+  },
   "ci_test_files/doe_test_bldg_super_market-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537284989,
-    "end": 1537285024,
-    "total": 35
+    "start": 1536689432,
+    "end": 1536689465,
+    "total": 33
   },
   "ci_test_files/doe_test_bldg_super_market-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285453,
-    "end": 1537285482,
+    "start": 1536690786,
+    "end": 1536690815,
     "total": 29
   },
   "ci_test_files/doe_test_bldg_super_market-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537284821,
-    "end": 1537284854,
-    "total": 33
+    "start": 1536689680,
+    "end": 1536689709,
+    "total": 29
   },
   "ci_test_files/doe_test_bldg_super_market-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537284958,
-    "end": 1537284989,
-    "total": 31
+    "start": 1536690402,
+    "end": 1536690432,
+    "total": 30
   },
   "ci_test_files/doe_test_bldg_warehouse-90.1_2010-ashrae_169_2006_2_a.rb": {
-    "start": 1537285151,
-    "end": 1537285167,
-    "total": 16
+    "start": 1536690889,
+    "end": 1536690907,
+    "total": 18
   },
   "ci_test_files/doe_test_bldg_warehouse-90.1_2010-ashrae_169_2006_3_b.rb": {
-    "start": 1537285171,
-    "end": 1537285188,
-    "total": 17
+    "start": 1536690769,
+    "end": 1536690783,
+    "total": 14
   },
   "ci_test_files/doe_test_bldg_warehouse-90.1_2010-ashrae_169_2006_4_a.rb": {
-    "start": 1537286008,
-    "end": 1537286023,
+    "start": 1536689469,
+    "end": 1536689484,
     "total": 15
   },
   "ci_test_files/doe_test_bldg_warehouse-90.1_2010-ashrae_169_2006_5_a.rb": {
-    "start": 1537285208,
-    "end": 1537285222,
-    "total": 14
+    "start": 1536689519,
+    "end": 1536689534,
+    "total": 15
   },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_1980_2004-ashrae_169_2006_2_a.rb": {
-    "start": 1537285724,
-    "end": 1537285737,
+    "start": 1536690081,
+    "end": 1536690094,
     "total": 13
   },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_1980_2004-ashrae_169_2006_3_b.rb": {
-    "start": 1537285498,
-    "end": 1537285513,
-    "total": 15
+    "start": 1536690908,
+    "end": 1536690920,
+    "total": 12
   },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_1980_2004-ashrae_169_2006_4_a.rb": {
-    "start": 1537285273,
-    "end": 1537285288,
-    "total": 15
+    "start": 1536689707,
+    "end": 1536689718,
+    "total": 11
   },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_1980_2004-ashrae_169_2006_5_a.rb": {
-    "start": 1537284838,
-    "end": 1537284854,
-    "total": 16
+    "start": 1536689718,
+    "end": 1536689731,
+    "total": 13
   },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_2_a.rb": {
-    "start": 1537285578,
-    "end": 1537285591,
-    "total": 13
-  },
-  "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
-    "start": 1537285815,
-    "end": 1537285828,
-    "total": 13
-  },
-  "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
-    "start": 1537285111,
-    "end": 1537285127,
+    "start": 1536689686,
+    "end": 1536689702,
     "total": 16
   },
+  "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_3_b.rb": {
+    "start": 1536690296,
+    "end": 1536690307,
+    "total": 11
+  },
+  "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_4_a.rb": {
+    "start": 1536690220,
+    "end": 1536690233,
+    "total": 13
+  },
   "ci_test_files/doe_test_bldg_warehouse-doe_ref_pre_1980-ashrae_169_2006_5_a.rb": {
-    "start": 1537285590,
-    "end": 1537285604,
-    "total": 14
+    "start": 1536689564,
+    "end": 1536689577,
+    "total": 13
   },
   "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_electric.rb": {
-    "start": 1537285189,
-    "end": 1537285215,
-    "total": 26
-  },
-  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_gas.rb": {
-    "start": 1537285672,
-    "end": 1537285692,
+    "start": 1536691827,
+    "end": 1536691847,
     "total": 20
   },
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_gas.rb": {
+    "start": 1536691825,
+    "end": 1536691846,
+    "total": 21
+  },
   "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_electric.rb": {
-    "start": 1537286012,
-    "end": 1537286040,
-    "total": 28
+    "start": 1536691932,
+    "end": 1536691957,
+    "total": 25
   },
   "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_gas.rb": {
-    "start": 1537285368,
-    "end": 1537285398,
-    "total": 30
+    "start": 1536691928,
+    "end": 1536691953,
+    "total": 25
+  },
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_electric.rb": {
+    "start": 1536691825,
+    "end": 1536691858,
+    "total": 33
+  },
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_gas.rb": {
+    "start": 1536691825,
+    "end": 1536691858,
+    "total": 33
   },
   "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_electric.rb": {
-    "start": 1537285049,
-    "end": 1537285322,
-    "total": 273
+    "start": 1536691992,
+    "end": 1536692234,
+    "total": 242
   },
   "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_gas.rb": {
-    "start": 1537285141,
-    "end": 1537285438,
+    "start": 1536692003,
+    "end": 1536692300,
     "total": 297
   },
   "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_electric.rb": {
-    "start": 1537285099,
-    "end": 1537285555,
-    "total": 456
+    "start": 1536692372,
+    "end": 1536692757,
+    "total": 385
   },
   "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_gas.rb": {
-    "start": 1537284883,
-    "end": 1537285436,
-    "total": 553
+    "start": 1536692215,
+    "end": 1536692684,
+    "total": 469
+  },
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_electric.rb": {
+    "start": 1536692310,
+    "end": 1536692727,
+    "total": 417
+  },
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_gas.rb": {
+    "start": 1536691997,
+    "end": 1536692524,
+    "total": 527
   },
   "ci_test_files/test_necb_bldg_Hospital_NECB2011_electric.rb": {
-    "start": 1537284821,
-    "end": 1537285322,
-    "total": 501
+    "start": 1536691992,
+    "end": 1536692435,
+    "total": 443
   },
   "ci_test_files/test_necb_bldg_Hospital_NECB2011_gas.rb": {
-    "start": 1537284898,
-    "end": 1537285470,
-    "total": 572
+    "start": 1536691825,
+    "end": 1536692357,
+    "total": 532
   },
   "ci_test_files/test_necb_bldg_Hospital_NECB2015_electric.rb": {
-    "start": 1537285756,
-    "end": 1537286460,
-    "total": 704
+    "start": 1536691875,
+    "end": 1536692656,
+    "total": 781
   },
   "ci_test_files/test_necb_bldg_Hospital_NECB2015_gas.rb": {
-    "start": 1537285438,
-    "end": 1537286284,
-    "total": 846
+    "start": 1536691825,
+    "end": 1536692609,
+    "total": 784
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2017_electric.rb": {
+    "start": 1536691897,
+    "end": 1536692667,
+    "total": 770
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2017_gas.rb": {
+    "start": 1536691827,
+    "end": 1536692707,
+    "total": 880
   },
   "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_electric.rb": {
-    "start": 1537285604,
-    "end": 1537285705,
-    "total": 101
+    "start": 1536692379,
+    "end": 1536692482,
+    "total": 103
   },
   "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_gas.rb": {
-    "start": 1537285436,
-    "end": 1537285551,
-    "total": 115
+    "start": 1536691858,
+    "end": 1536691955,
+    "total": 97
   },
   "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_electric.rb": {
-    "start": 1537285816,
-    "end": 1537285960,
-    "total": 144
+    "start": 1536691825,
+    "end": 1536691974,
+    "total": 149
   },
   "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_gas.rb": {
-    "start": 1537284821,
-    "end": 1537284988,
-    "total": 167
+    "start": 1536691988,
+    "end": 1536692145,
+    "total": 157
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_electric.rb": {
+    "start": 1536691827,
+    "end": 1536691986,
+    "total": 159
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_gas.rb": {
+    "start": 1536692144,
+    "end": 1536692312,
+    "total": 168
   },
   "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_electric.rb": {
-    "start": 1537284898,
-    "end": 1537284958,
-    "total": 60
+    "start": 1536692145,
+    "end": 1536692197,
+    "total": 52
   },
   "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_gas.rb": {
-    "start": 1537285197,
-    "end": 1537285267,
-    "total": 70
+    "start": 1536691827,
+    "end": 1536691894,
+    "total": 67
   },
   "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_electric.rb": {
-    "start": 1537285144,
-    "end": 1537285242,
-    "total": 98
+    "start": 1536692330,
+    "end": 1536692427,
+    "total": 97
   },
   "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_gas.rb": {
-    "start": 1537285639,
-    "end": 1537285762,
-    "total": 123
+    "start": 1536692215,
+    "end": 1536692330,
+    "total": 115
+  },
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_electric.rb": {
+    "start": 1536691953,
+    "end": 1536692056,
+    "total": 103
+  },
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_gas.rb": {
+    "start": 1536691825,
+    "end": 1536691959,
+    "total": 134
   },
   "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_electric.rb": {
-    "start": 1537285968,
-    "end": 1537286019,
-    "total": 51
+    "start": 1536692266,
+    "end": 1536692310,
+    "total": 44
   },
   "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_gas.rb": {
-    "start": 1537285508,
-    "end": 1537285565,
-    "total": 57
+    "start": 1536691858,
+    "end": 1536691908,
+    "total": 50
   },
   "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_electric.rb": {
-    "start": 1537285784,
-    "end": 1537285858,
-    "total": 74
+    "start": 1536691825,
+    "end": 1536691897,
+    "total": 72
   },
   "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_gas.rb": {
-    "start": 1537284821,
-    "end": 1537284914,
-    "total": 93
+    "start": 1536692056,
+    "end": 1536692143,
+    "total": 87
+  },
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_electric.rb": {
+    "start": 1536692307,
+    "end": 1536692382,
+    "total": 75
+  },
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_gas.rb": {
+    "start": 1536692394,
+    "end": 1536692479,
+    "total": 85
   },
   "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_electric.rb": {
-    "start": 1537285905,
-    "end": 1537285966,
-    "total": 61
+    "start": 1536691934,
+    "end": 1536691992,
+    "total": 58
   },
   "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_gas.rb": {
-    "start": 1537285099,
-    "end": 1537285164,
-    "total": 65
+    "start": 1536691825,
+    "end": 1536691887,
+    "total": 62
   },
   "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_electric.rb": {
-    "start": 1537284989,
-    "end": 1537285088,
+    "start": 1536692326,
+    "end": 1536692425,
     "total": 99
   },
   "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_gas.rb": {
-    "start": 1537285027,
-    "end": 1537285147,
-    "total": 120
+    "start": 1536692037,
+    "end": 1536692144,
+    "total": 107
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_electric.rb": {
+    "start": 1536691887,
+    "end": 1536691992,
+    "total": 105
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_gas.rb": {
+    "start": 1536692262,
+    "end": 1536692387,
+    "total": 125
   },
   "ci_test_files/test_necb_bldg_Outpatient_NECB2011_electric.rb": {
-    "start": 1537285091,
-    "end": 1537285854,
-    "total": 763
+    "start": 1536691825,
+    "end": 1536692516,
+    "total": 691
   },
   "ci_test_files/test_necb_bldg_Outpatient_NECB2011_gas.rb": {
-    "start": 1537285407,
-    "end": 1537286253,
-    "total": 846
+    "start": 1536691992,
+    "end": 1536692791,
+    "total": 799
   },
   "ci_test_files/test_necb_bldg_Outpatient_NECB2015_electric.rb": {
-    "start": 1537285746,
-    "end": 1537286858,
-    "total": 1112
+    "start": 1536691847,
+    "end": 1536692955,
+    "total": 1108
   },
   "ci_test_files/test_necb_bldg_Outpatient_NECB2015_gas.rb": {
-    "start": 1537285093,
-    "end": 1537286464,
-    "total": 1371
+    "start": 1536691959,
+    "end": 1536693210,
+    "total": 1251
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_electric.rb": {
+    "start": 1536691825,
+    "end": 1536693049,
+    "total": 1224
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_gas.rb": {
+    "start": 1536691827,
+    "end": 1536693253,
+    "total": 1426
   },
   "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_electric.rb": {
-    "start": 1537284890,
-    "end": 1537285060,
-    "total": 170
+    "start": 1536691827,
+    "end": 1536691992,
+    "total": 165
   },
   "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_gas.rb": {
-    "start": 1537285967,
-    "end": 1537286139,
-    "total": 172
+    "start": 1536691929,
+    "end": 1536692087,
+    "total": 158
   },
   "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_electric.rb": {
-    "start": 1537285147,
-    "end": 1537285384,
-    "total": 237
+    "start": 1536692300,
+    "end": 1536692544,
+    "total": 244
   },
   "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_gas.rb": {
-    "start": 1537285966,
-    "end": 1537286203,
-    "total": 237
+    "start": 1536692085,
+    "end": 1536692336,
+    "total": 251
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_electric.rb": {
+    "start": 1536692087,
+    "end": 1536692379,
+    "total": 292
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_gas.rb": {
+    "start": 1536691986,
+    "end": 1536692266,
+    "total": 280
   },
   "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_electric.rb": {
-    "start": 1537284902,
-    "end": 1537284924,
-    "total": 22
+    "start": 1536692197,
+    "end": 1536692215,
+    "total": 18
   },
   "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_gas.rb": {
-    "start": 1537285305,
-    "end": 1537285327,
-    "total": 22
+    "start": 1536691825,
+    "end": 1536691845,
+    "total": 20
   },
   "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_electric.rb": {
-    "start": 1537286040,
-    "end": 1537286072,
-    "total": 32
+    "start": 1536691878,
+    "end": 1536691906,
+    "total": 28
   },
   "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_gas.rb": {
-    "start": 1537286011,
-    "end": 1537286044,
+    "start": 1536692362,
+    "end": 1536692394,
+    "total": 32
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_electric.rb": {
+    "start": 1536691955,
+    "end": 1536691988,
     "total": 33
   },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_gas.rb": {
+    "start": 1536692232,
+    "end": 1536692262,
+    "total": 30
+  },
   "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_electric.rb": {
-    "start": 1537284924,
-    "end": 1537284953,
-    "total": 29
+    "start": 1536692188,
+    "end": 1536692215,
+    "total": 27
   },
   "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_gas.rb": {
-    "start": 1537284953,
-    "end": 1537284990,
-    "total": 37
+    "start": 1536691906,
+    "end": 1536691934,
+    "total": 28
   },
   "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_electric.rb": {
-    "start": 1537285648,
-    "end": 1537285699,
-    "total": 51
+    "start": 1536691880,
+    "end": 1536691928,
+    "total": 48
   },
   "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_gas.rb": {
-    "start": 1537284938,
-    "end": 1537284985,
-    "total": 47
+    "start": 1536692143,
+    "end": 1536692188,
+    "total": 45
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_electric.rb": {
+    "start": 1536691845,
+    "end": 1536691891,
+    "total": 46
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_gas.rb": {
+    "start": 1536691827,
+    "end": 1536691880,
+    "total": 53
   },
   "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_electric.rb": {
-    "start": 1537285290,
-    "end": 1537285345,
-    "total": 55
+    "start": 1536691825,
+    "end": 1536691875,
+    "total": 50
   },
   "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_gas.rb": {
-    "start": 1537284990,
-    "end": 1537285043,
+    "start": 1536691825,
+    "end": 1536691878,
     "total": 53
   },
   "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_electric.rb": {
-    "start": 1537285644,
-    "end": 1537285727,
-    "total": 83
+    "start": 1536691867,
+    "end": 1536691953,
+    "total": 86
   },
   "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_gas.rb": {
-    "start": 1537285075,
-    "end": 1537285156,
-    "total": 81
+    "start": 1536691957,
+    "end": 1536692037,
+    "total": 80
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_electric.rb": {
+    "start": 1536691852,
+    "end": 1536691929,
+    "total": 77
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_gas.rb": {
+    "start": 1536691908,
+    "end": 1536692003,
+    "total": 95
   },
   "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_electric.rb": {
-    "start": 1537286002,
-    "end": 1537286386,
-    "total": 384
+    "start": 1536691825,
+    "end": 1536692232,
+    "total": 407
   },
   "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_gas.rb": {
-    "start": 1537285565,
-    "end": 1537286035,
-    "total": 470
+    "start": 1536691872,
+    "end": 1536692326,
+    "total": 454
   },
   "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_electric.rb": {
-    "start": 1537285473,
-    "end": 1537286047,
-    "total": 574
+    "start": 1536692336,
+    "end": 1536692829,
+    "total": 493
   },
   "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_gas.rb": {
-    "start": 1537285864,
-    "end": 1537286475,
-    "total": 611
+    "start": 1536692382,
+    "end": 1536692931,
+    "total": 549
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_electric.rb": {
+    "start": 1536691825,
+    "end": 1536692444,
+    "total": 619
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_gas.rb": {
+    "start": 1536692169,
+    "end": 1536692824,
+    "total": 655
   },
   "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_electric.rb": {
-    "start": 1537285681,
-    "end": 1537285954,
-    "total": 273
+    "start": 1536692312,
+    "end": 1536692544,
+    "total": 232
   },
   "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_gas.rb": {
-    "start": 1537285327,
-    "end": 1537285627,
-    "total": 300
+    "start": 1536691891,
+    "end": 1536692169,
+    "total": 278
   },
   "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_electric.rb": {
-    "start": 1537285542,
-    "end": 1537286000,
-    "total": 458
+    "start": 1536692234,
+    "end": 1536692625,
+    "total": 391
   },
   "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_gas.rb": {
-    "start": 1537285156,
-    "end": 1537285638,
+    "start": 1536691894,
+    "end": 1536692372,
+    "total": 478
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_electric.rb": {
+    "start": 1536691825,
+    "end": 1536692307,
     "total": 482
   },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_gas.rb": {
+    "start": 1536691825,
+    "end": 1536692362,
+    "total": 537
+  },
   "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_electric.rb": {
-    "start": 1537285614,
-    "end": 1537285640,
-    "total": 26
+    "start": 1536691866,
+    "end": 1536691891,
+    "total": 25
   },
   "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_gas.rb": {
-    "start": 1537285032,
-    "end": 1537285064,
-    "total": 32
+    "start": 1536691846,
+    "end": 1536691872,
+    "total": 26
   },
   "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_electric.rb": {
-    "start": 1537285798,
-    "end": 1537285844,
-    "total": 46
+    "start": 1536692049,
+    "end": 1536692085,
+    "total": 36
   },
   "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_gas.rb": {
-    "start": 1537286072,
-    "end": 1537286115,
-    "total": 43
+    "start": 1536691825,
+    "end": 1536691867,
+    "total": 42
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_electric.rb": {
+    "start": 1536692357,
+    "end": 1536692394,
+    "total": 37
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_gas.rb": {
+    "start": 1536692003,
+    "end": 1536692049,
+    "total": 46
   },
   "ci_test_files/test_necb_bldg_Warehouse_NECB2011_electric.rb": {
-    "start": 1537286084,
-    "end": 1537286115,
-    "total": 31
+    "start": 1536691825,
+    "end": 1536691852,
+    "total": 27
   },
   "ci_test_files/test_necb_bldg_Warehouse_NECB2011_gas.rb": {
-    "start": 1537285045,
-    "end": 1537285078,
-    "total": 33
+    "start": 1536691974,
+    "end": 1536692003,
+    "total": 29
   },
   "ci_test_files/test_necb_bldg_Warehouse_NECB2015_electric.rb": {
-    "start": 1537285554,
-    "end": 1537285591,
+    "start": 1536692387,
+    "end": 1536692424,
     "total": 37
   },
   "ci_test_files/test_necb_bldg_Warehouse_NECB2015_gas.rb": {
-    "start": 1537285078,
-    "end": 1537285123,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-electric.rb": {
-    "start": 1537285648,
-    "end": 1537285682,
-    "total": 34
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-hot_water.rb": {
-    "start": 1537284865,
-    "end": 1537284902,
-    "total": 37
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-electric.rb": {
-    "start": 1537285788,
-    "end": 1537285823,
-    "total": 35
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-hot_water.rb": {
-    "start": 1537285499,
-    "end": 1537285538,
-    "total": 39
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-electric.rb": {
-    "start": 1537285591,
-    "end": 1537285634,
-    "total": 43
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-hot_water.rb": {
-    "start": 1537285860,
-    "end": 1537285905,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-electric.rb": {
-    "start": 1537285637,
-    "end": 1537285681,
-    "total": 44
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-hot_water.rb": {
-    "start": 1537285097,
-    "end": 1537285141,
-    "total": 44
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-electric.rb": {
-    "start": 1537284821,
-    "end": 1537284855,
-    "total": 34
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-hot_water.rb": {
-    "start": 1537285959,
-    "end": 1537285995,
-    "total": 36
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-electric.rb": {
-    "start": 1537285780,
-    "end": 1537285815,
-    "total": 35
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-hot_water.rb": {
-    "start": 1537284959,
-    "end": 1537285000,
+    "start": 1536691825,
+    "end": 1536691866,
     "total": 41
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-electric.rb": {
-    "start": 1537285163,
-    "end": 1537285201,
-    "total": 38
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_electric.rb": {
+    "start": 1536691891,
+    "end": 1536691932,
+    "total": 41
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-hot_water.rb": {
-    "start": 1537284874,
-    "end": 1537284916,
-    "total": 42
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_gas.rb": {
+    "start": 1536691953,
+    "end": 1536691997,
+    "total": 44
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-electric.rb": {
-    "start": 1537285898,
-    "end": 1537285941,
-    "total": 43
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-electric.rb": {
+    "start": 1536689444,
+    "end": 1536689481,
+    "total": 37
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-hot_water.rb": {
-    "start": 1537286017,
-    "end": 1537286062,
-    "total": 45
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-hot_water.rb": {
+    "start": 1536690380,
+    "end": 1536690421,
+    "total": 41
   },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-electric.rb": {
-    "start": 1537285086,
-    "end": 1537285126,
-    "total": 40
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-electric.rb": {
+    "start": 1536690957,
+    "end": 1536690986,
+    "total": 29
   },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-hot_water.rb": {
-    "start": 1537284989,
-    "end": 1537285029,
-    "total": 40
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-electric.rb": {
-    "start": 1537285571,
-    "end": 1537285603,
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-hot_water.rb": {
+    "start": 1536690804,
+    "end": 1536690836,
     "total": 32
   },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-hot_water.rb": {
-    "start": 1537284821,
-    "end": 1537284866,
-    "total": 45
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-electric.rb": {
+    "start": 1536689608,
+    "end": 1536689649,
+    "total": 41
   },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-electric.rb": {
-    "start": 1537284881,
-    "end": 1537284920,
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-hot_water.rb": {
+    "start": 1536690306,
+    "end": 1536690345,
     "total": 39
   },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-electric.rb": {
+    "start": 1536689482,
+    "end": 1536689528,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-hot_water.rb": {
+    "start": 1536689717,
+    "end": 1536689760,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-electric.rb": {
+    "start": 1536689880,
+    "end": 1536689913,
+    "total": 33
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-hot_water.rb": {
+    "start": 1536689923,
+    "end": 1536689961,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-electric.rb": {
+    "start": 1536690941,
+    "end": 1536690975,
+    "total": 34
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-hot_water.rb": {
+    "start": 1536690838,
+    "end": 1536690873,
+    "total": 35
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-electric.rb": {
+    "start": 1536690258,
+    "end": 1536690292,
+    "total": 34
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-hot_water.rb": {
+    "start": 1536689825,
+    "end": 1536689869,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-electric.rb": {
+    "start": 1536690628,
+    "end": 1536690666,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-hot_water.rb": {
+    "start": 1536690554,
+    "end": 1536690603,
+    "total": 49
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-electric.rb": {
+    "start": 1536689845,
+    "end": 1536689880,
+    "total": 35
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-hot_water.rb": {
+    "start": 1536690979,
+    "end": 1536691015,
+    "total": 36
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-electric.rb": {
+    "start": 1536689954,
+    "end": 1536689990,
+    "total": 36
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-hot_water.rb": {
+    "start": 1536690421,
+    "end": 1536690459,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-electric.rb": {
+    "start": 1536690888,
+    "end": 1536690923,
+    "total": 35
+  },
   "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-hot_water.rb": {
-    "start": 1537285582,
-    "end": 1537285630,
-    "total": 48
+    "start": 1536690989,
+    "end": 1536691028,
+    "total": 39
   },
   "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-electric.rb": {
-    "start": 1537285024,
-    "end": 1537285064,
-    "total": 40
+    "start": 1536690640,
+    "end": 1536690684,
+    "total": 44
   },
   "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-hot_water.rb": {
-    "start": 1537284869,
-    "end": 1537284913,
+    "start": 1536691025,
+    "end": 1536691069,
     "total": 44
   },
   "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-dx.rb": {
-    "start": 1537285300,
-    "end": 1537285363,
-    "total": 63
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-hydronic.rb": {
-    "start": 1537285018,
-    "end": 1537285099,
-    "total": 81
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-dx.rb": {
-    "start": 1537285308,
-    "end": 1537285377,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-hydronic.rb": {
-    "start": 1537285384,
-    "end": 1537285453,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-dx.rb": {
-    "start": 1537286044,
-    "end": 1537286116,
-    "total": 72
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-hydronic.rb": {
-    "start": 1537285472,
-    "end": 1537285548,
-    "total": 76
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-dx.rb": {
-    "start": 1537285727,
-    "end": 1537285795,
+    "start": 1536689465,
+    "end": 1536689533,
     "total": 68
   },
-  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-hydronic.rb": {
-    "start": 1537284951,
-    "end": 1537285027,
+  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-hydronic.rb": {
+    "start": 1536690515,
+    "end": 1536690588,
+    "total": 73
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-dx.rb": {
+    "start": 1536690163,
+    "end": 1536690230,
+    "total": 67
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-hydronic.rb": {
+    "start": 1536690700,
+    "end": 1536690772,
+    "total": 72
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-dx.rb": {
+    "start": 1536690592,
+    "end": 1536690663,
+    "total": 71
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-hydronic.rb": {
+    "start": 1536690573,
+    "end": 1536690640,
+    "total": 67
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-dx.rb": {
+    "start": 1536690230,
+    "end": 1536690306,
     "total": 76
   },
+  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-hydronic.rb": {
+    "start": 1536690789,
+    "end": 1536690862,
+    "total": 73
+  },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-dx.rb": {
-    "start": 1537286060,
-    "end": 1537286125,
-    "total": 65
+    "start": 1536689864,
+    "end": 1536689931,
+    "total": 67
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-hydronic.rb": {
-    "start": 1537284908,
-    "end": 1537284982,
+    "start": 1536690363,
+    "end": 1536690437,
     "total": 74
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-dx.rb": {
-    "start": 1537284990,
-    "end": 1537285060,
-    "total": 70
+    "start": 1536689432,
+    "end": 1536689503,
+    "total": 71
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-hydronic.rb": {
-    "start": 1537285139,
-    "end": 1537285214,
-    "total": 75
+    "start": 1536690916,
+    "end": 1536690988,
+    "total": 72
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-dx.rb": {
-    "start": 1537285346,
-    "end": 1537285421,
-    "total": 75
+    "start": 1536689545,
+    "end": 1536689618,
+    "total": 73
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-hydronic.rb": {
-    "start": 1537285800,
-    "end": 1537285865,
-    "total": 65
+    "start": 1536690115,
+    "end": 1536690181,
+    "total": 66
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-dx.rb": {
-    "start": 1537285804,
-    "end": 1537285872,
+    "start": 1536689971,
+    "end": 1536690039,
     "total": 68
   },
   "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-hydronic.rb": {
-    "start": 1537285954,
-    "end": 1537286027,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-dx.rb": {
-    "start": 1537285358,
-    "end": 1537285425,
-    "total": 67
-  },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-hydronic.rb": {
-    "start": 1537285712,
-    "end": 1537285783,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-dx.rb": {
-    "start": 1537285161,
-    "end": 1537285235,
-    "total": 74
-  },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-hydronic.rb": {
-    "start": 1537284914,
-    "end": 1537284988,
-    "total": 74
-  },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-rotary_screw-dx.rb": {
-    "start": 1537285016,
-    "end": 1537285091,
+    "start": 1536690846,
+    "end": 1536690921,
     "total": 75
   },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-dx.rb": {
+    "start": 1536689528,
+    "end": 1536689604,
+    "total": 76
+  },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-hydronic.rb": {
+    "start": 1536691033,
+    "end": 1536691098,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-dx.rb": {
+    "start": 1536689724,
+    "end": 1536689791,
+    "total": 67
+  },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-hydronic.rb": {
+    "start": 1536690094,
+    "end": 1536690175,
+    "total": 81
+  },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-rotary_screw-dx.rb": {
+    "start": 1536689885,
+    "end": 1536689953,
+    "total": 68
+  },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-rotary_screw-hydronic.rb": {
-    "start": 1537284869,
-    "end": 1537284939,
-    "total": 70
+    "start": 1536690842,
+    "end": 1536690909,
+    "total": 67
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-scroll-dx.rb": {
-    "start": 1537285389,
-    "end": 1537285461,
-    "total": 72
+    "start": 1536690570,
+    "end": 1536690640,
+    "total": 70
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-scroll-hydronic.rb": {
-    "start": 1537285398,
-    "end": 1537285471,
-    "total": 73
+    "start": 1536690815,
+    "end": 1536690887,
+    "total": 72
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-dx.rb": {
-    "start": 1537285363,
-    "end": 1537285406,
-    "total": 43
+    "start": 1536690297,
+    "end": 1536690334,
+    "total": 37
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-electric.rb": {
-    "start": 1537285540,
-    "end": 1537285585,
-    "total": 45
+    "start": 1536689503,
+    "end": 1536689544,
+    "total": 41
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-gas.rb": {
-    "start": 1537284967,
-    "end": 1537285013,
-    "total": 46
+    "start": 1536690368,
+    "end": 1536690409,
+    "total": 41
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-dx.rb": {
-    "start": 1537285299,
-    "end": 1537285347,
-    "total": 48
+    "start": 1536689896,
+    "end": 1536689942,
+    "total": 46
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-electric.rb": {
-    "start": 1537285260,
-    "end": 1537285308,
-    "total": 48
+    "start": 1536689544,
+    "end": 1536689594,
+    "total": 50
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-gas.rb": {
-    "start": 1537286027,
-    "end": 1537286075,
-    "total": 48
+    "start": 1536690995,
+    "end": 1536691046,
+    "total": 51
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-dx.rb": {
-    "start": 1537285874,
-    "end": 1537285918,
-    "total": 44
+    "start": 1536689526,
+    "end": 1536689564,
+    "total": 38
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-electric.rb": {
-    "start": 1537285858,
-    "end": 1537285901,
-    "total": 43
+    "start": 1536689728,
+    "end": 1536689768,
+    "total": 40
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-gas.rb": {
-    "start": 1537285474,
-    "end": 1537285519,
+    "start": 1536689739,
+    "end": 1536689784,
     "total": 45
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-dx.rb": {
-    "start": 1537284839,
-    "end": 1537284888,
-    "total": 49
+    "start": 1536689814,
+    "end": 1536689858,
+    "total": 44
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-electric.rb": {
-    "start": 1537285726,
-    "end": 1537285776,
-    "total": 50
+    "start": 1536689550,
+    "end": 1536689599,
+    "total": 49
   },
   "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-gas.rb": {
-    "start": 1537285760,
-    "end": 1537285812,
+    "start": 1536689887,
+    "end": 1536689939,
     "total": 52
   },
   "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-dx.rb": {
-    "start": 1537285099,
-    "end": 1537285143,
-    "total": 44
+    "start": 1536689465,
+    "end": 1536689507,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-electric.rb": {
-    "start": 1537285865,
-    "end": 1537285911,
+    "start": 1536690459,
+    "end": 1536690505,
     "total": 46
   },
   "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-gas.rb": {
-    "start": 1537285436,
-    "end": 1537285482,
-    "total": 46
+    "start": 1536690664,
+    "end": 1536690706,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-dx.rb": {
-    "start": 1537284871,
-    "end": 1537284924,
-    "total": 53
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-electric.rb": {
-    "start": 1537285466,
-    "end": 1537285515,
-    "total": 49
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-gas.rb": {
-    "start": 1537285425,
-    "end": 1537285473,
-    "total": 48
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-electric-electric.rb": {
-    "start": 1537285335,
-    "end": 1537285380,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-electric-gas.rb": {
-    "start": 1537284821,
-    "end": 1537284866,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-electric.rb": {
-    "start": 1537286070,
-    "end": 1537286126,
-    "total": 56
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-gas.rb": {
-    "start": 1537285551,
-    "end": 1537285599,
-    "total": 48
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-electric.rb": {
-    "start": 1537285267,
-    "end": 1537285308,
+    "start": 1536690144,
+    "end": 1536690185,
     "total": 41
   },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-gas.rb": {
-    "start": 1537285114,
-    "end": 1537285161,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-electric.rb": {
-    "start": 1537285425,
-    "end": 1537285476,
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-electric.rb": {
+    "start": 1536690729,
+    "end": 1536690780,
     "total": 51
   },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-gas.rb": {
-    "start": 1537285479,
-    "end": 1537285527,
-    "total": 48
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-gas.rb": {
+    "start": 1536690603,
+    "end": 1536690656,
+    "total": 53
   },
-  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-electric.rb": {
-    "start": 1537285527,
-    "end": 1537285571,
+  "ci_test_files/test_necb_hvac_system_4_electricity-electric-electric.rb": {
+    "start": 1536690216,
+    "end": 1536690258,
+    "total": 42
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-electric-gas.rb": {
+    "start": 1536690680,
+    "end": 1536690723,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-electric.rb": {
+    "start": 1536690429,
+    "end": 1536690476,
+    "total": 47
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-gas.rb": {
+    "start": 1536690540,
+    "end": 1536690592,
+    "total": 52
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-electric.rb": {
+    "start": 1536689796,
+    "end": 1536689842,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-gas.rb": {
+    "start": 1536690532,
+    "end": 1536690572,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-electric.rb": {
+    "start": 1536690911,
+    "end": 1536690957,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-gas.rb": {
+    "start": 1536690950,
+    "end": 1536690994,
     "total": 44
   },
+  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-electric.rb": {
+    "start": 1536691023,
+    "end": 1536691065,
+    "total": 42
+  },
   "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-gas.rb": {
-    "start": 1537285640,
-    "end": 1537285685,
-    "total": 45
+    "start": 1536690936,
+    "end": 1536690978,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-electric.rb": {
-    "start": 1537284945,
-    "end": 1537284995,
-    "total": 50
+    "start": 1536690557,
+    "end": 1536690601,
+    "total": 44
   },
   "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-gas.rb": {
-    "start": 1537284923,
-    "end": 1537284974,
+    "start": 1536689635,
+    "end": 1536689686,
     "total": 51
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537285543,
-    "end": 1537285590,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285683,
-    "end": 1537285724,
-    "total": 41
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285371,
-    "end": 1537285418,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1537285043,
-    "end": 1537285089,
+    "start": 1536690383,
+    "end": 1536690429,
     "total": 46
   },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536690350,
+    "end": 1536690394,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-fc_inletvanes.rb": {
+    "start": 1536689534,
+    "end": 1536689575,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-var_speed_drive.rb": {
+    "start": 1536689770,
+    "end": 1536689812,
+    "total": 42
+  },
   "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537284821,
-    "end": 1537284873,
-    "total": 52
+    "start": 1536690117,
+    "end": 1536690159,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537284821,
-    "end": 1537284874,
-    "total": 53
+    "start": 1536690306,
+    "end": 1536690357,
+    "total": 51
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537284821,
-    "end": 1537284871,
-    "total": 50
+    "start": 1536689515,
+    "end": 1536689562,
+    "total": 47
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537285139,
-    "end": 1537285188,
-    "total": 49
+    "start": 1536690025,
+    "end": 1536690081,
+    "total": 56
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537284912,
-    "end": 1537284959,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285634,
-    "end": 1537285683,
+    "start": 1536690672,
+    "end": 1536690721,
     "total": 49
   },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285992,
-    "end": 1537286042,
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536689597,
+    "end": 1536689647,
     "total": 50
   },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1537284821,
-    "end": 1537284873,
-    "total": 52
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-fc_inletvanes.rb": {
+    "start": 1536689840,
+    "end": 1536689885,
+    "total": 45
   },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537285597,
-    "end": 1537285644,
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-var_speed_drive.rb": {
+    "start": 1536690357,
+    "end": 1536690404,
     "total": 47
   },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1536690941,
+    "end": 1536690989,
+    "total": 48
+  },
   "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285923,
-    "end": 1537285973,
+    "start": 1536689432,
+    "end": 1536689482,
     "total": 50
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537285195,
-    "end": 1537285255,
-    "total": 60
+    "start": 1536689660,
+    "end": 1536689705,
+    "total": 45
   },
   "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537285705,
-    "end": 1537285754,
+    "start": 1536690521,
+    "end": 1536690570,
     "total": 49
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537285242,
-    "end": 1537285286,
-    "total": 44
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285103,
-    "end": 1537285144,
-    "total": 41
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285055,
-    "end": 1537285100,
+    "start": 1536690185,
+    "end": 1536690230,
     "total": 45
   },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536689566,
+    "end": 1536689606,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-fc_inletvanes.rb": {
+    "start": 1536689684,
+    "end": 1536689724,
+    "total": 40
+  },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1537284939,
-    "end": 1537284985,
-    "total": 46
+    "start": 1536690784,
+    "end": 1536690823,
+    "total": 39
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537285249,
-    "end": 1537285299,
-    "total": 50
+    "start": 1536690005,
+    "end": 1536690058,
+    "total": 53
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285973,
-    "end": 1537286027,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537285515,
-    "end": 1537285565,
-    "total": 50
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537285242,
-    "end": 1537285289,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537285776,
-    "end": 1537285828,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285161,
-    "end": 1537285209,
+    "start": 1536690923,
+    "end": 1536690971,
     "total": 48
   },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1536691041,
+    "end": 1536691084,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1536690417,
+    "end": 1536690467,
+    "total": 50
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1536690906,
+    "end": 1536690952,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536689838,
+    "end": 1536689887,
+    "total": 49
+  },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285461,
-    "end": 1537285512,
+    "start": 1536689618,
+    "end": 1536689669,
     "total": 51
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1537285222,
-    "end": 1537285273,
-    "total": 51
+    "start": 1536689606,
+    "end": 1536689655,
+    "total": 49
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537285523,
-    "end": 1537285579,
-    "total": 56
+    "start": 1536690157,
+    "end": 1536690206,
+    "total": 49
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285513,
-    "end": 1537285565,
-    "total": 52
+    "start": 1536690236,
+    "end": 1536690291,
+    "total": 55
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537286055,
-    "end": 1537286106,
-    "total": 51
+    "start": 1536690601,
+    "end": 1536690655,
+    "total": 54
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537286071,
-    "end": 1537286124,
-    "total": 53
+    "start": 1536689649,
+    "end": 1536689698,
+    "total": 49
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537285625,
-    "end": 1537285672,
-    "total": 47
+    "start": 1536689432,
+    "end": 1536689474,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285716,
-    "end": 1537285763,
-    "total": 47
+    "start": 1536690514,
+    "end": 1536690557,
+    "total": 43
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285974,
-    "end": 1537286015,
+    "start": 1536689687,
+    "end": 1536689728,
     "total": 41
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1537284988,
-    "end": 1537285032,
-    "total": 44
+    "start": 1536690550,
+    "end": 1536690592,
+    "total": 42
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537284854,
-    "end": 1537284905,
-    "total": 51
+    "start": 1536690623,
+    "end": 1536690666,
+    "total": 43
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537284967,
-    "end": 1537285016,
-    "total": 49
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537285281,
-    "end": 1537285335,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537286017,
-    "end": 1537286072,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1537285421,
-    "end": 1537285473,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285255,
-    "end": 1537285301,
-    "total": 46
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1537285579,
-    "end": 1537285633,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1537285358,
-    "end": 1537285407,
-    "total": 49
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1537285482,
-    "end": 1537285532,
-    "total": 50
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1537285038,
-    "end": 1537285097,
-    "total": 59
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1537285421,
-    "end": 1537285474,
-    "total": 53
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1537285918,
-    "end": 1537285966,
+    "start": 1536690197,
+    "end": 1536690245,
     "total": 48
   },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1536690218,
+    "end": 1536690263,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1536690251,
+    "end": 1536690294,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1536690821,
+    "end": 1536690869,
+    "total": 48
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536690484,
+    "end": 1536690529,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-fc_inletvanes.rb": {
+    "start": 1536689432,
+    "end": 1536689485,
+    "total": 53
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-var_speed_drive.rb": {
+    "start": 1536689432,
+    "end": 1536689482,
+    "total": 50
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1536690431,
+    "end": 1536690480,
+    "total": 49
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
+    "start": 1536689886,
+    "end": 1536689937,
+    "total": 51
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1536690843,
+    "end": 1536690894,
+    "total": 51
+  },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1536690617,
+    "end": 1536690664,
+    "total": 47
+  },
   "ci_test_files/test_necb_hvac_system_7_electricity-centrifugal-dx.rb": {
-    "start": 1537285649,
-    "end": 1537285717,
-    "total": 68
+    "start": 1536689598,
+    "end": 1536689676,
+    "total": 78
   },
   "ci_test_files/test_necb_hvac_system_7_electricity-centrifugal-hydronic.rb": {
-    "start": 1537285638,
-    "end": 1537285712,
-    "total": 74
+    "start": 1536689572,
+    "end": 1536689647,
+    "total": 75
   },
   "ci_test_files/test_necb_hvac_system_7_electricity-reciprocating-dx.rb": {
-    "start": 1537286042,
-    "end": 1537286116,
+    "start": 1536689476,
+    "end": 1536689550,
     "total": 74
   },
   "ci_test_files/test_necb_hvac_system_7_electricity-reciprocating-hydronic.rb": {
-    "start": 1537285922,
-    "end": 1537285992,
-    "total": 70
+    "start": 1536689562,
+    "end": 1536689642,
+    "total": 80
   },
   "ci_test_files/test_necb_hvac_system_7_electricity-rotary_screw-dx.rb": {
-    "start": 1537285716,
-    "end": 1537285783,
-    "total": 67
+    "start": 1536689616,
+    "end": 1536689688,
+    "total": 72
   },
   "ci_test_files/test_necb_hvac_system_7_electricity-rotary_screw-hydronic.rb": {
-    "start": 1537285566,
-    "end": 1537285637,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-dx.rb": {
-    "start": 1537285492,
-    "end": 1537285566,
-    "total": 74
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-hydronic.rb": {
-    "start": 1537285167,
-    "end": 1537285242,
+    "start": 1536689497,
+    "end": 1536689572,
     "total": 75
   },
+  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-dx.rb": {
+    "start": 1536690991,
+    "end": 1536691067,
+    "total": 76
+  },
+  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-hydronic.rb": {
+    "start": 1536690721,
+    "end": 1536690783,
+    "total": 62
+  },
   "ci_test_files/test_necb_hvac_system_7_fuel_oil2-centrifugal-dx.rb": {
-    "start": 1537284895,
-    "end": 1537284967,
+    "start": 1536689635,
+    "end": 1536689707,
     "total": 72
   },
   "ci_test_files/test_necb_hvac_system_7_fuel_oil2-centrifugal-hydronic.rb": {
-    "start": 1537285886,
-    "end": 1537285953,
-    "total": 67
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-dx.rb": {
-    "start": 1537286015,
-    "end": 1537286084,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-hydronic.rb": {
-    "start": 1537285682,
-    "end": 1537285751,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-dx.rb": {
-    "start": 1537285566,
-    "end": 1537285639,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-hydronic.rb": {
-    "start": 1537285437,
-    "end": 1537285510,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-dx.rb": {
-    "start": 1537285067,
-    "end": 1537285140,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-hydronic.rb": {
-    "start": 1537285455,
-    "end": 1537285521,
-    "total": 66
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-dx.rb": {
-    "start": 1537285997,
-    "end": 1537286071,
-    "total": 74
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-hydronic.rb": {
-    "start": 1537284821,
-    "end": 1537284889,
+    "start": 1536689702,
+    "end": 1536689770,
     "total": 68
   },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-dx.rb": {
-    "start": 1537286062,
-    "end": 1537286136,
-    "total": 74
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-dx.rb": {
+    "start": 1536690394,
+    "end": 1536690458,
+    "total": 64
   },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-hydronic.rb": {
-    "start": 1537285647,
-    "end": 1537285716,
-    "total": 69
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-hydronic.rb": {
+    "start": 1536690892,
+    "end": 1536690955,
+    "total": 63
   },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-dx.rb": {
-    "start": 1537284821,
-    "end": 1537284898,
-    "total": 77
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-dx.rb": {
+    "start": 1536689452,
+    "end": 1536689520,
+    "total": 68
   },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-hydronic.rb": {
-    "start": 1537285714,
-    "end": 1537285784,
-    "total": 70
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-scroll-dx.rb": {
-    "start": 1537285127,
-    "end": 1537285198,
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-hydronic.rb": {
+    "start": 1536690952,
+    "end": 1536691023,
     "total": 71
   },
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-dx.rb": {
+    "start": 1536689784,
+    "end": 1536689855,
+    "total": 71
+  },
+  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-hydronic.rb": {
+    "start": 1536691046,
+    "end": 1536691111,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-dx.rb": {
+    "start": 1536690085,
+    "end": 1536690154,
+    "total": 69
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-hydronic.rb": {
+    "start": 1536690618,
+    "end": 1536690683,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-dx.rb": {
+    "start": 1536690078,
+    "end": 1536690144,
+    "total": 66
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-hydronic.rb": {
+    "start": 1536689731,
+    "end": 1536689806,
+    "total": 75
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-dx.rb": {
+    "start": 1536690955,
+    "end": 1536691019,
+    "total": 64
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-hydronic.rb": {
+    "start": 1536689547,
+    "end": 1536689615,
+    "total": 68
+  },
+  "ci_test_files/test_necb_hvac_system_7_natural_gas-scroll-dx.rb": {
+    "start": 1536689950,
+    "end": 1536690015,
+    "total": 65
+  },
   "ci_test_files/test_necb_hvac_system_7_natural_gas-scroll-hydronic.rb": {
-    "start": 1537285438,
-    "end": 1537285508,
-    "total": 70
+    "start": 1536689939,
+    "end": 1536690004,
+    "total": 65
   },
   "doe_prototype/test_add_elevators.rb": {
-    "start": 1537285510,
-    "end": 1537285578,
+    "start": 1536689529,
+    "end": 1536689597,
     "total": 68
   },
   "doe_prototype/test_add_exhaust.rb": {
-    "start": 1537284913,
-    "end": 1537284967,
-    "total": 54
+    "start": 1536690660,
+    "end": 1536690704,
+    "total": 44
   },
   "doe_prototype/test_add_exterior_lights.rb": {
-    "start": 1537285419,
-    "end": 1537285466,
-    "total": 47
+    "start": 1536691015,
+    "end": 1536691063,
+    "total": 48
   },
   "doe_prototype/test_add_swh.rb": {
-    "start": 1537285000,
-    "end": 1537285042,
-    "total": 42
+    "start": 1536690609,
+    "end": 1536690652,
+    "total": 43
   },
   "doe_prototype/test_effective_num_stories.rb": {
-    "start": 1537284929,
-    "end": 1537284944,
-    "total": 15
+    "start": 1536689604,
+    "end": 1536689616,
+    "total": 12
   },
   "doe_prototype/test_space_type_hash.rb": {
-    "start": 1537285060,
-    "end": 1537285073,
-    "total": 13
+    "start": 1536689679,
+    "end": 1536689687,
+    "total": 8
   },
   "necb/test_necb_airloop_sizing_parameters.rb": {
-    "start": 1537285127,
-    "end": 1537285166,
+    "start": 1536689916,
+    "end": 1536689955,
     "total": 39
   },
   "necb/test_necb_boiler_rules.rb": {
-    "start": 1537286068,
-    "end": 1537286297,
-    "total": 229
+    "start": 1536690140,
+    "end": 1536690402,
+    "total": 262
   },
   "necb/test_necb_chiller_rules.rb": {
-    "start": 1537285828,
-    "end": 1537286233,
-    "total": 405
+    "start": 1536690816,
+    "end": 1536691202,
+    "total": 386
   },
   "necb/test_necb_constructions_fdwr.rb": {
-    "start": 1537284985,
-    "end": 1537285062,
-    "total": 77
+    "start": 1536690547,
+    "end": 1536690570,
+    "total": 23
   },
   "necb/test_necb_coolingtower_rules.rb": {
-    "start": 1537285049,
-    "end": 1537285240,
-    "total": 191
+    "start": 1536690367,
+    "end": 1536690540,
+    "total": 173
   },
   "necb/test_necb_default_spacetypes.rb": {
-    "start": 1537286858,
-    "end": 1537286862,
-    "total": 4
+    "start": 1536690883,
+    "end": 1536690998,
+    "total": 115
   },
   "necb/test_necb_default_system_selection.rb": {
-    "start": 1537286858,
-    "end": 1537286862,
-    "total": 4
+    "start": 1536689432,
+    "end": 1536690032,
+    "total": 600
   },
   "necb/test_necb_fan_rules.rb": {
-    "start": 1537284821,
-    "end": 1537284890,
-    "total": 69
+    "start": 1536689577,
+    "end": 1536689635,
+    "total": 58
   },
   "necb/test_necb_heatpump_rules.rb": {
-    "start": 1537285008,
-    "end": 1537285132,
-    "total": 124
+    "start": 1536690663,
+    "end": 1536690786,
+    "total": 123
   },
   "necb/test_necb_hrv_rules.rb": {
-    "start": 1537285881,
-    "end": 1537285900,
-    "total": 19
+    "start": 1536690350,
+    "end": 1536690370,
+    "total": 20
   },
   "necb/test_necb_loop_rules.rb": {
-    "start": 1537284821,
-    "end": 1537284878,
-    "total": 57
+    "start": 1536689709,
+    "end": 1536689759,
+    "total": 50
   },
   "necb/test_necb_pumppower_rules.rb": {
-    "start": 1537285704,
-    "end": 1537285733,
-    "total": 29
+    "start": 1536689629,
+    "end": 1536689660,
+    "total": 31
   },
   "necb/test_necb_qaqc_single.rb": {
-    "start": 1537286858,
-    "end": 1537286902,
-    "total": 44
+    "start": 1536689571,
+    "end": 1536689635,
+    "total": 64
   },
   "necb/test_necb_schedules.rb": {
-    "start": 1537286858,
-    "end": 1537286862,
-    "total": 4
+    "start": 1536689587,
+    "end": 1536689720,
+    "total": 133
   },
   "necb/test_necb_shw.rb": {
-    "start": 1537286858,
-    "end": 1537286865,
-    "total": 7
+    "start": 1536690710,
+    "end": 1536691018,
+    "total": 308
   },
   "necb/test_necb_unitary_rules.rb": {
-    "start": 1537285627,
-    "end": 1537286012,
-    "total": 385
+    "start": 1536690666,
+    "end": 1536691048,
+    "total": 382
   },
   "necb/test_necb_waterheater_rules.rb": {
-    "start": 1537285592,
-    "end": 1537285681,
-    "total": 89
+    "start": 1536690799,
+    "end": 1536690886,
+    "total": 87
   },
   "necb/test_necb_weather.rb": {
-    "start": 1537285132,
-    "end": 1537285171,
-    "total": 39
+    "start": 1536689642,
+    "end": 1536689679,
+    "total": 37
   },
   "necb/test_remove_duplicate_materials_and_constructions.rb": {
-    "start": 1537286008,
-    "end": 1537286017,
-    "total": 9
+    "start": 1536691002,
+    "end": 1536691010,
+    "total": 8
   }
 }
