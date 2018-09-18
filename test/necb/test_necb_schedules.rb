@@ -29,7 +29,7 @@ class NECB2011ScheduleTests < Minitest::Test
         "template" => template,
       }
       # lookup space type properties
-      standard.model_find_objects(standard.standards_data["space_types"], search_criteria).each do |space_type_properties|
+      standard.standards_lookup_table_many(table_name: "space_types", search_criteria: search_criteria).each do |space_type_properties|
         # Create a space type
         st = OpenStudio::Model::SpaceType.new(@model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
