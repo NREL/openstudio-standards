@@ -492,10 +492,10 @@ class NECB2011 < Standard
         # Check if space type for this space matches NECB2011 specific space type
         # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
 
-        if (space_type_name == 'Storage area' && space.floorArea < 100) ||
-            (space_type_name == 'Storage area - refrigerated' && space.floorArea < 100) ||
-            (space_type_name == 'Hospital - medical supply' && space.floorArea < 100) ||
-            (space_type_name == 'Office - enclosed' && space.floorArea < 25)
+        #Evaluate the formula in the database.
+        standard_space_type_name = space_type_name
+        floor_area = space.floorArea
+        if eval(@standards_data['formulas']['occupancy_sensors_space_types_formula']['value'])
           # If there is only one space assigned to this space type, then reassign this stub
           # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
           # for this space. Required to use reduced LPD by NECB2011 0.9 factor.

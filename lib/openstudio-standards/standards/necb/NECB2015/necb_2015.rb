@@ -27,20 +27,24 @@ class NECB2015 < NECB2011
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-          @standards_data["tables"] = [*@standards_data["tables"],  *data["tables"] ].to_h
-        else
-          @standards_data[data.keys.first] = data[data.keys.first]
+        if !data['tables'].nil?
+          @standards_data['tables'] = [*@standards_data['tables'],  *data['tables'] ].to_h
+        elsif !data['constants'].nil?
+          @standards_data['constants'] = [*@standards_data['constants'],  *data['constants'] ].to_h
+        elsif !data['constants'].nil?
+          @standards_data['formulas'] = [*@standards_data['formulas'],  *data['formulas'] ].to_h
         end
       end
     else
       files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
       files.each do |file|
         data = JSON.parse(File.read(file))
-        if not data["tables"].nil?
-          @standards_data["tables"] = [*@standards_data["tables"],  *data["tables"] ].to_h
-        else
-          @standards_data[data.keys.first] = data[data.keys.first]
+        if !data['tables'].nil?
+          @standards_data['tables'] = [*@standards_data['tables'],  *data['tables'] ].to_h
+        elsif !data['constants'].nil?
+          @standards_data['constants'] = [*@standards_data['constants'],  *data['constants'] ].to_h
+        elsif !data['constants'].nil?
+          @standards_data['formulas'] = [*@standards_data['formulas'],  *data['formulas'] ].to_h
         end
       end
     end

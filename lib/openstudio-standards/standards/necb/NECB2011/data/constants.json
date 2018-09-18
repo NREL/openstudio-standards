@@ -98,15 +98,6 @@
     "value": 0.0,
     "units": "",
     "notes": ""
-  },
-    "skylight_to_roof_ratio":{
-    "data_type": "value",
-    "refs": [
-      "NECB2011_S_3.2.1.4(2)"
-    ],
-    "value": 0.05,
-    "units": "",
-    "notes": ""
   }
   }
 }
