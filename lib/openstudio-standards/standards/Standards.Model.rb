@@ -1928,44 +1928,14 @@ class Standard
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false #TODO change to return empty optional schedule:ruleset?
   #   end
-  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil)
-    #    matching_objects = hash_of_objects.clone
-    #    #new
-    #    puts "searching"
-    #    puts search_criteria
-    #    raise ("hash of objects is nil or empty. #{hash_of_objects}") if hash_of_objects.nil? || hash_of_objects.empty? || matching_objects[0].nil?
-    #
-    #    search_criteria.each do |key,value|
-    #      puts "#{key}-#{value}"
-    #      puts matching_objects.size
-    #      #if size has already reduced to zero. Get out of loop.
-    #      break if matching_objects.size == 0
-    #      #if there are no keys that match, skip search... (This seems odd)
-    #      next unless  matching_objects[0].has_key?(key)
-    #      matching_objects.select!{ |k| k[key] == value }
-    #    end
-    #    if not capacity.nil?
-    #      puts "Capacity = #{capacity}"
-    #      capacity = capacity + (capacity * 0.01) if capacity == capacity.round
-    #      matching_objects.select!{|k| capacity.to_f > k['minimum_capacity'].to_f}
-    #      matching_objects.select!{|k| capacity.to_f <= k['maximum_capacity'].to_f}
-    #    end
-    #
-    #
-    #    # Check the number of matching objects found
-    #    if matching_objects.size == 0
-    #      OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
-    #
-    #    end
-    #    new_matching_objects =  matching_objects
-
-    # old
-
+  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil, date: nil)
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
     hash_of_objects= @standards_data[table_name]
 
+    #needed for NRCan data structure compatibility. We keep all tables in a 'tables' hash in @standards_data and the table
+    # itself is in the 'table' hash index.
     if hash_of_objects.nil?
       table = @standards_data['tables'][table_name]['table']
       hash_of_objects = table
@@ -2028,6 +1998,21 @@ class Standard
           matching_objects << object
         end
       end
+      # If date was specified, narrow down the matching objects
+      unless date.nil?
+        date_matching_objects = []
+        matching_objects.each do |object|
+          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+          next if !object.key?('start_date') || !object.key?('end_date')
+          # Skip objects whose the start date is earlier than the specified date
+          next if date <= Date.parse(object['start_date'])
+          # Skip objects whose end date is beyond the specified date
+          next if date > Date.parse(object['end_date'])
+          # Found a matching object
+          date_matching_objects << object
+        end
+        matching_objects = date_matching_objects
+      end
     end
 
     # Check the number of matching objects found
@@ -2066,91 +2051,11 @@ class Standard
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
   def standards_lookup_table_first(table_name:, search_criteria: {}, capacity: nil, date: nil)
-
-    #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
-    hash_of_objects = @standards_data[table_name]
-    if hash_of_objects.nil?
-      table = @standards_data['tables'][table_name]['table']
-      hash_of_objects = table
-    end
-    desired_object = nil
-    search_criteria_matching_objects = []
-    matching_objects = []
-    # Compare each of the objects against the search criteria
-    hash_of_objects.each do |object|
-
-      meets_all_search_criteria = true
-      search_criteria.each do |key, value|
-        # Don't check non-existent search criteria
-        next unless object.key?(key)
-        # Stop as soon as one of the search criteria is not met
-        # 'Any' is a special key that matches anything
-        unless object[key] == value || object[key] == 'Any'
-          meets_all_search_criteria = false
-          break
-        end
-      end
-      # Skip objects that don't meet all search criteria
-      next unless meets_all_search_criteria
-      # If made it here, object matches all search criteria
-      search_criteria_matching_objects << object
-    end
-
-    # If capacity was specified, narrow down the matching objects
-    if capacity.nil?
-      matching_objects = search_criteria_matching_objects
-    else
-      # Round up if capacity is an integer
-      if capacity == capacity.round
-        capacity += (capacity * 0.01)
-      end
-      search_criteria_matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-        # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-        next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-        # Skip objects whose the minimum capacity is below the specified capacity
-        next if capacity <= object['minimum_capacity'].to_f
-        # Skip objects whose max
-        next if capacity > object['maximum_capacity'].to_f
-        # Found a matching object
-        matching_objects << object
-      end
-      # If no object was found, round the capacity down a little
-      # to avoid issues where the number fell between the limits
-      # in the json file.
-      if matching_objects.size.zero?
-        capacity *= 0.99
-        search_criteria_matching_objects.each do |object|
-          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-          # Skip objects whose the minimum capacity is below the specified capacity
-          next if capacity <= object['minimum_capacity'].to_f
-          # Skip objects whose max
-          next if capacity > object['maximum_capacity'].to_f
-          # Found a matching object
-          matching_objects << object
-        end
-      end
-    end
-
-    # If date was specified, narrow down the matching objects
-    unless date.nil?
-      date_matching_objects = []
-      matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('start_date') || !object.key?('end_date')
-        # Skip objects whose the start date is earlier than the specified date
-        next if date <= Date.parse(object['start_date'])
-        # Skip objects whose end date is beyond the specified date
-        next if date > Date.parse(object['end_date'])
-        # Found a matching object
-        date_matching_objects << object
-      end
-      matching_objects = date_matching_objects
-    end
+    #run the many version of the look up code...DRY.
+    matching_objects = standards_lookup_table_many(table_name: table_name,
+                                search_criteria: search_criteria,
+                                capacity: capacity,
+                                date: date)
 
     # Check the number of matching objects found
     if matching_objects.size.zero?
