@@ -2908,46 +2908,37 @@ module BTAP
       # 2018-09-17 Chris Kirney
       # This applies Delaunay triangulation to a surface.  This will return a set of ordered points which define the triangles on the surface.  These triangles can then be used to define subsurfaces or new surfaces.
       # Surfaces and subsurfaces are not returned since they may not be needed nor wanted.
-      def self.delaunay_triangulation_2d(surface)
-        start_array = surface.vertices
-        # First sort the points lexicographically (sort starting with x_values, then by y if two x values are the same).
-        new_array = surface.vertices.sort_by { |a| [a.x.to_f, a.y.to_f] }
-        tri = []
-        i = 0
-        tri << [new_array[i], new_array[i+1], new_array[i+2]]
-        i = 3
-        while cur_point <= last_pnt
-          tri << [new_array[i-1], new_array[i], new_array[i+1]]
-
-
-          tri_start = []
-        end
-        # Then halve the array until we are left with subarrays with a length of no more than 3.
-        array_partitions = []
-        array_sz = new_array.length
-        array_sz = 43
-        local_sz = array_sz
-        while local_sz > 3
-          local_sz /= 2
-          if local_sz <= 3
-            array_partitions.push(local_sz)
-            local_sz = array_sz - array_partitions.inject(:+)
-            if local_sz <= 3
-              array_partitions.push(local_sz)
-              break
+      def self.get_guaranteed_concave_surfaces(surface)
+        surf_verts = surface.vertices
+        for i in 1..(surf_verts.length-1)
+          # Is this line segment pointing up?  If no, then ignore it and go to the next line segment.
+          if surf_verts[i].y.to_f.round(8) > surf_verts.[i-1].y.to_f.round(8)
+            # Go through each line segment
+            for j in 1..(surf_verts.length-1)
+              # Is the line segment to the left of the current (index i) line segment?  If no, then ignore it and go to the next one.
+              if surf_verts[j].x.to_f.round(8) < surf_verts[i].x.to_f.round(8) && surf_verts[j-1].x.to_f.round(8) < surf_verts[i-1].x.to_f.round(8)
+                # Is the line segment pointing down?  If no, then ignore it and go to the next line segment.
+                if surf_verts[j].y.to_f.round(8) < surf_verts[j-1].y.to_f.round(8)
+                  # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no
+                  # then ignore it and go to the next line segment.
+                  line_a = [surf_verts[i], surf_verts[i-1]]
+                  line_b = [surf_verts[j], surf_verts[j-1]]
+                  if line_segment_overlap_y?(surf_verts[i].y.to_f.round(8), surf_verts[i-1].y.to_f.round(8), surf_verts[j].y.to_f.round(8), surf_verts[j-1].y.to_f.round(8))
+                    puts "hello"
+                  end
+                end
+              end
             end
           end
         end
-        i = 0
-        array_partitions.each do |array_part|
-          if array_part = 3
-            tri = [new_array[i], new_array[i+1], new_array[i+2]]
-            i += array_part - 1
-          elsif array_part < 3
-            puts "test"
-          end
+      end
+
+      def self.line_segment_overlap_y?(point_a1, point_a2, point_b1, point_b2)
+        if point_a1 >= point_b1 && point_a2 <= point_b1 or point_a1 >= point_b2 && point_a2 <= point_b2
+          return true
+        else
+          return false
         end
-        puts "hello"
       end
     end #Module Surfaces
   end #module Geometry

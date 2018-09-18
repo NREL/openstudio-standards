@@ -190,12 +190,58 @@ class Standard
   # themselves (like an 'L' or a 'V').
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
-    # ckirney start
-    # BTAP::Geometry::Surfaces.delaunay_triangulation_2d(surface)
-    # ckirney end
     surface.subSurfaces.sort.each do |sub_surface|
       sub_surface.remove
     end
+    # What is the centroid of the surface.
+    surf_cent = surface.centroid
+    scale_factor = Math.sqrt(area_fraction)
+
+    # Create an array to collect the new vertices
+    new_vertices = []
+
+    # Loop on vertices (Point3ds)
+    surface.vertices.each do |vertex|
+      # Point3d - Point3d = Vector3d
+      # Vector from centroid to vertex (GA, GB, GC, etc)
+      centroid_vector = vertex - surf_cent
+
+      # Resize the vector (done in place) according to scale_factor
+      centroid_vector.setLength(centroid_vector.length * scale_factor)
+
+      # Move the vertex toward the centroid
+      new_vertex = surf_cent + centroid_vector
+
+      # Add the new vertices to an array of vertices.
+      new_vertices << new_vertex
+    end
+    # Create a new subsurface with the vertices determined above.
+    new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+    # Put this sub-surface on the surface.
+    new_sub_surface.setSurface(surface)
+    # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
+    # 'skylight').
+    new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+    new_sub_surface.setName(new_name)
+    # There is now only one surface on the subsurface.  Enforce this
+    new_sub_surface.setMultiplier(1)
+  end
+
+  # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
+  # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
+  # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
+  # themselves (like an 'L' or a 'V').
+  def sub_surface_create_scaled_subsurfaces_from_surface (surface, area_fraction, model)
+    # ckirney start
+    # BTAP::Geometry::Surfaces.delaunay_triangulation_2d(surface)
+    # ckirney end
+    # Get rid of all existing subsurfaces.
+    surface.subSurfaces.sort.each do |sub_surface|
+      sub_surface.remove
+    end
+    # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
+    # concave.
+    new_surfaces = BTAP::Geometry::Surfaces.get_guaranteed_concave_surfaces(surface)
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
