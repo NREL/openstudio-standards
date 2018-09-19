@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "ground_temperatures",
+  "tables": {
+    "ground_temperatures": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -31051,5 +31050,5 @@
         }
       ]
     }
-  ]
+  }
 }

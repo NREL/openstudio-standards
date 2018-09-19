@@ -2,7 +2,8 @@ require 'json'
 require 'yaml'
 require 'deep_merge'
 require 'rubyXL'
-
+#Note this script is no longer nor updated since the team now prefers to use JSON directly than excel.
+# This file is only kept for reference if it is needed.
 
 #monkey patch for recursive hash sorting.
 class Hash
@@ -124,7 +125,7 @@ class StandardsData
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false #TODO change to return empty optional schedule:ruleset?
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil)
+  def model_find_objects(table_name: , search_criteria: {}, capacity:nil)
     #    matching_objects = hash_of_objects.clone
     #    #new
     #    puts "searching"
@@ -257,9 +258,9 @@ class StandardsData
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil)
+  def model_find_object(table_name: , search_criteria: {}, capacity: nil, date: nil)
     #    new_matching_objects = model_find_objects(self, hash_of_objects, search_criteria, capacity)
-
+    hash_of_objects = @standards_data[table_name]
     if hash_of_objects.is_a?(Hash) and hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
     end

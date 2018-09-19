@@ -52,7 +52,7 @@ namespace :test do
     CITestGenerator::generate(local_run: false)
   end
 
-=begin
+
   desc 'Run NECB Building regression test'
   Rake::TestTask.new(:necb_regression_test) do |t|
     file_list = FileList.new('test/necb/necb_bldg_regression.rb')
@@ -79,7 +79,7 @@ namespace :test do
     end
 
 end
-=end
+
 
 # These tests only available in the CI environment
   if ENV['CI'] == 'true'

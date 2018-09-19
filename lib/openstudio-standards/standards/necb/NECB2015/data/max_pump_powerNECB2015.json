@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "max_total_loop_pump_power",
+  "tables": {
+    "max_total_loop_pump_power": {
       "data_type": "table",
       "refs": [
         "NECB 2015 Table 5.2.6.3."
@@ -29,5 +28,5 @@
         }
       ]
     }
-  ]
+  }
 }

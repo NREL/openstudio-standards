@@ -121,7 +121,7 @@ class Standard
               'building_type' => model_get_lookup_name(building_type),
               'space_type' => space_type_name
           }
-          data = model_find_object(standards_data['space_types'], search_criteria)
+          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
           # Skip space types with no data
           next if data.nil?

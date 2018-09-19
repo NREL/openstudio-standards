@@ -62,7 +62,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
+    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs',search_criteria: {'template' => @template,'building_type' => @@building_type })
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
@@ -180,7 +180,7 @@ end
       @building_type = BUILDING_TYPE
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
-      @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
+      @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => \"#{template}\",'building_type' => \"#{name}\" })
       if @prototype_input.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => \"#{template}\",'building_type' => \"#{name}\" }}, cannot create model.\")
         #puts JSON.pretty_generate(standards_data['prototype_inputs'])
@@ -510,7 +510,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system}, nil)
+    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system})
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{building_type}#{hvac_system}, cannot create model.\")
@@ -650,7 +650,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type}, nil)
+    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => @template,'building_type' => @@building_type})
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type}}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{building_type}, cannot create model.\")

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "heat_pumps",
+  "tables": {
+    "heat_pumps": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -361,5 +360,5 @@
         }
       ]
     }
-  ]
+  }
 }

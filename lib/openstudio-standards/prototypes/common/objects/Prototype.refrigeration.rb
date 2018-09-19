@@ -169,7 +169,7 @@ class Standard
       'case_type' => case_type
     }
 
-    props = model_find_object(standards_data['refrigerated_cases'], search_criteria)
+    props = standards_lookup_table_first(table_name: 'refrigerated_cases', search_criteria: search_criteria)
     if props.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find refrigerated case properties for: #{search_criteria}.")
       return nil
@@ -302,7 +302,7 @@ class Standard
       'walkin_type' => walkin_type
     }
 
-    props = model_find_object(standards_data['walkin_refrigeration'], search_criteria)
+    props = standards_lookup_table_first(table_name: 'walkin_refrigeration', search_criteria: search_criteria)
     if props.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find walkin refrigeration properties for: #{search_criteria}.")
       return nil
@@ -417,7 +417,7 @@ class Standard
       'compressor_type' => compressor_type
     }
 
-    props = model_find_object(standards_data['refrigeration_compressors'], search_criteria)
+    props = standards_lookup_table_first(table_name: 'refrigeration_compressors', search_criteria: search_criteria)
     if props.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find refrigeration compressor properties for: #{search_criteria}.")
       return nil

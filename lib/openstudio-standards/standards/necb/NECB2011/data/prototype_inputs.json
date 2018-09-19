@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "prototype_inputs",
+  "tables": {
+    "prototype_inputs": {
       "data_type": "table",
       "notes": "This is a list of default inputs for spacetypes and building types. Developed by NREL",
       "refs": [
@@ -13363,5 +13362,5 @@
         }
       ]
     }
-  ]
+  }
 }

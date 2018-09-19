@@ -6,6 +6,7 @@ class Standard
   #
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
+
     standards_building_type = if space_type.standardsBuildingType.is_initialized
                                 space_type.standardsBuildingType.get
                               end
@@ -21,8 +22,8 @@ class Standard
     }
 
     # lookup space type properties
-
-    space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
+    space_type_properties = standards_lookup_table_first(table_name: 'space_types',
+                                                         search_criteria: search_criteria)
 
     if space_type_properties.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
@@ -595,7 +596,7 @@ class Standard
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+    construction_properties = standards_lookup_table_first(table_name: 'construction_properties', search_criteria: search_criteria)
 
     return construction_properties
   end

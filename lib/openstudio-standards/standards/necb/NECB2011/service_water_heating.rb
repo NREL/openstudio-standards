@@ -198,7 +198,7 @@ class NECB2011
       space_type_name = space.spaceType.get.nameString
       tank_temperature = 60
       # find the specific space_type properties from standard.json
-      standards_data['space_types']['table'].each do |space_type|
+      standards_lookup_table_many(table_name: 'space_types').each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
           if space_type['necb_hvac_system_selection_type'] == "- undefined -"
             break
@@ -254,7 +254,7 @@ class NECB2011
             'name' => data['service_water_heating_schedule'],
             'day_types' => day_peak_sched[0]
         }
-        day_sched = model_find_object(standards_data['schedules'], search_criteria)
+        day_sched = standards_lookup_table_first(table_name: 'schedules', search_criteria: search_criteria)
         # Make sure the schedule is not empty and contains 24 hours.
         if day_sched.empty? || day_sched['values'].size != 24
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The water use schedule called #{data['service_water_heating_schedule']} for #{space_type_name} is corrupted or could not be found.  Please check that the schedules.json file is available and that the schedule names are spelled correctly")
@@ -388,7 +388,7 @@ class NECB2011
       space_peak_flow_SI = 0
       space_type_name = space.spaceType.get.nameString
       # Find the specific space_type properties from standard.json
-      standards_data['space_types']['table'].each do |space_type|
+      standards_lookup_table_many(table_name: 'space_types').each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
           # If the space is unheated ignore it.
           if space_type['necb_hvac_system_selection_type'] == "- undefined -"

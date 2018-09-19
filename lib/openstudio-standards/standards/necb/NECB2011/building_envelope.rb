@@ -66,17 +66,17 @@ class NECB2011
 
       # Add to the correct category
       case cat
-        when 'Unconditioned'
-          next # Skip unconditioned spaces
-        when 'NonResConditioned'
-          nr_wall_m2 += wall_area_m2
-          nr_wind_m2 += wind_area_m2
-        when 'ResConditioned'
-          res_wall_m2 += wall_area_m2
-          res_wind_m2 += wind_area_m2
-        when 'Semiheated'
-          sh_wall_m2 += wall_area_m2
-          sh_wind_m2 += wind_area_m2
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        nr_wall_m2 += wall_area_m2
+        nr_wind_m2 += wind_area_m2
+      when 'ResConditioned'
+        res_wall_m2 += wall_area_m2
+        res_wind_m2 += wind_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_wind_m2 += wind_area_m2
       end
     end
 
@@ -181,15 +181,15 @@ class NECB2011
 
       # Add to the correct category
       case cat
-        when 'NonRes'
-          nr_wall_m2 += wall_area_m2
-          nr_sky_m2 += sky_area_m2
-        when 'Res'
-          res_wall_m2 += wall_area_m2
-          res_sky_m2 += sky_area_m2
-        when 'Semiheated'
-          sh_wall_m2 += wall_area_m2
-          sh_sky_m2 += sky_area_m2
+      when 'NonRes'
+        nr_wall_m2 += wall_area_m2
+        nr_sky_m2 += sky_area_m2
+      when 'Res'
+        res_wall_m2 += wall_area_m2
+        res_sky_m2 += sky_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_sky_m2 += sky_area_m2
       end
       total_roof_m2 += wall_area_m2
       total_subsurface_m2 += sky_area_m2
@@ -311,14 +311,22 @@ class NECB2011
     new_name = "#{old_name} at hdd = #{hdd}"
 
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
+    wall_rsi = 1.0 / (scale_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                           search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                         search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
+    door_rsi = 1.0 / (scale_door * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
+    window_rsi = 1.0 / (scale_window * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                             search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
@@ -347,12 +355,12 @@ class NECB2011
     if surface.outsideBoundaryCondition.casecmp('outdoors').zero?
 
       case surface.surfaceType.downcase
-        when 'wall'
-          conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'floor'
-          conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'roofceiling'
-          conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'wall'
+        conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'floor'
+        conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'roofceiling'
+        conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -362,12 +370,12 @@ class NECB2011
 
     if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
-        when 'wall'
-          conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'floor'
-          conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'roofceiling'
-          conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'wall'
+        conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'floor'
+        conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'roofceiling'
+        conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -385,10 +393,10 @@ class NECB2011
 
     if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
-        when /window/
-          conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when /door/
-          conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when /window/
+        conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when /door/
+        conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       subsurface.setRSI(1 / conductance_value)
     end
@@ -460,9 +468,9 @@ class NECB2011
   end
 
 
-  def model_add_construction_set_from_osm(model: ,
-                                          construction_set_name:'BTAP-Mass',
-                                          osm_path: File.absolute_path(File.join(__FILE__, '..', '..','common/construction_defaults.osm')))
+  def model_add_construction_set_from_osm(model:,
+                                          construction_set_name: 'BTAP-Mass',
+                                          osm_path: File.absolute_path(File.join(__FILE__, '..', '..', 'common/construction_defaults.osm')))
     # load resources model
     construction_library = BTAP::FileIO::load_osm(osm_path)
 
@@ -474,7 +482,6 @@ class NECB2011
     new_construction_set = selected_construction_set.clone(model).to_DefaultConstructionSet.get
     return new_construction_set
   end
-
 
 
   def assign_contruction_to_adiabatic_surfaces(model)
@@ -573,9 +580,9 @@ class NECB2011
     # Identity matrix for setting space origins
     m = OpenStudio::Matrix.new(4, 4, 0)
 
-    m[0, 0] = 1.0/x_scale
-    m[1, 1] = 1.0/y_scale
-    m[2, 2] = 1.0/z_scale
+    m[0, 0] = 1.0 / x_scale
+    m[1, 1] = 1.0 / y_scale
+    m[2, 2] = 1.0 / z_scale
     m[3, 3] = 1.0
     t = OpenStudio::Transformation.new(m)
     model.getPlanarSurfaceGroups().each do |planar_surface|
