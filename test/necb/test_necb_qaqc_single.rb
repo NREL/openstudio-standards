@@ -32,11 +32,11 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   def test_single_qaqc()
     building_types = [
-        "FullServiceRestaurant"
+    #    "FullServiceRestaurant"
     # "LargeHotel",
     # "LargeOffice",
     # "MediumOffice",
-    # "MidriseApartment",
+     "MidriseApartment"#,
     # "Outpatient",
     # "PrimarySchool",
     # "QuickServiceRestaurant",
