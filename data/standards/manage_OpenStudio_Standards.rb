@@ -149,9 +149,9 @@ def download_google_spreadsheet
   # Find the OpenStudio_Standards google spreadsheet
   # and save it.
   results.data.items.each do |file|
-    if file.title == 'OpenStudio_Standards'
+    if file.title == 'OpenStudio_Standards_LA100'
       puts "Found OpenStudio_Standards"
-      download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/OpenStudio_Standards.xlsx")
+      download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/OpenStudio_Standards_LA100.xlsx")
     end
   end
 
@@ -160,7 +160,7 @@ end
 def export_spreadsheet_to_json
 
   # Path to the xlsx file
-  xlsx_path = "#{File.dirname(__FILE__)}/OpenStudio_Standards.xlsx"
+  xlsx_path = "#{File.dirname(__FILE__)}/OpenStudio_Standards_LA100.xlsx"
 
   # List of worksheets to skip
   worksheets_to_skip = []

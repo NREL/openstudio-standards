@@ -77,6 +77,34 @@
       "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
     },
     {
+      "name": "DEER 2020",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2025",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2030",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2035",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2040",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2045",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
+      "name": "DEER 2050",
+      "notes": "Data estimated for LA100 project"
+    },
+    {
       "name": "DEER Pre-1975",
       "notes": "Data taken from DEER 2017 MASControl2 Dated 8-30-2016"
     },
