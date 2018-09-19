@@ -2909,22 +2909,25 @@ module BTAP
       # This applies Delaunay triangulation to a surface.  This will return a set of ordered points which define the triangles on the surface.  These triangles can then be used to define subsurfaces or new surfaces.
       # Surfaces and subsurfaces are not returned since they may not be needed nor wanted.
       def self.get_guaranteed_concave_surfaces(surface)
+        tol = 8
         surf_verts = surface.vertices
         for i in 1..(surf_verts.length-1)
           # Is this line segment pointing up?  If no, then ignore it and go to the next line segment.
-          if surf_verts[i].y.to_f.round(8) > surf_verts.[i-1].y.to_f.round(8)
+          if surf_verts[i].y.to_f.round(tol) > surf_verts.[i-1].y.to_f.round(tol)
             # Go through each line segment
             for j in 1..(surf_verts.length-1)
               # Is the line segment to the left of the current (index i) line segment?  If no, then ignore it and go to the next one.
-              if surf_verts[j].x.to_f.round(8) < surf_verts[i].x.to_f.round(8) && surf_verts[j-1].x.to_f.round(8) < surf_verts[i-1].x.to_f.round(8)
+              if surf_verts[j].x.to_f.round(tol) < surf_verts[i].x.to_f.round(tol) && surf_verts[j-1].x.to_f.round(tol) < surf_verts[i-1].x.to_f.round(tol)
                 # Is the line segment pointing down?  If no, then ignore it and go to the next line segment.
-                if surf_verts[j].y.to_f.round(8) < surf_verts[j-1].y.to_f.round(8)
+                if surf_verts[j].y.to_f.round(tol) < surf_verts[j-1].y.to_f.round(tol)
                   # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no
                   # then ignore it and go to the next line segment.
-                  line_a = [surf_verts[i], surf_verts[i-1]]
-                  line_b = [surf_verts[j], surf_verts[j-1]]
-                  if line_segment_overlap_y?(surf_verts[i].y.to_f.round(8), surf_verts[i-1].y.to_f.round(8), surf_verts[j].y.to_f.round(8), surf_verts[j-1].y.to_f.round(8))
-                    puts "hello"
+                  overlap_y = line_segment_overlap_y?(surf_verts[i].y.to_f.round(tol), surf_verts[i-1].y.to_f.round(tol), surf_verts[j].y.to_f.round(tol), surf_verts[j-1].y.to_f.round(tol))
+                  unless overlap_y == 0
+                    overlap_x_coords = line_segment_overlap_x_coord(point_a1: surf_verts[i], point_a2: surf_verts[i-1], point_b1: surf_verts[j], point_b2: surf_verts[j-1], tol: tol)
+                    a = (surf_verts[j].y.to_f.round(tol) - surf_verts[j-1].y.to_f.round(tol))/(surf_verts[j].x.to_f.round(tol) - surf_verts[j-1].x.to_f.round(tol))
+                    b = surf_verts[j-1].y.to_f.round(tol)
+                    overlap_seg << [surf_verts[j].y.to_f.round(tol), surf_verts[j-1].y.to_f.round(tol)]
                   end
                 end
               end
@@ -2935,10 +2938,36 @@ module BTAP
 
       def self.line_segment_overlap_y?(point_a1, point_a2, point_b1, point_b2)
         if point_a1 >= point_b1 && point_a2 <= point_b1 or point_a1 >= point_b2 && point_a2 <= point_b2
-          return true
+          puts "hello"
+          bottom_overlap_start = nil
+          bottom_overlap_end = nil
+          top_overlap_start = nil
+          top_overlap_end = nil
+          if point_a1 >= point_b1 && point_a2 <= point_b1
+            bottom_overlap_start = point_b1
+            bottom_overlap_end = point_a2
+          end
+          if point_a1 >= point_b1 && point_a2 <= point_b1
+            top_overlap_start = point_b1
+            top_overlap_end = point_a2
+          end
+          overlap_y = {
+              "top_overlap_start" => top_overlap_start,
+              "top_overlap_end" => top_overlap_end,
+              "bottom_overlap_start" => bottom_overlap_start,
+              "bottom_overlap_end" => bottom_overlap_end
+          }
+          return overlap_y
         else
-          return false
+          return 0
         end
+      end
+
+      def self.line_segment_overlap_x_coord(point_a1:, point_a2:, point_b1:, point_b2:, tol: 8)
+        a = (point_b1.y.to_f.round(tol) - point_b2.y.to_f.round(tol))/(point_b1.x.to_f.round(tol) - point_b2.x.to_f.round(tol))
+        b = point_b2.y.to_f.round(tol)
+        if
+        overlap = point_a1
       end
     end #Module Surfaces
   end #module Geometry
