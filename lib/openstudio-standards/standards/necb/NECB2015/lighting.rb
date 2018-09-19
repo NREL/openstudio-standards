@@ -25,7 +25,8 @@ class NECB2015
 
       #apply occupancy sensor control
       #get occupancy schedule's day rules
-      rules = model_find_objects(standards_data['schedules'], 'name' => occupancy_schedule) # returns all schedules with schedule name entered
+      rules = standards_lookup_table_many(table_name: 'schedules',
+                                 search_criteria: {'name' => occupancy_schedule}) # returns all schedules with schedule name entered
       #check if it exists
       if rules.size.zero? #does not exist -apply default lighting sched
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{occupancy_schedule}. Cannot apply occupancy sensor control for lighting for space: #{space_type.name} ")
@@ -69,7 +70,8 @@ class NECB2015
             lighting_sched_value = 999
             #get the hourly value from the .json schedule
             #get lighting schedule
-            orig_lighting_rules = model_find_objects(standards_data['schedules'], 'name' => orig_lighting_sch) # returns all schedules with schedule name
+            orig_lighting_rules = standards_lookup_table_many(table_name: 'schedules',
+                                                              search_criteria: {'name' => orig_lighting_sch}) # returns all schedules with schedule name
             if orig_lighting_rules.size.zero?
               OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{orig_lighting_sch}.")
             end

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "regional_fuel_use",
+  "tables": {
+    "regional_fuel_use": {
       "data_type": "table",
       "notes": "This is a list of the fuel sources for all NECB system types by province. Mike Lubun compiled these very high level assumptions.",
       "refs": [
@@ -73,6 +72,6 @@
         }
       ]
     }
-  ]
+  }
 }
 

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "unitary_acs",
+  "tables": {
+    "unitary_acs": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -405,5 +404,5 @@
         }
       ]
     }
-  ]
+  }
 }

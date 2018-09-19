@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "schedules",
+  "tables": {
+    "schedules": {
       "data_type": "table",
       "refs": [
         "NECB 2015 Table A-8.4.3.2.(1)-A"
@@ -8682,5 +8681,5 @@
         }
       ]
     }
-  ]
+  }
 }

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "space_compliance",
+  "tables": {
+    "space_compliance": {
       "data_type": "table",
       "refs": {
         "lighting_per_area_w_per_m2": "Table 4.2.1.6",
@@ -3208,5 +3207,5 @@
         }
       ]
     }
-  ]
+  }
 }

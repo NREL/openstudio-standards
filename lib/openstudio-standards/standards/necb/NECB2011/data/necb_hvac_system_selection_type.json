@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "necb_hvac_system_selection_type",
+  "tables": {
+    "necb_hvac_system_selection_type": {
       "data_type": "table",
       "refs": [
         "NECB 2011 Table 8.4.4.8.A."
@@ -199,5 +198,5 @@
         }
       ]
     }
-  ]
+  }
 }

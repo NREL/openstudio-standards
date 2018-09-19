@@ -77,7 +77,7 @@ class Standard
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_tons = OpenStudio.convert(chiller_electric_eir_find_capacity(chiller_electric_eir), 'W', 'ton').get
-    chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
+    chlr_props = standards_lookup_table_first(table_name: 'chillers', search_criteria: search_criteria, capacity: capacity_tons, date: Date.today)
 
     # lookup the efficiency value
     kw_per_ton = nil
@@ -112,7 +112,7 @@ class Standard
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = standards_lookup_table_first(table_name: 'chillers', search_criteria: search_criteria, capacity: capacity_tons, date: Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties using #{search_criteria}, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false

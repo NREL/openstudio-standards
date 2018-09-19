@@ -113,7 +113,7 @@ class NECB2015
         #qaqc_table = @qaqc_data['space_compliance']
 
         search_criteria = {"template" => 'NECB2015', "building_type" => building_type, "space_type" => space_type}
-        qaqc_table = model_find_objects(@qaqc_data['space_compliance'], search_criteria)
+        qaqc_table = standards_lookup_table_many(@qaqc_data['space_compliance'], search_criteria)
         qaqc_table = qaqc_table.first
         puts"{\"building_type\" => #{building_type}, \"space_type\" => #{space_type}}"
         puts "#{qaqc_table}\n\n"

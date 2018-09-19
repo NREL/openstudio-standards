@@ -496,7 +496,7 @@ class NECB2011
     capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = standards_lookup_table_first(table_name: 'boilers', search_criteria: search_criteria, capacity: capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -584,7 +584,7 @@ class NECB2011
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = standards_lookup_table_first(table_name: 'chillers', search_criteria: search_criteria, capacity: capacity_tons, date: Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false
@@ -761,9 +761,9 @@ class NECB2011
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if heat_pump == true
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+                 standards_lookup_table_first(table_name: 'heat_pumps', search_criteria: search_criteria, capacity: capacity_btu_per_hr, date: Date.today)
                else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+                 standards_lookup_table_first(table_name: 'unitary_acs', search_criteria: search_criteria, capacity: capacity_btu_per_hr, date: Date.today)
                end
 
     # Check to make sure properties were found
@@ -1037,7 +1037,7 @@ class NECB2011
     if fan_small_fan?(fan)
       nominal_hp = 0.5
     else
-      motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+      motor_properties = standards_lookup_table_first(table_name: 'motors', search_criteria: search_criteria, capacity: motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
@@ -1058,7 +1058,8 @@ class NECB2011
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+    motor_properties = standards_lookup_table_first(table_name: 'motors', search_criteria: search_criteria, capacity: nominal_hp + 0.01)
+
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
       return [fan_motor_eff, nominal_hp]
@@ -2595,7 +2596,9 @@ class NECB2011
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        space_type_property = model_find_object(standards_data['space_types'], 'template' => @template, 'space_type' => space.spaceType.get.standardsSpaceType.get, 'building_type' => space.spaceType.get.standardsBuildingType.get)
+        space_type_property = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => @template,
+                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
         raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
         # stores the Building or SpaceType System type name.
         necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
@@ -2629,8 +2632,7 @@ class NECB2011
       is_wildcard = nil
 
       # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
-      necb_hvac_system_selection_table = []
-      necb_hvac_system_selection_table = standards_data['necb_hvac_system_selection_type']['table']
+      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
 
       # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
       # main selection loop

@@ -4,7 +4,7 @@ class Standard
 
   # find search criteria
   #
-  # @return [Hash] used for model_find_object(model)
+  # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.
@@ -66,7 +66,9 @@ class Standard
     thermal_eff = nil
 
     # Get the boiler properties
-    blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = standards_lookup_table_first(table_name: 'boilers',
+                                             search_criteria: search_criteria,
+                                             capacity: capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
@@ -128,7 +130,9 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
+    blr_props = standards_lookup_table_first(table_name: 'boilers',
+                                             search_criteria: search_criteria,
+                                             capacity: capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
       successfully_set_all_properties = false
