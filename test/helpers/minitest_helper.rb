@@ -31,7 +31,7 @@ else
 end
 
 require 'openstudio'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require 'openstudio/measure/ShowRunnerOutput'
 require 'json'
 require 'fileutils'
 
