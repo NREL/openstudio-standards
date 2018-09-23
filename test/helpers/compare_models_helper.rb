@@ -6,8 +6,12 @@
 # @param model_true [OpenStudio::Model::Model] the "true" model
 # @param model_compare [OpenStudio::Model::Model] the model to be
 # compared to the "true" model
+# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# on name alone will be compared with all objects of the same type on a field-by-field basis.
+# This finds objects that have been renamed but are otherwise
+# identical between models, but significantly slows down the comparison.
 # @return [Array<String>] a list of differences between the two models
-def compare_osm_files(model_true, model_compare)
+def compare_osm_files(model_true, model_compare, look_for_renamed_objects = false)
 
   only_model_true = [] # objects only found in the true model
   only_model_compare = [] # objects only found in the compare model
@@ -28,7 +32,8 @@ def compare_osm_files(model_true, model_compare)
     'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
     'OS:Schedule:Rule', # Names appear to be created non-deteministically
     'OS:Rendering:Color', # Rendering colors don't matter
-    'OS:Output:Meter' # Output meter objects may be different and don't affect results
+    'OS:Output:Meter', # Output meter objects may be different and don't affect results
+    'OS:ProgramControl' # Deprecated object no longer translated to EnergyPlus
   ]
 
   # Fill model object lists with all object types to be compared
@@ -54,8 +59,8 @@ def compare_osm_files(model_true, model_compare)
                                                                                                    both_models,
                                                                                                    renamed_object_aliases,
                                                                                                    diffs,
-                                                                                                   object_types_to_skip)
-
+                                                                                                   object_types_to_skip,
+                                                                                                   look_for_renamed_objects)
   # require 'json'
   # diffs << "renamed"
   # diffs << JSON.pretty_generate(renamed_object_aliases)
@@ -305,7 +310,11 @@ end
 # This method is recursive because after it finds that some objects have been renamed, it needs to re-compare
 # all remaining unmatched objects because they might have been unmatched due to having fields
 # referencing renamed object names be different.
-def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_compare_objects, object_pairs, renamed_object_aliases, diffs, object_types_to_skip)
+# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# on name alone will be compared with all objects of the same type in the model_compare
+# on a field-by-field basis.  This finds objects that have been renamed but are otherwise
+# identical between models, but has a significant speed penalty.
+def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_compare_objects, object_pairs, renamed_object_aliases, diffs, object_types_to_skip, look_for_renamed_objects = false)
   # puts "running match_objects!"
   # Determine the number of renamed objects before matching
   num_renamed_objects_before = renamed_object_aliases.size
@@ -316,6 +325,9 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
 
     # Start by looking for unique model objects
     get_unique_object_method = "get#{true_object.iddObject.name.gsub('OS:','').gsub(':','')}"
+    # Methods for SurfaceConvectionAlgorithms don't match convention
+    get_unique_object_method = 'getInsideSurfaceConvectionAlgorithm' if get_unique_object_method == 'getSurfaceConvectionAlgorithmInside'
+    get_unique_object_method = 'getOutsideSurfaceConvectionAlgorithm' if get_unique_object_method == 'getSurfaceConvectionAlgorithmOutside'
     if model_compare.respond_to?(get_unique_object_method) && model_compare.method(get_unique_object_method).arity.zero?
       compare_object = model_compare.send(get_unique_object_method)
       object_pairs << [true_object, compare_object]
@@ -344,38 +356,16 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
     end
 
     # If not found by name, try to find based on field-by-field comparison
-    matching_compare_objects = find_object_matches_field_by_field(true_object, model_compare, renamed_object_aliases)
-    if matching_compare_objects.size > 0
-      matching_compare_objects.each do |matching_compare_object|
-        object_pairs << [true_object, matching_compare_object]
-        # puts "compare '#{object_name(matching_compare_object)}' renamed matches true '#{object_name(true_object)}'"
-        renamed_object_aliases[object_name(matching_compare_object)] += [object_name(true_object)] # Record the alias
+    if look_for_renamed_objects
+      matching_compare_objects = find_object_matches_field_by_field(true_object, model_compare, renamed_object_aliases)
+      if matching_compare_objects.size > 0
+        matching_compare_objects.each do |matching_compare_object|
+          object_pairs << [true_object, matching_compare_object]
+          # puts "compare '#{object_name(matching_compare_object)}' renamed matches true '#{object_name(true_object)}'"
+          renamed_object_aliases[object_name(matching_compare_object)] += [object_name(true_object)] # Record the alias
+        end
+        next
       end
-      next
-    end
-  end
-
-  # Find objects in compare model or in both models
-  model_compare.getModelObjects.sort.each do |compare_object|
-    next if object_types_to_skip.include?(compare_object.iddObject.name) # Skip comparison of certain object types
-    # Start by finding an object with the same name
-    true_workspace_object = model_true.getObjectByTypeAndName(compare_object.iddObject.type, object_name(compare_object))
-    if true_workspace_object.is_initialized
-      true_object = model_true.getModelObject(true_workspace_object.get.handle).get
-      object_pairs << [true_object, compare_object]
-      # puts "true '#{object_name(true_object)}' matches compare '#{object_name(compare_object)}'"
-      next
-    end
-
-    # If not found by name, try to find based on field-by-field comparison
-    matching_true_objects = find_object_matches_field_by_field(compare_object, model_true, renamed_object_aliases)
-    if matching_true_objects.size > 0
-      matching_true_objects.each do |matching_true_object|
-        object_pairs << [matching_true_object, compare_object]
-        # puts "true '#{object_name(matching_true_object)}' renamed matches compare '#{object_name(compare_object)}'"
-        renamed_object_aliases[object_name(matching_true_object)] += [object_name(compare_object)] # Record the alias
-      end
-      next
     end
   end
 
@@ -407,7 +397,8 @@ def match_objects!(model_true, model_compare, unmatched_true_objects, unmatched_
                    object_pairs,
                    renamed_object_aliases,
                    diffs,
-                   object_types_to_skip)
+                   object_types_to_skip,
+                   look_for_renamed_objects)
   end
 
 end
