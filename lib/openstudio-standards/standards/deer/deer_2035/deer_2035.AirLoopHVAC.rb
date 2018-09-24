@@ -1,8 +1,8 @@
 class DEER2035 < DEER
   # @!group AirLoopHVAC
 
-  # Determine if the system required supply air temperature
-  # (SAT) reset. Defaults to true for DEER 2050.
+  # Determine if the system required supply air temperature (SAT) reset.
+  # Defaults to true for DEER 2035.
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.

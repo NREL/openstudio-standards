@@ -1,8 +1,8 @@
-class DEER2030 < DEER
+class DEER2055 < DEER
   # @!group AirLoopHVAC
 
   # Determine if the system required supply air temperature (SAT) reset.
-  # Defaults to true for DEER 2030.
+  # Defaults to true for DEER 2055.
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
@@ -12,7 +12,7 @@ class DEER2030 < DEER
   end
 
   # Determine if a motorized OA damper is required
-  # Defaults to true for DEER 2030.
+  # Defaults to true for DEER 2055.
   #
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)

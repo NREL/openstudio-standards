@@ -1,5 +1,4 @@
-# This class holds methods that apply DEER 2020
-# to a given model.
+# This class holds methods that apply DEER 2020 to a given model.
 # @ref [References::DEERMASControl]
 class DEER2020 < DEER
   @@template = 'DEER 2020' # rubocop:disable Style/ClassVars
