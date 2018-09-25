@@ -2767,7 +2767,6 @@ class Standard
 
     # create a split AC for each group of thermal zones
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-    air_loop.setAvailabilitySchedule(hvac_op_sch)
     thermal_zones_name = (thermal_zones.map { |z| z.name }).join(' - ')
     air_loop.setName("#{thermal_zones_name} SAC")
 
@@ -2882,6 +2881,9 @@ class Standard
     oa_system.setName("#{air_loop.name} OA System")
     oa_system.addToNode(air_loop.supplyInletNode)
 
+    # set air loop availability controls after oa system added
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+
     # create a diffuser and attach the zone/diffuser pair to the air loop
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding #{zone.name} to split DX AC system.")
@@ -2925,7 +2927,7 @@ class Standard
 
     # adjusted zone reheat temperature for ptac
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
-    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C')
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
     dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
@@ -3029,7 +3031,7 @@ class Standard
 
     # adjusted zone reheat temperature for pthp
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
-    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C')
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
     dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
@@ -3133,7 +3135,7 @@ class Standard
 
     # adjusted zone reheat temperature for ptac
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
-    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C')
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
     dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
