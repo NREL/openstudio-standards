@@ -2929,7 +2929,7 @@ class Standard
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
-    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_clg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
     # make a PTAC for each zone
     ptacs = []
@@ -3033,7 +3033,7 @@ class Standard
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
-    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_clg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
     # make a PTHP for each zone
     pthps = []
@@ -3137,7 +3137,7 @@ class Standard
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
-    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_clg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
     # make a unit heater for each zone
     unit_heaters = []
