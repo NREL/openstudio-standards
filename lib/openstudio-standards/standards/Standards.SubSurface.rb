@@ -241,7 +241,7 @@ class Standard
     end
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
-    new_surfaces = BTAP::Geometry::Surfaces.get_guaranteed_concave_surfaces(surface)
+    new_surfaces = BTAP::Geometry::Surfaces.get_guaranteed_concave_surfaces(surface: surface)
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
