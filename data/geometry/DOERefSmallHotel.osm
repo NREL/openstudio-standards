@@ -8229,8 +8229,8 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {555201ea-0c0e-4df3-b813-ccc710b8dae6}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {41e119e9-a57b-48f8-b9b7-e04a8c0195d6}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -10881,8 +10881,8 @@ OS:Surface,
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {cde37d94-0d8f-4be9-b503-792001487e8a}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {e4a49f13-2277-4d20-b5fb-4c587c407f14}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground

@@ -31,10 +31,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4a035398-e49d-42c2-ab5b-4a4c6a2d73f7}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {93ee4c81-2ed9-4b73-9cb5-82f57fdc18c2}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   45.7178, 30.4785, 8.534,                !- X,Y,Z Vertex 1 {m}
@@ -221,10 +221,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {6d122caa-5590-45e8-b46b-87cdc21cf9dd}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {a95cc1df-826b-4ea6-bde3-10fa7dd6f052}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   25.9067, 0, 4.267,                      !- X,Y,Z Vertex 1 {m}
@@ -391,10 +391,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  45.718, 65.0716, 2.1335,                !- X,Y,Z Vertex 1 {m}
-  45.718, 65.0716, 0,                     !- X,Y,Z Vertex 2 {m}
-  45.718, 65.986, 0,                      !- X,Y,Z Vertex 3 {m}
-  45.718, 65.986, 2.1335;                 !- X,Y,Z Vertex 4 {m}
+  45.7178, 65.0716, 2.1335,               !- X,Y,Z Vertex 1 {m}
+  45.7178, 65.0716, 0,                    !- X,Y,Z Vertex 2 {m}
+  45.7178, 65.986, 0,                     !- X,Y,Z Vertex 3 {m}
+  45.7178, 65.986, 2.1335;                !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {8d78c09b-cfec-413f-95c9-1e0d881493a9}, !- Handle
@@ -446,10 +446,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  45.718, 47.5465, 2.1335,                !- X,Y,Z Vertex 1 {m}
-  45.718, 47.5465, 0,                     !- X,Y,Z Vertex 2 {m}
-  45.718, 48.4608, 0,                     !- X,Y,Z Vertex 3 {m}
-  45.718, 48.4608, 2.1335;                !- X,Y,Z Vertex 4 {m}
+  45.7178, 47.5465, 2.1335,               !- X,Y,Z Vertex 1 {m}
+  45.7178, 47.5465, 0,                    !- X,Y,Z Vertex 2 {m}
+  45.7178, 48.4608, 0,                    !- X,Y,Z Vertex 3 {m}
+  45.7178, 48.4608, 2.1335;               !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {499365cb-98fa-46d1-a4c0-87db5431834b}, !- Handle
@@ -510,10 +510,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  45.718, 82.5968, 2.1335,                !- X,Y,Z Vertex 1 {m}
-  45.718, 82.5968, 0,                     !- X,Y,Z Vertex 2 {m}
-  45.718, 83.5111, 0,                     !- X,Y,Z Vertex 3 {m}
-  45.718, 83.5111, 2.1335;                !- X,Y,Z Vertex 4 {m}
+  45.7178, 82.5968, 2.1335,               !- X,Y,Z Vertex 1 {m}
+  45.7178, 82.5968, 0,                    !- X,Y,Z Vertex 2 {m}
+  45.7178, 83.5111, 0,                    !- X,Y,Z Vertex 3 {m}
+  45.7178, 83.5111, 2.1335;               !- X,Y,Z Vertex 4 {m}
 
 OS:ConvergenceLimits,
   {64f3b173-f852-4d94-b429-3376a587d8c6}, !- Handle
@@ -685,6 +685,57 @@ OS:HeatBalanceAlgorithm,
   200;                                    !- Surface Temperature Upper Limit {C}
 
 OS:Surface,
+  {a95cc1df-826b-4ea6-bde3-10fa7dd6f052}, !- Handle
+  Office_Wall_East Reversed,              !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {4a035398-e49d-42c2-ab5b-4a4c6a2d73f7}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {c19449a9-e627-4c44-8fb9-899ea884e797}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  25.9067, 9.1435, 4.267,                 !- X,Y,Z Vertex 1 {m}
+  25.9067, 9.1435, 0,                     !- X,Y,Z Vertex 2 {m}
+  25.9067, 0, 0,                          !- X,Y,Z Vertex 3 {m}
+  25.9067, 0, 4.267;                      !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {75fd56fb-ce92-4202-9b80-bfe1bfac5f6d}, !- Handle
+  Office_Wall_North Reversed,             !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {4a035398-e49d-42c2-ab5b-4a4c6a2d73f7}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {c3efc38f-c8b3-488c-9401-98e12bed3ed7}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 9.1435, 4.267,                       !- X,Y,Z Vertex 1 {m}
+  0, 9.1435, 0,                           !- X,Y,Z Vertex 2 {m}
+  25.9067, 9.1435, 0,                     !- X,Y,Z Vertex 3 {m}
+  25.9067, 9.1435, 4.267;                 !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
+  {93ee4c81-2ed9-4b73-9cb5-82f57fdc18c2}, !- Handle
+  FineStorage_Wall_North Reversed,        !- Name
+  Wall,                                   !- Surface Type
+  ,                                       !- Construction Name
+  {5d98aa08-59f2-4a73-bec1-097ed7f67ab3}, !- Space Name
+  Surface,                                !- Outside Boundary Condition
+  {211eccee-9239-49a8-a483-fabf7eb8b269}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 30.4785, 8.534,                      !- X,Y,Z Vertex 1 {m}
+  0, 30.4785, 0,                          !- X,Y,Z Vertex 2 {m}
+  45.7178, 30.4785, 0,                    !- X,Y,Z Vertex 3 {m}
+  45.7178, 30.4785, 8.534;                !- X,Y,Z Vertex 4 {m}
+
+OS:Surface,
   {a7567fa3-8961-46b3-97d8-e6b9a19270ff}, !- Handle
   Office_Ceiling,                         !- Name
   RoofCeiling,                            !- Surface Type
@@ -724,10 +775,10 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {6d122caa-5590-45e8-b46b-87cdc21cf9dd}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {75fd56fb-ce92-4202-9b80-bfe1bfac5f6d}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   25.9067, 9.1435, 4.267,                 !- X,Y,Z Vertex 1 {m}
@@ -764,10 +815,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   1,                                      !- Multiplier
   ,                                       !- Number of Vertices
-  45.718, 14.7821, 2.1335,                !- X,Y,Z Vertex 1 {m}
-  45.718, 14.7821, 0,                     !- X,Y,Z Vertex 2 {m}
-  45.718, 15.6964, 0,                     !- X,Y,Z Vertex 3 {m}
-  45.718, 15.6964, 2.1335;                !- X,Y,Z Vertex 4 {m}
+  45.7178, 14.7821, 2.1335,               !- X,Y,Z Vertex 1 {m}
+  45.7178, 14.7821, 0,                    !- X,Y,Z Vertex 2 {m}
+  45.7178, 15.6964, 0,                    !- X,Y,Z Vertex 3 {m}
+  45.7178, 15.6964, 2.1335;               !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {c0fbed24-7688-45b6-9d60-99820c3c010a}, !- Handle
@@ -1226,4 +1277,3 @@ OS:Rendering:Color,
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
-
