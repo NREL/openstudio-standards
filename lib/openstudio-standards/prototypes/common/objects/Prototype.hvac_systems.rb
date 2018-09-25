@@ -1044,11 +1044,11 @@ class Standard
       air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
 
       # DOAS sizing
-      zone_sizing = zone.sizingZone
-      zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
-      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy('ColdSupplyAir')
-      zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp_c)
-      zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp_c)
+      sizing_zone = zone.sizingZone
+      sizing_zone.setAccountforDedicatedOutdoorAirSystem(true)
+      sizing_zone.setDedicatedOutdoorAirSystemControlStrategy('ColdSupplyAir')
+      sizing_zone.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp_c)
+      sizing_zone.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp_c)
     end
 
     return air_loop
@@ -1330,11 +1330,11 @@ class Standard
       air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
 
       # DOAS sizing
-      zone_sizing = zone.sizingZone
-      zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
-      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy(doas_control_strategy)
-      zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp_c)
-      zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp_c)
+      sizing_zone = zone.sizingZone
+      sizing_zone.setAccountforDedicatedOutdoorAirSystem(true)
+      sizing_zone.setDedicatedOutdoorAirSystemControlStrategy(doas_control_strategy)
+      sizing_zone.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp_c)
+      sizing_zone.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp_c)
     end
 
     return air_loop
@@ -3523,7 +3523,7 @@ class Standard
     fcus = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding fan coil for #{zone.name}.")
-      zone_sizing = zone.sizingZone
+      sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
 
@@ -3994,11 +3994,11 @@ class Standard
       hottest_erv_supply_c = OpenStudio.convert(hottest_erv_supply_f, 'F', 'C').get
 
       # Ensure that zone sizing accounts for OA from ERV
-      zone_sizing = zone.sizingZone
-      zone_sizing.setAccountforDedicatedOutdoorAirSystem(true)
-      zone_sizing.setDedicatedOutdoorAirSystemControlStrategy('NeutralSupplyAir')
-      zone_sizing.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(coldest_erv_supply_c)
-      zone_sizing.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(hottest_erv_supply_c)
+      sizing_zone = zone.sizingZone
+      sizing_zone.setAccountforDedicatedOutdoorAirSystem(true)
+      sizing_zone.setDedicatedOutdoorAirSystemControlStrategy('NeutralSupplyAir')
+      sizing_zone.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(coldest_erv_supply_c)
+      sizing_zone.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(hottest_erv_supply_c)
 
       ervs << zone_hvac
     end
