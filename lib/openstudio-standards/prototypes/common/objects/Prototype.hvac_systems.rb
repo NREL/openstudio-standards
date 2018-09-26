@@ -2029,6 +2029,8 @@ class Standard
     end
 
     # adjusted zone reheat temperature for cav
+    dsgn_temps['zhtg_dsgn_sup_air_temp_f'] = 62.0
+    dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
@@ -2206,7 +2208,7 @@ class Standard
       setpoint_mgr_single_zone_reheat.setName("#{zone.name} Setpoint Manager SZ Reheat")
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
       setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
+      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
       # zone sizing
@@ -2475,7 +2477,7 @@ class Standard
       setpoint_mgr_single_zone_reheat.setName("#{zone.name} Setpoint Manager SZ Reheat")
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
       setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
+      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
       # zone sizing
@@ -2807,7 +2809,7 @@ class Standard
     dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
 
     # default design settings used across all air loops
-    sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0, sizing_option: 'NonCoincident')
 
     # air handler controls
     # add a setpoint manager single zone reheat to control the supply air temperature
@@ -2815,7 +2817,7 @@ class Standard
     setpoint_mgr_single_zone_reheat.setName("#{air_loop.name} Setpoint Manager SZ Reheat")
     setpoint_mgr_single_zone_reheat.setControlZone(thermal_zones[0])
     setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
-    setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
+    setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
     # add the components to the air loop in order from closest to zone to furthest from zone
@@ -3314,7 +3316,7 @@ class Standard
       # air handler controls
       # setpoint follows OAT WetBulb
       evap_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)
-      evap_stpt_manager.setName("#{approach_r} F above OATwb")
+      evap_stpt_manager.setName("#{dsgn_temps['approach_r']} F above OATwb")
       evap_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
       evap_stpt_manager.setMaximumSetpointTemperature(dsgn_temps['max_clg_dsgn_sup_air_temp_c'])
       evap_stpt_manager.setMinimumSetpointTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
