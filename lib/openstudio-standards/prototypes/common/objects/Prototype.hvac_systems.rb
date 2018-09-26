@@ -1398,8 +1398,7 @@ class Standard
 
     # default design temperatures and settings used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
-    sizing_system = adjust_sizing_system(air_loop,
-                                         dsgn_temps)
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
     sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
     unless hot_water_loop.nil?
@@ -1725,8 +1724,7 @@ class Standard
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
     # default design settings used across all air loops
-    sizing_system = adjust_sizing_system(air_loop,
-                                         dsgn_temps)
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
     sa_temp_sch = model_add_constant_schedule_ruleset(model,
@@ -2188,19 +2186,27 @@ class Standard
 
       # default design temperatures and settings used across all air loops
       dsgn_temps = standard_design_sizing_temperatures
-      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
       unless hot_water_loop.nil?
         hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
         hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
       end
+
+      # adjusted zone reheat temperature for psz_ac
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
       # air handler controls
       # add a setpoint manager single zone reheat to control the supply air temperature
       setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
       setpoint_mgr_single_zone_reheat.setName("#{zone.name} Setpoint Manager SZ Reheat")
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
-      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
       # zone sizing
@@ -2335,7 +2341,6 @@ class Standard
           unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
           unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
           unitary_system.addToNode(air_loop.supplyInletNode)
-          setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         else
           # CyclingHeatPump: Unitary Heat Pump system
           unitary_system = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model,
@@ -2350,8 +2355,6 @@ class Standard
           unitary_system.setFanPlacement(fan_location)
           unitary_system.setSupplyAirFanOperatingModeSchedule(hvac_op_sch)
           unitary_system.addToNode(air_loop.supplyInletNode)
-          setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-          setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         end
       else
         # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
@@ -2377,8 +2380,6 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Invalid fan location')
           return false
         end
-        setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-        setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       end
 
       # add the OA system
@@ -2458,8 +2459,14 @@ class Standard
         air_loop.setName("#{zone.name} #{system_name}")
       end
 
-      # default design temperatures and settings used across all air loops
+      # default design temperatures used across all air loops
       dsgn_temps = standard_design_sizing_temperatures
+
+      # adjusted zone reheat temperature for psz_vav
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+      # default design settings used across all air loops
       sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
       # air handler controls
@@ -2467,8 +2474,8 @@ class Standard
       setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
       setpoint_mgr_single_zone_reheat.setName("#{zone.name} Setpoint Manager SZ Reheat")
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
-      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
       # zone sizing
@@ -2635,21 +2642,27 @@ class Standard
         air_loop.setName("#{zone.name} #{system_name}")
       end
 
-      # default design temperatures and settings used across all air loops
+      # default design temperatures across all air loops
       dsgn_temps = standard_design_sizing_temperatures
-      sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
       unless hot_water_loop.nil?
         hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
         hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
       end
+
+      # adjusted zone reheat temperature for psz_ac
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
       # air handler controls
       # add a setpoint manager single zone reheat to control the supply air temperature
       setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
       setpoint_mgr_single_zone_reheat.setName("#{zone.name} Setpoint Manager SZ Reheat")
       setpoint_mgr_single_zone_reheat.setControlZone(zone)
-      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['htg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
       # zone sizing
@@ -2790,19 +2803,19 @@ class Standard
     # adjusted zone reheat temperature for pvav
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+    dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
 
     # default design settings used across all air loops
-    sizing_system = adjust_sizing_system(air_loop,
-                                         dsgn_temps,
-                                         sizing_option: 'NonCoincident')
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
 
     # air handler controls
     # add a setpoint manager single zone reheat to control the supply air temperature
     setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
     setpoint_mgr_single_zone_reheat.setName("#{air_loop.name} Setpoint Manager SZ Reheat")
     setpoint_mgr_single_zone_reheat.setControlZone(thermal_zones[0])
-    setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['clg_dsgn_sup_air_temp_c'])
-    setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['htg_dsgn_sup_air_temp_c'])
+    setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+    setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'])
     setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
 
     # add the components to the air loop in order from closest to zone to furthest from zone
