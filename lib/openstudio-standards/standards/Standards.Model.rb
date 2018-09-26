@@ -1183,7 +1183,11 @@ class Standard
   # @param array_of_zones [Array] an array of Hashes for each zone, with the keys 'zone',
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
-    array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
+    begin
+      array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
+    rescue ArgumentError => e
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Unable to sort array_of_zones by #{key_to_inspect} due to #{e.message}, defaulting to order that was passed")
+    end
 
     # Calculate the area-weighted average
     total = 0.0
