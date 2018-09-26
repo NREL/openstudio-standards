@@ -2029,7 +2029,7 @@ class Standard
     end
 
     # adjusted zone reheat temperature for cav
-    dsgn_temps['zhtg_dsgn_sup_air_temp_f'] = 62.0
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 62.0
     dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
