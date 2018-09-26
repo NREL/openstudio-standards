@@ -25,6 +25,19 @@ module MediumOffice
     add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
 
+    # set infiltration schedule for plenums
+    # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
+    model.getSpaces.each do |space|
+      next unless space.name.get.to_s.include? 'Plenum'
+      space.spaceInfiltrationDesignFlowRates.each do |infiltration_object|
+        if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+          infiltration_object.setSchedule(model_add_schedule(model, 'Medium Office Infil Quarter On'))
+        else
+          infiltration_object.setSchedule(model_add_schedule(model, 'OfficeLarge INFIL_SCH_PNNL'))
+        end
+      end
+    end
+
     return true
   end
 
@@ -59,10 +72,11 @@ module MediumOffice
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = [
-        { 'stds_spc_type' => 'WholeBuilding - Md Office',
-          'sensor_1_frac' => 0.3835,
-          'sensor_2_frac' => 0.1395,
-        }
+      {
+        'stds_spc_type' => 'WholeBuilding - Md Office',
+        'sensor_1_frac' => 0.3835,
+        'sensor_2_frac' => 0.1395
+      }
     ]
 
     # Adjust daylight sensors in each space

@@ -75,6 +75,19 @@ module LargeOffice
       end
     end
 
+    # set infiltration schedule for plenums
+    # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
+    model.getSpaces.each do |space|
+      next unless space.name.get.to_s.include? 'Plenum'
+      space.spaceInfiltrationDesignFlowRates.each do |infiltration_object|
+        if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+          infiltration_object.setSchedule(model_add_schedule(model, 'Large Office Infil Quarter On'))
+        else
+          infiltration_object.setSchedule(model_add_schedule(model, 'OfficeLarge INFIL_SCH_PNNL'))
+        end
+      end
+    end
+
     return true
   end
 
