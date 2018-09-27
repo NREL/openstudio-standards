@@ -2223,6 +2223,17 @@ class Standard
 
       end
 
+      # If the construction is fenestration,
+      # also set the frame type for use in future lookups
+      if construction.isFenestration
+        case standards_construction_type
+        when 'Metal framing (all other)'
+          standards_info.setFenestrationFrameType('Metal Framing')
+        when 'Nonmetal framing (all)'
+          standards_info.setFenestrationFrameType('Non-Metal Framing')
+        end
+      end
+
       # If the construction has a skylight framing material specified,
       # get the skylight frame material properties and add frame to
       # all skylights in the model.
