@@ -242,6 +242,14 @@ class Standard
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
+    # Throw an error if the roof is not flat.
+    surface.vertices.each do |surf_vert|
+      surface.vertices.each do |surf_vert_2|
+        unless surf_vert_2.z.to_f == surf_vert.z.to_f
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
+        end
+      end
+    end
     new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: 12)
 
     # What is the centroid of the surface.
@@ -287,8 +295,11 @@ class Standard
       # Put this sub-surface on the surface.
       new_sub_surface.setSurface(surface)
       # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
-      # 'skylight').
-      new_name = surface.name.to_s + '_' + "#{index}" + '_' + new_sub_surface.subSurfaceType.to_s
+      # 'skylight').  If there will be more than one subsurface then add a counter at the end.
+      new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+      if new_surfaces.length > 1
+        new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + "#{index}"
+      end
       new_sub_surface.setName(new_name)
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
