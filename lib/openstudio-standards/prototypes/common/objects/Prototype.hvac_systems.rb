@@ -1488,7 +1488,7 @@ class Standard
 
       # create reheat coil
       case reheat_type
-      when 'NaturalGas'
+      when 'NaturalGas', 'Gas'
         rht_coil = create_coil_heating_gas(model,
                                            name: "#{zone.name} Gas Reheat Coil")
       when 'Electricity'
@@ -1503,28 +1503,42 @@ class Standard
                                              rated_inlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'],
                                              rated_outlet_air_temperature: dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       else
-        # Zero-capacity, always-off electric heating coil
-        rht_coil = create_coil_heating_electric(model,
-                                                name: "#{zone.name} No Reheat",
-                                                schedule: model.alwaysOffDiscreteSchedule,
-                                                nominal_capacity: 0.0)
+        # no reheat
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "No reheat coil for terminal in #{zone.name}")
       end
 
-      # create vav terminal
-      terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
-      terminal.setName("#{zone.name} VAV Terminal")
-      terminal.setZoneMinimumAirFlowMethod('Constant')
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-      terminal.setMaximumFlowFractionDuringReheat(0.5)
-      terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+      # set zone reheat temperatures depending on reheat
+      case reheat_type
+      when 'NaturalGas', 'Gas', 'Electricity', 'Water'
+        # create vav terminal
+        terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
+        terminal.setName("#{zone.name} VAV Terminal")
+        terminal.setZoneMinimumAirFlowMethod('Constant')
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        terminal.setMaximumFlowFractionDuringReheat(0.5)
+        terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+        air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
 
-      # zone sizing
-      sizing_zone = zone.sizingZone
-      sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
-      sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
-      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
-      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+        # zone sizing
+        sizing_zone = zone.sizingZone
+        sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+        sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+      else
+        # no reheat
+        # create vav terminal
+        terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
+        terminal.setName("#{zone.name} VAV Terminal")
+        terminal.setZoneMinimumAirFlowInputMethod('Constant')
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+
+        # zone sizing
+        sizing_zone = zone.sizingZone
+        sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      end
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -1719,7 +1733,7 @@ class Standard
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
     end
 
-    # adjusted zone reheat temperature for pvav
+    # adjusted zone design heating temperature for pvav
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
@@ -2028,7 +2042,7 @@ class Standard
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
     end
 
-    # adjusted zone reheat temperature for cav
+    # adjusted design heating temperature for cav
     dsgn_temps['htg_dsgn_sup_air_temp_f'] = 62.0
     dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
@@ -2193,7 +2207,7 @@ class Standard
         hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
       end
 
-      # adjusted zone reheat temperature for psz_ac
+      # adjusted design heating temperature for psz_ac
       dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
       dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
       dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
@@ -2464,7 +2478,7 @@ class Standard
       # default design temperatures used across all air loops
       dsgn_temps = standard_design_sizing_temperatures
 
-      # adjusted zone reheat temperature for psz_vav
+      # adjusted zone design heating temperature for psz_vav
       dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
       dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
 
@@ -2651,7 +2665,7 @@ class Standard
         hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
       end
 
-      # adjusted zone reheat temperature for psz_ac
+      # adjusted zone design heating temperature for data center psz_ac
       dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
       dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
 
@@ -2802,7 +2816,7 @@ class Standard
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
 
-    # adjusted zone reheat temperature for pvav
+    # adjusted zone design heating temperature for split_ac
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
@@ -2940,7 +2954,7 @@ class Standard
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
     end
 
-    # adjusted zone reheat temperature for ptac
+    # adjusted zone design temperatures for ptac
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
@@ -3044,7 +3058,7 @@ class Standard
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
 
-    # adjusted zone reheat temperature for pthp
+    # adjusted zone design temperatures for pthp
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
@@ -3132,7 +3146,7 @@ class Standard
                            rated_inlet_water_temperature: 180.0,
                            rated_outlet_water_temperature: 160.0,
                            rated_inlet_air_temperature: 60.0,
-                           rated_outlet_air_temperature: 100.0)
+                           rated_outlet_air_temperature: 104.0)
 
     # hvac operation schedule
     if hvac_op_sch.nil?
@@ -3148,11 +3162,9 @@ class Standard
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
 
-    # adjusted zone reheat temperature for ptac
+    # adjusted zone design heating temperature for unit heater
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
     dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
-    dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 57.0
-    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_clg_dsgn_sup_air_temp_f'], 'F', 'C').get
 
     # make a unit heater for each zone
     unit_heaters = []
@@ -3161,10 +3173,7 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
-      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      sizing_zone.setZoneCoolingDesignSupplyAirHumidityRatio(0.008)
-      sizing_zone.setZoneHeatingDesignSupplyAirHumidityRatio(0.008)
 
       # add fan
       fan = create_fan_by_name(model,
@@ -3200,7 +3209,7 @@ class Standard
           rated_inlet_air_temperature_c = OpenStudio.convert(rated_inlet_air_temperature, 'F', 'C').get
         end
         if rated_outlet_air_temperature.nil?
-          rated_outlet_air_temperature_c = OpenStudio.convert(100.0, 'F', 'C').get
+          rated_outlet_air_temperature_c = OpenStudio.convert(104.0, 'F', 'C').get
         else
           rated_outlet_air_temperature_c = OpenStudio.convert(rated_outlet_air_temperature, 'F', 'C').get
         end
@@ -3221,7 +3230,7 @@ class Standard
                                                               hvac_op_sch,
                                                               fan,
                                                               htg_coil)
-      unit_heater.setName("#{zone.name} UnitHeater")
+      unit_heater.setName("#{zone.name} Unit Heater")
       unit_heater.setFanControlType(fan_control_type)
       unit_heater.addToThermalZone(zone)
       unit_heaters << unit_heater
@@ -3290,7 +3299,7 @@ class Standard
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
 
-    # adjusted zone reheat temperature for evap cooler
+    # adjusted design temperatures for evap cooler
     dsgn_temps['clg_dsgn_sup_air_temp_f'] = 70.0
     dsgn_temps['clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['clg_dsgn_sup_air_temp_f'], 'F', 'C').get
     dsgn_temps['max_clg_dsgn_sup_air_temp_f'] = 78.0
@@ -3683,6 +3692,21 @@ class Standard
       air_loop.setName("#{zone.name} #{equip_name}")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding furnace AC for #{zone.name}.")
 
+
+      # default design temperatures across all air loops
+      dsgn_temps = standard_design_sizing_temperatures
+
+      # adjusted temperatures for furnace_central_ac
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
+      sizing_system.setAllOutdoorAirinCooling(true)
+      sizing_system.setAllOutdoorAirinHeating(true)
+
       # create heating coil
       htg_coil = nil
       if heating
@@ -3712,7 +3736,7 @@ class Standard
       # create fan
       fan = create_fan_by_name(model,
                                'Residential_HVAC_Fan',
-                               fan_name: "#{air_loop.name} supply fan",
+                               fan_name: "#{air_loop.name} Supply Fan",
                                end_use_subcategory: 'Residential HVAC Fans')
       fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
@@ -3729,9 +3753,9 @@ class Standard
 
       # create unitary system (holds the coils and fan)
       unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
-      unitary.setName("#{air_loop.name} unitary system")
+      unitary.setName("#{air_loop.name} Unitary System")
       unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-      unitary.setMaximumSupplyAirTemperature(OpenStudio.convert(120.0, 'F', 'C').get)
+      unitary.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary.setControllingZoneorThermostatLocation(zone)
       unitary.addToNode(air_loop.supplyInletNode)
 
@@ -3749,7 +3773,7 @@ class Standard
 
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      diffuser.setName("#{zone.name} direct air")
+      diffuser.setName("#{zone.name} Direct Air")
       air_loop.addBranchForZone(zone, diffuser)
 
       furnaces << air_loop
@@ -3790,6 +3814,20 @@ class Standard
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
       air_loop.setName("#{zone.name} Central Air Source HP")
 
+      # default design temperatures across all air loops
+      dsgn_temps = standard_design_sizing_temperatures
+
+      # adjusted temperatures for furnace_central_ac
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
+      sizing_system.setAllOutdoorAirinCooling(true)
+      sizing_system.setAllOutdoorAirinHeating(true)
+
       # create heating coil
       htg_coil = nil
       supplemental_htg_coil = nil
@@ -3818,7 +3856,7 @@ class Standard
       clg_coil = nil
       if cooling
         clg_coil = create_coil_cooling_dx_single_speed(model,
-                                                       name: "#{air_loop.name} cooling coil",
+                                                       name: "#{air_loop.name} Cooling Coil",
                                                        type: 'Residential Central ASHP',
                                                        cop: cop)
         clg_coil.setRatedSensibleHeatRatio(shr)
@@ -3835,7 +3873,7 @@ class Standard
       # create fan
       fan = create_fan_by_name(model,
                                'Residential_HVAC_Fan',
-                               fan_name: "#{air_loop.name} supply fan",
+                               fan_name: "#{air_loop.name} Supply Fan",
                                end_use_subcategory: 'Residential HVAC Fans')
       fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
@@ -3852,7 +3890,7 @@ class Standard
 
       # create unitary system (holds the coils and fan)
       unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
-      unitary.setName("#{air_loop.name} zone unitary system")
+      unitary.setName("#{air_loop.name} Unitary System")
       unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       unitary.setMaximumSupplyAirTemperature(OpenStudio.convert(170.0, 'F', 'C').get) # higher temp for supplemental heat as to not severely limit its use, resulting in unmet hours.
       unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
@@ -3872,7 +3910,7 @@ class Standard
 
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      diffuser.setName(" #{zone.name} direct air")
+      diffuser.setName(" #{zone.name} Direct Air")
       air_loop.addBranchForZone(zone, diffuser)
 
       hps << air_loop
