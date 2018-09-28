@@ -180,7 +180,7 @@ OS:Connection,
 OS:Space,
   {d6fae17a-2423-4ae7-b189-02f65601f395}, !- Handle
   MidFloor_Plenum,                        !- Name
-  ,                                       !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -826,7 +826,7 @@ OS:Connection,
 OS:Space,
   {d90bdd43-239b-4cf7-ae27-6c4e6b492a91}, !- Handle
   TopFloor_Plenum,                        !- Name
-  ,                                       !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -901,7 +901,7 @@ OS:Connection,
 OS:Space,
   {b30407eb-ffd6-40ad-a549-5d1cfee1d345}, !- Handle
   GroundFloor_Plenum,                     !- Name
-  ,                                       !- Space Type Name
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   -0,                                     !- Direction of Relative North {deg}
@@ -5701,3 +5701,12 @@ OS:Rendering:Color,
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
 
+OS:SpaceType,
+  {197e68ab-195b-4ad3-9452-c3b5ed7c640d}, !- Handle
+  Plenum,                                 !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Building Type
+  Plenum;                                 !- Standards Space Type

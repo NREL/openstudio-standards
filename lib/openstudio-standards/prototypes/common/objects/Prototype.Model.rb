@@ -435,7 +435,7 @@ Standard.class_eval do
       adj_space = adj_surface.space.get
       if adj_space.spaceType.is_initialized && adj_space.spaceType.get.standardsSpaceType.is_initialized
         adj_std_space_type = adj_space.spaceType.get.standardsSpaceType.get
-        if adj_std_space_type == 'Plenum'
+        if adj_std_space_type.downcase == 'plenum'
           plenum_construction = adj_surface.construction
           if plenum_construction.is_initialized
             plenum_construction = plenum_construction.get

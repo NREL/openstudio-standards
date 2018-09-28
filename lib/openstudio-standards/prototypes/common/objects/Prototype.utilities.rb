@@ -843,8 +843,13 @@ class Standard
 
     # rename zone equipment list objects
     model.getZoneHVACEquipmentLists.each do |obj|
-      zone = obj.thermalZone
-      obj.setName("#{zone.name.to_s} Zone HVAC Equipment List")
+      begin
+        zone = obj.thermalZone
+        obj.setName("#{zone.name.to_s} Zone HVAC Equipment List")
+      rescue StandardError => e
+        OpenStudio.logFree(OpenStudio::Warn, "openstudio.model.Model", "Removing ZoneHVACEquipmentList #{obj.name}; missing thermal zone.")
+        obj.remove
+      end
     end
 
     return model
