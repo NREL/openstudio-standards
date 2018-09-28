@@ -2959,6 +2959,8 @@ module BTAP
         end
         # If the surface is a triangle or less then do nothing and return it.
         return surf_verts if surf_verts.length <= 3
+        # Adding the first vertex to the end so that it is accounted for.
+        surf_verts << surf_verts[0]
         # Following we go through the points, look for upward pointing lines, then look for downward pointing lines to
         # their left (only to the left because everything goes counter-clockwise).  If there is a line find how much the
         # current upward pointing line overlaps with it in the y direction.
@@ -3052,6 +3054,8 @@ module BTAP
           end
         elsif overlap_segs.length == 1
           # There is only one overlapping downward line, thus this is a quadrilateral already so just return it.
+          # Remove the last vertex as we had artificially added it at the start.
+          surf_verts.pop
           new_surfs << surf_verts
         end
         return new_surfs
