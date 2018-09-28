@@ -23,7 +23,8 @@ def create_class_array
 	'SmallOfficeDetailed',
     'RetailStripmall',
     'Warehouse',
-    'SuperMarket'
+    'SuperMarket',
+	'Courthouse'
   ]
 
   templates = ['NECB2011',
