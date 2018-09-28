@@ -2976,17 +2976,19 @@ module BTAP
                   # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no
                   # then ignore it and go to the next line segment.
                   overlap_y = line_segment_overlap_y?(point_a1: surf_verts[i][:y], point_a2: surf_verts[i-1][:y], point_b1: surf_verts[j][:y], point_b2: surf_verts[j-1][:y])
-                  unless (overlap_y[:overlap_start].nil? || overlap_y[:overlap_end].nil?)
-                    overlap_seg = {
-                        index_a1: i,
-                        index_a2: i-1,
-                        index_b1: j,
-                        index_b2: j-1,
-                        point_b1: surf_verts[j],
-                        point_b2: surf_verts[j-1],
-                        overlap_y: overlap_y
-                    }
-                    overlap_segs << overlap_seg
+                  unless overlap_y[:overlap_start].nil? || overlap_y[:overlap_end].nil?
+                    unless overlap_y[:overlap_start] == overlap_y[:overlap_end]
+                      overlap_seg = {
+                          index_a1: i,
+                          index_a2: i-1,
+                          index_b1: j,
+                          index_b2: j-1,
+                          point_b1: surf_verts[j],
+                          point_b2: surf_verts[j-1],
+                          overlap_y: overlap_y
+                      }
+                      overlap_segs << overlap_seg
+                    end
                   end
                 end
               end
@@ -3031,11 +3033,17 @@ module BTAP
                 new_surf << {x: x_loc, y: y_loc, z: z_loc}
                 # Check if this should be a triangle.
                 for k in 0..(new_surf.length - 1)
+                  break_now = false
                   for l in 0..(new_surf.length - 1)
                     next if k == l
                     if (new_surf[k][:x] == new_surf[l][:x]) && (new_surf[k][:y] == new_surf[l][:y])
                       new_surf.delete_at(l)
+                      break_now = true
+                      break
                     end
+                  end
+                  if break_now == true
+                    break
                   end
                 end
                 new_surfs << new_surf
