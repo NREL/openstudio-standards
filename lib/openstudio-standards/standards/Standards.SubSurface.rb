@@ -190,9 +190,7 @@ class Standard
   # themselves (like an 'L' or a 'V').
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
     # Get rid of all existing subsurfaces.
-    surface.subSurfaces.sort.each do |sub_surface|
-      sub_surface.remove
-    end
+    remove_All_Subsurfaces(surface: surface)
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
@@ -229,16 +227,13 @@ class Standard
 
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
   # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
-  # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
-  # themselves (like an 'L' or a 'V').
+  # fraction of the surface (set by area_fraction).  This method is different than the
+  # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
+  # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
+  # loops that cycle through the verticies in a surface.
   def sub_surface_create_scaled_subsurfaces_from_surface (surface, area_fraction, model)
-    # ckirney start
-    # BTAP::Geometry::Surfaces.delaunay_triangulation_2d(surface)
-    # ckirney end
     # Get rid of all existing subsurfaces.
-    surface.subSurfaces.sort.each do |sub_surface|
-      sub_surface.remove
-    end
+    remove_All_Subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
@@ -313,6 +308,14 @@ class Standard
     surface.subSurfaces.sort.each do |sub_surf|
       new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
       sub_surf.setName(new_name)
+    end
+  end
+
+  # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
+  # before adding windows.
+  def remove_All_Subsurfaces(surface:)
+    surface.subSurfaces.sort.each do |sub_surface|
+      sub_surface.remove
     end
   end
 end

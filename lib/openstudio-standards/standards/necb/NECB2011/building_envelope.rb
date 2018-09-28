@@ -632,6 +632,7 @@ class NECB2011
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
         set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
       end
     else
@@ -641,11 +642,13 @@ class NECB2011
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
         set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
         set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
       end
     end
