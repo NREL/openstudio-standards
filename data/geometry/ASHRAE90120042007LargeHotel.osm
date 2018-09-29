@@ -777,7 +777,7 @@ OS:Surface,
 
 OS:Surface,
   {2c06a457-865a-40b6-838c-9be5a679153d}, !- Handle
-  Corridor_Flr_6_Wall_3_West,             !- Name
+  Corridor_Flr_6_Wall_2_West,             !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
@@ -794,12 +794,12 @@ OS:Surface,
 
 OS:Surface,
   {b704ad1c-b44a-43cd-827e-1eaaa714ea10}, !- Handle
-  Corridor_Flr_6_Wall_2_West,             !- Name
+  Corridor_Flr_6_Wall_4_West,           !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {69429ced-9e9c-443d-a436-abe7c7a09a0a}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1169,8 +1169,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e7c48afd-fd2f-4b1f-a6ed-bc521183d564}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {e9c34369-94f5-420d-ab69-7989fd4fb122}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1419,8 +1419,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4e45dfce-4774-4bb3-87cb-f096a1e6a868}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {cd606390-2ecf-47df-aac8-57774f16ba10}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1661,8 +1661,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {f167dd56-f99d-4d08-bfe9-cb907e0cc75d}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1780,8 +1780,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {641a68f5-3b06-483d-b433-b086626f28a6}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1797,8 +1797,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4e45dfce-4774-4bb3-87cb-f096a1e6a868}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {f60f499f-48a8-45d0-9e7d-37936e116e03}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -1831,8 +1831,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e7c48afd-fd2f-4b1f-a6ed-bc521183d564}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {cd296b28-2ba3-4052-b306-06b5691b246c}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -2621,8 +2621,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {b7b7c8e2-8cd3-4bbe-8cfe-316581e6658e}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -2813,8 +2813,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {c9cac1df-0500-4e93-aca8-168ce98698b8}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -2881,8 +2881,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {c96f4baf-843e-4e6a-96c8-082c31f522fd}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -3075,8 +3075,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {c11369de-980c-4379-8814-84c108bfb730}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -3253,8 +3253,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {b43b9c9e-e9ef-499e-8e23-4b0ea2184482}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -3616,8 +3616,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {87113b54-1a70-42f4-8d62-370ab9058660}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {178b8df5-a2db-4b2f-ac66-1390d2d371f4}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -3986,8 +3986,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8337fdfc-5370-48cb-afdc-4b5fbc87ce0d}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {6b5e0663-fa03-41e1-a0d2-f04d2b656a81}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -4020,8 +4020,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {064876aa-b4ee-47a9-bd4b-88b7fce9181b}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {b704ad1c-b44a-43cd-827e-1eaaa714ea10}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -4050,12 +4050,12 @@ OS:Surface,
 
 OS:Surface,
   {183721a8-2a8e-4e97-af67-33313dfa63c5}, !- Handle
-  Room_1_Flr_6_Wall_East,                 !- Name
+  Room_1_Flr_6_Wall_2_East,               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {b9b16d75-f08b-472e-8174-dacb52b5ac8d}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {717f2e27-2b9a-429f-92cb-f35ac4c9562b}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -4071,8 +4071,8 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8337fdfc-5370-48cb-afdc-4b5fbc87ce0d}, !- Space Name
-  Adiabatic,                              !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
+  Surface,                                !- Outside Boundary Condition
+  {183721a8-2a8e-4e97-af67-33313dfa63c5}, !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
@@ -5978,14 +5978,14 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:Surface,
   {34e15ad4-259e-4af7-9d47-f9dfb6b78bc5}, !- Handle
-  Surface 1,                              !- Name
+  Corridor_Flr_6_Wall_3_West,           !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {ae375c1a-a6f6-4f72-97c7-68988455a7f8}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   4.572, 14.326, 19.2,                    !- X,Y,Z Vertex 1 {m}
@@ -5995,7 +5995,7 @@ OS:Surface,
 
 OS:Surface,
   {412a52da-a12c-4d25-8be6-37fe167cf8d3}, !- Handle
-  Surface 2,                              !- Name
+  Corridor_Flr_3_Wall_4_South,            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
@@ -6012,7 +6012,7 @@ OS:Surface,
 
 OS:Surface,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
-  Surface 3,                              !- Name
+  Corridor_Flr_3_Wall_4_North,            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {227b807d-4e11-4183-8a63-1ff910e681e5}, !- Space Name
@@ -6029,7 +6029,7 @@ OS:Surface,
 
 OS:Surface,
   {b561fd0f-55af-433e-86cc-3619d4454fba}, !- Handle
-  Surface 4,                              !- Name
+  Corridor_Flr_6_Wall_3_South,            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
@@ -6046,14 +6046,14 @@ OS:Surface,
 
 OS:Surface,
   {ae375c1a-a6f6-4f72-97c7-68988455a7f8}, !- Handle
-  Surface 5,                              !- Name
+  Room_1_Flr_6_Wall_1_East,               !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {b9b16d75-f08b-472e-8174-dacb52b5ac8d}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {34e15ad4-259e-4af7-9d47-f9dfb6b78bc5}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   4.572, 9.449, 19.2,                     !- X,Y,Z Vertex 1 {m}
@@ -6063,14 +6063,14 @@ OS:Surface,
 
 OS:Surface,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
-  Surface 6,                              !- Name
+  Corridor_Flr_6_Wall_5_North,            !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {8db4d7a3-2488-4c4c-a843-128954346798}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
+  Surface,                                !- Outside Boundary Condition
+  {7d3999f4-b92b-4587-87f6-715a408ad120}, !- Outside Boundary Condition Object
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   81.991, 12.497, 19.2,                   !- X,Y,Z Vertex 1 {m}
