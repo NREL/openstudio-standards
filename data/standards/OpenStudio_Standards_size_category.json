@@ -41,7 +41,7 @@
       "building_category": "Nonresidential",
       "minimum_floors": 0.0,
       "maximum_floors": 5.0,
-      "minimum_area": 75000.1,
+      "minimum_area": 75000.0,
       "maximum_area": 150000.0,
       "size_category": "nonres_med"
     },
@@ -50,7 +50,7 @@
       "building_category": "Nonresidential",
       "minimum_floors": 0.0,
       "maximum_floors": 999.0,
-      "minimum_area": 150000.1,
+      "minimum_area": 150000.0,
       "maximum_area": "9.9999999E7",
       "size_category": "nonres_lg"
     },
