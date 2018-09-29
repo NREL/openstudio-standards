@@ -38,7 +38,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # logic for multizone VAV Reheat systems
     if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && air_loop_hvac_terminal_reheat?(air_loop_hvac)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "Applying multizone VAV Reheat system controls.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', 'Applying multizone VAV Reheat system controls.')
 
       # economizer controls
       air_loop_hvac_apply_economizer_limits(air_loop_hvac, climate_zone)
@@ -78,6 +78,27 @@ class NRELZNEReady2017 < ASHRAE901
       if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
         air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
       end
+    end
+
+    # Unoccupied shutdown
+    if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
+      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+    else
+      air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
+    end
+
+    # Motorized OA damper
+    if air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)
+      # Assume that the availability schedule has already been
+      # set to reflect occupancy and use this for the OA damper.
+      air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, air_loop_hvac.availabilitySchedule)
+    else
+      air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
+    end
+
+    # Optimum Start
+    if air_loop_hvac_optimum_start_required?(air_loop_hvac)
+      air_loop_hvac_enable_optimum_start(air_loop_hvac)
     end
 
   end
@@ -418,5 +439,17 @@ class NRELZNEReady2017 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is required.")
       return is_sat_reset_required
     end
+  end
+
+  # Determine if a motorized OA damper is required
+  def air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)
+    motorized_oa_damper_required = true
+    return motorized_oa_damper_required
+  end
+
+  # Determines if optimum start control is required.
+  def air_loop_hvac_optimum_start_required?(air_loop_hvac)
+    opt_start_required = true
+    return opt_start_required
   end
 end
