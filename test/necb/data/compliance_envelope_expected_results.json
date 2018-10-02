@@ -2,7 +2,7 @@
   "NECB2011": {
     "2800.0": {
       "fdwr": 0.4,
-      "srr": 0.0499,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.315,
       "outdoor_floors_average_conductances": 0.227,
@@ -11,7 +11,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.4,
       "skylights_average_conductance": 2.4,
-      "doors_average_conductance": 2.4,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -32,7 +32,7 @@
     },
     "3450.0": {
       "fdwr": 0.4,
-      "srr": 0.0499,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.278,
       "outdoor_floors_average_conductances": 0.183,
@@ -41,7 +41,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -61,8 +61,8 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.367,
-      "srr": 0.0499,
+      "fdwr": 0.3667,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
       "outdoor_floors_average_conductances": 0.183,
@@ -71,7 +71,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -92,7 +92,7 @@
     },
     "5500.0": {
       "fdwr": 0.3,
-      "srr": 0.0499,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
       "outdoor_floors_average_conductances": 0.162,
@@ -101,7 +101,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -121,8 +121,8 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.233,
-      "srr": 0.0499,
+      "fdwr": 0.2333,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
       "outdoor_floors_average_conductances": 0.162,
@@ -131,7 +131,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -152,7 +152,7 @@
     },
     "12360.0": {
       "fdwr": 0.2,
-      "srr": 0.0499,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.142,
       "outdoor_walls_average_conductances": 0.183,
       "outdoor_floors_average_conductances": 0.142,
@@ -161,7 +161,7 @@
       "ground_floors_average_conductances": 0.379,
       "windows_average_conductance": 1.6,
       "skylights_average_conductance": 1.6,
-      "doors_average_conductance": 1.6,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -183,8 +183,8 @@
   },
   "NECB2015": {
     "2800.0": {
-      "fdwr": 0.2,
-      "srr": 0.0499,
+      "fdwr": 0.4,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.315,
       "outdoor_floors_average_conductances": 0.227,
@@ -193,7 +193,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.4,
       "skylights_average_conductance": 2.4,
-      "doors_average_conductance": 2.4,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -213,8 +213,8 @@
       }
     },
     "3450.0": {
-      "fdwr": 0.2,
-      "srr": 0.0499,
+      "fdwr": 0.4,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.278,
       "outdoor_floors_average_conductances": 0.183,
@@ -223,7 +223,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -243,8 +243,8 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.2,
-      "srr": 0.0499,
+      "fdwr": 0.3667,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
       "outdoor_floors_average_conductances": 0.183,
@@ -253,7 +253,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -273,8 +273,8 @@
       }
     },
     "5500.0": {
-      "fdwr": 0.2,
-      "srr": 0.0499,
+      "fdwr": 0.3,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
       "outdoor_floors_average_conductances": 0.162,
@@ -283,7 +283,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -303,8 +303,8 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.2,
-      "srr": 0.0499,
+      "fdwr": 0.2333,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
       "outdoor_floors_average_conductances": 0.162,
@@ -313,7 +313,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.2,
       "skylights_average_conductance": 2.2,
-      "doors_average_conductance": 2.2,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -334,7 +334,7 @@
     },
     "12360.0": {
       "fdwr": 0.2,
-      "srr": 0.0499,
+      "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.142,
       "outdoor_walls_average_conductances": 0.183,
       "outdoor_floors_average_conductances": 0.142,
@@ -343,7 +343,7 @@
       "ground_floors_average_conductances": 0.379,
       "windows_average_conductance": 1.6,
       "skylights_average_conductance": 1.6,
-      "doors_average_conductance": 1.6,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -365,7 +365,7 @@
   },
   "NECB2017": {
     "2800.0": {
-      "fdwr": 0.2,
+      "fdwr": 0.4,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.193,
       "outdoor_walls_average_conductances": 0.315,
@@ -375,7 +375,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 2.1,
       "skylights_average_conductance": 2.1,
-      "doors_average_conductance": 2.1,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -395,7 +395,7 @@
       }
     },
     "3450.0": {
-      "fdwr": 0.2,
+      "fdwr": 0.4,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
       "outdoor_walls_average_conductances": 0.278,
@@ -405,7 +405,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 1.9,
       "skylights_average_conductance": 1.9,
-      "doors_average_conductance": 1.9,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -425,7 +425,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.2,
+      "fdwr": 0.3667,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
       "outdoor_walls_average_conductances": 0.247,
@@ -435,7 +435,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 1.9,
       "skylights_average_conductance": 1.9,
-      "doors_average_conductance": 1.9,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -455,7 +455,7 @@
       }
     },
     "5500.0": {
-      "fdwr": 0.2,
+      "fdwr": 0.3,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.21,
@@ -465,7 +465,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 1.9,
       "skylights_average_conductance": 1.9,
-      "doors_average_conductance": 1.9,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -485,7 +485,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.2,
+      "fdwr": 0.2333,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.21,
@@ -495,7 +495,7 @@
       "ground_floors_average_conductances": 0.757,
       "windows_average_conductance": 1.9,
       "skylights_average_conductance": 1.9,
-      "doors_average_conductance": 1.9,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
@@ -525,7 +525,7 @@
       "ground_floors_average_conductances": 0.379,
       "windows_average_conductance": 1.4,
       "skylights_average_conductance": 1.4,
-      "doors_average_conductance": 1.4,
+      "doors_average_conductance": "NA",
       "Wall/Roof infil rate (L/s/m2)": {
         "Story 1 Core Space": "NA,",
         "Story 1 East Perimeter Space": "0.25,",
