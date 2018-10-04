@@ -1276,7 +1276,13 @@ class Baseline9012013Test3 < Minitest::Test
         if spot_check_zone_name.casecmp(zone_name).zero?
           # puts "Zone #{zone_name} is a spot check zone"
           # check fixed flow rate (equal to minimum oa requirement)
-          unless (expected_min_oa_rates_m3_per_s_hash[spot_check_zone_name] - vav_terminal.fixedMinimumAirFlowRate).abs < 0.005
+          min_flow = vav_terminal.fixedMinimumAirFlowRate
+          if min_flow.is_initialized
+            min_flow = min_flow.get
+          else
+            min_flow = 0.0
+          end
+          unless (expected_min_oa_rates_m3_per_s_hash[spot_check_zone_name] - min_flow).abs < 0.005
             failure_array << "Expected #{(expected_min_oa_rates_m3_per_s_hash[spot_check_zone_name]*2118.88).round()} cfm Fixed Flow Rate for Zone #{spot_check_zone_name}; found #{(vav_terminal.fixedMinimumAirFlowRate*2118.88).round()} cfm instead"
           end
         end
