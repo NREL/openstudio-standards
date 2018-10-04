@@ -96,5 +96,16 @@
       "EL3 Core Spc (G.C5)"
     ],
     "return_plenum": "EL3 Core Plnm (G.C13)"
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 West Perim Spc (G.W3) Exhaust Fan",
+    "flow_rate": 2.563887558,
+    "operation_schedule": "D_Hsp_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Hospital Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL1 West Perim Spc (G.W3)"
+    ]
   }
 ]
