@@ -1873,6 +1873,9 @@ class Standard
     # ERVs
     model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj)}
 
+    # Gas Heaters
+    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_efficiency_and_curves(obj)}
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
 

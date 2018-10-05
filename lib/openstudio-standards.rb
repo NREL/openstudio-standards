@@ -101,6 +101,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilHeatingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilHeatingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
+  require_relative "#{stds}/Standards.CoilHeatingGas"
   require_relative "#{stds}/Standards.Construction"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
