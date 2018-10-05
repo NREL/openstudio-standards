@@ -198,9 +198,13 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @json_test_output[template][@hdd]['ground_floors_average_conductances'] = ground_floors_average_conductances.round(4)
         @json_test_output[template][@hdd]['windows_average_conductance'] = windows_average_conductance.round(4)
         @json_test_output[template][@hdd]['skylights_average_conductance'] = skylights_average_conductance.round(4)
-        @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance.round(4)
+        if doors_average_conductance == 'NA'
+          @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance
+        else
+          @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance.round(4)
+        end
 
-
+        
 
         #infiltration test
         # Get the effective infiltration rate through the walls and roof only.
