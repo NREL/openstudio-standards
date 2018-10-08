@@ -43,7 +43,7 @@ class Standard
   # Sets the capacity of the reheat coil based on the minimum flow fraction,
   # and the maximum flow rate.
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
-    flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction
+    flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.get
     if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized
       reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.get
       if reheat_coil.autosizedRatedCapacity.to_f < 1.0e-6
