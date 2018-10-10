@@ -74,7 +74,6 @@ class Standard
   # @return [Hash] a hash of standards data
   def load_standards_database
     standards_files = []
-    standards_files << 'OpenStudio_Standards_furnaces.json'
     standards_files << 'OpenStudio_Standards_boilers.json'
     standards_files << 'OpenStudio_Standards_chillers.json'
     standards_files << 'OpenStudio_Standards_climate_zone_sets.json'
