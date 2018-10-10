@@ -97,20 +97,9 @@ Standard.class_eval do
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
       puts cmd
 
-      # If the appropriate environment variables are set, assume that
-      # the user wants to use the gems from the Gemfile outside the openstudio-cli.
-      # If not, clear both environment variables and run using gems
-      # inside the openstudio-cli.
-      bundle_gemfile = ENV['BUNDLE_GEMFILE']
-      bundle_path = ENV['BUNDLE_PATH']
       env_vars = {}
-      if bundle_gemfile.nil? || bundle_path.nil?
-        env_vars['BUNDLE_GEMFILE'] = nil
-        env_vars['BUNDLE_PATH'] = nil
-      else
-        env_vars['BUNDLE_GEMFILE'] = bundle_gemfile
-        env_vars['BUNDLE_PATH'] = bundle_path
-      end
+      env_vars['BUNDLE_GEMFILE'] = nil
+      env_vars['BUNDLE_PATH'] = nil
 
       # Run the sizing run
       puts "Running sizing run with ENV VARS = '#{env_vars}'"
