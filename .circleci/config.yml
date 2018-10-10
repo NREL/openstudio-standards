@@ -20,11 +20,11 @@ jobs:
       - run:
           name: Run tests
           command: |
-            bundle exec rake test:circleci --bundle Gemfile --bundle_path './openstudio_standards_gems'
+            export BUNDLE_PATH=~/openstudio-standards/openstudio_standards_gems && bundle exec rake test:circleci
       - run:
           name: Summarize test times
           command: |
-            bundle exec rake test:times --bundle Gemfile --bundle_path './openstudio_standards_gems'
+            bundle exec rake test:times
       - store_test_results:
           path: test/reports/
       - store_artifacts:
