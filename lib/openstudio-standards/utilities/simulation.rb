@@ -103,12 +103,16 @@ Standard.class_eval do
       # inside the openstudio-cli.
       bundle_gemfile = ENV['BUNDLE_GEMFILE']
       bundle_path = ENV['BUNDLE_PATH']
+
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "ENV['BUNDLE_GEMFILE'] = '#{bundle_gemfile}'")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "ENV['BUNDLE_PATH'] = '#{bundle_path}'")
+
       if bundle_gemfile.nil? || bundle_path.nil?
         ENV['BUNDLE_GEMFILE'] = nil
         ENV['BUNDLE_PATH'] = nil
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Using gems built into the openstudio CLI for sizing run.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Using gems built into the openstudio CLI for sizing run.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Using gems specified in #{bundle_gemfile} for sizing run.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Using gems specified in #{bundle_gemfile} for sizing run.")
       end
 
       # Run the sizing run
