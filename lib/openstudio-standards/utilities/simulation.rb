@@ -96,7 +96,27 @@ Standard.class_eval do
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
       puts cmd
+
+      # If the appropriate environment variables are set, assume that
+      # the user wants to use the gems from the Gemfile outside the openstudio-cli.
+      # If not, clear both environment variables and run using gems
+      # inside the openstudio-cli.
+      bundle_gemfile = ENV['BUNDLE_GEMFILE']
+      bundle_path = ENV['BUNDLE_PATH']
+      if bundle_gemfile.nil? || bundle_path.nil?
+        ENV['BUNDLE_GEMFILE'] = nil
+        ENV['BUNDLE_PATH'] = nil
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Using gems built into the openstudio CLI for sizing run.")
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Using gems specified in #{bundle_gemfile} for sizing run.")
+      end
+
+      # Run the sizing run
       system(cmd)
+
+      # Reset the environment variables
+      ENV['BUNDLE_GEMFILE'] = bundle_gemfile unless bundle_gemfile.nil?
+      ENV['BUNDLE_PATH'] = bundle_path unless bundle_path.nil?
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
