@@ -94,8 +94,8 @@ Standard.class_eval do
       workflow.saveAs(File.absolute_path(osw_path.to_s))
 
       cli_path = OpenStudio.getOpenStudioCLI
-      #cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
-      cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
+      cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
+      #cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
       puts cmd
 
       # Run the sizing run
