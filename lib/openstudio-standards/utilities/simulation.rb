@@ -95,15 +95,11 @@ Standard.class_eval do
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
+      #cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
       puts cmd
 
-      env_vars = {}
-      env_vars['BUNDLE_GEMFILE'] = nil
-      env_vars['BUNDLE_PATH'] = nil
-
       # Run the sizing run
-      puts "Running sizing run with ENV VARS = '#{env_vars}'"
-      system(env_vars, cmd)
+      OpenstudioStandards.run_command(cmd)
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 
