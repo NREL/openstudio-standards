@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Install openstudio-standards test dependencies
           command: |
-            bundle install --path ./openstudio_standards_gems
+            bundle install
       - run:
           name: Parallelize Tests
           command: |
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            export BUNDLE_PATH=~/openstudio-standards/openstudio_standards_gems && bundle exec rake test:circleci
+            bundle exec rake test:circleci
       - run:
           name: Summarize test times
           command: |
