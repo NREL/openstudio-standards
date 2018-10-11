@@ -217,7 +217,8 @@ class NECB2011
       next if data.nil?
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
-      space_peak_flow = (data['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
+      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f*space_area
+      space_peak_flow = space_peak_flow_ind*space.multiplier
 #      space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building
       total_peak_flow_rate += space_peak_flow
@@ -229,9 +230,11 @@ class NECB2011
       end
       # Get the shw schedule
 #      shw_sched_names << data['service_water_heating_schedule']
+      # 'shw_peakflow_ind_SI' is the shw peak flow rate of the individual space (without the space multiplier)
       space_info = {
           'shw_spaces' => space,
           'shw_peakflow_SI' => OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get,
+          'shw_peakflow_ind_SI' => OpenStudio.convert(space_peak_flow_ind, 'gal/hr', 'm^3/s').get,
           'shw_temp_SI' => tank_temperature,
           'shw_sched' => data['service_water_heating_schedule']
       }
@@ -276,6 +279,7 @@ class NECB2011
       space_info = {
           'shw_spaces' => nil,
           'shw_peakflow_SI' => 0,
+          'shw_peakflow_ind_SI' => 0,
           'shw_temp_SI' => 60,
           'shw_sched' => []
       }
