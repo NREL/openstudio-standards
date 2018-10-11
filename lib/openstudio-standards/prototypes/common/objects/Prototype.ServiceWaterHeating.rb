@@ -252,6 +252,7 @@ class Standard
   #   If nil, will be assumed in 70F air for heat loss.
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_heatpump_water_heater(model,
+                                      type: 'PumpedCondenser',
                                       water_heater_capacity: 500,
                                       electric_backup_capacity: 4500,
                                       water_heater_volume: OpenStudio.convert(80.0, 'gal', 'm^3').get,
@@ -269,10 +270,60 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump water heater')
 
     # create heat pump water heater
-    hpwh = OpenStudio::Model::WaterHeaterHeatPumpWrappedCondenser.new(model)
+    if type == 'WrappedCondenser'
+      hpwh = OpenStudio::Model::WaterHeaterHeatPumpWrappedCondenser.new(model)
+    elsif type == 'PumpedCondenser'
+      hpwh = OpenStudio::Model::WaterHeaterHeatPump.new(model)
+    end
+
+    # calculate tank height and radius
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'kBtu/hr').get
     hpwh_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
+    tank_height = 0.0188 * hpwh_vol_gal + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
+    tank_radius = (0.9 * water_heater_volume / (Math::PI * tank_height))**0.5
+    tank_surface_area = 2.0 * Math::PI * tank_radius * (tank_radius + tank_height)
+    u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
     hpwh.setName("#{hpwh_vol_gal.round}gal Heat Pump Water Heater - #{water_heater_capacity_kbtu_per_hr.round(0)}kBtu/hr")
+
+    if type == 'WrappedCondenser'
+      hpwh.setMinimumInletAirTemperatureforCompressorOperation(OpenStudio.convert(45.0, 'F', 'C').get)
+      hpwh.setMaximumInletAirTemperatureforCompressorOperation(OpenStudio.convert(120.0, 'F', 'C').get)
+      # set sensor heights
+      if hpwh_vol_gal <= 50.0
+        hpwh.setDeadBandTemperatureDifference(0.5)
+        h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 4th node of the tank (counting from top)
+        h_LE = (1 - (10.5 / 12.0)) * tank_height # in the 11th node of the tank (counting from top)
+        h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
+        h_condbot = (1 - (10.99 / 12.0)) * tank_height # in the 11th node of the tank
+        h_hpctrl = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
+        hpwh.setControlSensor1HeightInStratifiedTank(h_hpctrl)
+        hpwh.setControlSensor1Weight(1.0)
+        hpwh.setControlSensor2HeightInStratifiedTank(h_hpctrl)
+      else
+        hpwh.setDeadBandTemperatureDifference(3.89)
+        h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 3rd node of the tank (counting from top)
+        h_LE = (1 - (9.5 / 12.0)) * tank_height # in the 10th node of the tank (counting from top)
+        h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
+        h_condbot = 0.01 # bottom node
+        h_hpctrl_up = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
+        h_hpctrl_low = (1 - (8.5 / 12.0)) * tank_height # in the 9th node of the tank
+        hpwh.setControlSensor1HeightInStratifiedTank(h_hpctrl_up)
+        hpwh.setControlSensor1Weight(0.75)
+        hpwh.setControlSensor2HeightInStratifiedTank(h_hpctrl_low)
+      end
+      hpwh.setCondenserBottomLocation(h_condbot)
+      hpwh.setCondenserTopLocation(h_condtop)
+      hpwh.setTankElementControlLogic('MutuallyExclusive')
+    elsif type == 'PumpedCondenser'
+      hpwh.setDeadBandTemperatureDifference(3.89)
+    end
+
+    # set heat pump water heater properties
+    hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
+    hpwh.setFanPlacement('DrawThrough')
+    hpwh.setOnCycleParasiticElectricLoad(0.0)
+    hpwh.setOffCycleParasiticElectricLoad(0.0)
+    hpwh.setParasiticHeatRejectionLocation('Outdoors')
 
     # set temperature setpoint schedule
     if swh_temp_sch.nil?
@@ -295,47 +346,6 @@ class Standard
       swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
     end
     hpwh.setCompressorSetpointTemperatureSchedule(swh_temp_sch)
-
-    # set properties based on tank size
-    tank_height = 0.0188 * hpwh_vol_gal + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
-    tank_radius = (0.9 * water_heater_volume / (Math::PI * tank_height))**0.5
-    tank_surface_area = 2.0 * Math::PI * tank_radius * (tank_radius + tank_height)
-    u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
-
-    # set sensor heights
-    if hpwh_vol_gal <= 50.0
-      hpwh.setDeadBandTemperatureDifference(0.5)
-      h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 4th node of the tank (counting from top)
-      h_LE = (1 - (10.5 / 12.0)) * tank_height # in the 11th node of the tank (counting from top)
-      h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
-      h_condbot = (1 - (10.99 / 12.0)) * tank_height # in the 11th node of the tank
-      h_hpctrl = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
-      hpwh.setControlSensor1HeightInStratifiedTank(h_hpctrl)
-      hpwh.setControlSensor1Weight(1.0)
-      hpwh.setControlSensor2HeightInStratifiedTank(h_hpctrl)
-    else
-      hpwh.setDeadBandTemperatureDifference(3.89)
-      h_UE = (1 - (3.5 / 12.0)) * tank_height # in the 3rd node of the tank (counting from top)
-      h_LE = (1 - (9.5 / 12.0)) * tank_height # in the 10th node of the tank (counting from top)
-      h_condtop = (1 - (5.5 / 12.0)) * tank_height # in the 6th node of the tank (counting from top)
-      h_condbot = 0.01 # bottom node
-      h_hpctrl_up = (1 - (2.5 / 12.0)) * tank_height # in the 3rd node of the tank
-      h_hpctrl_low = (1 - (8.5 / 12.0)) * tank_height # in the 9th node of the tank
-      hpwh.setControlSensor1HeightInStratifiedTank(h_hpctrl_up)
-      hpwh.setControlSensor1Weight(0.75)
-      hpwh.setControlSensor2HeightInStratifiedTank(h_hpctrl_low)
-    end
-
-    hpwh.setCondenserBottomLocation(h_condbot)
-    hpwh.setCondenserTopLocation(h_condtop)
-    hpwh.setEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
-    hpwh.setMinimumInletAirTemperatureforCompressorOperation(OpenStudio.convert(45.0, 'F', 'C').get)
-    hpwh.setMaximumInletAirTemperatureforCompressorOperation(OpenStudio.convert(120.0, 'F', 'C').get)
-    hpwh.setFanPlacement('DrawThrough')
-    hpwh.setOnCycleParasiticElectricLoad(0.0)
-    hpwh.setOffCycleParasiticElectricLoad(0.0)
-    hpwh.setParasiticHeatRejectionLocation('Outdoors') #### TODO
-    hpwh.setTankElementControlLogic('MutuallyExclusive')
 
     # coil curves
     hpwh_cap = OpenStudio::Model::CurveBiquadratic.new(model)
@@ -364,15 +374,22 @@ class Standard
     hpwh_cop.setMinimumValueofy(0.0)
     hpwh_cop.setMaximumValueofy(100.0)
 
+    # create DX coil object
+    if type == 'WrappedCondenser'
+      coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPumpWrapped.get
+      coil.setRatedCondenserWaterTemperature(48.89)
+    elsif type == 'PumpedCondenser'
+      coil = OpenStudio::Model::CoilWaterHeatingAirToWaterHeatPump.new(model)
+      hpwh.setDXCoil(coil)
+    end
+
     # set coil properties
-    coil = hpwh.dXCoil.to_CoilWaterHeatingAirToWaterHeatPumpWrapped.get
     coil.setName("#{hpwh.name} Coil")
     coil.setRatedHeatingCapacity(water_heater_capacity * cop)
     coil.setRatedCOP(cop)
     coil.setRatedSensibleHeatRatio(shr)
     coil.setRatedEvaporatorInletAirDryBulbTemperature(OpenStudio.convert(67.5, 'F', 'C').get)
     coil.setRatedEvaporatorInletAirWetBulbTemperature(OpenStudio.convert(56.426, 'F', 'C').get)
-    coil.setRatedCondenserWaterTemperature(48.89)
     coil.setRatedEvaporatorAirFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
     coil.setEvaporatorFanPowerIncludedinRatedCOP(true)
     coil.setEvaporatorAirTemperatureTypeforCurveObjects('WetBulbTemperature')
@@ -381,56 +398,64 @@ class Standard
     coil.setMaximumAmbientTemperatureforCrankcaseHeaterOperation(0.0)
 
     # set tank properties
-    tank = hpwh.tank.to_WaterHeaterStratified.get
-    tank.setName("#{hpwh.name} tank")
+    if type == 'WrappedCondenser'
+      tank = hpwh.tank.to_WaterHeaterStratified.get
+      tank.setTankHeight(tank_height)
+      tank.setHeaterPriorityControl('MasterSlave')
+      if hpwh_vol_gal <= 50.0
+        tank.setHeater1DeadbandTemperatureDifference(25.0)
+        tank.setHeater2DeadbandTemperatureDifference(30.0)
+      else
+        tank.setHeater1DeadbandTemperatureDifference(18.5)
+        tank.setHeater2DeadbandTemperatureDifference(3.89)
+      end
+      hpwh_bottom_element_sp = OpenStudio::Model::ScheduleConstant.new(model)
+      hpwh_bottom_element_sp.setName("#{hpwh.name} BottomElementSetpoint")
+      hpwh_top_element_sp = OpenStudio::Model::ScheduleConstant.new(model)
+      hpwh_top_element_sp.setName("#{hpwh.name} TopElementSetpoint")
+      tank.setHeater1Capacity(electric_backup_capacity)
+      tank.setHeater1Height(h_UE)
+      tank.setHeater1SetpointTemperatureSchedule(hpwh_top_element_sp) # Overwritten later by EMS
+      tank.setHeater2Capacity(electric_backup_capacity)
+      tank.setHeater2Height(h_LE)
+      tank.setHeater2SetpointTemperatureSchedule(hpwh_bottom_element_sp)
+      tank.setUniformSkinLossCoefficientperUnitAreatoAmbientTemperature(u_tank)
+      tank.setNumberofNodes(12)
+      tank.setAdditionalDestratificationConductivity(0)
+      tank.setNode1AdditionalLossCoefficient(0)
+      tank.setNode2AdditionalLossCoefficient(0)
+      tank.setNode3AdditionalLossCoefficient(0)
+      tank.setNode4AdditionalLossCoefficient(0)
+      tank.setNode5AdditionalLossCoefficient(0)
+      tank.setNode6AdditionalLossCoefficient(0)
+      tank.setNode7AdditionalLossCoefficient(0)
+      tank.setNode8AdditionalLossCoefficient(0)
+      tank.setNode9AdditionalLossCoefficient(0)
+      tank.setNode10AdditionalLossCoefficient(0)
+      tank.setNode11AdditionalLossCoefficient(0)
+      tank.setNode12AdditionalLossCoefficient(0)
+      tank.setUseSideDesignFlowRate(0.9 * water_heater_volume / 60.1)
+      tank.setSourceSideDesignFlowRate(0)
+      tank.setSourceSideFlowControlMode('')
+      tank.setSourceSideInletHeight(0)
+      tank.setSourceSideOutletHeight(0)
+    elsif type == 'PumpedCondenser'
+      tank = OpenStudio::Model::WaterHeaterMixed.new(model)
+      hpwh.setTank(tank)
+      tank.setDeadbandTemperatureDifference(3.89)
+      tank.setHeaterControlType('Cycle')
+      tank.setHeaterMaximumCapacity(electric_backup_capacity)
+    end
+    tank.setName("#{hpwh.name} Tank")
     tank.setEndUseSubcategory('Service Hot Water')
     tank.setTankVolume(0.9 * water_heater_volume)
-    tank.setTankHeight(tank_height)
     tank.setMaximumTemperatureLimit(90.0)
-    tank.setHeaterPriorityControl('MasterSlave')
-    if hpwh_vol_gal <= 50.0
-      tank.setHeater1DeadbandTemperatureDifference(25.0)
-      tank.setHeater2DeadbandTemperatureDifference(30.0)
-    else
-      tank.setHeater1DeadbandTemperatureDifference(18.5)
-      tank.setHeater2DeadbandTemperatureDifference(3.89)
-    end
-    hpwh_bottom_element_sp = OpenStudio::Model::ScheduleConstant.new(model)
-    hpwh_bottom_element_sp.setName("#{hpwh.name} BottomElementSetpoint")
-    hpwh_top_element_sp = OpenStudio::Model::ScheduleConstant.new(model)
-    hpwh_top_element_sp.setName("#{hpwh.name} TopElementSetpoint")
-    tank.setHeater1Capacity(electric_backup_capacity)
-    tank.setHeater1Height(h_UE)
-    tank.setHeater1SetpointTemperatureSchedule(hpwh_top_element_sp) # Overwritten later by EMS
-    tank.setHeater2Capacity(electric_backup_capacity)
-    tank.setHeater2Height(h_LE)
-    tank.setHeater2SetpointTemperatureSchedule(hpwh_bottom_element_sp)
     tank.setHeaterFuelType('Electricity')
     tank.setHeaterThermalEfficiency(1.0)
     tank.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
     tank.setOffCycleParasiticFuelType('Electricity')
     tank.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
     tank.setOnCycleParasiticFuelType('Electricity')
-    tank.setUniformSkinLossCoefficientperUnitAreatoAmbientTemperature(u_tank)
-    tank.setNumberofNodes(12)
-    tank.setAdditionalDestratificationConductivity(0)
-    tank.setNode1AdditionalLossCoefficient(0)
-    tank.setNode2AdditionalLossCoefficient(0)
-    tank.setNode3AdditionalLossCoefficient(0)
-    tank.setNode4AdditionalLossCoefficient(0)
-    tank.setNode5AdditionalLossCoefficient(0)
-    tank.setNode6AdditionalLossCoefficient(0)
-    tank.setNode7AdditionalLossCoefficient(0)
-    tank.setNode8AdditionalLossCoefficient(0)
-    tank.setNode9AdditionalLossCoefficient(0)
-    tank.setNode10AdditionalLossCoefficient(0)
-    tank.setNode11AdditionalLossCoefficient(0)
-    tank.setNode12AdditionalLossCoefficient(0)
-    tank.setUseSideDesignFlowRate(0.9 * water_heater_volume / 60.1)
-    tank.setSourceSideDesignFlowRate(0)
-    tank.setSourceSideFlowControlMode('')
-    tank.setSourceSideInletHeight(0)
-    tank.setSourceSideOutletHeight(0)
 
     # set fan properties
     fan = hpwh.fan.to_FanOnOff.get
@@ -446,7 +471,7 @@ class Standard
     fan.setMaximumFlowRate(OpenStudio.convert(181.0, 'ft^3/min', 'm^3/s').get)
     fan.setMotorEfficiency(1.0)
     fan.setMotorInAirstreamFraction(1.0)
-    fan.setEndUseSubcategory('Domestic Hot Water')
+    fan.setEndUseSubcategory('Service Hot Water')
 
     if water_heater_thermal_zone.nil?
       # add in schedules for Tamb, RHamb, and the compressor
