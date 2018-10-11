@@ -6,7 +6,7 @@ module OpenstudioStandards
       exts.each do |ext|
         exe = "#{path}/#{cmd}#{ext}"
         if File.executable?(exe)
-          revision = `#{exe} -C #{__dir__} rev-parse --short HEAD`
+          revision = `"#{exe}" -C "#{__dir__}" rev-parse --short HEAD`
           return revision.strip!
         end
       end
