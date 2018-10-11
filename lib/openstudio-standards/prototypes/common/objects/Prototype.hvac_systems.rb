@@ -6462,7 +6462,7 @@ class Standard
     water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
-    water_fixture_def.setPeakFlowRate(space['shw_peakflow_SI'])
+    water_fixture_def.setPeakFlowRate(space['shw_peakflow_ind_SI'])
     water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
     mixed_water_temp_c = space['shw_temp_SI']
