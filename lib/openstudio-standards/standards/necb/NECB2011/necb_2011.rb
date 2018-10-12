@@ -52,7 +52,6 @@ class NECB2011 < Standard
     end
 
 
-
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
@@ -183,7 +182,7 @@ class NECB2011 < Standard
                                    fdwr_set: 'MAXIMIZE',
                                    ssr_set: 'MAXIMIZE'
   )
-    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/#{template}/data/geometry/#{building_type}.osm"))
+    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
     return model_apply_standard(model: model,
@@ -350,12 +349,15 @@ class NECB2011 < Standard
       bt_target_vintage_string = "#{self.class.name}_building_type"
       space_type_upgrade_map = standards_lookup_table_many(table_name: 'space_type_upgrade_map')
       model.getSpaceTypes.each do |st|
-        space_type_map = space_type_upgrade_map.detect {|row| ( row[st_model_vintage_string] == st.get.standardsSpaceType.get) && (row[bt_model_vintage_string] == st.get.standardsBuildingType.get)}
-        unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string]) or st.setStandardsSpaceType(space_type_map[st_target_vintage_string])
-          no_errors = false
-        end
-        return no_errors
+        puts "replacing #{space_type_vintage} to #{self.class.name}"
+        puts "#{st.standardsBuildingType.get.to_s} - #{st.standardsSpaceType.get.to_s}"
+        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        puts " with #{space_type_map[bt_target_vintage_string]} - #{space_type_map[st_target_vintage_string]}"
+        st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
+        puts "results #{st.standardsBuildingType.get.to_s} - #{st.standardsSpaceType.get.to_s}"
       end
+      return no_errors
     end
   end
 
