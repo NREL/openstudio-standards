@@ -6455,14 +6455,17 @@ class Standard
     # water_use_sensible_frac_sch.setValue(0.2)
     # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
     # water_use_latent_frac_sch.setValue(0.05)
-    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_SI'], 'm^3/s', 'gal/min').get
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by the
+    # space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier as well
+    # which is different than the space (ultimately thermal zone) multiplier.
+    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_ind_SI'], 'm^3/s', 'gal/min').get
     water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
     water_use_latent_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
-    water_fixture_def.setPeakFlowRate(space['shw_peakflow_SI'])
+    water_fixture_def.setPeakFlowRate(space['shw_peakflow_ind_SI'])
     water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
     mixed_water_temp_c = space['shw_temp_SI']
