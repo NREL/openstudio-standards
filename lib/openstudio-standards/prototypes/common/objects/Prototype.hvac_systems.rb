@@ -6455,6 +6455,9 @@ class Standard
     # water_use_sensible_frac_sch.setValue(0.2)
     # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
     # water_use_latent_frac_sch.setValue(0.05)
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by the
+    # space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier as well
+    # which is different than the space (ultimately thermal zone) multiplier.
     rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_ind_SI'], 'm^3/s', 'gal/min').get
     water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
     water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)

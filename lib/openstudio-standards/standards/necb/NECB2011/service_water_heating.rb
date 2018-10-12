@@ -30,6 +30,9 @@ class NECB2011
     if shw_sizing["loop_peak_flow_rate_SI"] == 0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
     else
+      # Note that when water use equipment is assigned to spaces then the water used
+      # by the equipment is multiplied by the space (ultimately thermal zone) multiplier.  Note that there is a separate
+      # water use equipment multiplier as well which is different than the space (ultimately thermal zone) multiplier.
       shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
     end
@@ -217,6 +220,12 @@ class NECB2011
       next if data.nil?
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
+      # space_peak_flow_ind is the peak flow rate for the space while space_peak_flow is the peak flow
+      # rate for the space multiplied by the space (ultimately thermal zone) multiplier.  space_peak_flow is used for
+      # much of the rest as it reflects how much water is used.  space_peak_flow_ind is recorded and used later on
+      # when defining water use equipment.  When when water use equipment is assigned to spaces then the water use
+      # by the equipment is multiplied by the space multiplier.  Note that there is a separate water use equipment
+      # multiplier as well which is different than the space (ultimately thermal zone) multiplier.
       space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f*space_area
       space_peak_flow = space_peak_flow_ind*space.multiplier
 #      space_peak_flows << space_peak_flow
