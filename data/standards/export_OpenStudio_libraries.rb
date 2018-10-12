@@ -9,6 +9,21 @@ require 'json'
 require 'openstudio'
 require_relative '../../lib/openstudio-standards'
 
+require 'etc'
+# gem install parallel
+require 'parallel'
+
+# Environment variables
+if ENV['N'].nil?
+  # Number of parallel runs caps to nproc - 1
+  $nproc = [1, Etc.nprocessors - 1].max
+  puts "Defaulted Nproc to #{$nproc}"
+else
+  $nproc = ENV['N'].to_i
+  puts "Using environment Nproc=#{$nproc}"
+end
+
+
 def export_openstudio_libraries
   start_time = Time.now
 
@@ -28,7 +43,9 @@ def export_openstudio_libraries
   templates_to_climate_zones = JSON.parse(temp)
 
   # Make a library model for each template
-  std.standards_data["templates"].each do |template|
+  # We parallelize this loop, since it takes really long
+  Parallel.each(std.standards_data["templates"],
+                in_threads: $nproc) do |template|
 
     # Wrap each library creation in a begin/rescue because
     # the entire process can take a long time and
@@ -44,12 +61,14 @@ def export_openstudio_libraries
         std_applier = Standard.build(template_name)
       rescue Exception => e
         puts "'#{template_name}' is not defined in OpenStudio-Standards yet"
+        next
       end
 
       # Reset the openstudio-standards log
       reset_log
 
-      next unless template_name == '90.1-2004'
+      # If you want to only do one specific template
+      # next unless template_name == '90.1-2004'
 
       # Make an empty model
       model = OpenStudio::Model::Model.new
@@ -416,7 +435,9 @@ def export_openstudio_libraries
       end
 
       # Save the library
-      osm_lib_dir = "#{__dir__}/../../pkg/libraries"
+      pkg_dir = "#{__dir__}/../../pkg"
+      Dir.mkdir(pkg_dir) unless Dir.exists?(pkg_dir)
+      osm_lib_dir = "#{pkg_dir}/libraries"
       Dir.mkdir(osm_lib_dir) unless Dir.exists?(osm_lib_dir)
       library_path = "#{osm_lib_dir}/#{template_name.gsub(/\W/,'_')}.osm"
       puts "* Saving library #{library_path}"
