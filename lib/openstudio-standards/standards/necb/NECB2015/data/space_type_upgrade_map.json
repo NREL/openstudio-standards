@@ -1,6 +1,6 @@
 {
   "tables": {
-    "space_types": {
+    "space_type_upgrade_map": {
       "data_type": "table",
       "refs": [
         "assumption"
