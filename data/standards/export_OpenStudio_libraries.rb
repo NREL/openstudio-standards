@@ -13,18 +13,18 @@ require 'etc'
 # gem install parallel
 require 'parallel'
 
-# Environment variables
-if ENV['N'].nil?
-  # Number of parallel runs caps to nproc - 1
-  $nproc = [1, Etc.nprocessors - 1].max
-  puts "Defaulted Nproc to #{$nproc}"
-else
-  $nproc = ENV['N'].to_i
-  puts "Using environment Nproc=#{$nproc}"
-end
-
-
 def export_openstudio_libraries
+
+  # Environment variables
+  if ENV['N'].nil?
+    # Number of parallel runs caps to nproc - 1
+    $nproc = [1, Etc.nprocessors - 1].max
+    puts "Defaulted Nproc to #{$nproc}"
+  else
+    $nproc = ENV['N'].to_i
+    puts "Using environment Nproc=#{$nproc}"
+  end
+
   start_time = Time.now
 
   ### Define what to include in the libraries ###
