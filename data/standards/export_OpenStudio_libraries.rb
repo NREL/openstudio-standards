@@ -9,7 +9,6 @@ require 'json'
 require 'openstudio'
 require_relative '../../lib/openstudio-standards'
 
-require 'etc'
 # gem install parallel
 require 'parallel'
 
@@ -18,7 +17,8 @@ def export_openstudio_libraries
   # Environment variables
   if ENV['N'].nil?
     # Number of parallel runs caps to nproc - 1
-    $nproc = [1, Etc.nprocessors - 1].max
+    # On a 8 core, 16 threads machine => 15
+    $nproc = [1, Parallel.processor_count - 1].max
     puts "Defaulted Nproc to #{$nproc}"
   else
     $nproc = ENV['N'].to_i
