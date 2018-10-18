@@ -240,7 +240,7 @@ class OpenStudio::Model::Model
                    prototype_input['doas_economizer_control_type'],
                    building_type)
 
-        when 'DC' # Data Center
+        when 'DC' # Data Center in the Large Office prototype
 
           # Retrieve the existing hot water loop
           # or add a new one if necessary.
@@ -268,7 +268,69 @@ class OpenStudio::Model::Model
                                prototype_input['flow_fraction_schedule_name'],
                                prototype_input['flow_fraction_schedule_name'],
                                system['main_data_center'])
+        when 'CRAC'
+          
+          # this can only be 'DrawThrough' as there is bug in OpenStudio that a setpoint manager will be automatically added
+          # to the outlet node of supply fan, which causes duplication.
+          fan_position = 'DrawThrough'
+          # fan_position = 'BlowThrough'
+          
+          add_crac(template,
+                   system['name'],
+                   thermal_zones,
+                   prototype_input['crac_operation_schedule'],
+                   prototype_input['crac_oa_damper_schedule'],
+                   fan_position,
+                   prototype_input['crac_fan_type'],
+                   prototype_input['crac_cooling_type'],
+                   building_type)
 
+        when 'CRAH'
+          
+          # Retrieve the existing chilled water loop
+          # or add a new one if necessary.
+          chilled_water_loop = nil
+          if getPlantLoopByName('Chilled Water Loop').is_initialized
+            chilled_water_loop = getPlantLoopByName('Chilled Water Loop').get
+          else
+            condenser_water_loop = nil
+            number_cooling_towers = 1
+            num_chillers = 1
+            if prototype_input['chiller_cooling_type'] == 'WaterCooled'
+              condenser_water_loop = add_cw_loop(template,
+                                                 'Open Cooling Tower',
+                                                 'Centrifugal',
+                                                 'Fan Cycling',
+                                                 2,
+                                                 number_cooling_towers,
+                                                 building_type)
+            end
+
+            chilled_water_loop = add_chw_loop(template,
+                                              prototype_input['chw_pumping_type'],
+                                              prototype_input['chiller_cooling_type'],
+                                              prototype_input['chiller_condenser_type'],
+                                              prototype_input['chiller_compressor_type'],
+                                              'Electricity',
+                                              condenser_water_loop,
+                                              building_type,
+                                              num_chillers)
+          end
+
+          # Add the CRAH
+          add_crah(template,
+                   system['name'],
+                   chilled_water_loop,
+                   thermal_zones,
+                   prototype_input['vav_operation_schedule'],
+                   prototype_input['vav_oa_damper_schedule'],
+                   prototype_input['vav_fan_efficiency'],
+                   prototype_input['vav_fan_motor_efficiency'],
+                   prototype_input['vav_fan_pressure_rise'],
+                   return_plenum,
+                   building_type)
+                  
+        
         when 'SAC'
 
           add_split_ac(template,

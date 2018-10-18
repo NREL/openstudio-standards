@@ -130,7 +130,7 @@ class OpenStudio::Model::Construction
       next unless layer.name.get == insulation_layer_name
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
-        layer.setThickness(ins_r_value_si * layer.getConductivity)
+        layer.setThickness(ins_r_value_si * layer.getConductivity.value)
         layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
         break # Stop looking for the insulation layer once found
       elsif layer.to_MasslessOpaqueMaterial.is_initialized

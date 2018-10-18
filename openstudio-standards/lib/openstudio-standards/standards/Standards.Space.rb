@@ -1552,6 +1552,8 @@ class OpenStudio::Model::Space
       basic_infil_rate_cfm_per_ft2 = 1.8
     when '90.1-2010', '90.1-2013'
       basic_infil_rate_cfm_per_ft2 = 1.0
+    when 'LowITE', 'HighITE'
+      basic_infil_rate_cfm_per_ft2 = 0
     end
 
     # Conversion factor
@@ -1587,7 +1589,7 @@ class OpenStudio::Model::Space
       # exterior surface area (for the E+ input field) this will include the exterior floor if present.
       all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / exteriorArea
 
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'LowITE', 'HighITE'
       adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
       adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
       # Get the exterior wall area

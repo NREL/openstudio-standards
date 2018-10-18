@@ -54,7 +54,7 @@ class OpenStudio::Model::FanVariableVolume
 
         pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7487
                                  2.5
-                               elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20_000
+                               elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
                                  4.46
                                else # Over 20,000 cfm
                                  4.09
@@ -66,7 +66,7 @@ class OpenStudio::Model::FanVariableVolume
         when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
           pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
                                    4.0
-                                 elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20_000
+                                 elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
                                    6.32
                                  else # Over 20,000 cfm
                                    5.58
@@ -76,6 +76,18 @@ class OpenStudio::Model::FanVariableVolume
                                    4.0
                                  else # Over 7,437 cfm
                                    5.58
+                                 end
+        when 'LowITE', 'HighITE'   # for data centers
+          pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
+                                   4.0
+                                 elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
+                                   5.58
+                                 elsif maximum_flow_rate_cfm >= 20000 && maximum_flow_rate_cfm < 50000
+                                   8.0
+                                 elsif maximum_flow_rate_cfm >= 50000 && maximum_flow_rate_cfm < 200000
+                                   12.0
+                                 else
+                                   20.0
                                  end
         end
 

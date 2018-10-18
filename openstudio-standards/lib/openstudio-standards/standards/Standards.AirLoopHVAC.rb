@@ -687,7 +687,7 @@ class OpenStudio::Model::AirLoopHVAC
     minimum_capacity_btu_per_hr = infinity_btu_per_hr
 
     # Determine if the airloop serves any computer rooms
-    # / data centers, which changes the economizer.
+    # / data centers, which changes the economizer requirement.
     is_dc = false
     if data_center_area_served > 0
       is_dc = true
@@ -720,7 +720,7 @@ class OpenStudio::Model::AirLoopHVAC
           'ASHRAE 169-2006-6B'
         minimum_capacity_btu_per_hr = 65_000
       end
-    when '90.1-2010', '90.1-2013'
+    when '90.1-2010', '90.1-2013', 'LowITE', 'HighITE'
       if is_dc # data center / computer room
         case climate_zone
         when 'ASHRAE 169-2006-1A',
@@ -1379,6 +1379,10 @@ class OpenStudio::Model::AirLoopHVAC
         erv_required = false
         return erv_required
       end
+     # ERV not required for data centers(building type), which don't need outdoor air
+     when 'LowITE', 'HighITE'
+       erv_required = false
+       return erv_required
     end
 
     # ERV Not Applicable for AHUs that have DCV
@@ -2259,8 +2263,9 @@ class OpenStudio::Model::AirLoopHVAC
   def demand_control_ventilation_required?(template, climate_zone)
     dcv_required = false
 
-    # Not required by the old vintages
-    if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004' || template == 'NECB 2011'
+    # Not required by the old vintages and data centers(building type)
+    case template
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'NECB 2011', 'LowITE', 'HighITE'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{template} #{climate_zone}:  #{name}: DCV is not required for any system.")
       return dcv_required
     end
@@ -3445,7 +3450,7 @@ class OpenStudio::Model::AirLoopHVAC
     # must turn off when unoccupied.
     minimum_fan_hp = nil
     case template
-    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'LowITE', 'HighITE'
       minimum_fan_hp = 0.75
     end
 
@@ -3590,7 +3595,7 @@ class OpenStudio::Model::AirLoopHVAC
         next if space_type.standardsSpaceType.empty?
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
-        next unless standards_space_type.downcase.include?('data')
+        next unless standards_space_type.downcase.include?('data') || standards_space_type.downcase.include?('computer')
         dc_area_m2 += space.floorArea
       end
     end

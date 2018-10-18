@@ -122,6 +122,29 @@ class OpenStudio::Model::CoilCoolingDXSingleSpeed
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
+
+
+########################################################################################    
+    # If specified as SCOP for CRAC
+    unless ac_props['minimum_scop'].nil?
+      min_scop = ac_props['minimum_scop']
+      if ratedSensibleHeatRatio.is_initialized
+        crac_sensible_heat_ratio = ratedSensibleHeatRatio.get
+      elsif autosizedRatedSensibleHeatRatio.is_initialized     
+        #Though actual inlet temperature is very high (thus basically no dehumidification),
+        #sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 °C drybulb/19.4 °C wetbulb.
+        crac_sensible_heat_ratio = autosizedRatedSensibleHeatRatio.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.autosizedRatedSensibleHeatRatio', "Failed to get autosized sensible heat ratio")
+      end
+      cop = min_scop/crac_sensible_heat_ratio
+      cop = cop.round(2)
+      new_comp_name = "#{name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_scop}SCOP #{cop}COP"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{min_scop}")
+    end
+########################################################################################
+
+       
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']

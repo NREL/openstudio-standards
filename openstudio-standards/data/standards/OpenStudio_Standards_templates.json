@@ -57,8 +57,16 @@
       "notes": "Indian Energy Conservation Building Code 2007"
     },
     {
+      "name": "HighITE",
+      "notes": "For Data Center only. Each size of data center has two IT equipment density levels: Low and High"
+    },
+    {
       "name": "ICC IECC 2015",
       "notes": "International Code Council 2015 International \nEnergy Conservation Code"
+    },
+    {
+      "name": "LowITE",
+      "notes": "For Data Center only. Each size of data center has two IT equipment density levels: Low and High"
     },
     {
       "name": "NECB 2011",

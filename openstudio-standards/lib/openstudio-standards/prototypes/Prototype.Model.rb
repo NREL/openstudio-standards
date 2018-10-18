@@ -220,6 +220,11 @@ class OpenStudio::Model::Model
     if building_type == 'HighriseApartment'
       PrototypeBuilding::HighriseApartment.update_fan_efficiency(self)
     end
+    
+    # # for large data center, if sized AHU is too big, implement multiple AHUs to the same zone.
+    # if building_type == 'LargeDataCenter'
+      # PrototypeBuilding::LargeDataCenter.update_crah_num(building_type,prototype_input,template,self,sizing_run_dir)
+    # end
 
     # Add output variables for debugging
     if debug
@@ -301,6 +306,10 @@ class OpenStudio::Model::Model
       building_methods = 'Prototype.mid_rise_apartment'
     when 'HighriseApartment'
       building_methods = 'Prototype.high_rise_apartment'
+    when 'SmallDataCenter'
+      building_methods = 'Prototype.small_data_center'
+    when 'LargeDataCenter'
+      building_methods = 'Prototype.large_data_center'
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
       return false
@@ -424,6 +433,10 @@ class OpenStudio::Model::Model
       alt_search_name = 'Office'
     when 'HighriseApartment'
       geometry_file = 'Geometry.high_rise_apartment.osm'
+    when 'SmallDataCenter'
+      geometry_file = 'Geometry.small_data_center.osm'
+    when 'LargeDataCenter'
+      geometry_file = 'Geometry.large_data_center.osm'
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Building Type = #{building_type} not recognized")
       return false
@@ -687,6 +700,7 @@ class OpenStudio::Model::Model
     bldg_def_const_set = add_construction_set(template, climate_zone, lookup_building_type, nil, is_residential)
 
     if bldg_def_const_set.is_initialized
+      puts "bldg_def_const_set.is_initialized"
       getBuilding.setDefaultConstructionSet(bldg_def_const_set.get)
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Could not create default construction set for the building.')
@@ -800,6 +814,7 @@ class OpenStudio::Model::Model
     # add internal mass
     # not required for NECB 2011
     unless (template == 'NECB 2011') ||
+           (building_type == 'SmallDataCenter' || building_type == 'LargeDataCenter' )  # data centers have little furniture
            ((building_type == 'SmallHotel') &&
              (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(self)
@@ -1459,6 +1474,9 @@ class OpenStudio::Model::Model
           # return air temperature and outside air temperature OR return air enthalpy
           # and outside air enthalphy; latter chosen to be consistent with MNECB and CAN-QUEST implementation
           economizer_type = 'DifferentialEnthalpy'
+        # For data centers, the air-side economizer will be added as a measure only.
+        when 'LowITE', 'HighITE'
+          economizer_type = 'NoEconomizer'
         end
 
         # Set the economizer type

@@ -81,6 +81,8 @@ def strip_model(model)
 
   # Remove all schedules
   model.getSchedules.each(&:remove)
+  model.getScheduleWeeks.each(&:remove)
+  model.getScheduleDays.each(&:remove)
 
   # Remove all schedule type limits
   model.getScheduleTypeLimitss.each(&:remove)

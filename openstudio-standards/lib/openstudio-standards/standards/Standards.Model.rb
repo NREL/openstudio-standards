@@ -2646,6 +2646,8 @@ class OpenStudio::Model::Model
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
+    puts "intended_surface_type = #{intended_surface_type}"
+    
     props = find_object($os_standards['construction_properties'], 'template' => template,
                                                                   'climate_zone_set' => climate_zone_set,
                                                                   'intended_surface_type' => intended_surface_type,
@@ -4259,11 +4261,12 @@ class OpenStudio::Model::Model
         possible_climate_zones << climate_zone_set['name']
       end
     end
-
+    
     # Check the results
     if possible_climate_zones.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
-    elsif possible_climate_zones.size > 2
+    # Added climate zone set "AllClimateZones 1to8", so change the bar from 2 to 3.
+    elsif possible_climate_zones.size > 3
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
     end
 
@@ -4274,7 +4277,7 @@ class OpenStudio::Model::Model
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'LowITE', 'HighITE'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       result = if possible_climate_zones.include? 'ClimateZone 3'
@@ -4285,6 +4288,8 @@ class OpenStudio::Model::Model
     when 'ICC IECC 2015', 'OEESC 2014'
       result = possible_climate_zones.sort.first
     end
+    
+    puts "climate zone set result = #{result}"
 
     # Check that a climate zone set was found
     if result.nil?
