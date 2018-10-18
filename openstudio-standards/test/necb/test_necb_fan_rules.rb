@@ -37,6 +37,9 @@ class HVACEfficienciesTest < MiniTest::Test
       puts "***************************************#{name}*******************************************************\n"
       model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.716240_CWEC.epw").set_weather_file(model)
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule	
+      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
       BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
         model, 
         model.getThermalZones, 
@@ -44,7 +47,8 @@ class HVACEfficienciesTest < MiniTest::Test
         heating_coil_type, 
         baseboard_type, 
         chiller_type, 
-        vavfan_type)
+        vavfan_type,
+        hw_loop)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       vavfans = model.getFanVariableVolumes
@@ -115,13 +119,17 @@ class HVACEfficienciesTest < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = 'sys1'
     puts "***************************************#{name}*******************************************************\n"
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
       model, 
       model.getThermalZones, 
       boiler_fueltype, 
       mau_type, 
       mau_heating_coil_type, 
-      baseboard_type)
+      baseboard_type,
+      hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -150,7 +158,7 @@ class HVACEfficienciesTest < MiniTest::Test
       oa_sys = iloop.airLoopHVACOutdoorAirSystem.get
       oa_ctl = oa_sys.getControllerOutdoorAir
       econ_is_diff_enthalpy = true
-      if oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
+      if oa_ctl.getEconomizerControlType.to_s != 'NoEconomizer' && oa_ctl.getEconomizerControlType.to_s != 'DifferentialEnthalpy' then econ_is_diff_enthalpy = false end
       assert(econ_is_diff_enthalpy, "test_vavfan_rules: Economizer control does not match necb requirement #{name}")
     end
   end

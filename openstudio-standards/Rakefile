@@ -1,4 +1,3 @@
-
 require 'bundler/gem_tasks'
 begin
   Bundler.setup
@@ -10,18 +9,44 @@ end
 
 require 'rake/testtask'
 namespace :test do
-
-  desc 'Run the weather file tests'
-  Rake::TestTask.new('weather') do |t|
-    t.libs << 'test'
-    t.test_files = FileList['openstudio-standards/test/necb/test_weather.rb']
+  full_file_list = nil
+  if File.exist?("test/circleci_tests.txt")
+    #load test files from file. 
+    full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
+    #Select only .rb files that exist 
+    full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
+    full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+  else
+    puts "Could not find list of files to test at test/circleci_tests.txt"
+    return false
   end
 
-  desc 'Run the compliance file tests'
-  Rake::TestTask.new('compliance') do |t|
+
+  desc 'Run BTAP.perform_qaqc() test'
+  Rake::TestTask.new(:btap_json_test) do |t|
+    file_list = FileList.new('openstudio-standards/test/test_necb_qaqc.rb')
     t.libs << 'test'
-    t.test_files = FileList['openstudio-standards/test/necb/test_compliance.rb']
+    t.test_files = file_list
+    t.verbose = true
   end
+
+  ['90_1_prm', '90_1_general', 'doe_prototype', 'necb', 'necb_bldg'].each do |type|
+    desc "Manual Run CircleCI tests #{type}"
+    Rake::TestTask.new("circ-#{type}") do |t|
+      array = full_file_list.select {|item| item.include?("#{type}")}
+      t.libs << 'test'
+      t.test_files = array
+    end
+  end
+
+
+  desc "Manual Run All CircleCI tests"
+  Rake::TestTask.new("circ-all-tests") do |t|
+    array = full_file_list
+    t.libs << 'test'
+    t.test_files = array
+  end
+
 
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'
@@ -63,7 +88,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) { |f| Nokogiri::XML(f) }
+        doc = File.open(xml) {|f| Nokogiri::XML(f)}
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')
@@ -72,13 +97,13 @@ namespace :test do
           if files_to_times[file].nil?
             files_to_times[file] = time
           else
-            files_to_times[file] += time        
+            files_to_times[file] += time
           end
           # Record for this test itself
           if tests_to_times[name].nil?
             tests_to_times[name] = time
           else
-            tests_to_times[name] += time        
+            tests_to_times[name] += time
           end
 
         end
@@ -111,48 +136,6 @@ namespace :test do
 
   end
 
-  desc 'Run the NECB building creation tests'
-  Rake::TestTask.new('necb-buildings') do |t|
-    t.libs << 'test'
-    t.test_files = FileList[
-    'openstudio-standards/test/necb/test_necb_airloop_sizing_parameters.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_full_service_restaurant.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_high_rise_apartment.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_large_hotel.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_large_office.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_medium_office.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_midrise_apartment_office.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_outpatient.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_primary_school.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_quick_service_restaurant.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_retail_standalone.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_retail_stripmall.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_secondary_school.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_small_hotel.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_small_office.rb',
-    'openstudio-standards/test/necb/test_necb_bldg_warehouse.rb',
-    'openstudio-standards/test/necb/test_necb_boiler_rules.rb',
-    'openstudio-standards/test/necb/test_necb_chiller_rules.rb', #42s
-    'openstudio-standards/test/necb/test_necb_constructions_fdwr.rb', #19s
-    'openstudio-standards/test/necb/test_necb_coolingtower_rules.rb',
-    'openstudio-standards/test/necb/test_necb_default_spacetypes.rb', #30s
-    'openstudio-standards/test/necb/test_necb_default_system_selection.rb',
-    'openstudio-standards/test/necb/test_necb_fan_rules.rb',
-    'openstudio-standards/test/necb/test_necb_heatpump_rules.rb',
-    'openstudio-standards/test/necb/test_necb_hrv_rules.rb',
-    'openstudio-standards/test/necb/test_necb_loop_rules.rb',
-    'openstudio-standards/test/necb/test_necb_unitary_rules.rb',
-    'openstudio-standards/test/necb/test_necb_waterheater_rules.rb',
-    'openstudio-standards/test/necb/test_necb_weather.rb'
-    ]
-  end
-
-  desc 'Run the NECB 2011 HVAC Tests'
-  Rake::TestTask.new('necb-hvac') do |t|
-    t.libs << 'test'
-    t.test_files = FileList['openstudio-standards/test/necb/test_create_necb_hvac.rb']
-  end
-
 end
 
 # Tasks to manage the spreadsheet data
@@ -170,6 +153,21 @@ namespace :data do
     export_spreadsheet_to_json
   end
 
+  desc 'Update RS-Means Database'
+  task 'update:costing' do
+    $LOAD_PATH.unshift File.expand_path('lib', __FILE__)
+    require 'openstudio'
+    require 'openstudio/ruleset/ShowRunnerOutput'
+    # Require local version instead of installed version for developers
+    begin
+      require_relative 'lib/openstudio-standards.rb'
+      puts 'DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.'
+    rescue
+      require 'openstudio-standards'
+      puts 'Using installed openstudio-standards gem.'
+    end
+    BTAPCosting.instance()
+  end
 end
 
 require 'yard'
@@ -178,7 +176,6 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   Dir.chdir('../')
   t.stats_options = ['--list-undoc']
 end
-
 desc 'Show the documentation in a web browser'
 task 'doc:show' => [:doc] do
   link = "#{Dir.pwd}/openstudio-standards/doc/index.html"

@@ -15,12 +15,13 @@ module LargeOffice
       }
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
       space_type_map = {
-        'WholeBuilding - Lg Office' => [
-          'Basement', 'Core_bottom', 'Core_mid', 'Core_top', # 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
+        'WholeBuilding - Lg Office-basement' => ['Basement'],
+        'WholeBuilding - Lg Office-others' => [
+          'Core_bottom', 'Core_mid', 'Core_top', # 'GroundFloor_Plenum', 'MidFloor_Plenum', 'TopFloor_Plenum',
           'Perimeter_bot_ZN_1', 'Perimeter_bot_ZN_2', 'Perimeter_bot_ZN_3', 'Perimeter_bot_ZN_4',
           'Perimeter_mid_ZN_1', 'Perimeter_mid_ZN_2', 'Perimeter_mid_ZN_3', 'Perimeter_mid_ZN_4',
           'Perimeter_top_ZN_1', 'Perimeter_top_ZN_2', 'Perimeter_top_ZN_3', 'Perimeter_top_ZN_4'
-        ],
+        ],        
         'OfficeLarge Data Center' => ['DataCenter_bot_ZN_6', 'DataCenter_mid_ZN_6', 'DataCenter_top_ZN_6'],
         'OfficeLarge Main Data Center' => [
           'DataCenter_basement_ZN_6'
@@ -35,7 +36,7 @@ module LargeOffice
         '- undefined -' => ['GroundFloor_Plenum', 'TopFloor_Plenum', 'MidFloor_Plenum']
       }
     end
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)
@@ -148,16 +149,9 @@ module LargeOffice
   end
 
   def self.define_space_multiplier
+    building_type = 'LargeOffice'
     # This map define the multipliers for spaces with multipliers not equals to 1
-    space_multiplier_map = {
-      'DataCenter_mid_ZN_6' => 10,
-      'Perimeter_mid_ZN_1' => 10,
-      'Perimeter_mid_ZN_2' => 10,
-      'Perimeter_mid_ZN_3' => 10,
-      'Perimeter_mid_ZN_4' => 10,
-      'Core_mid' => 10,
-      'MidFloor_Plenum' => 10
-    }
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 

@@ -8,7 +8,7 @@ module Hospital
     when 'NECB 2011'
       sch = 'B'
       space_type_map = {
-        "Electrical/Mechanical-sch-#{sch}" => ['Basement'],
+
         "Hospital corr. >= 2.4m-sch-#{sch}" => ['Corridor_Flr_1', 'Corridor_Flr_2', 'Corridor_Flr_5', 'Corridor_NW_Flr_3', 'Corridor_NW_Flr_4', 'Corridor_SE_Flr_3', 'Corridor_SE_Flr_4'],
         'Dining - bar lounge/leisure' => ['Dining_Flr_5'],
         'Hospital - emergency' => ['ER_Exam1_Mult4_Flr_1', 'ER_Exam3_Mult4_Flr_1', 'ER_Trauma1_Flr_1', 'ER_Trauma2_Flr_1', 'ER_Triage_Mult4_Flr_1'],
@@ -16,7 +16,7 @@ module Hospital
         'Hospital - patient room' => ['IC_PatRoom1_Mult5_Flr_2', 'IC_PatRoom2_Flr_2', 'IC_PatRoom3_Mult6_Flr_2', 'PatRoom1_Mult10_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_3', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_3', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_3', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_3', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_3', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_3', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_3', 'PatRoom8_Flr_4'],
         'Hospital - recovery' => ['ICU_Flr_2'],
         'Food preparation' => ['Kitchen_Flr_5'],
-        'Lab - research' => ['Lab_Flr_3', 'Lab_Flr_4'],
+        'Lab - research' => ['Lab_Flr_3', 'Lab_Flr_4','Basement'],
         'Office - enclosed' => ['Lobby_Records_Flr_1', 'Office1_Flr_5', 'Office1_Mult4_Flr_1', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
         'Hospital - operating room' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
         'Hospital - physical therapy' => ['PhysTherapy_Flr_3'],
@@ -52,14 +52,15 @@ module Hospital
         'Lobby' => ['Lobby_Records_Flr_1'],
         'NurseStn' => ['OR_NurseStn_Lobby_Flr_2', 'NurseStn_Lobby_Flr_3', 'NurseStn_Lobby_Flr_4', 'NurseStn_Lobby_Flr_5'],
         'OR' => ['OR1_Flr_2', 'OR2_Mult5_Flr_2', 'OR3_Flr_2', 'OR4_Flr_2'],
-        'Office' => ['Office1_Mult4_Flr_1', 'Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
+        'HospitalOfficeFlr1' => ['Office1_Mult4_Flr_1'],
+        'HospitalOfficeFlr5' => ['Office1_Flr_5', 'Office2_Mult5_Flr_5', 'Office3_Flr_5', 'Office4_Mult6_Flr_5'],
         'Basement' => ['Basement'], # 'PatCorridor' => [],
         'PatRoom' => ['PatRoom1_Mult10_Flr_3', 'PatRoom2_Flr_3', 'PatRoom3_Mult10_Flr_3', 'PatRoom4_Flr_3', 'PatRoom5_Mult10_Flr_3', 'PatRoom6_Flr_3', 'PatRoom7_Mult10_Flr_3', 'PatRoom8_Flr_3', 'PatRoom1_Mult10_Flr_4', 'PatRoom2_Flr_4', 'PatRoom3_Mult10_Flr_4', 'PatRoom4_Flr_4', 'PatRoom5_Mult10_Flr_4', 'PatRoom6_Flr_4', 'PatRoom7_Mult10_Flr_4', 'PatRoom8_Flr_4'],
         'PhysTherapy' => ['PhysTherapy_Flr_3'],
         'Radiology' => ['Radiology_Flr_4'] # total number of zones: 55 - equals to the IDF
       }
     end
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)
@@ -255,35 +256,23 @@ module Hospital
   end
 
   def self.define_space_multiplier
-    space_multiplier_map = {
-      'ER_Exam1_Mult4_Flr_1' => 4,
-      'ER_Exam3_Mult4_Flr_1' => 4,
-      'ER_Triage_Mult4_Flr_1' => 4,
-      'Office1_Mult4_Flr_1' => 5,
-      'OR2_Mult5_Flr_2' => 5,
-      'IC_PatRoom1_Mult5_Flr_2' => 5,
-      'IC_PatRoom3_Mult6_Flr_2' => 6,
-      'PatRoom1_Mult10_Flr_3' => 10,
-      'PatRoom3_Mult10_Flr_3' => 10,
-      'PatRoom5_Mult10_Flr_3' => 10,
-      'PatRoom7_Mult10_Flr_3' => 10,
-      'PatRoom1_Mult10_Flr_4' => 10,
-      'PatRoom3_Mult10_Flr_4' => 10,
-      'PatRoom5_Mult10_Flr_4' => 10,
-      'PatRoom7_Mult10_Flr_4' => 10,
-      'Office2_Mult5_Flr_5' => 5,
-      'Office4_Mult6_Flr_5' => 6
-    }
+    building_type = 'Hospital'
+    # This map define the multipliers for spaces with multipliers not equals to 1
+    space_multiplier_map = JSON.parse(File.read(File.join(File.dirname(__FILE__),"../../../data/geometry/archetypes/#{building_type}.json")))[building_type]['space_multiplier_map']
     return space_multiplier_map
   end
 
   def self.custom_hvac_tweaks(building_type, template, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
+    # add extra equipment for kitchen
+    PrototypeBuilding::Hospital.add_extra_equip_kitchen(template, model) 
+
+    
     system_to_space_map = PrototypeBuilding::Hospital.define_hvac_system_map(building_type, template, climate_zone)
 
     hot_water_loop = nil
-    model.getPlantLoops.each do |loop|
+    model.getPlantLoops.sort.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
@@ -307,12 +296,48 @@ module Hospital
     end
 
     PrototypeBuilding::Hospital.reset_kitchen_oa(template, model)
-    PrototypeBuilding::Hospital.update_exhaust_fan_efficiency(template, model)
     PrototypeBuilding::Hospital.reset_or_room_vav_minimum_damper(prototype_input, template, model)
 
     return true
   end
 
+  # add extra equipment for kitchen
+  def self.add_extra_equip_kitchen(template, model)
+    kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
+    kitchen_space = kitchen_space.get
+    kitchen_space_type = kitchen_space.spaceType.get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
+    elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
+    case template
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+      elec_equip_def1.setFractionLatent(0)
+      elec_equip_def1.setFractionRadiant(0.25)
+      elec_equip_def1.setFractionLost(0)
+      elec_equip_def2.setFractionLatent(0)
+      elec_equip_def2.setFractionRadiant(0.25)
+      elec_equip_def2.setFractionLost(0)
+      if template == '90.1-2013'
+        elec_equip_def1.setDesignLevel(915)
+        elec_equip_def2.setDesignLevel(855)
+      else
+        elec_equip_def1.setDesignLevel(99999.88)
+        elec_equip_def2.setDesignLevel(99999.99)
+      end
+      # Create the electric equipment instance and hook it up to the space type
+      elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
+      elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+      elec_equip1.setName('Kitchen_Reach-in-Freezer')
+      elec_equip2.setName('Kitchen_Reach-in-Refrigerator')
+      elec_equip1.setSpaceType(kitchen_space_type)
+      elec_equip2.setSpaceType(kitchen_space_type)
+      elec_equip1.setSchedule(model.add_schedule('Hospital ALWAYS_ON'))
+      elec_equip2.setSchedule(model.add_schedule('Hospital ALWAYS_ON'))
+    end
+  end  
+  
+  
   def self.update_waterheater_loss_coefficient(template, model)
     case template
     when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
@@ -369,7 +394,7 @@ module Hospital
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('Hospital MaxRelHumSetSch'))
     zone.setZoneControlHumidistat(humidistat)
 
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.thermalZones.include? zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
@@ -427,7 +452,7 @@ module Hospital
   end
 
   def self.modify_hospital_oa_controller(template, model)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
       oa_control = oa_sys.getControllerOutdoorAir
       case air_loop.name.get

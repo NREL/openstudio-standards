@@ -5,8 +5,8 @@ class OpenStudio::Model::Model
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     case template
     when 'NECB 2011'
-      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
-      BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type)
+      boiler_fueltype, baseboard_type, mau_type, mau_heating_coil_type, mua_cooling_type, chiller_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
+      BTAP::Compliance::NECB2011.necb_autozone_and_autosystem(self, runner = nil, use_ideal_air_loads = false, boiler_fueltype, mau_type, mau_heating_coil_type, baseboard_type, chiller_type, mua_cooling_type, heating_coil_types_sys3, heating_coil_types_sys4, heating_coil_types_sys6, fan_type, swh_fueltype, building_type)
     else
       # Get the list of HVAC systems, as defined
       # for each building in the Prototype.building_name files.
@@ -40,9 +40,9 @@ class OpenStudio::Model::Model
             condenser_water_loop = nil
             number_cooling_towers = 1
             num_chillers = 1
-            if building_type == 'Hospital' || building_type == 'LargeOffice'
+            if building_type == 'Hospital' || building_type == 'LargeOffice' || building_type == 'LargeOfficeDetail'
               case template
-              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+              when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
                 number_cooling_towers = 2
                 num_chillers = 2
               end
@@ -79,7 +79,7 @@ class OpenStudio::Model::Model
                          prototype_input['vav_fan_motor_efficiency'],
                          prototype_input['vav_fan_pressure_rise'],
                          return_plenum,
-                         electric_reheat = false,
+                         reheat_type = 'Water',
                          building_type)
 
         when 'CAV'
@@ -125,6 +125,9 @@ class OpenStudio::Model::Model
                   building_type)
 
         when 'PSZ-AC'
+		
+          # Retrieve the existing chilled water loop
+          # or add a new one if necessary.
 
           # Special logic to differentiate between operation schedules
           # that vary even inside of a system type for stripmall.
@@ -239,6 +242,11 @@ class OpenStudio::Model::Model
                    prototype_input['doas_fan_maximum_flow_rate'],
                    prototype_input['doas_economizer_control_type'],
                    building_type)
+
+          add_four_pipe_fan_coil(template,
+                                  hot_water_loop,
+                                  chilled_water_loop,
+                                  thermal_zones)
 
         when 'DC' # Data Center in the Large Office prototype
 
@@ -399,6 +407,17 @@ class OpenStudio::Model::Model
                             system['condenser_fan_pwr'],
                             system['condenser_fan_pwr_curve_name'],
                             thermal_zones[0])
+							
+        # When multiple cases and walk-ins asssigned to a system        
+	    	when 'Refrigeration_system'
+
+          add_refrigeration_system(template,
+                                   system['compressor_type'],
+                                   system['sys_name'],
+                                   system['cases'],
+                                   system['walkins'],
+                                   thermal_zones[0])
+
         else
 
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type #{system['type']} is not recognized.  This system will not be added.")

@@ -66,7 +66,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_people_loads( model, factor )
-          model.getPeoples.each do |item|
+          model.getPeoples.sort.each do |item|
             item.setMultiplier( item.multiplier * factor )
           end
         end
@@ -80,7 +80,7 @@ module BTAP
         #@param time_shift [Float]
         #@param time_sign [Float]
         def self.scale_people_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
-          model.getPeoples.each do |item|
+          model.getPeoples.sort.each do |item|
             #Do an in-place modification of the schedule. 
             BTAP::Resources::Schedules::modify_schedule!(model, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign )
           end
@@ -91,7 +91,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_lighting_loads( model, factor )
-          model.getLightss.each do |item|
+          model.getLightss.sort.each do |item|
             item.setMultiplier( item.multiplier * factor )
           end
         end
@@ -105,7 +105,7 @@ module BTAP
         #@param time_shift [Float]
         #@param time_sign [Float]
         def self.scale_lighting_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
-          model.getLightss.each do |item|
+          model.getLightss.sort.each do |item|
             #Do an in-place modification of the schedule. 
             BTAP::Resources::Schedules::modify_schedule!(model, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign)
           end
@@ -116,7 +116,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_electrical_loads( model, factor )
-          model.getElectricEquipments.each do |item|
+          model.getElectricEquipments.sort.each do |item|
             item.setMultiplier( item.multiplier * factor )
           end
         end
@@ -130,7 +130,7 @@ module BTAP
         #@param time_shift [Float]
         #@param time_sign [Float]
         def self.scale_electrical_loads_schedule( model, a_coef, b_coef, c_coef,time_shift = nil, time_sign = nil  )
-          model.getElectricEquipments.each do |item|
+          model.getElectricEquipments.sort.each do |item|
             BTAP::Resources::Schedules::modify_schedule!(model, item.schedule, a_coef, b_coef, c_coef, time_shift, time_sign )
           end
         end
@@ -140,7 +140,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_hot_water_loads( model, factor )
-          model.getHotWaterEquipments.each do |item|
+          model.getHotWaterEquipments.sort.each do |item|
             item.setMultiplier( item.multiplier * factor )
           end
         end
@@ -150,7 +150,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_oa_loads( model, factor )
-          model.getDesignSpecificationOutdoorAirs.each do |oa_def|
+          model.getDesignSpecificationOutdoorAirs.sort.each do |oa_def|
             oa_def.setOutdoorAirFlowperPerson(oa_def.getOutdoorAirFlowperPerson * factor ) unless oa_def.isOutdoorAirFlowperPersonDefaulted
             oa_def.setOutdoorAirFlowperFloorArea(oa_def.getOutdoorAirFlowperFloorArea * factor) unless oa_def.isOutdoorAirFlowperFloorAreaDefaulted
             oa_def.setOutdoorAirFlowRate(oa_def.getOutdoorAirFlowRate * factor) unless oa_def.isOutdoorAirFlowRateDefaulted
@@ -163,7 +163,7 @@ module BTAP
         #@param model [OpenStudio::model::Model] A model object 
         #@param factor [Float]
         def self.scale_inflitration_loads( model, factor )
-          model.getSpaceInfiltrationDesignFlowRates.each do |infiltration_load|
+          model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
             infiltration_load.setDesignFlowRate( infiltration_load.designFlowRate.get * factor ) unless infiltration_load.designFlowRate.empty?
             infiltration_load.setFlowperSpaceFloorArea( infiltration_load.flowperSpaceFloorArea.get * factor ) unless infiltration_load.flowperSpaceFloorArea.empty?
             infiltration_load.setFlowperExteriorSurfaceArea( infiltration_load.flowperExteriorSurfaceArea.get * factor ) unless infiltration_load.flowperExteriorSurfaceArea.empty?
@@ -182,7 +182,7 @@ module BTAP
         def self.set_inflitration_magnitude( model, setDesignFlowRate,setFlowperSpaceFloorArea,setFlowperExteriorSurfaceArea,setAirChangesperHour )
 
           table = "name,infiltration_method,infiltration_design_flow_rate,infiltration_flow_per_space,infiltration_flow_per_exterior_area,infiltration_air_changes_per_hour\n"
-          model.getSpaceInfiltrationDesignFlowRates.each do |infiltration_load|
+          model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
             infiltration_load.setAirChangesperHour(setAirChangesperHour ) unless setAirChangesperHour.nil?
             infiltration_load.setDesignFlowRate( setDesignFlowRate ) unless setDesignFlowRate.nil?
             infiltration_load.setFlowperSpaceFloorArea(setFlowperSpaceFloorArea ) unless setFlowperSpaceFloorArea.nil?
@@ -204,8 +204,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_people_loads(model)
-        model.getPeoples.each {|people| people.remove}
-        model.getPeopleDefinitions.each {|people| people.remove}
+        model.getPeoples.sort.each {|people| people.remove}
+        model.getPeopleDefinitions.sort.each {|people| people.remove}
       end
 
 
@@ -241,8 +241,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_light_loads(model)
-        model.getLightss.each {|item| item.remove}
-        model.getLightsDefinitions.each {|item| item.remove}
+        model.getLightss.sort.each {|item| item.remove}
+        model.getLightsDefinitions.sort.each {|item| item.remove}
       end
 
       #This method created people loads from the model.
@@ -270,8 +270,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object 
       def self.remove_all_electric_loads(model)
-        model.getElectricEquipments.each {|item| item.remove}
-        model.getElectricEquipmentDefinitions.each {|item| item.remove}
+        model.getElectricEquipments.sort.each {|item| item.remove}
+        model.getElectricEquipmentDefinitions.sort.each {|item| item.remove}
       end
 
 
@@ -299,8 +299,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_hot_water_loads(model)
-        model.getHotWaterEquipments.each {|item| item.remove}
-        model.getHotWaterEquipmentDefinitions.each {|item| item.remove}
+        model.getHotWaterEquipments.sort.each {|item| item.remove}
+        model.getHotWaterEquipmentDefinitions.sort.each {|item| item.remove}
       end
 
       #This method creats hot water load.
@@ -328,7 +328,7 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_DesignSpecificationOutdoorAir(model)
-        model.getDesignSpecificationOutdoorAirs.each { |item| item.remove }
+        model.getDesignSpecificationOutdoorAirs.sort.each { |item| item.remove }
       end
 
       
@@ -337,7 +337,7 @@ module BTAP
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceInfiltrationDesignFlowRate(model)
         OpenStudio::Model::SpaceInfiltrationDesignFlowRate
-        model.getSpaceInfiltrationDesignFlowRates.each { |item| item.remove }
+        model.getSpaceInfiltrationDesignFlowRates.sort.each { |item| item.remove }
       end
 
       #This method creats hot water load.
@@ -375,7 +375,7 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceInfiltrationDesignFlowRates(model)
-        model.getSpaceInfiltrationDesignFlowRates.each { |item| item.remove }
+        model.getSpaceInfiltrationDesignFlowRates.sort.each { |item| item.remove }
       end
 
       #This method creates infiltration load.
@@ -431,8 +431,8 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::model::Model] A model object
       def self.remove_all_SpaceLoads(model)
-        model.getSpaceLoads.each { |item| item.remove }
-        model.getSpaceLoadDefinitions.each { |item| item.remove }
+        model.getSpaceLoads.sort.each { |item| item.remove }
+        model.getSpaceLoadDefinitions.sort.each { |item| item.remove }
       end
     end #module SpaceLoads
   end #module Resources

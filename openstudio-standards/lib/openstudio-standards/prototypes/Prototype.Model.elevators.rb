@@ -14,6 +14,7 @@ class OpenStudio::Model::Model
     # todo - add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
     elevator_type = nil
     if effective_num_stories[:below_grade] + effective_num_stories[:above_grade] < 2
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "The building only has 1 story, no elevators will be added.")
       return nil # don't add elevators
     elsif effective_num_stories[:below_grade] + effective_num_stories[:above_grade] < 6
       elevator_type = "Hydraulic"
@@ -47,56 +48,98 @@ class OpenStudio::Model::Model
         building_type_hash[hash[:stds_bldg_type]] = hash[:floor_area]
       end
 
-      # building type specific notes; prototype uses Beyer (2009) rules fo thumb
+      # building type specific notes; prototype uses Beyer (2009) rules of thumb
+      area_per_pass_elev_ft2 = nil
+      units_per_pass_elevator = nil
+      beds_per_pass_elevator = nil
+      area_per_freight_elev_ft2 = nil
+      units_per_freight_elevator = nil
+      beds_per_freight_elevator = nil
       if ["Office","SmallOffice","MediumOffice","LargeOffice"].include?(hash[:stds_bldg_type])
         # The office buildings have one elevator for every 45,000 ft2 (4,181 m2),
-        # plus one service elevator for the large office building.
-        pass_elevator_per_area = OpenStudio::convert(45000.0,"ft^2","m^2").get
-        number_of_pass_elevators += hash[:floor_area]/pass_elevator_per_area
-        # add freight elevators as separate step 1 if over 5k m^2 but more than one if over 50k m^2
-        if self.getBuilding.floorArea > 45000.0 # m^2
-          number_of_freight_elevators += self.getBuilding.floorArea/500000.0 # m^2
+        # plus one service elevator for the large office building (500,000 ft^2).
+        area_per_pass_elev_ft2 = 45_000
+        bldg_area_ft2 = OpenStudio.convert(self.getBuilding.floorArea, 'm^2', 'ft^2').get
+        if bldg_area_ft2 > 500_000
+          area_per_freight_elev_ft2 = 500_000
         end
-      elsif["SmallHotel","LargeHotel"].include?(hash[:stds_bldg_type]) && hash[:stds_space_type].include?("GuestRoom")
-        # The hotels have one elevator for every 75 rooms, and the large hotel includes one service elevator for every two public elevators,
+      elsif["SmallHotel","LargeHotel"].include?(hash[:stds_bldg_type])
+        # The hotels have one elevator for every 75 rooms.
+        if hash[:stds_space_type].include?("GuestRoom")
+          units_per_pass_elevator = 75.0
+        end
+        # The large hotel includes one service elevator for every two public elevators,
         # plus one additional elevator for the dining and banquet facilities on the top floor.
-        units_per_pass_elevator = 75.0
-        freight_elevators_per_unit = units_per_pass_elevator/2.0
-        number_of_pass_elevators += hash[:num_units]/units_per_pass_elevator
-        number_of_freight_elevators += hash[:num_units]/freight_elevators_per_unit
-      elsif["LargeHotel"].include?(hash[:stds_bldg_type]) && ["Banquet","Cafe"].include?(hash[:stds_space_type])
-        pass_elevator_per_area = OpenStudio::convert(10000.0,"ft^2","m^2").get
-        number_of_pass_elevators += hash[:floor_area]/pass_elevator_per_area
+        # None of the other space types generate elevators.
+        if["LargeHotel"].include?(hash[:stds_bldg_type]) && hash[:stds_space_type].include?("GuestRoom")
+          units_per_freight_elevator = 150.0
+        elsif["LargeHotel"].include?(hash[:stds_bldg_type]) && ["Banquet","Cafe"].include?(hash[:stds_space_type])
+          area_per_pass_elev_ft2 = 10_000
+        end
       elsif["MidriseApartment","HighriseApartment"].include?(hash[:stds_bldg_type]) && hash[:stds_space_type].include?("Apartment")
         # The apartment building has one elevator for every 90 units
         units_per_pass_elevator = 90.0
-        number_of_pass_elevators += hash[:num_units]/units_per_pass_elevator
-      elsif["Hospital"].include?(hash[:stds_bldg_type]) && ["PatRoom","ICU_PatRm","ICU_Open"].include?(hash[:stds_space_type])
+      elsif["Hospital"].include?(hash[:stds_bldg_type])
         # The hospital has one public and one service elevator for every 100 beds (250 total),
         # plus two elevators for the offices and cafeteria on the top floor.
-        beds_per_pass_elevator = 100.0
-        number_of_pass_elevators += hash[:num_beds]/beds_per_pass_elevator
-        number_of_freight_elevators += hash[:num_beds]/beds_per_pass_elevator
-      elsif["Hospital"].include?(hash[:stds_bldg_type]) && ["Dining","Kitchen","Office"].include?(hash[:stds_space_type])
-        pass_elevator_per_area = OpenStudio::convert(12500.0,"ft^2","m^2").get
-        number_of_pass_elevators += hash[:floor_area]/pass_elevator_per_area
+        # None of the other space types generate elevators.
+        if ["PatRoom","ICU_PatRm","ICU_Open"].include?(hash[:stds_space_type])
+          beds_per_pass_elevator = 100.0
+          beds_per_freight_elevator = 100.0
+        elsif["Dining","Kitchen","Office"].include?(hash[:stds_space_type])
+          area_per_pass_elev_ft2 = 12_500
+        end
       elsif ["PrimarySchool","SecondarySchool"].include?(hash[:stds_bldg_type])
         # 210,887 ft^2 secondary school prototype has 2 elevators
-        pass_elevator_per_area = OpenStudio::convert(100000.0,"ft^2","m^2").get
-        number_of_pass_elevators += hash[:floor_area]/(pass_elevator_per_area) # freight and passenger combined
+        area_per_pass_elev_ft2 = 100_000
       elsif ["Outpatient"].include?(hash[:stds_bldg_type])
-        # 210,887 ft^2 secondary school prototype has 2 elevators
-        #pass_elevator_per_area = OpenStudio::convert(15000.0,"ft^2","m^2").get
-        #number_of_pass_elevators += hash[:floor_area]/(pass_elevator_per_area) # freight and passenger combined
+        # 40,946 Outpatient has 3 elevators
+        area_per_pass_elev_ft2 = 15_000
       elsif ["Warehouse"].include?(hash[:stds_bldg_type])
-        freight_elevator_per_area = OpenStudio::convert(250000.0,"ft^2","m^2").get
-        number_of_freight_elevators += hash[:floor_area]/freight_elevator_per_area
+        # Warehouse has no elevators, but assume some would be needed
+        area_per_freight_elev_ft2 = 250_000
       else
         # todo - improve catchall for building types without elevator data, using same value as what Outpatient would be if not already in space type
         # includes RetailStandalone, RetailStripmall, QuickServiceRestaurant, FullServiceRestaurant, SuperMarket (made unique logic above for warehouse)
+        area_per_pass_elev_ft2 = 15_000
+      end
 
-        pass_elevator_per_area = OpenStudio::convert(15000.0,"ft^2","m^2").get
-        number_of_pass_elevators += hash[:floor_area]/pass_elevator_per_area
+      # passenger elevators
+      if area_per_pass_elev_ft2
+        pass_elevs = hash[:floor_area] / OpenStudio.convert(area_per_pass_elev_ft2, 'ft^2', 'm^2').get
+        number_of_pass_elevators += pass_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{pass_elevs.round(1)} passenger elevators at 1 per #{area_per_pass_elev_ft2.round} ft^2.")
+      end
+
+      if units_per_pass_elevator
+        pass_elevs = hash[:num_units] / units_per_pass_elevator
+        number_of_pass_elevators += pass_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{pass_elevs.round(1)} passenger elevators at 1 per #{units_per_pass_elevator} units.")
+      end
+
+      if beds_per_pass_elevator
+        pass_elevs = hash[:num_beds] / beds_per_pass_elevator
+        number_of_pass_elevators += pass_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{pass_elevs.round(1)} passenger elevators at 1 per #{beds_per_pass_elevator} beds.")
+      end
+
+      # freight or service elevators
+      if area_per_freight_elev_ft2
+        freight_elevs = hash[:floor_area] / OpenStudio.convert(area_per_freight_elev_ft2, 'ft^2', 'm^2').get
+        number_of_freight_elevators += freight_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{freight_elevs.round(1)} freight/service elevators at 1 per #{area_per_freight_elev_ft2.round} ft^2.")
+      end
+
+      if units_per_freight_elevator
+        freight_elevs = hash[:num_units] / units_per_freight_elevator
+        number_of_freight_elevators += freight_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{freight_elevs.round(1)} freight/service elevators at 1 per #{units_per_freight_elevator} units.")
+      end
+
+      if beds_per_freight_elevator
+        freight_elevs = hash[:num_beds] / beds_per_freight_elevator
+        number_of_freight_elevators += freight_elevs
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "For #{space_type.name}, adding #{freight_elevs.round(1)} freight/service elevators at 1 per #{beds_per_freight_elevator} beds.")
       end
 
     end
@@ -110,7 +153,6 @@ class OpenStudio::Model::Model
     end
     number_of_elevators = number_of_pass_elevators + number_of_freight_elevators
 
-
     building_type = building_type_hash.key(building_type_hash.values.max)
     # rename space types as needed
     if building_type == "Office"
@@ -121,7 +163,7 @@ class OpenStudio::Model::Model
     if building_type == "Retail" then building_type = "RetailStandalone" end # no elevator schedules for PrimarySchool
     if building_type == "StripMall" then building_type = "RetailStripmall" end # no elevator schedules for PrimarySchool
     if building_type == "Outpatient"
-      OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.elevators', "Outpatient ElevatorPumpRoom plug loads contain the elevator loads. Not adding extra elevator loads on top of it.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Outpatient ElevatorPumpRoom plug loads contain the elevator loads. Not adding extra elevator loads on top of it.")
     end
 
     # Retrieve the Prototype Inputs from JSON
@@ -132,16 +174,16 @@ class OpenStudio::Model::Model
 
     prototype_input = find_object($os_standards['prototype_inputs'], search_criteria, nil)
     if prototype_input.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'Prototype.Model.elevators', "Could not find prototype inputs for #{search_criteria}.")
-      return false
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find prototype inputs for #{search_criteria}, cannot add elevators.")
+      return nil
     end
 
     # assign schedules
-    if ["Office","SmallOffice","MediumOffice","LargeOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
+    if ["Office","MediumOffice","MidriseApartment","HighriseApartment","SecondarySchool"].include?(building_type)
       elevator_schedule = prototype_input['elevator_schedule']
       elevator_fan_schedule = prototype_input['elevator_fan_schedule']
       elevator_lights_schedule = prototype_input['elevator_fan_schedule']
-    elsif ["LargeHotel","Hospital"].include?(building_type)
+    elsif ["LargeHotel","Hospital","LargeOffice"].include?(building_type)
       elevator_schedule = prototype_input['exterior_fuel_equipment1_schedule']
       elevator_fan_schedule = prototype_input['exterior_fuel_equipment2_schedule']
       elevator_lights_schedule = prototype_input['exterior_fuel_equipment2_schedule']
@@ -153,7 +195,20 @@ class OpenStudio::Model::Model
         next if not building_type.include?(hash[:stds_bldg_type])
         space_type_size[space_type] = hash[:floor_area]
       end
-      occ_sch = space_type_size.key(space_type_size.values.max).defaultScheduleSet.get.numberofPeopleSchedule.get
+
+      # Get the largest space type
+      largest_space_type = space_type_size.key(space_type_size.values.max)
+
+      # Get the occ sch, if one is specified
+      occ_sch = nil
+      if largest_space_type.defaultScheduleSet.is_initialized
+        if largest_space_type.defaultScheduleSet.get.numberofPeopleSchedule.is_initialized
+          occ_sch = largest_space_type.defaultScheduleSet.get.numberofPeopleSchedule.get
+        end
+      else
+        occ_sch = alwaysOffDiscreteSchedule
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.elevators', "No occupancy schedule was specified for #{largest_space_type.name}, an always off schedule will be used for the elvevators and the elevators will never run.")
+      end
 
       # clone and assign to elevator
       elev_sch = occ_sch.clone(self)
@@ -204,11 +259,12 @@ class OpenStudio::Model::Model
                        elevator_lights_schedule,
                        building_type)
 
-    OpenStudio.logFree(OpenStudio::Info, 'Prototype.Model.elevators', "Adding #{elevator.multiplier} #{elevator_type} elevators to the model in #{target_space.name}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Adding #{elevator.multiplier.round(1)} #{elevator_type} elevators to the model in #{target_space.name}.")
 
     # check fraction lost on heat from elevator if traction, change to 100% lost if not setup that way.
     if elevator_type == "Traction"
       elevator.definition.to_ElectricEquipmentDefinition.get.setFractionLost(1.0)
+      elevator.definition.to_ElectricEquipmentDefinition.get.setFractionRadiant(0.0)
     end
 
     return elevator

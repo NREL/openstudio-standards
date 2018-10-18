@@ -41,7 +41,7 @@ def strip_model(model)
   model.getCurves.each(&:remove)
 
   # remove all zone equipment
-  model.getThermalZones.each do |zone|
+  model.getThermalZones.sort.each do |zone|
     zone.equipment.each(&:remove)
   end
 
@@ -286,7 +286,10 @@ end
 
 # Convert the infiltration rate at a 75 Pa
 # to an infiltration rate at the typical value for the prototype buildings
-# per method described here:  http://www.taskair.net/knowledge/Infiltration%20Modeling%20Guidelines%20for%20Commercial%20Building%20Energy%20Analysis.pdf
+# per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
+# Gowri K, DW Winiarski, and RE Jarnagin. 2009. 
+# Infiltration modeling guidelines for commercial building energy analysis. 
+# PNNL-18898, Pacific Northwest National Laboratory, Richland, WA. 
 #
 # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
 # @return [Double]
@@ -307,4 +310,179 @@ def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_ra
   adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
 
   return adjusted_infiltration_rate_m3_per_s
+end
+
+# Convert biquadratic curves that are a function of temperature
+# from IP (F) to SI (C) or vice-versa.  The curve is of the form
+# z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y
+# where C1, C2, ... are the coefficients,
+# x is the first independent variable (in F or C)
+# y is the second independent variable (in F or C)
+# and z is the resulting value
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 6 coefficients, in order
+# @return [Array<Double>] the revised coefficients in the new unit system
+def convert_curve_biquadratic(coeffs, ip_to_si=true)
+  if ip_to_si
+    # Convert IP curves to SI curves
+    si_coeffs = []
+    si_coeffs << coeffs[0] + 32.0 * (coeffs[1] + coeffs[3]) + 1024.0 * (coeffs[2] + coeffs[4] + coeffs[5])
+    si_coeffs << 9.0 / 5.0 * coeffs[1] + 576.0 / 5.0 * coeffs[2] + 288.0 / 5.0 * coeffs[5]
+    si_coeffs << 81.0 / 25.0 * coeffs[2]
+    si_coeffs << 9.0 / 5.0 * coeffs[3] + 576.0 / 5.0 * coeffs[4] + 288.0 / 5.0 * coeffs[5]
+    si_coeffs << 81.0 / 25.0 * coeffs[4]
+    si_coeffs << 81.0 / 25.0 * coeffs[5]        
+    return si_coeffs
+  else
+    # Convert SI curves to IP curves
+    ip_coeffs = []
+    ip_coeffs << coeffs[0] - 160.0/9.0 * (coeffs[1] + coeffs[3]) + 25600.0/81.0 * (coeffs[2] + coeffs[4] + coeffs[5])
+    ip_coeffs << 5.0/9.0 * (coeffs[1] - 320.0/9.0 * coeffs[2] - 160.0/9.0 * coeffs[5])
+    ip_coeffs << 25.0/81.0 * coeffs[2]
+    ip_coeffs << 5.0/9.0 * (coeffs[3] - 320.0/9.0 * coeffs[4] - 160.0/9.0 * coeffs[5])
+    ip_coeffs << 25.0/81.0 * coeffs[4]
+    ip_coeffs << 25.0/81.0 * coeffs[5]
+    return ip_coeffs
+  end
+end
+
+# Create a biquadratic curve of the form
+# z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 6 coefficients, in order
+# @param crv_name [String] the name of the curve
+# @param minX [Double] the minimum value of independent variable X that will be used
+# @param maxX [Double] the maximum value of independent variable X that will be used
+# @param minY [Double] the minimum value of independent variable Y that will be used
+# @param maxY [Double] the maximum value of independent variable Y that will be used
+# @param minOut [Double] the minimum value of dependent variable Z
+# @param maxOut [Double] the maximum value of dependent variable Z
+def create_curve_biquadratic(coeffs, crv_name, minX, maxX, minY, maxY, minOut, maxOut)
+  curve = OpenStudio::Model::CurveBiquadratic.new(self)
+  curve.setName(crv_name)
+  curve.setCoefficient1Constant(coeffs[0])
+  curve.setCoefficient2x(coeffs[1])
+  curve.setCoefficient3xPOW2(coeffs[2])
+  curve.setCoefficient4y(coeffs[3])
+  curve.setCoefficient5yPOW2(coeffs[4])
+  curve.setCoefficient6xTIMESY(coeffs[5])
+  curve.setMinimumValueofx(minX) unless minX.nil?
+  curve.setMaximumValueofx(maxX) unless maxX.nil?
+  curve.setMinimumValueofy(minY) unless minY.nil?
+  curve.setMaximumValueofy(maxY) unless maxY.nil?
+  curve.setMinimumCurveOutput(minOut) unless minOut.nil?
+  curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+  return curve
+end
+
+# Create a bicubic curve of the form
+# z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y + C7*x^3 + C8*y^3 + C9*x^2*y + C10*x*y^2
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 10 coefficients, in order
+# @param crv_name [String] the name of the curve
+# @param minX [Double] the minimum value of independent variable X that will be used
+# @param maxX [Double] the maximum value of independent variable X that will be used
+# @param minY [Double] the minimum value of independent variable Y that will be used
+# @param maxY [Double] the maximum value of independent variable Y that will be used
+# @param minOut [Double] the minimum value of dependent variable Z
+# @param maxOut [Double] the maximum value of dependent variable Z
+def create_curve_bicubic(coeffs, crv_name, minX, maxX, minY, maxY, minOut, maxOut)
+  curve = OpenStudio::Model::CurveBicubic.new(self)
+  curve.setName(crv_name)
+  curve.setCoefficient1Constant(coeffs[0])
+  curve.setCoefficient2x(coeffs[1])
+  curve.setCoefficient3xPOW2(coeffs[2])
+  curve.setCoefficient4y(coeffs[3])
+  curve.setCoefficient5yPOW2(coeffs[4])
+  curve.setCoefficient6xTIMESY(coeffs[5])
+  curve.setCoefficient7xPOW3(coeffs[6])
+  curve.setCoefficient8yPOW3(coeffs[7])
+  curve.setCoefficient9xPOW2TIMESY(coeffs[8])
+  curve.setCoefficient10xTIMESYPOW2(coeffs[9])
+  curve.setMinimumValueofx(minX) unless minX.nil?
+  curve.setMaximumValueofx(maxX) unless maxX.nil?
+  curve.setMinimumValueofy(minY) unless minY.nil?
+  curve.setMaximumValueofy(maxY) unless maxY.nil?
+  curve.setMinimumCurveOutput(minOut) unless minOut.nil?
+  curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+  return curve
+end
+
+# Create a quadratic curve of the form
+# z = C1 + C2*x + C3*x^2
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 3 coefficients, in order
+# @param crv_name [String] the name of the curve
+# @param minX [Double] the minimum value of independent variable X that will be used
+# @param maxX [Double] the maximum value of independent variable X that will be used
+# @param minOut [Double] the minimum value of dependent variable Z
+# @param maxOut [Double] the maximum value of dependent variable Z
+# @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
+# and the resulting output dependent variable is considered unitless
+def create_curve_quadratic(coeffs, crv_name, minX, maxX, minOut, maxOut, is_dimensionless=false)
+  curve = OpenStudio::Model::CurveQuadratic.new(self)
+  curve.setName(crv_name)
+  curve.setCoefficient1Constant(coeffs[0])
+  curve.setCoefficient2x(coeffs[1])
+  curve.setCoefficient3xPOW2(coeffs[2])
+  curve.setMinimumValueofx(minX) unless minX.nil?
+  curve.setMaximumValueofx(maxX) unless maxX.nil?
+  curve.setMinimumCurveOutput(minOut) unless minOut.nil?
+  curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+  if is_dimensionless
+    curve.setInputUnitTypeforX("Dimensionless")
+    curve.setOutputUnitType("Dimensionless")
+  end
+  return curve
+end
+
+# Create a cubic curve of the form
+# z = C1 + C2*x + C3*x^2 + C4*x^3
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 4 coefficients, in order
+# @param crv_name [String] the name of the curve
+# @param minX [Double] the minimum value of independent variable X that will be used
+# @param maxX [Double] the maximum value of independent variable X that will be used
+# @param minOut [Double] the minimum value of dependent variable Z
+# @param maxOut [Double] the maximum value of dependent variable Z
+def create_curve_cubic(coeffs, crv_name, minX, maxX, minOut, maxOut)    
+  curve = OpenStudio::Model::CurveCubic.new(self)
+  curve.setName(crv_name)
+  curve.setCoefficient1Constant(coeffs[0])
+  curve.setCoefficient2x(coeffs[1])
+  curve.setCoefficient3xPOW2(coeffs[2])
+  curve.setCoefficient4xPOW3(coeffs[3])
+  curve.setMinimumValueofx(minX) unless minX.nil?
+  curve.setMaximumValueofx(maxX) unless maxX.nil?
+  curve.setMinimumCurveOutput(minOut) unless minOut.nil?
+  curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+  return curve
+end
+
+# Create an exponential curve of the form
+# z = C1 + C2*x^C3
+#
+# @author Scott Horowitz, NREL
+# @param coeffs [Array<Double>] an array of 3 coefficients, in order
+# @param crv_name [String] the name of the curve
+# @param minX [Double] the minimum value of independent variable X that will be used
+# @param maxX [Double] the maximum value of independent variable X that will be used
+# @param minOut [Double] the minimum value of dependent variable Z
+# @param maxOut [Double] the maximum value of dependent variable Z
+def create_curve_exponent(coeffs, crv_name, minX, maxX, minOut, maxOut)
+  curve = OpenStudio::Model::CurveExponent.new(self)
+  curve.setName(crv_name)
+  curve.setCoefficient1Constant(coeffs[0])
+  curve.setCoefficient2Constant(coeffs[1])
+  curve.setCoefficient3Constant(coeffs[2])
+  curve.setMinimumValueofx(minX) unless minX.nil?
+  curve.setMaximumValueofx(maxX) unless maxX.nil?
+  curve.setMinimumCurveOutput(minOut) unless minOut.nil?
+  curve.setMaximumCurveOutput(maxOut) unless maxOut.nil?
+  return curve
 end

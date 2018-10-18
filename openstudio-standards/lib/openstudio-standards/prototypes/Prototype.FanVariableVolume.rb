@@ -50,47 +50,35 @@ class OpenStudio::Model::FanVariableVolume
       # TODO: Inconsistency - Primary School uses CAV pressure rises
       # even thought it has a VAV system.  CAV system is listed in document,
       # so assume the system type was updated but forgot to update pressure rises.
-      if building_type == 'PrimarySchool' && (template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004')
+      # if building_type == 'PrimarySchool' && (template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004')
 
-        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 7487
-                                 2.5
-                               elsif maximum_flow_rate_cfm >= 7487 && maximum_flow_rate_cfm < 20000
-                                 4.46
+      case template
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
+        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
+                                 4.0
+                               elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
+                                 6.32
                                else # Over 20,000 cfm
-                                 4.09
+                                 5.58
                                end
-
-      else
-
-        case template
-        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004', '90.1-2004'
-          pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
-                                   4.0
-                                 elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
-                                   6.32
-                                 else # Over 20,000 cfm
-                                   5.58
-                                 end
-        when '90.1-2007', '90.1-2010', '90.1-2013'
-          pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
-                                   4.0
-                                 else # Over 7,437 cfm
-                                   5.58
-                                 end
-        when 'LowITE', 'HighITE'   # for data centers
-          pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
-                                   4.0
-                                 elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
-                                   5.58
-                                 elsif maximum_flow_rate_cfm >= 20000 && maximum_flow_rate_cfm < 50000
-                                   8.0
-                                 elsif maximum_flow_rate_cfm >= 50000 && maximum_flow_rate_cfm < 200000
-                                   12.0
-                                 else
-                                   20.0
-                                 end
-        end
-
+      when '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
+                                 4.0
+                               else # Over 7,437 cfm
+                                 5.58
+                               end
+      when 'LowITE', 'HighITE'   # for data centers
+        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
+                                 4.0
+                               elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
+                                 5.58
+                               elsif maximum_flow_rate_cfm >= 20000 && maximum_flow_rate_cfm < 50000
+                                 8.0
+                               elsif maximum_flow_rate_cfm >= 50000 && maximum_flow_rate_cfm < 200000
+                                 12.0
+                               else
+                                 20.0
+                               end
       end
     end
 

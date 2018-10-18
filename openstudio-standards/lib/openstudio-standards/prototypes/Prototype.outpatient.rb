@@ -112,8 +112,10 @@ module Outpatient
         # ['Floor 1 Dictation', 'Floor 1 Humid','Floor 1 Scheduling', 'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', ...
         # 'Floor 2 Work', 'Floor 3 Humid', 'Floor 3 Work'] same as 'Office', 'IT Room' and 'Dressing Room'
         # TODO 'Floor 2 Work' has slightly different equipment density
+        # split "Floor 2 Work" out from "Office" zone list to account for the different power density
         'Office' => ['Floor 1 Office', 'Floor 2 Office', 'Floor 3 Office', 'Floor 1 Dictation', 'Floor 1 Humid', 'Floor 1 Scheduling',
-                     'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 2 Work', 'Floor 3 Humid', 'Floor 3 Work'],
+                     'Floor 2 Dictation', 'Floor 2 Scheduling 1', 'Floor 2 Scheduling 2', 'Floor 3 Humid', 'Floor 3 Work'],
+        'OutpatientFloor2Work' => ['Floor 2 Work'],                     
         # 'Floor 1 Recovery Room' and 'Floor 1 Step Down' same as 'PACU'
         'PACU' => ['Floor 1 PACU', 'Floor 1 Recovery Room', 'Floor 1 Step Down'],
         'PhysicalTherapy' => ['Floor 3 Physical Therapy 1', 'Floor 3 Physical Therapy 2'],
@@ -131,7 +133,7 @@ module Outpatient
       }
     end
 
-    return space_type_map
+    return space_type_map.sort.to_h
   end
 
   def self.define_hvac_system_map(building_type, template, climate_zone)
@@ -314,7 +316,7 @@ module Outpatient
     PrototypeBuilding::Outpatient.adjust_clg_setpoint(template, climate_zone, model)
     # Get the hot water loop
     hot_water_loop = nil
-    model.getPlantLoops.each do |loop|
+    model.getPlantLoops.sort.each do |loop|
       # If it has a boiler:hotwater, it is the correct loop
       unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
         hot_water_loop = loop
@@ -404,7 +406,7 @@ module Outpatient
         infiltration.setSchedule(infil_sch)
         infiltration.setSpace(space)
       end
-      model.getSpaceTypes.each do |space_type|
+      model.getSpaceTypes.sort.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
     else
@@ -464,7 +466,7 @@ module Outpatient
     humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MinRelHumSetSch'))
     humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model.add_schedule('OutPatientHealthCare MaxRelHumSetSch'))
     operatingroom1_zone.setZoneControlHumidistat(humidistat)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       if air_loop.thermalZones.include? operatingroom1_zone
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
@@ -501,7 +503,7 @@ module Outpatient
   # for 90.1-2010 Outpatient, AHU2 set minimum outdoor air flow rate as 0
   # AHU1 doesn't have economizer
   def self.modify_oa_controller(template, model)
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
@@ -565,7 +567,7 @@ module Outpatient
 
   # assign the minimum total air changes to the cooling minimum air flow in Sizing:Zone
   def self.apply_minimum_total_ach(building_type, template, model)
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       space_type_name = space.spaceType.get.standardsSpaceType.get
       search_criteria = {
         'template' => template,
@@ -574,6 +576,11 @@ module Outpatient
       }
       data = model.find_object($os_standards['space_types'], search_criteria)
 
+      if data.nil?  ###
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")
+        next
+      end
+      
       # skip space type without minimum total air changes
       next if data['minimum_total_air_changes'].nil?
 

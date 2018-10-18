@@ -1,12 +1,20 @@
 
 # open the class to add methods to size all HVAC equipment
 class OpenStudio::Model::Model
-  def add_swh(building_type, template, climate_zone, prototype_input)
+  def add_swh(building_type, template, climate_zone, prototype_input, epw_file)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Add the main service water heating loop, if specified
     unless prototype_input['main_water_heater_volume'].nil?
 
+      if template == 'NECB 2011'
+        # vars x1..x10 not required here, only service water heating fuel type, which is
+        # weather file dependent for NECB 2011
+        x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, swh_fueltype = BTAP::Environment.get_canadian_system_defaults_by_weatherfile_name(epw_file)
+      else
+        swh_fueltype = prototype_input['main_water_heater_fuel']
+      end
+      
       # Add the main service water loop
       main_swh_loop = add_swh_loop(template,
                                    'Main Service Water Loop',
@@ -16,7 +24,7 @@ class OpenStudio::Model::Model
                                    prototype_input['main_service_water_pump_motor_efficiency'],
                                    OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                    OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
-                                   prototype_input['main_water_heater_fuel'],
+                                   swh_fueltype,
                                    OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
                                    building_type) unless building_type == 'RetailStripmall' && template != 'NECB 2011'
 
@@ -27,8 +35,9 @@ class OpenStudio::Model::Model
       if building_type == 'LargeOffice' && template != 'NECB 2011'
 
         # Only the core spaces have service water
-        ['Core_bottom', 'Core_mid', 'Core_top'].each do |space_name|
-          add_swh_end_uses(template,
+        ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
+        #['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
+		 add_swh_end_uses(template,
                            'Main',
                            main_swh_loop,
                            OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
@@ -37,7 +46,19 @@ class OpenStudio::Model::Model
                            space_name,
                            building_type)
         end
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB 2011'
 
+        # Only mechanical rooms have service water
+        ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
+		 add_swh_end_uses(template,
+                           'Main',
+                           main_swh_loop,
+                           OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                           prototype_input['main_service_water_flowrate_schedule'],
+                           OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                           space_name,
+                           building_type)
+        end
       elsif building_type == 'RetailStripmall' && template != 'NECB 2011'
 
         return true if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
@@ -51,7 +72,7 @@ class OpenStudio::Model::Model
         rated_flow_rate_m3_per_s = OpenStudio.convert(rated_use_rate_gal_per_min, 'gal/min', 'm^3/s').get
 
         # Loop through all spaces
-        swh_space_names.zip(swh_sch_names).each do |swh_space_name, swh_sch_name|
+        swh_space_names.zip(swh_sch_names).sort.each do |swh_space_name, swh_sch_name|
           swh_thermal_zone = getSpaceByName(swh_space_name).get.thermalZone.get
           main_swh_loop = add_swh_loop(template,
                                        "#{swh_thermal_zone.name} Service Water Loop",
@@ -75,99 +96,6 @@ class OpenStudio::Model::Model
                            building_type)
         end
 
-      #
-      #       elsif building_type == 'LargeHotel'
-      #
-      #         # Add water use equipment to each space
-      #         guess_room_water_use_schedule = "HotelLarge GuestRoom_SWH_Sch"
-      #         kitchen_water_use_schedule = "HotelLarge BLDG_SWH_SCH"
-      #
-      #         water_end_uses = []
-      #         space_type_map = self.define_space_type_map(building_type, template, climate_zone)
-      #         space_multipliers = define_space_multiplier
-      #
-      #         kitchen_space_types = ['Kitchen']
-      #         kitchen_space_use_rate = 2.22 # gal/min, from PNNL prototype building
-      #
-      #         guess_room_water_use_rate = 0.020833333 # gal/min, Reference: NREL Reference building report 5.1.6
-      #
-      #         # Create a list of water use rates and associated room multipliers
-      #         case template
-      #         when "90.1-2004", "90.1-2007", "90.1-2010", "90.1-2013"
-      #           guess_room_space_types =['GuestRoom','GuestRoom2','GuestRoom3','GuestRoom4']
-      #         else
-      #           guess_room_space_types =['GuestRoom','GuestRoom3']
-      #           guess_room_space_types1 = ['GuestRoom2']
-      #           guess_room_space_types2 = ['GuestRoom4']
-      #           guess_room_water_use_rate1 = 0.395761032 # gal/min, Reference building
-      #           guess_room_water_use_rate2 = 0.187465752 # gal/min, Reference building
-      #
-      #           laundry_water_use_schedule = "HotelLarge LaundryRoom_Eqp_Elec_Sch"
-      #           laundry_space_types = ['Laundry']
-      #           laundry_room_water_use_rate = 2.6108244 # gal/min, Reference building
-      #
-      #           guess_room_space_types1.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, guess_room_water_use_rate1 * space_multiplier,guess_room_water_use_schedule])
-      #             end
-      #           end
-      #
-      #           guess_room_space_types2.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, guess_room_water_use_rate2 * space_multiplier,guess_room_water_use_schedule])
-      #             end
-      #           end
-      #
-      #           laundry_space_types.each do |space_type|
-      #             space_names = space_type_map[space_type]
-      #             space_names.each do |space_name|
-      #               space_multiplier = 1
-      #               space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #               water_end_uses.push([space_name, laundry_room_water_use_rate * space_multiplier,laundry_water_use_schedule])
-      #             end
-      #           end
-      #         end
-      #
-      #         guess_room_space_types.each do |space_type|
-      #           space_names = space_type_map[space_type]
-      #           space_names.each do |space_name|
-      #             space_multiplier = 1
-      #             space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #             water_end_uses.push([space_name, guess_room_water_use_rate * space_multiplier,guess_room_water_use_schedule])
-      #           end
-      #         end
-      #
-      #         kitchen_space_types.each do |space_type|
-      #           space_names = space_type_map[space_type]
-      #           space_names.each do |space_name|
-      #             space_multiplier = 1
-      #             space_multiplier= space_multipliers[space_name].to_i if space_multipliers[space_name] != nil
-      #             water_end_uses.push([space_name, kitchen_space_use_rate * space_multiplier,kitchen_water_use_schedule])
-      #           end
-      #         end
-      #
-      #         # Connect the water use equipment to the loop
-      #         water_end_uses.each do |water_end_use|
-      #           space_name = water_end_use[0]
-      #           use_rate = water_end_use[1] # in gal/min
-      #           use_schedule = water_end_use[2]
-      #
-      #           self.add_swh_end_uses(template,
-      #                               'Main',
-      #                               main_swh_loop,
-      #                               OpenStudio.convert(use_rate,'gal/min','m^3/s').get,
-      #                               use_schedule,
-      #                               OpenStudio.convert(prototype_input['main_water_use_temperature'],'F','C').get,
-      #                               space_name,
-      #                               building_type)
-      #         end
-
       elsif prototype_input['main_service_water_peak_flowrate']
 
         # Attaches the end uses if specified as a lump value in the prototype_input
@@ -183,13 +111,13 @@ class OpenStudio::Model::Model
       else
 
         # Attaches the end uses if specified by space type
-        space_type_map = define_space_type_map(building_type, template, climate_zone)
-
+        space_type_map = define_space_type_map(building_type, template, climate_zone).sort.to_h
+        
         if template == 'NECB 2011'
           building_type = 'Space Function'
         end
 
-        space_type_map.each do |space_type_name, space_names|
+        space_type_map.sort.each do |space_type_name, space_names|
           search_criteria = {
             'template' => template,
             'building_type' => get_lookup_name(building_type),
@@ -204,9 +132,19 @@ class OpenStudio::Model::Model
           next unless template == 'NECB 2011' || !data['service_water_heating_peak_flow_rate'].nil?
 
           # Add a service water use for each space
-          space_names.each do |space_name|
+          space_names.sort.each do |space_name|
             space = getSpaceByName(space_name).get
-            space_multiplier = space.multiplier
+            space_multiplier =  nil
+            case template
+            when 'NECB 2011'
+            #Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes. 
+              space_multiplier = 1
+            else
+              space_multiplier = space.multiplier 
+            end
+            
+
+            
             add_swh_end_uses_by_space(get_lookup_name(building_type),
                                       template,
                                       climate_zone,
@@ -302,7 +240,7 @@ class OpenStudio::Model::Model
     water_use_def_schedules = {} # key is temp C value is schedule
 
     # loop through space types adding demand side of swh
-    self.getSpaceTypes.each do |space_type|
+    self.getSpaceTypes.sort.each do |space_type|
       next if not space_type.standardsBuildingType.is_initialized
       next if not space_type.standardsSpaceType.is_initialized
       next if not space_type_hash.has_key?(space_type) # this is used for space types without any floor area
@@ -322,6 +260,13 @@ class OpenStudio::Model::Model
 
       # next if no service water heating demand
       next if not (gal_hr_per_area.to_f > 0.0 || gal_hr_peak_flow_rate.to_f > 0.0)
+
+      # If there is no SWH schedule specified, assume
+      # that there should be no SWH consumption for this space type.
+      unless flow_rate_fraction_schedule
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "No service water heating schedule was specified for #{space_type.name}, an always off schedule will be used and no water will be used.")
+        flow_rate_fraction_schedule = alwaysOffDiscreteSchedule
+      end
 
       if (stds_bldg_type == "MidriseApartment" && stds_space_type.include?("Apartment")) || stds_bldg_type == "StripMall"
         num_units = space_type_hash[space_type][:num_units].round
@@ -411,7 +356,7 @@ class OpenStudio::Model::Model
           unit_hot_water_loop.addDemandBranchForComponent(water_use_connection)
 
           # apply efficiency to hot water heater
-          unit_hot_water_loop.supplyComponents.each do |component|
+          unit_hot_water_loop.supplyComponents.sort.each do |component|
             next if not component.to_WaterHeaterMixed.is_initialized
             component = component.to_WaterHeaterMixed.get
             component.apply_efficiency(template)
@@ -424,7 +369,7 @@ class OpenStudio::Model::Model
 
       elsif stds_space_type.include?("Kitchen") || stds_space_type.include?("Laundry")
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate} gal/hr.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr.")
 
         # add water use equipment definition
         water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
@@ -503,7 +448,7 @@ class OpenStudio::Model::Model
         dedicated_hot_water_loop.addDemandBranchForComponent(water_use_connection)
 
         # find water heater
-        dedicated_hot_water_loop.supplyComponents.each do |component|
+        dedicated_hot_water_loop.supplyComponents.sort.each do |component|
           next if not component.to_WaterHeaterMixed.is_initialized
           water_heater = component.to_WaterHeaterMixed.get
 
@@ -546,7 +491,7 @@ class OpenStudio::Model::Model
 
 
           # find water heater
-          booster_service_water_loop.supplyComponents.each do |component|
+          booster_service_water_loop.supplyComponents.sort.each do |component|
             next if not component.to_WaterHeaterMixed.is_initialized
             water_heater = component.to_WaterHeaterMixed.get
 
@@ -563,7 +508,7 @@ class OpenStudio::Model::Model
       else # store water use equip by building type in hash so can add general building type hot water loop
 
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate} gal/hr on a shared loop.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr on a shared loop.")
 
         # add water use equipment definition
         water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(self)
@@ -617,7 +562,7 @@ class OpenStudio::Model::Model
     bldg_effective_num_stories = bldg_effective_num_stories_hash[:below_grade] + bldg_effective_num_stories_hash[:above_grade]
 
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
-    water_use_equipment_hash.each do |stds_bldg_type,water_use_equipment_array|
+    water_use_equipment_hash.sort.each do |stds_bldg_type,water_use_equipment_array|
 
       # gather inputs for add_swh_loop
       sys_name = "#{stds_bldg_type} Shared Service Water Loop"
@@ -652,7 +597,7 @@ class OpenStudio::Model::Model
       end
 
       bldg_type_floor_area = 0.0
-      space_type_hash.each do |space_type,hash|
+      space_type_hash.sort.each do |space_type,hash|
         next if not hash[:stds_bldg_type] == stds_bldg_type
         bldg_type_floor_area += hash[:floor_area]
       end
@@ -670,7 +615,7 @@ class OpenStudio::Model::Model
       water_heater_volume = water_heater_sizing[:water_heater_volume]
       parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
       if parasitic_fuel_consumption_rate > 0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loopo of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loop of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
       end
 
       # make loop for each unit and add on water use equipment
@@ -687,7 +632,7 @@ class OpenStudio::Model::Model
                                               stds_bldg_type)
 
       # find water heater
-      shared_hot_water_loop.supplyComponents.each do |component|
+      shared_hot_water_loop.supplyComponents.sort.each do |component|
         next if not component.to_WaterHeaterMixed.is_initialized
         water_heater = component.to_WaterHeaterMixed.get
 
@@ -696,7 +641,7 @@ class OpenStudio::Model::Model
       end
 
       # loop through water use equipment
-      water_use_equipment_array.each do |water_use_equip|
+      water_use_equipment_array.sort.each do |water_use_equip|
         # add water use connection
         water_use_connection = OpenStudio::Model::WaterUseConnections.new(self)
         water_use_connection.addWaterUseEquipment(water_use_equip)
@@ -733,10 +678,17 @@ class OpenStudio::Model::Model
 
     # get water use equipment
     max_flow_rate_array = [] # gallons per hour
-    water_use_equipment_array.each do |water_use_equip|
+    water_use_equipment_array.sort.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
-      next if not water_use_equip_sch.is_initialized and water_use_equip_sch.get.to_ScheduleRuleset.is_initialized
-      water_use_equip_sch = water_use_equip_sch.get.to_ScheduleRuleset.get
+      next if water_use_equip_sch.empty?
+      water_use_equip_sch = water_use_equip_sch.get
+      if water_use_equip_sch.to_ScheduleRuleset.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
+      elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
+      elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
+        water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
+      end
       max_sch_value = water_use_equip_sch.annual_min_max_value['max']
 
       # get water_use_equip_def to get max flow rate
@@ -759,9 +711,10 @@ class OpenStudio::Model::Model
 
     # use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
     # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity is #{peak_flow_fraction} * #{adjusted_flow_rate_sum} gal/hr * 8.4 * 1.0 * (#{target_temp_ip} - #{inlet_temp_ip}/ #{htg_eff}).")
     water_heater_capacity_ip = peak_flow_fraction * adjusted_flow_rate_sum * 8.4 * 1.0 * (target_temp_ip - inlet_temp_ip) / htg_eff
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity of #{water_heater_capacity_ip} Btu/hr = #{peak_flow_fraction} peak fraction * #{adjusted_flow_rate_sum.round} gal/hr * 8.4 lb/gal * 1.0 Btu/lb F * (#{target_temp_ip.round} - #{inlet_temp_ip.round} deltaF / #{htg_eff} htg eff).")
     water_heater_capacity_si = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","W").get
+    # Assume 1 gal of volume per 1 kBtu/hr of heating capacity
     water_heater_volume_ip = OpenStudio::convert(water_heater_capacity_ip,"Btu/hr","kBtu/hr").get
     # increase tank size to 40 galons if calculated value is smaller
     if water_heater_volume_ip < 40.0 # gal

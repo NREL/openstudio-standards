@@ -29,6 +29,15 @@ def load_openstudio_standards_json
   standards_files << 'OpenStudio_Standards_exterior_lighting.json'
   standards_files << 'OpenStudio_Standards_parking.json'
   standards_files << 'OpenStudio_Standards_entryways.json'
+  standards_files << 'OpenStudio_Standards_necb_climate_zones.json'
+  standards_files << 'OpenStudio_Standards_necb_fdwr.json'
+  standards_files << 'OpenStudio_Standards_necb_hvac_system_selection_type.json'
+  standards_files << 'OpenStudio_Standards_necb_surface_conductances.json'
+  standards_files << 'OpenStudio_Standards_water_heaters.json'
+  standards_files << 'OpenStudio_Standards_economizers.json'
+  standards_files << 'OpenStudio_Standards_refrigerated_cases.json'
+  standards_files << 'OpenStudio_Standards_walkin_refrigeration.json'
+  standards_files << 'OpenStudio_Standards_refrigeration_compressors.json'
   #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
 
   # Combine the data from the JSON files into a single hash
@@ -148,7 +157,7 @@ class OpenStudio::Model::Model
     # If any of the lights are missing schedules, assign an
     # always-off schedule to those lights.  This is assumed to
     # be the user's intent in the proposed model.
-    getLightss.each do |lights|
+    getLightss.sort.each do |lights|
       if lights.schedule.empty?
         lights.setSchedule(alwaysOffDiscreteSchedule)
       end
@@ -307,6 +316,10 @@ class OpenStudio::Model::Model
     # Apply the HVAC efficiency standard
     apply_hvac_efficiency_standard(template, climate_zone)
 
+    # Fix EMS references.
+    # Temporary workaround for OS issue #2598
+    temp_fix_ems_references
+
     # Delete all the unused curves
     getCurves.sort.each do |curve|
       if curve.parent.empty?
@@ -339,7 +352,7 @@ class OpenStudio::Model::Model
   def residential_and_nonresidential_floor_areas(template)
     res_area_m2 = 0
     nonres_area_m2 = 0
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       if space.residential?(template)
         res_area_m2 += space.floorArea
       else
@@ -664,7 +677,7 @@ class OpenStudio::Model::Model
     # for the purposes of HVAC system assignment
     all_htg_fuels = []
     all_clg_fuels = []
-    getThermalZones.each do |zone|
+    getThermalZones.sort.each do |zone|
       all_htg_fuels += zone.heating_fuels
       all_clg_fuels += zone.cooling_fuels
     end
@@ -1244,9 +1257,9 @@ class OpenStudio::Model::Model
         end
 
         # If electric zone heat
-        electric_reheat = false
+        reheat_type = 'Water'
         if zone_heat_fuel == 'Electricity'
-          electric_reheat = true
+          reheat_type = 'Electricity'
         end
 
         # Group zones by story
@@ -1288,7 +1301,7 @@ class OpenStudio::Model::Model
                            0.9,
                            OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
                            nil,
-                           electric_reheat,
+                           reheat_type,
                            nil)
           end
 
@@ -1752,7 +1765,7 @@ class OpenStudio::Model::Model
   def assign_spaces_to_stories
     # Make hash of spaces and minz values
     sorted_spaces = {}
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Skip plenum spaces
       next if space.plenum?
 
@@ -2073,7 +2086,7 @@ class OpenStudio::Model::Model
       # "For 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004', infiltration rates are not defined using this method, no changes have been made to the model.
     else
       # Remove infiltration rates set at the space type. Kind of redundant for NECB 2011
-      getSpaceTypes.each do |space_type|
+      getSpaceTypes.sort.each do |space_type|
         space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
       end
     end
@@ -2344,7 +2357,7 @@ class OpenStudio::Model::Model
   def add_schedule(schedule_name)
     return nil if schedule_name.nil? || schedule_name == ''
     # First check model and return schedule if it already exists
-    getSchedules.each do |schedule|
+    getSchedules.sort.each do |schedule|
       if schedule.name.get.to_s == schedule_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added schedule: #{schedule_name}")
         return schedule
@@ -2455,7 +2468,7 @@ class OpenStudio::Model::Model
   # @todo make return an OptionalMaterial
   def add_material(material_name)
     # First check model and return material if it already exists
-    getMaterials.each do |material|
+    getMaterials.sort.each do |material|
       if material.name.get.to_s == material_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added material: #{material_name}")
         return material
@@ -2556,7 +2569,7 @@ class OpenStudio::Model::Model
   # @todo make return an OptionalConstruction
   def add_construction(construction_name, construction_props = nil)
     # First check model and return construction if it already exists
-    getConstructions.each do |construction|
+    getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added construction: #{construction_name}")
         return construction
@@ -2697,15 +2710,11 @@ class OpenStudio::Model::Model
     data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
       data = find_object($os_standards['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
-
       unless data
-
-        # for debugging (maria)
-        # puts "data = #{data}"
-
+        # if nothing matches say that we could not find it.
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in $os_standards['construction_sets']")
         return construction_set
       end
-
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
@@ -3304,7 +3313,7 @@ class OpenStudio::Model::Model
     constructions = []
 
     # From default construction sets
-    getDefaultConstructionSets.each do |const_set|
+    getDefaultConstructionSets.sort.each do |const_set|
       ext_surfs = const_set.defaultExteriorSurfaceConstructions
       int_surfs = const_set.defaultInteriorSurfaceConstructions
       gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
@@ -3376,7 +3385,7 @@ class OpenStudio::Model::Model
     end
 
     # Hard-assigned surfaces
-    getSurfaces.each do |surf|
+    getSurfaces.sort.each do |surf|
       next unless surf.outsideBoundaryCondition == boundary_condition
       surf_type = surf.surfaceType
       if surf_type == 'Floor' || surf_type == 'Wall'
@@ -3388,7 +3397,7 @@ class OpenStudio::Model::Model
     end
 
     # Hard-assigned subsurfaces
-    getSubSurfaces.each do |surf|
+    getSubSurfaces.sort.each do |surf|
       next unless surf.outsideBoundaryCondition == boundary_condition
       surf_type = surf.subSurfaceType
       if surf_type == 'FixedWindow' || surf_type == 'OperableWindow'
@@ -3545,7 +3554,7 @@ class OpenStudio::Model::Model
     # Create an array of surface types
     # each standard applies to.
     case template
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
       types_to_modify << ['Outdoors', 'Floor']
       types_to_modify << ['Outdoors', 'Wall']
       types_to_modify << ['Outdoors', 'RoofCeiling']
@@ -3563,14 +3572,14 @@ class OpenStudio::Model::Model
     surfaces_to_modify = []
     types_to_modify.each do |boundary_condition, surface_type|
       # Surfaces
-      getSurfaces.each do |surf|
+      getSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
         surfaces_to_modify << surf
       end
 
       # SubSurfaces
-      getSubSurfaces.each do |surf|
+      getSubSurfaces.sort.each do |surf|
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == surface_type
         surfaces_to_modify << surf
@@ -3648,7 +3657,7 @@ class OpenStudio::Model::Model
     total_subsurface_m2 = 0.0
     # Store the space conditioning category for later use
     space_cats = {}
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
@@ -3698,7 +3707,10 @@ class OpenStudio::Model::Model
               end
       end
       space_cats[space] = cat
-
+      # NECB 2011 keep track of totals for NECB regardless of conditioned or not. 
+      total_wall_m2 += wall_area_m2
+      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
+      
       # Add to the correct category
       case cat
       when 'Unconditioned'
@@ -3713,9 +3725,7 @@ class OpenStudio::Model::Model
         sh_wall_m2 += wall_area_m2
         sh_wind_m2 += wind_area_m2
       end
-      # keep track of totals for NECB
-      total_wall_m2 += wall_area_m2
-      total_subsurface_m2 += wind_area_m2 # this contains doors as well.
+
     end
 
     # Calculate the WWR of each category
@@ -3751,14 +3761,15 @@ class OpenStudio::Model::Model
       # NECB FDWR limit
       hdd = BTAP::Environment::WeatherFile.new(weatherFile.get.path.get).hdd18
       fdwr_lim = (BTAP::Compliance::NECB2011.max_fwdr(hdd) * 100.0).round(1)
-
+      #puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
+      #puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
       # Stop here unless windows / doors need reducing
       return true unless fdwr > fdwr_lim
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Reducing the size of all windows (by raising sill height) to reduce window area down to the limit of #{wwr_lim.round}%.")
       # Determine the factors by which to reduce the window / door area
       mult = fdwr_lim / fdwr
       # Reduce the window area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -3783,7 +3794,7 @@ class OpenStudio::Model::Model
       mult_sh_red = wwr_lim / wwr_sh
 
       # Reduce the window area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Determine the space category
         # from the previously stored values
         cat = space_cats[space]
@@ -3825,7 +3836,7 @@ class OpenStudio::Model::Model
           end
         end
       end
-
+      
     end
 
     return true
@@ -3849,7 +3860,7 @@ class OpenStudio::Model::Model
     sh_sky_m2 = 0
     total_roof_m2 = 0.001
     total_subsurface_m2 = 0
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       sky_area_m2 = 0
@@ -3922,7 +3933,7 @@ class OpenStudio::Model::Model
       mult = srr_lim / srr
 
       # Reduce the subsurface areas
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Loop through all surfaces in this space
         space.surfaces.sort.each do |surface|
           # Skip non-outdoor surfaces
@@ -3951,7 +3962,7 @@ class OpenStudio::Model::Model
       # mult_sh_red = srr_lim / srr_sh
 
       # Reduce the skylight area if any of the categories necessary
-      getSpaces.each do |space|
+      getSpaces.sort.each do |space|
         # Determine the space category
         cat = 'NonRes'
         if space.residential?(template)
@@ -4001,7 +4012,7 @@ class OpenStudio::Model::Model
   # @return [Bool] true if successful, false if not
   def remove_prm_hvac
     # Plant loops
-    getPlantLoops.each do |loop|
+    getPlantLoops.sort.each do |loop|
       # Don't remove service water heating loops
       next if loop.swh_loop?
       loop.remove
@@ -4011,7 +4022,7 @@ class OpenStudio::Model::Model
     getAirLoopHVACs.each(&:remove)
 
     # Zone equipment
-    getThermalZones.each do |zone|
+    getThermalZones.sort.each do |zone|
       zone.equipment.each do |zone_equipment|
         next if zone_equipment.to_FanZoneExhaust.is_initialized
         zone_equipment.remove
@@ -4029,7 +4040,7 @@ class OpenStudio::Model::Model
   # @return [Bool] returns true if successful, false if not.
   def remove_external_shading_devices
     shading_surfaces_removed = 0
-    getShadingSurfaceGroups.each do |shade_group|
+    getShadingSurfaceGroups.sort.each do |shade_group|
       # Skip Site shading
       next if shade_group.shadingSurfaceType == 'Site'
       # Space shading surfaces should be removed
@@ -4066,7 +4077,7 @@ class OpenStudio::Model::Model
   # Default is 0.3 m ~1ft
   # @return [OpenStudio::Model::BuildingStory] the story
   def get_story_for_nominal_z_coordinate(minz, tolerance = 0.3)
-    getBuildingStorys.each do |story|
+    getBuildingStorys.sort.each do |story|
       z = story.minimum_z_value
 
       if (minz - z).abs < tolerance
@@ -4277,7 +4288,7 @@ class OpenStudio::Model::Model
     case template
     when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
       result = possible_climate_zones.sort.last
-    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'LowITE', 'HighITE'
+    when '90.1-2007', '90.1-2010', '90.1-2013', 'NECB 2011', 'NREL ZNE Ready 2017', 'LowITE', 'HighITE'
       result = possible_climate_zones.sort.first
     when '90.1-2004'
       result = if possible_climate_zones.include? 'ClimateZone 3'
@@ -4306,7 +4317,7 @@ class OpenStudio::Model::Model
   def validate_standards_spacetypes_in_model(template)
     error_string = ''
     # populate search hash
-    getSpaces.each do |space|
+    getSpaces.sort.each do |space|
       unless space.spaceType.empty?
         if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
           error_string << "Space: #{space.name} has SpaceType of #{space.spaceType.get.name} but the standardSpaceType or standardBuildingType  is undefined. Please use an appropriate standardSpaceType for #{template}\n"
@@ -4343,7 +4354,7 @@ class OpenStudio::Model::Model
     story_hash = {}
 
     # loop through stories
-    self.getBuildingStorys.each do |story|
+    self.getBuildingStorys.sort.each do |story|
 
       # skip of story doesn't have any spaces
       next if story.spaces.size == 0
@@ -4471,7 +4482,7 @@ class OpenStudio::Model::Model
     typical_class_size = 20.0
 
     space_type_hash = {}
-    self.getSpaceTypes.each do |space_type|
+    self.getSpaceTypes.sort.each do |space_type|
 
       # get standards info
       stds_bldg_type = space_type.standardsBuildingType
@@ -4491,7 +4502,7 @@ class OpenStudio::Model::Model
         # determine num_parking_spots in another method
 
         # loop through spaces to get mis values
-        space_type.spaces.each do |space|
+        space_type.spaces.sort.each do |space|
           next if not space.partofTotalFloorArea
           effective_num_spaces += space.multiplier
           floor_area += space.floorArea * space.multiplier
@@ -4537,12 +4548,20 @@ class OpenStudio::Model::Model
         space_type_hash[space_type][:num_units] = num_units
         space_type_hash[space_type][:num_beds] = num_beds
 
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, floor area = #{OpenStudio.convert(floor_area,'m^2','ft^2').get.round} ft^2.") unless floor_area == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of spaces = #{effective_num_spaces}.") unless effective_num_spaces == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of units = #{num_units}.") unless num_units == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of people = #{num_people.round}.") unless num_people == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of students = #{num_students}.") unless num_students == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of beds = #{num_beds}.") unless num_beds == 0.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of meals = #{num_meals}.") unless num_meals.nil?
+
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
       end
     end
 
-    return space_type_hash
+    return space_type_hash.sort.to_h
   end
 
   private
@@ -4567,7 +4586,7 @@ class OpenStudio::Model::Model
   # @author Julien Marrec
   def apply_baseline_swh_loops(template, building_type)
 
-    getPlantLoops.each do |plant_loop|
+    getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop.swh_loop?
 
@@ -4642,7 +4661,7 @@ class OpenStudio::Model::Model
     end
 
     # Set the water heater fuel types if it's 90.1-2013
-    getWaterHeaterMixeds.each do |water_heater|
+    getWaterHeaterMixeds.sort.each do |water_heater|
       water_heater.apply_prm_baseline_fuel_type(template, building_type)
     end
     
@@ -4650,4 +4669,29 @@ class OpenStudio::Model::Model
     
   end
 
+  # This method goes through certain types of EnergyManagementSystem
+  # variables and replaces UIDs with object names.  This should
+  # be done by the forward translator, and this code should be
+  # removed after this bug is fixed:
+  # https://github.com/NREL/OpenStudio/issues/2598
+  #
+  # @todo remove this method after OpenStudio issue #2598 is fixed.
+  def temp_fix_ems_references
+
+    # Internal Variables
+    getEnergyManagementSystemInternalVariables.sort.each do |var|
+      # Get the reference field value
+      ref = var.internalDataIndexKeyName
+      # Convert to UUID
+      uid = OpenStudio.toUUID(ref)
+      # Get the model object with this UID
+      obj = getModelObject(uid)
+      # If it exists, replace the UID with the object name
+      if obj.is_initialized
+        var.setInternalDataIndexKeyName(obj.get.name.get)
+      end
+    end
+
+    return true
+  end
 end

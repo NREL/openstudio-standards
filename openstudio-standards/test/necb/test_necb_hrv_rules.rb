@@ -24,12 +24,16 @@ class HRVTests < MiniTest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
+    hw_loop = OpenStudio::Model::PlantLoop.new(model)
+    always_on = model.alwaysOnDiscreteSchedule	
+    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
     BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
       model, 
       model.getThermalZones, 
       boiler_fueltype, 
       heating_coil_type, 
-      baseboard_type)
+      baseboard_type,
+      hw_loop)
     systems = model.getAirLoopHVACs
     # increase default outdoor air requirement so that some of the systems in the project would require an HRV
     for isys in 0..0

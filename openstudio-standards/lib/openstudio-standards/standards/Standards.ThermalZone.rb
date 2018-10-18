@@ -114,7 +114,7 @@ class OpenStudio::Model::ThermalZone
       oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
       oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
       oa_rate = dsn_oa.outdoorAirFlowRate
-      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
       tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
 
       # Convert total to per-area
@@ -1370,6 +1370,9 @@ class OpenStudio::Model::ThermalZone
     when '90.1-2013'
       min_area_ft2 = 500
       min_occ_per_1000_ft2 = 25
+    when 'NREL ZNE Ready 2017'
+      min_area_ft2 = 500
+      min_occ_per_1000_ft2 = 12 # half of 90.1-2013
     end
 
     # Get the area served and the number of occupants
@@ -1453,6 +1456,10 @@ class OpenStudio::Model::ThermalZone
       else
         sch_name = space_type_properties['exhaust_schedule']
         exhaust_schedule = model.add_schedule(sch_name)
+        unless exhaust_schedule
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
+          exhaust_schedule = model.alwaysOnDiscreteSchedule
+        end
       end
 
       # add exhaust fans

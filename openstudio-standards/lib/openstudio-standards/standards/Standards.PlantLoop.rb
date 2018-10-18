@@ -208,7 +208,7 @@ class OpenStudio::Model::PlantLoop
       # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
       # the WB=>MDB day is used to size cooling towers.
       summer_oat_wbs_f = []
-      model.getDesignDays.each do |dd|
+      model.getDesignDays.sort.each do |dd|
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
         if dd.humidityIndicatingType == 'Wetbulb'
@@ -369,7 +369,7 @@ class OpenStudio::Model::PlantLoop
       # Not required before 90.1-2004
       return reset_required
 
-    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+    when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
 
       # Not required for service water heating systems
       if swh_loop?
@@ -1224,6 +1224,7 @@ class OpenStudio::Model::PlantLoop
   end
 
   # Determines if the loop is a Service Water Heating loop by checking if there is a WaterUseConnection on the demand side
+  # or a WaterHeaterMixed on the supply side
   #
   # @return [Boolean] true if it's indeed a SHW loop, false otherwise
   def swh_loop?()
@@ -1231,6 +1232,12 @@ class OpenStudio::Model::PlantLoop
     serves_swh = false
     self.demandComponents.each do |comp|
       if comp.to_WaterUseConnections.is_initialized
+        serves_swh = true
+        break
+      end
+    end
+    self.supplyComponents.each do |comp|
+      if comp.to_WaterHeaterMixed.is_initialized
         serves_swh = true
         break
       end

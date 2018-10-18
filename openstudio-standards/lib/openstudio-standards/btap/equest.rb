@@ -2231,7 +2231,7 @@ module BTAP
             end
           end
           #Find Polygons for space and add reference to the space.
-          spaces.each do |space|
+          spaces.sort.each do |space|
             if space.check_keyword?("POLYGON")
               if ( polygon.utype == space.get_keyword_value("POLYGON") )
                 space.polygon = polygon
@@ -2244,7 +2244,7 @@ module BTAP
 
         #    Find spaces that belong to the zone.
         zones.each do |zone|
-          spaces.each do |space|
+          spaces.sort.each do |space|
             if ( space.utype ==  zone.get_keyword_value("SPACE") )
               space.zone = zone
               zone.space = space
@@ -2322,7 +2322,7 @@ module BTAP
         
         x_scale = y_scale = z_scale = 0.3048
         BTAP::runner_register("Info", "scaling model from feet to meters",runner)
-        model.getPlanarSurfaces.each do |surface|
+        model.getPlanarSurfaces.sort.each do |surface|
           new_vertices = OpenStudio::Point3dVector.new
           surface.vertices.each do |vertex|
             new_vertices << OpenStudio::Point3d.new(vertex.x * x_scale, vertex.y * y_scale, vertex.z * z_scale)
@@ -2330,7 +2330,7 @@ module BTAP
           surface.setVertices(new_vertices)
         end
  
-        model.getPlanarSurfaceGroups.each do |surface_group|
+        model.getPlanarSurfaceGroups.sort.each do |surface_group|
           transformation = surface_group.transformation
           translation = transformation.translation
           euler_angles = transformation.eulerAngles

@@ -25,7 +25,7 @@ class OpenStudio::Model::SpaceType
     space_type_properties = model.find_object($os_standards['space_types'], search_criteria)
 
     if space_type_properties.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
       space_type_properties = {}
     end
 
@@ -52,6 +52,7 @@ class OpenStudio::Model::SpaceType
     g = rgb[1].to_i
     b = rgb[2].to_i
     rendering_color = OpenStudio::Model::RenderingColor.new(model)
+    rendering_color.setName(self.name.get)
     rendering_color.setRenderingRedValue(r)
     rendering_color.setRenderingGreenValue(g)
     rendering_color.setRenderingBlueValue(b)
@@ -132,6 +133,9 @@ class OpenStudio::Model::SpaceType
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set occupancy to #{occupancy_per_area} people/1000 ft^2.")
         end
 
+        # set fraction radiant  ##
+        definition.setFractionRadiant(0.3)
+        
         # Clothing schedule for thermal comfort metrics
         clothing_sch = model.getScheduleRulesetByName('Clothing Schedule')
         if clothing_sch.is_initialized
@@ -183,6 +187,7 @@ class OpenStudio::Model::SpaceType
     lights_frac_to_return_air = space_type_properties['lighting_fraction_to_return_air'].to_f
     lights_frac_radiant = space_type_properties['lighting_fraction_radiant'].to_f
     lights_frac_visible = space_type_properties['lighting_fraction_visible'].to_f
+    lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
     lights_have_info = true unless lighting_per_area.zero?
     lights_have_info = true unless lighting_per_person.zero?
 
@@ -210,7 +215,24 @@ class OpenStudio::Model::SpaceType
       lights.sort.each do |inst|
         definition = inst.lightsDefinition
         unless lighting_per_area.zero?
-          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+          occSensLPDfactor = 1.0
+          if template == "NECB 2011"
+            # NECB 2011 space types that require a reduction in the LPD to account for 
+            # the requirement of an occupancy sensor (8.4.4.6(3) and 4.2.2.2(2))
+            reduceLPDSpaces = ["Classroom/lecture/training", "Conf./meet./multi-purpose", "Lounge/recreation",
+              "Conf./meet./multi-purpose", "Washroom-sch-A", "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", 
+              "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G", "Washroom-sch-H", "Washroom-sch-I", 
+              "Dress./fitt. - performance arts", "Locker room", "Locker room-sch-A", "Locker room-sch-B", 
+              "Locker room-sch-C", "Locker room-sch-D", "Locker room-sch-E", "Locker room-sch-F", "Locker room-sch-G",
+              "Locker room-sch-H", "Locker room-sch-I", "Retail - dressing/fitting"]
+            if reduceLPDSpaces.include?(standardsSpaceType.get)
+              # Note that "Storage area", "Storage area - refrigerated", "Hospital - medical supply" and "Office - enclosed" 
+              # LPD should only be reduced if their space areas are less than specific area values. 
+              # This is checked in a space loop after this function in the calling routine.
+              occSensLPDfactor = 0.9
+            end
+          end
+          definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occSensLPDfactor, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{name} set LPD to #{lighting_per_area} W/ft^2.")
         end
         unless lighting_per_person.zero?
@@ -226,6 +248,9 @@ class OpenStudio::Model::SpaceType
         unless lights_frac_visible.zero?
           definition.setFractionVisible(lights_frac_visible)
         end
+        # unless lights_frac_replaceable.zero?
+        #  definition.setFractionReplaceable(lights_frac_replaceable)
+        # end        
       end
 
       # If additional lights are specified, add those too

@@ -37,8 +37,13 @@ class OpenStudio::Model::AirTerminalSingleDuctVAVReheat
                             end
     when '90.1-2004', '90.1-2007'
       min_damper_position = 0.3
-    when '90.1-2010', '90.1-2013'
-      min_damper_position = 0.2
+    when '90.1-2010', '90.1-2013', 'NREL ZNE Ready 2017'
+      min_damper_position = case reheat_type
+                            when 'HotWater'
+                              0.2
+                            when 'Electricity', 'NaturalGas'
+                              0.3
+                            end
     end
 
     # TODO: remove the template conditional; doesn't make sense

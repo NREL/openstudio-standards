@@ -1,6 +1,6 @@
 90_1_prm/test_create_performance_rating_method_baseline_building.rb
 90_1_prm/test_create_performance_rating_method_baseline_bldg_2.rb
-90_1_prm/test_create_performance_rating_method_baseline_bldg_3.rb
+90_1_prm/test_create_performance_rating_method_baseline_bldg_3
 
 90_1_general/test_boiler_hot_water.rb
 90_1_general/test_chiller_electric_eir.rb
@@ -34,6 +34,7 @@ doe_prototype/test_add_exterior_lights.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
+doe_prototype/test_add_hvac_systems.rb
 
 necb/test_necb_airloop_sizing_parameters.rb
 necb/test_necb_bldg_full_service_restaurant.rb

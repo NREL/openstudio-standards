@@ -542,6 +542,15 @@ General Area,Space Function-Office - enclosed,4,20.0,21,6
 General Area,Space Function-Office - enclosed,5,20.0,0,6
 General Area,Space Function-Office - enclosed,5,20.0,20,6
 General Area,Space Function-Office - enclosed,5,20.0,21,6
+General Area,Space Function-Office - enclosed - occsens,2,20.0,0,3
+General Area,Space Function-Office - enclosed - occsens,2,20.0,20,3
+General Area,Space Function-Office - enclosed - occsens,2,20.0,21,3
+General Area,Space Function-Office - enclosed - occsens,4,20.0,0,6
+General Area,Space Function-Office - enclosed - occsens,4,20.0,20,6
+General Area,Space Function-Office - enclosed - occsens,4,20.0,21,6
+General Area,Space Function-Office - enclosed - occsens,5,20.0,0,6
+General Area,Space Function-Office - enclosed - occsens,5,20.0,20,6
+General Area,Space Function-Office - enclosed - occsens,5,20.0,21,6
 General Area,Space Function-Office - open plan,2,20.0,0,3
 General Area,Space Function-Office - open plan,2,20.0,20,3
 General Area,Space Function-Office - open plan,2,20.0,21,3
@@ -1172,6 +1181,15 @@ Warehouse Area,Space Function-Storage area,4,20.0,21,4
 Warehouse Area,Space Function-Storage area,5,20.0,0,4
 Warehouse Area,Space Function-Storage area,5,20.0,20,4
 Warehouse Area,Space Function-Storage area,5,20.0,21,4
+Warehouse Area,Space Function-Storage area - occsens,2,20.0,0,4
+Warehouse Area,Space Function-Storage area - occsens,2,20.0,20,4
+Warehouse Area,Space Function-Storage area - occsens,2,20.0,21,4
+Warehouse Area,Space Function-Storage area - occsens,4,20.0,0,4
+Warehouse Area,Space Function-Storage area - occsens,4,20.0,20,4
+Warehouse Area,Space Function-Storage area - occsens,4,20.0,21,4
+Warehouse Area,Space Function-Storage area - occsens,5,20.0,0,4
+Warehouse Area,Space Function-Storage area - occsens,5,20.0,20,4
+Warehouse Area,Space Function-Storage area - occsens,5,20.0,21,4
 Warehouse Area,Space Function-Warehouse - fine,2,20.0,0,4
 Warehouse Area,Space Function-Warehouse - fine,2,20.0,20,4
 Warehouse Area,Space Function-Warehouse - fine,2,20.0,21,4
@@ -1217,6 +1235,15 @@ Warehouse Area - refrigerated,Space Function-Storage area - refrigerated,4,20.0,
 Warehouse Area - refrigerated,Space Function-Storage area - refrigerated,5,20.0,0,5
 Warehouse Area - refrigerated,Space Function-Storage area - refrigerated,5,20.0,20,5
 Warehouse Area - refrigerated,Space Function-Storage area - refrigerated,5,20.0,21,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,2,20.0,0,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,2,20.0,20,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,2,20.0,21,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,4,20.0,0,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,4,20.0,20,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,4,20.0,21,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,5,20.0,0,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,5,20.0,20,5
+Warehouse Area - refrigerated,Space Function-Storage area - refrigerated - occsens,5,20.0,21,5
 Warehouse Area - refrigerated,Space Function-Warehouse - fine - refrigerated,2,20.0,0,5
 Warehouse Area - refrigerated,Space Function-Warehouse - fine - refrigerated,2,20.0,20,5
 Warehouse Area - refrigerated,Space Function-Warehouse - fine - refrigerated,2,20.0,21,5

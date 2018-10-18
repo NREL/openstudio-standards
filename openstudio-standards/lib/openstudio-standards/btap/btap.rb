@@ -39,7 +39,10 @@ require_relative 'measures'
 require_relative 'utilities'
 require_relative 'reporting'
 require_relative 'equest'
- 
+require_relative 'btap_result'
+require_relative 'btap_costing'
+#require_relative 'btap.space'
+#require_relative 'btap.model'
 class String
   #This method converts to Boolean.
   #@author phylroy.lopez@nrcan.gc.ca
@@ -208,7 +211,7 @@ module BTAP
     #@return [OpenStudio::Model::Model] the OpenStudio model object (self reference).
     def self.clear_output_variables(model)
       #remove existing outputs
-      model.getOutputVariables.each do |object|
+      model.getOutputVariables.sort.each do |object|
         object.remove
       end
       return model

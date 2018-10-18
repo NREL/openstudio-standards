@@ -1,0 +1,141 @@
+{
+  "LargeHotel": {
+    "geometry": {
+      "DOE Ref Pre-1980": "Geometry.large_hotel.doe.osm",
+      "DOE Ref 1980-2004": "Geometry.large_hotel.doe.osm",
+      "DOE Ref 2004": "Geometry.large_hotel.doe.osm",
+      "90.1-2007": "Geometry.large_hotel.2004_2007.osm",
+      "90.1-2004": "Geometry.large_hotel.2004_2007.osm",
+      "90.1-2010": "Geometry.large_hotel.2010.osm",
+      "NECB 2011": "Geometry.large_hotel.2013.osm",
+      "90.1-2013": "Geometry.large_hotel.2013.osm"
+    },
+    "space_map": [
+      {
+        "template": [
+          "NECB 2011"
+        ],
+        "space_type_map": {
+          "Hotel/Motel - dining": [
+            "Banquet_Flr_6",
+            "Dining_Flr_6"
+          ],
+          "Storage area": [
+            "Basement",
+            "Storage_Flr_1"
+          ],
+          "Retail - mall concourse": [
+            "Cafe_Flr_1"
+          ],
+          "Corr. >= 2.4m wide-sch-E": [
+            "Corridor_Flr_3",
+            "Corridor_Flr_6"
+          ],
+          "Food preparation": [
+            "Kitchen_Flr_6"
+          ],
+          "Hospital - laundry/washing": [
+            "Laundry_Flr_1"
+          ],
+          "Hotel/Motel - lobby": [
+            "Lobby_Flr_1"
+          ],
+          "Electrical/Mechanical-sch-E": [
+            "Mech_Flr_1"
+          ],
+          "Retail - sales": [
+            "Retail_1_Flr_1",
+            "Retail_2_Flr_1"
+          ],
+          "Hotel/Motel - rooms": [
+            "Room_1_Flr_3",
+            "Room_1_Flr_6",
+            "Room_2_Flr_3",
+            "Room_2_Flr_6",
+            "Room_3_Mult19_Flr_3",
+            "Room_3_Mult9_Flr_6",
+            "Room_4_Mult19_Flr_3",
+            "Room_5_Flr_3",
+            "Room_6_Flr_3"
+          ]
+        }
+      },
+      {
+        "template": [
+          "90.1-2004",
+          "90.1-2007",
+          "90.1-2010",
+          "90.1-2013",
+          "DOE Ref 1980-2004",
+          "DOE Ref Pre-1980"
+        ],
+        "space_type_map": {
+          "Banquet": [
+            "Banquet_Flr_6",
+            "Dining_Flr_6"
+          ],
+          "Basement": [
+            "Basement"
+          ],
+          "Cafe": [
+            "Cafe_Flr_1"
+          ],
+          "Corridor": [
+            "Corridor_Flr_6"
+          ],
+          "Corridor2": [
+            "Corridor_Flr_3"
+          ],
+          "GuestRoom": [
+            "Room_1_Flr_3",
+            "Room_2_Flr_3",
+            "Room_5_Flr_3",
+            "Room_6_Flr_3"
+          ],
+          "GuestRoom2": [
+            "Room_3_Mult19_Flr_3",
+            "Room_4_Mult19_Flr_3"
+          ],
+          "GuestRoom3": [
+            "Room_1_Flr_6",
+            "Room_2_Flr_6"
+          ],
+          "GuestRoom4": [
+            "Room_3_Mult9_Flr_6"
+          ],
+          "Kitchen": [
+            "Kitchen_Flr_6"
+          ],
+          "Laundry": [
+            "Laundry_Flr_1"
+          ],
+          "Lobby": [
+            "Lobby_Flr_1"
+          ],
+          "Mechanical": [
+            "Mech_Flr_1"
+          ],
+          "Retail": [
+            "Retail_1_Flr_1"
+          ],
+          "Retail2": [
+            "Retail_2_Flr_1"
+          ],
+          "Storage": [
+            "Storage_Flr_1"
+          ]
+        }
+      }
+    ],
+    "space_multiplier_map": {
+      "Corridor_Flr_3": 4,
+      "Room_1_Flr_3": 4,
+      "Room_2_Flr_3": 4,
+      "Room_3_Mult19_Flr_3": 76,
+      "Room_3_Mult9_Flr_6": 9,
+      "Room_4_Mult19_Flr_3": 76,
+      "Room_5_Flr_3": 4,
+      "Room_6_Flr_3": 4
+    }
+  }
+}

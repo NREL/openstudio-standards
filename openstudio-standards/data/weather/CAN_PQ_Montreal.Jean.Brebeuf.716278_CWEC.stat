@@ -1,32 +1,93 @@
- -EnergyPlus Weather Converter V7.1.0.010
- Statistics for CAN_PQ_Montreal.Jean.Brebeuf.716278_CWEC
+ -EnergyPlus Weather Converter V8.1.0.005
+ Statistics for CAN_PQ_Montreal.Jean.Brebeuf.716278_CWECEPWCSV
  Location -- Montreal Jean Brebeuf PQ CAN  
       {N 45° 30'} {W  73° 37'} {GMT -5.0 Hours}
  Elevation --   133m above sea level
  Standard Pressure at Elevation --  99737Pa
  Data Source -- WYEC2-B-04770
 
- WMO Station 71612 
+ WMO Station 716278
 
- - Displaying Design Conditions calculated from this weather file.
- -  The following design temperature statistics are calculated based on THIS weather file ONLY
- -  and may not be representative of a long-term  period of record normally used for
- -  design temperatures. Also, note that dew point temperatures are listed where 
- -  wet-bulb temperatures are normally presented.
+ - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
+ - ASHRAE design conditions are carefully generated from a period of record 
+ - (typically 30 years) to be representative of that location and to be suitable
+ - for use in heating/cooling load calculations.
 
- 	Design Stat	Coldest Month	HDB 99.6%	HDB 99%
- 	   Units   	    {}   	   {C}   	  {C}  
- 	  Heating  	 1	-27.3	-25.7
+    	Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996	
+    	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
+    	Heating	1	-26	-23.1	-32.5	0.2	-25.3	-29.7	0.2	-22.5	10.2	-6.1	9.2	-7.8	2.4	260
 
- 	Design Stat	Hottest Month	CDB .4%	CDB 1%	CDB 2%	CDP .4%	CDP 1%	CDP 2%
- 	   Units   	    {}   	  {C}  	  {C} 	  {C} 	  {C}  	  {C} 	  {C} 
- 	  Cooling  	 7	 30.7	 29.5	 28.4	 23.4	 22.9	 22.3
+    	Design Stat	HottestMonth	DBR	DB004	WB_DB004	DB010	WB_DB010	DB020	WB_DB020	WB004	DB_WB004	WB010	DB_WB010	WB020	DB_WB020	WS_DB004	WD_DB004	DP004	HR_DP004	DB_DP004	DP010	HR_DP010	DB_DP010	DP020	HR_DP020	DB_DP020	EN004	DB_EN004	EN010	DB_EN010	EN020	DB_EN020	#Hrs_8-4_&_DB-12.8/20.6	
+    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
+    	Cooling	7	10.4	29.5	22	27.9	20.8	26.4	19.9	23	27.9	21.9	26.4	20.9	25	3.6	220	21.3	16.2	26.1	20.3	15.1	24.7	19.4	14.3	23.5	68.7	28	64.5	26.3	60.9	25	713
 
- 	Design Stat	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec
- 	   Units   	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}	{m/s}
- 	Max WS	 16.9	 13.3	 11.7	 11.9	 10.8	  9.2	  8.9	  7.2	 10.8	 13.3	 17.5	 14.4
+    	Design Stat	WS010	WS025	WS050	WBmax	DBmin_mean	DBmax_mean	DBmin_stddev	DBmax_stddev	DBmin05years	DBmax05years	DBmin10years	DBmax10years	DBmin20years	DBmax20years	DBmin50years	DBmax50years
+    	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
+    	Extremes	8.5	7.3	6.4	27.2	-29.4	32	3.4	1.6	-31.9	33.1	-33.8	34.1	-35.7	35	-38.2	36.1
 
- - Heating/Cooling Degree Days/Hours calculated from this weather file are later in this report.
+ - Displaying Monthly Design Conditions "Climate Design Data 2013 ASHRAE Handbook"
+ - Monthly Optical Sky Depth Beam (taub) and Diffuse (taud)
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	             taub (beam)	0.267	0.282	0.305	0.339	0.370	0.393	0.365	0.390	0.366	0.322	0.299	0.277	
+ 	          taud (diffuse)	2.437	2.346	2.353	2.357	2.306	2.217	2.338	2.291	2.387	2.541	2.610	2.502	
+
+ 	                    taub	= Clear Sky Optical Depth for Beam Irradiance
+ 	                    taud	= Clear Sky Optical Depth for Diffuse Irradiance
+
+ - Monthly Solar Irradiance Wh/m² (noon on 21st of month)
+ 	               ib (beam)	  853	  902	  928	  919	  896	  873	  895	  857	  849	  851	  817	  805	
+ 	            id (diffuse)	   68	   91	  105	  115	  126	  138	  121	  122	  102	   76	   59	   59	
+
+ 	                      ib	= Clear Sky Noon Beam Normal Irradiance on 21st Day
+ 	                      id	= Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
+
+ - Monthly Drybulb and Mean Coincident Wetbulb Temperatures °C
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	            Drybulb 0.4%	  6.1	  6.2	 12.9	 24.8	 28.6	 31.1	 31.6	 30.9	 29.4	 22.9	 15.7	  7.7	
+ 	 Coincident Wetbulb 0.4%	  5.2	  3.6	  7.7	 15.9	 19.4	 22.8	 23.6	 22.8	 20.8	 17.2	 12.9	  6.5	
+ 	            Drybulb 2.0%	  3.3	  3.5	  9.4	   20	 25.5	 28.8	 29.3	 28.7	 25.5	 19.3	 12.7	  4.8	
+ 	 Coincident Wetbulb 2.0%	  2.1	  1.9	  5.7	 12.1	 16.9	 21.1	 22.3	 21.5	 19.8	   15	 10.7	  3.3	
+ 	            Drybulb 5.0%	  1.5	  1.9	  6.5	 16.6	 23.1	 26.8	 27.6	   27	 23.2	 16.4	  9.8	  2.7	
+ 	 Coincident Wetbulb 5.0%	  0.6	  0.7	  3.5	  9.9	 15.5	 19.9	   21	 20.7	 18.1	   13	  7.8	  1.5	
+ 	            Drybulb 10.%	 -0.1	  0.2	  4.5	 13.6	 20.6	 24.9	   26	 25.3	 21.3	   14	  7.4	  1.2	
+ 	 Coincident Wetbulb 10.%	 -0.9	 -0.9	  2.1	    8	 14.1	 18.4	 20.1	 19.7	   17	 11.1	  5.8	  0.2	
+
+ 	            Drybulb 0.4%	= 0.4% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 0.4%	= 0.4% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 2.0%	= 2.0% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 2.0%	= 2.0% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 5.0%	= 5.0% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 5.0%	= 5.0% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 10.%	= 10.% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 10.%	= 10.% Monthly Mean Coincident Wetbulb Temperature
+
+ - Monthly Drybulb and Wetbulb Daily Ranges delta°C
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	                 Drybulb	  8.8	  9.6	  8.9	  9.9	 11.2	 10.8	 10.4	 10.7	 10.6	  9.2	  7.4	  7.8	
+ 	   Drybulb range - DB 5%	  9.7	  8.6	 10.5	 15.5	 15.2	 13.1	   12	   12	 12.9	 12.7	 10.9	  7.9	
+ 	   Wetbulb range - DB 5%	  9.4	    8	  7.7	  9.5	  8.4	  7.3	  6.5	  6.5	  7.8	  8.8	  9.3	  7.3	
+
+ 	                 Drybulb	= Mean Daily Dry Bulb Temperature Range
+ 	   Drybulb range - DB 5%	= Mean Daily Dry Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
+ 	   Wetbulb range - DB 5%	= Mean Daily Wet Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
+
+ - Displaying Heating/Cooling Degree Days/Hours from "Climate Design Data 2013 ASHRAE Handbook"
+ - Monthly Standard Heating/Cooling Degree Days/Hours
+ 	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	       HDD base 10°C	  642	  546	  408	  143	   19	    1	    0	    0	    9	  107	  275	  524	
+ 	     HDD base 18.3°C	  901	  779	  666	  378	  183	   57	   16	   33	  133	  342	  524	  783	
+
+ 	       CDD base 10°C	    0	    0	    0	   15	  101	  230	  309	  276	  137	   24	    1	    0	
+ 	     CDD base 18.3°C	    0	    0	    0	    1	    6	   37	   66	   51	   11	    1	    0	    0	
+
+ 	     CDH base 23.3°C	    0	    0	    0	   11	   81	  308	  481	  365	   82	    2	    0	    0	
+ 	     CDH base 26.7°C	    0	    0	    0	    2	   16	   72	  106	   77	   19	    0	    0	    0	
+
+    - 1092 annual (standard) cooling degree-days (10°C baseline)
+    - 2675 annual (standard) heating degree-days (10°C baseline)
+
+    -  171 annual (standard) cooling degree-days (18.3°C baseline)
+    - 4794 annual (standard) heating degree-days (18.3°C baseline)
 
  - Monthly Statistics for Dry Bulb temperatures °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -264,15 +325,15 @@
 
  - Monthly Statistics for Solar Radiation  (Direct Normal, Diffuse, Global Horizontal) Wh/m²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Direct Avg 	2437 	3146 	3080 	4110 	4251 	4495 	5030 	3907 	4745 	3064 	1488 	1571 	
+ 	Direct Avg 	2437 	3146 	3080 	4110 	4252 	4496 	5031 	3907 	4745 	3064 	1488 	1571 	
 
- 	Direct Max 	6444 	7070 	8849 	9957 	10680	9964 	11284	10341	9937 	7370 	6394 	5408 	
+ 	Direct Max 	6444 	7072 	8848 	9958 	10680	9966 	11286	10339	9936 	7372 	6394 	5408 	
  	    Day    	  29 	  26 	  28 	  11 	  28 	  28 	  20 	   6 	  23 	  11 	  27 	  19 	
 
- 	Diffuse Avg	930  	1143 	1905 	1773 	2302 	2746 	2734 	2223 	1515 	1137 	730  	668  	
+ 	Diffuse Avg	931  	1143 	1905 	1773 	2303 	2746 	2734 	2223 	1515 	1137 	731  	668  	
 
- 	Global Avg 	1676 	2410 	3352 	4182 	5088 	5734 	6076 	4659 	3966 	2459 	1199 	1108 	
-   - Maximum Direct Normal Solar of 11283 Wh/m² on Jul 20
+ 	Global Avg 	1676 	2411 	3352 	4183 	5088 	5734 	6077 	4660 	3967 	2460 	1199 	1109 	
+   - Maximum Direct Normal Solar of 11286 Wh/m² on Jul 20
 
  - Average Hourly Statistics for Direct Normal Solar Radiation Wh/m²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -282,16 +343,16 @@
  	 3:01- 4:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 4:01- 5:00	    0	    0	    0	    1	    8	   55	   11	    0	    0	    0	    0	    0	
  	 5:01- 6:00	    0	    0	    1	   48	  174	  153	  146	   97	   31	    0	    0	    0	
- 	 6:01- 7:00	    0	    0	   53	  201	  317	  249	  272	  211	  277	  100	    0	    0	
+ 	 6:01- 7:00	    0	    0	   53	  201	  318	  249	  272	  211	  277	  100	    0	    0	
  	 7:01- 8:00	   25	  106	  190	  292	  385	  385	  347	  273	  369	  229	  115	    1	
- 	 8:01- 9:00	  155	  204	  257	  329	  432	  403	  428	  314	  468	  338	  162	  131	
+ 	 8:01- 9:00	  155	  204	  257	  329	  432	  403	  428	  314	  468	  339	  162	  131	
  	 9:01-10:00	  261	  313	  307	  343	  414	  397	  428	  359	  497	  394	  189	  197	
- 	10:01-11:00	  337	  394	  306	  372	  361	  361	  410	  341	  460	  372	  183	  245	
+ 	10:01-11:00	  337	  394	  306	  372	  362	  361	  410	  341	  460	  372	  183	  245	
  	11:01-12:00	  354	  432	  313	  411	  385	  359	  438	  368	  425	  324	  177	  240	
- 	12:01-13:00	  382	  429	  306	  426	  369	  368	  448	  349	  412	  312	  177	  254	
- 	13:01-14:00	  346	  395	  295	  400	  343	  340	  430	  409	  414	  302	  187	  223	
+ 	12:01-13:00	  382	  429	  306	  426	  369	  368	  449	  349	  412	  312	  177	  254	
+ 	13:01-14:00	  347	  395	  295	  400	  343	  340	  430	  409	  414	  302	  187	  223	
  	14:01-15:00	  304	  359	  316	  383	  321	  369	  422	  359	  428	  284	  164	  175	
- 	15:01-16:00	  201	  307	  291	  362	  267	  325	  416	  329	  388	  255	  121	  103	
+ 	15:01-16:00	  201	  307	  291	  362	  267	  325	  416	  330	  388	  255	  121	  103	
  	16:01-17:00	   71	  206	  264	  308	  233	  316	  350	  234	  335	  150	   12	    0	
  	17:01-18:00	    0	    0	  180	  197	  164	  247	  294	  181	  238	    4	    0	    0	
  	18:01-19:00	    0	    0	    1	   37	   78	  134	  179	   82	    4	    0	    0	    0	
@@ -311,19 +372,19 @@
  	 3:01- 4:00	    0	    0	    0	    0	    0	    1	    0	    0	    0	    0	    0	    0	
  	 4:01- 5:00	    0	    0	    0	    1	    5	   14	    8	    1	    1	    0	    0	    0	
  	 5:01- 6:00	    0	    0	    1	   13	   39	   60	   49	   22	    9	    2	    0	    0	
- 	 6:01- 7:00	    0	    1	   21	   49	   78	  112	  108	   68	   40	   17	    4	    0	
+ 	 6:01- 7:00	    0	    1	   21	   49	   79	  112	  108	   68	   40	   17	    4	    0	
  	 7:01- 8:00	    7	   22	   74	   84	  122	  156	  166	  115	   83	   57	   17	    6	
  	 8:01- 9:00	   50	   74	  131	  134	  160	  205	  212	  155	  116	   95	   47	   40	
- 	 9:01-10:00	   99	  120	  188	  174	  213	  262	  261	  200	  149	  126	   82	   82	
+ 	 9:01-10:00	   98	  120	  188	  174	  213	  262	  262	  200	  149	  126	   82	   82	
  	10:01-11:00	  138	  148	  230	  211	  255	  298	  290	  247	  173	  156	  109	  106	
- 	11:01-12:00	  158	  170	  268	  232	  256	  304	  296	  242	  212	  175	  128	  120	
- 	12:01-13:00	  152	  176	  268	  230	  252	  292	  295	  269	  211	  169	  124	  118	
+ 	11:01-12:00	  158	  170	  268	  232	  257	  304	  296	  242	  212	  175	  128	  120	
+ 	12:01-13:00	  152	  176	  268	  230	  252	  292	  295	  269	  211	  169	  124	  119	
  	13:01-14:00	  141	  158	  258	  198	  235	  296	  289	  242	  181	  138	  103	   99	
  	14:01-15:00	  111	  138	  208	  172	  227	  240	  253	  242	  146	  100	   74	   67	
  	15:01-16:00	   61	   89	  149	  127	  205	  198	  195	  193	   98	   68	   35	   27	
- 	16:01-17:00	   13	   42	   83	   91	  147	  158	  150	  125	   64	   30	    7	    2	
+ 	16:01-17:00	   13	   42	   83	   91	  147	  157	  150	  125	   65	   30	    7	    2	
  	17:01-18:00	    1	    5	   25	   49	   77	   96	   98	   75	   28	    4	    0	    0	
- 	18:01-19:00	    0	    0	    1	   10	   28	   44	   50	   26	    3	    0	    0	    0	
+ 	18:01-19:00	    0	    0	    2	   10	   28	   44	   50	   26	    3	    0	    0	    0	
  	19:01-20:00	    0	    0	    0	    0	    2	   11	   11	    1	    0	    0	    0	    0	
  	20:01-21:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -340,18 +401,18 @@
  	 3:01- 4:00	    0	    0	    0	    0	    0	    1	    0	    0	    0	    0	    0	    0	
  	 4:01- 5:00	    0	    0	    0	    2	    5	   18	    9	    2	    1	    0	    0	    0	
  	 5:01- 6:00	    0	    0	    1	   18	   70	   92	   75	   31	   13	    2	    0	    0	
- 	 6:01- 7:00	    0	    1	   27	   92	  189	  206	  201	  125	   85	   25	    4	    0	
+ 	 6:01- 7:00	    0	    1	   27	   93	  189	  206	  201	  125	   85	   25	    4	    0	
  	 7:01- 8:00	   10	   33	  117	  196	  319	  364	  341	  234	  206	  107	   28	    7	
- 	 8:01- 9:00	   72	  127	  229	  312	  444	  480	  492	  339	  345	  219	   84	   57	
- 	 9:01-10:00	  166	  241	  346	  404	  534	  580	  592	  456	  454	  316	  145	  131	
+ 	 8:01- 9:00	   72	  127	  229	  312	  444	  480	  492	  340	  345	  219	   84	   57	
+ 	 9:01-10:00	  166	  241	  347	  403	  534	  580	  593	  456	  454	  316	  145	  131	
  	10:01-11:00	  255	  336	  415	  493	  565	  615	  642	  519	  493	  365	  184	  186	
- 	11:01-12:00	  298	  396	  472	  561	  601	  635	  693	  552	  524	  366	  206	  207	
+ 	11:01-12:00	  298	  396	  472	  561	  601	  635	  693	  552	  524	  366	  207	  207	
  	12:01-13:00	  305	  401	  468	  569	  579	  630	  701	  564	  510	  349	  199	  209	
  	13:01-14:00	  264	  349	  438	  496	  522	  592	  660	  571	  459	  296	  171	  168	
- 	14:01-15:00	  194	  280	  374	  421	  466	  528	  581	  497	  392	  219	  118	  105	
- 	15:01-16:00	   93	  173	  267	  315	  371	  411	  468	  385	  269	  140	   51	   36	
+ 	14:01-15:00	  194	  280	  374	  422	  466	  528	  581	  497	  392	  219	  118	  105	
+ 	15:01-16:00	   93	  174	  267	  315	  371	  411	  468	  385	  269	  140	   51	   36	
  	16:01-17:00	   18	   68	  151	  202	  256	  319	  329	  226	  158	   49	    9	    3	
- 	17:01-18:00	    1	    5	   42	   86	  126	  182	  199	  122	   54	    5	    0	    0	
+ 	17:01-18:00	    1	    5	   42	   86	  126	  182	  200	  122	   54	    5	    0	    0	
  	18:01-19:00	    0	    0	    3	   13	   39	   69	   81	   34	    4	    0	    0	    0	
  	19:01-20:00	    0	    0	    0	    0	    2	   13	   12	    2	    0	    0	    0	    0	
  	20:01-21:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -421,7 +482,7 @@
 
  - Monthly Calculated "undisturbed" Ground Temperatures** °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	   0.5 m  	 -7.0	 -8.2	 -6.0	 -2.5	  6.7	 13.7	 18.5	 19.9	 17.5	 12.0	  4.7	 -2.1	
+ 	   0.5 m  	 -6.9	 -8.2	 -6.0	 -2.5	  6.7	 13.7	 18.5	 19.9	 17.5	 12.0	  4.7	 -2.1	
  	   2.0 m  	 -2.3	 -4.6	 -4.1	 -2.2	  3.9	  9.4	 13.8	 16.2	 15.7	 12.6	  7.6	  2.2	
  	   4.0 m  	  1.5	 -0.8	 -1.3	 -0.6	  2.9	  6.6	 10.0	 12.4	 13.0	 11.6	  8.6	  5.0	
 
@@ -455,7 +516,7 @@
  - **Note that the Köppen classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.
 
- - Climate type "6A" (ASHRAE Standards 90.1-2004 and 90.2-2004 Climate Zone)**
+ - Climate type "6A" (ASHRAE Standard 196-2006 Climate Zone)**
  - Cold - Humid, Probable Köppen classification=Dfa/Dfb, Humid Continental (Warm Summer/Cool Summer)
  - **Note that the ASHRAE classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.

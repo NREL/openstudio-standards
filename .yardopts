@@ -1,8 +1,7 @@
 --output-dir openstudio-standards/doc/
-openstudio-standards/lib/**/*.rb
+openstudio-standards/lib/openstudio-standards/refactor/standards/**/*.rb
 -
 openstudio-standards/docs/UserQuickStartGuide.md
-openstudio-standards/docs/Measures.md
 openstudio-standards/docs/Architecture.md
 openstudio-standards/docs/DeveloperInformation.md
 openstudio-standards/docs/CodeStructure.md
