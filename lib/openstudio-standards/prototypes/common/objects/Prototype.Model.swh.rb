@@ -441,7 +441,8 @@ class Standard
 
         # find_water_heater_capacity_volume_and_parasitic
         water_use_equipment_array = [water_use_equip]
-        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array)
+        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
+                                                                                    water_use_equipment_array)
         water_heater_capacity = water_heater_sizing[:water_heater_capacity]
         water_heater_volume = water_heater_sizing[:water_heater_volume]
         parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
@@ -483,7 +484,12 @@ class Standard
           inlet_temp_ip = OpenStudio.convert(service_water_temperature_si, 'C', 'F').get # pre-booster temp
           outlet_temp_ip = inlet_temp_ip + 40.0
           peak_flow_fraction = 0.6 # assume 60% of peak for dish washing
-          water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array, pipe_hash = {}, 1.0, 1.0, inlet_temp_ip, outlet_temp_ip, peak_flow_fraction)
+          water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
+                                                                                      water_use_equipment_array,
+                                                                                      htg_eff: 1.0,
+                                                                                      inlet_temp_ip: inlet_temp_ip,
+                                                                                      target_temp_ip: outlet_temp_ip,
+                                                                                      peak_flow_fraction: peak_flow_fraction)
           water_heater_capacity = water_heater_sizing[:water_heater_capacity]
 
           # gather additional inputs for add_swh_booster
@@ -634,7 +640,9 @@ class Standard
       pipe_hash[:insulation_thickness] = pipe_insul_in
 
       # find_water_heater_capacity_volume_and_parasitic
-      water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array, pipe_hash)
+      water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
+                                                                                  water_use_equipment_array,
+                                                                                  pipe_hash: pipe_hash)
       water_heater_capacity = water_heater_sizing[:water_heater_capacity]
       water_heater_volume = water_heater_sizing[:water_heater_volume]
       parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
@@ -687,12 +695,19 @@ class Standard
   # set capacity, volume, and parasitic
   #
   # @param water_use_equipment_array [Array] array of water use equipment objects that will be using this water heater
-  # @param storage_to_cap_ratio [Double]  gal of storage to kBtu/hr of capacitiy
-  # @param htg_eff [Double] fraction
-  # @param inlet_temp_ip [Double] cold water temperature F
-  # @param target_temp_ip [Double] F
+  # @param storage_to_cap_ratio [Double] storage volume gal to kBtu/hr of capacity
+  # @param htg_eff [Double] water heater thermal efficiency, fraction
+  # @param inlet_temp_ip [Double] inlet cold water temperature, degrees Fahrenheit
+  # @param target_temp_ip [Double] target supply water temperatre from the tank, degrees Fahrenheit
   # @return [Hash] hash with values needed to size water heater made with downstream method
-  def model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array, pipe_hash = {}, storage_to_cap_ratio = 1.0, htg_eff = 0.8, inlet_temp_ip = 40.0, target_temp_ip = 140.0, peak_flow_fraction = 1.0)
+  def model_find_water_heater_capacity_volume_and_parasitic(model,
+                                                            water_use_equipment_array,
+                                                            pipe_hash: nil,
+                                                            storage_to_cap_ratio: 1.0,
+                                                            htg_eff: 0.8,
+                                                            inlet_temp_ip: 40.0,
+                                                            target_temp_ip: 140.0,
+                                                            peak_flow_fraction: 1.0)
     # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
 
     water_heater_sizing = {}
@@ -750,7 +765,7 @@ class Standard
     water_heater_sizing[:water_heater_volume] = water_heater_volume_si
 
     # get pipe length (formula from A.3.1 PrototypeModelEnhancements_2014_0.pdf)
-    if !pipe_hash.empty?
+    unless pipe_hash.nil?
 
       pipe_length = 2.0 * (Math.sqrt(pipe_hash[:floor_area] / pipe_hash[:effective_num_stories]) + (10.0 * (pipe_hash[:effective_num_stories] - 1.0)))
       pipe_length_ip = OpenStudio.convert(pipe_length, 'm', 'ft').get
