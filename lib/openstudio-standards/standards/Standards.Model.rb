@@ -1184,7 +1184,7 @@ class Standard
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
     begin
-      array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
+      array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
     rescue ArgumentError => e
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Unable to sort array_of_zones by #{key_to_inspect} due to #{e.message}, defaulting to order that was passed")
     end
@@ -1211,11 +1211,14 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "names #{all_zn_names.join(', ')}")
 
     # Calculate the biggest delta and the index of the biggest delta
-    biggest_delta_i = nil
+    biggest_delta_i = 0 # array at first item in case delta is 0
     biggest_delta = 0.0
     worst = nil
     array_of_zones.each_with_index do |zn, i|
       val = zn[key_to_inspect]
+      if worst.nil? # array at first item in case delta is 0
+        worst = val
+      end
       delta = (val - avg).abs
       if delta >= biggest_delta
         biggest_delta = delta
