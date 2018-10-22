@@ -1206,7 +1206,7 @@ class Standard
     end
 
     if total_area == 0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Total area is zero for array_of_zones with key #{key_to_inspect}, unable to calcualte area-weighted average.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Total area is zero for array_of_zones with key #{key_to_inspect}, unable to calculate area-weighted average.")
       return false
     end
 
