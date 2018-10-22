@@ -1204,6 +1204,12 @@ class Standard
       all_areas << area.round
       all_zn_names << zn['zone'].name.get.to_s
     end
+
+    if total_area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Total area is zero for array_of_zones with key #{key_to_inspect}, unable to calcualte area-weighted average.")
+      return false
+    end
+
     avg = total / total_area
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Values for #{field_name}, tol = #{tolerance} #{units}, area ft2:")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "vals  #{all_vals.join(', ')}")
