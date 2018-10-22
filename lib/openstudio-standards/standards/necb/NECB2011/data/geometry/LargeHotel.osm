@@ -6126,6 +6126,20 @@ OS:Surface,
   47.549, 12.497, 16.152,                 !- X,Y,Z Vertex 3 {m}
   47.549, 12.497, 19.2;                   !- X,Y,Z Vertex 4 {m}
 
+OS:WeatherFile,
+  {3195e3ec-3f8d-48ae-99cf-236de054684b}, !- Handle
+  Sherbrooke,                             !- City
+  PQ,                                     !- State Province Region
+  CAN,                                    !- Country
+  WYEC2-B-04785,                          !- Data Source
+  716100,                                 !- WMO Number
+  45.43,                                  !- Latitude {deg}
+  -71.68,                                 !- Longitude {deg}
+  -5,                                     !- Time Zone {hr}
+  241,                                    !- Elevation {m}
+  file:///home/osdev/openstudio-standards/openstudio-standards/data/weather/CAN_PQ_Sherbrooke.716100_CWEC.epw, !- Url
+  F7B2328B;                               !- Checksum
+
 OS:Site:WaterMainsTemperature,
   {ada25fad-9587-4528-81a8-c70dca7af588}, !- Handle
   Correlation,                            !- Calculation Method
@@ -15329,7 +15343,7 @@ OS:Surface,
 
 OS:SubSurface,
   {f80061e2-65de-4ead-bf81-72e193c8195f}, !- Handle
-  Sub Surface 1,                          !- Name
+  Room_3_2_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {c2d5dfb7-9561-42ac-ac47-8ea7e405121f}, !- Surface Name
@@ -15447,7 +15461,7 @@ OS:Surface,
 
 OS:SubSurface,
   {427fbc26-9ff2-4fc5-98b8-f2723084afa3}, !- Handle
-  Sub Surface 2,                          !- Name
+  Room_3_3_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {bdeb838a-d77c-4cca-9021-fe79ba0c18ef}, !- Surface Name
@@ -15633,7 +15647,7 @@ OS:Surface,
 
 OS:SubSurface,
   {b044ca97-4313-4d20-95f9-14fef01ca69f}, !- Handle
-  Sub Surface 3,                          !- Name
+  Room_3_4_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {72193f34-c749-4077-bbbd-75b9c03264cf}, !- Surface Name
@@ -15666,7 +15680,7 @@ OS:Space,
 
 OS:SubSurface,
   {4f4ad09b-012c-4416-9b49-e62e91c5d375}, !- Handle
-  Sub Surface 4,                          !- Name
+  Room_3_5_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {8ea8ae36-89cb-4ee8-9879-ba9f745d338f}, !- Surface Name
@@ -15801,7 +15815,7 @@ OS:Space,
 
 OS:SubSurface,
   {d56c7d0a-edb5-4b85-aa28-8a61ca1cbb3c}, !- Handle
-  Sub Surface 5,                          !- Name
+  Room_3_6_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {41bfe3ba-7ef7-4a11-8e77-efab9e8ebd8c}, !- Surface Name
@@ -16021,7 +16035,7 @@ OS:Surface,
 
 OS:SubSurface,
   {b25bfbe7-9abe-4cab-8e2f-7dfb5d0024cd}, !- Handle
-  Sub Surface 6,                          !- Name
+  Room_3_7_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {dac10b71-39f2-4528-a8f7-9a5d53419b87}, !- Surface Name
@@ -16105,7 +16119,7 @@ OS:Surface,
 
 OS:SubSurface,
   {2f6000ad-c202-4ed6-8f8f-81e6cf415394}, !- Handle
-  Sub Surface 7,                          !- Name
+  Room_3_8_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {b61ef7d0-9f0c-4ad2-927f-11dd7480c141}, !- Surface Name
@@ -16223,7 +16237,7 @@ OS:Surface,
 
 OS:SubSurface,
   {9eea18bd-e750-444c-9718-6a1a732e4bd4}, !- Handle
-  Sub Surface 8,                          !- Name
+  Room_3_9_Flr_6_Wall_South_Window,       !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {a740ccf3-e970-4150-b6ad-7f816453b447}, !- Surface Name
@@ -17161,36 +17175,4 @@ OS:Surface,
   44.808, 9.449, 16.152,                  !- X,Y,Z Vertex 2 {m}
   51.514, 9.449, 16.152,                  !- X,Y,Z Vertex 3 {m}
   51.514, 9.449, 19.2;                    !- X,Y,Z Vertex 4 {m}
-
-OS:ClimateZones,
-  {121c3060-a019-47a5-b5fa-e2223e926edb}, !- Handle
-  ,                                       !- Active Institution
-  ,                                       !- Active Year
-  ,                                       !- Climate Zone Institution Name 1
-  ,                                       !- Climate Zone Document Name 1
-  ,                                       !- Climate Zone Document Year 1
-  ,                                       !- Climate Zone Value 1
-  CEC,                                    !- Climate Zone Institution Name 2
-  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
-  1995,                                   !- Climate Zone Document Year 2
-  ;                                       !- Climate Zone Value 2
-
-OS:Sizing:Parameters,
-  {2361737f-e191-47c5-bcac-b53ace909d02}, !- Handle
-  1.25,                                   !- Heating Sizing Factor
-  1.15;                                   !- Cooling Sizing Factor
-
-OS:LifeCycleCost:Parameters,
-  {33b11472-9685-449b-882c-8341fcc6ec7e}, !- Handle
-  ,                                       !- Analysis Type
-  ,                                       !- Discounting Convention
-  ,                                       !- Inflation Approach
-  ,                                       !- Real Discount Rate
-  ,                                       !- Nominal Discount Rate
-  ,                                       !- Inflation
-  ,                                       !- Base Date Month
-  ,                                       !- Base Date Year
-  ,                                       !- Service Date Month
-  ,                                       !- Service Date Year
-  ;                                       !- Length of Study Period in Years
 
