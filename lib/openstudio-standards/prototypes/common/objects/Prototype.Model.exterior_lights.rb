@@ -325,6 +325,11 @@ class Standard
       # load illuminated_parking_area_properties
       search_criteria = { 'building_type' => building_type }
       illuminated_parking_area_lookup = model_find_object(standards_data['parking'], search_criteria)
+      if illuminated_parking_area_lookup.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find parking data for #{building_type}.")
+        return area_length_count_hash
+      end
+
       if !illuminated_parking_area_lookup['building_area_per_spot'].nil?
         num_spots += floor_area_ip / illuminated_parking_area_lookup['building_area_per_spot'].to_f
       elsif !illuminated_parking_area_lookup['units_per_spot'].nil?
