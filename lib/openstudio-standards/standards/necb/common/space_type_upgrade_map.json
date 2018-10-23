@@ -3085,6 +3085,14 @@
           "NECB2015_space_type": "Return Plenum",
           "NECB2017_building_type": "Space Function",
           "NECB2017_space_type": "Return Plenum"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "- undefined -",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "- undefined -",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "- undefined -"
         }
       ]
     }

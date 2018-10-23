@@ -16,8 +16,8 @@ class NECB2011 < Standard
     @standards_data["tables"][table_name]
   end
 
-  def get_standard_constant_value(constand_name:)
-
+  def get_standard_constant_value(constant_name: )
+     puts "do nothing"
   end
 
 
@@ -214,10 +214,22 @@ class NECB2011 < Standard
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     #validate that model has information required.
+    puts 'Old SPace types'
+    model.getSpaceTypes.each do |spacetype|
+      puts spacetype.name
+    end
+
     return false unless validate_initial_model(model)
 
     #Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
+
+    #puts Old SPace types
+    puts 'new spacetypes'
+    model.getSpaceTypes.each do |spacetype|
+      puts spacetype.name
+    end
+
 
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
@@ -348,14 +360,13 @@ class NECB2011 < Standard
       st_target_vintage_string = "#{self.class.name}_space_type"
       bt_target_vintage_string = "#{self.class.name}_building_type"
       space_type_upgrade_map = standards_lookup_table_many(table_name: 'space_type_upgrade_map')
-      model.getSpaceTypes.each do |st|
-        puts "replacing #{space_type_vintage} to #{self.class.name}"
-        puts "#{st.standardsBuildingType.get.to_s} - #{st.standardsSpaceType.get.to_s}"
+      model.getSpaceTypes.sort.each do |st|
         space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
-        puts " with #{space_type_map[bt_target_vintage_string]} - #{space_type_map[st_target_vintage_string]}"
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
-        st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
-        puts "results #{st.standardsBuildingType.get.to_s} - #{st.standardsSpaceType.get.to_s}"
+        raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
+        #Set name of spacetype to new name.
+        st.setName("#{st.standardsBuildingType.get.to_s} #{st.standardsSpaceType.get.to_s}")
       end
       return no_errors
     end
