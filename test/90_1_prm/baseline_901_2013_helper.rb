@@ -197,9 +197,14 @@ module Baseline9012013
 
           # minimum fraction, which is the greater
           # of the min fraction or the min fixed value converted to a fraction.
-          act_fixed_min_frac = terminal.constantMinimumAirFlowFraction
+          act_fixed_min_frac = terminal.constantMinimumAirFlowFraction.get
           act_oa_min_frac = 0.0
           act_min_flow = terminal.fixedMinimumAirFlowRate
+          if act_min_flow.is_initialized
+            act_min_flow = act_min_flow.get
+          else
+            act_min_flow = 0.0
+          end
           if act_min_flow > 0.0
             act_oa_min_frac = act_min_flow/des_flow
           end

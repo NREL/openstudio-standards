@@ -1668,8 +1668,12 @@ class Standard
           end
         elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVReheat.get
-          mdp_term = term.constantMinimumAirFlowFraction
-          min_zn_flow = term.fixedMinimumAirFlowRate
+          if term.constantMinimumAirFlowFraction.is_initialized
+            mdp_term = term.constantMinimumAirFlowFraction.get
+          end
+          if term.fixedMinimumAirFlowRate.is_initialized
+            min_zn_flow = term.fixedMinimumAirFlowRate.get
+          end
         end
       end
 
