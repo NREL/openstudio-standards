@@ -15,9 +15,9 @@ namespace :test do
     # load test files from file.
     full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
     # Select only .rb files that exist
-    full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
-    full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
-    File.open("test/circleci_tests.json", "w") do |f|
+    full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
+    full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
+    File.open('test/circleci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
 
@@ -29,7 +29,7 @@ namespace :test do
     # Select only .rb files that exist
     local_full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
     local_full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
-    File.open("test/local_circleci_tests.json", "w") do |f|
+    File.open('test/local_circleci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(local_full_file_list.to_a))
     end
   else
@@ -45,6 +45,15 @@ namespace :test do
     t.test_files = file_list
     t.verbose = false
   end
+
+  desc 'Run All NECB tests locally'
+  Rake::TestTask.new('local-circ-necb-tests') do |t|
+    file_list = FileList.new('test/test_run_necb_test_locally.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = false
+  end
+
 
   desc 'Generate CircleCI test files'
   task :'gen-circ-files' do
@@ -70,15 +79,7 @@ namespace :test do
     t.verbose = true
   end
 
-  ['90_1_prm', '90_1_general', 'doe','doe_test_add_hvac_systems', 'doe_test_bldg' ,'necb', 'necb_bldg'].each do |type|
-    desc "Manual Run CircleCI tests #{type}"
-    Rake::TestTask.new("local-circ-#{type}") do |t|
-      array = local_full_file_list.select { |item| item.include?(type.to_s) }
-      t.libs << 'test'
-      t.test_files = array
-    end
 
-end
 
 
 # These tests only available in the CI environment
