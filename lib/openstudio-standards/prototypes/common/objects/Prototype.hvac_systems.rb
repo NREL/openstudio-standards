@@ -1393,9 +1393,7 @@ class Standard
     end
 
     # oa damper schedule
-    if oa_damper_sch.nil?
-      oa_damper_sch = model.alwaysOnDiscreteSchedule
-    else
+    unless oa_damper_sch.nil?
       oa_damper_sch = model_add_schedule(model, oa_damper_sch)
     end
 
@@ -1471,7 +1469,12 @@ class Standard
     oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
-    # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    unless econo_ctrl_mthd.nil?
+      oa_intake_controller.setEconomizerControlType(econo_ctrl_mthd)
+    end
+    unless oa_damper_sch.nil?
+      oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    end
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
     controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
@@ -1503,7 +1506,7 @@ class Standard
       when 'Electricity'
         rht_coil = create_coil_heating_electric(model,
                                                 name: "#{zone.name} Electric Reheat Coil")
-      when 'Water'
+      when 'Water', 'HeatPump', 'DistrictHeating'
         rht_coil = create_coil_heating_water(model,
                                              hot_water_loop,
                                              name: "#{zone.name} Reheat Coil",
@@ -1518,7 +1521,7 @@ class Standard
 
       # set zone reheat temperatures depending on reheat
       case reheat_type
-      when 'NaturalGas', 'Gas', 'Electricity', 'Water'
+      when 'NaturalGas', 'Gas', 'Electricity', 'Water', 'HeatPump', 'DistrictHeating'
         # create vav terminal
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Terminal")
@@ -4706,8 +4709,37 @@ class Standard
 
     when 'VAV Reheat'
       case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating'
-        heating_type = nil
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+        heating_type = main_heat_fuel
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        heating_type = 'Electricity'
+        hot_water_loop = nil
+      end
+
+      case air_loop_cooling_type
+      when 'Water'
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
+
+      model_add_vav_reheat(model,
+                           zones,
+                           heating_type: heating_type,
+                           reheat_type: zone_heat_fuel,
+                           hot_water_loop: hot_water_loop,
+                           chilled_water_loop: chilled_water_loop,
+                           fan_efficiency: 0.62,
+                           fan_motor_efficiency: 0.9,
+                           fan_pressure_rise: 4.0)
+
+    when 'VAV No Reheat'
+      case main_heat_fuel
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+        heating_type = main_heat_fuel
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
       else
@@ -4721,32 +4753,10 @@ class Standard
       else
         chilled_water_loop = nil
       end
-
-      if zone_heat_fuel == 'Electricity'
-        reheat_type = 'Electricity'
-      else
-        reheat_type = 'Water'
-      end
-
       model_add_vav_reheat(model,
                            zones,
                            heating_type: heating_type,
-                           reheat_type: reheat_type,
-                           hot_water_loop: hot_water_loop,
-                           chilled_water_loop: chilled_water_loop,
-                           fan_efficiency: 0.62,
-                           fan_motor_efficiency: 0.9,
-                           fan_pressure_rise: 4.0)
-
-    when 'VAV No Reheat'
-      if air_loop_cooling_type == 'Water'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
-                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
-      else
-        chilled_water_loop = nil
-      end
-      model_add_vav_reheat(model,
-                           zones,
+                           reheat_type: nil,
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            fan_efficiency: 0.62,
@@ -4762,8 +4772,8 @@ class Standard
       end
       model_add_vav_reheat(model,
                            zones,
+                           heating_type: 'NaturalGas',
                            reheat_type: 'NaturalGas',
-                           hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            fan_efficiency: 0.62,
                            fan_motor_efficiency: 0.9,

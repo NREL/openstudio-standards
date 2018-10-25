@@ -47,8 +47,8 @@ class TestAddHVACSystems < Minitest::Test
 
       # Electric, District Chilled Water, forced air
       ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
-      ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
-      ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, forced air
       ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
@@ -124,8 +124,10 @@ class TestAddHVACSystems < Minitest::Test
         model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        standard.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
-        standard.model_add_ground_temperatures(model, 'MediumOffice', 'ASHRAE 169-2006-7A')
+        climate_zone = 'ASHRAE 169-2006-7A'
+        standard.model_add_design_days_and_weather_file(model, climate_zone, '')
+        standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
+
         # Add the HVAC
         standard.model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 
