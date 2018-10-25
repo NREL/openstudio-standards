@@ -1346,8 +1346,8 @@ class Standard
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
   # @param heating_type [String] main heating coil fuel type
-  #   valid choices are NaturalGas, Electricity, Water, or nil (defaults to NaturalGas)
-  # @param reheat_type [String] valid options are NaturalGas, Electricity, Water, nil (no heat)
+  #   valid choices are NaturalGas, Gas, Electricity, HeatPump, DistrictHeating, or nil (defaults to NaturalGas)
+  # @param reheat_type [String] valid options are NaturalGas, Gas, Electricity, Water, nil (no heat)
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating and reheat coils to
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coil to
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
@@ -1506,7 +1506,7 @@ class Standard
       when 'Electricity'
         rht_coil = create_coil_heating_electric(model,
                                                 name: "#{zone.name} Electric Reheat Coil")
-      when 'Water', 'HeatPump', 'DistrictHeating'
+      when 'Water'
         rht_coil = create_coil_heating_water(model,
                                              hot_water_loop,
                                              name: "#{zone.name} Reheat Coil",
@@ -1521,7 +1521,7 @@ class Standard
 
       # set zone reheat temperatures depending on reheat
       case reheat_type
-      when 'NaturalGas', 'Gas', 'Electricity', 'Water', 'HeatPump', 'DistrictHeating'
+      when 'NaturalGas', 'Gas', 'Electricity', 'Water'
         # create vav terminal
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Terminal")
@@ -4660,6 +4660,7 @@ class Standard
         hot_water_loop = nil
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Baseboards must have heating_type specified.')
+        return false
       end
       model_add_baseboard(model,
                           zones,
@@ -4726,10 +4727,24 @@ class Standard
         chilled_water_loop = nil
       end
 
+      if hot_water_loop.nil?
+        case zone_heat_fuel
+        when 'NaturalGas', 'Gas'
+          reheat_type = 'NaturalGas'
+        when 'Electricity'
+          reheat_type = 'Electricity'
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "zone_heat_fuel '#{zone_heat_fuel}' not supported with main_heat_fuel '#{main_heat_fuel}' for a 'VAV Reheat' system type.")
+          return false
+        end
+      else
+        reheat_type = 'Water'
+      end
+
       model_add_vav_reheat(model,
                            zones,
                            heating_type: heating_type,
-                           reheat_type: zone_heat_fuel,
+                           reheat_type: reheat_type,
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            fan_efficiency: 0.62,
