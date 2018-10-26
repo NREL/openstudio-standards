@@ -272,7 +272,7 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
+    model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
     model_add_swh(model)
     model_apply_sizing_parameters(model)
 
