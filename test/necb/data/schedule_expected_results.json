@@ -38680,43 +38680,6 @@
   ],
   [
     {
-      "Space_Type": "NECB2011-Space Function-Locker room",
-      "StandardsSpaceType": "Locker room",
-      "StandardsBuildingType": "Space Function"
-    },
-    {
-      "ScheduleType": "NECB-*-Occupancy",
-      "Schedules": [
-
-      ]
-    },
-    {
-      "ScheduleType": "NECB-*-Lighting",
-      "Schedules": [
-
-      ]
-    },
-    {
-      "ScheduleType": "NECB-*-Electric-Equipment",
-      "Schedules": [
-
-      ]
-    },
-    {
-      "ScheduleType": "NECB-*-Thermostat Setpoint-Cooling",
-      "Schedules": [
-
-      ]
-    },
-    {
-      "ScheduleType": "NECB-*-Thermostat Setpoint-Heating",
-      "Schedules": [
-
-      ]
-    }
-  ],
-  [
-    {
       "Space_Type": "NECB2011-Space Function-Locker room-sch-A",
       "StandardsSpaceType": "Locker room-sch-A",
       "StandardsBuildingType": "Space Function"

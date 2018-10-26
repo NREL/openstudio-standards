@@ -16,14 +16,9 @@ class NECB2011 < Standard
     @standards_data["tables"][table_name]
   end
 
-  def get_standard_constant_value(constand_name:)
-
+  def get_standard_constant_value(constant_name: )
+     puts "do nothing"
   end
-
-
-
-
-
 
 
   # Combine the data from the JSON files into a single hash
@@ -32,6 +27,30 @@ class NECB2011 < Standard
   def load_standards_database_new()
     @standards_data = {}
     @standards_data["tables"] = {}
+
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      embedded_files_relative('../common', /.*\.json/).each do |file|
+        data = JSON.parse(EmbeddedScripting.getFileAsString(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] == "table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    else
+      path = "#{File.dirname(__FILE__)}/../common/"
+      raise ('Could not find common folder') unless Dir.exist?(path)
+      files = Dir.glob("#{path}/*.json").select {|e| File.file? e}
+      files.each do |file|
+        data = JSON.parse(File.read(file))
+        if not data["tables"].nil?
+          @standards_data["tables"] = [*@standards_data["tables"], *data["tables"]].to_h
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    end
+
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
@@ -85,7 +104,6 @@ class NECB2011 < Standard
     raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
     return object['value']
   end
-
 
 
   def initialize
@@ -154,27 +172,27 @@ class NECB2011 < Standard
 
   # This method is a wrapper to create the 16 archetypes easily.
   def model_create_prototype_model(template:,
-                            building_type:,
-                            epw_file:,
-                            debug: false,
-                            sizing_run_dir: Dir.pwd,
-                            x_scale: 1.0,
-                            y_scale: 1.0,
-                            z_scale: 1.0,
-                            fdwr_set: 'MAXIMIZE',
-                            ssr_set: 'MAXIMIZE'
+                                   building_type:,
+                                   epw_file:,
+                                   debug: false,
+                                   sizing_run_dir: Dir.pwd,
+                                   x_scale: 1.0,
+                                   y_scale: 1.0,
+                                   z_scale: 1.0,
+                                   fdwr_set: 'MAXIMIZE',
+                                   ssr_set: 'MAXIMIZE'
   )
-    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/#{template}/data/geometry/#{building_type}.osm"))
+    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
-    return model_apply_standard( model: model,
-                                 epw_file: epw_file,
-                                 x_scale: x_scale,
-                                 y_scale: y_scale,
-                                 z_scale: z_scale,
-                                 sizing_run_dir: sizing_run_dir,
-                                 fdwr_set: fdwr_set,
-                                 ssr_set: ssr_set)
+    return model_apply_standard(model: model,
+                                epw_file: epw_file,
+                                x_scale: x_scale,
+                                y_scale: y_scale,
+                                z_scale: z_scale,
+                                sizing_run_dir: sizing_run_dir,
+                                fdwr_set: fdwr_set,
+                                ssr_set: ssr_set)
   end
 
 
@@ -196,10 +214,22 @@ class NECB2011 < Standard
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     #validate that model has information required.
+    puts 'Old SPace types'
+    model.getSpaceTypes.each do |spacetype|
+      puts spacetype.name
+    end
+
     return false unless validate_initial_model(model)
 
     #Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
+
+    #puts Old SPace types
+    puts 'new spacetypes'
+    model.getSpaceTypes.each do |spacetype|
+      puts spacetype.name
+    end
+
 
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
@@ -278,21 +308,68 @@ class NECB2011 < Standard
     return model
   end
 
+  #this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
+  # determine it.
+  def determine_spacetype_vintage(model)
+    #this code is the list of available vintages
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017']
+    #this reorders the list to do the current class first.
+    space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
+    #Set the space_type
+    space_type_vintage = nil
+    # get list of space types used in model and a mapped string.
+    model_space_type_names = model.getSpaceTypes.map do |spacetype|
+      [spacetype.standardsBuildingType.get.to_s + '-' + spacetype.standardsSpaceType.get.to_s]
+    end
+    #Now iterate though each vintage
+    space_type_vintage_list.each do |template|
+      #Create the standard object and get a list of all the spacetypes available for that vintage.
+      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
+      # set array to contain unknown spacetypes.
+      unknown_spacetypes = []
+      # iterate though all space types that the model is using
+      model_space_type_names.each do |space_type_name|
+        # push unknown spacetypes into the array.
+        unknown_spacetypes << space_type_name unless standard_space_type_list.include?(space_type_name)
+      end
+      if unknown_spacetypes.empty?
+        #No unknowns, so return the template and don't bother looking for others.
+        return template
+      end
+    end
+    return space_type_vintage
+  end
+
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
   def validate_space_types(model)
-    space_type_list = get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
-    space_type_names = model.getSpaceTypes.map {|spacetype| [spacetype.standardsBuildingType.get.to_s + '-' + spacetype.standardsSpaceType.get.to_s]}
-    unknown_spacetypes = []
-    space_type_names.each do |space_type_name|
-      unknown_spacetypes << space_type_name unless space_type_list.include?(space_type_name)
-    end
-    if unknown_spacetypes.size > 0
-      message = "These spacetypes are not part of the defined #{self.class.name.to_s} standard.\n #{unknown_spacetypes}\n please ensure all spacetype in model are correct."
+    space_type_vintage = determine_spacetype_vintage(model)
+    if space_type_vintage.nil?
+      message = "These some of the spacetypes in the model are not part of any necb standard.\n  Please ensure all spacetype in model are correct."
       puts "Error: #{message}"
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', message)
       return false
+    elsif space_type_vintage == self.class.name
+      # the spacetype in the model match the version we are trying to create.
+      # no translation neccesary.
+      return true
+    else
+      #Need to translate to current vintage.
+      no_errors = true
+      st_model_vintage_string = "#{space_type_vintage}_space_type"
+      bt_model_vintage_string = "#{space_type_vintage}_building_type"
+      st_target_vintage_string = "#{self.class.name}_space_type"
+      bt_target_vintage_string = "#{self.class.name}_building_type"
+      space_type_upgrade_map = standards_lookup_table_many(table_name: 'space_type_upgrade_map')
+      model.getSpaceTypes.sort.each do |st|
+        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
+        #Set name of spacetype to new name.
+        st.setName("#{st.standardsBuildingType.get.to_s} #{st.standardsSpaceType.get.to_s}")
+      end
+      return no_errors
     end
-    return true
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
