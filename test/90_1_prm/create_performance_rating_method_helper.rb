@@ -155,7 +155,8 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
           msg.logChannel.include?("setFileExtension") || # .ddy extension unexpected
           msg.logChannel.include?("Translator") || # Forward translator and geometry translator
           msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
-          msg.logMessage.include?("has multiple parents") # Bogus errors about curves having multiple parents
+          msg.logMessage.include?("has multiple parents") || # Bogus errors about curves having multiple parents
+          msg.logMessage.include?('Prior to OpenStudio 2.6.2, this field was returning a double, it now returns an Optional double') # Warning about OS API change
             
       # Report the message in the correct way
       if msg.logLevel == OpenStudio::Info

@@ -95,8 +95,11 @@ Standard.class_eval do
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
+      #cmd = "\"#{cli_path}\" --verbose run -w \"#{osw_path}\""
       puts cmd
-      system(cmd)
+
+      # Run the sizing run
+      OpenstudioStandards.run_command(cmd)
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
 

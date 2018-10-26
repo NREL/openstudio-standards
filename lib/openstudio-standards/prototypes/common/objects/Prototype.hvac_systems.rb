@@ -835,8 +835,8 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param hot_water_loop [String] hot water loop to connect to heating and zone fan coils
-  # @param chilled_water_loop [String] chilled water loop to connect to cooling coil
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to heating and zone fan coils
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect to cooling coil
   # @param hvac_op_sch [String] name of the HVAC operation schedule, default is always on
   # @param min_oa_sch [String] name of the minimum outdoor air schedule, default is always on
   # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
@@ -1061,8 +1061,8 @@ class Standard
   # @param doas_type [String] DOASCV or DOASVAV, determines whether the DOAS is operated at scheduled,
   #   constant flow rate, or airflow is variable to allow for economizing or demand controlled ventilation
   # @param doas_control_strategy [String] DOAS control strategy
-  # @param hot_water_loop [String] hot water loop to connect to heating and zone fan coils
-  # @param chilled_water_loop [String] chilled water loop to connect to cooling coil
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to heating and zone fan coils
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect to cooling coil
   # @param hvac_op_sch [String] name of the HVAC operation schedule, default is always on
   # @param min_oa_sch [String] name of the minimum outdoor air schedule, default is always on
   # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
@@ -1345,11 +1345,13 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
-  # @param reheat_type [String] valid options are NaturalGas, Electricity, Water, nil (no heat)
-  # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to
-  # @param chilled_water_loop [String] chilled water loop to connect cooling coil to
+  # @param heating_type [String] main heating coil fuel type
+  #   valid choices are NaturalGas, Gas, Electricity, HeatPump, DistrictHeating, or nil (defaults to NaturalGas)
+  # @param reheat_type [String] valid options are NaturalGas, Gas, Electricity, Water, nil (no heat)
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating and reheat coils to
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coil to
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule, or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule, or nil in which case will be defaulted to always open
   # @param fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param fan_motor_efficiency [Double] fan motor efficiency
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
@@ -1361,6 +1363,7 @@ class Standard
                            thermal_zones,
                            system_name: nil,
                            return_plenum: nil,
+                           heating_type: nil,
                            reheat_type: nil,
                            hot_water_loop: nil,
                            chilled_water_loop: nil,
@@ -1390,9 +1393,7 @@ class Standard
     end
 
     # oa damper schedule
-    if oa_damper_sch.nil?
-      oa_damper_sch = model.alwaysOnDiscreteSchedule
-    else
+    unless oa_damper_sch.nil?
       oa_damper_sch = model_add_schedule(model, oa_damper_sch)
     end
 
@@ -1428,9 +1429,15 @@ class Standard
 
     # create heating coil
     if hot_water_loop.nil?
-      create_coil_heating_gas(model,
-                              air_loop_node: air_loop.supplyInletNode,
-                              name: 'Main Gas Htg Coil')
+      if heating_type == 'Electricity'
+        create_coil_heating_electric(model,
+                                     air_loop_node: air_loop.supplyInletNode,
+                                     name: "#{air_loop.name} Main Electric Htg Coil")
+      else # default to NaturalGas
+        create_coil_heating_gas(model,
+                                air_loop_node: air_loop.supplyInletNode,
+                                name: "#{air_loop.name} Main Gas Htg Coil")
+      end
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
@@ -1462,7 +1469,12 @@ class Standard
     oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
     oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
-    # oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    unless econo_ctrl_mthd.nil?
+      oa_intake_controller.setEconomizerControlType(econo_ctrl_mthd)
+    end
+    unless oa_damper_sch.nil?
+      oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    end
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
     controller_mv.setName("#{air_loop.name} Vent Controller")
     controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
@@ -1555,9 +1567,9 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param chilled_water_loop [String] chilled water loop to connect to the cooling coil
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect to the cooling coil
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param fan_motor_efficiency [Double] fan motor efficiency
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
@@ -1687,11 +1699,13 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
-  # @param hot_water_loop [String] hot water loop to connect heating and reheat coils to. If nil, will be electric heat and electric reheat
-  # @param chilled_water_loop [String] chilled water loop to connect cooling coils to. If nil, will be DX cooling
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating and reheat coils to. If nil, will be electric heat and electric reheat
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coils to. If nil, will be DX cooling
+  # @param heating_type [String] main heating coil fuel type
+  #   valid choices are NaturalGas, Electricity, Water, or nil (defaults to NaturalGas)
   # @param electric_reheat [Bool] if true electric reheat coils, if false the reheat coils served by hot_water_loop
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
   def model_add_pvav(model,
                      thermal_zones,
@@ -1699,6 +1713,7 @@ class Standard
                      return_plenum: nil,
                      hot_water_loop: nil,
                      chilled_water_loop: nil,
+                     heating_type: nil,
                      electric_reheat: false,
                      hvac_op_sch: nil,
                      oa_damper_sch: nil)
@@ -1757,9 +1772,15 @@ class Standard
 
     # create heating coil
     if hot_water_loop.nil?
-      create_coil_heating_gas(model,
-                              air_loop_node: air_loop.supplyInletNode,
-                              name: "#{air_loop.name} Main Gas Htg Coil")
+      if heating_type == 'Electricity'
+        create_coil_heating_electric(model,
+                                     air_loop_node: air_loop.supplyInletNode,
+                                     name: "#{air_loop.name} Main Electric Htg Coil")
+      else # default to NaturalGas
+        create_coil_heating_gas(model,
+                                air_loop_node: air_loop.supplyInletNode,
+                                name: "#{air_loop.name} Main Gas Htg Coil")
+      end
     else
       create_coil_heating_water(model,
                                 hot_water_loop,
@@ -1855,9 +1876,9 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param chilled_water_loop [String] chilled water loop to connect cooling coils to. If nil, will be DX cooling
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coils to. If nil, will be DX cooling
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param fan_motor_efficiency [Double] fan motor efficiency
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
@@ -1993,10 +2014,10 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param hot_water_loop [String] hot water loop to connect to heating and reheat coils.
-  # @param chilled_water_loop [String] chilled water loop to connect to the cooling coil.
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to heating and reheat coils.
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect to the cooling coil.
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param fan_efficiency [Double] fan total efficiency, including motor and impeller
   # @param fan_motor_efficiency [Double] fan motor efficiency
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
@@ -2152,14 +2173,14 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
-  # @param chilled_water_loop [String] chilled water loop to connect cooling coil to, or nil
-  # @param heating_type [Double] valid choices are NaturalGas, Electricity, Water, Single Speed Heat Pump, Water To Air Heat Pump, or nil (no heat)
-  # @param supplemental_heating_type [Double] valid choices are Electricity, NaturalGas,  nil (no heat)
-  # @param hot_water_loop [String] hot water loop to connect heating coil to, or nil
-  # @param fan_location [Double] valid choices are BlowThrough, DrawThrough
-  # @param fan_type [Double] valid choices are ConstantVolume, Cycling
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coil to, or nil
+  # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, Single Speed Heat Pump, Water To Air Heat Pump, or nil (no heat)
+  # @param supplemental_heating_type [String] valid choices are Electricity, NaturalGas,  nil (no heat)
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to, or nil
+  # @param fan_location [String] valid choices are BlowThrough, DrawThrough
+  # @param fan_type [String] valid choices are ConstantVolume, Cycling
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
   def model_add_psz_ac(model,
                        thermal_zones,
@@ -2436,10 +2457,10 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param heating_type [Double] valid choices are NaturalGas, Electricity, Water, nil (no heat)
-  # @param supplemental_heating_type [Double] valid choices are Electricity, NaturalGas,  nil (no heat)
+  # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
+  # @param supplemental_heating_type [String] valid choices are Electricity, NaturalGas,  nil (no heat)
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting PSZ-AC air loops
   def model_add_psz_vav(model,
                         thermal_zones,
@@ -2616,11 +2637,11 @@ class Standard
   # Creates a data center PSZ-AC system for each zone.
   #
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
-  # @param hot_water_loop [String] hot water loop to connect to the heating coil
-  # @param heat_pump_loop [String] heat pump water loop to connect to heat pump
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to the heating coil
+  # @param heat_pump_loop [OpenStudio::Model::PlantLoop] heat pump water loop to connect to heat pump
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param main_data_center [Bool] whether or not this is the main data center in the building.
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting air loops
   def model_add_data_center_hvac(model,
@@ -2777,12 +2798,12 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
-  # @param heating_type [Double] valid choices are Gas, Single Speed Heat Pump
-  # @param supplemental_heating_type [Double] valid choices are Electric, Gas
-  # @param fan_type [Double] valid choices are ConstantVolume, Cycling
+  # @param heating_type [String] valid choices are Gas, Single Speed Heat Pump
+  # @param supplemental_heating_type [String] valid choices are Electric, Gas
+  # @param fan_type [String] valid choices are ConstantVolume, Cycling
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [Double] name of the oa damper schedule, or nil in which case will be defaulted to always open
-  # @param econ_max_oa_frac_sch [Double] name of the economizer maximum outdoor air fraction schedule
+  # @param oa_damper_sch [String] name of the oa damper schedule, or nil in which case will be defaulted to always open
+  # @param econ_max_oa_frac_sch [String] name of the economizer maximum outdoor air fraction schedule
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop
   def model_add_split_ac(model,
                          thermal_zones,
@@ -2936,9 +2957,9 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC
-  # @param heating_type [Double] valid choices are NaturalGas, Electricity, Water, nil (no heat)
-  # @param hot_water_loop [String] hot water loop to connect heating coil to. Set to nil for heating types besides water
-  # @param fan_type [Double] valid choices are ConstantVolume, Cycling
+  # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to. Set to nil for heating types besides water
+  # @param fan_type [String] valid choices are ConstantVolume, Cycling
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs
   def model_add_ptac(model,
                      thermal_zones,
@@ -3127,10 +3148,10 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param fan_control_type [Double] valid choices are OnOff, ConstantVolume, VariableVolume
+  # @param fan_control_type [String] valid choices are OnOff, ConstantVolume, VariableVolume
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
-  # @param heating_type [Double] valid choices are NaturalGas, Gas, Electricity, Electric, DistrictHeating
-  # @param hot_water_loop [String] hot water loop to connect to the heating coil
+  # @param heating_type [String] valid choices are NaturalGas, Gas, Electricity, Electric, DistrictHeating
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to the heating coil
   # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Fahrenheit, default is 180F
   # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Fahrenheit, default is 160F
   # @param rated_inlet_air_temperature [Double] rated inlet air temperature in degrees Fahrenheit, default is 60F
@@ -3242,7 +3263,7 @@ class Standard
   # Creates a high temp radiant heater for each zone and adds it to the model.
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
-  # @param heating_type [Double] valid choices are Gas, Electric
+  # @param heating_type [String] valid choices are Gas, Electric
   # @param combustion_efficiency [Double] combustion efficiency as decimal
   # @return [Array<OpenStudio::Model::ZoneHVACHighTemperatureRadiant>] an
   # array of the resulting radiant heaters.
@@ -4639,6 +4660,7 @@ class Standard
         hot_water_loop = nil
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Baseboards must have heating_type specified.')
+        return false
       end
       model_add_baseboard(model,
                           zones,
@@ -4687,17 +4709,41 @@ class Standard
                                              ventilation: false)
 
     when 'VAV Reheat'
-      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                       hot_water_loop_type: hot_water_loop_type)
-      if air_loop_cooling_type == 'Water'
+      case main_heat_fuel
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+        heating_type = main_heat_fuel
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        heating_type = 'Electricity'
+        hot_water_loop = nil
+      end
+
+      case air_loop_cooling_type
+      when 'Water'
         chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
                                                                  chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
       else
         chilled_water_loop = nil
       end
-      reheat_type = zone_heat_fuel == 'Electricity' ? 'Electricity' : 'Water'
+
+      if hot_water_loop.nil?
+        case zone_heat_fuel
+        when 'NaturalGas', 'Gas'
+          reheat_type = 'NaturalGas'
+        when 'Electricity'
+          reheat_type = 'Electricity'
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "zone_heat_fuel '#{zone_heat_fuel}' not supported with main_heat_fuel '#{main_heat_fuel}' for a 'VAV Reheat' system type.")
+          return false
+        end
+      else
+        reheat_type = 'Water'
+      end
+
       model_add_vav_reheat(model,
                            zones,
+                           heating_type: heating_type,
                            reheat_type: reheat_type,
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
@@ -4706,6 +4752,16 @@ class Standard
                            fan_pressure_rise: 4.0)
 
     when 'VAV No Reheat'
+      case main_heat_fuel
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+        heating_type = main_heat_fuel
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      else
+        heating_type = 'Electricity'
+        hot_water_loop = nil
+      end
+
       if air_loop_cooling_type == 'Water'
         chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
                                                                  chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
@@ -4714,6 +4770,8 @@ class Standard
       end
       model_add_vav_reheat(model,
                            zones,
+                           heating_type: heating_type,
+                           reheat_type: nil,
                            hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            fan_efficiency: 0.62,
@@ -4729,8 +4787,8 @@ class Standard
       end
       model_add_vav_reheat(model,
                            zones,
+                           heating_type: 'NaturalGas',
                            reheat_type: 'NaturalGas',
-                           hot_water_loop: hot_water_loop,
                            chilled_water_loop: chilled_water_loop,
                            fan_efficiency: 0.62,
                            fan_motor_efficiency: 0.9,

@@ -64,12 +64,10 @@ class NECB2011
 
   # Generates the base data hash mainly used to perform qaqc.
   def create_base_data(model)
-    cli_path = OpenStudio.getOpenStudioCLI
+  
     #construct command with local libs
-    f = open("| \"#{cli_path}\" openstudio_version")
-    os_version = f.read()
-    f = open("| \"#{cli_path}\" energyplus_version")
-    eplus_version = f.read()
+    os_version = OpenStudio.openStudioLongVersion
+    eplus_version = OpenStudio.energyPlusVersion
     puts "\n\n\nOS_version is [#{os_version.strip}]"
     puts "\n\n\nEP_version is [#{eplus_version.strip}]"
 
