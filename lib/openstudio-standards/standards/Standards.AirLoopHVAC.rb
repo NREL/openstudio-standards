@@ -2164,8 +2164,7 @@ class Standard
     return has_erv
   end
 
-  # Set the VAV damper control to single maximum or
-  # dual maximum control depending on the standard.
+  # Set the VAV damper control to single maximum or dual maximum control depending on the standard.
   #
   # @return [Bool] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
@@ -2187,8 +2186,7 @@ class Standard
                             end
     end
 
-    # Set the control for any VAV reheat terminals
-    # on this airloop.
+    # Set the control for any VAV reheat terminals on this airloop.
     control_type_set = false
     air_loop_hvac.demandComponents.each do |equip|
       if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
@@ -2214,8 +2212,8 @@ class Standard
     return true
   end
 
-  # Determine whether the VAV damper control is single maximum or
-  # dual maximum control.  Defults to 90.1-2007.
+  # Determine whether the VAV damper control is single maximum or dual maximum control.
+  # Defaults to 90.1-2007.
   #
   # @return [String] the damper control type: Single Maximum, Dual Maximum
   def air_loop_hvac_vav_damper_action(air_loop_hvac)
@@ -2234,8 +2232,7 @@ class Standard
       return motorized_oa_damper_required
     end
 
-    # If the system has an economizer, it must have
-    # a motorized damper.
+    # If the system has an economizer, it must have a motorized damper.
     if air_loop_hvac_economizer?(air_loop_hvac)
       motorized_oa_damper_required = true
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Because the system has an economizer, it requires a motorized OA damper.")
