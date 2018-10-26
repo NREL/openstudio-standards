@@ -19,7 +19,7 @@ class TestAddHVACSystems < Minitest::Test
       # Gas, Electric, forced air
       ['PTAC', 'NaturalGas', nil, 'Electricity'],
       ['PSZ-AC', 'NaturalGas', nil, 'Electricity'],
-      # ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+      ['PVAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
       ['VAV Reheat', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
       # Electric, Electric, forced air
@@ -33,12 +33,12 @@ class TestAddHVACSystems < Minitest::Test
 
       # District Hot Water, Electric, forced air
       ['PTAC', 'DistrictHeating', nil, 'Electricity'],
-      # ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'], # Disable this; failure due to bug in E+ 8.8 w/ VAV terminal min airflow sizing
+      ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
       ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
       # Ambient Loop, Ambient Loop, forced air
-      # ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
-      # ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
+      ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
 
       # Gas, District Chilled Water, forced air
       ['PSZ-AC', 'NaturalGas', nil, 'DistrictCooling'],
@@ -47,8 +47,8 @@ class TestAddHVACSystems < Minitest::Test
 
       # Electric, District Chilled Water, forced air
       ['PSZ-AC', 'Electricity', nil, 'DistrictCooling'],
-      # ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'], # Disable this; failure due to suspected bug in E+ w/ VAV terminal min airflow sizing
-      ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # ['PVAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
+      # ['VAV Reheat', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, forced air
       ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
@@ -81,11 +81,11 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
       # Electric, District Chilled Water, hydronic
-      #['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
+      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, hydronic
-      #['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
+      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
@@ -124,8 +124,10 @@ class TestAddHVACSystems < Minitest::Test
         model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        standard.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
-        standard.model_add_ground_temperatures(model, 'MediumOffice', 'ASHRAE 169-2006-7A')
+        climate_zone = 'ASHRAE 169-2006-7A'
+        standard.model_add_design_days_and_weather_file(model, climate_zone, '')
+        standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
+
         # Add the HVAC
         standard.model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 
