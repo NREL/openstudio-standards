@@ -346,6 +346,10 @@ class Standard
       # load illuninated_parking_area_properties
       search_criteria = { 'building_type' => building_type }
       exterior_lighting_assumptions_lookup = model_find_object(standards_data['entryways'], search_criteria)
+      if exterior_lighting_assumptions_lookup.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find entryway data for #{building_type}.")
+        return area_length_count_hash
+      end
 
       # lookup doors
       if use_model_for_entries_and_canopies
