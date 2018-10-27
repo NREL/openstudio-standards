@@ -192,6 +192,7 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
+  require_relative "#{stds}/deer/deer.PlanarSurface"
   # CBES Common
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
