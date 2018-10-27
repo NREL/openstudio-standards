@@ -355,7 +355,12 @@ module OpenstudioStandards
         next if env_changes.key?(env_var) && env_changes[env_var].nil?
         final_env << "#{env_var} = #{val}"
       end
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: #{final_env.join("\n")}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: \n #{final_env.join("\n")}")
+      # List the gems available to openstudio at this point
+      cli_path = OpenStudio.getOpenStudioCLI
+      cmd = "\"#{cli_path}\" gem_list"
+      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env(), cmd)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Gems available to openstudio cli according to (openstudio gem_list): \n #{stdout_str_2}")
 
       return false 
     end
