@@ -340,14 +340,14 @@ module OpenstudioStandards
   def self.run_command(command)
     stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
     if status.success?
-      puts "Command completed successfully"
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.command', "Successfully ran command: '#{command}'")
       #puts "stdout: #{stdout_str}"
       #puts "stderr: #{stderr_str}"
       return true
     else
-      puts "Error running command: '#{command}'"
-      puts "stdout: #{stdout_str}"
-      puts "stderr: #{stderr_str}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stdout: #{stdout_str}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stderr: #{stderr_str}")
       return false 
     end
   end
