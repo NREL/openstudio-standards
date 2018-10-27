@@ -320,8 +320,10 @@ module OpenstudioStandards
     
     # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
     # requires to ruby gems will work, will fail if we require a native gem
-    #new_env["GEM_PATH"] = nil
-    #new_env["GEM_HOME"] = nil
+    ### DO NOT MERGE TO MASTER ###
+    new_env["GEM_PATH"] = nil
+    new_env["GEM_HOME"] = nil
+    ### DO NOT MERGE TO MASTER ###
     
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
     #bundle_gemfile = ENV['BUNDLE_GEMFILE']
