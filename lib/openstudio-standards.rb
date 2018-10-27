@@ -348,6 +348,15 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stdout: #{stdout_str}")
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stderr: #{stderr_str}")
+      # Print the ENV for debugging
+      final_env = []
+      env_changes = get_run_env()
+      ENV.each do |env_var, val|
+        next if env_changes.key?(env_var) && env_changes[env_var].nil?
+        final_env << "#{env_var} = #{val}"
+      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: #{final_env.join("\n")}")
+
       return false 
     end
   end
