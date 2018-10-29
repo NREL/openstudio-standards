@@ -144,7 +144,6 @@ class NECB2011
             necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_load &&
             necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_load
       end.first
-      raise()
 
 
 
