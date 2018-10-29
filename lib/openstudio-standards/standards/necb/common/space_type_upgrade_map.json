@@ -1,0 +1,3100 @@
+{
+  "tables": {
+    "space_type_upgrade_map": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "NECB2011_building_type": "Automotive facility",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Automotive facility",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Automotive facility",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Convention centre",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Convention centre",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Convention centre",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Courthouse",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Courthouse",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Courthouse",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Dining - bar/lounge",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Dining - bar lounge/leisure",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Dining - bar lounge/leisure",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Dining - cafeteria",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Dining - cafeteria/fast food",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Dining - cafeteria/fast food",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Dining - family",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Dining - family",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Dining - family",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Dormitory",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Dormitory",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Dormitory",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Exercise centre",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Exercise centre",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Exercise centre",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Fire station",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Fire station",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Fire station",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Gymnasium",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Gymnasium",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Gymnasium",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Health-care clinic",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Health care clinic",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Health care clinic",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Hospital",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Hospital",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Hospital",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Hotel",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Hotel/Motel",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Hotel/Motel",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Motel",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Hotel/Motel",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Hotel/Motel",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Library",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Library",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Library",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Manufacturing facility",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Manufacturing facility",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Manufacturing facility",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Motion picture theatre",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Motion picture theatre",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Motion picture theatre",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Multi-unit residential",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Multi-unit residential building",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Multi-unit residential building",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Museum",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Museum",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Museum",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Office",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Office",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Office",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Penitentiary",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Penitentiary",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Penitentiary",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Performing arts theatre",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Performing arts theatre",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Performing arts theatre",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Police station",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Police station",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Police station",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Post office",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Post office",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Post office",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Religious",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Religious building",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Religious building",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Retail",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Retail area",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Retail area",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "School/university",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "School/university",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "School/university",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Sports arena",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Sports arena",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Sports arena",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Parking garage",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Storage garage",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Storage garage",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Town hall",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Town hall",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Town hall",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Transportation",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Transportation facility",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Transportation facility",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Warehouse",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Warehouse",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Warehouse",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Warehouse - refrigerated",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Warehouse",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Warehouse",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Workshop",
+          "NECB2011_space_type": "WholeBuilding",
+          "NECB2015_building_type": "Workshop",
+          "NECB2015_space_type": "WholeBuilding",
+          "NECB2017_building_type": "Workshop",
+          "NECB2017_space_type": "WholeBuilding"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height < 6m)-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height < 6m)-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H < 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (6 =< height <= 12m)-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (6 =< height <= 12m)-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Atrium - H > 13m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Atrium (height > 12m)-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Atrium (height > 12m)-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Audience - auditorium",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - auditorium",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - auditorium"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Convention centre - audience",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - convention centre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - convention centre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Audience - motion picture",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - motion picture theatre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - motion picture theatre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Penitentiary - audience",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - penitentiary",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - penitentiary"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Audience - performance arts",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - performing arts theatre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - performing arts theatre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Religious - audience",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - religious building",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - religious building"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - audience",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - sports arena",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - sports arena"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Transp. seating",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - other-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - other-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Bank - banking and offices",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Banking activity area and offices",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Banking activity area and offices"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Classroom/lecture/training",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Classroom/Lecture hall/Training room other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Classroom/Lecture hall/Training room other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Penitentiary - classroom",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Classroom/Lecture hall/Training room - Penitentary",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Classroom/Lecture hall/Training room - Penitentary"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Conf./meet./multi-purpose",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Conference/Meeting/Multi-purpose room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Conference/Meeting/Multi-purpose room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Courthouse - cell",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Confinement cell",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Confinement cell"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. < 2.4m wide-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Corr. >= 2.4m wide-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area other-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area other-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Courthouse - chambers",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Courtroom",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Courtroom"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Courthouse - courtroom",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Courtroom",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Courtroom"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dining - bar lounge/leisure",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - bar lounge/leisure dining",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - bar lounge/leisure dining"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dining - family space",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - family dining",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - family dining"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Penitentiary - dining",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - penitentiary",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - penitentiary"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dining - other",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hotel/Motel - dining",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hway lodging - dining",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dining area - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dining area - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dress./fitt. - performance arts",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dressing/Fitting room - performing arts theatre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dressing/Fitting room - performing arts theatre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Electrical/Mechanical-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Electrical/Mechanical room-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Electrical/Mechanical room-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Fire station - engine room",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Emergency vehicle garage",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Emergency vehicle garage"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Food preparation",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Food preparation area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Food preparation area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Food preparation - vented",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Food preparation area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Food preparation area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hotel/Motel - rooms",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Guest room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Guest room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hway lodging - rooms",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Guest room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Guest room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lab - classrooms",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Laboratory - classrooms",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Laboratory - classrooms"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lab - research",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Laboratory - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Laboratory - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lobby - elevator",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lobby - elevator",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lobby - elevator"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hotel/Motel - lobby",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lobby - hotel",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lobby - hotel"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lobby - motion picture",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lobby - motion picture theatre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lobby - motion picture theatre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lobby - performance arts",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lobby - performing arts theatre",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lobby - performing arts theatre"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lobby - other",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lobby - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lobby - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Locker room-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Locker room-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Locker room-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Lounge/recreation",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lounge/Break room - other",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lounge/Break room - other"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Office - enclosed",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Office enclosed <= 25 m2",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Office enclosed <= 25 m2"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Office - enclosed - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Office enclosed <= 25 m2",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Office enclosed <= 25 m2"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Office - open plan",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Office open plan",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Office open plan"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Office - enclosed",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Office enclosed > 25 m2",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Office enclosed > 25 m2"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Office - enclosed - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Office enclosed > 25 m2",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Office enclosed > 25 m2"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Retail - sales",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sales area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sales area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sales area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sales area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sales area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Stairway-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Stairway/Stairwell-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Stairway/Stairwell-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Parking garage space",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage garage interior",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage garage interior"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room < 5 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room < 5 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room <= 5 m2 <= 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-J",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-J"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Storage area - refrigerated - occsens",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Storage room > 100 m2-sch-K",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Storage room > 100 m2-sch-K"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Automotive - repair",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Vehicle maintenance area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Vehicle maintenance area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Washroom-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Washroom - other-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Washroom - other-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Workshop space",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Workshop",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Workshop"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Convention centre - exhibit",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Convention centre exhibit space",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Convention centre exhibit space"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dormitory - living quarters",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dormitory living quarters",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dormitory living quarters"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dwelling Unit(s)",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Dwelling units general",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Dwelling units general"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Fire station - quarters",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Fire station sleeping quarters",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Fire station sleeping quarters"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Gym - audience",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Audience seating area permanent - gymnasium",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Audience seating area permanent - gymnasium"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Gym - fitness",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Gymnasium/Fitness centre exercise area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Gymnasium/Fitness centre exercise area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Gym - play",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Gymnasium/Fitness centre playing area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Gymnasium/Fitness centre playing area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - emergency",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility exam/treatment room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility exam/treatment room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - exam",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility exam/treatment room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility exam/treatment room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - radiology/imaging",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility imaging room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility imaging room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - medical supply",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility medical supply room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility medical supply room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - nursery",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility nursery",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility nursery"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - nurses' station",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility nurses station",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility nurses station"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - operating room",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility operating room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility operating room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - patient room",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility patient room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility patient room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - pharmacy",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Pharmacy area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Pharmacy area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - physical therapy",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility physical therapy room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility physical therapy room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - recovery",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Health care facility recovery room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Health care facility recovery room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - laundry/washing",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Laundry/Washing area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Laundry/Washing area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital - lounge/recreation",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Lounge/Break room - health care facility",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Lounge/Break room - health care facility"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. < 2.4m-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Hospital corr. >= 2.4m-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - hospital-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - hospital-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Library - reading",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Library reading area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Library reading area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Library - cataloging",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Library stacks",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Library stacks"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Library - stacks",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Library stacks",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Library stacks"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - detailed",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Manufacturing facility detailed manufacturing area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Manufacturing facility detailed manufacturing area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - equipment",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Manufacturing facility equipment room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Manufacturing facility equipment room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - bay H > 15m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Manufacturing facility extra high bay area (> 15 m floor-to-ceiling height)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Manufacturing facility extra high bay area (> 15 m floor-to-ceiling height)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - 7.5 <= bay H <= 15m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Manufacturing facility high bay area (7.5 to 15 m floor-to-ceiling height)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Manufacturing facility high bay area (7.5 to 15 m floor-to-ceiling height)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - bay H < 7.5m",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Manufacturing facility low bay area (< 7.5 m floor-to-ceiling height)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Manufacturing facility low bay area (< 7.5 m floor-to-ceiling height)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. < 2.4m-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-A",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-A",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-A"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-B",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-B",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-B"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-C",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-C",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-C"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-D",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-D",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-D"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-E",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-E",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-E"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-F",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-F",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-F"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-G",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-G",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-G"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-H",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-H",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-H"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Mfg - corr. >= 2.4m-sch-I",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Corridor/Transition area - manufacturing facility-sch-I",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Corridor/Transition area - manufacturing facility-sch-I"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Museum - exhibition",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Museum general exhibition area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Museum general exhibition area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Museum - restoration",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Museum restoration room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Museum restoration room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Post office sorting",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Post office sorting area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Post office sorting area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Religious - fellowship hall",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Religious building fellowship hall",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Religious building fellowship hall"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Religious - pulpit/choir",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Religious building worship/pulpit/choir area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Religious building worship/pulpit/choir area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Dress./fitt. - performance arts",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Retail facility dressing/fitting room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Retail facility dressing/fitting room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Retail - dressing/fitting",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Retail facility dressing/fitting room",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Retail facility dressing/fitting room"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Retail - mall concourse",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Retail facility mall concourse",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Retail facility mall concourse"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - court c1",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sports arena playing area class I facility(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sports arena playing area class I facility(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - court c2",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sports arena playing area class II facility(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sports arena playing area class II facility(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - court c3",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sports arena playing area class III facility(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sports arena playing area class III facility(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - court c4",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sports arena playing area class IV facility(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sports arena playing area class IV facility(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Sports arena - ring",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Sports arena playing area class I facility(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Sports arena playing area class I facility(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Transp. concourse",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Transportation facility airport concourse",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Transportation facility airport concourse"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Transp. baggage",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Transportation facility baggage/carousel area",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Transportation facility baggage/carousel area"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Transp. counter",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Transportation facility terminal ticket counter",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Transportation facility terminal ticket counter"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - med/blk",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area medium to bulky palletized items",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area medium to bulky palletized items"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - med/blk - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area medium to bulky palletized items",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area medium to bulky palletized items"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - med/blk2",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area medium to bulky palletized items",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area medium to bulky palletized items"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - med/blk2 - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area medium to bulky palletized items",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area medium to bulky palletized items"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - fine",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area small hand-carried items(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area small hand-carried items(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Warehouse - fine - refrigerated",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Warehouse storage area small hand-carried items(4)",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Warehouse storage area small hand-carried items(4)"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "Return Plenum",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "Return Plenum",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "Return Plenum"
+        },
+        {
+          "NECB2011_building_type": "Space Function",
+          "NECB2011_space_type": "- undefined -",
+          "NECB2015_building_type": "Space Function",
+          "NECB2015_space_type": "- undefined -",
+          "NECB2017_building_type": "Space Function",
+          "NECB2017_space_type": "- undefined -"
+        }
+      ]
+    }
+  }
+}
