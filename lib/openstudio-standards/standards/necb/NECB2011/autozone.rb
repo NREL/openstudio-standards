@@ -135,18 +135,21 @@ class NECB2011
 
       puts "damn....#{space_type_property['necb_hvac_system_selection_type']}"
 
-      necb_hvac_system_selection_table = standards_lookup_table_first(table_name: 'necb_hvac_system_selection_type')
-      necb_hvac_system_select = standards_lookup_table_first(table_name: 'necb_hvac_system_selection_type').select do |necb_hvac_system_select|
+      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+      puts necb_hvac_system_selection_table
+      necb_hvac_system_select = necb_hvac_system_selection_table.select do |necb_hvac_system_select|
         necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_property['necb_hvac_system_selection_type'] &&
             necb_hvac_system_select['min_stories'] <= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['max_stories'] >= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_load &&
             necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_load
-      end
+      end.first
+      raise()
 
 
 
-      puts necb_hvac_system_select
+      puts necb_hvac_system_select.size
+      puts "better have it dog #{necb_hvac_system_select} dog"
       system = necb_hvac_system_select['system_type']
       is_dwelling_unit = necb_hvac_system_select['dwelling']
       is_wildcard = true if necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard'
