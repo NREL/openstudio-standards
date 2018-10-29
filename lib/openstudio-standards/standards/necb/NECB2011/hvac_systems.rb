@@ -1,4 +1,4 @@
-require_relative 'autozone.rb'
+require_relative("autozone.rb")
 class NECB2011
   def model_add_hvac(model:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
@@ -2700,7 +2700,6 @@ class NECB2011
   end
 
 
-=begin
 
   # This method will take a model that uses NECB2011 spacetypes , and..
   # 1. Create a building story schema.
@@ -2715,7 +2714,7 @@ class NECB2011
   # @author phylroy.lopez@nrcan.gc.ca
   # @param model [OpenStudio::model::Model] A model object
   # @return [String] system_zone_array
-  def necb_autozone_and_autosystem( model:  nil, runner: nil, use_ideal_air_loads: false, system_fuel_defaults:)
+  def necb_autozone_and_autosystem_old( model:  nil, runner: nil, use_ideal_air_loads: false, system_fuel_defaults:)
 
     # Create a data struct for the space to system to placement information.
 
@@ -2808,7 +2807,7 @@ class NECB2011
 
     # Array to store schedule objects
     schedule_type_array = []
-
+    space_zoning_data_array_json = []
 
     # find the number of stories in the model this include multipliers.
     number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
@@ -2923,8 +2922,25 @@ class NECB2011
                                                         is_dwelling_unit,
                                                         is_wildcard)
         schedule_type_array << determine_necb_schedule_type(space).to_s
+        space_zoning_data_array_json << {
+            space: space,
+            space_name: space.name.get,
+            building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
+            space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
+            necb_hvac_system_selection_type: necb_hvac_system_selection_type, #
+            system_number: system, # the necb system type
+            number_of_stories: number_of_stories, # number of stories
+            horizontal_placement: horizontal_placement, # the horizontal placement (norht, south, east, west, core)
+            vertical_placment: vertical_placement, # the vertical placement ( ground, top, both, middle )
+            heating_capacity: heating_load,
+            cooling_capacity: cooling_load,
+            is_dwelling_unit: is_dwelling_unit, # Checks if it is a dwelling unit.
+            is_wildcard: is_wildcard,
+            schedule_type: determine_necb_schedule_type(space).to_s
+        }
       end
     end
+    File.write("#{File.dirname(__FILE__)}/oldway.json", JSON.pretty_generate(space_zoning_data_array_json))
     schedule_type_array.uniq!
 
 
@@ -3094,7 +3110,7 @@ class NECB2011
       raise(" #{errors}")
     end
   end
-=end
+
 
   # Creates thermal zones to contain each space, as defined for each building in the
   # system_to_space_map inside the Prototype.building_name
@@ -3138,6 +3154,7 @@ class NECB2011
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
+
 
 
 end

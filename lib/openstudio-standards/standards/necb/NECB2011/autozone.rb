@@ -19,12 +19,12 @@ class NECB2011
     # system assignment.
     unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(system_fuel_defaults['boiler_fueltype'])
       BTAP.runner_register('ERROR', "boiler_fueltype = #{system_fuel_defaults['boiler_fueltype']}", runner)
-      return
+      return false
     end
 
     unless [true, false].include?(system_fuel_defaults['mau_type'])
       BTAP.runner_register('ERROR', "mau_type = #{system_fuel_defaults['mau_type']}", runner)
-      return
+      return false
     end
 
     unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['mau_heating_coil_type'])
@@ -76,69 +76,43 @@ class NECB2011
       return false
     end
 
-    schedule_type_array = [] # Array to store schedule objects
-    space_zoning_data_array = [] # set up system array containers. These will contain the spaces associated with the system types.
+    unique_schedule_types = [] # Array to store schedule objects
     space_zoning_data_array_json = []
-    spacezoning_data = Struct.new(
-        :space, # the space object
-        :space_name, # the space name
-        :building_type_name, # space type name
-        :space_type_name, # space type name
-        :necb_hvac_system_selection_type, #
-        :system_number, # the necb system type
-        :number_of_stories, # number of stories
-        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-        :vertical_placment, # the vertical placement ( ground, top, both, middle )
-        :people_obj, # Spacetype people object
-        :heating_capacity,
-        :cooling_capacity,
-        :is_dwelling_unit, # Checks if it is a dwelling unit.
-        :is_wildcard
-    )
+
 
     # First pass of spaces to collect information into the space_zoning_data_array .
     model.getSpaces.sort.each do |space|
+      space_type_data = nil
       # this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
       space_system_index = nil
       if space.spaceType.empty?
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        search_criteria = {'template' => self.class.name,
-                           'space_type' => space.spaceType.get.standardsSpaceType.get,
-                           'building_type' => space.spaceType.get.standardsBuildingType.get}
-        space_type_property = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
-        raise("could not find necb system selection type for space: #{search_criteria}") if space_type_property.nil?
-
-        # stores the Building or SpaceType System type name.
-        necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
-        # Check if the NECB HVAC system selection type name was found in the standards data
-        if space_type_property['necb_hvac_system_selection_type'].nil?
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        end
+        space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => self.class.name,
+                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
+        raise("Could not find spacetype information in #{self.class.name} for space_type => #{space.spaceType.get.standardsSpaceType.get} - #{space.spaceType.get.standardsBuildingType.get}") if space_type_data.nil?
       end
 
       # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
       # Make sure we don't have sideeffects by changing the argument variables.
-      cooling_load = 0.0
-      heating_load = 0.0
-      unless space.spaceType.get.standardsSpaceType.get == '- undefined -'
+      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
+      # Make sure we don't have sideeffects by changing the argument variables.
+      cooling_load = nil
+      heating_load = nil
+      if space.spaceType.get.standardsSpaceType.get == '- undefined -'
+        cooling_load = 0.0
+        heating_load = 0.0
+      else
         cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil?
         heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
       end
 
       # identify space-system_index and assign the right NECB system type 1-7.
-
-      system = nil
-      is_dwelling_unit = false
-      is_wildcard = nil
-
-      puts "damn....#{space_type_property['necb_hvac_system_selection_type']}"
-
       necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
-      puts necb_hvac_system_selection_table
       necb_hvac_system_select = necb_hvac_system_selection_table.select do |necb_hvac_system_select|
-        necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_property['necb_hvac_system_selection_type'] &&
+        necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
             necb_hvac_system_select['min_stories'] <= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['max_stories'] >= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_load &&
@@ -147,12 +121,6 @@ class NECB2011
 
 
 
-      puts necb_hvac_system_select.size
-      puts "better have it dog #{necb_hvac_system_select} dog"
-      system = necb_hvac_system_select['system_type']
-      is_dwelling_unit = necb_hvac_system_select['dwelling']
-      is_wildcard = true if necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard'
-      system = 0 if system.nil?
 
 
       # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
@@ -161,70 +129,54 @@ class NECB2011
       unless space.spaceType.empty?
         space_type_name = space.spaceType.get.standardsSpaceType.get
         building_type_name = space.spaceType.get.standardsBuildingType.get
-        space_zoning_data_array << spacezoning_data.new(space,
-                                                        space.name.get,
-                                                        building_type_name,
-                                                        space_type_name,
-                                                        necb_hvac_system_selection_type,
-                                                        system,
-                                                        model.getBuilding.standardsNumberOfAboveGroundStories.get,
-                                                        horizontal_placement,
-                                                        vertical_placement,
-                                                        space.spaceType.get.people,
-                                                        heating_load,
-                                                        cooling_load,
-                                                        is_dwelling_unit,
-                                                        is_wildcard)
 
         space_zoning_data_array_json << {
             space: space,
-            space_name: space.name.get,
-            building_type_name: building_type_name, # space type name
-            space_type_name: space_type_name, # space type name
-            necb_hvac_system_selection_type: necb_hvac_system_selection_type, #
-            system_number: system, # the necb system type
+            space_name: space.name,
+            building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
+            space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
+            necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
+            system_number: necb_hvac_system_select['system_type'].nil? ? nil : necb_hvac_system_select['system_type'], # the necb system type
             number_of_stories: model.getBuilding.standardsNumberOfAboveGroundStories.get, # number of stories
             horizontal_placement: horizontal_placement, # the horizontal placement (norht, south, east, west, core)
             vertical_placment: vertical_placement, # the vertical placement ( ground, top, both, middle )
-            people_obj: space.spaceType.get.people, # Spacetype people object
             heating_capacity: heating_load,
             cooling_capacity: cooling_load,
-            is_dwelling_unit: is_dwelling_unit, # Checks if it is a dwelling unit.
-            is_wildcard: is_wildcard
+            is_dwelling_unit: necb_hvac_system_select['dwelling'], # Checks if it is a dwelling unit.
+            is_wildcard: necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard' ? true : nil ,
+            schedule_type: determine_necb_schedule_type(space).to_s
         }
 
-
-        schedule_type_array << determine_necb_schedule_type(space).to_s
       end
     end
-    puts space_zoning_data_array_json
-    schedule_type_array.uniq!
+
+    File.write("#{File.dirname(__FILE__)}/newway.json", JSON.pretty_generate(space_zoning_data_array_json))
 
     # Deal with Wildcard spaces. Might wish to have logic to do coridors first.
-    space_zoning_data_array.sort_by(&:space_name).each do |space_zone_data|
+    space_zoning_data_array_json.each do |space_zone_data|
       # If it is a wildcard space.
-      if space_zone_data.system_number.nil?
+      if space_zone_data[:system_number].nil?
         # iterate through all adjacent spaces from largest shared wall area to smallest.
         # Set system type to match first space system that is not nil.
-        adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, true)
+        adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data[:space], true)
         if adj_spaces.nil?
-          puts "Warning: No adjacent spaces for #{space_zone_data.space.name} on same floor, looking for others above and below to set system"
-          adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, false)
+          puts "Warning: No adjacent spaces for #{space_zone_data[:space].name} on same floor, looking for others above and below to set system"
+          adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data[:space], false)
         end
         adj_spaces.sort.each do |adj_space|
           # if there are no adjacent spaces. Raise an error.
-          raise "Could not determine adj space to space #{space_zone_data.space.name.get}" if adj_space.nil?
+          raise "Could not determine adj space to space #{space_zone_data[:space].name.get}" if adj_space.nil?
 
-          adj_space_data = space_zoning_data_array.find {|data| data.space == adj_space[0]}
-          if adj_space_data.system_number.nil?
+          adj_space_data = space_zoning_data_array_json.find {|data| data[:space] == adj_space[0] }
+          if adj_space_data[:system_number].nil?
             next
           else
-            space_zone_data.system_number = adj_space_data.system_number
-            puts space_zone_data.space.name.get.to_s
+            space_zone_data[:system_number] = adj_space_data[:system_number]
+            puts space_zone_data[:space].name.get.to_s
             break
           end
         end
-        raise "Could not determine adj space system to space #{space_zone_data.space.name.get}" if space_zone_data.system_number.nil?
+        raise "Could not determine adj space system to space #{space_zone_data.space.name.get}" if space_zone_data[:system_number].nil?
       end
     end
 
@@ -249,21 +201,21 @@ class NECB2011
       model.getBuildingStorys.sort.each do |story|
         # puts "Story:#{story}"
         story_counter += 1
-        # iterate by operation schedule type.
-        schedule_type_array.each do |schedule_type|
+        # iterate by unique schedule type.
+        space_zoning_data_array_json.map{ |item| item[:schedule_type] }.uniq!.each do |schedule_type|
           # iterate by horizontal location
           ['north', 'east', 'west', 'south', 'core'].each do |horizontal_placement|
             # puts "horizontal_placement:#{horizontal_placement}"
             [true, false].each do |is_dwelling_unit|
               space_array = []
-              space_zoning_data_array.each do |space_info|
+              space_zoning_data_array_json.each do |space_info|
                 # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
-                if (space_info.system_number == system_number) &&
-                    (space_info.space.buildingStory.get == story) &&
-                    (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
-                    (space_info.horizontal_placement == horizontal_placement) &&
-                    (space_info.is_dwelling_unit == is_dwelling_unit)
-                  space_array << space_info.space
+                if (space_info[:system_number] == system_number) &&
+                    (space_info[:space].buildingStory.get == story) &&
+                    (determine_necb_schedule_type(space_info[:space]).to_s == schedule_type) &&
+                    (space_info[:horizontal_placement] == horizontal_placement) &&
+                    (space_info[:is_dwelling_unit] == is_dwelling_unit)
+                  space_array << space_info[:space]
                 end
               end
 
@@ -367,5 +319,48 @@ class NECB2011
       end
     end
     raise(" #{errors}") unless errors.empty?
+  end
+
+  # Creates thermal zones to contain each space, as defined for each building in the
+  # system_to_space_map inside the Prototype.building_name
+  # e.g. (Prototype.secondary_school.rb) file.
+  #
+  # @param (see #add_constructions)
+  # @return [Bool] returns true if successful, false if not
+  def model_create_thermal_zones(model, space_multiplier_map = nil)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
+    space_multiplier_map = {} if space_multiplier_map.nil?
+
+    # Remove any Thermal zones assigned
+    model.getThermalZones.each(&:remove)
+
+    # Create a thermal zone for each space in the self
+    model.getSpaces.sort.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      if thermostat.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
+      else
+        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+        # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+        ideal_loads.addToThermalZone(zone)
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 end
