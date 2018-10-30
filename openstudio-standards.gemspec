@@ -37,5 +37,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'roo'
+  spec.add_development_dependency 'ruby-prof'
 
 end

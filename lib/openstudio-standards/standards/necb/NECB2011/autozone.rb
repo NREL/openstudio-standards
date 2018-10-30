@@ -197,17 +197,14 @@ class NECB2011
     (0..7).each do |system_number|
       system_zone_array[system_number] = []
       # iterate by story
-      story_counter = 0
-      model.getBuildingStorys.sort.each do |story|
-        # puts "Story:#{story}"
-        story_counter += 1
+      model.getBuildingStorys.sort.each_with_index do |story, building_index|
         # iterate by unique schedule type.
         space_zoning_data_array_json.map{ |item| item[:schedule_type] }.uniq!.each do |schedule_type|
           # iterate by horizontal location
           ['north', 'east', 'west', 'south', 'core'].each do |horizontal_placement|
             # puts "horizontal_placement:#{horizontal_placement}"
             [true, false].each do |is_dwelling_unit|
-              space_array = []
+              space_info_array = []
               space_zoning_data_array_json.each do |space_info|
                 # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
                 if (space_info[:system_number] == system_number) &&
@@ -215,33 +212,33 @@ class NECB2011
                     (determine_necb_schedule_type(space_info[:space]).to_s == schedule_type) &&
                     (space_info[:horizontal_placement] == horizontal_placement) &&
                     (space_info[:is_dwelling_unit] == is_dwelling_unit)
-                  space_array << space_info[:space]
+                  space_info_array << space_info
                 end
               end
 
               # create Thermal Zone if space_array is not empty.
-              unless space_array.empty?
+              unless space_info_array.empty?
                 # Process spaces that have multipliers associated with them first.
                 # This map define the multipliers for spaces with multipliers not equals to 1
                 space_multiplier_map = @space_multiplier_map
 
                 # create new zone and add the spaces to it.
-                space_array.each do |space|
+                space_info_array.each do |space_info|
                   # Create thermalzone for each space.
                   thermal_zone = OpenStudio::Model::ThermalZone.new(model)
                   # Create a more informative space name.
-                  thermal_zone.setName("Sp-#{space.name} Sys-#{system_number} Flr-#{story_counter} Sch-#{schedule_type} HPlcmt-#{horizontal_placement} ZN")
+                  thermal_zone.setName("Sp-#{space_info[:space].name} Sys-#{system_number} Flr-#{building_index + 1} Sch-#{schedule_type} HPlcmt-#{horizontal_placement} ZN")
                   # Add zone mulitplier if required.
-                  thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s]) unless space_multiplier_map[space.name.to_s].nil?
+                  thermal_zone.setMultiplier(space_multiplier_map[space_info[:space].name.to_s]) unless space_multiplier_map[space_info[:space].name.to_s].nil?
                   # Space to thermal zone. (for archetype work it is one to one)
-                  space.setThermalZone(thermal_zone)
+                  space_info[:space].setThermalZone(thermal_zone)
                   # Get thermostat for space type if it already exists.
-                  space_type_name = space.spaceType.get.name.get
+                  space_type_name = space_info[:space].spaceType.get.name.get
                   thermostat_name = space_type_name + ' Thermostat'
                   thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
                   if thermostat.empty?
-                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name} ZN")
-                    raise " Thermostat #{thermostat_name} not found for space name: #{space.name}"
+                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space_info[:space].name} ZN")
+                    raise " Thermostat #{thermostat_name} not found for space name: #{space_info[:space].name}"
                   else
                     thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
                     thermal_zone.setThermostatSetpointDualSetpoint(thermostat_clone)
