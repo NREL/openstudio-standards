@@ -33,8 +33,7 @@ class Standard
                                            OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                            OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                            swh_fueltype,
-                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                           building_type)
+                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
       end
 
       # Attach the end uses if specified in prototype inputs
@@ -52,8 +51,7 @@ class Standard
                                  OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                  prototype_input['main_service_water_flowrate_schedule'],
                                  OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 space_name,
-                                 building_type)
+                                 space_name)
         end
       elsif building_type == 'LargeOfficeDetail' && template != 'NECB2011'
 
@@ -65,8 +63,7 @@ class Standard
                                  OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                  prototype_input['main_service_water_flowrate_schedule'],
                                  OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 space_name,
-                                 building_type)
+                                 space_name)
         end
       elsif building_type == 'RetailStripmall' && template != 'NECB2011'
 
@@ -92,8 +89,7 @@ class Standard
                                              OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                              OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                              prototype_input['main_water_heater_fuel'],
-                                             OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                             building_type)
+                                             OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
           model_add_swh_end_uses(model,
                                  'Main',
@@ -101,8 +97,7 @@ class Standard
                                  rated_flow_rate_m3_per_s,
                                  swh_sch_name,
                                  OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 swh_space_name,
-                                 building_type)
+                                 swh_space_name)
         end
 
       elsif prototype_input['main_service_water_peak_flowrate']
@@ -115,8 +110,7 @@ class Standard
                                OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                prototype_input['main_service_water_flowrate_schedule'],
                                OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                               nil,
-                               building_type)
+                               nil)
 
       else
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by space_type_map')
@@ -158,11 +152,9 @@ class Standard
                                    space.multiplier
                                end
 
-            water_fixture = model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
-                                            climate_zone,
+            water_fixture = model_add_swh_end_uses_by_space(model,
                                             main_swh_loop,
-                                            space_type_name,
-                                            space_name,
+                                            space,
                                             space_multiplier)
             unless water_fixture.nil?
               water_fixtures << water_fixture
@@ -187,16 +179,14 @@ class Standard
                                                prototype_input['booster_water_heater_fuel'],
                                                OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
                                                0,
-                                               nil,
-                                               building_type)
+                                               nil)
 
       # Attach the end uses
       model_add_booster_swh_end_uses(model,
                                      swh_booster_loop,
                                      OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                      prototype_input['booster_service_water_flowrate_schedule'],
-                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get,
-                                     building_type)
+                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
 
     end
 
@@ -213,8 +203,7 @@ class Standard
                                             OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
                                             OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
                                             prototype_input['laundry_water_heater_fuel'],
-                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                            building_type)
+                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
       # Attach the end uses if specified in prototype inputs
       model_add_swh_end_uses(model,
@@ -223,8 +212,7 @@ class Standard
                              OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                              prototype_input['laundry_service_water_flowrate_schedule'],
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                             nil,
-                             building_type)
+                             nil)
 
     end
 
@@ -365,8 +353,7 @@ class Standard
                                                    water_heater_capacity,
                                                    water_heater_volume,
                                                    water_heater_fuel,
-                                                   parasitic_fuel_consumption_rate,
-                                                   stds_bldg_type)
+                                                   parasitic_fuel_consumption_rate)
 
           # Connect the water use connection to the SWH loop
           unit_hot_water_loop.addDemandBranchForComponent(water_use_connection)
@@ -457,8 +444,7 @@ class Standard
                                                       water_heater_capacity,
                                                       water_heater_volume,
                                                       water_heater_fuel,
-                                                      parasitic_fuel_consumption_rate,
-                                                      stds_bldg_type)
+                                                      parasitic_fuel_consumption_rate)
 
         # Connect the water use connection to the SWH loop
         dedicated_hot_water_loop.addDemandBranchForComponent(water_use_connection)
@@ -507,8 +493,7 @@ class Standard
                                                              water_heater_fuel,
                                                              booster_water_temperature,
                                                              parasitic_fuel_consumption_rate,
-                                                             booster_water_heater_thermal_zone,
-                                                             stds_bldg_type)
+                                                             booster_water_heater_thermal_zone)
 
           # find water heater
           booster_service_water_loop.supplyComponents.sort.each do |component|
@@ -660,8 +645,7 @@ class Standard
                                                  water_heater_capacity,
                                                  water_heater_volume,
                                                  water_heater_fuel,
-                                                 parasitic_fuel_consumption_rate,
-                                                 stds_bldg_type)
+                                                 parasitic_fuel_consumption_rate)
 
       # find water heater
       shared_hot_water_loop.supplyComponents.sort.each do |component|

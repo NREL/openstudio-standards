@@ -13,7 +13,6 @@ class Standard
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [String] water heater fuel. Valid choices are Natural Gas, Electricity
   # @param parasitic_fuel_consumption_rate [Double] the parasitic fuel consumption rate of the water heater, in W
-  # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
   def model_add_swh_loop(model,
@@ -25,8 +24,7 @@ class Standard
                          water_heater_capacity,
                          water_heater_volume,
                          water_heater_fuel,
-                         parasitic_fuel_consumption_rate,
-                         building_type = nil)
+                         parasitic_fuel_consumption_rate)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop')
 
@@ -75,12 +73,7 @@ class Standard
       swh_pump_motor_efficiency = 1
     end
 
-    swh_pump = case model_swh_pump_type(model, building_type)
-               when 'ConstantSpeed'
-                 OpenStudio::Model::PumpConstantSpeed.new(model)
-               when 'VariableSpeed'
-                 OpenStudio::Model::PumpVariableSpeed.new(model)
-               end
+    swh_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
     swh_pump.setName('Service Water Loop Pump')
     swh_pump.setRatedPumpHead(swh_pump_head_press_pa.to_f)
     swh_pump.setMotorEfficiency(swh_pump_motor_efficiency)
@@ -114,13 +107,6 @@ class Standard
     demand_outlet_pipe.addToNode(service_water_loop.demandOutletNode)
 
     return service_water_loop
-  end
-
-  # Determine the type of SWH pump that a model will have.  Defaults to ConstantSpeed.
-  # @return [String] the SWH pump type: ConstantSpeed, VariableSpeed
-  def model_swh_pump_type(model, building_type)
-    swh_pump_type = 'ConstantSpeed'
-    return swh_pump_type
   end
 
   # Creates a water heater and attaches it to the supplied service water heating loop.
@@ -525,7 +511,6 @@ class Standard
   # fuel consumption rate, in W
   # @param booster_water_heater_thermal_zone [OpenStudio::Model::ThermalZone]
   # zones to place water heater in.  If nil, will be assumed in 70F air for heat loss.
-  # @param building_type [String] the building type
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting booster water loop.
   def model_add_swh_booster(model,
@@ -535,8 +520,7 @@ class Standard
                             water_heater_fuel,
                             booster_water_temperature,
                             parasitic_fuel_consumption_rate,
-                            booster_water_heater_thermal_zone,
-                            building_type = nil)
+                            booster_water_heater_thermal_zone)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{main_service_water_loop.name}")
 
@@ -632,15 +616,6 @@ class Standard
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     end
 
-    if water_heater_fuel == 'Electricity'
-      water_heater.setHeaterFuelType('Electricity')
-      water_heater.setOffCycleParasiticFuelType('Electricity')
-      water_heater.setOnCycleParasiticFuelType('Electricity')
-    elsif water_heater_fuel == 'Natural Gas'
-      water_heater.setHeaterFuelType('Gas')
-      water_heater.setOffCycleParasiticFuelType('Gas')
-      water_heater.setOnCycleParasiticFuelType('Gas')
-    end
     booster_service_water_loop.addSupplyBranchForComponent(water_heater)
 
     # Service water heating loop bypass pipes
@@ -685,7 +660,6 @@ class Standard
   # @param water_use_temperature [Double] mixed water use temperature, in C
   # @param space_name [String] the name of the space to add the water fixture to,
   # or nil, in which case it will not be assigned to any particular space.
-  # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
   def model_add_swh_end_uses(model,
@@ -694,8 +668,7 @@ class Standard
                              peak_flowrate,
                              flowrate_schedule,
                              water_use_temperature,
-                             space_name,
-                             building_type = nil)
+                             space_name)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
 
@@ -752,26 +725,59 @@ class Standard
     return water_fixture
   end
 
-  # This method will add an swh water fixture to the model for the space.
-  # if the it will return a water fixture object, or NIL if there is no water load at all.
-  def model_add_swh_end_uses_by_space(model, building_type, climate_zone, swh_loop, space_type_name, space_name, space_multiplier = nil, is_flow_per_area = true)
+  # This method will add a swh water fixture to the model for the space.
+  # It will return a water fixture object, or NIL if there is no water load at all.
+  #
+  # Adds a WaterUseEquipment object representing the SWH loads of the supplied Space.
+  # Attaches this WaterUseEquipment to the supplied PlantLoop via a new WaterUseConnections object.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param swh_loop [OpenStudio::Model::PlantLoop] the SWH loop to connect the WaterUseEquipment to
+  # @space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
+  # @space_multiplier [Double] the multiplier to use if the supplied Space actually represents
+  #   more area than is shown in the model.
+  # @param is_flow_per_area [Bool] if true, use the value in the 'service_water_heating_peak_flow_per_area'
+  #   field of the space_types JSON.  If false, use the value in the 'service_water_heating_peak_flow_rate' field.
+  # @return [OpenStudio::Model::WaterUseEquipment] the WaterUseEquipment for the
+  def model_add_swh_end_uses_by_space(model,
+                                      swh_loop,
+                                      space,
+                                      space_multiplier = 1.0,
+                                      is_flow_per_area = true)
+    # SpaceType
+    if space.spaceType.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name} does not have a Space Type assigned, cannot add SWH end uses.")
+      return nil
+    end
+    space_type = space.spaceType.get
+
+    # Standards Building Type
+    if space_type.standardsBuildingType.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name}'s Space Type does not have a Standards Building Type assigned, cannot add SWH end uses.")
+      return nil
+    end
+    stds_bldg_type = space_type.standardsBuildingType.get
+    building_type = model_get_lookup_name(stds_bldg_type)
+
+    # Standards Space Type
+    if space_type.standardsSpaceType.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space #{space.name}'s Space Type does not have a Standards Space Type assigned, cannot add SWH end uses.")
+      return nil
+    end
+    stds_spc_type = space_type.standardsSpaceType.get
+
     # find the specific space_type properties from standard.json
     search_criteria = {
         'template' => template,
         'building_type' => building_type,
-        'space_type' => space_type_name
+        'space_type' => stds_spc_type
     }
     data = model_find_object(standards_data['space_types'], search_criteria)
     if data.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
       return nil
     end
-    space = model.getSpaceByName(space_name)
-    space = space.get
     space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-    if space_multiplier.nil?
-      space_multiplier = 1
-    end
 
     # If there is no service hot water load.. Don't bother adding anything.
     if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
@@ -839,15 +845,13 @@ class Standard
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_use_temperature [Double] mixed water use temperature, in C
-  # @param building_type [String] the building type
   # @return [OpenStudio::Model::WaterUseEquipment]
   # the resulting water fixture.
   def model_add_booster_swh_end_uses(model,
                                      swh_booster_loop,
                                      peak_flowrate,
                                      flowrate_schedule,
-                                     water_use_temperature,
-                                     building_type = nil)
+                                     water_use_temperature)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_booster_loop.name}.")
 
