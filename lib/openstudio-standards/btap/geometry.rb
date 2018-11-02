@@ -2400,6 +2400,50 @@ module BTAP
           horizontal_placement = "core"
         end
         return horizontal_placement, vertical_placement
+
+=begin
+
+        walls_area_array = Hash.new
+        subsurface_area_array = Hash.new
+        ['north', 'east', 'south', 'west'].each do |index| walls_area_array[index] = 0.0}
+        ['north', 'east', 'south', 'west'].each {|index| subsurface_area_array[index] = 0.0}
+        #east is defined as 315-45 degs
+        [
+            {:cardinal_direction => 'north', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:cardinal_direction => 'east', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:cardinal_direction => 'south', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:cardinal_direction => 'west', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+        ].each do |orientation|
+          BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
+            #          puts "northern surface found 0-46: #{surface}"
+            #          puts surface.azimuth / ( Math::PI / 180.0 )
+            walls_area_array[orientation[:cardinal_direction]] = walls_area_array[orientation[:cardinal_direction]]+ surface.grossArea
+            subsurface_area_array[orientation[:cardinal_direction]]  = subsurface_area_array[orientation[:cardinal_direction]] +
+                surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+          end
+        end
+        #find our which cardinal driection has the most exterior surface and declare it that orientation.
+        horizontal_placement = hash.max_by{|k,v| v}[0]
+        horizontal_placement = "core" if walls_area_array.inject {|sum, x| sum + x} == 0.0
+
+
+        return {:horizontal_placement => horizontal_placement,
+                :vertical_placement => vertical_placement,
+                #Exposed areas
+                :northern_exposed_area => walls_area_array[0],
+                :eastern_exposed_area => walls_area_array[1],
+                :southern_exposed_area => walls_area_array[2],
+                :western_exposed_area => walls_area_array[3],
+                #Exposed Glazing
+                :northern_glazed_area => subsurface_area_array[0],
+                :eastern_glazed_area => subsurface_area_array[1],
+                :southern_glazed_area => subsurface_area_array[2],
+                :western_glazed_area => subsurface_area_array[3],
+                #Floor Area
+                :floor_area => space.floorArea
+        }
+=end
+        
       end
 
 
