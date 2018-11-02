@@ -1,0 +1,15 @@
+[
+  {
+    "name": "EL1 Sys1 (PVVT) (G.SSW2)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 SSW Perim Spc (G.SSW2)"
+    ]
+  }
+]

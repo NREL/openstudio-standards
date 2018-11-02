@@ -1,0 +1,28 @@
+[
+  {
+    "type": "PSZ-AC",
+    "operation_schedule": "OfficeMedium HVACOperationSchd",
+    "oa_damper_schedule": "OfficeMedium MinOA_MotorizedDamper_Sched",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": null,
+    "space_names": [
+      "Perimeter_bot_ZN_1",
+      "Perimeter_bot_ZN_2",
+      "Perimeter_bot_ZN_3",
+      "Perimeter_bot_ZN_4",
+      "Core_bottom",
+      "Perimeter_mid_ZN_1",
+      "Perimeter_mid_ZN_2",
+      "Perimeter_mid_ZN_3",
+      "Perimeter_mid_ZN_4",
+      "Core_mid",
+      "Perimeter_top_ZN_1",
+      "Perimeter_top_ZN_2",
+      "Perimeter_top_ZN_3",
+      "Perimeter_top_ZN_4",
+      "Core_top"
+    ]
+  }
+]

@@ -1,0 +1,299 @@
+
+# Custom changes for the Hospital prototype.
+# These are changes that are inconsistent with other prototype
+# building types.
+module Hospital
+  def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
+
+    # add extra equipment for kitchen
+    add_extra_equip_kitchen(model)
+
+    system_to_space_map = define_hvac_system_map(building_type, climate_zone)
+
+    hot_water_loop = nil
+    model.getPlantLoops.sort.each do |loop|
+      # If it has a boiler:hotwater, it is the correct loop
+      unless loop.supplyComponents('OS:Boiler:HotWater'.to_IddObjectType).empty?
+        hot_water_loop = loop
+      end
+    end
+    if hot_water_loop
+      case template
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2', 'ICU_Flr_2', 'PatRoom5_Mult10_Flr_4', 'Lab_Flr_3']
+          space_names.each do |space_name|
+            add_humidifier(space_name, hot_water_loop, model)
+          end
+        when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+          space_names = ['ER_Exam3_Mult4_Flr_1', 'OR2_Mult5_Flr_2']
+          space_names.each do |space_name|
+            add_humidifier(space_name, hot_water_loop, model)
+          end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find hot water loop to attach humidifier to.')
+    end
+
+    # adjust minimum damper positions
+    model_adjust_vav_minimum_damper(model)
+
+    reset_kitchen_oa(model)
+    model_update_exhaust_fan_efficiency(model)
+    model_reset_or_room_vav_minimum_damper(prototype_input, model)
+
+    # adjust CAV system sizing
+    model.getAirLoopHVACs.each do |air_loop|
+      if air_loop.name.to_s.include? 'CAV_KITCHEN'
+        # system sizing
+        sizing_system = air_loop.sizingSystem
+        prehtg_sa_temp_c = OpenStudio.convert(55.04, 'F', 'C').get
+        htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
+        sizing_system.setPreheatDesignTemperature(prehtg_sa_temp_c)
+        sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_sa_temp_c)
+        sizing_system.setSizingOption('NonCoincident')
+
+        # set coil sizing
+        htg_coil = model.getCoilHeatingWaterByName('CAV_KITCHEN Main Htg Coil').get
+        htg_coil.setRatedInletAirTemperature(prehtg_sa_temp_c)
+        htg_coil.setRatedOutletAirTemperature(htg_sa_temp_c)
+
+        # replace main supply air fan
+        air_loop.supplyFan.get.remove
+        fan = create_fan_by_name(model,
+                                 'Hospital_CAV_Sytem_Fan',
+                                 fan_name: "#{air_loop.name} Fan",
+                                 end_use_subcategory: 'CAV System Fans')
+        fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+        fan.addToNode(air_loop.supplyOutletNode)
+
+        # replace AirTerminalSingleDuctVAVReheat with AirTerminalSingleDuctUncontrolled
+        air_loop.thermalZones.each do |zone|
+          # remove old terminal and reheat coil
+          old_terminal = zone.airLoopHVACTerminal.get.to_AirTerminalSingleDuctVAVReheat.get
+          reheat_coil = old_terminal.reheatCoil
+          reheat_coil.remove
+          # in future, may need to remove plant loop if empty at end of this
+          old_terminal.remove
+          air_loop.removeBranchForZone(zone)
+
+          # make new terminal
+          new_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+          new_terminal.setName("#{zone.name} CAV Terminal")
+          air_loop.addBranchForZone(zone, new_terminal.to_StraightComponent)
+          zone.setCoolingPriority(new_terminal.to_ModelObject.get, 1)
+          zone.setHeatingPriority(new_terminal.to_ModelObject.get, 1)
+        end
+
+        # zone sizing
+        zone_htg_sa_temp_c = OpenStudio.convert(104.0, 'F', 'C').get
+        air_loop.thermalZones.each do |zone|
+          sizing_zone = zone.sizingZone
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(zone_htg_sa_temp_c)
+        end
+      end
+    end
+
+    # Modify the condenser water pump
+    if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
+      cw_pump = model.getPumpConstantSpeedByName('Condenser Water Loop Constant Pump').get
+      cw_pump_head_ft_h2o = 60.0
+      cw_pump_head_press_pa = OpenStudio.convert(cw_pump_head_ft_h2o, 'ftH_{2}O', 'Pa').get
+      cw_pump.setRatedPumpHead(cw_pump_head_press_pa)
+    end
+
+    return true
+  end
+
+  # add extra equipment for kitchen
+  def add_extra_equip_kitchen(model)
+    kitchen_space = model.getSpaceByName('Kitchen_Flr_5')
+    kitchen_space = kitchen_space.get
+    kitchen_space_type = kitchen_space.spaceType.get
+    elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+    elec_equip_def1.setName('Kitchen Electric Equipment Definition1')
+    elec_equip_def2.setName('Kitchen Electric Equipment Definition2')
+    case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        elec_equip_def1.setFractionLatent(0)
+        elec_equip_def1.setFractionRadiant(0.25)
+        elec_equip_def1.setFractionLost(0)
+        elec_equip_def2.setFractionLatent(0)
+        elec_equip_def2.setFractionRadiant(0.25)
+        elec_equip_def2.setFractionLost(0)
+        if template == '90.1-2013'
+          elec_equip_def1.setDesignLevel(915)
+          elec_equip_def2.setDesignLevel(855)
+        else
+          elec_equip_def1.setDesignLevel(915)
+          elec_equip_def2.setDesignLevel(855)
+        end
+        # Create the electric equipment instance and hook it up to the space type
+        elec_equip1 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def1)
+        elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+        elec_equip1.setName('Kitchen_Reach-in-Freezer')
+        elec_equip2.setName('Kitchen_Reach-in-Refrigerator')
+        elec_equip1.setSpaceType(kitchen_space_type)
+        elec_equip2.setSpaceType(kitchen_space_type)
+        elec_equip1.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
+        elec_equip2.setSchedule(model_add_schedule(model, 'Hospital ALWAYS_ON'))
+    end
+  end
+
+  def update_waterheater_loss_coefficient(model)
+    case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        model.getWaterHeaterMixeds.sort.each do |water_heater|
+          if water_heater.name.to_s.include?('Booster')
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
+          else
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.60100708)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.60100708)
+          end
+        end
+    end
+  end
+
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    update_waterheater_loss_coefficient(model)
+    return true
+  end
+
+  # add swh
+
+  def reset_kitchen_oa(model)
+    space_kitchen = model.getSpaceByName('Kitchen_Flr_5').get
+    ventilation = space_kitchen.designSpecificationOutdoorAir.get
+    ventilation.setOutdoorAirFlowperPerson(0)
+    ventilation.setOutdoorAirFlowperFloorArea(0)
+    case template
+      when '90.1-2010', '90.1-2013'
+        ventilation.setOutdoorAirFlowRate(3.398)
+      when '90.1-2004', '90.1-2007', 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        ventilation.setOutdoorAirFlowRate(3.776)
+    end
+  end
+
+  def model_update_exhaust_fan_efficiency(model)
+    case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        model.getFanZoneExhausts.sort.each do |exhaust_fan|
+          exhaust_fan.setFanEfficiency(0.16)
+          exhaust_fan.setPressureRise(125)
+        end
+      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+        model.getFanZoneExhausts.sort.each do |exhaust_fan|
+          exhaust_fan.setFanEfficiency(0.338)
+          exhaust_fan.setPressureRise(125)
+        end
+    end
+  end
+
+  def add_humidifier(space_name, hot_water_loop, model)
+    space = model.getSpaceByName(space_name).get
+    zone = space.thermalZone.get
+    humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
+    humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model_add_schedule(model, 'Hospital MinRelHumSetSch'))
+    humidistat.setDehumidifyingRelativeHumiditySetpointSchedule(model_add_schedule(model, 'Hospital MaxRelHumSetSch'))
+    zone.setZoneControlHumidistat(humidistat)
+
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      if air_loop.thermalZones.include? zone
+        humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
+        humidifier.setRatedCapacity(3.72E-5)
+        humidifier.setRatedPower(100_000)
+        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
+        # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
+        htg_coil = nil
+        air_loop.supplyComponents.each do |equip|
+          if equip.to_CoilHeatingWater.is_initialized
+            htg_coil = equip.to_CoilHeatingWater.get
+          end
+        end
+        heating_coil_outlet_node = htg_coil.airOutletModelObject.get.to_Node.get
+        supply_outlet_node = air_loop.supplyOutletNode
+        humidifier.addToNode(heating_coil_outlet_node)
+        humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
+        case template
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+          create_coil_heating_electric(model,
+                                       air_loop_node: supply_outlet_node,
+                                       name: "#{space_name} Electric Htg Coil")
+          create_coil_heating_water(model,
+                                    hot_water_loop,
+                                    air_loop_node: supply_outlet_node,
+                                    name: "#{space_name} Water Htg Coil")
+        end
+        # humidity_spm.addToNode(supply_outlet_node)
+        humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
+        humidity_spm.setControlZone(zone)
+      end
+    end
+  end
+
+  def model_add_daylighting_controls(model)
+    space_names = ['Office1_Flr_5', 'Office3_Flr_5', 'Lobby_Records_Flr_1']
+    space_names.each do |space_name|
+      space = model.getSpaceByName(space_name).get
+      space_add_daylighting_controls(space, false, false)
+    end
+  end
+
+  # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
+  def model_adjust_vav_minimum_damper(model)
+    model.getThermalZones.each do |zone|
+      air_terminal = zone.airLoopHVACTerminal
+      if air_terminal.is_initialized
+        air_terminal = air_terminal.get
+        if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
+          vav_name = air_terminal.name.get
+          # High OA zones
+          # Determine whether or not to use the high minimum guess.
+          # Cutoff was determined by correlating apparent minimum guesses
+          # to OA rates in prototypes since not well documented in papers.
+          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          case template
+          when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+            if vav_name.include?('PatRoom') || vav_name.include?('OR') || vav_name.include?('ICU') || vav_name.include?('Lab') || vav_name.include?('ER') || vav_name.include?('Kitchen')
+              air_terminal.setConstantMinimumAirFlowFraction(1.0)
+            end
+          when '90.1-2004', '90.1-2007'
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+          when '90.1-2010', '90.1-2013'
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+            air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? "PatRoom"
+          end
+        end
+      end
+    end
+  end
+
+  def model_reset_or_room_vav_minimum_damper(prototype_input, model)
+    case template
+    when '90.1-2010', '90.1-2013'
+      model.getAirTerminalSingleDuctVAVReheats.sort.each do |air_terminal|
+        air_terminal_name = air_terminal.name.get
+        if air_terminal_name.include?('OR1') || air_terminal_name.include?('OR2') || air_terminal_name.include?('OR3') || air_terminal_name.include?('OR4')
+          air_terminal.setZoneMinimumAirFlowMethod('Scheduled')
+          air_terminal.setMinimumAirFlowFractionSchedule(model_add_schedule(model, 'Hospital OR_MinSA_Sched'))
+        end
+      end
+    else
+      return true
+    end
+  end
+
+  def model_modify_oa_controller(model)
+    model.getAirLoopHVACs.sort.each do |air_loop|
+      oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
+      oa_control = oa_sys.getControllerOutdoorAir
+      case air_loop.name.get
+        when 'VAV_ER', 'VAV_ICU', 'VAV_LABS', 'VAV_OR', 'VAV_PATRMS', 'CAV_1', 'CAV_2'
+          oa_control.setEconomizerControlType('NoEconomizer')
+      end
+    end
+  end
+end

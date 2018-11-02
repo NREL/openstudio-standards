@@ -1,0 +1,36 @@
+[
+  {
+    "name": "EL1 Sys1 (PTAC) (G)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "EL1 NNE Perim Spc (G.NNE1)",
+      "EL1 South Perim Spc (G.S2)",
+      "EL1 North Perim Spc (G.N3)",
+      "EL1 North Perim Spc (G.N4)",
+      "EL1 Core Spc (G.C5)",
+      "EL1 SE Perim Spc (G.SE6)",
+      "EL1 South Perim Spc (G.S7)",
+      "EL1 SSW Perim Spc (G.SSW8)",
+      "EL1 South Perim Spc (G.S9)"
+    ]
+  },
+  {
+    "name": "EL2 Sys1 (PTAC) (G)",
+    "type": "PTHP",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "fan_type": "Cycling",
+    "space_names": [
+      "EL2 North Perim Spc (G.N1)",
+      "EL2 SSW Perim Spc (G.SSW2)",
+      "EL2 North Perim Spc (G.N3)",
+      "EL2 NNE Perim Spc (G.NNE4)",
+      "EL2 Core Spc (G.C5)",
+      "EL2 South Perim Spc (G.S6)",
+      "EL2 South Perim Spc (G.S7)"
+    ]
+  }
+]

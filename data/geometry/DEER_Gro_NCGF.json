@@ -1,0 +1,37 @@
+[
+  {
+    "name": "EL1 Sys1 (PSZ) (G.SW2)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 SW Perim Spc (G.SW2)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (PSZ) (G.N3)",
+    "type": "UnitHeater",
+    "heating_type": "Gas",
+    "fan_type": "OnOff",
+    "fan_static_pressure": 1,
+    "operation_schedule": null,
+    "space_names": [
+      "EL1 North Perim Spc (G.N3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (PVVT) (G.SSE1)",
+    "type": "PSZ-AC",
+    "operation_schedule": null,
+    "oa_damper_schedule": null,
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "fan_type": "ConstantVolume",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "EL1 SSE Perim Spc (G.SSE1)"
+    ]
+  }
+]

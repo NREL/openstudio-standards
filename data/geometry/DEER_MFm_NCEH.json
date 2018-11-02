@@ -1,0 +1,210 @@
+[
+  {
+    "name": "EL1 Sys1 (UHT) (G.SSE1)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 SSE Perim Spc (G.SSE1)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UHT) (G.E2)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UHT) (T.SSE27)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 SSE Perim Spc (T.SSE27)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UHT) (T.E28)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (T.E28)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (UHT) (G.E3)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E3)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (UHT) (G.E4)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E4)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (UHT) (T.E29)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (T.E29)"
+    ]
+  },
+  {
+    "name": "EL1 Sys2 (UHT) (T.E30)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (T.E30)"
+    ]
+  },
+  {
+    "name": "EL1 Sys3 (UHT) (G.E5)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (G.E5)"
+    ]
+  },
+  {
+    "name": "EL1 Sys3 (UHT) (G.NNE6)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 NNE Perim Spc (G.NNE6)"
+    ]
+  },
+  {
+    "name": "EL1 Sys3 (UHT) (T.E31)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 East Perim Spc (T.E31)"
+    ]
+  },
+  {
+    "name": "EL1 Sys3 (UHT) (T.NNE32)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 NNE Perim Spc (T.NNE32)"
+    ]
+  },
+  {
+    "name": "EL1 Sys4 (UHT) (G.SSW7)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 SSW Perim Spc (G.SSW7)"
+    ]
+  },
+  {
+    "name": "EL1 Sys4 (UHT) (G.W8)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W8)"
+    ]
+  },
+  {
+    "name": "EL1 Sys4 (UHT) (T.SSW33)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 SSW Perim Spc (T.SSW33)"
+    ]
+  },
+  {
+    "name": "EL1 Sys4 (UHT) (T.W34)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (T.W34)"
+    ]
+  },
+  {
+    "name": "EL1 Sys5 (UHT) (G.W9)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W9)"
+    ]
+  },
+  {
+    "name": "EL1 Sys5 (UHT) (G.W10)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W10)"
+    ]
+  },
+  {
+    "name": "EL1 Sys5 (UHT) (T.W35)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (T.W35)"
+    ]
+  },
+  {
+    "name": "EL1 Sys5 (UHT) (T.W36)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (T.W36)"
+    ]
+  },
+  {
+    "name": "EL1 Sys6 (UHT) (G.W11)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (G.W11)"
+    ]
+  },
+  {
+    "name": "EL1 Sys6 (UHT) (G.NNW12)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 NNW Perim Spc (G.NNW12)"
+    ]
+  },
+  {
+    "name": "EL1 Sys6 (UHT) (T.W37)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 West Perim Spc (T.W37)"
+    ]
+  },
+  {
+    "name": "EL1 Sys6 (UHT) (T.NNW38)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 NNW Perim Spc (T.NNW38)"
+    ]
+  },
+  {
+    "name": "EL1 Sys7 (UHT) (G.C13)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (G.C13)"
+    ]
+  },
+  {
+    "name": "EL1 Sys7 (UHT) (T.C39)",
+    "type": "Baseboards",
+    "heating_type": "Electricity",
+    "space_names": [
+      "EL1 Core Spc (T.C39)"
+    ]
+  }
+]

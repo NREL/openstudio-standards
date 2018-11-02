@@ -1,0 +1,290 @@
+[
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G SW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G NW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G NE Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G N1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G N2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G S1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "G S2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M SW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M NW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M SE Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M NE Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M N1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M N2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M S1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "M S2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T SW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T NW Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T SE Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T NE Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T N1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T N2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T S1 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "T S2 Apartment"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "ApartmentMidRise All On",
+    "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "space_names": [
+      "Office"
+    ]
+  }
+]

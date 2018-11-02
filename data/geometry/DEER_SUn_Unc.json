@@ -1,0 +1,16 @@
+[
+  {
+    "name": "EL1 Sys1 (UVT) (G.S1)",
+    "type": "Unconditioned",
+    "space_names": [
+      "EL1 South Perim Spc (G.S1)"
+    ]
+  },
+  {
+    "name": "EL1 Sys1 (UVT) (G.N2)",
+    "type": "Unconditioned",
+    "space_names": [
+      "EL1 North Perim Spc (G.N2)"
+    ]
+  }
+]

@@ -3,31 +3,28 @@ jobs:
   build:
     working_directory: ~/openstudio-standards
     docker:
-      - image: nrel/openstudio:2.2.1
+      - image: nrel/openstudio
     parallelism: 7
     steps:
       - checkout
       - run:
           name: Install openstudio-standards test dependencies
           command: |
-            cd openstudio-standards
-            ~/.rbenv/shims/bundle install
+            bundle install
       - run:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            circleci tests split --split-by=timings openstudio-standards/test/circleci_tests.txt > node_tests.txt
+            circleci tests split --split-by=timings test/circleci_tests.txt > node_tests.txt
             cat node_tests.txt
       - run:
           name: Run tests
           command: |
-            cd openstudio-standards
-            ~/.rbenv/shims/bundle exec rake test:circleci
+            bundle exec rake test:circleci
       - run:
           name: Summarize test times
           command: |
-            cd openstudio-standards
-            ~/.rbenv/shims/bundle exec rake test:times
+            bundle exec rake test:times
       - store_test_results:
           path: test/reports/
       - store_artifacts:
