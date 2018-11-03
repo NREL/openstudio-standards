@@ -2353,48 +2353,85 @@ module BTAP
         #determine if what cardinal direction has the majority of external
         #surface area of the space.
         #set this to 'core' by default and change it if it is found to be a space exposed to a cardinal direction.
-          horizontal_placement = nil
-          #set up summing hashes for each direction.
-          walls_area_array = Hash.new
-          subsurface_area_array = Hash.new
-          ['north', 'east', 'south', 'west'].each do |index|
-            walls_area_array[index] = 0.0
-            subsurface_area_array[index] = 0.0
+        horizontal_placement = nil
+        #set up summing hashes for each direction.
+        json_data = Hash.new
+        walls_area_array = Hash.new
+        subsurface_area_array = Hash.new
+        boundary_conditions = {}
+        boundary_conditions[:outdoors] = ["Outdoors"]
+        boundary_conditions[:ground] = [
+            "Ground",
+            "GroundFCfactorMethod",
+            "GroundSlabPreprocessorAverage",
+            "GroundSlabPreprocessorCore",
+            "GroundSlabPreprocessorPerimeter",
+            "GroundBasementPreprocessorAverageWall",
+            "GroundBasementPreprocessorAverageFloor",
+            "GroundBasementPreprocessorUpperWall",
+            "GroundBasementPreprocessorLowerWall"]
+        #go through all directions.. need to do north twice since that goes around zero degree mark.
+        orientations = [
+            {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 315.001, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'east', :azimuth_from => 45.001, :azimuth_to => 135.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'south', :azimuth_from => 135.001, :azimuth_to => 225.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'west', :azimuth_from => 225.001, :azimuth_to => 315.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            # {:surface_type => 'RoofCeiling', :direction => 'top', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            # {:surface_type => 'Floor', :direction => 'bottom', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0}
+        ]
+        [:outdoors, :ground].each do |bc|
+          orientations.each do |orientation|
+            walls_area_array[orientation[:direction]] = 0.0
+            subsurface_area_array[orientation[:direction]] = 0.0
+            json_data[orientation[:direction]] = {} if json_data[orientation[:direction]].nil?
+            json_data[orientation[:direction]][bc] = {:surface_area => 0.0,
+                                                      :glazed_subsurface_area => 0.0,
+                                                      :opaque_subsurface_area => 0.0}
+
           end
-          #go through all directions.. need to do north twice since that goes around zero degree mark.
-          [
-              {:cardinal_direction => 'north', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
-              {:cardinal_direction => 'north', :azimuth_from => 315.001, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
-              {:cardinal_direction => 'east', :azimuth_from => 45.001, :azimuth_to => 135.0, :tilt_from => 0.0, :tilt_to => 180.0},
-              {:cardinal_direction => 'south', :azimuth_from => 135.001, :azimuth_to => 225.0, :tilt_from => 0.0, :tilt_to => 180.0},
-              {:cardinal_direction => 'west', :azimuth_from => 225.001, :azimuth_to => 315.0, :tilt_from => 0.0, :tilt_to => 180.0},
-          ].each do |orientation|
-            BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
+        end
+
+
+        [:outdoors, :ground].each do |bc|
+          orientations.each do |orientation|
+            puts "bc= #{bc}"
+            puts boundary_conditions[bc.to_sym]
+            puts boundary_conditions
+            surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
+            selected_surfaces= BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces,[orientation[:surface_type]])
+            BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
               #sum wall area and subsurface area by direction.
-              walls_area_array[orientation[:cardinal_direction]] = walls_area_array[orientation[:cardinal_direction]] + surface.grossArea
-              subsurface_area_array[orientation[:cardinal_direction]] = subsurface_area_array[orientation[:cardinal_direction]] +
-                  surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+              walls_area_array[orientation[:direction]] += surface.grossArea
+              subsurface_area_array[orientation[:direction]] += surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+              json_data[orientation[:direction]][bc][:surface_area] += surface.grossArea
+              glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow", "OperableWindow", "GlassDoor", "Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
+              doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["Door", "OverheadDoor"])
+              json_data[orientation[:direction]][bc][:glazed_subsurface_area] += glazings.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+              json_data[orientation[:direction]][bc][:opaque_subsurface_area] += doors.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
             end
           end
-
-          #find our which cardinal direction has the most exterior surface and declare it that orientation.
-          horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
-          horizontal_placement = 'core' if space.exteriorWallArea == 0.0
-          json_data = {:horizontal_placement => horizontal_placement,
-                       :vertical_placement => vertical_placement,
-                       #Exposed areas
-                       :northern_exposed_area => walls_area_array['north'],
-                       :eastern_exposed_area => walls_area_array['east'],
-                       :southern_exposed_area => walls_area_array['south'],
-                       :western_exposed_area => walls_area_array['west'],
-                       #Exposed Glazing
-                       :northern_glazed_area => subsurface_area_array['north'],
-                       :eastern_glazed_area => subsurface_area_array['east'],
-                       :southern_glazed_area => subsurface_area_array['south'],
-                       :western_glazed_area => subsurface_area_array['west'],
-                       #Floor Area
-                       :floor_area => space.floorArea
-          }
+        end
+        puts JSON.pretty_generate(json_data)
+        #find our which cardinal direction has the most exterior surface and declare it that orientation.
+        horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
+        horizontal_placement = 'core' if space.exteriorWallArea == 0.0
+        json_data = ( {:horizontal_placement => horizontal_placement,
+                     :vertical_placement => vertical_placement,
+                     #Exposed areas
+                     :northern_exposed_area => walls_area_array['north'],
+                     :eastern_exposed_area => walls_area_array['east'],
+                     :southern_exposed_area => walls_area_array['south'],
+                     :western_exposed_area => walls_area_array['west'],
+                     #Exposed Glazing
+                     :northern_glazed_area => subsurface_area_array['north'],
+                     :eastern_glazed_area => subsurface_area_array['east'],
+                     :southern_glazed_area => subsurface_area_array['south'],
+                     :western_glazed_area => subsurface_area_array['west'],
+                     #Floor Area
+                     :floor_area => space.floorArea
+        })
+        puts JSON.pretty_generate(json_data)
 
         return json_data
       end

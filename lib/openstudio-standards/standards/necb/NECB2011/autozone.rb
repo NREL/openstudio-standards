@@ -99,15 +99,10 @@ class NECB2011
       # Make sure we don't have sideeffects by changing the argument variables.
       # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
       # Make sure we don't have sideeffects by changing the argument variables.
-      cooling_load = nil
-      heating_load = nil
-      if space.spaceType.get.standardsSpaceType.get == '- undefined -'
-        cooling_load = 0.0
-        heating_load = 0.0
-      else
-        cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil?
-        heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
-      end
+
+      cooling_design_load =  space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
+      heating_design_load =  space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
+
 
       # identify space-system_index and assign the right NECB system type 1-7.
       necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
@@ -115,21 +110,14 @@ class NECB2011
         necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
             necb_hvac_system_select['min_stories'] <= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['max_stories'] >= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
-            necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_load &&
-            necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_load
+            necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_design_load &&
+            necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_design_load
       end.first
-
-
-
-
-
+      
       # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
       horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
       # dump all info into an array for debugging and iteration.
       unless space.spaceType.empty?
-        space_type_name = space.spaceType.get.standardsSpaceType.get
-        building_type_name = space.spaceType.get.standardsBuildingType.get
-
         space_zoning_data_array_json << {
             space: space,
             space_name: space.name,
@@ -138,8 +126,8 @@ class NECB2011
             necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
             system_number: necb_hvac_system_select['system_type'].nil? ? nil : necb_hvac_system_select['system_type'], # the necb system type
             number_of_stories: model.getBuilding.standardsNumberOfAboveGroundStories.get, # number of stories
-            heating_capacity: heating_load,
-            cooling_capacity: cooling_load,
+            heating_design_load: heating_design_load,
+            cooling_design_load: cooling_design_load,
             is_dwelling_unit: necb_hvac_system_select['dwelling'], # Checks if it is a dwelling unit.
             is_wildcard: necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard' ? true : nil ,
             schedule_type: determine_necb_schedule_type(space).to_s,
