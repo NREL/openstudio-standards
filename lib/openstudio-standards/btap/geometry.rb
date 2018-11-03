@@ -2310,6 +2310,7 @@ module BTAP
       def self.get_space_placement(space)
         horizontal_placement = nil
         vertical_placement = nil
+        json_data = nil
 
         #get all exterior surfaces. 
         surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces,
@@ -2352,8 +2353,7 @@ module BTAP
         #determine if what cardinal direction has the majority of external
         #surface area of the space.
         #set this to 'core' by default and change it if it is found to be a space exposed to a cardinal direction.
-        horizontal_placement = 'core'
-        unless space.exteriorWallArea == 0.0
+          horizontal_placement = nil
           #set up summing hashes for each direction.
           walls_area_array = Hash.new
           subsurface_area_array = Hash.new
@@ -2376,6 +2376,10 @@ module BTAP
                   surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
             end
           end
+
+          #find our which cardinal direction has the most exterior surface and declare it that orientation.
+          horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
+          horizontal_placement = 'core' if space.exteriorWallArea == 0.0
           json_data = {:horizontal_placement => horizontal_placement,
                        :vertical_placement => vertical_placement,
                        #Exposed areas
@@ -2391,10 +2395,8 @@ module BTAP
                        #Floor Area
                        :floor_area => space.floorArea
           }
-          #find our which cardinal direction has the most exterior surface and declare it that orientation.
-          horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
-        end
-        return horizontal_placement, vertical_placement
+
+        return json_data
       end
 
 

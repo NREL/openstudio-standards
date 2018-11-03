@@ -138,14 +138,13 @@ class NECB2011
             necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
             system_number: necb_hvac_system_select['system_type'].nil? ? nil : necb_hvac_system_select['system_type'], # the necb system type
             number_of_stories: model.getBuilding.standardsNumberOfAboveGroundStories.get, # number of stories
-            horizontal_placement: horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-            vertical_placment: vertical_placement, # the vertical placement ( ground, top, both, middle )
             heating_capacity: heating_load,
             cooling_capacity: cooling_load,
             is_dwelling_unit: necb_hvac_system_select['dwelling'], # Checks if it is a dwelling unit.
             is_wildcard: necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard' ? true : nil ,
-            schedule_type: determine_necb_schedule_type(space).to_s
-        }
+            schedule_type: determine_necb_schedule_type(space).to_s,
+            multiplier: (@space_multiplier_map[space.name.to_s].nil? ? 1 : @space_multiplier_map[space.name.to_s]),
+        }.merge(BTAP::Geometry::Spaces.get_space_placement(space))
 
       end
     end
@@ -229,7 +228,7 @@ class NECB2011
                   # Create a more informative space name.
                   thermal_zone.setName("Sp-#{space_info[:space].name} Sys-#{system_number} Flr-#{building_index + 1} Sch-#{schedule_type} HPlcmt-#{horizontal_placement} ZN")
                   # Add zone mulitplier if required.
-                  thermal_zone.setMultiplier(space_multiplier_map[space_info[:space].name.to_s]) unless space_multiplier_map[space_info[:space].name.to_s].nil?
+                  thermal_zone.setMultiplier(space_info[:multiplier]) unless space_info[:multiplier] == 1
                   # Space to thermal zone. (for archetype work it is one to one)
                   space_info[:space].setThermalZone(thermal_zone)
                   # Get thermostat for space type if it already exists.
