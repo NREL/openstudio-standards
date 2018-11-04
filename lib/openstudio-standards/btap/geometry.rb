@@ -2415,7 +2415,9 @@ module BTAP
         puts JSON.pretty_generate(json_data)
         #find our which cardinal direction has the most exterior surface and declare it that orientation.
         horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
-        horizontal_placement = 'core' if space.exteriorWallArea == 0.0
+        if walls_area_array.inject {|sum, x| sum + x} == 0.0
+          horizontal_placement = "core"
+        end
         json_data = ( {:horizontal_placement => horizontal_placement,
                      :vertical_placement => vertical_placement,
                      #Exposed areas
