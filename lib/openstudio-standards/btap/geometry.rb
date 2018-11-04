@@ -2399,10 +2399,10 @@ module BTAP
             puts boundary_conditions[bc.to_sym]
             puts boundary_conditions
             surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
-            selected_surfaces= BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces,[orientation[:surface_type]])
+            selected_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, [orientation[:surface_type]])
             BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
               #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
-              walls_area_array[orientation[:direction]] += surface.grossArea unless ['RoofCeiling','Floor'].include?(orientation[:surface_type])
+              walls_area_array[orientation[:direction]] += surface.grossArea unless ['RoofCeiling', 'Floor'].include?(orientation[:surface_type])
               subsurface_area_array[orientation[:direction]] += surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
               json_data[orientation[:direction]][bc][:surface_area] += surface.grossArea
               glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow", "OperableWindow", "GlassDoor", "Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
@@ -2416,24 +2416,12 @@ module BTAP
         #find our which cardinal direction has the most exterior surface and declare it that orientation.
         horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
         puts walls_area_array
-        if walls_area_array['north'] + walls_area_array['east'] + walls_area_array['south'] + walls_area_array['west']  == 0.0
+        if json_data['north'][:outdoors][:surface_area] + json_data['east'][:outdoors][:surface_area] + json_data['south'][:outdoors][:surface_area] + json_data['west'][:outdoors][:surface_area] == 0.0
           horizontal_placement = "core"
         end
-        json_data = ( {:horizontal_placement => horizontal_placement,
-                     :vertical_placement => vertical_placement,
-                     #Exposed areas
-                     :northern_exposed_area => walls_area_array['north'],
-                     :eastern_exposed_area => walls_area_array['east'],
-                     :southern_exposed_area => walls_area_array['south'],
-                     :western_exposed_area => walls_area_array['west'],
-                     #Exposed Glazing
-                     :northern_glazed_area => subsurface_area_array['north'],
-                     :eastern_glazed_area => subsurface_area_array['east'],
-                     :southern_glazed_area => subsurface_area_array['south'],
-                     :western_glazed_area => subsurface_area_array['west'],
-                     #Floor Area
-                     :floor_area => space.floorArea
-        })
+        json_data = ({:horizontal_placement => horizontal_placement,
+                      :vertical_placement => vertical_placement,
+        }).merge(json_data)
         puts JSON.pretty_generate(json_data)
 
         return json_data

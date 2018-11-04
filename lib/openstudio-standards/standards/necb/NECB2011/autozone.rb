@@ -121,6 +121,7 @@ class NECB2011
         space_zoning_data_array_json << {
             space: space,
             space_name: space.name,
+            floor_area: space.floorArea,
             building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
             space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
             necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
