@@ -2416,7 +2416,14 @@ module BTAP
         #find our which cardinal direction has the most exterior surface and declare it that orientation.
         horizontal_placement = walls_area_array.max_by {|k, v| v}[0]
         puts walls_area_array
-        if json_data['north'][:outdoors][:surface_area] + json_data['east'][:outdoors][:surface_area] + json_data['south'][:outdoors][:surface_area] + json_data['west'][:outdoors][:surface_area] == 0.0
+        if json_data['north'][:outdoors][:surface_area]
+          + json_data['east'][:outdoors][:surface_area]
+          + json_data['south'][:outdoors][:surface_area]
+          + json_data['west'][:outdoors][:surface_area]
+          + json_data['north'][:ground][:surface_area]
+          + json_data['east'][:ground][:surface_area]
+          + json_data['south'][:ground][:surface_area]
+          + json_data['west'][:ground][:surface_area]== 0.0
           horizontal_placement = "core"
         end
         json_data = ({:horizontal_placement => horizontal_placement,
