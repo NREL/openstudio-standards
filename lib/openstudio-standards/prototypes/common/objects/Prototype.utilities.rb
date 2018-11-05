@@ -937,7 +937,7 @@ class Standard
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def get_zones_occupancy_schedule(model, zones, occupied_percentage_threshold = 0.05)
+  def get_zones_occupancy_schedule(model, zones, occupied_percentage_threshold: 0.05)
     # Get all the occupancy schedules in every space in every zone in zones.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}

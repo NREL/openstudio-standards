@@ -43,9 +43,10 @@ Standard.class_eval do
   # Gets the annual occupied unmet heating hours from zone temperature time series in the sql file
   #
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [Hash] Hash with 'sum' of heating unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
-  def model_annual_occupied_unmet_heating_hours_detailed(model, tolerance: 1.0)
+  def model_annual_occupied_unmet_heating_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone heating occupied unmet hours with #{tolerance} R tolerance")
     sql = model_sql_file(model)
 
@@ -60,7 +61,8 @@ Standard.class_eval do
 
     # for each zone calculate unmet hours and store in array
     bldg_unmet_hours = []
-    zone_temperature_differences = []
+    bldg_occ_unmet_hours = []
+    zone_data = []
     model.getThermalZones do |zone|
       # skip zones that aren't heated
       next unless thermal_zone_heated?(zone)
@@ -99,34 +101,47 @@ Standard.class_eval do
         zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
       end
 
-      # calculate zone occupancy
-      # use method similar to Standards.AirLoopHVAC air_loop_hvac_get_occupancy_schedule
-      # make method to generate annual hourly values for a schedule ruleset, including leap years
+      # calculate zone occupancy by making a new ruleset schedule
+      occ_schedule_ruleset = get_zones_occupancy_schedule(model, [zone], occupied_percentage_threshold)
+      occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| x - zone_temperatures[i] }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
+      zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] += zone_unmet_hours[i]
+        if occupied_bool_values[i]
+          zone_occ_unmet_hours[i] = zone_unmet_hours[i]
+          bldg_occ_unmet_hours[i] += zone_unmet_hours[i]
+        else
+          zone_occ_unmet_hours[i] = 0
+          bldg_occ_unmet_hours[i] += 0
+        end
       end
-      zone_temperature_differences << { 'zone' => zone,
-                                        'air_temp' => zone_temperatures,
-                                        'setpoint_temp' => zone_setpoint_temperatures,
-                                        'temp_diff' => zone_temperature_diff,
-                                        'unmet_hour' => zone_unmet_hours }
+
+      # log information for zone
+      zone_data << { 'zone_name' => zone.name,
+                     'temp_diff' => zone_temperature_diff,
+                     'unmet_hours' => zone_unmet_hours,
+                     'occ_unmet_hrs' => zone_occ_unmet_hours }
     end
 
-    occupied_unmet_heating_hours_detailed = { 'sum' => bldg_unmet_hours.inject(0){ |sum,x| sum + x },
-                                              'zone_temperature_differences' => zone_temperature_differences }
+    occupied_unmet_heating_hours_detailed = { 'sum_bldg_unmet_hours' => bldg_unmet_hours.count { |x| x > 0 },
+                                              'sum_bldg_occ_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
+                                              'bldg_unmet_hours' => bldg_unmet_hours,
+                                              'bldg_occ_unmet_hours' => bldg_occ_unmet_hours,
+                                              'zone_data' => zone_data }
     return occupied_unmet_heating_hours_detailed
   end
 
   # Gets the annual occupied unmet cooling hours from zone temperature time series in the sql file
   #
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @param tolerance [Double] tolerance in degrees Rankine to log an unmet hour
   # @return [Hash] Hash with 'sum' of cooling unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
-  def model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance: 1.0)
+  def model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone cooling occupied unmet hours with #{tolerance} R tolerance")
     sql = model_sql_file(model)
 
@@ -141,7 +156,8 @@ Standard.class_eval do
 
     # for each zone calculate unmet hours and store in array
     bldg_unmet_hours = []
-    zone_temperature_differences = []
+    bldg_occ_unmet_hours = []
+    zone_data = []
     model.getThermalZones do |zone|
       # skip zones that aren't heated
       next unless thermal_zone_heated?(zone)
@@ -180,25 +196,37 @@ Standard.class_eval do
         zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
       end
 
-      # calculate zone occupancy
-      # use method similar to Standards.AirLoopHVAC air_loop_hvac_get_occupancy_schedule
-      # make method to generate annual hourly values for a schedule ruleset, including leap years
+      # calculate zone occupancy by making a new ruleset schedule
+      occ_schedule_ruleset = get_zones_occupancy_schedule(model, [zone], occupied_percentage_threshold)
+      occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| x - zone_temperatures[i] }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
+      zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] += zone_unmet_hours[i]
+        if occupied_bool_values[i]
+          zone_occ_unmet_hours[i] = zone_unmet_hours[i]
+          bldg_occ_unmet_hours[i] += zone_unmet_hours[i]
+        else
+          zone_occ_unmet_hours[i] = 0
+          bldg_occ_unmet_hours[i] += 0
+        end
       end
-      zone_temperature_differences << { 'zone' => zone,
-                                        'air_temp' => zone_temperatures,
-                                        'setpoint_temp' => zone_setpoint_temperatures,
-                                        'temp_diff' => zone_temperature_diff,
-                                        'unmet_hour' => zone_unmet_hours }
+
+      # log information for zone
+      zone_data << { 'zone_name' => zone.name,
+                     'temp_diff' => zone_temperature_diff,
+                     'unmet_hours' => zone_unmet_hours,
+                     'occ_unmet_hrs' => zone_occ_unmet_hours }
     end
 
-    occupied_unmet_cooling_hours_detailed = { 'sum' => bldg_unmet_hours.inject(0){ |sum,x| sum + x },
-                                              'zone_temperature_differences' => zone_temperature_differences }
+    occupied_unmet_cooling_hours_detailed = { 'sum_bldg_unmet_hours' => bldg_unmet_hours.count { |x| x > 0 },
+                                              'sum_bldg_occ_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
+                                              'bldg_unmet_hours' => bldg_unmet_hours,
+                                              'bldg_occ_unmet_hours' => bldg_occ_unmet_hours,
+                                              'zone_data' => zone_data }
     return occupied_unmet_cooling_hours_detailed
   end
 
@@ -232,7 +260,7 @@ Standard.class_eval do
     if use_detailed
       # calculate unmet hours for each zone using zone time series
       zones_unmet_hours = model_annual_occupied_unmet_heating_hours_detailed(model, tolerance)
-      heating_unmet_hours = zones_unmet_hours['sum']
+      heating_unmet_hours = zones_unmet_hours['sum_bldg_occ_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_R} R tolerance")
@@ -290,7 +318,7 @@ Standard.class_eval do
     if use_detailed
       # calculate unmet hours for each zone using zone time series
       zones_unmet_hours = model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance)
-      cooling_unmet_hours = zones_unmet_hours['sum']
+      cooling_unmet_hours = zones_unmet_hours['sum_bldg_occ_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_R} R tolerance")
