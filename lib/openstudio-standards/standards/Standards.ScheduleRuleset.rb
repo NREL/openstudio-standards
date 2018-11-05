@@ -237,4 +237,25 @@ class Standard
 
     return annual_hrs
   end
+
+  # Returns the averaged hourly values of the ruleset schedule for all hours of the year
+  #
+  # @param schedule_ruleset [<OpenStudio::Model::ScheduleRuleset>] A ScheduleRuleset object
+  # @return [Array<Double>] An array of hourly values over the whole year
+  def schedule_ruleset_annual_hourly_values(schedule_ruleset)
+    schedule_values = []
+    year_description = schedule_ruleset.model.getYearDescription
+    (1..365).each do |i|
+      date = year_description.makeDate(i)
+      day_sch = schedule_ruleset.getDaySchedules(date, date)[0]
+      (0..23).each do |i|
+        # take average value over the hour
+        value_15 = day_sch.getValue(OpenStudio::Time.new(0, i, 15, 0))
+        value_30 = day_sch.getValue(OpenStudio::Time.new(0, i, 30, 0))
+        value_45 = day_sch.getValue(OpenStudio::Time.new(0, i, 45, 0))
+        avg = (value_15 + value_30 + value_45).to_f / 3.0
+        schedule_values << avg.round(5)
+      end
+    end
+  end
 end
