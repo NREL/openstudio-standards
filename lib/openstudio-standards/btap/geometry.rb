@@ -2388,6 +2388,10 @@ module BTAP
             json_data[orientation[:direction]][bc] = {:surface_area => 0.0,
                                                       :glazed_subsurface_area => 0.0,
                                                       :opaque_subsurface_area => 0.0}
+            json_data[bc] = {}
+            json_data[bc][:surface_area] = {}
+            json_data[bc][:glazed_subsurface_area] = {}
+            json_data[bc][:opaque_subsurface_area] = {}
 
           end
         end
@@ -2409,6 +2413,19 @@ module BTAP
               doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["Door", "OverheadDoor"])
               json_data[orientation[:direction]][bc][:glazed_subsurface_area] += glazings.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
               json_data[orientation[:direction]][bc][:opaque_subsurface_area] += doors.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+
+              json_data[bc][:surface_area][surface.azimuth().to_i] = {}  if json_data[bc][:surface_area][surface.azimuth().to_i].nil?
+              json_data[bc][:surface_area][surface.azimuth().to_i][surface.tilt().to_i] = 0.0 if json_data[bc][:surface_area][surface.azimuth().to_i][surface.tilt().to_i].nil?
+              json_data[bc][:surface_area][surface.azimuth().to_i][surface.tilt().to_i] = surface.grossArea
+
+              json_data[bc][:glazed_subsurface_area][surface.azimuth().to_i] = {}  if json_data[bc][:glazed_subsurface_area][surface.azimuth().to_i].nil?
+              json_data[bc][:glazed_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i] = 0.0 if json_data[bc][:glazed_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i].nil?
+              json_data[bc][:glazed_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i] += glazings.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+
+
+              json_data[bc][:opaque_subsurface_area][surface.azimuth().to_i] = {}  if json_data[bc][:opaque_subsurface_area][surface.azimuth().to_i].nil?
+              json_data[bc][:opaque_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i] = 0.0 if json_data[bc][:opaque_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i].nil?
+              json_data[bc][:opaque_subsurface_area][surface.azimuth().to_i][surface.tilt().to_i] += doors.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
             end
           end
         end
