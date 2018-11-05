@@ -272,7 +272,7 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
+    model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
     model_add_swh(model)
     model_apply_sizing_parameters(model)
 
@@ -482,7 +482,7 @@ class NECB2011 < Standard
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
     spacetype_data = standards_lookup_table_many(table_name: 'space_types')
-    raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
+    raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
