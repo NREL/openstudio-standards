@@ -1,8 +1,9 @@
+require_relative("autozone.rb")
 class NECB2011
-  def model_add_hvac(model, epw_file)
+  def model_add_hvac(model:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
     system_fuel_defaults = self.get_canadian_system_defaults_by_weatherfile_name(model)
-    necb_autozone_and_autosystem(model, nil, false, system_fuel_defaults)
+    necb_autozone_and_autosystem(model: model, runner: nil, use_ideal_air_loads: false, system_fuel_defaults: system_fuel_defaults)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
     return true
   end
@@ -44,7 +45,7 @@ class NECB2011
     dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
     min_dsafr_l_per_s = 1500
     unless dsafr_m3_per_s.empty?
-      dsafr_l_per_s = dsafr_m3_per_s.get()*1000
+      dsafr_l_per_s = dsafr_m3_per_s.get() * 1000
       if dsafr_l_per_s > min_dsafr_l_per_s
         economizer_required = true
         puts "economizer_required = true for #{air_loop_hvac.name} because dsafr_l_per_s(#{dsafr_l_per_s}) > 1500"
@@ -763,7 +764,7 @@ class NECB2011
 
     # lookup properties
     coil_props = standards_lookup_table_first(table_name: 'furnaces',
-                                              search_criteria:  search_criteria,
+                                              search_criteria: search_criteria,
                                               capacity: [capacity_btu_per_hr, 0.001].max,
                                               date: Date.today)
 
@@ -1150,12 +1151,12 @@ class NECB2011
       # 0.7457 is to convert from bhp to kW
       fan_power_kw = 0.909 * 0.7457 * motor_bhp
       power_vs_flow_curve_name = if fan_power_kw >= 25.0
-                                 'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                               elsif fan_power_kw >= 7.5 && fan_power_kw < 25
-                                 'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
-                               else
-                                 'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
-                               end
+                                   'VarVolFan-FCInletVanes-NECB2011-FPLR'
+                                 elsif fan_power_kw >= 7.5 && fan_power_kw < 25
+                                   'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
+                                 else
+                                   'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
+                                 end
       power_vs_flow_curve = model_add_curve(fan.model, power_vs_flow_curve_name)
       fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
       fan.setFanPowerCoefficient5(0.0)
@@ -1240,7 +1241,7 @@ class NECB2011
   end
 
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    fan_constant_volume.setPressureRise( self.get_standards_constant('fan_constant_volume_pressure_rise_value'))
+    fan_constant_volume.setPressureRise(self.get_standards_constant('fan_constant_volume_pressure_rise_value'))
     return true
   end
 
@@ -1249,10 +1250,10 @@ class NECB2011
   # and whether the fan lives inside a unit heater, PTAC, etc.
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # 1000 Pa for supply fan and 458.33 Pa for return fan (accounts for efficiency differences between two fans)
-    if(fan_variable_volume.name.to_s.include?('Supply'))
+    if (fan_variable_volume.name.to_s.include?('Supply'))
       sfan_deltaP = self.get_standards_constant('supply_fan_variable_volume_pressure_rise_value')
       fan_variable_volume.setPressureRise(sfan_deltaP)
-    elsif(fan_variable_volume.name.to_s.include?('Return'))
+    elsif (fan_variable_volume.name.to_s.include?('Return'))
       rfan_deltaP = self.get_standards_constant('return_fan_variable_volume_pressure_rise_value')
       fan_variable_volume.setPressureRise(rfan_deltaP)
     end
@@ -2006,20 +2007,20 @@ class NECB2011
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
 
       case heating_coil_type
-        when 'Electric' # electric coil
-          htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+      when 'Electric' # electric coil
+        htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
 
-        when 'Gas'
-          htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+      when 'Gas'
+        htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
 
-        when 'DX'
-          htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
-          supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-          htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
-          sizing_zone.setZoneHeatingSizingFactor(1.3)
-          sizing_zone.setZoneCoolingSizingFactor(1.0)
-        else
-          raise("#{heating_coil_type} is not a valid heating coil type.)")
+      when 'DX'
+        htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10.0)
+        sizing_zone.setZoneHeatingSizingFactor(1.3)
+        sizing_zone.setZoneCoolingSizingFactor(1.0)
+      else
+        raise("#{heating_coil_type} is not a valid heating coil type.)")
       end
 
       # TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
@@ -2698,148 +2699,7 @@ class NECB2011
     return clg_tower
   end
 
-  def necb_spacetype_system_selection(model, heating_design_load = nil, cooling_design_load = nil)
-    spacezoning_data = Struct.new(
-        :space, # the space object
-        :space_name, # the space name
-        :building_type_name, # space type name
-        :space_type_name, # space type name
-        :necb_hvac_system_selection_type, #
-        :system_number, # the necb system type
-        :number_of_stories, # number of stories
-        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-        :vertical_placment, # the vertical placement ( ground, top, both, middle )
-        :people_obj, # Spacetype people object
-        :heating_capacity,
-        :cooling_capacity,
-        :is_dwelling_unit, # Checks if it is a dwelling unit.
-        :is_wildcard
-    )
 
-    # Array to store schedule objects
-    schedule_type_array = []
-
-
-    # find the number of stories in the model this include multipliers.
-    number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
-    if number_of_stories.empty?
-      raise 'Number of above ground stories not present in geometry model. Please ensure this is defined in your Building Object'
-    else
-      number_of_stories = number_of_stories.get
-    end
-
-    # set up system array containers. These will contain the spaces associated with the system types.
-    space_zoning_data_array = []
-
-    # First pass of spaces to collect information into the space_zoning_data_array .
-    model.getSpaces.sort.each do |space|
-      # this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
-      space_system_index = nil
-      if space.spaceType.empty?
-        space_system_index = nil
-      else
-        # gets row information from standards spreadsheet.
-        space_type_property = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => @template,
-                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
-        raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
-        # stores the Building or SpaceType System type name.
-        necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
-        # Check if the NECB HVAC system selection type name was found in the standards data
-        if necb_hvac_system_selection_type.nil?
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        end
-      end
-
-      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
-      # Make sure we don't have sideeffects by changing the argument variables.
-      cooling_load = cooling_design_load
-      heating_load = heating_design_load
-      if space.spaceType.get.standardsSpaceType.get == '- undefined -'
-        cooling_load = 0.0
-        heating_load = 0.0
-      else
-        cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil?
-        heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
-      end
-
-      # identify space-system_index and assign the right NECB system type 1-7.
-
-      # Check if there is an hvac system selection category associated with the space.
-      if necb_hvac_system_selection_type.nil?
-        raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-      end
-
-      system = nil
-      is_dwelling_unit = false
-      is_wildcard = nil
-
-      # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
-      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
-
-      # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
-      # main selection loop
-      necb_hvac_system_selection_cooling_desg_load = 0
-      unless cooling_design_load.nil?
-        necb_hvac_system_selection_cooling_desg_load = cooling_design_load
-      end
-
-      # Make sure that we loaded the necb_hvac_system_selection_type.json file properly and that the information is stored in standards_data
-      if necb_hvac_system_selection_table.empty?
-        raise("Could not find necb system selection type table. Please make sure that the necb_havc_system_selection_type.json file is present")
-      else
-        # Loop through the NECB HVAC system selection table entries read from necb_hvac_system_selection_type table.JSON
-        # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
-        # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
-        necb_hvac_system_selection_table.each do |necb_hvac_system_select|
-          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
-            system = necb_hvac_system_select['system_type']
-            is_dwelling_unit = necb_hvac_system_select['dwelling']
-            if necb_hvac_system_select['necb_hvac_system_selection_type']=='Wildcard'
-              is_wildcard = true
-            end
-            break
-          end
-        end
-      end
-
-      # If the previous loop could not find an appropriate NECB HVAC system selection type then "system" will be defined by either nil, 0, or 'Wildcard'.
-      # If 'Wildcard' then the system remains at nil but is_wildard is true and the HVAC is dealt with elsewhere
-      # If 0, then the system will be treated as - undefined -.  Otherwise no system has been chosen so an error will be returned.
-      if system.nil? and is_wildcard.nil?
-        if necb_hvac_system_selection_type == 0
-          system = 0
-        else
-          raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
-        end
-      end
-
-      # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
-      horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
-      # dump all info into an array for debugging and iteration.
-      unless space.spaceType.empty?
-        space_type_name = space.spaceType.get.standardsSpaceType.get
-        building_type_name = space.spaceType.get.standardsBuildingType.get
-        space_zoning_data_array << spacezoning_data.new(space,
-                                                        space.name.get,
-                                                        building_type_name,
-                                                        space_type_name,
-                                                        necb_hvac_system_selection_type,
-                                                        system,
-                                                        number_of_stories,
-                                                        horizontal_placement,
-                                                        vertical_placement,
-                                                        space.spaceType.get.people,
-                                                        heating_load,
-                                                        cooling_load,
-                                                        is_dwelling_unit,
-                                                        is_wildcard)
-        schedule_type_array << determine_necb_schedule_type(space).to_s
-      end
-    end
-
-    return schedule_type_array.uniq!, space_zoning_data_array
-  end
 
   # This method will take a model that uses NECB2011 spacetypes , and..
   # 1. Create a building story schema.
@@ -2854,12 +2714,7 @@ class NECB2011
   # @author phylroy.lopez@nrcan.gc.ca
   # @param model [OpenStudio::model::Model] A model object
   # @return [String] system_zone_array
-  def necb_autozone_and_autosystem(
-      model = nil,
-      runner = nil,
-      use_ideal_air_loads = false,
-      system_fuel_defaults
-  )
+  def necb_autozone_and_autosystem_old( model:  nil, runner: nil, use_ideal_air_loads: false, system_fuel_defaults:)
 
     # Create a data struct for the space to system to placement information.
 
@@ -2928,7 +2783,166 @@ class NECB2011
     # BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
 
     # this method will determine the spaces that should be set to each system
-    schedule_type_array, space_zoning_data_array = necb_spacetype_system_selection(model, nil, nil)
+    #
+    #
+    #
+    #
+    #
+    spacezoning_data = Struct.new(
+        :space, # the space object
+        :space_name, # the space name
+        :building_type_name, # space type name
+        :space_type_name, # space type name
+        :necb_hvac_system_selection_type, #
+        :system_number, # the necb system type
+        :number_of_stories, # number of stories
+        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
+        :vertical_placment, # the vertical placement ( ground, top, both, middle )
+        :people_obj, # Spacetype people object
+        :heating_capacity,
+        :cooling_capacity,
+        :is_dwelling_unit, # Checks if it is a dwelling unit.
+        :is_wildcard
+    )
+
+    # Array to store schedule objects
+    schedule_type_array = []
+    space_zoning_data_array_json = []
+
+    # find the number of stories in the model this include multipliers.
+    number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
+    if number_of_stories.empty?
+      raise 'Number of above ground stories not present in geometry model. Please ensure this is defined in your Building Object'
+    else
+      number_of_stories = number_of_stories.get
+    end
+
+    # set up system array containers. These will contain the spaces associated with the system types.
+    space_zoning_data_array = []
+
+    # First pass of spaces to collect information into the space_zoning_data_array .
+    model.getSpaces.sort.each do |space|
+      # this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
+      space_system_index = nil
+      if space.spaceType.empty?
+        space_system_index = nil
+      else
+        # gets row information from standards spreadsheet.
+        space_type_property = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => @template,
+                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
+        raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
+        # stores the Building or SpaceType System type name.
+        necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
+        # Check if the NECB HVAC system selection type name was found in the standards data
+        if necb_hvac_system_selection_type.nil?
+          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+        end
+      end
+
+      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
+      # Make sure we don't have sideeffects by changing the argument variables.
+      cooling_load = nil
+      heating_load = nil
+      if space.spaceType.get.standardsSpaceType.get == '- undefined -'
+        cooling_load = 0.0
+        heating_load = 0.0
+      else
+        cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil?
+        heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
+      end
+
+      # identify space-system_index and assign the right NECB system type 1-7.
+
+      # Check if there is an hvac system selection category associated with the space.
+      if necb_hvac_system_selection_type.nil?
+        raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
+      end
+
+      system = nil
+      is_dwelling_unit = false
+      is_wildcard = nil
+
+      # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
+      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+
+      # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
+      # main selection loop
+      necb_hvac_system_selection_cooling_desg_load = 0
+
+
+      # Make sure that we loaded the necb_hvac_system_selection_type.json file properly and that the information is stored in standards_data
+      if necb_hvac_system_selection_table.empty?
+        raise("Could not find necb system selection type table. Please make sure that the necb_havc_system_selection_type.json file is present")
+      else
+        # Loop through the NECB HVAC system selection table entries read from necb_hvac_system_selection_type table.JSON
+        # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
+        # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
+        necb_hvac_system_selection_table.each do |necb_hvac_system_select|
+          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
+            system = necb_hvac_system_select['system_type']
+            is_dwelling_unit = necb_hvac_system_select['dwelling']
+            if necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard'
+              is_wildcard = true
+            end
+            break
+          end
+        end
+      end
+
+      # If the previous loop could not find an appropriate NECB HVAC system selection type then "system" will be defined by either nil, 0, or 'Wildcard'.
+      # If 'Wildcard' then the system remains at nil but is_wildard is true and the HVAC is dealt with elsewhere
+      # If 0, then the system will be treated as - undefined -.  Otherwise no system has been chosen so an error will be returned.
+      if system.nil? and is_wildcard.nil?
+        if necb_hvac_system_selection_type == 0
+          system = 0
+        else
+          raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
+        end
+      end
+
+      # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
+      horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
+      # dump all info into an array for debugging and iteration.
+      unless space.spaceType.empty?
+        space_type_name = space.spaceType.get.standardsSpaceType.get
+        building_type_name = space.spaceType.get.standardsBuildingType.get
+        space_zoning_data_array << spacezoning_data.new(space,
+                                                        space.name.get,
+                                                        building_type_name,
+                                                        space_type_name,
+                                                        necb_hvac_system_selection_type,
+                                                        system,
+                                                        number_of_stories,
+                                                        horizontal_placement,
+                                                        vertical_placement,
+                                                        space.spaceType.get.people,
+                                                        heating_load,
+                                                        cooling_load,
+                                                        is_dwelling_unit,
+                                                        is_wildcard)
+        schedule_type_array << determine_necb_schedule_type(space).to_s
+        space_zoning_data_array_json << {
+            space: space,
+            space_name: space.name.get,
+            building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
+            space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
+            necb_hvac_system_selection_type: necb_hvac_system_selection_type, #
+            system_number: system, # the necb system type
+            number_of_stories: number_of_stories, # number of stories
+            horizontal_placement: horizontal_placement, # the horizontal placement (norht, south, east, west, core)
+            vertical_placment: vertical_placement, # the vertical placement ( ground, top, both, middle )
+            heating_capacity: heating_load,
+            cooling_capacity: cooling_load,
+            is_dwelling_unit: is_dwelling_unit, # Checks if it is a dwelling unit.
+            is_wildcard: is_wildcard,
+            schedule_type: determine_necb_schedule_type(space).to_s
+        }
+      end
+    end
+    File.write("#{File.dirname(__FILE__)}/oldway.json", JSON.pretty_generate(space_zoning_data_array_json))
+    schedule_type_array.uniq!
+
 
     # Deal with Wildcard spaces. Might wish to have logic to do coridors first.
     space_zoning_data_array.sort_by(&:space_name).each do |space_zone_data|
@@ -3060,28 +3074,28 @@ class NECB2011
       if hw_loop_needed
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        setup_hw_loop_with_components( model, hw_loop, system_fuel_defaults['boiler_fueltype'], always_on )
+        setup_hw_loop_with_components(model, hw_loop, system_fuel_defaults['boiler_fueltype'], always_on)
       end
       system_zone_array.each_with_index do |zones, system_index|
         # skip if no thermal zones for this system.
         next if zones.empty?
         case system_index
-          when 0, nil
-            # Do nothing no system assigned to zone. Used for Unconditioned spaces
-          when 1
-            add_sys1_unitary_ac_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['mau_type'], system_fuel_defaults['mau_heating_coil_type'], system_fuel_defaults['baseboard_type'], hw_loop)
-          when 2
-            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
-          when 3
-            add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys3'], system_fuel_defaults['baseboard_type'], hw_loop)
-          when 4
-            add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys4'], system_fuel_defaults['baseboard_type'], hw_loop)
-          when 5
-            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'TPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
-          when 6
-            add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys6'], system_fuel_defaults['baseboard_type'], system_fuel_defaults['chiller_type'], system_fuel_defaults['fan_type'], hw_loop)
-          when 7
-            add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+        when 0, nil
+          # Do nothing no system assigned to zone. Used for Unconditioned spaces
+        when 1
+          add_sys1_unitary_ac_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['mau_type'], system_fuel_defaults['mau_heating_coil_type'], system_fuel_defaults['baseboard_type'], hw_loop)
+        when 2
+          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+        when 3
+          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys3'], system_fuel_defaults['baseboard_type'], hw_loop)
+        when 4
+          add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys4'], system_fuel_defaults['baseboard_type'], hw_loop)
+        when 5
+          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'TPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+        when 6
+          add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys6'], system_fuel_defaults['baseboard_type'], system_fuel_defaults['chiller_type'], system_fuel_defaults['fan_type'], hw_loop)
+        when 7
+          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
         end
       end
     end
@@ -3096,6 +3110,7 @@ class NECB2011
       raise(" #{errors}")
     end
   end
+
 
   # Creates thermal zones to contain each space, as defined for each building in the
   # system_to_space_map inside the Prototype.building_name
@@ -3131,14 +3146,15 @@ class NECB2011
       else
         thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
         zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-          # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
-          ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
-          ideal_loads.addToThermalZone(zone)
+        # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+        ideal_loads.addToThermalZone(zone)
       end
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
+
 
 
 end

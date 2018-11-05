@@ -181,31 +181,31 @@ module BTAP
         end
 
         shortest_side = [length, width].min
-        if perimeter_zone_depth < 0 or 4*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/4}m.")
+        if perimeter_zone_depth < 0 or 4 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 4}m.")
           return false
         end
 
-        if courtyard_length >= (length - 4*perimeter_zone_depth - 1e-4)
-          raise("Courtyard length must be less than #{length - 4*perimeter_zone_depth}m.")
+        if courtyard_length >= (length - 4 * perimeter_zone_depth - 1e-4)
+          raise("Courtyard length must be less than #{length - 4 * perimeter_zone_depth}m.")
           return false
         end
 
-        if courtyard_width >= (width - 4*perimeter_zone_depth - 1e-4)
-          raise("Courtyard width must be less than #{width - 4*perimeter_zone_depth}m.")
+        if courtyard_width >= (width - 4 * perimeter_zone_depth - 1e-4)
+          raise("Courtyard width must be less than #{width - 4 * perimeter_zone_depth}m.")
           return false
         end
 
 
         # Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in (0..num_floors - 1)
 
           z = floor_to_floor_height * floor
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
 
 
           nw_point = OpenStudio::Point3d.new(0, width, z)
@@ -213,10 +213,10 @@ module BTAP
           se_point = OpenStudio::Point3d.new(length, 0, z)
           sw_point = OpenStudio::Point3d.new(0, 0, z)
 
-          courtyard_nw_point = OpenStudio::Point3d.new((length-courtyard_length)/2, (width-courtyard_width)/2+courtyard_width, z)
-          courtyard_ne_point = OpenStudio::Point3d.new((length-courtyard_length)/2+courtyard_length, (width-courtyard_width)/2+courtyard_width, z)
-          courtyard_se_point = OpenStudio::Point3d.new((length-courtyard_length)/2+courtyard_length, (width-courtyard_width)/2, z)
-          courtyard_sw_point = OpenStudio::Point3d.new((length-courtyard_length)/2, (width-courtyard_width)/2, z)
+          courtyard_nw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2, (width - courtyard_width) / 2 + courtyard_width, z)
+          courtyard_ne_point = OpenStudio::Point3d.new((length - courtyard_length) / 2 + courtyard_length, (width - courtyard_width) / 2 + courtyard_width, z)
+          courtyard_se_point = OpenStudio::Point3d.new((length - courtyard_length) / 2 + courtyard_length, (width - courtyard_width) / 2, z)
+          courtyard_sw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2, (width - courtyard_width) / 2, z)
 
           # Identity matrix for setting space origins
           m = OpenStudio::Matrix.new(4, 4, 0)
@@ -248,7 +248,7 @@ module BTAP
             m[2, 3] = sw_point.z
             west_outer_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_outer_perimeter_space.setBuildingStory(story)
-            west_outer_perimeter_space.setName("Story #{floor+1} West Outer Perimeter Space")
+            west_outer_perimeter_space.setName("Story #{floor + 1} West Outer Perimeter Space")
 
 
             north_outer_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -263,7 +263,7 @@ module BTAP
             m[2, 3] = outer_perimeter_nw_point.z
             north_outer_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_outer_perimeter_space.setBuildingStory(story)
-            north_outer_perimeter_space.setName("Story #{floor+1} North Outer Perimeter Space")
+            north_outer_perimeter_space.setName("Story #{floor + 1} North Outer Perimeter Space")
 
 
             east_outer_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -278,7 +278,7 @@ module BTAP
             m[2, 3] = outer_perimeter_se_point.z
             east_outer_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_outer_perimeter_space.setBuildingStory(story)
-            east_outer_perimeter_space.setName("Story #{floor+1} East Outer Perimeter Space")
+            east_outer_perimeter_space.setName("Story #{floor + 1} East Outer Perimeter Space")
 
 
             south_outer_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -293,7 +293,7 @@ module BTAP
             m[2, 3] = sw_point.z
             south_outer_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_outer_perimeter_space.setBuildingStory(story)
-            south_outer_perimeter_space.setName("Story #{floor+1} South Outer Perimeter Space")
+            south_outer_perimeter_space.setName("Story #{floor + 1} South Outer Perimeter Space")
 
 
             west_core_polygon = OpenStudio::Point3dVector.new
@@ -308,7 +308,7 @@ module BTAP
             m[2, 3] = outer_perimeter_sw_point.z
             west_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_core_space.setBuildingStory(story)
-            west_core_space.setName("Story #{floor+1} West Core Space")
+            west_core_space.setName("Story #{floor + 1} West Core Space")
 
 
             north_core_polygon = OpenStudio::Point3dVector.new
@@ -323,7 +323,7 @@ module BTAP
             m[2, 3] = inner_perimeter_nw_point.z
             north_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_core_space.setBuildingStory(story)
-            north_core_space.setName("Story #{floor+1} North Core Space")
+            north_core_space.setName("Story #{floor + 1} North Core Space")
 
 
             east_core_polygon = OpenStudio::Point3dVector.new
@@ -338,7 +338,7 @@ module BTAP
             m[2, 3] = inner_perimeter_se_point.z
             east_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_core_space.setBuildingStory(story)
-            east_core_space.setName("Story #{floor+1} East Core Space")
+            east_core_space.setName("Story #{floor + 1} East Core Space")
 
 
             south_core_polygon = OpenStudio::Point3dVector.new
@@ -353,7 +353,7 @@ module BTAP
             m[2, 3] = outer_perimeter_sw_point.z
             south_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_core_space.setBuildingStory(story)
-            south_core_space.setName("Story #{floor+1} South Core Space")
+            south_core_space.setName("Story #{floor + 1} South Core Space")
 
 
             west_inner_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -368,7 +368,7 @@ module BTAP
             m[2, 3] = inner_perimeter_sw_point.z
             west_inner_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_inner_perimeter_space.setBuildingStory(story)
-            west_inner_perimeter_space.setName("Story #{floor+1} West Inner Perimeter Space")
+            west_inner_perimeter_space.setName("Story #{floor + 1} West Inner Perimeter Space")
 
 
             north_inner_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -383,7 +383,7 @@ module BTAP
             m[2, 3] = courtyard_nw_point.z
             north_inner_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_inner_perimeter_space.setBuildingStory(story)
-            north_inner_perimeter_space.setName("Story #{floor+1} North Inner Perimeter Space")
+            north_inner_perimeter_space.setName("Story #{floor + 1} North Inner Perimeter Space")
 
 
             east_inner_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -398,7 +398,7 @@ module BTAP
             m[2, 3] = courtyard_se_point.z
             east_inner_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_inner_perimeter_space.setBuildingStory(story)
-            east_inner_perimeter_space.setName("Story #{floor+1} East Inner Perimeter Space")
+            east_inner_perimeter_space.setName("Story #{floor + 1} East Inner Perimeter Space")
 
 
             south_inner_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -413,7 +413,7 @@ module BTAP
             m[2, 3] = inner_perimeter_sw_point.z
             south_inner_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_inner_perimeter_space.setBuildingStory(story)
-            south_inner_perimeter_space.setName("Story #{floor+1} South Inner Perimeter Space")
+            south_inner_perimeter_space.setName("Story #{floor + 1} South Inner Perimeter Space")
 
 
             # Minimal zones
@@ -430,7 +430,7 @@ module BTAP
             m[2, 3] = sw_point.z
             west_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_space.setBuildingStory(story)
-            west_space.setName("Story #{floor+1} West Space")
+            west_space.setName("Story #{floor + 1} West Space")
 
 
             north_polygon = OpenStudio::Point3dVector.new
@@ -445,7 +445,7 @@ module BTAP
             m[2, 3] = courtyard_nw_point.z
             north_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_space.setBuildingStory(story)
-            north_space.setName("Story #{floor+1} North Space")
+            north_space.setName("Story #{floor + 1} North Space")
 
 
             east_polygon = OpenStudio::Point3dVector.new
@@ -460,7 +460,7 @@ module BTAP
             m[2, 3] = courtyard_se_point.z
             east_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_space.setBuildingStory(story)
-            east_space.setName("Story #{floor+1} East Space")
+            east_space.setName("Story #{floor + 1} East Space")
 
 
             south_polygon = OpenStudio::Point3dVector.new
@@ -475,7 +475,7 @@ module BTAP
             m[2, 3] = sw_point.z
             south_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_space.setBuildingStory(story)
-            south_space.setName("Story #{floor+1} South Space")
+            south_space.setName("Story #{floor + 1} South Space")
           end
           #Set vertical story position
           story.setNominalZCoordinate(z)
@@ -554,22 +554,22 @@ module BTAP
           return false
         end
 
-        shortest_side = [length/2, left_width, center_width, right_width, left_end_length, right_end_length].min
-        if perimeter_zone_depth < 0 or 2*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/2}m.")
+        shortest_side = [length / 2, left_width, center_width, right_width, left_end_length, right_end_length].min
+        if perimeter_zone_depth < 0 or 2 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 2}m.")
           return false
         end
 
 
         # Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in (0..num_floors - 1)
 
           z = floor_to_floor_height * floor
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
 
 
           left_origin = (right_width - right_upper_end_offset) > (left_width - left_upper_end_offset) ? (right_width - right_upper_end_offset) - (left_width - left_upper_end_offset) : 0
@@ -584,7 +584,7 @@ module BTAP
           center_sw_point = OpenStudio::Point3d.new(left_end_length, center_se_point.y, z)
           right_nw_point = OpenStudio::Point3d.new(length - right_end_length, center_ne_point.y + right_upper_end_offset, z)
           right_ne_point = OpenStudio::Point3d.new(length, right_nw_point.y, z)
-          right_se_point = OpenStudio::Point3d.new(length, right_ne_point.y-right_width, z)
+          right_se_point = OpenStudio::Point3d.new(length, right_ne_point.y - right_width, z)
           right_sw_point = OpenStudio::Point3d.new(length - right_end_length, right_se_point.y, z)
 
           # Identity matrix for setting space origins
@@ -621,7 +621,7 @@ module BTAP
             m[2, 3] = left_sw_point.z
             west_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_left_perimeter_space.setBuildingStory(story)
-            west_left_perimeter_space.setName("Story #{floor+1} West Left Perimeter Space")
+            west_left_perimeter_space.setName("Story #{floor + 1} West Left Perimeter Space")
 
 
             north_left_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -636,7 +636,7 @@ module BTAP
             m[2, 3] = perimeter_left_nw_point.z
             north_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_left_perimeter_space.setBuildingStory(story)
-            north_left_perimeter_space.setName("Story #{floor+1} North Left Perimeter Space")
+            north_left_perimeter_space.setName("Story #{floor + 1} North Left Perimeter Space")
 
 
             east_upper_left_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -651,7 +651,7 @@ module BTAP
             m[2, 3] = perimeter_center_nw_point.z
             east_upper_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_upper_left_perimeter_space.setBuildingStory(story)
-            east_upper_left_perimeter_space.setName("Story #{floor+1} East Upper Left Perimeter Space")
+            east_upper_left_perimeter_space.setName("Story #{floor + 1} East Upper Left Perimeter Space")
 
 
             north_center_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -666,7 +666,7 @@ module BTAP
             m[2, 3] = perimeter_center_nw_point.z
             north_center_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_center_perimeter_space.setBuildingStory(story)
-            north_center_perimeter_space.setName("Story #{floor+1} North Center Perimeter Space")
+            north_center_perimeter_space.setName("Story #{floor + 1} North Center Perimeter Space")
 
 
             west_upper_right_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -681,7 +681,7 @@ module BTAP
             m[2, 3] = center_ne_point.z
             west_upper_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_upper_right_perimeter_space.setBuildingStory(story)
-            west_upper_right_perimeter_space.setName("Story #{floor+1} West Upper Right Perimeter Space")
+            west_upper_right_perimeter_space.setName("Story #{floor + 1} West Upper Right Perimeter Space")
 
 
             north_right_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -696,7 +696,7 @@ module BTAP
             m[2, 3] = perimeter_right_nw_point.z
             north_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_right_perimeter_space.setBuildingStory(story)
-            north_right_perimeter_space.setName("Story #{floor+1} North Right Perimeter Space")
+            north_right_perimeter_space.setName("Story #{floor + 1} North Right Perimeter Space")
 
 
             east_right_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -711,7 +711,7 @@ module BTAP
             m[2, 3] = perimeter_right_se_point.z
             east_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_right_perimeter_space.setBuildingStory(story)
-            east_right_perimeter_space.setName("Story #{floor+1} East Right Perimeter Space")
+            east_right_perimeter_space.setName("Story #{floor + 1} East Right Perimeter Space")
 
 
             south_right_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -726,7 +726,7 @@ module BTAP
             m[2, 3] = right_sw_point.z
             south_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_right_perimeter_space.setBuildingStory(story)
-            south_right_perimeter_space.setName("Story #{floor+1} South Right Perimeter Space")
+            south_right_perimeter_space.setName("Story #{floor + 1} South Right Perimeter Space")
 
 
             west_lower_right_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -741,7 +741,7 @@ module BTAP
             m[2, 3] = right_sw_point.z
             west_lower_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_lower_right_perimeter_space.setBuildingStory(story)
-            west_lower_right_perimeter_space.setName("Story #{floor+1} West Lower Right Perimeter Space")
+            west_lower_right_perimeter_space.setName("Story #{floor + 1} West Lower Right Perimeter Space")
 
 
             south_center_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -756,7 +756,7 @@ module BTAP
             m[2, 3] = center_sw_point.z
             south_center_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_center_perimeter_space.setBuildingStory(story)
-            south_center_perimeter_space.setName("Story #{floor+1} South Center Perimeter Space")
+            south_center_perimeter_space.setName("Story #{floor + 1} South Center Perimeter Space")
 
 
             east_lower_left_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -771,7 +771,7 @@ module BTAP
             m[2, 3] = perimeter_left_se_point.z
             east_lower_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_lower_left_perimeter_space.setBuildingStory(story)
-            east_lower_left_perimeter_space.setName("Story #{floor+1} East Lower Left Perimeter Space")
+            east_lower_left_perimeter_space.setName("Story #{floor + 1} East Lower Left Perimeter Space")
 
 
             south_left_perimeter_polygon = OpenStudio::Point3dVector.new
@@ -786,7 +786,7 @@ module BTAP
             m[2, 3] = left_sw_point.z
             south_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_left_perimeter_space.setBuildingStory(story)
-            south_left_perimeter_space.setName("Story #{floor+1} South Left Perimeter Space")
+            south_left_perimeter_space.setName("Story #{floor + 1} South Left Perimeter Space")
 
 
             west_core_polygon = OpenStudio::Point3dVector.new
@@ -803,7 +803,7 @@ module BTAP
             m[2, 3] = perimeter_left_sw_point.z
             west_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_core_space.setBuildingStory(story)
-            west_core_space.setName("Story #{floor+1} West Core Space")
+            west_core_space.setName("Story #{floor + 1} West Core Space")
 
 
             center_core_polygon = OpenStudio::Point3dVector.new
@@ -818,7 +818,7 @@ module BTAP
             m[2, 3] = perimeter_center_sw_point.z
             center_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             center_core_space.setBuildingStory(story)
-            center_core_space.setName("Story #{floor+1} Center Core Space")
+            center_core_space.setName("Story #{floor + 1} Center Core Space")
 
 
             east_core_polygon = OpenStudio::Point3dVector.new
@@ -835,7 +835,7 @@ module BTAP
             m[2, 3] = perimeter_right_sw_point.z
             east_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_core_space.setBuildingStory(story)
-            east_core_space.setName("Story #{floor+1} East Core Space")
+            east_core_space.setName("Story #{floor + 1} East Core Space")
 
 
             # Minimal zones
@@ -854,7 +854,7 @@ module BTAP
             m[2, 3] = left_sw_point.z
             west_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_space.setBuildingStory(story)
-            west_space.setName("Story #{floor+1} West Space")
+            west_space.setName("Story #{floor + 1} West Space")
 
 
             center_polygon = OpenStudio::Point3dVector.new
@@ -869,7 +869,7 @@ module BTAP
             m[2, 3] = center_sw_point.z
             center_space.changeTransformation(OpenStudio::Transformation.new(m))
             center_space.setBuildingStory(story)
-            center_space.setName("Story #{floor+1} Center Space")
+            center_space.setName("Story #{floor + 1} Center Space")
 
 
             east_polygon = OpenStudio::Point3dVector.new
@@ -886,7 +886,7 @@ module BTAP
             m[2, 3] = right_sw_point.z
             east_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_space.setBuildingStory(story)
-            east_space.setName("Story #{floor+1} East Space")
+            east_space.setName("Story #{floor + 1} East Space")
 
 
           end
@@ -947,8 +947,8 @@ module BTAP
         end
 
         shortest_side = [lower_end_width, upper_end_length].min
-        if perimeter_zone_depth < 0 or 2*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/2}m.")
+        if perimeter_zone_depth < 0 or 2 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 2}m.")
           return false
         end
 
@@ -958,14 +958,14 @@ module BTAP
         #    num_complete = 0
 
         # Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in (0..num_floors - 1)
 
           z = floor_to_floor_height * floor
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
 
 
           nw_point = OpenStudio::Point3d.new(0, width, z)
@@ -1003,7 +1003,7 @@ module BTAP
             m[2, 3] = sw_point.z
             west_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_perimeter_space.setBuildingStory(story)
-            west_perimeter_space.setName("Story #{floor+1} West Perimeter Space")
+            west_perimeter_space.setName("Story #{floor + 1} West Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1020,7 +1020,7 @@ module BTAP
             m[2, 3] = perimeter_nw_point.z
             north_upper_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_upper_perimeter_space.setBuildingStory(story)
-            north_upper_perimeter_space.setName("Story #{floor+1} North Upper Perimeter Space")
+            north_upper_perimeter_space.setName("Story #{floor + 1} North Upper Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1037,7 +1037,7 @@ module BTAP
             m[2, 3] = perimeter_upper_sw_point.z
             east_upper_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_upper_perimeter_space.setBuildingStory(story)
-            east_upper_perimeter_space.setName("Story #{floor+1} East Upper Perimeter Space")
+            east_upper_perimeter_space.setName("Story #{floor + 1} East Upper Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1054,7 +1054,7 @@ module BTAP
             m[2, 3] = perimeter_upper_sw_point.z
             north_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_lower_perimeter_space.setBuildingStory(story)
-            north_lower_perimeter_space.setName("Story #{floor+1} North Lower Perimeter Space")
+            north_lower_perimeter_space.setName("Story #{floor + 1} North Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1071,7 +1071,7 @@ module BTAP
             m[2, 3] = perimeter_se_point.z
             east_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_lower_perimeter_space.setBuildingStory(story)
-            east_lower_perimeter_space.setName("Story #{floor+1} East Lower Perimeter Space")
+            east_lower_perimeter_space.setName("Story #{floor + 1} East Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1088,7 +1088,7 @@ module BTAP
             m[2, 3] = sw_point.z
             south_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_perimeter_space.setBuildingStory(story)
-            south_perimeter_space.setName("Story #{floor+1} South Perimeter Space")
+            south_perimeter_space.setName("Story #{floor + 1} South Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1105,7 +1105,7 @@ module BTAP
             m[2, 3] = perimeter_lower_sw_point.z
             west_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_core_space.setBuildingStory(story)
-            west_core_space.setName("Story #{floor+1} West Core Space")
+            west_core_space.setName("Story #{floor + 1} West Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1122,7 +1122,7 @@ module BTAP
             m[2, 3] = perimeter_lower_sw_point.z
             east_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_core_space.setBuildingStory(story)
-            east_core_space.setName("Story #{floor+1} East Core Space")
+            east_core_space.setName("Story #{floor + 1} East Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1141,10 +1141,10 @@ module BTAP
             m[2, 3] = sw_point.z
             west_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_space.setBuildingStory(story)
-            west_space.setName("Story #{floor+1} West Space")
+            west_space.setName("Story #{floor + 1} West Space")
 
             num_complete += 1
-            runner.updateProgress(100*num_complete/num_total)
+            runner.updateProgress(100 * num_complete / num_total)
 
             east_polygon = OpenStudio::Point3dVector.new
             east_polygon << sw_point
@@ -1158,7 +1158,7 @@ module BTAP
             m[2, 3] = sw_point.z
             east_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_space.setBuildingStory(story)
-            east_space.setName("Story #{floor+1} East Space")
+            east_space.setName("Story #{floor + 1} East Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1235,21 +1235,21 @@ module BTAP
         end
 
         shortest_side = [length, width].min
-        if perimeter_zone_depth < 0 or 2*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/2}m")
+        if perimeter_zone_depth < 0 or 2 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 2}m")
           return false
         end
 
         building_stories = Array.new
         #Loop through the number of floors
-        for floor in ((under_ground_storys * -1)..above_ground_storys-1)
+        for floor in ((under_ground_storys * -1)..above_ground_storys - 1)
 
           z = floor_to_floor_height * floor + initial_height
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
           building_stories << story
 
 
@@ -1284,7 +1284,7 @@ module BTAP
             m[2, 3] = sw_point.z
             west_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_space.setBuildingStory(story)
-            west_space.setName("Story #{floor+1} West Perimeter Space")
+            west_space.setName("Story #{floor + 1} West Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1301,7 +1301,7 @@ module BTAP
             m[2, 3] = perimeter_nw_point.z
             north_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_space.setBuildingStory(story)
-            north_space.setName("Story #{floor+1} North Perimeter Space")
+            north_space.setName("Story #{floor + 1} North Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1318,7 +1318,7 @@ module BTAP
             m[2, 3] = perimeter_se_point.z
             east_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_space.setBuildingStory(story)
-            east_space.setName("Story #{floor+1} East Perimeter Space")
+            east_space.setName("Story #{floor + 1} East Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1335,7 +1335,7 @@ module BTAP
             m[2, 3] = sw_point.z
             south_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_space.setBuildingStory(story)
-            south_space.setName("Story #{floor+1} South Perimeter Space")
+            south_space.setName("Story #{floor + 1} South Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1352,7 +1352,7 @@ module BTAP
             m[2, 3] = perimeter_sw_point.z
             core_space.changeTransformation(OpenStudio::Transformation.new(m))
             core_space.setBuildingStory(story)
-            core_space.setName("Story #{floor+1} Core Space")
+            core_space.setName("Story #{floor + 1} Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1371,7 +1371,7 @@ module BTAP
             m[2, 3] = sw_point.z
             core_space.changeTransformation(OpenStudio::Transformation.new(m))
             core_space.setBuildingStory(story)
-            core_space.setName("Story #{floor+1} Core Space")
+            core_space.setName("Story #{floor + 1} Core Space")
             #
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1446,8 +1446,8 @@ module BTAP
         end
 
         shortest_side = [length, width, upper_end_width, lower_end_length].min
-        if perimeter_zone_depth < 0 or 2*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/2}m.")
+        if perimeter_zone_depth < 0 or 2 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 2}m.")
           return false
         end
 
@@ -1457,14 +1457,14 @@ module BTAP
         #    num_complete = 0
 
         # Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in (0..num_floors - 1)
 
           z = floor_to_floor_height * floor
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
 
 
           lower_ne_point = OpenStudio::Point3d.new(left_end_offset, width - upper_end_width, z)
@@ -1506,7 +1506,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             west_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_lower_perimeter_space.setBuildingStory(story)
-            west_lower_perimeter_space.setName("Story #{floor+1} West Lower Perimeter Space")
+            west_lower_perimeter_space.setName("Story #{floor + 1} West Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1523,7 +1523,7 @@ module BTAP
             m[2, 3] = upper_sw_point.z
             south_upper_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_upper_left_perimeter_space.setBuildingStory(story)
-            south_upper_left_perimeter_space.setName("Story #{floor+1} South Upper Left Perimeter Space")
+            south_upper_left_perimeter_space.setName("Story #{floor + 1} South Upper Left Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1540,7 +1540,7 @@ module BTAP
             m[2, 3] = upper_sw_point.z
             west_upper_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_upper_perimeter_space.setBuildingStory(story)
-            west_upper_perimeter_space.setName("Story #{floor+1} West Upper Perimeter Space")
+            west_upper_perimeter_space.setName("Story #{floor + 1} West Upper Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1557,7 +1557,7 @@ module BTAP
             m[2, 3] = perimeter_upper_nw_point.z
             north_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_perimeter_space.setBuildingStory(story)
-            north_perimeter_space.setName("Story #{floor+1} North Perimeter Space")
+            north_perimeter_space.setName("Story #{floor + 1} North Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1574,7 +1574,7 @@ module BTAP
             m[2, 3] = perimeter_upper_se_point.z
             east_upper_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_upper_perimeter_space.setBuildingStory(story)
-            east_upper_perimeter_space.setName("Story #{floor+1} East Upper Perimeter Space")
+            east_upper_perimeter_space.setName("Story #{floor + 1} East Upper Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1591,7 +1591,7 @@ module BTAP
             m[2, 3] = lower_nw_point.z
             south_upper_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_upper_right_perimeter_space.setBuildingStory(story)
-            south_upper_right_perimeter_space.setName("Story #{floor+1} South Upper Left Perimeter Space")
+            south_upper_right_perimeter_space.setName("Story #{floor + 1} South Upper Left Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1608,7 +1608,7 @@ module BTAP
             m[2, 3] = perimeter_lower_se_point.z
             east_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_lower_perimeter_space.setBuildingStory(story)
-            east_lower_perimeter_space.setName("Story #{floor+1} East Lower Perimeter Space")
+            east_lower_perimeter_space.setName("Story #{floor + 1} East Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1625,7 +1625,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             south_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_lower_perimeter_space.setBuildingStory(story)
-            south_lower_perimeter_space.setName("Story #{floor+1} South Lower Perimeter Space")
+            south_lower_perimeter_space.setName("Story #{floor + 1} South Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1644,7 +1644,7 @@ module BTAP
             m[2, 3] = perimeter_upper_sw_point.z
             north_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_core_space.setBuildingStory(story)
-            north_core_space.setName("Story #{floor+1} North Core Space")
+            north_core_space.setName("Story #{floor + 1} North Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1661,7 +1661,7 @@ module BTAP
             m[2, 3] = perimeter_lower_sw_point.z
             south_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_core_space.setBuildingStory(story)
-            south_core_space.setName("Story #{floor+1} South Core Space")
+            south_core_space.setName("Story #{floor + 1} South Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1682,7 +1682,7 @@ module BTAP
             m[2, 3] = upper_sw_point.z
             north_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_space.setBuildingStory(story)
-            north_space.setName("Story #{floor+1} North Space")
+            north_space.setName("Story #{floor + 1} North Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1699,7 +1699,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             south_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_space.setBuildingStory(story)
-            south_space.setName("Story #{floor+1} South Space")
+            south_space.setName("Story #{floor + 1} South Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1773,9 +1773,9 @@ module BTAP
           return false
         end
 
-        shortest_side = [length/2, left_width, right_width, left_end_length, right_end_length, left_width-left_end_offset].min
-        if perimeter_zone_depth < 0 or 2*perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side/2}m.")
+        shortest_side = [length / 2, left_width, right_width, left_end_length, right_end_length, left_width - left_end_offset].min
+        if perimeter_zone_depth < 0 or 2 * perimeter_zone_depth >= (shortest_side - 1e-4)
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 2}m.")
           return false
         end
 
@@ -1785,14 +1785,14 @@ module BTAP
         #    num_complete = 0
 
         # Loop through the number of floors
-        for floor in (0..num_floors-1)
+        for floor in (0..num_floors - 1)
 
           z = floor_to_floor_height * floor
 
           #Create a new story within the building
           story = OpenStudio::Model::BuildingStory.new(model)
           story.setNominalFloortoFloorHeight(floor_to_floor_height)
-          story.setName("Story #{floor+1}")
+          story.setName("Story #{floor + 1}")
 
 
           left_nw_point = OpenStudio::Point3d.new(0, left_width, z)
@@ -1834,7 +1834,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             west_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_left_perimeter_space.setBuildingStory(story)
-            west_left_perimeter_space.setName("Story #{floor+1} West Left Perimeter Space")
+            west_left_perimeter_space.setName("Story #{floor + 1} West Left Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1851,7 +1851,7 @@ module BTAP
             m[2, 3] = perimeter_left_nw_point.z
             north_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_left_perimeter_space.setBuildingStory(story)
-            north_left_perimeter_space.setName("Story #{floor+1} North Left Perimeter Space")
+            north_left_perimeter_space.setName("Story #{floor + 1} North Left Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1868,7 +1868,7 @@ module BTAP
             m[2, 3] = perimeter_upper_sw_point.z
             east_left_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_left_perimeter_space.setBuildingStory(story)
-            east_left_perimeter_space.setName("Story #{floor+1} East Left Perimeter Space")
+            east_left_perimeter_space.setName("Story #{floor + 1} East Left Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1885,7 +1885,7 @@ module BTAP
             m[2, 3] = perimeter_upper_sw_point.z
             north_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_lower_perimeter_space.setBuildingStory(story)
-            north_lower_perimeter_space.setName("Story #{floor+1} North Lower Perimeter Space")
+            north_lower_perimeter_space.setName("Story #{floor + 1} North Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1902,7 +1902,7 @@ module BTAP
             m[2, 3] = upper_se_point.z
             west_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_right_perimeter_space.setBuildingStory(story)
-            west_right_perimeter_space.setName("Story #{floor+1} West Right Perimeter Space")
+            west_right_perimeter_space.setName("Story #{floor + 1} West Right Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1919,7 +1919,7 @@ module BTAP
             m[2, 3] = perimeter_right_nw_point.z
             north_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             north_right_perimeter_space.setBuildingStory(story)
-            north_right_perimeter_space.setName("Story #{floor+1} North Right Perimeter Space")
+            north_right_perimeter_space.setName("Story #{floor + 1} North Right Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1936,7 +1936,7 @@ module BTAP
             m[2, 3] = perimeter_lower_se_point.z
             east_right_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_right_perimeter_space.setBuildingStory(story)
-            east_right_perimeter_space.setName("Story #{floor+1} East Right Perimeter Space")
+            east_right_perimeter_space.setName("Story #{floor + 1} East Right Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1953,7 +1953,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             south_lower_perimeter_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_lower_perimeter_space.setBuildingStory(story)
-            south_lower_perimeter_space.setName("Story #{floor+1} South Lower Perimeter Space")
+            south_lower_perimeter_space.setName("Story #{floor + 1} South Lower Perimeter Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1970,7 +1970,7 @@ module BTAP
             m[2, 3] = perimeter_lower_sw_point.z
             west_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_core_space.setBuildingStory(story)
-            west_core_space.setName("Story #{floor+1} West Core Space")
+            west_core_space.setName("Story #{floor + 1} West Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -1987,7 +1987,7 @@ module BTAP
             m[2, 3] = perimeter_lower_sw_point.z
             south_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_core_space.setBuildingStory(story)
-            south_core_space.setName("Story #{floor+1} South Core Space")
+            south_core_space.setName("Story #{floor + 1} South Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -2004,7 +2004,7 @@ module BTAP
             m[2, 3] = perimeter_upper_se_point.z
             east_core_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_core_space.setBuildingStory(story)
-            east_core_space.setName("Story #{floor+1} East Core Space")
+            east_core_space.setName("Story #{floor + 1} East Core Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -2023,7 +2023,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             west_space.changeTransformation(OpenStudio::Transformation.new(m))
             west_space.setBuildingStory(story)
-            west_space.setName("Story #{floor+1} West Space")
+            west_space.setName("Story #{floor + 1} West Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -2040,7 +2040,7 @@ module BTAP
             m[2, 3] = lower_sw_point.z
             south_space.changeTransformation(OpenStudio::Transformation.new(m))
             south_space.setBuildingStory(story)
-            south_space.setName("Story #{floor+1} South Space")
+            south_space.setName("Story #{floor + 1} South Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -2057,7 +2057,7 @@ module BTAP
             m[2, 3] = upper_se_point.z
             east_space.changeTransformation(OpenStudio::Transformation.new(m))
             east_space.setBuildingStory(story)
-            east_space.setName("Story #{floor+1} East Space")
+            east_space.setName("Story #{floor + 1} East Space")
 
             #        num_complete += 1
             #        runner.updateProgress(100*num_complete/num_total)
@@ -2132,9 +2132,9 @@ module BTAP
       # Identity matrix for setting space origins
       m = OpenStudio::Matrix.new(4, 4, 0)
 
-      m[0, 0] = 1.0/x
-      m[1, 1] = 1.0/y
-      m[2, 2] = 1.0/z
+      m[0, 0] = 1.0 / x
+      m[1, 1] = 1.0 / y
+      m[2, 2] = 1.0 / z
       m[3, 3] = 1.0
       t = OpenStudio::Transformation.new(m)
       model.getPlanarSurfaceGroups().each do |planar_surface|
@@ -2162,7 +2162,7 @@ module BTAP
         total_gross_surface_area = total_gross_surface_area + surface.grossArea
         total_net_surface_area = total_net_surface_area + surface.netArea
       end
-      return 1.0 - (total_net_surface_area/total_gross_surface_area)
+      return 1.0 - (total_net_surface_area / total_gross_surface_area)
     end
 
 
@@ -2172,7 +2172,7 @@ module BTAP
     # @return [OpenStudio::Model::Model] the model object.
     def self.rotate_model(model, degrees)
       # Identity matrix for setting space origins
-      t = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), degrees*Math::PI/180)
+      t = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), degrees * Math::PI / 180)
       model.getPlanarSurfaceGroups().each {|planar_surface| planar_surface.changeTransformation(t)}
       return model
     end
@@ -2235,7 +2235,7 @@ module BTAP
         end
 
         # pre-sort spaces
-        sorted_spaces = sorted_spaces.sort {|a, b| a[1]<=>b[1]}
+        sorted_spaces = sorted_spaces.sort {|a, b| a[1] <=> b[1]}
 
 
         # this should take the sorted list and make and assign stories
@@ -2310,6 +2310,7 @@ module BTAP
       def self.get_space_placement(space)
         horizontal_placement = nil
         vertical_placement = nil
+        json_data = nil
 
         #get all exterior surfaces. 
         surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces,
@@ -2350,56 +2351,91 @@ module BTAP
 
 
         #determine if what cardinal direction has the majority of external
-        #surface area of the space. 
+        #surface area of the space.
+        #set this to 'core' by default and change it if it is found to be a space exposed to a cardinal direction.
+        horizontal_placement = nil
+        #set up summing hashes for each direction.
+        json_data = Hash.new
+        walls_area_array = Hash.new
+        subsurface_area_array = Hash.new
+        boundary_conditions = {}
+        boundary_conditions[:outdoors] = ["Outdoors"]
+        boundary_conditions[:ground] = [
+            "Ground",
+            "GroundFCfactorMethod",
+            "GroundSlabPreprocessorAverage",
+            "GroundSlabPreprocessorCore",
+            "GroundSlabPreprocessorPerimeter",
+            "GroundBasementPreprocessorAverageWall",
+            "GroundBasementPreprocessorAverageFloor",
+            "GroundBasementPreprocessorUpperWall",
+            "GroundBasementPreprocessorLowerWall"]
+        #go through all directions.. need to do north twice since that goes around zero degree mark.
+        orientations = [
+            {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 315.001, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'east', :azimuth_from => 45.001, :azimuth_to => 135.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'south', :azimuth_from => 135.001, :azimuth_to => 225.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Wall', :direction => 'west', :azimuth_from => 225.001, :azimuth_to => 315.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'RoofCeiling', :direction => 'top', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+            {:surface_type => 'Floor', :direction => 'bottom', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0}
+        ]
+        [:outdoors, :ground].each do |bc|
+          orientations.each do |orientation|
+            walls_area_array[orientation[:direction]] = 0.0
+            subsurface_area_array[orientation[:direction]] = 0.0
+            json_data[orientation[:direction]] = {} if json_data[orientation[:direction]].nil?
+            json_data[orientation[:direction]][bc] = {:surface_area => 0.0,
+                                                      :glazed_subsurface_area => 0.0,
+                                                      :opaque_subsurface_area => 0.0}
 
-        walls_area_array = Array.new
-        [0, 1, 2, 3].each {|index| walls_area_array[index] = 0.0}
-        #east is defined as 315-45 degs
-        BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, 0.00, 45.0, 0.00, 180.00).each do |surface|
-          #          puts "northern surface found 0-46: #{surface}"
-          #          puts surface.azimuth / ( Math::PI / 180.0 )
-          walls_area_array[0] = walls_area_array[0] + surface.grossArea
-        end
-        BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, 315.001, 360.0, 0.00, 180.00).each do |surface|
-          #          puts "northern surface found: #{surface}"
-          #          puts surface.azimuth / ( Math::PI / 180.0 )
-          walls_area_array[0] = walls_area_array[0] + surface.grossArea
-        end
-
-        BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, 45.001, 135.0, 0.00, 180.00).each do |surface|
-          #          puts "eastern surface found: #{surface}"
-          #          puts surface.azimuth / ( Math::PI / 180.0 )
-          walls_area_array[1] = walls_area_array[1] + surface.grossArea
-        end
-
-        BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, 135.001, 225.0, 0.00, 180.00).each do |surface|
-          #          puts "south surface found: #{surface}"
-          #          puts surface.azimuth / ( Math::PI / 180.0 )
-          walls_area_array[2] = walls_area_array[2] + surface.grossArea
-        end
-
-        BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(ext_wall_surfaces, 225.001, 315.0, 0.00, 180.00).each do |surface|
-          #          puts "west surface found: #{surface}"
-          #          puts surface.azimuth / ( Math::PI / 180.0 )
-          walls_area_array[3] = walls_area_array[3] + surface.grossArea
+          end
         end
 
 
-        #find our which cardinal driection has the most exterior surface and declare it that orientation.  
-        case walls_area_array.index(walls_area_array.max)
-          when 0
-            horizontal_placement = "north"
-          when 1
-            horizontal_placement = "east"
-          when 2
-            horizontal_placement = "south"
-          when 3
-            horizontal_placement = "west"
+        [:outdoors, :ground].each do |bc|
+          orientations.each do |orientation|
+            puts "bc= #{bc}"
+            puts boundary_conditions[bc.to_sym]
+            puts boundary_conditions
+            surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
+            selected_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, [orientation[:surface_type]])
+            BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
+              #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
+              walls_area_array[orientation[:direction]] += surface.grossArea unless ['RoofCeiling', 'Floor'].include?(orientation[:surface_type])
+              subsurface_area_array[orientation[:direction]] += surface.subSurfaces.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+              json_data[orientation[:direction]][bc][:surface_area] += surface.grossArea
+              glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow", "OperableWindow", "GlassDoor", "Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
+              doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["Door", "OverheadDoor"])
+              json_data[orientation[:direction]][bc][:glazed_subsurface_area] += glazings.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+              json_data[orientation[:direction]][bc][:opaque_subsurface_area] += doors.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}
+            end
+          end
         end
-        if walls_area_array.inject {|sum, x| sum + x} == 0.0
+        puts JSON.pretty_generate(json_data)
+
+        puts walls_area_array
+        #find if no direction
+        sum= 0.0
+        ['north','east','south','west'].each do |direction|
+          [:outdoors,:ground].each do |bc|
+            sum += json_data[direction][bc][:surface_area]
+          end
+        end
+        if sum == 0.0
           horizontal_placement = "core"
+        else
+          #find our which cardinal direction has the most exterior surface and declare it that orientation.
+          horizontal_placement = walls_area_array.max_by {|k, v| v}[0] #include ext and ground.
         end
-        return horizontal_placement, vertical_placement
+
+        #save JSON data
+        json_data = ({:horizontal_placement => horizontal_placement,
+                      :vertical_placement => vertical_placement,
+        }).merge(json_data)
+        puts JSON.pretty_generate(json_data)
+
+        return json_data
       end
 
 
@@ -2598,8 +2634,8 @@ module BTAP
       # @return [OpenStudio::Model::Model] the model object.
       def self.rotate_tilt_translate_surfaces(planar_surfaces, azimuth_degrees, tilt_degrees = 0.0, translation_vector = OpenStudio::Vector3d.new(0.0, 0.0, 0.0))
         # Identity matrix for setting space origins
-        azimuth_matrix = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), azimuth_degrees*Math::PI/180)
-        tilt_matrix = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), tilt_degrees*Math::PI/180)
+        azimuth_matrix = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), azimuth_degrees * Math::PI / 180)
+        tilt_matrix = OpenStudio::Transformation::rotation(OpenStudio::Vector3d.new(0, 0, 1), tilt_degrees * Math::PI / 180)
         translation_matrix = OpenStudio::createTranslation(translation_vector)
         planar_surfaces.each do |surface|
           surface.changeTransformation(azimuth_matrix)
@@ -2881,7 +2917,13 @@ module BTAP
 
       # Azimuth start from Y axis, Tilts starts from Z-axis
       def self.filter_by_azimuth_and_tilt(surfaces, azimuth_from, azimuth_to, tilt_from, tilt_to, tolerance = 1.0)
-        return OpenStudio::Model::PlanarSurface::findPlanarSurfaces(surfaces, OpenStudio::OptionalDouble.new(azimuth_from), OpenStudio::OptionalDouble.new(azimuth_to), OpenStudio::OptionalDouble.new(tilt_from), OpenStudio::OptionalDouble.new(tilt_to), tolerance)
+        return_surfaces = []
+        surfaces.each do |surface|
+          unless OpenStudio::Model::PlanarSurface::findPlanarSurfaces([surface], OpenStudio::OptionalDouble.new(azimuth_from), OpenStudio::OptionalDouble.new(azimuth_to), OpenStudio::OptionalDouble.new(tilt_from), OpenStudio::OptionalDouble.new(tilt_to), tolerance).empty?
+            return_surfaces << surface
+          end
+        end
+        return return_surfaces
       end
 
 
@@ -2966,27 +3008,27 @@ module BTAP
         # current upward pointing line overlaps with it in the y direction.
         overlap_segs = []
         new_surfs = []
-        for i in 1..(surf_verts.length-1)
+        for i in 1..(surf_verts.length - 1)
           # Is this line segment pointing up?  If no, then ignore it and go to the next line segment.
-          if surf_verts[i][:y] > surf_verts[i-1][:y]
+          if surf_verts[i][:y] > surf_verts[i - 1][:y]
             # Go through each line segment
-            for j in 1..(surf_verts.length-1)
+            for j in 1..(surf_verts.length - 1)
               # Is the line segment to the left of the current (index i) line segment?  If no, then ignore it and go to the next one.
-              if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j-1][:x] < surf_verts[i-1][:x]
+              if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
                 # Is the line segment pointing down?  If no, then ignore it and go to the next line segment.
-                if surf_verts[j][:y]< surf_verts[j-1][:y]
+                if surf_verts[j][:y] < surf_verts[j - 1][:y]
                   # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no
                   # then ignore it and go to the next line segment.
-                  overlap_y = line_segment_overlap_y?(point_a1: surf_verts[i][:y], point_a2: surf_verts[i-1][:y], point_b1: surf_verts[j][:y], point_b2: surf_verts[j-1][:y])
+                  overlap_y = line_segment_overlap_y?(point_a1: surf_verts[i][:y], point_a2: surf_verts[i - 1][:y], point_b1: surf_verts[j][:y], point_b2: surf_verts[j - 1][:y])
                   unless overlap_y[:overlap_start].nil? || overlap_y[:overlap_end].nil?
                     unless overlap_y[:overlap_start] == overlap_y[:overlap_end]
                       overlap_seg = {
                           index_a1: i,
-                          index_a2: i-1,
+                          index_a2: i - 1,
                           index_b1: j,
-                          index_b2: j-1,
+                          index_b2: j - 1,
                           point_b1: surf_verts[j],
-                          point_b2: surf_verts[j-1],
+                          point_b2: surf_verts[j - 1],
                           overlap_y: overlap_y
                       }
                       overlap_segs << overlap_seg
@@ -3008,12 +3050,12 @@ module BTAP
           # Subdivide the overlapping segments found above into either unique overlaps between the upward and downward
           # pointing lines or overlapping segments that exactly match one another.
           overlap_segs = subdivide_overlaps(overlap_segs: overlap_segs)
-          for i in 1..(surf_verts.length-1)
+          for i in 1..(surf_verts.length - 1)
             # Does the line point up?  No then ignore and go on to the next one.
-            if surf_verts[i][:y] > surf_verts[i-1][:y]
+            if surf_verts[i][:y] > surf_verts[i - 1][:y]
               # Finds the closest overlapping downward pointing line segments that correspond to this updard pointing
               # line (if some of these downward pointing segments belong together then re-attached them).
-              closest_overlaps = get_overlapping_segments(overlap_segs: overlap_segs, index: i, point_a1: surf_verts[i], point_a2: surf_verts[i-1])
+              closest_overlaps = get_overlapping_segments(overlap_segs: overlap_segs, index: i, point_a1: surf_verts[i], point_a2: surf_verts[i - 1])
               closest_overlaps = closest_overlaps.sort_by {|closest_overlap| [closest_overlap[:overlap_y][:overlap_start]]}
               # Create the quadrilaterals out of the downward pointing line segments closest to the current upward
               # pointing line.
@@ -3107,7 +3149,7 @@ module BTAP
         # This goes through all the line segments and determines which correspond to the current upward pointing line
         # segment(line a).  It also determines the x coordinate distance between the top and bottom of the overlapping
         # portions of the line segments.
-        for j in 0..(overlap_segs.length-1)
+        for j in 0..(overlap_segs.length - 1)
           if (overlap_segs[j][:index_a1] == index) && (overlap_segs[j][:index_a2] == (index - 1))
             linea_x_top = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_start], point_b1: point_a1, point_b2: point_a2)
             linea_x_bottom = line_segment_overlap_x_coord(y_check: overlap_segs[j][:overlap_y][:overlap_end], point_b1: point_a1, point_b2: point_a2)
@@ -3210,7 +3252,7 @@ module BTAP
         while restart == true
           restart = false
           overlap_segs.each do |overlap_seg|
-            for j in 0..(overlap_segs.length-1)
+            for j in 0..(overlap_segs.length - 1)
               # Skip this y projection if it is the same as that in overlap_seg
               if overlap_seg == overlap_segs[j]
                 next
@@ -3376,7 +3418,7 @@ module BTAP
                     overlap_segs.delete(overlap_segs[j])
                     overlap_segs << overlap_top
                     overlap_segs << overlap_bottom
-                  elsif  overlap_seg[:overlap_y][:overlap_end] == overlap_segs[j][:overlap_y][:overlap_end]
+                  elsif overlap_seg[:overlap_y][:overlap_end] == overlap_segs[j][:overlap_y][:overlap_end]
                     # If the overlap_seg and overlap_segs[j] end at the same point replace overlap_segs[j] with two segments (
                     # one top and one bottom).
                     overlap_top_over = {
@@ -3594,7 +3636,7 @@ module BTAP
           if point_a1 >= point_b2
             overlap_start = point_b2
           end
-        # If line a overlaps with the top of line b do this:
+          # If line a overlaps with the top of line b do this:
         elsif (point_a1 >= point_b2) && (point_a2 <= point_b2)
           overlap_start = point_b2
           overlap_end = point_a2
@@ -3625,14 +3667,14 @@ module BTAP
         # If the line is vertical then all x coordinates are the same
         if point_b1[:x] == point_b2[:x]
           xcross = point_b2[:x]
-        # If the line is horizontal you cannot find the y intercept
+          # If the line is horizontal you cannot find the y intercept
         elsif point_b1[:y] == point_b2[:x]
           raise("This line is horizontal so no y intercept can be found.")
-        # Otherwise determine the line coefficients and get the intercept
+          # Otherwise determine the line coefficients and get the intercept
         else
-          a = (point_b1[:y] - point_b2[:y])/(point_b1[:x] - point_b2[:x])
-          b = point_b1[:y] - a*point_b1[:x]
-          xcross = (y_check - b)/a
+          a = (point_b1[:y] - point_b2[:y]) / (point_b1[:x] - point_b2[:x])
+          b = point_b1[:y] - a * point_b1[:x]
+          xcross = (y_check - b) / a
         end
         return xcross
       end

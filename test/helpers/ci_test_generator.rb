@@ -89,7 +89,10 @@ class Test_#{building_type}_#{template}_#{fuel_type} < NECBRegressionHelper
       puts "Pretty listing of diff-errors for readability."
       puts JSON.pretty_generate( diff )
       puts "You can find the saved json diff file here test/necb/regression_models/#{building_type}-#{template}-#\{@#{fuel_type}_location\}.epw_diffs.json"
+      puts "outputing errors here. "
+      puts diff["diffs-errors"] if result == false
     end
+
     assert(result, diff)
   end
 end
