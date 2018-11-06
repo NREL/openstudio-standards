@@ -248,14 +248,15 @@ class Standard
     (1..365).each do |i|
       date = year_description.makeDate(i)
       day_sch = schedule_ruleset.getDaySchedules(date, date)[0]
-      (0..23).each do |i|
+      (0..23).each do |j|
         # take average value over the hour
-        value_15 = day_sch.getValue(OpenStudio::Time.new(0, i, 15, 0))
-        value_30 = day_sch.getValue(OpenStudio::Time.new(0, i, 30, 0))
-        value_45 = day_sch.getValue(OpenStudio::Time.new(0, i, 45, 0))
+        value_15 = day_sch.getValue(OpenStudio::Time.new(0, j, 15, 0))
+        value_30 = day_sch.getValue(OpenStudio::Time.new(0, j, 30, 0))
+        value_45 = day_sch.getValue(OpenStudio::Time.new(0, j, 45, 0))
         avg = (value_15 + value_30 + value_45).to_f / 3.0
         schedule_values << avg.round(5)
       end
     end
+    return schedule_values
   end
 end

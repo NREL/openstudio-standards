@@ -68,13 +68,13 @@ Standard.class_eval do
       next unless thermal_zone_heated?(zone)
 
       # get zone air temperatures
-      zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name)
+      zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name.get)
       if zone_temp_timeseries.empty?
         # try mean air temperature instead
-        zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Mean Air Temperature', zone.name)
+        zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Mean Air Temperature', zone.name.get)
         if zone_temp_timeseries.empty?
           # no air temperature found
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find zone air temperature timeseries for zone '#{zone.name}'")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find zone air temperature timeseries for zone '#{zone.name.get}'")
           return false
         end
       end
@@ -87,10 +87,10 @@ Standard.class_eval do
       end
 
       # get zone thermostat heating setpoint temperatures
-      zone_setpoint_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Heating Setpoint Temperature', zone.name)
+      zone_setpoint_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Heating Setpoint Temperature', zone.name.get)
       if zone_setpoint_temp_timeseries.empty?
         # no setpoint temperature found
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find heating setpoint temperature timeseries for zone '#{zone.name}'")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find heating setpoint temperature timeseries for zone '#{zone.name.get}'")
         return false
       end
 
@@ -110,6 +110,8 @@ Standard.class_eval do
       zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
+        bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
+        bldg_occ_unmet_hours[i] = 0 if bldg_occ_unmet_hours[i].nil?
         bldg_unmet_hours[i] += zone_unmet_hours[i]
         if occupied_bool_values[i]
           zone_occ_unmet_hours[i] = zone_unmet_hours[i]
@@ -164,13 +166,13 @@ Standard.class_eval do
       next unless thermal_zone_cooled?(zone)
 
       # get zone air temperatures
-      zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name)
+      zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name.get)
       if zone_temp_timeseries.empty?
         # try mean air temperature instead
-        zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Mean Air Temperature', zone.name)
+        zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Mean Air Temperature', zone.name.get)
         if zone_temp_timeseries.empty?
           # no air temperature found
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find zone air temperature timeseries for zone '#{zone.name}'")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find zone air temperature timeseries for zone '#{zone.name.get}'")
           return false
         end
       end
@@ -183,10 +185,10 @@ Standard.class_eval do
       end
 
       # get zone thermostat heating setpoint temperatures
-      zone_setpoint_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Cooling Setpoint Temperature', zone.name)
+      zone_setpoint_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Cooling Setpoint Temperature', zone.name.get)
       if zone_setpoint_temp_timeseries.empty?
         # no setpoint temperature found
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find cooling setpoint temperature timeseries for zone '#{zone.name}'")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find cooling setpoint temperature timeseries for zone '#{zone.name.get}'")
         return false
       end
 
@@ -206,6 +208,8 @@ Standard.class_eval do
       zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
+        bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
+        bldg_occ_unmet_hours[i] = 0 if bldg_occ_unmet_hours[i].nil?
         bldg_unmet_hours[i] += zone_unmet_hours[i]
         if occupied_bool_values[i]
           zone_occ_unmet_hours[i] = zone_unmet_hours[i]
