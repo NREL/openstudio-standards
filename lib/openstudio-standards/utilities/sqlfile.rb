@@ -63,7 +63,7 @@ Standard.class_eval do
     bldg_unmet_hours = []
     bldg_occ_unmet_hours = []
     zone_data = []
-    model.getThermalZones do |zone|
+    model.getThermalZones.each do |zone|
       # skip zones that aren't heated
       next unless thermal_zone_heated?(zone)
 
@@ -159,9 +159,9 @@ Standard.class_eval do
     bldg_unmet_hours = []
     bldg_occ_unmet_hours = []
     zone_data = []
-    model.getThermalZones do |zone|
-      # skip zones that aren't heated
-      next unless thermal_zone_heated?(zone)
+    model.getThermalZones.each do |zone|
+      # skip zones that aren't cooled
+      next unless thermal_zone_cooled?(zone)
 
       # get zone air temperatures
       zone_temp_timeseries = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name)
