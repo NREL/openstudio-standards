@@ -1,5 +1,6 @@
 require_relative './parallel_tests'
 TestListFile = File.join(File.dirname(__FILE__), 'local_circleci_tests.txt')
+
 class RunAllTests < Minitest::Test
   def test_all()
     full_file_list = nil
@@ -7,8 +8,8 @@ class RunAllTests < Minitest::Test
       # load test files from file.
       full_file_list = File.readlines(TestListFile).shuffle
       # Select only .rb files that exist
-      full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
-      full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+      full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("#{item.strip}"))}
+      full_file_list.map! {|item| File.absolute_path("#{item.strip}")}
     else
       puts "Could not find list of files to test at #{TestListFile}"
       return false
