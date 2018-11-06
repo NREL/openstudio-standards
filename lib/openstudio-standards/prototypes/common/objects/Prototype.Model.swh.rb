@@ -273,40 +273,46 @@ class Standard
         flow_rate_fraction_schedule = model.alwaysOffDiscreteSchedule
       end
 
+      # add water use equipment definition
+      water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
+      water_use_equip_def.setName("#{space_type.name} SWH def")
+      peak_flow_rate_si = OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
+      water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
+
+      # Target temperature schedule
+      target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
+      name = "#{target_temp} C"
+      if water_use_def_schedules.key?(name)
+        target_temperature_sch = water_use_def_schedules[name]
+      else
+        target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp, name)
+        water_use_def_schedules[name] = target_temperature_sch
+      end
+      water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
+
+      # Sensible fraction schedule
+      name = "#{service_water_fraction_sensible} Fraction"
+      if water_use_def_schedules.key?(name)
+        service_water_fraction_sensible_sch = water_use_def_schedules[name]
+      else
+        service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
+        water_use_def_schedules[name] = service_water_fraction_sensible_sch
+      end
+      water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
+
+      # Latent fraction schedule
+      name = "#{service_water_fraction_latent} Fraction"
+      if water_use_def_schedules.key?(name)
+        service_water_fraction_latent_sch = water_use_def_schedules[name]
+      else
+        service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
+        water_use_def_schedules[name] = service_water_fraction_latent_sch
+      end
+      water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
+
       if (stds_bldg_type == 'MidriseApartment' && stds_space_type.include?('Apartment')) || stds_bldg_type == 'StripMall'
         num_units = space_type_hash[space_type][:num_units].round
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating fpr #{num_units} #{space_type.name} units, each with max flow rate of #{gal_hr_peak_flow_rate} gal/hr per.")
-
-        # add water use equipment definition
-        water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-        water_use_equip_def.setName("#{space_type.name} SWH def")
-        peak_flow_rate_si = OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
-        water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
-        target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
-        name = "#{target_temp} C"
-        if water_use_def_schedules.key?(name)
-          target_temperature_sch = water_use_def_schedules[name]
-        else
-          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp, name)
-          water_use_def_schedules[name] = target_temperature_sch
-        end
-        water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
-        name = "#{service_water_fraction_sensible} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_sensible_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_sensible_sch
-        end
-        water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
-        name = "#{service_water_fraction_latent} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_latent_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_latent_sch
-        end
-        water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
 
         # add water use equipment, connection, and loop for each unit
         num_units.times do |i|
@@ -372,37 +378,6 @@ class Standard
       elsif stds_space_type.include?('Kitchen') || stds_space_type.include?('Laundry')
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr.")
-
-        # add water use equipment definition
-        water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-        water_use_equip_def.setName("#{space_type.name} SWH def")
-        peak_flow_rate_si = OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
-        water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
-        target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
-        name = "#{target_temp} C"
-        if water_use_def_schedules.key?(name)
-          target_temperature_sch = water_use_def_schedules[name]
-        else
-          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp, name)
-          water_use_def_schedules[name] = target_temperature_sch
-        end
-        water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
-        name = "#{service_water_fraction_sensible} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_sensible_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_sensible_sch
-        end
-        water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
-        name = "#{service_water_fraction_latent} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_latent_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_latent_sch
-        end
-        water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
 
         # add water use equipment
         water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
@@ -514,38 +489,6 @@ class Standard
 
         gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr on a shared loop.")
-
-        # add water use equipment definition
-        water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-        water_use_equip_def.setName("#{space_type.name} SWH def")
-        peak_flow_rate_si = OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
-        water_use_equip_def.setPeakFlowRate(peak_flow_rate_si)
-        target_temp = service_water_temperature_si # in spreadsheet in si, no conversion needed unless that changes
-        name = "#{target_temp} C"
-        if water_use_def_schedules.key?(name)
-          target_temperature_sch = water_use_def_schedules[name]
-        else
-          target_temperature_sch = model_add_constant_schedule_ruleset(model, target_temp, name)
-          water_use_def_schedules[name] = target_temperature_sch
-        end
-        water_use_equip_def.setTargetTemperatureSchedule(target_temperature_sch)
-        name = "#{service_water_fraction_sensible} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_sensible_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_sensible_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_sensible_sch
-        end
-        water_use_equip_def.setSensibleFractionSchedule(service_water_fraction_sensible_sch)
-        name = "#{service_water_fraction_latent} Fraction"
-        if water_use_def_schedules.key?(name)
-          service_water_fraction_latent_sch = water_use_def_schedules[name]
-        else
-          service_water_fraction_latent_sch = model_add_constant_schedule_ruleset(model, service_water_fraction_sensible, name)
-          water_use_def_schedules[name] = service_water_fraction_latent_sch
-        end
-        water_use_equip_def.setLatentFractionSchedule(service_water_fraction_latent_sch)
-
         # add water use equipment
         water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
         water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
