@@ -79,49 +79,176 @@ class NECB2011
     unique_schedule_types = [] # Array to store schedule objects
     space_zoning_data_array_json = []
 
-
     # First pass of spaces to collect information into the space_zoning_data_array .
     model.getSpaces.sort.each do |space|
       space_type_data = nil
       # this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
       space_system_index = nil
-      if space.spaceType.empty?
-        space_system_index = nil
-      else
+      unless space.spaceType.empty?
         # gets row information from standards spreadsheet.
         space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => self.class.name,
-                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
+                                                                                                    'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                                                    'building_type' => space.spaceType.get.standardsBuildingType.get})
         raise("Could not find spacetype information in #{self.class.name} for space_type => #{space.spaceType.get.standardsSpaceType.get} - #{space.spaceType.get.standardsBuildingType.get}") if space_type_data.nil?
       end
 
-      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
-      # Make sure we don't have sideeffects by changing the argument variables.
-      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
-      # Make sure we don't have sideeffects by changing the argument variables.
-
-      cooling_design_load =  space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
-      heating_design_load =  space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
+      #Get Heating and cooling loads
+      cooling_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
+      heating_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
 
 
       # identify space-system_index and assign the right NECB system type 1-7.
       necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
-      necb_hvac_system_select = necb_hvac_system_selection_table.select do |necb_hvac_system_select|
+      necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
         necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
             necb_hvac_system_select['min_stories'] <= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['max_stories'] >= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
             necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_design_load &&
             necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_design_load
-      end.first
-      
-      # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
-      horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
+      end
+
+      #======
+
+      horizontal_placement = nil
+      vertical_placement = nil
+      json_data = nil
+
+      #get all exterior surfaces.
+      surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces,
+                                                                        ["Outdoors",
+                                                                         "Ground",
+                                                                         "GroundFCfactorMethod",
+                                                                         "GroundSlabPreprocessorAverage",
+                                                                         "GroundSlabPreprocessorCore",
+                                                                         "GroundSlabPreprocessorPerimeter",
+                                                                         "GroundBasementPreprocessorAverageWall",
+                                                                         "GroundBasementPreprocessorAverageFloor",
+                                                                         "GroundBasementPreprocessorUpperWall",
+                                                                         "GroundBasementPreprocessorLowerWall"])
+
+      #exterior Surfaces
+      ext_wall_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, ["Wall"])
+      ext_bottom_surface = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, ["Floor"])
+      ext_top_surface = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, ["RoofCeiling"])
+
+      #Interior Surfaces..if needed....
+      internal_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, ["Surface"])
+      int_wall_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(internal_surfaces, ["Wall"])
+      int_bottom_surface = BTAP::Geometry::Surfaces::filter_by_surface_types(internal_surfaces, ["Floor"])
+      int_top_surface = BTAP::Geometry::Surfaces::filter_by_surface_types(internal_surfaces, ["RoofCeiling"])
+
+
+      vertical_placement = "NA"
+      #determine if space is a top or bottom, both or middle space.
+      if ext_bottom_surface.size > 0 and ext_top_surface.size > 0 and int_bottom_surface.size == 0 and int_top_surface.size == 0
+        vertical_placement = "single_story_space"
+      elsif int_bottom_surface.size > 0 and ext_top_surface.size > 0 and int_bottom_surface.size > 0
+        vertical_placement = "top"
+      elsif ext_bottom_surface.size > 0 and ext_top_surface.size == 0
+        vertical_placement = "bottom"
+      elsif ext_bottom_surface.size == 0 and ext_top_surface.size == 0
+        vertical_placement = "middle"
+      end
+
+
+      #determine if what cardinal direction has the majority of external
+      #surface area of the space.
+      #set this to 'core' by default and change it if it is found to be a space exposed to a cardinal direction.
+      horizontal_placement = nil
+      #set up summing hashes for each direction.
+      json_data = Hash.new
+      walls_area_array = Hash.new
+      subsurface_area_array = Hash.new
+      boundary_conditions = {}
+      boundary_conditions[:outdoors] = ["Outdoors"]
+      boundary_conditions[:ground] = [
+          "Ground",
+          "GroundFCfactorMethod",
+          "GroundSlabPreprocessorAverage",
+          "GroundSlabPreprocessorCore",
+          "GroundSlabPreprocessorPerimeter",
+          "GroundBasementPreprocessorAverageWall",
+          "GroundBasementPreprocessorAverageFloor",
+          "GroundBasementPreprocessorUpperWall",
+          "GroundBasementPreprocessorLowerWall"]
+      #go through all directions.. need to do north twice since that goes around zero degree mark.
+      orientations = [
+          {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 0.00, :azimuth_to => 45.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'Wall', :direction => 'north', :azimuth_from => 315.001, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'Wall', :direction => 'east', :azimuth_from => 45.001, :azimuth_to => 135.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'Wall', :direction => 'south', :azimuth_from => 135.001, :azimuth_to => 225.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'Wall', :direction => 'west', :azimuth_from => 225.001, :azimuth_to => 315.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'RoofCeiling', :direction => 'top', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0},
+          {:surface_type => 'Floor', :direction => 'bottom', :azimuth_from => 0.0, :azimuth_to => 360.0, :tilt_from => 0.0, :tilt_to => 180.0}
+      ]
+      [:outdoors, :ground].each do |bc|
+        orientations.each do |orientation|
+          walls_area_array[orientation[:direction]] = 0.0
+          subsurface_area_array[orientation[:direction]] = 0.0
+
+          json_data[:surface_data] = []
+
+
+        end
+      end
+
+
+      [:outdoors, :ground].each do |bc|
+        orientations.each do |orientation|
+          puts "bc= #{bc}"
+          puts boundary_conditions[bc.to_sym]
+          puts boundary_conditions
+          surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
+          selected_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, [orientation[:surface_type]])
+          BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
+            #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
+            walls_area_array[orientation[:direction]] += surface.grossArea unless ['RoofCeiling', 'Floor'].include?(orientation[:surface_type])
+            #new way
+            glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow", "OperableWindow", "GlassDoor", "Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
+            doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["Door", "OverheadDoor"])
+            azimuth = (surface.azimuth() * 180.0 / Math::PI).to_i
+            tilt = (surface.tilt() * 180.0 / Math::PI).to_i
+            surface_data = json_data[:surface_data].detect {|surface_data| surface_data[:surface_type] == surface.surfaceType && surface.surfaceType && surface_data[:azimuth] == azimuth && surface_data[:tilt] == tilt && surface_data[:boundary_condition] == bc}
+            if surface_data.nil?
+              surface_data = {:surface_type => surface.surfaceType, :azimuth => azimuth, :tilt => tilt, :boundary_condition => bc, :surface_area => 0.0, :glazed_subsurface_area => 0.0, :opaque_subsurface_area => 0.0}
+              json_data[:surface_data] << surface_data
+            end
+            surface_data[:surface_area] += surface.grossArea.to_i
+            surface_data[:glazed_subsurface_area] += glazings.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}.to_i
+            surface_data[:surface_area] += doors.map {|subsurface| subsurface.grossArea}.inject(0) {|sum, x| sum + x}.to_i
+          end
+        end
+      end
+
+      horizontal_placement = nil
+      wall_surface_data = json_data[:surface_data].select {|surface| surface[:surface_type] == "Wall"}
+      if wall_surface_data.empty?
+        horizontal_placement = 'core' #should change to attic.
+      else
+        max_area_azimuth = wall_surface_data.max_by {|k| k[:surface_area]}[:azimuth]
+
+        #if no surfaces ext or ground.. then set the space as a core space.
+        if json_data[:surface_data].inject(0) {|sum, hash| sum + hash[:surface_area]} == 0.0
+          horizontal_placement = "core"
+        elsif (max_area_azimuth >= 0.0 && max_area_azimuth <= 45.00) || (max_area_azimuth >= 315.0 && max_area_azimuth <= 360.00)
+          horizontal_placement = 'north'
+        elsif (max_area_azimuth >= 45.0 && max_area_azimuth <= 135.00)
+          horizontal_placement = 'east'
+        elsif (max_area_azimuth >= 135.0 && max_area_azimuth <= 225.00)
+          horizontal_placement = 'south'
+        elsif (max_area_azimuth >= 225.0 && max_area_azimuth <= 315.00)
+          horizontal_placement = 'west'
+        end
+      end
+
       # dump all info into an array for debugging and iteration.
       unless space.spaceType.empty?
         space_zoning_data_array_json << {
             space: space,
             space_name: space.name,
             floor_area: space.floorArea,
+            horizontal_placement:  horizontal_placement,
+            vertical_placement: vertical_placement,
             building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
             space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
             necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
@@ -130,14 +257,13 @@ class NECB2011
             heating_design_load: heating_design_load,
             cooling_design_load: cooling_design_load,
             is_dwelling_unit: necb_hvac_system_select['dwelling'], # Checks if it is a dwelling unit.
-            is_wildcard: necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard' ? true : nil ,
+            is_wildcard: necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard' ? true : nil,
             schedule_type: determine_necb_schedule_type(space).to_s,
             multiplier: (@space_multiplier_map[space.name.to_s].nil? ? 1 : @space_multiplier_map[space.name.to_s]),
-        }.merge(BTAP::Geometry::Spaces.get_space_placement(space))
-
+            surface_data: json_data[:surface_data]
+        }
       end
     end
-
     File.write("#{File.dirname(__FILE__)}/newway.json", JSON.pretty_generate(space_zoning_data_array_json))
 
     # Deal with Wildcard spaces. Might wish to have logic to do coridors first.
@@ -155,7 +281,7 @@ class NECB2011
           # if there are no adjacent spaces. Raise an error.
           raise "Could not determine adj space to space #{space_zone_data[:space].name.get}" if adj_space.nil?
 
-          adj_space_data = space_zoning_data_array_json.find {|data| data[:space] == adj_space[0] }
+          adj_space_data = space_zoning_data_array_json.find {|data| data[:space] == adj_space[0]}
           if adj_space_data[:system_number].nil?
             next
           else
@@ -187,7 +313,7 @@ class NECB2011
       # iterate by story
       model.getBuildingStorys.sort.each_with_index do |story, building_index|
         # iterate by unique schedule type.
-        space_zoning_data_array_json.map{ |item| item[:schedule_type] }.uniq!.each do |schedule_type|
+        space_zoning_data_array_json.map {|item| item[:schedule_type]}.uniq!.each do |schedule_type|
           # iterate by horizontal location
           ['north', 'east', 'west', 'south', 'core'].each do |horizontal_placement|
             # puts "horizontal_placement:#{horizontal_placement}"
