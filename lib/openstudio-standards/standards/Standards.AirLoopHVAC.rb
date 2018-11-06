@@ -2390,7 +2390,9 @@ class Standard
   # @return [ScheduleRuleset] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
   def air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: 0.05)
     # Create combined occupancy schedule of every space in every zone served by this airloop
-    sch_ruleset = thermal_zones_get_occupancy_schedule(air_loop_hvac.thermalZones, occupied_percentage_threshold)
+    sch_ruleset = thermal_zones_get_occupancy_schedule(air_loop_hvac.thermalZones,
+                                                       sch_name: "#{air_loop_hvac.name} Occ Sch",
+                                                       occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
 

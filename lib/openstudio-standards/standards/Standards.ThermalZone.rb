@@ -139,10 +139,13 @@ class Standard
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  def thermal_zone_get_occupancy_schedule(thermal_zone, occupied_percentage_threshold = 0.05)
+  def thermal_zone_get_occupancy_schedule(thermal_zone, sch_name: nil, occupied_percentage_threshold: 0.05)
+    if sch_name.nil?
+      sch_name = "#{thermal_zone.name} Occ Sch"
+    end
     # Get the occupancy schedule for all spaces in thermal_zone
     sch_ruleset = spaces_get_occupancy_schedule(thermal_zone.spaces,
-                                                sch_name: "#{thermal_zone.name} Occ Sch",
+                                                sch_name: sch_name,
                                                 occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
@@ -155,7 +158,10 @@ class Standard
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  def thermal_zones_get_occupancy_schedule(thermal_zones, occupied_percentage_threshold: 0.05)
+  def thermal_zones_get_occupancy_schedule(thermal_zones, sch_name: nil, occupied_percentage_threshold: 0.05)
+    if sch_name.nil?
+      sch_name = "#{thermal_zones.size} zone Occ Sch"
+    end
     # Get the occupancy schedule for all spaces in thermal_zones
     spaces = []
     thermal_zones.each do |thermal_zone|
@@ -164,7 +170,7 @@ class Standard
       end
     end
     sch_ruleset = spaces_get_occupancy_schedule(spaces,
-                                                sch_name: "#{thermal_zones.size} zone Occ Sch",
+                                                sch_name: sch_name,
                                                 occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
