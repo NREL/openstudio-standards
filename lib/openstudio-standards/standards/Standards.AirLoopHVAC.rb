@@ -2343,7 +2343,7 @@ class Standard
     # or if the supplied availability schedule is Always On, implying
     # that the availability schedule does not reflect occupancy.
     if occ_sch.nil? || occ_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
-      occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, min_occ_pct)
+      occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
       flh = schedule_ruleset_annual_equivalent_full_load_hrs(occ_sch)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used to close OA damper during unoccupied hours.")
     else
@@ -2388,9 +2388,9 @@ class Standard
   # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] air loop to create occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   # @return [ScheduleRuleset] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  def air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold = 0.05)
-    # Get all the occupancy schedules in every space in every zone served by this airloop
-    sch_ruleset = get_zones_occupancy_schedule(air_loop_hvac.model, air_loop_hvac.thermalZones, occupied_percentage_threshold)
+  def air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: 0.05)
+    # Create combined occupancy schedule of every space in every zone served by this airloop
+    sch_ruleset = thermal_zones_get_occupancy_schedule(air_loop_hvac.thermalZones, occupied_percentage_threshold)
     return sch_ruleset
   end
 
@@ -2845,7 +2845,7 @@ class Standard
     end
 
     # Get the airloop occupancy schedule
-    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, min_occ_pct)
+    loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
     flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 

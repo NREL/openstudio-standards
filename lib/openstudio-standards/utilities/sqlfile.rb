@@ -102,7 +102,7 @@ Standard.class_eval do
       end
 
       # calculate zone occupancy by making a new ruleset schedule
-      occ_schedule_ruleset = get_zones_occupancy_schedule(model, [zone], occupied_percentage_threshold)
+      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone, occupied_percentage_threshold)
       occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
@@ -197,7 +197,7 @@ Standard.class_eval do
       end
 
       # calculate zone occupancy by making a new ruleset schedule
-      occ_schedule_ruleset = get_zones_occupancy_schedule(model, [zone], occupied_percentage_threshold)
+      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone, occupied_percentage_threshold)
       occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
