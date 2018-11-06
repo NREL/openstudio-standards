@@ -122,6 +122,7 @@ Standard.class_eval do
 
       # log information for zone
       zone_data << { 'zone_name' => zone.name,
+                     'zone_area' => zone.floorArea,
                      'temp_diff' => zone_temperature_diff,
                      'unmet_hours' => zone_unmet_hours,
                      'occ_unmet_hrs' => zone_occ_unmet_hours }
@@ -217,6 +218,7 @@ Standard.class_eval do
 
       # log information for zone
       zone_data << { 'zone_name' => zone.name,
+                     'zone_area' => zone.floorArea,
                      'temp_diff' => zone_temperature_diff,
                      'unmet_hours' => zone_unmet_hours,
                      'occ_unmet_hrs' => zone_occ_unmet_hours }
