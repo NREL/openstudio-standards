@@ -131,15 +131,18 @@ class Standard
     return true
   end
 
-  # This method creates a new discrete fractional schedule ruleset.
-  # The value is set to one when occupancy across all spaces
-  # is greater than or equal to the occupied_percentage_threshold, and zero all other times.
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
   #
   # @param thermal_zone [<OpenStudio::Model::ThermalZone>] thermal_zone to create occupancy schedule
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  def thermal_zone_get_occupancy_schedule(thermal_zone, sch_name: nil, occupied_percentage_threshold: 0.05)
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
+  def thermal_zone_get_occupancy_schedule(thermal_zone, sch_name: nil, occupied_percentage_threshold: nil)
     if sch_name.nil?
       sch_name = "#{thermal_zone.name} Occ Sch"
     end
@@ -150,15 +153,18 @@ class Standard
     return sch_ruleset
   end
 
-  # This method creates a new discrete fractional schedule ruleset.
-  # The value is set to one when occupancy across all spaces
-  # is greater than or equal to the occupied_percentage_threshold, and zero all other times.
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of thermal_zones to create occupancy schedule
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  def thermal_zones_get_occupancy_schedule(thermal_zones, sch_name: nil, occupied_percentage_threshold: 0.05)
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
+  def thermal_zones_get_occupancy_schedule(thermal_zones, sch_name: nil, occupied_percentage_threshold: nil)
     if sch_name.nil?
       sch_name = "#{thermal_zones.size} zone Occ Sch"
     end
@@ -175,16 +181,19 @@ class Standard
     return sch_ruleset
   end
 
-  # This method creates a new discrete fractional schedule ruleset.
-  # The value is set to one when occupancy across all spaces
-  # is greater than or equal to the occupied_percentage_threshold, and zero all other times.
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
   #
   # @param spaces [Array<OpenStudio::Model::Space>] array of spaces to generate occupancy schedule from
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: 0.05)
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil)
     # Get all the occupancy schedules in spaces.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}
@@ -278,9 +287,16 @@ class Standard
 
         # Total fraction for the spaces at each time
         spaces_occ_frac = tot_occ_at_time / max_occ_in_spaces
-        occ_status = 0 # unoccupied
-        if spaces_occ_frac >= occupied_percentage_threshold
-          occ_status = 1
+
+        # If occupied_percentage_threshold is specified, schedule values are boolean
+        # Otherwise use the actual spaces_occ_frac
+        if occupied_percentage_threshold.nil?
+          occ_status = spaces_occ_frac
+        else
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= occupied_percentage_threshold
+            occ_status = 1
+          end
         end
 
         # Add this data to the daily arrays
