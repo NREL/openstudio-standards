@@ -83,7 +83,7 @@ Standard.class_eval do
       zone_temperatures = []
       zone_temp_vector = zone_temp_timeseries.get.values
       for i in (0..zone_temp_vector.size - 1)
-        zone_temperatures << zone_temp_vector[i].round(2)
+        zone_temperatures << zone_temp_vector[i]
       end
 
       # get zone thermostat heating setpoint temperatures
@@ -98,27 +98,26 @@ Standard.class_eval do
       zone_setpoint_temperatures = []
       zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
       for i in (0..zone_setpoint_temp_vector.size - 1)
-        zone_setpoint_temperatures << zone_setpoint_temp_vector[i].round(2)
+        zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
       end
 
       # calculate zone occupancy by making a new ruleset schedule
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone, occupied_percentage_threshold: occupied_percentage_threshold)
-      occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
+      occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
+      occ_values = std.schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
-      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x).round(2) }
+      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x) }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
         bldg_occ_unmet_hours[i] = 0 if bldg_occ_unmet_hours[i].nil?
         bldg_unmet_hours[i] += zone_unmet_hours[i]
-        if occupied_bool_values[i]
+        if occ_values[i] >= occupied_percentage_threshold
           zone_occ_unmet_hours[i] = zone_unmet_hours[i]
           bldg_occ_unmet_hours[i] += zone_unmet_hours[i]
         else
           zone_occ_unmet_hours[i] = 0
-          bldg_occ_unmet_hours[i] += 0
         end
       end
 
@@ -126,9 +125,10 @@ Standard.class_eval do
       # could reduce the number of returned variables if this poses a storage or data transfer problem
       zone_data << { 'zone_name' => zone.name,
                      'zone_area' => zone.floorArea,
-                     'zone_air_temperatures' => zone_temperatures,
-                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures,
-                     'zone_air_temperature_differences' => zone_temperature_diff,
+                     'zone_air_temperatures' => zone_temperatures.round(3),
+                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures.round(3),
+                     'zone_air_temperature_differences' => zone_temperature_diff.round(3),
+                     'zone_occupancy' => occ_values.map { |x| x.round(3) },
                      'zone_unmet_hours' => zone_unmet_hours,
                      'zone_occupied_unmet_hours' => zone_occ_unmet_hours,
                      'sum_zone_unmet_hours' => zone_unmet_hours.count { |x| x > 0 },
@@ -186,7 +186,7 @@ Standard.class_eval do
       zone_temperatures = []
       zone_temp_vector = zone_temp_timeseries.get.values
       for i in (0..zone_temp_vector.size - 1)
-        zone_temperatures << zone_temp_vector[i].round(2)
+        zone_temperatures << zone_temp_vector[i]
       end
 
       # get zone thermostat heating setpoint temperatures
@@ -201,27 +201,26 @@ Standard.class_eval do
       zone_setpoint_temperatures = []
       zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
       for i in (0..zone_setpoint_temp_vector.size - 1)
-        zone_setpoint_temperatures << zone_setpoint_temp_vector[i].round(2)
+        zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
       end
 
       # calculate zone occupancy by making a new ruleset schedule
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone, occupied_percentage_threshold: occupied_percentage_threshold)
-      occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
+      occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
+      occ_values = std.schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
-      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]).round(2) }
+      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]) }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
         bldg_unmet_hours[i] = 0 if bldg_unmet_hours[i].nil?
         bldg_occ_unmet_hours[i] = 0 if bldg_occ_unmet_hours[i].nil?
         bldg_unmet_hours[i] += zone_unmet_hours[i]
-        if occupied_bool_values[i]
+        if occ_values[i] >= occupied_percentage_threshold
           zone_occ_unmet_hours[i] = zone_unmet_hours[i]
           bldg_occ_unmet_hours[i] += zone_unmet_hours[i]
         else
           zone_occ_unmet_hours[i] = 0
-          bldg_occ_unmet_hours[i] += 0
         end
       end
 
@@ -229,9 +228,10 @@ Standard.class_eval do
       # could reduce the number of returned variables if this poses a storage or data transfer problem
       zone_data << { 'zone_name' => zone.name,
                      'zone_area' => zone.floorArea,
-                     'zone_air_temperatures' => zone_temperatures,
-                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures,
-                     'zone_air_temperature_differences' => zone_temperature_diff,
+                     'zone_air_temperatures' => zone_temperatures.round(3),
+                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures.round(3),
+                     'zone_air_temperature_differences' => zone_temperature_diff.round(3),
+                     'zone_occupancy' => occ_values.map { |x| x.round(3) },
                      'zone_unmet_hours' => zone_unmet_hours,
                      'zone_occupied_unmet_hours' => zone_occ_unmet_hours,
                      'sum_zone_unmet_hours' => zone_unmet_hours.count { |x| x > 0 },
