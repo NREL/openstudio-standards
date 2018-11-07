@@ -185,10 +185,7 @@ class NECB2011
         orientations.each do |orientation|
           walls_area_array[orientation[:direction]] = 0.0
           subsurface_area_array[orientation[:direction]] = 0.0
-
           json_data[:surface_data] = []
-
-
         end
       end
 
@@ -229,14 +226,14 @@ class NECB2011
 
         #if no surfaces ext or ground.. then set the space as a core space.
         if json_data[:surface_data].inject(0) {|sum, hash| sum + hash[:surface_area]} == 0.0
-          horizontal_placement = "core"
-        elsif (max_area_azimuth >= 0.0 && max_area_azimuth <= 45.00) || (max_area_azimuth >= 315.0 && max_area_azimuth <= 360.00)
+          horizontal_placement = 'core'
+        elsif (max_area_azimuth >= 0.0 && max_area_azimuth <= 45.00) || (max_area_azimuth >= 315.01 && max_area_azimuth <= 360.00)
           horizontal_placement = 'north'
-        elsif (max_area_azimuth >= 45.0 && max_area_azimuth <= 135.00)
+        elsif (max_area_azimuth >= 45.01 && max_area_azimuth <= 135.00)
           horizontal_placement = 'east'
-        elsif (max_area_azimuth >= 135.0 && max_area_azimuth <= 225.00)
+        elsif (max_area_azimuth >= 135.01 && max_area_azimuth <= 225.00)
           horizontal_placement = 'south'
-        elsif (max_area_azimuth >= 225.0 && max_area_azimuth <= 315.00)
+        elsif (max_area_azimuth >= 225.01 && max_area_azimuth <= 315.00)
           horizontal_placement = 'west'
         end
       end
@@ -247,10 +244,11 @@ class NECB2011
             space: space,
             space_name: space.name,
             floor_area: space.floorArea,
-            horizontal_placement:  horizontal_placement,
+            horizontal_placement: horizontal_placement,
             vertical_placement: vertical_placement,
             building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
             space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
+            short_space_type_name: "#{space.spaceType.get.standardsBuildingType.get}-#{space.spaceType.get.standardsSpaceType.get}",
             necb_hvac_system_selection_type: space_type_data['necb_hvac_system_selection_type'], #
             system_number: necb_hvac_system_select['system_type'].nil? ? nil : necb_hvac_system_select['system_type'], # the necb system type
             number_of_stories: model.getBuilding.standardsNumberOfAboveGroundStories.get, # number of stories
@@ -265,6 +263,34 @@ class NECB2011
       end
     end
     File.write("#{File.dirname(__FILE__)}/newway.json", JSON.pretty_generate(space_zoning_data_array_json))
+    # reduce the number of zones by first finding spaces with similar load profiles.. That means
+    # 1. same space_type
+    # 2. same envelope exposure
+    # 3. same schedule (should be the same as #2)
+
+    # Get all the spacetypes used in the spaces.
+    dwelling_group_index = 0
+    wildcard_group_index = 0
+    regular_group_index = 0
+
+    unique_spacetypes = space_zoning_data_array_json.map {|space_info| space_info[:short_space_type_name]}.uniq()
+    unique_spacetypes.each do |unique_spacetype|
+      spaces_of_a_spacetype = space_zoning_data_array_json.select {|space_info| space_info[:short_space_type_name] == unique_spacetype}
+      spaces_of_a_spacetype.each do |space_info|
+        if space_info[:is_dwelling_unit] == true
+          # these units are regretablly on their own system. So they must be zone on their own for costing purposes.
+
+        elsif space_info[:is_wildcard] == true
+          # These spaces need to be added to nearby system or on their own system.
+        else # all other spaces
+          # find all spaces with same envelope loads.
+          spaces_of_a_spacetype.each do |space_info_2|
+            space_info[:surface_data] == space_info_2[:surface_data]
+          end
+        end
+      end
+    end
+
 
     # Deal with Wildcard spaces. Might wish to have logic to do coridors first.
     space_zoning_data_array_json.each do |space_zone_data|
