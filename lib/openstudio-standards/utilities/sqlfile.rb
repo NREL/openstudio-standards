@@ -47,7 +47,7 @@ Standard.class_eval do
   # @return [Hash] Hash with 'sum' of heating unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
   def model_annual_occupied_unmet_heating_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone heating occupied unmet hours with #{tolerance} R tolerance")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone heating occupied unmet hours with #{tolerance} R tolerance.  This may take some time.")
     sql = model_sql_file(model)
 
     # convert tolerance to Kelvin
@@ -83,7 +83,7 @@ Standard.class_eval do
       zone_temperatures = []
       zone_temp_vector = zone_temp_timeseries.get.values
       for i in (0..zone_temp_vector.size - 1)
-        zone_temperatures << zone_temp_vector[i]
+        zone_temperatures << zone_temp_vector[i].round(2)
       end
 
       # get zone thermostat heating setpoint temperatures
@@ -98,7 +98,7 @@ Standard.class_eval do
       zone_setpoint_temperatures = []
       zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
       for i in (0..zone_setpoint_temp_vector.size - 1)
-        zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
+        zone_setpoint_temperatures << zone_setpoint_temp_vector[i].round(2)
       end
 
       # calculate zone occupancy by making a new ruleset schedule
@@ -106,7 +106,7 @@ Standard.class_eval do
       occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
-      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| x - zone_temperatures[i] }
+      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x).round(2) }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_K) < 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
@@ -123,17 +123,22 @@ Standard.class_eval do
       end
 
       # log information for zone
+      # could reduce the number of returned variables if this poses a storage or data transfer problem
       zone_data << { 'zone_name' => zone.name,
                      'zone_area' => zone.floorArea,
-                     'temp_diff' => zone_temperature_diff,
-                     'unmet_hours' => zone_unmet_hours,
-                     'occ_unmet_hrs' => zone_occ_unmet_hours }
+                     'zone_air_temperatures' => zone_temperatures,
+                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures,
+                     'zone_air_temperature_differences' => zone_temperature_diff,
+                     'zone_unmet_hours' => zone_unmet_hours,
+                     'zone_occupied_unmet_hours' => zone_occ_unmet_hours,
+                     'sum_zone_unmet_hours' => zone_unmet_hours.count { |x| x > 0 },
+                     'sum_zone_occupied_unmet_hours' => zone_occ_unmet_hours.count { |x| x > 0 } }
     end
 
     occupied_unmet_heating_hours_detailed = { 'sum_bldg_unmet_hours' => bldg_unmet_hours.count { |x| x > 0 },
-                                              'sum_bldg_occ_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
+                                              'sum_bldg_occupied_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
                                               'bldg_unmet_hours' => bldg_unmet_hours,
-                                              'bldg_occ_unmet_hours' => bldg_occ_unmet_hours,
+                                              'bldg_occupied_unmet_hours' => bldg_occ_unmet_hours,
                                               'zone_data' => zone_data }
     return occupied_unmet_heating_hours_detailed
   end
@@ -145,7 +150,7 @@ Standard.class_eval do
   # @return [Hash] Hash with 'sum' of cooling unmet hours and 'zone_temperature_differences' of all zone unmet hours data
   # @todo account for operative temperature thermostats
   def model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance: 1.0, occupied_percentage_threshold: 0.05)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone cooling occupied unmet hours with #{tolerance} R tolerance")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating zone cooling occupied unmet hours with #{tolerance} R tolerance. This may take some time.")
     sql = model_sql_file(model)
 
     # convert tolerance to Kelvin
@@ -181,7 +186,7 @@ Standard.class_eval do
       zone_temperatures = []
       zone_temp_vector = zone_temp_timeseries.get.values
       for i in (0..zone_temp_vector.size - 1)
-        zone_temperatures << zone_temp_vector[i]
+        zone_temperatures << zone_temp_vector[i].round(2)
       end
 
       # get zone thermostat heating setpoint temperatures
@@ -196,7 +201,7 @@ Standard.class_eval do
       zone_setpoint_temperatures = []
       zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
       for i in (0..zone_setpoint_temp_vector.size - 1)
-        zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
+        zone_setpoint_temperatures << zone_setpoint_temp_vector[i].round(2)
       end
 
       # calculate zone occupancy by making a new ruleset schedule
@@ -204,7 +209,7 @@ Standard.class_eval do
       occupied_bool_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
-      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| x - zone_temperatures[i] }
+      zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]).round(2) }
       zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_K) > 0 ? 1 : 0 }
       zone_occ_unmet_hours = []
       for i in (0..zone_unmet_hours.size - 1)
@@ -221,17 +226,22 @@ Standard.class_eval do
       end
 
       # log information for zone
+      # could reduce the number of returned variables if this poses a storage or data transfer problem
       zone_data << { 'zone_name' => zone.name,
                      'zone_area' => zone.floorArea,
-                     'temp_diff' => zone_temperature_diff,
-                     'unmet_hours' => zone_unmet_hours,
-                     'occ_unmet_hrs' => zone_occ_unmet_hours }
+                     'zone_air_temperatures' => zone_temperatures,
+                     'zone_air_setpoint_temperatures' => zone_setpoint_temperatures,
+                     'zone_air_temperature_differences' => zone_temperature_diff,
+                     'zone_unmet_hours' => zone_unmet_hours,
+                     'zone_occupied_unmet_hours' => zone_occ_unmet_hours,
+                     'sum_zone_unmet_hours' => zone_unmet_hours.count { |x| x > 0 },
+                     'sum_zone_occupied_unmet_hours' => zone_occ_unmet_hours.count { |x| x > 0 } }
     end
 
     occupied_unmet_cooling_hours_detailed = { 'sum_bldg_unmet_hours' => bldg_unmet_hours.count { |x| x > 0 },
-                                              'sum_bldg_occ_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
+                                              'sum_bldg_occupied_unmet_hours' => bldg_occ_unmet_hours.count { |x| x > 0 },
                                               'bldg_unmet_hours' => bldg_unmet_hours,
-                                              'bldg_occ_unmet_hours' => bldg_occ_unmet_hours,
+                                              'bldg_occupied_unmet_hours' => bldg_occ_unmet_hours,
                                               'zone_data' => zone_data }
     return occupied_unmet_cooling_hours_detailed
   end
@@ -257,8 +267,7 @@ Standard.class_eval do
       # check to see if input argument tolerance matches model tolerance
       tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
       unless (model_tolerance - tolerance_K).abs < 1e-3
-        # input argument tolerance does not match model tolerance,
-        # need to recalculate unmet hours
+        # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
     end
@@ -266,7 +275,7 @@ Standard.class_eval do
     if use_detailed
       # calculate unmet hours for each zone using zone time series
       zones_unmet_hours = model_annual_occupied_unmet_heating_hours_detailed(model, tolerance)
-      heating_unmet_hours = zones_unmet_hours['sum_bldg_occ_unmet_hours']
+      heating_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating heating unmet hours with #{model_tolerance_R} R tolerance")
@@ -315,8 +324,7 @@ Standard.class_eval do
       # check to see if input argument tolerance matches model tolerance
       tolerance_K = OpenStudio.convert(tolerance, 'R', 'K').get
       unless (model_tolerance - tolerance_K).abs < 1e-3
-        # input argument tolerance does not match model tolerance,
-        # need to recalculate unmet hours
+        # input argument tolerance does not match model tolerance; need to recalculate unmet hours
         use_detailed = true
       end
     end
@@ -324,7 +332,7 @@ Standard.class_eval do
     if use_detailed
       # calculate unmet hours for each zone using zone time series
       zones_unmet_hours = model_annual_occupied_unmet_cooling_hours_detailed(model, tolerance)
-      cooling_unmet_hours = zones_unmet_hours['sum_bldg_occ_unmet_hours']
+      cooling_unmet_hours = zones_unmet_hours['sum_bldg_occupied_unmet_hours']
     else
       # use default EnergyPlus unmet hours reporting
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Calculating cooling unmet hours with #{model_tolerance_R} R tolerance")
