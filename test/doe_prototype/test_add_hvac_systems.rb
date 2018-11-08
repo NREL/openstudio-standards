@@ -36,6 +36,9 @@ class TestAddHVACSystems < Minitest::Test
       ['PVAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
       ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
 
+      # Central Air Source Heat Pump plant object
+      ['VAV Reheat', 'AirSourceHeatPump', 'AirSourceHeatPump', 'Electricity'],
+
       # Ambient Loop, Ambient Loop, forced air
       ['PVAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
       ['VAV Reheat', 'HeatPump', 'HeatPump', 'HeatPump'],
@@ -70,6 +73,9 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
       ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
       ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+
+      # Central Air Source Heat Pump, hydronic
+      ['Fan Coil with DOAS', 'AirSourceHeatPump', nil, 'Electricity'],
 
       # Ambient Loop, Ambient Loop, hydronic
       ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
