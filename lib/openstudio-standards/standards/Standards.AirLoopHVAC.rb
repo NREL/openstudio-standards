@@ -2319,7 +2319,7 @@ class Standard
   # If not supplied, one will be created based on the supplied
   # occupancy threshold.
   # @return [Bool] true if successful, false if not
-  def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.15, occ_sch = nil)
+  def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.05, occ_sch = nil)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -3049,7 +3049,7 @@ class Standard
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
   # @return [Bool] true if successful, false if not
-  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.15)
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
 
