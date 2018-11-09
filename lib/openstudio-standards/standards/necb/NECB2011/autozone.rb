@@ -192,11 +192,8 @@ class NECB2011
 
       [:outdoors, :ground].each do |bc|
         orientations.each do |orientation|
-          puts "bc= #{bc}"
-          puts boundary_conditions[bc.to_sym]
-          puts boundary_conditions
-          surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
-          selected_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, [orientation[:surface_type]])
+          surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
+          selected_surfaces = BTAP::Geometry::Surfaces.filter_by_surface_types(surfaces, [orientation[:surface_type]])
           BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|
             #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
             walls_area_array[orientation[:direction]] += surface.grossArea unless ['RoofCeiling', 'Floor'].include?(orientation[:surface_type])
@@ -207,7 +204,7 @@ class NECB2011
             tilt = (surface.tilt() * 180.0 / Math::PI).to_i
             surface_data = json_data[:surface_data].detect {|surface_data| surface_data[:surface_type] == surface.surfaceType && surface.surfaceType && surface_data[:azimuth] == azimuth && surface_data[:tilt] == tilt && surface_data[:boundary_condition] == bc}
             if surface_data.nil?
-              surface_data = {:surface_type => surface.surfaceType, :azimuth => azimuth, :tilt => tilt, :boundary_condition => bc, :surface_area => 0.0, :glazed_subsurface_area => 0.0, :opaque_subsurface_area => 0.0}
+              surface_data = {surface_type: surface.surfaceType, azimuth: azimuth, tilt: tilt, boundary_condition: bc, surface_area: 0.0, glazed_subsurface_area: 0.0, opaque_subsurface_area: 0.0}
               json_data[:surface_data] << surface_data
             end
             surface_data[:surface_area] += surface.grossArea.to_i
@@ -243,7 +240,7 @@ class NECB2011
         space_zoning_data_array_json << {
             space: space,
             space_name: space.name,
-            floor_area: space.floorArea,
+            floor_area: space.floorArea.to_i,
             horizontal_placement: horizontal_placement,
             vertical_placement: vertical_placement,
             building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
@@ -272,22 +269,28 @@ class NECB2011
     dwelling_group_index = 0
     wildcard_group_index = 0
     regular_group_index = 0
-
+    #Thermal Zone iterator
     unique_spacetypes = space_zoning_data_array_json.map {|space_info| space_info[:short_space_type_name]}.uniq()
     unique_spacetypes.each do |unique_spacetype|
       spaces_of_a_spacetype = space_zoning_data_array_json.select {|space_info| space_info[:short_space_type_name] == unique_spacetype}
       spaces_of_a_spacetype.each do |space_info|
-        if space_info[:is_dwelling_unit] == true
-          # these units are regretablly on their own system. So they must be zone on their own for costing purposes.
+        # Find spacetypes that have similar envelop loads in the same.
+        # find all spaces with same envelope loads.
+        spaces_of_a_spacetype.each do |space_info_2|
+          does_space_have_similar_envelope_load = true
+          if space_info[:surface_data].size == space_info_2[:surface_data].size
+            space_info[:surface_data].each do |surface_info|
+              does_space_have_similar_envelope_load = false unless space_info_2[:surface_data].include?(surface_info)
+            end
+          else
+            does_space_have_similar_envelope_load = false
+          end
+          if does_space_have_similar_envelope_load
+             #If there are similar spaces.. they should be placed into the same Thermal zone.
 
-        elsif space_info[:is_wildcard] == true
-          # These spaces need to be added to nearby system or on their own system.
-        else # all other spaces
-          # find all spaces with same envelope loads.
-          spaces_of_a_spacetype.each do |space_info_2|
-            space_info[:surface_data] == space_info_2[:surface_data]
           end
         end
+
       end
     end
 

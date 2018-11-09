@@ -18,7 +18,7 @@ class TestECC < CreateDEERPrototypeBuildingTest
 
   create_models = true
   run_models = false
-  compare_results = false
+  compare_results = falseThis
   
   debug = false
   
