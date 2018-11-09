@@ -179,6 +179,42 @@
       "beds_per_spot": null,
       "parking_area_per_spot": null,
       "notes": null
+    },
+    {
+      "building_type": "SmallDataCenterLowITE",
+      "building_area_per_spot": 0.0,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": null,
+      "notes": null
+    },
+    {
+      "building_type": "SmallDataCenterHighITE",
+      "building_area_per_spot": 0.0,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": null,
+      "notes": null
+    },
+    {
+      "building_type": "LargeDataCenterLowITE",
+      "building_area_per_spot": 0.0,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": null,
+      "notes": null
+    },
+    {
+      "building_type": "LargeDataCenterHighITE",
+      "building_area_per_spot": 0.0,
+      "units_per_spot": null,
+      "students_per_spot": null,
+      "beds_per_spot": null,
+      "parking_area_per_spot": null,
+      "notes": null
     }
   ]
 }

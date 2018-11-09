@@ -197,6 +197,50 @@
       "canopy_size": null,
       "floor_area_per_drive_through_window": null,
       "notes": null
+    },
+    {
+      "building_type": "SmallDataCenterLowITE",
+      "rollup_doors_per_10,000": null,
+      "entrance_doors_per_10,000": null,
+      "others_doors_per_10,000": null,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": null
+    },
+    {
+      "building_type": "SmallDataCenterHighITE",
+      "rollup_doors_per_10,000": null,
+      "entrance_doors_per_10,000": null,
+      "others_doors_per_10,000": null,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": null
+    },
+    {
+      "building_type": "LargeDataCenterLowITE",
+      "rollup_doors_per_10,000": null,
+      "entrance_doors_per_10,000": null,
+      "others_doors_per_10,000": null,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": null
+    },
+    {
+      "building_type": "LargeDataCenterHighITE",
+      "rollup_doors_per_10,000": null,
+      "entrance_doors_per_10,000": null,
+      "others_doors_per_10,000": null,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": null
     }
   ]
 }
