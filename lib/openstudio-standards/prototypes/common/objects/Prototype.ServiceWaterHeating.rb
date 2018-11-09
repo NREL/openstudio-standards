@@ -11,7 +11,7 @@ class Standard
   # @param service_water_pump_motor_efficiency [Double] service water pump motor efficiency, as decimal.
   # @param water_heater_capacity [Double] water heater heating capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
-  # @param water_heater_fuel [String] water heater fuel. Valid choices are Natural Gas, Electricity
+  # @param water_heater_fuel [String] water heater fuel. Valid choices are NaturalGas, Electricity
   # @param parasitic_fuel_consumption_rate [Double] the parasitic fuel consumption rate of the water heater, in W
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
@@ -113,7 +113,7 @@ class Standard
   #
   # @param water_heater_capacity [Double] water heater capacity, in W
   # @param water_heater_volume [Double] water heater volume, in m^3
-  # @param water_heater_fuel [Double] valid choices are Natural Gas, Electricity
+  # @param water_heater_fuel [Double] valid choices are NaturalGas, Electricity
   # @param service_water_temperature [Double] water heater temperature, in C
   # @param parasitic_fuel_consumption_rate [Double] water heater parasitic fuel consumption rate, in W
   # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating schedule. If nil, will be defaulted.
@@ -201,7 +201,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
-    elsif water_heater_fuel == 'Natural Gas'
+    elsif water_heater_fuel == 'Natural Gas' || water_heater_fuel == 'NaturalGas'
       water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.78)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -605,7 +605,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
-    elsif water_heater_fuel == 'Natural Gas'
+    elsif water_heater_fuel == 'Natural Gas' || water_heater_fuel == 'NaturalGas'
       water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.8)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -668,10 +668,9 @@ class Standard
                              peak_flowrate,
                              flowrate_schedule,
                              water_use_temperature,
-                             space_name)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
-
+                             space_name,
+                             frac_sensible: 0.2,
+                             frac_latent: 0.05)
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
 
@@ -679,8 +678,7 @@ class Standard
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
     rated_flow_rate_m3_per_s = peak_flowrate
     rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s, 'm^3/s', 'gal/min').get
-    frac_sensible = 0.2
-    frac_latent = 0.05
+
     water_use_sensible_frac_sch = model_add_constant_schedule_ruleset(model,
                                                                       frac_sensible,
                                                                       name = "Fraction Sensible - #{frac_sensible}",
@@ -720,7 +718,10 @@ class Standard
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
-    swh_loop.addDemandBranchForComponent(swh_connection)
+    unless swh_loop.nil?
+      swh_loop.addDemandBranchForComponent(swh_connection)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
+    end
 
     return water_fixture
   end
