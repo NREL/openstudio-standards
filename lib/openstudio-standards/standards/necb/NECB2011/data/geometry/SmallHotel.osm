@@ -5211,7 +5211,7 @@ OS:Surface,
 
 OS:Building,
   {d51e5796-e368-46e3-9443-963f0bbac6c9}, !- Handle
-  NECB_2011SmallHotel,                    !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   180,                                    !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

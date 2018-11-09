@@ -184,7 +184,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:Building,
   {2359408b-6252-42dc-81e2-5632894e0032}, !- Handle
-  NECB_2011QuickServiceRestaurant,        !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

@@ -2109,7 +2109,7 @@ OS:YearDescription,
 
 OS:Building,
   {2b0bfd6c-8754-4347-b436-1d7c3e63c79e}, !- Handle
-  NECB_2011RetailStripmall,               !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

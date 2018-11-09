@@ -164,7 +164,7 @@ OS:ThermostatSetpoint:DualSetpoint,
 
 OS:Building,
   {161a51f0-9700-4aa1-8ba8-f2513d0eecae}, !- Handle
-  NECB_2011Hospital,                      !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
