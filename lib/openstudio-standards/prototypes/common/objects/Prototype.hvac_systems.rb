@@ -1752,7 +1752,7 @@ class Standard
     end
 
     # adjusted zone design heating temperature for pvav unless it would cause a temperature higher than reheat water supply temperature
-    if hw_temp_c > OpenStudio.convert(140.0, 'F', 'C').get
+    unless !hot_water_loop.nil? && hw_temp_c < OpenStudio.convert(140.0, 'F', 'C').get
       dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
       dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
     end
