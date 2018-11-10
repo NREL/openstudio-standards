@@ -9,6 +9,14 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
+    # TODO remove this once workaround for HPWHs is removed
+    if water_heater_mixed.partLoadFactorCurve.is_initialized
+      if water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
+        return true
+      end
+    end
+
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
