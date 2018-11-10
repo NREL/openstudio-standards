@@ -210,6 +210,34 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
+    elsif water_heater_fuel == 'HeatPump'
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple but crappy workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
+      # Make a part-load efficiency modifier curve with a value above 1, which
+      # can gets multiplied by the nominal efficiency of 100% to represent
+      # the COP of a HPWH.
+      # TODO could make this workaround better by using EMS
+      # to modify this curve output in realtime based on
+      # the OA temperature.
+      hpwh_cop = 2.8
+      eff_f_of_plr = OpenStudio::Model::CurveCubic.new(model)
+      eff_f_of_plr.setName("HPWH_COP_#{hpwh_cop}")
+      eff_f_of_plr.setCoefficient1Constant(hpwh_cop)
+      eff_f_of_plr.setCoefficient2x(0.0)
+      eff_f_of_plr.setCoefficient3xPOW2(0.0)
+      eff_f_of_plr.setCoefficient4xPOW3(0.0)
+      eff_f_of_plr.setMinimumValueofx(0.0)
+      eff_f_of_plr.setMaximumValueofx(1.0)
+      water_heater.setHeaterFuelType('Electricity')
+      water_heater.setHeaterThermalEfficiency(1.0)
+      water_heater.setPartLoadFactorCurve(eff_f_of_plr)
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOffCycleParasiticFuelType('Electricity')
+      water_heater.setOnCycleParasiticFuelType('Electricity')
+      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
+      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{water_heater_fuel} is not a valid water heater fuel.  Valid choices are Electricity, NaturalGas, and HeatPump.")
     end
 
     if set_peak_use_flowrate
@@ -854,8 +882,6 @@ class Standard
                                      flowrate_schedule,
                                      water_use_temperature)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_booster_loop.name}.")
-
     # Water use connection
     swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
 
@@ -880,7 +906,10 @@ class Standard
     swh_connection.addWaterUseEquipment(water_fixture)
 
     # Connect the water use connection to the SWH loop
-    swh_booster_loop.addDemandBranchForComponent(swh_connection)
+    unless swh_booster_loop.nil?
+      swh_booster_loop.addDemandBranchForComponent(swh_connection)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_booster_loop.name}.")
+    end
 
     return water_fixture
   end
