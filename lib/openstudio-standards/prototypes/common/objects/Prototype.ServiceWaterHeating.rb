@@ -73,11 +73,11 @@ class Standard
       swh_pump_motor_efficiency = 1
     end
 
-    swh_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    swh_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
     swh_pump.setName('Service Water Loop Pump')
     swh_pump.setRatedPumpHead(swh_pump_head_press_pa.to_f)
     swh_pump.setMotorEfficiency(swh_pump_motor_efficiency)
-    swh_pump.setPumpControlType('Intermittent')
+    swh_pump.setPumpControlType('Continuous')
     swh_pump.addToNode(service_water_loop.supplyInletNode)
 
     water_heater = model_add_water_heater(model,
@@ -170,6 +170,7 @@ class Standard
     water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal, 'gal', 'm^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
+    water_heater.setDeadbandTemperatureDifference(2.0)
 
     if water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F for now
@@ -582,12 +583,13 @@ class Standard
     sizing_plant.setLoopDesignTemperatureDifference(swh_delta_t_k)
 
     # Booster water heating pump
-    swh_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    swh_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
     swh_pump.setName('Booster Water Loop Pump')
-    swh_pump_head_press_pa = 0.0 # As if there is no circulation pump
-    swh_pump.setRatedPumpHead(swh_pump_head_press_pa)
+    swh_pump.setRatedPumpHead(0.0) # As if there is no circulation pump
+    swh_pump.setRatedPowerConsumption(0.0) # As if there is no circulation pump
     swh_pump.setMotorEfficiency(1)
-    swh_pump.setPumpControlType('Intermittent')
+    swh_pump.setPumpControlType('Continuous')
+    swh_pump.setMinimumFlowRate(0.0)
     swh_pump.addToNode(booster_service_water_loop.supplyInletNode)
 
     # Water heater
@@ -602,6 +604,7 @@ class Standard
     water_heater.setName("#{water_heater_vol_gal}gal #{water_heater_fuel} Booster Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal, 'gal', 'm^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
+    water_heater.setDeadbandTemperatureDifference(2.0)
 
     if booster_water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F for now
@@ -673,6 +676,43 @@ class Standard
     # the main service water loop.
     main_service_water_loop.addDemandBranchForComponent(hx)
 
+    # Add a plant component temperature source to the demand outlet
+    # of the HX to represent the fact that the water used by the booster
+    # would in reality be at the mains temperature.
+    mains_src = OpenStudio::Model::PlantComponentTemperatureSource.new(model)
+    mains_src.setName('Mains Water Makeup for SWH Booster')
+    mains_src.addToNode(hx.demandOutletModelObject.get.to_Node.get)
+
+    # Mains water temperature sensor
+    mains_water_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Mains Water Temperature')
+    mains_water_temp_sen.setName('Mains_Water_Temp_Sen')
+    mains_water_temp_sen.setKeyName('Environment')
+
+    # Schedule to actuate
+    water_mains_temp_sch = OpenStudio::Model::ScheduleConstant.new(model)
+    water_mains_temp_sch.setName('Mains Water Temperature')
+    water_mains_temp_sch.setValue(OpenStudio.convert(50, 'F', 'C').get)
+
+    # Actuator for mains water temperature schedule
+    mains_water_temp_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(water_mains_temp_sch, 'Schedule:Constant', 'Schedule Value')
+    mains_water_temp_sch_act.setName('Mains_Water_Temp_Act')
+
+    # Program
+    mains_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    mains_prg.setName('Mains_Water_Prg')
+    mains_prg_body = "SET #{mains_water_temp_sch_act.handle} = #{mains_water_temp_sen.handle}"
+    mains_prg.setBody(mains_prg_body)
+
+    # Program Calling Manager
+    mains_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    mains_mgr.setName("Mains_Water_Prg_Mgr")
+    mains_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+    mains_mgr.addProgram(mains_prg)
+
+    # Make the plant component use the actuated schedule
+    mains_src.setTemperatureSpecificationType('Scheduled')
+    mains_src.setSourceTemperatureSchedule(water_mains_temp_sch)
+
     return booster_service_water_loop
   end
 
@@ -718,7 +758,7 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{use_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture_def.setName("#{use_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
     # Target mixed water temperature
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
@@ -732,9 +772,11 @@ class Standard
     water_fixture.setFlowRateFractionSchedule(schedule)
 
     if space_name.nil?
-      water_fixture.setName("#{use_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+      water_fixture.setName("#{use_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      swh_connection.setName("#{use_name.capitalize} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
     else
-      water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+      water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      swh_connection.setName("#{space_name.capitalize} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
     end
 
     unless space_name.nil?
@@ -750,6 +792,8 @@ class Standard
       swh_loop.addDemandBranchForComponent(swh_connection)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{swh_loop.name}.")
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{water_fixture.name}.")
 
     return water_fixture
   end
@@ -838,10 +882,10 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{space_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture_def.setName("#{space.name.get.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
     # Target mixed water temperature
-    mixed_water_temp_c = data['service_water_heating_target_temperature']
-    mixed_water_temp_f = OpenStudio.convert(mixed_water_temp_c, 'C', 'F').get
+    mixed_water_temp_f = data['service_water_heating_target_temperature']
+    mixed_water_temp_c = OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                mixed_water_temp_c,
                                                                name = "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
@@ -851,7 +895,7 @@ class Standard
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
     schedule = model_add_schedule(model, data['service_water_heating_schedule'])
     water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    water_fixture.setName("#{space.name.get.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm")
     swh_connection.addWaterUseEquipment(water_fixture)
     # Assign water fixture to a space
     water_fixture.setSpace(space) if model_attach_water_fixtures_to_spaces?(model)
@@ -889,10 +933,10 @@ class Standard
     water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
     rated_flow_rate_m3_per_s = peak_flowrate
     rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s, 'm^3/s', 'gal/min').get
-    water_fixture_def.setName("Water Fixture Def - #{rated_flow_rate_gal_per_min} gal/min")
+    water_fixture_def.setName("Booster Water Fixture Def - #{rated_flow_rate_gal_per_min.round(2)} gpm")
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
     # Target mixed water temperature
-    mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'F', 'C').get
+    mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get,
                                                                name = "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
@@ -900,7 +944,7 @@ class Standard
 
     # Water use equipment
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    water_fixture.setName("Booster Water Fixture - #{rated_flow_rate_gal_per_min} gal/min at #{mixed_water_temp_f}F")
+    water_fixture.setName("Booster Water Fixture - #{rated_flow_rate_gal_per_min.round(2)} gpm at #{mixed_water_temp_f.round}F")
     schedule = model_add_schedule(model, flowrate_schedule)
     water_fixture.setFlowRateFractionSchedule(schedule)
     swh_connection.addWaterUseEquipment(water_fixture)
