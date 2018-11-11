@@ -25,7 +25,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
-      capacity_w = capacity_w.get
+      capacity_w = capacity_w.get / water_heater_mixed.component_quantity
     end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -37,7 +37,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = volume_m3.get
+      volume_m3 = volume_m3.get / water_heater_mixed.component_quantity
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
