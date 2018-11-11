@@ -237,7 +237,7 @@ class Standard
     swh_systems = []
 
     # hash of general water use equipment awaiting loop
-    water_use_equipment_hash = Hash.new([]) # key is standards building type value is array of water use equipment
+    water_use_equipment_hash = {} # key is standards building type value is array of water use equipment
 
     # create space type hash (need num_units for MidriseApartment and RetailStripmall)
     space_type_hash = model_create_space_type_hash(model, trust_effective_num_spaces = false)
@@ -254,9 +254,9 @@ class Standard
       peak_flow_rate_gal_per_hr = space_type_properties['service_water_heating_peak_flow_rate'].to_f
       swh_system_type = space_type_properties['service_water_heating_system_type']
       flow_rate_fraction_schedule = model_add_schedule(model, space_type_properties['service_water_heating_schedule'])
-      service_water_temperature_f = space_type_properties['service_water_heating_target_temperature']
+      service_water_temperature_f = space_type_properties['service_water_heating_target_temperature'].to_f
       service_water_temperature_c = OpenStudio.convert(service_water_temperature_f, 'F', 'C').get
-      booster_water_temperature_f = space_type_properties['booster_water_heating_target_temperature']
+      booster_water_temperature_f = space_type_properties['booster_water_heating_target_temperature'].to_f
       booster_water_temperature_c = OpenStudio.convert(booster_water_temperature_f, 'F', 'C').get
       booster_water_heater_fraction = space_type_properties['booster_water_heater_fraction'].to_f
       service_water_fraction_sensible = space_type_properties['service_water_heating_fraction_sensible']
@@ -329,7 +329,11 @@ class Standard
       when 'Shared'
 
         # Store water use equip by building type to add to shared building hot water loop
-        water_use_equipment_hash[stds_bldg_type] << water_use_equip
+        if water_use_equipment_hash.key?(stds_bldg_type)
+          water_use_equipment_hash[stds_bldg_type] << water_use_equip
+        else
+          water_use_equipment_hash[stds_bldg_type] = [water_use_equip]
+        end
 
       when 'One Per Unit', 'Dedicated'
 
@@ -347,12 +351,12 @@ class Standard
 
         # Assign a quantity to the water heater if it represents multiple water heaters
         if num_water_heaters > 1
-          water_heater = swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).first
-          water_heater.set_component_quantity(1)
+          water_heater = swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).first.to_WaterHeaterMixed.get
+          water_heater.set_component_quantity(num_water_heaters)
         end
 
         # Add loop to list
-        swh_systems << unit_hot_water_loop
+        swh_systems << swh_loop
 
         # Attach water use equipment to the loop
         swh_connection = water_use_equip.waterUseConnections
@@ -367,7 +371,7 @@ class Standard
           # Add booster water heater equipment and connections
           booster_water_use_equip = model_add_swh_end_uses(model,
                                                            "Booster #{use_name}",
-                                                           swh_loop=nil,
+                                                           loop=nil,
                                                            booster_peak_flow_rate_m3_per_s,
                                                            flow_rate_fraction_schedule.name.get,
                                                            booster_water_temperature_c,
