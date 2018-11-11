@@ -221,11 +221,8 @@ class Standard
     return true
   end
 
-  # add swh
-
   # add typical swh demand and supply to model
   #
-  # @param trust_effective_num_spaces [Bool]
   # @param water_heater_fuel [String] water heater fuel. Valid choices are NaturalGas, Electricity, and HeatPump.
   #   If not supplied, a smart default will be determined based on building type.
   # @param pipe_insul_in [Double] thickness of the pipe insulation, in inches.
@@ -240,36 +237,35 @@ class Standard
     swh_systems = []
 
     # hash of general water use equipment awaiting loop
-    water_use_equipment_hash = {} # key is standards building type value is array of water use equipment
+    water_use_equipment_hash = Hash.new([]) # key is standards building type value is array of water use equipment
 
     # create space type hash (need num_units for MidriseApartment and RetailStripmall)
     space_type_hash = model_create_space_type_hash(model, trust_effective_num_spaces = false)
 
-    # add temperate schedules to hash so they can be shared across water use equipment
-    water_use_def_schedules = {} # key is temp C value is schedule
-
     # loop through space types adding demand side of swh
     model.getSpaceTypes.sort.each do |space_type|
       next unless space_type.standardsBuildingType.is_initialized
-      next unless space_type.standardsSpaceType.is_initialized
       next unless space_type_hash.key?(space_type) # this is used for space types without any floor area
       stds_bldg_type = space_type.standardsBuildingType.get
-      stds_space_type = space_type.standardsSpaceType.get
 
       # lookup space_type_properties
       space_type_properties = space_type_get_standards_data(space_type)
-      gal_hr_per_area = space_type_properties['service_water_heating_peak_flow_per_area']
-      gal_hr_peak_flow_rate = space_type_properties['service_water_heating_peak_flow_rate']
+      peak_flow_rate_gal_per_hr_per_ft2 = space_type_properties['service_water_heating_peak_flow_per_area'].to_f
+      peak_flow_rate_gal_per_hr = space_type_properties['service_water_heating_peak_flow_rate'].to_f
       swh_system_type = space_type_properties['service_water_heating_system_type']
       flow_rate_fraction_schedule = model_add_schedule(model, space_type_properties['service_water_heating_schedule'])
-      service_water_temperature_si = space_type_properties['service_water_heating_target_temperature']
+      service_water_temperature_f = space_type_properties['service_water_heating_target_temperature']
+      service_water_temperature_c = OpenStudio.convert(service_water_temperature_f, 'F', 'C').get
+      booster_water_temperature_f = space_type_properties['booster_water_heating_target_temperature']
+      booster_water_temperature_c = OpenStudio.convert(booster_water_temperature_f, 'F', 'C').get
+      booster_water_heater_fraction = space_type_properties['booster_water_heater_fraction'].to_f
       service_water_fraction_sensible = space_type_properties['service_water_heating_fraction_sensible']
       service_water_fraction_latent = space_type_properties['service_water_heating_fraction_latent']
-      floor_area_si = space_type_hash[space_type][:floor_area]
-      floor_area_ip = OpenStudio.convert(floor_area_si, 'm^2', 'ft^2').get
+      floor_area_m2 = space_type_hash[space_type][:floor_area]
+      floor_area_ft2 = OpenStudio.convert(floor_area_m2, 'm^2', 'ft^2').get
 
       # next if no service water heating demand
-      next unless gal_hr_per_area.to_f > 0.0 || gal_hr_peak_flow_rate.to_f > 0.0
+      next unless peak_flow_rate_gal_per_hr_per_ft2 > 0.0 || peak_flow_rate_gal_per_hr > 0.0
 
       # If there is no SWH schedule specified, assume
       # that there should be no SWH consumption for this space type.
@@ -278,278 +274,207 @@ class Standard
         flow_rate_fraction_schedule = model.alwaysOffDiscreteSchedule
       end
 
-      # add water use equipment definition
-      # For "One Per Unit" space types, set the flow rate based on the fixed gal/hr field.
-      # For all others, scale the gal/hr/ft2 based on space type area
-      water_use_equip_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-
-      # Set the flow rate.
-
+      # Determine flow rate
       case swh_system_type
       when 'One Per Unit'
+        water_heater_fuel = 'Electricity' if water_heater_fuel.nil?
         num_units = space_type_hash[space_type][:num_units].round
-        gal_hr_peak_flow_rate = num_units * gal_hr_peak_flow_rate
-        peak_flow_rate_si = num_units * OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
+        peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr
+        peak_flow_rate_m3_per_s = num_units * OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
-        gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        peak_flow_rate_si = OpenStudio.convert(gal_hr_peak_flow_rate, 'gal/hr', 'm^3/s').get
-        use_name = "#{space_type.name} #{num_units} units"
+        # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
+        water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
+        peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * floor_area_ft2
+        peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
+        use_name = "#{space_type.name}"
       end
 
+      # Split flow rate between main and booster uses if specified
+      if booster_water_heater_fraction > 0.0
+        booster_peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr * booster_water_heater_fraction
+        booster_peak_flow_rate_m3_per_s = peak_flow_rate_m3_per_s * booster_water_heater_fraction
+        peak_flow_rate_gal_per_hr -= booster_peak_flow_rate_gal_per_hr
+        peak_flow_rate_m3_per_s -= booster_peak_flow_rate_m3_per_s
+      end
+
+      # Add water use equipment and connections
+      water_use_equip = model_add_swh_end_uses(model,
+                                               use_name,
+                                               swh_loop=nil,
+                                               peak_flow_rate_m3_per_s,
+                                               flow_rate_fraction_schedule.name.get,
+                                               service_water_temperature_c,
+                                               space_name=nil,
+                                               frac_sensible: service_water_fraction_sensible,
+                                               frac_latent: service_water_fraction_latent)
+
+      # Water heater sizing
       case swh_system_type
       when 'One Per Unit'
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding dedicated water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr.")
+        parasitic_fuel_consumption_rate_w = num_units * 87.75
+        water_heater_capacity_w = num_units * OpenStudio.convert(15.0, 'kBtu/hr', 'W').get
+        water_heater_volume_m3 = num_units * OpenStudio.convert(50.0, 'gal', 'm^3').get
+        num_water_heaters = num_units
+      else
+        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, [water_use_equip])
+        parasitic_fuel_consumption_rate_w = water_heater_sizing[:parasitic_fuel_consumption_rate]
+        water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
+        water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
+        num_water_heaters = 1
+      end
 
-        # Add SWH loop
-        # default fuel, capacity, and volume from Table A.1. Water Heating Equipment Enhancements to ASHRAE Standard 90.1 Prototype Building Models
-        # temperature, pump head, motor efficiency, and parasitic load from Prototype Inputs
-        water_heater_fuel = 'Electricity' if water_heater_fuel.nil?
-        unit_hot_water_loop = model_add_swh_loop(model,
-                                                 system_name="#{space_type.name} Service Water Loop",
-                                                 water_heater_thermal_zone=nil,
-                                                 service_water_temperature=service_water_temperature_si,
-                                                 service_water_pump_head=0.01,
-                                                 service_water_pump_motor_efficiency=1.0,
-                                                 water_heater_capacity=OpenStudio.convert(15.0, 'kBtu/hr', 'W').get,
-                                                 water_heater_volume=OpenStudio.convert(50.0, 'gal', 'm^3').get,
-                                                 water_heater_fuel,
-                                                 parasitic_fuel_consumption_rate=87.75)
+      # Add either a dedicated SWH loop or save to add to shared SWH loop
+      case swh_system_type
+      when 'Shared'
 
-        # Add water use equipment and connections and attach to SWH loop
-        model_add_swh_end_uses(model,
-                               use_name,
-                               unit_hot_water_loop,
-                               peak_flow_rate_si,
-                               flow_rate_fraction_schedule,
-                               service_water_temperature,
-                               space_name=nil,
-                               frac_sensible: service_water_fraction_sensible,
-                               frac_latent: service_water_fraction_latent)
+        # Store water use equip by building type to add to shared building hot water loop
+        water_use_equipment_hash[stds_bldg_type] << water_use_equip
 
-        # apply efficiency to hot water heater
-        unit_hot_water_loop.supplyComponents.sort.each do |component|
-          next if component.to_WaterHeaterMixed.empty?
-          component = component.to_WaterHeaterMixed.get
-          water_heater_mixed_apply_efficiency(component)
+      when 'One Per Unit', 'Dedicated'
+
+        # Add service water loop with water heater
+        swh_loop = model_add_swh_loop(model,
+                                     system_name="#{space_type.name} Service Water Loop",
+                                     water_heater_thermal_zone=nil,
+                                     service_water_temperature_c,
+                                     service_water_pump_head=0.01,
+                                     service_water_pump_motor_efficiency=1.0,
+                                     water_heater_capacity_w,
+                                     water_heater_volume_m3,
+                                     water_heater_fuel,
+                                     parasitic_fuel_consumption_rate_w)
+
+        # Assign a quantity to the water heater if it represents multiple water heaters
+        if num_water_heaters > 1
+          water_heater = swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).first
+          water_heater.set_component_quantity(1)
         end
 
-        # add to list of systems
+        # Add loop to list
         swh_systems << unit_hot_water_loop
 
-      when 'Dedicated', 'Dedicated Booster'
+        # Attach water use equipment to the loop
+        swh_connection = water_use_equip.waterUseConnections
+        swh_loop.addDemandBranchForComponent(swh_connection.get) if swh_connection.is_initialized
 
-        # add water use equipment
-        water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
-        water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
-        water_use_equip.setName("#{space_type.name} SWH")
+        # If a booster fraction is specified, some percentage of the water
+        # is assumed to be heated beyond the normal temperature by a separate
+        # booster water heater.  This booster water heater is fed by the
+        # main water heater, so the booster is responsible for a smaller delta-T.
+        if booster_water_heater_fraction > 0
 
-        # add water use connection
-        water_use_connection = OpenStudio::Model::WaterUseConnections.new(model)
-        water_use_connection.addWaterUseEquipment(water_use_equip)
-        water_use_connection.setName("#{space_type.name} WUC")
-
-        # Add water use equipment and connections and attach to SWH loop
-        water_use_equip = model_add_swh_end_uses(model,
-                                                 use_name,
-                                                 swh_loop=nil,
-                                                 peak_flow_rate_si,
-                                                 flow_rate_fraction_schedule,
-                                                 service_water_temperature,
-                                                 space_name=nil,
-                                                 frac_sensible: service_water_fraction_sensible,
-                                                 frac_latent: service_water_fraction_latent)
-
-        # find_water_heater_capacity_volume_and_parasitic
-        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, [water_use_equip])
-        water_heater_capacity =
-        water_heater_volume =
-        parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
-
-        # Add SWH loop
-        water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
-        swh_loop = model_add_swh_loop(model,
-                                      system_name = "#{space_type.name} Service Water Loop",
-                                      water_heater_thermal_zone = nil,
-                                      water_heater_temp_si = 60.0, # C
-                                      service_water_pump_head = 0.01,
-                                      service_water_pump_motor_efficiency = 1.0,
-                                      water_heater_sizing[:water_heater_capacity],
-                                      water_heater_sizing[:water_heater_volume],
-                                      water_heater_fuel,
-                                      parasitic_fuel_consumption_rate)
-
-        # Attach water use equipment to SWH loop
-        swh_loop.addDemandBranchForComponent(swh_connection)
-
-
-        # find water heater
-        swh_loop.supplyComponents.sort.each do |component|
-          next if component.to_WaterHeaterMixed.empty?
-          water_heater = component.to_WaterHeaterMixed.get
-
-          # apply efficiency to hot water heater
-          water_heater_mixed_apply_efficiency(water_heater)
-        end
-
-        # add to list of systems
-        swh_systems << swh_loop
-
-        # boosters are all 6 gal elec but heating capacity varies from 3 to 19 (kBtu/hr) for prototype buildings
-        if swh_system_type == 'Dedicated Booster'
+          # Add booster water heater equipment and connections
+          booster_water_use_equip = model_add_swh_end_uses(model,
+                                                           "Booster #{use_name}",
+                                                           swh_loop=nil,
+                                                           booster_peak_flow_rate_m3_per_s,
+                                                           flow_rate_fraction_schedule.name.get,
+                                                           booster_water_temperature_c,
+                                                           space_name=nil,
+                                                           frac_sensible: service_water_fraction_sensible,
+                                                           frac_latent: service_water_fraction_latent)
 
           # find_water_heater_capacity_volume_and_parasitic
-          water_use_equipment_array = [water_use_equip]
-          inlet_temp_ip = OpenStudio.convert(service_water_temperature_si, 'C', 'F').get # pre-booster temp
-          outlet_temp_ip = inlet_temp_ip + 40.0
-          peak_flow_fraction = 0.6 # assume 60% of peak for dish washing
-          water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
-                                                                                      water_use_equipment_array,
-                                                                                      htg_eff: 1.0,
-                                                                                      inlet_temp_ip: inlet_temp_ip,
-                                                                                      target_temp_ip: outlet_temp_ip,
-                                                                                      peak_flow_fraction: peak_flow_fraction)
-          water_heater_capacity = water_heater_sizing[:water_heater_capacity]
+          booster_water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
+                                                                                              [booster_water_use_equip],
+                                                                                              htg_eff: 1.0,
+                                                                                              inlet_temp_ip: service_water_temperature_f,
+                                                                                              target_temp_ip: booster_water_temperature_f)
 
-          # gather additional inputs for add_swh_booster
-          water_heater_volume = OpenStudio.convert(6, 'gal', 'm^3').get
-          water_heater_fuel = 'Electricity'
-          booster_water_temperature = 82.22 # C
-          parasitic_fuel_consumption_rate = 0.0
-          booster_water_heater_thermal_zone = nil
+          # Add service water booster loop with water heater
+          # Note that booster water heaters are always assumed to be electric resistance
+          swh_booster_loop = model_add_swh_booster(model,
+                                                   swh_loop,
+                                                   booster_water_heater_sizing[:water_heater_capacity],
+                                                   water_heater_volume_m3=OpenStudio.convert(6, 'gal', 'm^3').get,
+                                                   water_heater_fuel='Electricity',
+                                                   booster_water_temperature_c,
+                                                   parasitic_fuel_consumption_rate_w=0.0,
+                                                   booster_water_heater_thermal_zone=nil)
 
-          # add_swh_booster
-          booster_service_water_loop = model_add_swh_booster(model,
-                                                             dedicated_hot_water_loop,
-                                                             water_heater_capacity,
-                                                             water_heater_volume,
-                                                             water_heater_fuel,
-                                                             booster_water_temperature,
-                                                             parasitic_fuel_consumption_rate,
-                                                             booster_water_heater_thermal_zone)
+          # Rename the service water booster loop
+          swh_booster_loop.setName("#{space_type.name} Service Water Booster Loop")
 
-          # find water heater
-          booster_service_water_loop.supplyComponents.sort.each do |component|
-            next if component.to_WaterHeaterMixed.empty?
-            water_heater = component.to_WaterHeaterMixed.get
-
-            # apply efficiency to hot water heater
-            water_heater_mixed_apply_efficiency(water_heater)
-          end
-
-          # rename booster loop
-          booster_service_water_loop.setName("#{space_type.name} Booster Service Water Loop")
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding Electric Booster water heater for #{space_type.name} on a loop named #{booster_service_water_loop.name}.")
-
+          # Attach booster water use equipment to the booster loop
+          booster_swh_connection = booster_water_use_equip.waterUseConnections
+          swh_booster_loop.addDemandBranchForComponent(booster_swh_connection.get) if booster_swh_connection.is_initialized
         end
 
-      when 'Shared' # store water use equip by building type in hash so can add general building type hot water loop
-
-        gal_hr_peak_flow_rate = gal_hr_per_area * floor_area_ip
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding water heating for #{space_type.name} space type with max flow rate of #{gal_hr_peak_flow_rate.round} gal/hr on a shared loop.")
-        # add water use equipment
-        water_use_equip = OpenStudio::Model::WaterUseEquipment.new(water_use_equip_def)
-        water_use_equip.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
-        water_use_equip.setName("#{space_type.name} SWH")
-
-        if water_use_equipment_hash.key?(stds_bldg_type)
-          water_use_equipment_hash[stds_bldg_type] << water_use_equip
-        else
-          water_use_equipment_hash[stds_bldg_type] = [water_use_equip]
-        end
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "'#{swh_system_type}' is not a valid Service Water Heating System Type, cannot add SWH to #{space_type.name}.  Valid choices are One Per Unit, Dedicated, Dedicated Booster, and Shared.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "'#{swh_system_type}' is not a valid Service Water Heating System Type, cannot add SWH to #{space_type.name}.  Valid choices are One Per Unit, Dedicated, and Shared.")
       end
     end
 
     # get building floor area and effective number of stories
-    bldg_floor_area = model.getBuilding.floorArea
+    bldg_floor_area_m2 = model.getBuilding.floorArea
     bldg_effective_num_stories_hash = model_effective_num_stories(model)
     bldg_effective_num_stories = bldg_effective_num_stories_hash[:below_grade] + bldg_effective_num_stories_hash[:above_grade]
 
     # add non-dedicated system(s) here. Separate systems for water use equipment from different building types
     water_use_equipment_hash.sort.each do |stds_bldg_type, water_use_equipment_array|
-      # gather inputs for add_swh_loop
-      system_name = "#{stds_bldg_type} Shared Service Water Loop"
-      water_heater_thermal_zone = nil
-      water_heater_temp_si = 60.0
+      # TODO: find the water use equipment with the highest temperature
+      water_heater_temp_f = 140.0
+      water_heater_temp_c = OpenStudio.convert(water_heater_temp_f, 'F', 'C').get
 
       # find pump values
       # Table A.2 in PrototypeModelEnhancements_2014_0.pdf shows 10ft on everything except SecondarySchool which has 11.4ft
       # todo - if SmallOffice then shouldn't have circulating pump
       if ['Office', 'PrimarySchool', 'Outpatient', 'Hospital', 'SmallHotel', 'LargeHotel', 'FullServiceRestaurant', 'HighriseApartment'].include?(stds_bldg_type)
-        service_water_pump_head = OpenStudio.convert(10.0, 'ftH_{2}O', 'Pa').get
+        service_water_pump_head_pa = OpenStudio.convert(10.0, 'ftH_{2}O', 'Pa').get
         service_water_pump_motor_efficiency = 0.3
         circulating = true if circulating.nil?
         pipe_insul_in = 0.5 if pipe_insul_in.nil?
       else # values for non-circulating pump
-        service_water_pump_head = 0.01
+        service_water_pump_head_pa = 0.01
         service_water_pump_motor_efficiency = 1.0
         circulating = false if circulating.nil?
         pipe_insul_in = 0.0 if pipe_insul_in.nil?
       end
 
-      # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
-      water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
-
-      bldg_type_floor_area = 0.0
-      space_type_hash.sort.each do |space_type, hash|
-        next if hash[:stds_bldg_type] != stds_bldg_type
-        bldg_type_floor_area += hash[:floor_area]
+      bldg_type_floor_area_m2 = 0.0
+      space_type_hash.sort.each do |space_type, space_type_props|
+        bldg_type_floor_area_m2 += space_type_props[:floor_area] if space_type_props[:stds_bldg_type] == stds_bldg_type
       end
 
-      # inputs for find_water_heater_capacity_volume_and_parasitic
+      # Inputs to determine pipe losses
       pipe_hash = {}
-      pipe_hash[:floor_area] = bldg_type_floor_area
-      pipe_hash[:effective_num_stories] = bldg_effective_num_stories * (bldg_type_floor_area / bldg_floor_area)
+      pipe_hash[:floor_area] = bldg_type_floor_area_m2
+      pipe_hash[:effective_num_stories] = bldg_effective_num_stories * (bldg_type_floor_area_m2 / bldg_floor_area_m2)
       pipe_hash[:circulating] = circulating
       pipe_hash[:insulation_thickness] = pipe_insul_in
 
-      # find_water_heater_capacity_volume_and_parasitic
+      # Water heater sizing
       water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
                                                                                   water_use_equipment_array,
                                                                                   pipe_hash: pipe_hash)
-      water_heater_capacity = water_heater_sizing[:water_heater_capacity]
-      water_heater_volume = water_heater_sizing[:water_heater_volume]
-      parasitic_fuel_consumption_rate = water_heater_sizing[:parasitic_fuel_consumption_rate]
-      if parasitic_fuel_consumption_rate > 0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loop of #{parasitic_fuel_consumption_rate.round} Btu/hr.")
+      water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
+      water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
+      parasitic_fuel_consumption_rate_w = water_heater_sizing[:parasitic_fuel_consumption_rate]
+      if parasitic_fuel_consumption_rate_w > 0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loop of #{parasitic_fuel_consumption_rate_w.round} Btu/hr.")
       end
 
-      # make loop for each unit and add on water use equipment
-      shared_hot_water_loop = model_add_swh_loop(model,
-                                                 system_name,
-                                                 water_heater_thermal_zone,
-                                                 water_heater_temp_si,
-                                                 service_water_pump_head,
-                                                 service_water_pump_motor_efficiency,
-                                                 water_heater_capacity,
-                                                 water_heater_volume,
-                                                 water_heater_fuel,
-                                                 parasitic_fuel_consumption_rate)
+      # Add a shared service water heating loop with water heater
+      shared_swh_loop = model_add_swh_loop(model,
+                                           "#{stds_bldg_type} Shared Service Water Loop",
+                                           water_heater_thermal_zone=nil,
+                                           water_heater_temp_c,
+                                           service_water_pump_head_pa,
+                                           service_water_pump_motor_efficiency,
+                                           water_heater_capacity_w,
+                                           water_heater_volume_m3,
+                                           water_heater_fuel,
+                                           parasitic_fuel_consumption_rate_w)
 
-      # find water heater
-      shared_hot_water_loop.supplyComponents.sort.each do |component|
-        next if component.to_WaterHeaterMixed.empty?
-        water_heater = component.to_WaterHeaterMixed.get
-
-        # apply efficiency to hot water heater
-        water_heater_mixed_apply_efficiency(water_heater)
-      end
-
-      # loop through water use equipment
+      # Attach all water use equipment to the shared loop
       water_use_equipment_array.sort.each do |water_use_equip|
-        # add water use connection
-        water_use_connection = OpenStudio::Model::WaterUseConnections.new(model)
-        water_use_connection.addWaterUseEquipment(water_use_equip)
-        water_use_connection.setName(water_use_equip.name.get.gsub('SWH', 'WUC'))
-
-        # Connect the water use connection to the SWH loop
-        shared_hot_water_loop.addDemandBranchForComponent(water_use_connection)
+        swh_connection = water_use_equip.waterUseConnections
+        shared_swh_loop.addDemandBranchForComponent(swh_connection.get) if swh_connection.is_initialized
       end
 
       # add to list of systems
-      swh_systems << shared_hot_water_loop
+      swh_systems << shared_swh_loop
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding shared water heating loop for #{stds_bldg_type}.")
     end
