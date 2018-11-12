@@ -255,7 +255,7 @@ Standard.class_eval do
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
-      when 'SmallOffice', 'MediumOffice', 'LargeOffice'
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice','SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
         new_lookup_building_type = building_type
       else
         new_lookup_building_type = model_get_lookup_name(building_type)
@@ -1076,7 +1076,7 @@ Standard.class_eval do
         end
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
-          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail', 'Outpatient', 'PrimarySchool'
+          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed','LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
             clg = 1.0
             htg = 1.0
         end

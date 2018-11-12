@@ -188,7 +188,7 @@ class Standard
       area_per_freight_elev_ft2 = nil
       units_per_freight_elevator = nil
       beds_per_freight_elevator = nil
-      if ['Office', 'SmallOffice', 'MediumOffice', 'LargeOffice'].include?(hash[:stds_bldg_type])
+      if ['Office', 'SmallOffice', 'MediumOffice', 'LargeOffice','SmallOfficeDetailed','MediumOfficeDetailed','LargeOfficeDetailed'].include?(hash[:stds_bldg_type])
         # The office buildings have one elevator for every 45,000 ft2 (4,181 m2),
         # plus one service elevator for the large office building (500,000 ft^2).
         area_per_pass_elev_ft2 = 45_000
@@ -311,11 +311,11 @@ class Standard
     end
 
     # assign schedules
-    if ['Office', 'MediumOffice', 'MidriseApartment', 'HighriseApartment', 'SecondarySchool'].include?(building_type)
+    if ['Office', 'MediumOffice', 'MediumOfficeDetailed','MidriseApartment', 'HighriseApartment', 'SecondarySchool'].include?(building_type)
       elevator_schedule = prototype_input['elevator_schedule']
       elevator_fan_schedule = prototype_input['elevator_fan_schedule']
       elevator_lights_schedule = prototype_input['elevator_fan_schedule']
-    elsif ['LargeHotel', 'Hospital', 'LargeOffice'].include?(building_type)
+    elsif ['LargeHotel', 'LargeOfficeDetailed','Hospital', 'LargeOffice'].include?(building_type)
       elevator_schedule = prototype_input['exterior_fuel_equipment1_schedule']
       elevator_fan_schedule = prototype_input['exterior_fuel_equipment2_schedule']
       elevator_lights_schedule = prototype_input['exterior_fuel_equipment2_schedule']
