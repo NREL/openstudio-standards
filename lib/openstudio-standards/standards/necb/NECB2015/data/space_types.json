@@ -13590,7 +13590,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Hospital Area",
           "necb_schedule_type": "C",
           "notes": null
         },
