@@ -1389,7 +1389,7 @@ class NECB2011
 
       mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-      mau_air_loop.setName('Make-up air unit')
+      mau_air_loop.setName('Sys_1_Make-up air unit')
 
       # When an air_loop is constructed, its constructor creates a sizing:system object
       # the default sizing:system constructor makes a system:sizing object
@@ -1586,7 +1586,7 @@ class NECB2011
 
       mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-      mau_air_loop.setName('Make-up air unit')
+      mau_air_loop.setName('Sys_1_Make-up air unit')
 
       # When an air_loop is constructed, its constructor creates a sizing:system object
       # the default sizing:system constructor makes a system:sizing object
@@ -1842,7 +1842,7 @@ class NECB2011
 
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-    air_loop.setName('Make-up air unit')
+    air_loop.setName('Sys_2_Make-up air unit')
 
     # When an air_loop is contructed, its constructor creates a sizing:system object
     # the default sizing:system constructor makes a system:sizing object
@@ -1969,7 +1969,7 @@ class NECB2011
     zones.each do |zone|
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-      air_loop.setName("#{zone.name} NECB System 3 PSZ")
+      air_loop.setName("Sys_3_PSZ #{zone.name}")
 
       # When an air_loop is constructed, its constructor creates a sizing:system object
       # the default sizing:system constructor makes a system:sizing object
@@ -2127,7 +2127,7 @@ class NECB2011
     zones.each do |zone|
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-      air_loop.setName("#{zone.name} NECB System 3 PSZ")
+      air_loop.setName("Sys_3_PSZ_#{zone.name}")
 
       # When an air_loop is constructed, its constructor creates a sizing:system object
       # the default sizing:system constructor makes a system:sizing object
@@ -2297,7 +2297,7 @@ class NECB2011
     zones.each do |zone|
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
 
-      air_loop.setName("#{zone.name} NECB System 4 PSZ")
+      air_loop.setName("Sys_4_PSZ_#{zone.name}")
 
       # When an air_loop is constructed, its constructor creates a sizing:system object
       # the default sizing:system constructor makes a system:sizing object
@@ -2449,7 +2449,7 @@ class NECB2011
       unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
 
         air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-        air_loop.setName('VAV with Reheat')
+        air_loop.setName('Sys_6_VAV with Reheat')
         sizing_system = air_loop.sizingSystem
         sizing_system.setCentralCoolingDesignSupplyAirTemperature(13.0)
         sizing_system.setCentralHeatingDesignSupplyAirTemperature(13.1)
