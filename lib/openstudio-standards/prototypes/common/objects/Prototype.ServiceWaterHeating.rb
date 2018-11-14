@@ -17,6 +17,9 @@ class Standard
   # @param floor_area_served [Double] area served by the SWH loop, in m^2.  Used for pipe loss piping length estimation
   # @param number_of_stories [Integer] number of stories served by the SWH loop.  Used for pipe loss piping length estimation
   # @param pipe_insulation_thickness [Double] thickness of the fiberglass batt pipe insulation, in m.  Use 0 for uninsulated pipes
+  # @param number_water_heaters [Double] the number of water heaters represented by the capacity and volume inputs.
+  # Used to modify efficiencies for water heaters based on individual component size while avoiding having to model
+  # lots of individual water heaters (for runtime sake).
   # @return [OpenStudio::Model::PlantLoop]
   # the resulting service water loop.
   def model_add_swh_loop(model,
@@ -32,9 +35,9 @@ class Standard
                          add_pipe_losses = false,
                          floor_area_served = 465,
                          number_of_stories = 1,
-                         pipe_insulation_thickness = 0.0127) # 1/2in
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding service water loop')
+                         pipe_insulation_thickness = 0.0127, # 1/2in
+                         number_water_heaters = 1)
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_swh_loop, number_water_heaters = #{number_water_heaters}")
 
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -106,7 +109,8 @@ class Standard
                                           false,
                                           0.0,
                                           nil,
-                                          water_heater_thermal_zone)
+                                          water_heater_thermal_zone,
+                                          number_water_heaters)
 
     service_water_loop.addSupplyBranchForComponent(water_heater)
 
@@ -130,6 +134,12 @@ class Standard
     demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
     demand_outlet_pipe.addToNode(service_water_loop.demandOutletNode)
 
+    if circulating
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added circulating SWH loop called #{service_water_loop.name}")
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added non-circulating SWH loop called #{service_water_loop.name}")
+    end
+
     return service_water_loop
   end
 
@@ -146,6 +156,9 @@ class Standard
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
   #   If nil, will be assumed in 70F air for heat loss.
+  # @param number_water_heaters [Double] the number of water heaters represented by the capacity and volume inputs.
+  # Used to modify efficiencies for water heaters based on individual component size while avoiding having to model
+  # lots of individual water heaters (for runtime sake).
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_water_heater(model,
                              water_heater_capacity,
@@ -157,10 +170,9 @@ class Standard
                              set_peak_use_flowrate,
                              peak_flowrate,
                              flowrate_schedule,
-                             water_heater_thermal_zone)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding water heater')
-
+                             water_heater_thermal_zone,
+                             number_water_heaters)
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_water_heater, number_water_heaters = #{number_water_heaters}")
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
@@ -191,7 +203,15 @@ class Standard
 
     # Water heater depends on the fuel type
     water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
-    water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
+
+    # Assign a quantity to the water heater if it represents multiple water heaters
+    if number_water_heaters > 1
+      water_heater.setName("#{number_water_heaters}X #{(water_heater_vol_gal/number_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr/number_water_heaters).round}kBtu/hr")
+      water_heater.set_component_quantity(number_water_heaters)
+    else
+      water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
+    end
+
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal, 'gal', 'm^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
     water_heater.setDeadbandTemperatureDifference(2.0)
@@ -273,6 +293,8 @@ class Standard
       schedule = model_add_schedule(model, flowrate_schedule)
       water_heater.setUseFlowRateFractionSchedule(schedule)
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added water heater called #{water_heater.name}")
 
     return water_heater
   end
@@ -782,7 +804,7 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{use_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
+    water_fixture_def.setName("#{use_name} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
     # Target mixed water temperature
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
@@ -796,11 +818,11 @@ class Standard
     water_fixture.setFlowRateFractionSchedule(schedule)
 
     if space_name.nil?
-      water_fixture.setName("#{use_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
-      swh_connection.setName("#{use_name.capitalize} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      water_fixture.setName("#{use_name} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      swh_connection.setName("#{use_name} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
     else
-      water_fixture.setName("#{space_name.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
-      swh_connection.setName("#{space_name.capitalize} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      water_fixture.setName("#{space_name} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
+      swh_connection.setName("#{space_name} WUC #{rated_flow_rate_gal_per_min.round(2)}gpm at #{mixed_water_temp_f.round}F")
     end
 
     unless space_name.nil?
@@ -906,7 +928,7 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{space.name.get.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
+    water_fixture_def.setName("#{space.name.get} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
     # Target mixed water temperature
     mixed_water_temp_f = data['service_water_heating_target_temperature']
     mixed_water_temp_c = OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get
@@ -919,7 +941,7 @@ class Standard
     water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
     schedule = model_add_schedule(model, data['service_water_heating_schedule'])
     water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{space.name.get.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm")
+    water_fixture.setName("#{space.name.get} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gpm")
     swh_connection.addWaterUseEquipment(water_fixture)
     # Assign water fixture to a space
     water_fixture.setSpace(space) if model_attach_water_fixtures_to_spaces?(model)
@@ -1009,13 +1031,25 @@ class Standard
         # For circulating systems, get pipe length based on the size of the building.
         # Formula from A.3.1 PrototypeModelEnhancements_2014_0.pdf
         floor_area_ft2 = OpenStudio.convert(floor_area_served, 'm^2', 'ft^2').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "floor_area_m2 = #{floor_area_served}")
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "num_stories = #{number_of_stories}")
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Andrew floor_area_ft2 = #{floor_area_ft2.round}ft2")
         pipe_length_ft = 2.0 * (Math.sqrt(floor_area_ft2 / number_of_stories) + (10.0 * (number_of_stories - 1.0)))
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft = 2.0 * ( (#{floor_area_ft2.round}ft2 / #{number_of_stories} stories)^0.5 + (10.0ft * (#{number_of_stories} stories - 1.0) ) )")
       else
         # For non-circulating systems, assume water heater is close to point of use
         pipe_length_ft = 20.0
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
+      end
+
+      # For systems whose water heater object represents multiple pieces
+      # of equipment, multiply the piping length by the number of pieces of equipment.
+      swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).each do |sc|
+        next unless sc.to_WaterHeaterMixed.is_initialized
+        water_heater = sc.to_WaterHeaterMixed.get
+        comp_qty = water_heater.component_quantity
+        if comp_qty > 1
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
+          pipe_length_ft *= comp_qty
+          break
+        end
       end
 
       # Service water heating piping heat loss scheduled air temperature
@@ -1058,9 +1092,9 @@ class Standard
         insulation.setVisibleAbsorptance(0.7) # TODO: find reference for property
 
         pipe_construction.setName("Copper pipe 0.75in type L with #{pipe_insulation_thickness_in.round(2)}in fiberglass batt")
-        pipe_construction.setLayer([insulation, copper_pipe])
+        pipe_construction.setLayers([insulation, copper_pipe])
       else
-        pipe_construction.setName("Unisulated copper pipe 0.75in type L")
+        pipe_construction.setName("Uninsulated copper pipe 0.75in type L")
         pipe_construction.setLayers([copper_pipe])
       end
 

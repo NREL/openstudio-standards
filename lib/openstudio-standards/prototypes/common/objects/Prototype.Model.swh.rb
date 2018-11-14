@@ -278,16 +278,15 @@ class Standard
       case swh_system_type
       when 'One Per Unit'
         water_heater_fuel = 'Electricity' if water_heater_fuel.nil?
-        num_units = space_type_hash[space_type][:num_units].round
-        if num_units.zero?
-          num_units = space_type_hash[space_type][:effective_num_spaces].round
-        end
+        num_units = space_type_hash[space_type][:num_units].round # First try number of units
+        num_units = space_type_hash[space_type][:effective_num_spaces].round if num_units.zero? # Fall back on number of spaces
         peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr
         peak_flow_rate_m3_per_s = num_units * OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
       else
         # TODO: - add building type or sice specific logic or just assume Gas? (SmallOffice and Warehouse are only non unit prototypes with Electric heating)
         water_heater_fuel = 'NaturalGas' if water_heater_fuel.nil?
+        num_units = 1
         peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * floor_area_ft2
         peak_flow_rate_m3_per_s = OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name}"
@@ -296,7 +295,6 @@ class Standard
       # Split flow rate between main and booster uses if specified
       booster_water_use_equip = nil
       if booster_water_heater_fraction > 0.0
-        booster_peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr * booster_water_heater_fraction
         booster_peak_flow_rate_m3_per_s = peak_flow_rate_m3_per_s * booster_water_heater_fraction
         peak_flow_rate_m3_per_s -= booster_peak_flow_rate_m3_per_s
 
@@ -366,14 +364,9 @@ class Standard
                                       add_pipe_losses=true,
                                       floor_area_served=OpenStudio.convert(950, 'ft^2', 'm^2').get,
                                       number_of_stories=1,
-                                      pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get)
-
-        # Assign a quantity to the water heater if it represents multiple water heaters
-        if num_water_heaters > 1
-          water_heater = swh_loop.supplyComponents('OS_WaterHeater_Mixed'.to_IddObjectType).first.to_WaterHeaterMixed.get
-          water_heater.set_component_quantity(num_water_heaters)
-        end
-
+                                      pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get,
+                                      num_water_heaters)
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_typical, num_water_heaters = #{num_water_heaters}")
         # Add loop to list
         swh_systems << swh_loop
 
