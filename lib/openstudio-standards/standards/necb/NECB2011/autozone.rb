@@ -286,11 +286,9 @@ class NECB2011
             does_space_have_similar_envelope_load = false
           end
           if does_space_have_similar_envelope_load
-             #If there are similar spaces.. they should be placed into the same Thermal zone.
-
+            #If there are similar spaces.. they should be placed into the same Thermal zone.
           end
         end
-
       end
     end
 
@@ -503,4 +501,228 @@ class NECB2011
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
+
+
+  def presizing_run()
+    dwelling_tz = []
+
+
+    # ----Dwelling units will always have their own system per unit, so they should have their own thermal zone.
+    model.getSpaces.map {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      if thermostat.empty?
+        # The thermostat name for the spacetype should exist.
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
+      else
+        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+        # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+        ideal_loads.addToThermalZone(zone)
+      end
+      dwelling_tz << zone
+    end
+
+    # Non-dwelling spaces
+    model.getSpaces.map {|space| not is_a_necb_dwelling_unit?(space) && is_an_necb_wildcard_space?(space)}.each do |space|
+      next unless space.thermalZone.empty?
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
+
+      # Skip thermostat for spaces with no space type
+      next if space.spaceType.empty?
+      # Add a thermostat
+      space_type_name = space.spaceType.get.name.get
+      thermostat_name = space_type_name + ' Thermostat'
+      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+      if thermostat.empty?
+        # The thermostat name for the spacetype should exist.
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
+      else
+        thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
+        zone.setThermostatSetpointDualSetpoint(thermostat_clone)
+        # Set Ideal loads to thermal zone for sizing for NECB needs. We need this for sizing.
+        ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+        ideal_loads.addToThermalZone(zone)
+      end
+      # Go through other spaces.
+      model.getSpaces.map {|space| not is_a_necb_dwelling_unit?(space) and not is_an_necb_wildcard_space?(space)}.each do |space_target|
+        if space_target.space.thermalZone.empty?
+          if are_space_loads_similar?(space_1: space, space_2: space_target) &&
+              space.buildingStory().get == space_target.buildingStory().get # added since chris needs zones to not span floors for costing.
+            space_target.setThermalZone(zone)
+          end
+        end
+      end
+
+      #organize Wildcard spaces accordingly. Can be grouped with adjacent spaced unless they are dwelling units.
+      model.getSpaces.map {|space|  is_an_necb_wildcard_space?(space)}.each do |space|
+        adjacent_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space, true)
+        adjacent_real_spaces = adjacent_spaces.select{ |space,area| not is_an_necb_wildcard_space?(space) }
+        adjacent_real_spaces[]
+      end
+      dwelling_tz << zone
+    end
+  end
+
+
+  # This method will try to determine if the spaces have similar loads. This will ensure:
+  # 1) Space have the same multiplier.
+  # 2) Spaces have space types and that they are the same.
+  # 3) That the spaces have the same exposed surfaces area relative to the floor area in the same direction. by a
+  # percent difference and angular percent difference.
+  def are_space_loads_similar?(space_1:, space_2:, surface_percent_difference_tolerance: 5.0, angular_percent_difference_tolerance: 5.0)
+    # Do they have the same space type?
+    return false unless space_1.multiplier == space_2.multiplier
+    # Ensure that they both have defined spacetypes
+    return false if space_1.spaceType.empty?
+    return false if space_2.spaceType.empty?
+    # ensure that they have the same spacetype.
+    return false unless space_1.spaceType.get == space_2.spaceType.get
+    # Perform surface comparision. If ranges are within percent_difference_tolerance.. they can be considered the same.
+    space_1_floor_area = space_1.floorArea
+    space_2_floor_area = space_2.floorArea
+    space_1_surface_report = space_surface_report(space_1)
+    space_2_surface_report = space_surface_report(space_2)
+    space_1_surface_report.each do |space_1_surface|
+      space_2_surface_report.detect do |space_2_surface|
+        space_1_surface[:surface_type] == space_2_surface[:surface_type] &&
+            space_1_surface[:boundary_condition] == space_2_surface[:boundary_condition] &&
+            self.percentage_difference(space_1_surface[:tilt], space_2_surface[:tilt]) <= angular_percent_difference_tolerance &&
+            self.percentage_difference(space_1_surface[:azimuth], space_2_surface[:azimuth]) <= angular_percent_difference_tolerance &&
+            self.percentage_difference(space_1_surface[:surface_area_to_floor_ratio],
+                                       space_2_surface[:surface_area_to_floor_ratio]) <= surface_percent_difference_tolerance &&
+            self.percentage_difference(space_1_surface[:glazed_subsurface_area_to_floor_ratio],
+                                       space_2_surface[:glazed_subsurface_area_to_floor_ratio]) <= surface_percent_difference_tolerance &&
+            self.percentage_difference(space_1_surface[:opaque_subsurface_area_to_floor_ratio],
+                                       space_2_surface[:opaque_subsurface_area_to_floor_ratio]) <= surface_percent_difference_tolerance
+      end
+    end
+  end
+
+
+  #This method gathers the surface information for the space to determine if spaces are the same.
+  def space_surface_report(space)
+    surface_report = []
+    space_floor_area = space.floorArea
+    [:outdoors, :ground].each do |bc|
+      orientations.each do |orientation|
+        surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(space.surfaces, boundary_conditions[bc]).each do |surface|
+          #sum wall area and subsurface area by direction. This is the old way so excluding top and bottom surfaces.
+          #new way
+          glazings = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["FixedWindow",
+                                                                                                 "OperableWindow",
+                                                                                                 "GlassDoor",
+                                                                                                 "Skylight",
+                                                                                                 "TubularDaylightDiffuser",
+                                                                                                 "TubularDaylightDome"])
+          doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(surface.subSurfaces, ["Door",
+                                                                                              "OverheadDoor"])
+          azimuth = (surface.azimuth() * 180.0 / Math::PI)
+          tilt = (surface.tilt() * 180.0 / Math::PI)
+          surface_data = json_data[:surface_data].detect do |surface_data|
+            surface_data[:surface_type] == surface.surfaceType &&
+                surface_data[:azimuth] == azimuth &&
+                surface_data[:tilt] == tilt &&
+                surface_data[:boundary_condition] == bc
+          end
+        end
+        if surface_data.nil?
+          surface_data = {
+              surface_type: surface.surfaceType,
+              azimuth: azimuth,
+              tilt: tilt,
+              boundary_condition: bc,
+              surface_area: 0,
+              surface_area_to_floor_ratio: 0,
+              glazed_subsurface_area: 0,
+              glazed_subsurface_area_to_floor_ratio: 0,
+              opaque_subsurface_area: 0,
+              opaque_subsurface_area_to_floor_ratio: 0
+          }
+          surface_report << surface_data
+        end
+        surface_data[:surface_area] += surface.grossArea.to_i
+        surface_data[:surface_area_to_floor_ratio] += surface.grossArea / space.floorArea
+
+        surface_data[:glazed_subsurface_area] += glazings.map {|subsurface| subsurface.grossArea * subsurface.multiplier}.inject(0) {|sum, x| sum + x}.to_i
+        surface_data[:glazed_subsurface_area_to_floor_ratio] += glazings.map {|subsurface| subsurface.grossArea * subsurface.multiplier}.inject(0) {|sum, x| sum + x} / space.floorArea
+
+        surface_data[:surface_area] += doors.map {|subsurface| subsurface.grossArea * subsurface.multiplier}.inject(0) {|sum, x| sum + x}.to_i
+        surface_data[:surface_area_to_floor_ratio] += doors.map {|subsurface| subsurface.grossArea * subsurface.multiplier}.inject(0) {|sum, x| sum + x} / space.floorArea
+      end
+    end
+    return surface_report
+  end
+
+
+  def is_an_necb_wildcard_space?(space)
+    space_type_data = standards_lookup_table_first(table_name: 'space_types',
+                                                   search_criteria: {'template' => self.class.name,
+                                                                     'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                     'building_type' => space.spaceType.get.standardsBuildingType.get})
+
+    necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
+      necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
+          necb_hvac_system_select['min_stories'] <= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
+          necb_hvac_system_select['max_stories'] >= space.model.getBuilding.standardsNumberOfAboveGroundStories.get
+    end
+    return necb_hvac_system_select['dwelling'] == true
+
+  end
+
+  def is_a_necb_dwelling_unit?(space)
+    space_type_data = standards_lookup_table_first(table_name: 'space_types',
+                                                   search_criteria: {'template' => self.class.name,
+                                                                     'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                     'building_type' => space.spaceType.get.standardsBuildingType.get})
+
+    necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
+      necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
+          necb_hvac_system_select['min_stories'] <= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
+          necb_hvac_system_select['max_stories'] >= space.model.getBuilding.standardsNumberOfAboveGroundStories.get
+    end
+    return necb_hvac_system_select['dwelling'] == true
+  end
+
+  def get_necb_spacetype_system_selection(space)
+    space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => self.class.name,
+                                                                                                'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                                                                'building_type' => space.spaceType.get.standardsBuildingType.get})
+
+    #Get Heating and cooling loads
+    cooling_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
+
+    # identify space-system_index and assign the right NECB system type 1-7.
+    necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+    necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
+      necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
+          necb_hvac_system_select['min_stories'] <= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
+          necb_hvac_system_select['max_stories'] >= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
+          necb_hvac_system_select['min_cooling_capacity_kw'] <= cooling_design_load &&
+          necb_hvac_system_select['max_cooling_capacity_kw'] >= cooling_design_load
+    end
+  end
+
+  def percentage_difference(value_1, value_2)
+    return ((value_1 - value_2).abs / ((value_1 + value_2) / 2) * 100)
+  end
+
 end
+
