@@ -165,15 +165,9 @@ class Standard
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    # TODO: Parasitic loss (pilot light)
-    # PNNL document says pilot lights were removed, but IDFs
-    # still have the on/off cycle parasitic fuel consumptions filled in
-    water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
-    # self.setOffCycleParasiticFuelConsumptionRate(??)
-    water_heater_mixed.setOnCycleParasiticHeatFractiontoTank(0)
-    water_heater_mixed.setOffCycleParasiticFuelType(fuel_type)
-    # self.setOffCycleParasiticFuelConsumptionRate(??)
-    water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
+    # Parasitic losses like pilot light are ignored.
+    # Instead, the parasitic loss fields are typically used
+    # to model pipe dump and pipe thermal losses.
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
