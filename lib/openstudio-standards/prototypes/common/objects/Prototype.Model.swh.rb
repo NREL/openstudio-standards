@@ -28,7 +28,7 @@ class Standard
                                            'Main Service Water Loop',
                                            water_heater_zone,
                                            OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
-                                           prototype_input['main_service_water_pump_head'],
+                                           prototype_input['main_service_water_pump_head'].to_f,
                                            prototype_input['main_service_water_pump_motor_efficiency'],
                                            OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                            OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
@@ -84,7 +84,7 @@ class Standard
                                              "#{swh_thermal_zone.name} Service Water Loop",
                                              swh_thermal_zone,
                                              OpenStudio.convert(prototype_input['main_service_water_temperature'], 'F', 'C').get,
-                                             prototype_input['main_service_water_pump_head'],
+                                             prototype_input['main_service_water_pump_head'].to_f,
                                              prototype_input['main_service_water_pump_motor_efficiency'],
                                              OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                              OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
@@ -198,7 +198,7 @@ class Standard
                                             'Laundry Service Water Loop',
                                             nil,
                                             OpenStudio.convert(prototype_input['laundry_service_water_temperature'], 'F', 'C').get,
-                                            prototype_input['laundry_service_water_pump_head'],
+                                            prototype_input['laundry_service_water_pump_head'].to_f,
                                             prototype_input['laundry_service_water_pump_motor_efficiency'],
                                             OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
                                             OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
@@ -279,6 +279,9 @@ class Standard
       when 'One Per Unit'
         water_heater_fuel = 'Electricity' if water_heater_fuel.nil?
         num_units = space_type_hash[space_type][:num_units].round
+        if num_units.zero?
+          num_units = space_type_hash[space_type][:effective_num_spaces].round
+        end
         peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr
         peak_flow_rate_m3_per_s = num_units * OpenStudio.convert(peak_flow_rate_gal_per_hr, 'gal/hr', 'm^3/s').get
         use_name = "#{space_type.name} #{num_units} units"
@@ -291,11 +294,22 @@ class Standard
       end
 
       # Split flow rate between main and booster uses if specified
+      booster_water_use_equip = nil
       if booster_water_heater_fraction > 0.0
         booster_peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr * booster_water_heater_fraction
         booster_peak_flow_rate_m3_per_s = peak_flow_rate_m3_per_s * booster_water_heater_fraction
-        peak_flow_rate_gal_per_hr -= booster_peak_flow_rate_gal_per_hr
         peak_flow_rate_m3_per_s -= booster_peak_flow_rate_m3_per_s
+
+        # Add booster water heater equipment and connections
+        booster_water_use_equip = model_add_swh_end_uses(model,
+                                                         "Booster #{use_name}",
+                                                         loop=nil,
+                                                         booster_peak_flow_rate_m3_per_s,
+                                                         flow_rate_fraction_schedule.name.get,
+                                                         booster_water_temperature_c,
+                                                         space_name=nil,
+                                                         frac_sensible: service_water_fraction_sensible,
+                                                         frac_latent: service_water_fraction_latent)
       end
 
       # Add water use equipment and connections
@@ -312,13 +326,13 @@ class Standard
       # Water heater sizing
       case swh_system_type
       when 'One Per Unit'
-        parasitic_fuel_consumption_rate_w = num_units * 87.75
         water_heater_capacity_w = num_units * OpenStudio.convert(15.0, 'kBtu/hr', 'W').get
         water_heater_volume_m3 = num_units * OpenStudio.convert(50.0, 'gal', 'm^3').get
         num_water_heaters = num_units
       else
-        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, [water_use_equip])
-        parasitic_fuel_consumption_rate_w = water_heater_sizing[:parasitic_fuel_consumption_rate]
+        water_use_equips = [water_use_equip]
+        water_use_equips << booster_water_use_equip unless booster_water_use_equip.nil? # Include booster in sizing since flows will be preheated by main water heater
+        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equips)
         water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
         water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
         num_water_heaters = 1
@@ -336,18 +350,23 @@ class Standard
         end
 
       when 'One Per Unit', 'Dedicated'
+        pipe_insul_in = 0.0 if pipe_insul_in.nil?
 
         # Add service water loop with water heater
         swh_loop = model_add_swh_loop(model,
-                                     system_name="#{space_type.name} Service Water Loop",
-                                     water_heater_thermal_zone=nil,
-                                     service_water_temperature_c,
-                                     service_water_pump_head=0.01,
-                                     service_water_pump_motor_efficiency=1.0,
-                                     water_heater_capacity_w,
-                                     water_heater_volume_m3,
-                                     water_heater_fuel,
-                                     parasitic_fuel_consumption_rate_w)
+                                      system_name="#{space_type.name} Service Water Loop",
+                                      water_heater_thermal_zone=nil,
+                                      service_water_temperature_c,
+                                      service_water_pump_head=0.01,
+                                      service_water_pump_motor_efficiency=1.0,
+                                      water_heater_capacity_w,
+                                      water_heater_volume_m3,
+                                      water_heater_fuel,
+                                      parasitic_fuel_consumption_rate_w=0,
+                                      add_pipe_losses=true,
+                                      floor_area_served=OpenStudio.convert(950, 'ft^2', 'm^2').get,
+                                      number_of_stories=1,
+                                      pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get)
 
         # Assign a quantity to the water heater if it represents multiple water heaters
         if num_water_heaters > 1
@@ -367,24 +386,12 @@ class Standard
         # booster water heater.  This booster water heater is fed by the
         # main water heater, so the booster is responsible for a smaller delta-T.
         if booster_water_heater_fraction > 0
-
-          # Add booster water heater equipment and connections
-          booster_water_use_equip = model_add_swh_end_uses(model,
-                                                           "Booster #{use_name}",
-                                                           loop=nil,
-                                                           booster_peak_flow_rate_m3_per_s,
-                                                           flow_rate_fraction_schedule.name.get,
-                                                           booster_water_temperature_c,
-                                                           space_name=nil,
-                                                           frac_sensible: service_water_fraction_sensible,
-                                                           frac_latent: service_water_fraction_latent)
-
           # find_water_heater_capacity_volume_and_parasitic
           booster_water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
                                                                                               [booster_water_use_equip],
                                                                                               htg_eff: 1.0,
-                                                                                              inlet_temp_ip: service_water_temperature_f,
-                                                                                              target_temp_ip: booster_water_temperature_f)
+                                                                                              inlet_temp_f: service_water_temperature_f,
+                                                                                              target_temp_f: booster_water_temperature_f)
 
           # Add service water booster loop with water heater
           # Note that booster water heaters are always assumed to be electric resistance
@@ -423,8 +430,36 @@ class Standard
 
       # find pump values
       # Table A.2 in PrototypeModelEnhancements_2014_0.pdf shows 10ft on everything except SecondarySchool which has 11.4ft
-      # todo - if SmallOffice then shouldn't have circulating pump
-      if ['Office', 'PrimarySchool', 'Outpatient', 'Hospital', 'SmallHotel', 'LargeHotel', 'FullServiceRestaurant', 'HighriseApartment'].include?(stds_bldg_type)
+      # TODO: Remove hard-coded building-type-based lookups for circulating vs. non-circulating SWH systems
+      circulating_bldg_types = [
+        # DOE building types
+        'Office',
+        'PrimarySchool',
+        'Outpatient',
+        'Hospital',
+        'SmallHotel',
+        'LargeHotel',
+        'FullServiceRestaurant',
+        'HighriseApartment',
+        # DEER building types
+        'Asm', # 'Assembly'
+        'ECC', # 'Education - Community College'
+        'EPr', # 'Education - Primary School'
+        'ERC', # 'Education - Relocatable Classroom'
+        'ESe', # 'Education - Secondary School'
+        'EUn', # 'Education - University'
+        'Gro', # 'Grocery'
+        'Hsp', # 'Health/Medical - Hospital'
+        'Htl', # 'Lodging - Hotel'
+        'MBT', # 'Manufacturing Biotech'
+        'MFm', # 'Residential Multi-family'
+        'Mtl', # 'Lodging - Motel'
+        'Nrs', # 'Health/Medical - Nursing Home'
+        'OfL', # 'Office - Large'
+        # 'RFF', # 'Restaurant - Fast-Food'
+        'RSD' # 'Restaurant - Sit-Down'
+      ]
+      if circulating_bldg_types.include?(stds_bldg_type)
         service_water_pump_head_pa = OpenStudio.convert(10.0, 'ftH_{2}O', 'Pa').get
         service_water_pump_motor_efficiency = 0.3
         circulating = true if circulating.nil?
@@ -441,23 +476,13 @@ class Standard
         bldg_type_floor_area_m2 += space_type_props[:floor_area] if space_type_props[:stds_bldg_type] == stds_bldg_type
       end
 
-      # Inputs to determine pipe losses
-      pipe_hash = {}
-      pipe_hash[:floor_area] = bldg_type_floor_area_m2
-      pipe_hash[:effective_num_stories] = bldg_effective_num_stories * (bldg_type_floor_area_m2 / bldg_floor_area_m2)
-      pipe_hash[:circulating] = circulating
-      pipe_hash[:insulation_thickness] = pipe_insul_in
+      # Calculate the number of stories covered by this building type
+      num_stories = bldg_effective_num_stories * (bldg_type_floor_area_m2 / bldg_floor_area_m2)
 
       # Water heater sizing
-      water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
-                                                                                  water_use_equipment_array,
-                                                                                  pipe_hash: pipe_hash)
+      water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array)
       water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
       water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
-      parasitic_fuel_consumption_rate_w = water_heater_sizing[:parasitic_fuel_consumption_rate]
-      if parasitic_fuel_consumption_rate_w > 0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Adding parasitic loss for #{stds_bldg_type} loop of #{parasitic_fuel_consumption_rate_w.round} Btu/hr.")
-      end
 
       # Add a shared service water heating loop with water heater
       shared_swh_loop = model_add_swh_loop(model,
@@ -469,7 +494,11 @@ class Standard
                                            water_heater_capacity_w,
                                            water_heater_volume_m3,
                                            water_heater_fuel,
-                                           parasitic_fuel_consumption_rate_w)
+                                           parasitic_fuel_consumption_rate_w=0,
+                                           add_pipe_losses=true,
+                                           floor_area_served=bldg_type_floor_area_m2,
+                                           number_of_stories=num_stories,
+                                           pipe_insulation_thickness=OpenStudio.convert(pipe_insul_in, 'in', 'm').get)
 
       # Attach all water use equipment to the shared loop
       water_use_equipment_array.sort.each do |water_use_equip|
@@ -486,28 +515,28 @@ class Standard
     return swh_systems
   end
 
-  # set capacity, volume, and parasitic
+  # Use rules from DOE Prototype Building documentation to determine water heater capacity,
+  # volume, pipe dump losses, and pipe thermal losses.
   #
   # @param water_use_equipment_array [Array] array of water use equipment objects that will be using this water heater
-  # @param storage_to_cap_ratio [Double] storage volume gal to kBtu/hr of capacity
+  # @param storage_to_cap_ratio_gal_to_kbtu_per_hr [Double] storage volume gal to kBtu/hr of capacity
   # @param htg_eff [Double] water heater thermal efficiency, fraction
-  # @param inlet_temp_ip [Double] inlet cold water temperature, degrees Fahrenheit
-  # @param target_temp_ip [Double] target supply water temperatre from the tank, degrees Fahrenheit
+  # @param inlet_temp_f [Double] inlet cold water temperature, degrees Fahrenheit
+  # @param target_temp_f [Double] target supply water temperatre from the tank, degrees Fahrenheit
   # @return [Hash] hash with values needed to size water heater made with downstream method
   def model_find_water_heater_capacity_volume_and_parasitic(model,
                                                             water_use_equipment_array,
-                                                            pipe_hash: nil,
-                                                            storage_to_cap_ratio: 1.0,
+                                                            storage_to_cap_ratio_gal_to_kbtu_per_hr: 1.0,
                                                             htg_eff: 0.8,
-                                                            inlet_temp_ip: 40.0,
-                                                            target_temp_ip: 140.0,
+                                                            inlet_temp_f: 40.0,
+                                                            target_temp_f: 140.0,
                                                             peak_flow_fraction: 1.0)
     # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
 
     water_heater_sizing = {}
 
-    # get water use equipment
-    max_flow_rate_array = [] # gallons per hour
+    # Get the maximum flow rates for all pieces of water use equipment
+    adjusted_max_flow_rates_gal_per_hr = [] # gallons per hour
     water_use_equipment_array.sort.each do |water_use_equip|
       water_use_equip_sch = water_use_equip.flowRateFractionSchedule
       next if water_use_equip_sch.empty?
@@ -521,78 +550,39 @@ class Standard
       elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
         max_sch_value = schedule_compact_annual_min_max_value(water_use_equip_sch)['max']
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The peak flow rate fraction for #{water_use_equip_sch.name} could not be determined, assuming 1 for water heater sizing purposes.")
+        max_sch_value = 1.0
       end
 
-      # get water_use_equip_def to get max flow rate
-      water_use_equip_def = water_use_equip.waterUseEquipmentDefinition
-      peak_flow_rate = water_use_equip_def.peakFlowRate
+      # Get peak flow rate from water use equipment definition
+      peak_flow_rate_m3_per_s = water_use_equip.waterUseEquipmentDefinition.peakFlowRate
 
-      # calculate adjusted flow rate
-      adjusted_peak_flow_rate_si = max_sch_value * peak_flow_rate
-      adjusted_peak_flow_rate_ip = OpenStudio.convert(adjusted_peak_flow_rate_si, 'm^3/s', 'gal/min').get
-      max_flow_rate_array << adjusted_peak_flow_rate_ip * 60.0 # min per hour
+      # Calculate adjusted flow rate based on the peak fraction found in the flow rate fraction schedule
+      adjusted_peak_flow_rate_m3_per_s = max_sch_value * peak_flow_rate_m3_per_s
+      adjusted_max_flow_rates_gal_per_hr << OpenStudio.convert(adjusted_peak_flow_rate_m3_per_s, 'm^3/s', 'gal/hr').get
     end
 
-    # warn if max_flow_rate_array size doesn't match equipment size (one or more didn't have ruleset schedule)
-    if max_flow_rate_array.size != water_use_equipment_array.size
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'One or more Water Use Equipment Fraction Flow Rate Scheules were not Schedule Rulestes and were excluding from Water Heating Sizing.')
-    end
+    # Sum gph values from water use equipment to use in formula
+    total_adjusted_flow_rate_gal_per_hr = adjusted_max_flow_rates_gal_per_hr.inject(:+)
 
-    # sum gpm values from water use equipment to use in formula
-    adjusted_flow_rate_sum = max_flow_rate_array.inject(:+)
-
-    # use formula to calculate volume and capacity based on analysis of combined water use equipment maximum flow rates and schedules
+    # Calculate capacity based on analysis of combined water use equipment maximum flow rates and schedules
     # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
-    water_heater_capacity_ip = peak_flow_fraction * adjusted_flow_rate_sum * 8.4 * 1.0 * (target_temp_ip - inlet_temp_ip) / htg_eff
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity of #{water_heater_capacity_ip} Btu/hr = #{peak_flow_fraction} peak fraction * #{adjusted_flow_rate_sum.round} gal/hr * 8.4 lb/gal * 1.0 Btu/lb F * (#{target_temp_ip.round} - #{inlet_temp_ip.round} deltaF / #{htg_eff} htg eff).")
-    water_heater_capacity_si = OpenStudio.convert(water_heater_capacity_ip, 'Btu/hr', 'W').get
-    # Assume 1 gal of volume per 1 kBtu/hr of heating capacity
-    water_heater_volume_ip = OpenStudio.convert(water_heater_capacity_ip, 'Btu/hr', 'kBtu/hr').get
+    water_heater_capacity_btu_per_hr = peak_flow_fraction * total_adjusted_flow_rate_gal_per_hr * 8.4 * 1.0 * (target_temp_f - inlet_temp_f) / htg_eff
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity of #{water_heater_capacity_btu_per_hr.round} Btu/hr = #{peak_flow_fraction} peak fraction * #{total_adjusted_flow_rate_gal_per_hr.round} gal/hr * 8.4 lb/gal * 1.0 Btu/lb F * (#{target_temp_f.round} - #{inlet_temp_f.round} deltaF / #{htg_eff} htg eff).")
+    water_heater_capacity_m3_per_s = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get
+
+    # Calculate volume based on capacity
+    # Default assumption is 1 gal of volume per 1 kBtu/hr of heating capacity
+    water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
+    water_heater_volume_gal = water_heater_capacity_kbtu_per_hr * storage_to_cap_ratio_gal_to_kbtu_per_hr
     # increase tank size to 40 galons if calculated value is smaller
-    if water_heater_volume_ip < 40.0 # gal
-      water_heater_volume_ip = 40.0
-    end
-    water_heater_volume_si = OpenStudio.convert(water_heater_volume_ip, 'gal', 'm^3').get
+    water_heater_volume_gal = 40.0 if water_heater_volume_gal < 40.0 # gal
+    water_heater_volume_m3 = OpenStudio.convert(water_heater_volume_gal, 'gal', 'm^3').get
 
-    # populate return hash
-    water_heater_sizing[:water_heater_capacity] = water_heater_capacity_si
-    water_heater_sizing[:water_heater_volume] = water_heater_volume_si
-
-    # get pipe length (formula from A.3.1 PrototypeModelEnhancements_2014_0.pdf)
-    unless pipe_hash.nil?
-
-      pipe_length = 2.0 * (Math.sqrt(pipe_hash[:floor_area] / pipe_hash[:effective_num_stories]) + (10.0 * (pipe_hash[:effective_num_stories] - 1.0)))
-      pipe_length_ip = OpenStudio.convert(pipe_length, 'm', 'ft').get
-
-      # calculate pipe dump (from A.4.1)
-      pipe_dump = pipe_length_ip * 0.689 # Btu/hr
-
-      pipe_loss_per_foot = if pipe_hash[:circulating]
-                             if pipe_hash[:insulation_thickness] >= 1.0
-                               16.10
-                             elsif pipe_hash[:insulation_thickness] >= 0.5
-                               17.5
-                             else
-                               30.8
-                             end
-                           else
-                             if pipe_hash[:insulation_thickness] >= 1.0
-                               11.27
-                             elsif pipe_hash[:insulation_thickness] >= 0.5
-                               12.25
-                             else
-                               28.07
-                             end
-                           end
-
-      # calculate pipe loss (from Table A.3 in section A.4.2)
-      pipe_loss = pipe_length * pipe_loss_per_foot # Btu/hr
-
-      # calculate parasitic loss
-      water_heater_sizing[:parasitic_fuel_consumption_rate] = pipe_dump + pipe_loss
-    else
-      water_heater_sizing[:parasitic_fuel_consumption_rate] = 0.0
-    end
+    # Populate return hash
+    water_heater_sizing[:water_heater_capacity] = water_heater_capacity_m3_per_s
+    water_heater_sizing[:water_heater_volume] = water_heater_volume_m3
 
     return water_heater_sizing
   end
