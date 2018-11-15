@@ -390,6 +390,7 @@ class NECB2011
   # Chris Kirney 2018-07-27.
   def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.0000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
+    mech_room, cond_spaces = find_mech_room(model)
     shw_spaces = []
     building_centre = Array.new(3,0)
     total_peak_flow = 0
@@ -557,5 +558,120 @@ class NECB2011
       f = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
     end
     return f
+  end
+
+  def find_mech_room(model, shw_info: false)
+    cond_spaces = []
+    total_peak_flow = 0
+    mech_rooms = []
+    check_spaces = nil
+    building_centre = Array.new(3, 0)
+    total_peak_flow = 0
+    lowest_space = 1000000000000000
+    sp_func_regex = Regexp.new('Space Function')
+    mech_regex = Regexp.new('Electrical/Mechanical')
+    mech_flag = false
+    model.getSpaces.each_with_index do |space, index|
+      cooled = space_cooled?(space)
+      heated = space_heated?(space)
+      spaceType_name = space.spaceType.get.nameString
+      if heated || cooled
+        next if space_plenum?(space)
+        if mech_regex.match(spaceType_name)
+          mech_rooms << index
+        end
+        # Determine the bottom surface of the space and calculate it's centroid.  Note that the mech room is assumed to
+        # be in a space that conditioned and is not a plenum (or attic space).  Get the coordinates of the origin for
+        # the space (the coordinates of points in the space are relative to this).
+        xOrigin = space.xOrigin
+        yOrigin = space.yOrigin
+        zOrigin = space.zOrigin
+        # Get the surfaces for the space.
+        space_surfaces = space.surfaces
+        # Find the floor (aka the surface with the lowest centroid).
+        min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
+        # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
+        floor_centroid = [0, 0, 0]
+        space_surfaces.each do |sp_surface|
+          if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
+            floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+            floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+            floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
+          end
+        end
+
+        floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
+        floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
+
+        if lowest_space > (min_surf.centroid.z.to_f + zOrigin)
+          lowest_space = min_surf.centroid.z.to_f + zOrigin
+        end
+        # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
+        # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
+        building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
+        building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
+        building_centre[2] += (floor_centroid[2])
+        cond_space = {
+            "space_name" => space.nameString,
+            "space" => space,
+            "space_centroid" => [floor_centroid[0] + xOrigin, floor_centroid[1] + yOrigin, min_surf.centroid.z.to_f + zOrigin],
+            "building_cent_dist" => 0,
+        }
+        # Run this if we are doing this to determine spaces served by shw
+        if shw_info
+          # Find the specific space_type properties from standard.json
+          sp_type = spaceType_name[15..-1]
+          sp_type_info = @standards_data['space_types'].detect do |data|
+            data["space_type"].to_s.upcase == sp_type.to_s.upcase and
+                data['building_type'].to_s.upcase = 'SPACE FUNCTION'
+          end
+          if sp_type_info.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
+            return false
+          end
+          next if sp_type_info['service_water_heating_peak_flow_per_area'].to_f == 0.0 && sp_type_info['service_water_heating_peak_flow_rate'].to_f == 0.0 || sp_type_info['service_water_heating_schedule'].nil?
+          space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
+          # Calculate the peak shw flow rate for the space
+          space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
+          space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
+          # Determine the total shw peak flow for the building.
+          total_peak_flow += space_peak_flow_SI
+          # I use centroid for the floor as the location of the source or point of use for the shw system.
+          cond_space["peak_flow_SI"] = space_peak_flow_SI
+        end
+        cond_spaces << cond_space
+      end
+    end
+
+    if mech_rooms.size == 1
+      return [cond_spaces[mech_rooms[0]], cond_spaces]
+    elsif mech_rooms.size > 1
+      check_spaces = []
+      lowest_space == 10000000000000
+      mech_rooms.each do |mech_room|
+        if cond_spaces[mech_room]['space_centroid'][2].to_f < lowest_space
+          lowest_space = cond_spaces[mech_room]['space_centroid'][2].to_f
+          check_spaces << cond_spaces[mech_room]
+        end
+      end
+    else
+      check_spaces = cond_spaces
+    end
+    # This is where the average happens
+    building_centre[0] /= building_centre[2]
+    building_centre[1] /= building_centre[2]
+    # Go through each space on the lowest floor of the building and determine the distance between the centroid of the
+    # space's floors and the center of the building I calculated just above.
+    centre_spaces = []
+    check_spaces.each do |check_space|
+      if check_space['space_centroid'][2] == lowest_space
+        check_space['building_cent_dist'] = Math.sqrt(((check_space['space_centroid'][0] - building_centre[0])**2) + ((check_space['space_centroid'][1] - building_centre[1])**2))
+        centre_spaces << check_space
+      end
+    end
+    # Determine which of the floor spaces is closest to the centre of the building and that one becomes the location of
+    # the mechanical room.
+    centre_space = centre_spaces.min_by{|dist| dist['building_cent_dist'].round(1)}
+    return [centre_space, cond_spaces]
   end
 end
