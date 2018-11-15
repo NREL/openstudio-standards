@@ -651,6 +651,7 @@ class Standard
     water_heater.setTankVolume(OpenStudio.convert(water_heater_vol_gal, 'gal', 'm^3').get)
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
     water_heater.setDeadbandTemperatureDifference(2.0)
+    water_heater.setEndUseSubcategory('Booster')
 
     if booster_water_heater_thermal_zone.nil?
       # Assume the water heater is indoors at 70F for now
@@ -1059,6 +1060,13 @@ class Standard
                                                                     swh_piping_air_temp_c,
                                                                     name = "#{swh_loop.name} Piping Air Temp - #{swh_piping_air_temp_f.round}F")
 
+      # Service water heating piping heat loss scheduled air velocity
+      swh_piping_air_velocity_m_per_s = 0.3
+      swh_piping_air_velocity_mph = OpenStudio.convert(swh_piping_air_velocity_m_per_s, 'm/s', 'mile/hr').get
+      swh_piping_air_velocity_sch = model_add_constant_schedule_ruleset(model,
+                                                                        swh_piping_air_velocity_m_per_s,
+                                                                        name = "#{swh_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph")
+
       # Material for 3/4in type L (heavy duty) copper pipe
       copper_pipe = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       copper_pipe.setName("Copper pipe 0.75in type L")
@@ -1077,19 +1085,20 @@ class Standard
       # Add insulation material to insulated pipe
       if pipe_insulation_thickness > 0
         # Material for fiberglass insulation
-        # Properties from CBECC-Com 3 1/2in Glass fiber batt, downscaled
+        # R-value from Owens-Corning 1/2in fiberglass pipe insulation
+        # https://www.grainger.com/product/OWENS-CORNING-1-2-Thick-40PP22
+        # but modified until simulated heat loss = 17.7 Btu/hr/ft of pipe with 140F water and 70F air
         pipe_insulation_thickness_in = OpenStudio.convert(pipe_insulation_thickness, 'm', 'in').get
-
         insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model)
         insulation.setName("Fiberglass batt #{pipe_insulation_thickness_in.round(2)}in")
         insulation.setRoughness('Smooth')
         insulation.setThickness(OpenStudio.convert(pipe_insulation_thickness_in, 'in', 'm').get)
-        insulation.setConductivity(OpenStudio.convert(0.318, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+        insulation.setConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
         insulation.setDensity(OpenStudio.convert(0.7, 'lb/ft^3', 'kg/m^3').get)
         insulation.setSpecificHeat(OpenStudio.convert(0.2, 'Btu/lb*R', 'J/kg*K').get)
-        insulation.setThermalAbsorptance(0.9) # TODO: find reference for property
-        insulation.setSolarAbsorptance(0.7) # TODO: find reference for property
-        insulation.setVisibleAbsorptance(0.7) # TODO: find reference for property
+        insulation.setThermalAbsorptance(0.9) # Irrelevant for Pipe:Indoor; no radiation model is used
+        insulation.setSolarAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
+        insulation.setVisibleAbsorptance(0.7) # Irrelevant for Pipe:Indoor; no radiation model is used
 
         pipe_construction.setName("Copper pipe 0.75in type L with #{pipe_insulation_thickness_in.round(2)}in fiberglass batt")
         pipe_construction.setLayers([insulation, copper_pipe])
@@ -1104,7 +1113,7 @@ class Standard
       # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch) # TODO: schedule type registry error for this setter
       heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
       # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule) # TODO: schedule type registry error for this setter
-      heat_loss_pipe.setPointer(8, model.alwaysOffDiscreteSchedule.handle) # Assume no air movement inside walls where pipes are located
+      heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
       heat_loss_pipe.setConstruction(pipe_construction)
       heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)
       heat_loss_pipe.setPipeLength(OpenStudio.convert(pipe_length_ft, 'ft', 'm').get)
