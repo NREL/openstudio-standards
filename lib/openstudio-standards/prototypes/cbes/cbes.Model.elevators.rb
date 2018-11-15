@@ -66,6 +66,7 @@ class CBES < Standard
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
     elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
+    elevator_equipment.setEndUseSubcategory('Elevators')
     elevator_sch = model_add_schedule(model, elevator_schedule)
     elevator_equipment.setSchedule(elevator_sch)
     elevator_equipment.setSpace(space)
