@@ -506,8 +506,12 @@ class NECB2011
   def auto_zoning(model)
     self.auto_zone_dwelling_units(model)
     self.auto_zone_wet_spaces(model)
+    # todo....
+    self.auto_zone_all_other_spaces(model)
+    self.auto_zone_wild_spaces(model)
+  end
 
-    #-----Non-dwelling spaces---------
+  def auto_zone_all_other_spaces(model)
     model.getSpaces.select {|space| not is_a_necb_dwelling_unit?(space) && is_an_necb_wildcard_space?(space)}.each do |space|
       next unless space.thermalZone.empty?
       zone = OpenStudio::Model::ThermalZone.new(model)
@@ -542,15 +546,6 @@ class NECB2011
           end
         end
       end
-
-
-      #organize Wildcard spaces accordingly. Can be grouped with adjacent spaced unless they are dwelling units.
-      model.getSpaces.select {|space| is_an_necb_wildcard_space?(space)}.each do |space|
-        adjacent_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space, true)
-        adjacent_real_spaces = adjacent_spaces.select {|space, area| not is_an_necb_wildcard_space?(space)}
-        adjacent_spaceadjacent_real_spaces.map {|k, v| key}[0]
-      end
-      dwelling_tz << zone
     end
   end
 
