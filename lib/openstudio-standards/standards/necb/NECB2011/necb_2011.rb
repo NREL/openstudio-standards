@@ -414,66 +414,73 @@ class NECB2011 < Standard
     return true
   end
 
+
+  def determine_dominant_schedule(spaces)
+    spaces.each do |space|
+      # lookup necb space type properties
+      space_type_properties = standards_lookup_table_many(table_name: 'space_types')
+      # Here is a hash to keep track of the m2 running total of spacetypes for each
+      # sched type.
+      # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
+      # future schedules.
+      schedule_hash = Hash[
+          'A', 0,
+          'B', 0,
+          'C', 0,
+          'D', 0,
+          'E', 0,
+          'F', 0,
+          'G', 0,
+          'H', 0,
+          'I', 0,
+          'J', 0,
+          'K', 0,
+          'L', 0,
+          'M', 0,
+          'N', 0,
+          'O', 0,
+          'P', 0,
+          'Q', 0
+      ]
+      # iterate through spaces in building.
+      wildcard_spaces = 0
+      model.getSpaces.sort.each do |space|
+        found_space_type = false
+        # iterate through the NECB spacetype property table
+        space_type_properties.each do |spacetype|
+          unless space.spaceType.empty?
+            if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Space #{space.name} does not have a standardSpaceType defined")
+              found_space_type = false
+            elsif space.spaceType.get.standardsSpaceType.get == spacetype['space_type'] && space.spaceType.get.standardsBuildingType.get == spacetype['building_type']
+              if spacetype['necb_schedule_type'] == '*'
+                wildcard_spaces = +1
+              else
+                schedule_hash[spacetype['necb_schedule_type']] = schedule_hash[spacetype['necb_schedule_type']] + space.floorArea if (spacetype['necb_schedule_type'] != '*') && (spacetype['necb_schedule_type'] != '- undefined -')
+              end
+              # puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
+              found_space_type = true
+            elsif spacetype['necb_schedule_type'] != '*'
+              # found wildcard..will not count to total.
+              found_space_type = true
+            end
+          end
+        end
+        raise "Did not find #{space.spaceType.get.name} in NECB space types." if found_space_type == false
+      end
+      # finds max value and returns NECB schedule letter.
+      raise('Only wildcard spaces in model. You need to define the actual spaces. ') if wildcard_spaces == model.getSpaces.size
+      dominant_schedule = schedule_hash.each {|k, v| return k.to_s if v == schedule_hash.values.max}
+      return dominant_schedule
+    end
+  end
+
+
   # This model determines the dominant NECB schedule type
   # @param model [OpenStudio::model::Model] A model object
   # return s.each [String]
   def determine_dominant_necb_schedule_type(model)
-    # lookup necb space type properties
-    space_type_properties = @standards_data['space_types']
-
-    # Here is a hash to keep track of the m2 running total of spacetypes for each
-    # sched type.
-    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
-    # future schedules.
-    s = Hash[
-        'A', 0,
-        'B', 0,
-        'C', 0,
-        'D', 0,
-        'E', 0,
-        'F', 0,
-        'G', 0,
-        'H', 0,
-        'I', 0,
-        'J', 0,
-        'K', 0,
-        'L', 0,
-        'M', 0,
-        'N', 0,
-        'O', 0,
-        'P', 0,
-        'Q', 0
-    ]
-    # iterate through spaces in building.
-    wildcard_spaces = 0
-    model.getSpaces.sort.each do |space|
-      found_space_type = false
-      # iterate through the NECB spacetype property table
-      space_type_properties.each do |spacetype|
-        unless space.spaceType.empty?
-          if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Space #{space.name} does not have a standardSpaceType defined")
-            found_space_type = false
-          elsif space.spaceType.get.standardsSpaceType.get == spacetype['space_type'] && space.spaceType.get.standardsBuildingType.get == spacetype['building_type']
-            if spacetype['necb_schedule_type'] == '*'
-              wildcard_spaces = +1
-            else
-              s[spacetype['necb_schedule_type']] = s[spacetype['necb_schedule_type']] + space.floorArea if (spacetype['necb_schedule_type'] != '*') && (spacetype['necb_schedule_type'] != '- undefined -')
-            end
-            # puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
-            found_space_type = true
-          elsif spacetype['necb_schedule_type'] != '*'
-            # found wildcard..will not count to total.
-            found_space_type = true
-          end
-        end
-      end
-      raise "Did not find #{space.spaceType.get.name} in NECB space types." if found_space_type == false
-    end
-    # finds max value and returns NECB schedule letter.
-    raise('Only wildcard spaces in model. You need to define the actual spaces. ') if wildcard_spaces == model.getSpaces.size
-    dominant_schedule = s.each {|k, v| return k.to_s if v == s.values.max}
-    return dominant_schedule
+    return determine_dominant_schedule(model.getSpaces)
   end
 
   # This method determines the spacetype schedule type. This will re
@@ -590,7 +597,7 @@ class NECB2011 < Standard
             stub_space_type_occsens.setStandardsBuildingType(building_type)
             stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
             stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-            space_type_apply_rendering_color(stub_space_type_occsens)
+            space_type_apply_rendering_color(space_type_name_occsens)
             space.setSpaceType(stub_space_type_occsens)
           else
             # reassign occsens space type stub already created...
