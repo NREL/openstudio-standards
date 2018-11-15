@@ -597,7 +597,7 @@ class NECB2011 < Standard
             stub_space_type_occsens.setStandardsBuildingType(building_type)
             stub_space_type_occsens.setStandardsSpaceType(space_type_name_occsens)
             stub_space_type_occsens.setName("#{building_type} #{space_type_name_occsens}")
-            space_type_apply_rendering_color(space_type_name_occsens)
+            space_type_apply_rendering_color(stub_space_type_occsens)
             space.setSpaceType(stub_space_type_occsens)
           else
             # reassign occsens space type stub already created...
