@@ -132,6 +132,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
           # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
           shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
           shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+          shw_target_temperature_schedule = shw_target_temperature_schedule.map{|val| val.to_f.round(1) }
         end
 
         header_output << "SpaceType,"
