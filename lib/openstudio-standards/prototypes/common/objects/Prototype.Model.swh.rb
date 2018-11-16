@@ -324,7 +324,7 @@ class Standard
       # Water heater sizing
       case swh_system_type
       when 'One Per Unit'
-        water_heater_capacity_w = num_units * OpenStudio.convert(15.0, 'kBtu/hr', 'W').get
+        water_heater_capacity_w = num_units * OpenStudio.convert(20.0, 'kBtu/hr', 'W').get
         water_heater_volume_m3 = num_units * OpenStudio.convert(50.0, 'gal', 'm^3').get
         num_water_heaters = num_units
       else
