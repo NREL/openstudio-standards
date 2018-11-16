@@ -393,24 +393,25 @@ class NECB2011
     mech_room, cond_spaces = find_mech_room(model)
     space_coord_dists = []
     total_peak_flow = 0
+    hl_Pas = []
     # Now go through each space with a shw load and determine the x, y, and z components of a vector from the centroid
     # of the floor of the space containing the shw_tank and the centroid of the floor of the given space
     cond_spaces.each do |cond_space|
       # Find the specific space_type properties from standard.json
       spaceType_name = cond_space['space'].spaceType.get.nameString
       sp_type = spaceType_name[15..-1]
-      sp_type_info = @standards_data['space_types'].detect do |data|
-        data["space_type"].to_s.upcase == sp_type.to_s.upcase and
-            data['building_type'].to_s.upcase = 'SPACE FUNCTION'
+      sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
+        data['space_type'].to_s.upcase == sp_type.upcase and
+            data['building_type'].to_s.upcase == 'SPACE FUNCTION'
       end
       if sp_type_info.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
         return false
       end
       next if sp_type_info['service_water_heating_peak_flow_per_area'].to_f == 0.0 && sp_type_info['service_water_heating_peak_flow_rate'].to_f == 0.0 || sp_type_info['service_water_heating_schedule'].nil?
-      space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
+      space_area = OpenStudio.convert(cond_space['space'].floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space
-      space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
+      space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f*space_area)*cond_space['space'].multiplier
       space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
       # Determine the total shw peak flow for the building.
       total_peak_flow += space_peak_flow_SI
@@ -418,7 +419,7 @@ class NECB2011
       if space_peak_flow_SI > 0
         space_coord_dist = []
         cond_space['space_centroid'].each_with_index do |dist, coord|
-          space_coord_dist[coord] << (dist - mech_room['space_centroid'][coord]).abs
+          space_coord_dist << (dist - mech_room['space_centroid'][coord]).abs
         end
         space_coord_dists << space_coord_dist
       end
@@ -426,9 +427,8 @@ class NECB2011
     # The piping run length from the shw tank to a given space is assumed to be the sum of the coordinates of the vector
     # described above.  The longest piping run becomes the one used for sizing.  Note that I double the length of this
     # piping run below when calculating head loss.
-    space_coord_dists.each do space_coord_dists
-      sizing_pipe_run = shw_spaces.max_by{|index| (index['shw_piping_coord_dist'][0] + index['shw_piping_coord_dist'][1] + index['shw_piping_coord_dist'][2])}
-      sizing_pipe_length = sizing_pipe_run['shw_piping_coord_dist'][0] + sizing_pipe_run['shw_piping_coord_dist'][1] + sizing_pipe_run['shw_piping_coord_dist'][2]
+    space_coord_dists.each do |space_coord_dist|
+      sizing_pipe_length = space_coord_dist[0] + space_coord_dist[1] + space_coord_dist[2]
       # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
       # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
       # flow rates for the entire building.  The length of the piping run is twice the calculated longest piping run
@@ -454,12 +454,18 @@ class NECB2011
       # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
       # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
       # earth hence g is hard coded to 9.81 m/s^2.
-      hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*sizing_pipe_run['shw_piping_coord_dist'][2]*9.81
+      hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*space_coord_dist[2]*9.81
       if hl_Pa < 1
         hl_Pa = 1
       end
+      hl_Pas << hl_Pa
     end
-    return hl_Pa
+    # If no spaces with shw were found return the default pump head.
+    if hl_Pas.empty?
+      return 179532
+    else
+      return hl_Pas.max_by{|hl| (hl)}
+    end
   end
 
   def friction_factor(re_pipe, relative_rough)
