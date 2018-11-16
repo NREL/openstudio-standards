@@ -518,7 +518,8 @@ class NECB2011
     sp_func_regex = Regexp.new('Space Function')
     mech_regex = Regexp.new('Electrical/Mechanical')
     mech_flag = false
-    model.getSpaces.each_with_index do |space, index|
+    index = 0
+    model.getSpaces.each do |space|
       cooled = space_cooled?(space)
       heated = space_heated?(space)
       spaceType_name = space.spaceType.get.nameString
@@ -565,6 +566,7 @@ class NECB2011
             "building_cent_dist" => 0,
         }
         cond_spaces << cond_space
+        index += 1
       end
     end
 
