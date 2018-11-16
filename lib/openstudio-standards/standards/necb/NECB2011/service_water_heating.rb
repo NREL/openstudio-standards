@@ -400,8 +400,10 @@ class NECB2011
       # Find the specific space_type properties from standard.json
       spaceType_name = cond_space['space'].spaceType.get.nameString
       sp_type = spaceType_name[15..-1]
+      # Including regular expressions in the following match for cases where extra characters, which do not belong, are
+      # added to either the space type in the model or the space type reference file.
       sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
-        data['space_type'].to_s.upcase == sp_type.upcase and
+        (Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase))and
             data['building_type'].to_s.upcase == 'SPACE FUNCTION'
       end
       if sp_type_info.nil?
