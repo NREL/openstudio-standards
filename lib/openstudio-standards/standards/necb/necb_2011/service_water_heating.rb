@@ -19,8 +19,7 @@ class NECB2011
                                            OpenStudio.convert(prototype_input['main_water_heater_capacity'], 'Btu/hr', 'W').get,
                                            OpenStudio.convert(prototype_input['main_water_heater_volume'], 'gal', 'm^3').get,
                                            swh_fueltype,
-                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                           building_type)
+                                           OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
       end
 
       # Attach the end uses if specified in prototype inputs
@@ -37,8 +36,7 @@ class NECB2011
                                OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                prototype_input['main_service_water_flowrate_schedule'],
                                OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                               nil,
-                               building_type)
+                               nil)
 
       else
 
@@ -69,11 +67,9 @@ class NECB2011
             # Added this to prevent double counting of zone multipliers.. space multipliers are never used in NECB archtypes.
             space_multiplier = 1
 
-            model_add_swh_end_uses_by_space(model, model_get_lookup_name(building_type),
-                                            climate_zone,
+            model_add_swh_end_uses_by_space(model,
                                             main_swh_loop,
-                                            space_type_name,
-                                            space_name,
+                                            space,
                                             space_multiplier)
           end
         end
@@ -91,16 +87,14 @@ class NECB2011
                                                prototype_input['booster_water_heater_fuel'],
                                                OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
                                                0,
-                                               nil,
-                                               building_type)
+                                               nil)
 
       # Attach the end uses
       model_add_booster_swh_end_uses(model,
                                      swh_booster_loop,
                                      OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                                      prototype_input['booster_service_water_flowrate_schedule'],
-                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get,
-                                     building_type)
+                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
 
     end
 
@@ -117,8 +111,7 @@ class NECB2011
                                             OpenStudio.convert(prototype_input['laundry_water_heater_capacity'], 'Btu/hr', 'W').get,
                                             OpenStudio.convert(prototype_input['laundry_water_heater_volume'], 'gal', 'm^3').get,
                                             prototype_input['laundry_water_heater_fuel'],
-                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get,
-                                            building_type)
+                                            OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
       # Attach the end uses if specified in prototype inputs
       model_add_swh_end_uses(model,
@@ -127,8 +120,7 @@ class NECB2011
                              OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
                              prototype_input['laundry_service_water_flowrate_schedule'],
                              OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                             nil,
-                             building_type)
+                             nil)
 
     end
 

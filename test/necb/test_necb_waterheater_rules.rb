@@ -46,8 +46,7 @@ class SHWTests < MiniTest::Test
                         prototype_input['main_water_heater_capacity'],
                         prototype_input['main_water_heater_volume'],
                         prototype_input['main_water_heater_fuel'],
-                        prototype_input['main_service_water_parasitic_fuel_consumption_rate'],
-                        'SmallOffice')
+                        prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
     # add hvac system
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -123,8 +122,7 @@ class SHWTests < MiniTest::Test
                             prototype_input['main_water_heater_capacity'],
                             prototype_input['main_water_heater_volume'],
                             prototype_input['main_water_heater_fuel'],
-                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'],
-                            'SmallOffice')
+                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
         # add hvac system
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
