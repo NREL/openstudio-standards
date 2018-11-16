@@ -403,8 +403,8 @@ class NECB2011
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
       # added to either the space type in the model or the space type reference file.
       sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
-        (Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase))and
-            data['building_type'].to_s.upcase == 'SPACE FUNCTION'
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+            data['building_type'].to_s == 'Space Function'
       end
       if sp_type_info.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
