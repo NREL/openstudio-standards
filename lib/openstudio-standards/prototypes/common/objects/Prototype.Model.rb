@@ -1785,7 +1785,7 @@ Standard.class_eval do
         if oa_sys.is_initialized
           oa_sys = oa_sys.get
         else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
           next
         end
         oa_control = oa_sys.getControllerOutdoorAir

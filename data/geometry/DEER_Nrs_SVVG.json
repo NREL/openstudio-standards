@@ -46,5 +46,16 @@
       "EL4 Core Spc (G.C3)"
     ],
     "return_plenum": "EL4 Core Plnm (G.4)"
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 East Perim Spc (G.E2) Exhaust Fan",
+    "flow_rate": 0.636916681,
+    "operation_schedule": "D_Nrs_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Nursing Home Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL1 East Perim Spc (G.E2)"
+    ]
   }
 ]
