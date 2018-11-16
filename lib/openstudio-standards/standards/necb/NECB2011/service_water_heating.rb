@@ -574,9 +574,9 @@ class NECB2011
       check_spaces = []
       lowest_space == 10000000000000
       mech_rooms.each do |mech_room|
+        check_spaces << cond_spaces[mech_room]
         if cond_spaces[mech_room]['space_centroid'][2].to_f < lowest_space
           lowest_space = cond_spaces[mech_room]['space_centroid'][2].to_f
-          check_spaces << cond_spaces[mech_room]
         end
       end
     else
