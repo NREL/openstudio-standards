@@ -432,8 +432,8 @@
     {
       "building_type": "SCn",
       "rollup_doors_per_10,000": 3.67,
-      "entrance_doors_per_10,000": 1.0,
-      "others_doors_per_10,000": 2.0,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
       "entrance_canopies": null,
       "emergency_canopies": null,
       "canopy_size": null,
@@ -443,8 +443,8 @@
     {
       "building_type": "SUn",
       "rollup_doors_per_10,000": 3.67,
-      "entrance_doors_per_10,000": 1.0,
-      "others_doors_per_10,000": 2.0,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
       "entrance_canopies": null,
       "emergency_canopies": null,
       "canopy_size": null,
@@ -454,8 +454,8 @@
     {
       "building_type": "WRf",
       "rollup_doors_per_10,000": 3.67,
-      "entrance_doors_per_10,000": 1.0,
-      "others_doors_per_10,000": 2.0,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
       "entrance_canopies": null,
       "emergency_canopies": null,
       "canopy_size": null,
