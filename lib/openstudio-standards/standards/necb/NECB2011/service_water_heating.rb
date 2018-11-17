@@ -390,144 +390,84 @@ class NECB2011
   # Chris Kirney 2018-07-27.
   def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.0000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
-    shw_spaces = []
-    building_centre = Array.new(3,0)
+    mech_room, cond_spaces = find_mech_room(model)
+    space_coord_dists = []
     total_peak_flow = 0
-    lowest_space = 100000000000
-    floor_centroid = Array.new(3, 0)
-    # Go through all of the spaces, ignore those that are not conditioned
-    model.getSpaces.sort.each do |space|
-      conditioned = true
-      space_peak_flow_SI = 0
-      space_type_name = space.spaceType.get.nameString
-      # Find the specific space_type properties from standard.json
-      standards_lookup_table_many(table_name: 'space_types').each do |space_type|
-        if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
-          # If the space is unheated ignore it.
-          if space_type['necb_hvac_system_selection_type'] == "- undefined -"
-            conditioned = false
-            break
-          # Check if the there is a shw load.  If there isn't flag this by setting the peak flow to 0.
-          elsif space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
-            space_peak_flow_SI = 0
-            break
-          else
-            # If there is a service hot water load collect the space information
-            space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
-            # Calculate the peak shw flow rate for the space
-            space_peak_flow = (space_type['service_water_heating_peak_flow_per_area'].to_f*space_area)*space.multiplier
-            space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
-            # Determine the total shw peak flow for the building.
-            total_peak_flow += space_peak_flow_SI
-            break
-          end
-        end
-      end
-      if conditioned == false
-        next
-      end
-      # Determine the bottom surface of the space and calculate it's centroid.  This is assumed to be where SHW enters
-      # the space (or leaves the space in the case of the location of the tank).  Note that this is calculated for all
-      # conditioned spaces as the tank may be located in a space that is conditioned but does not actually have a shw
-      # demand (such as a mechanical/electrical room).
-      # Get the coordinates of the origin for the space (This coordinates of points in the space are relative to this).
-      xOrigin = space.xOrigin
-      yOrigin = space.yOrigin
-      zOrigin = space.zOrigin
-      # Get the surfaces for the space.
-      space_surfaces = space.surfaces
-      # Find the floor (aka the surface with the lowest centroid).
-      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
-      # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
-      floor_centroid = [0, 0, 0]
-      space_surfaces.each do |sp_surface|
-        if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
-          floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
-          floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
-          floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
-        end
-      end
-      floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
-      floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
-      # I use centroid for the floor as the location of the source or point of use for the shw system.  What!?! doesn't
-      # everyone wash their hands on the floor?
-      shw_space_info = {
-          "space_centroid" => [floor_centroid[0] + xOrigin, floor_centroid[1] + yOrigin, min_surf.centroid.z.to_f + zOrigin],
-          "peak_flow_SI" => space_peak_flow_SI,
-          "building_cent_dist" => 0,
-          "space_name" => space.name,
-          "shw_piping_coord_dist" => [0, 0, 0],
-      }
-      if shw_space_info["space_centroid"][2] < lowest_space
-        lowest_space = shw_space_info["space_centroid"][2]
-      end
-      shw_spaces << shw_space_info
-      # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
-      # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
-      building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
-      building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
-      building_centre[2] += floor_centroid[2]
-    end
-    # This is where the average happens
-    building_centre[0] /= building_centre[2]
-    building_centre[1] /= building_centre[2]
-    # Go through each space on the lowest floor of the building and determine the distance between the centroid of the
-    # space's floors and the center of the building I calculated just above.
-    centre_spaces = []
-    shw_spaces.each do |shw_space|
-      if shw_space['space_centroid'][2] == lowest_space
-        shw_space['building_cent_dist'] = Math.sqrt(((shw_space['space_centroid'][0] - building_centre[0])**2) + ((shw_space['space_centroid'][1] - building_centre[1])**2))
-        centre_spaces << shw_space
-      end
-    end
-    # Determine which of the floor spaces is closest to the centre of the building and that one becomes the location of
-    # the shw tank.
-    centre_space = centre_spaces.min_by{|dist| dist['building_cent_dist'].round(1)}
+    hl_Pas = []
     # Now go through each space with a shw load and determine the x, y, and z components of a vector from the centroid
     # of the floor of the space containing the shw_tank and the centroid of the floor of the given space
-    shw_spaces.each do |shw_space|
-      if shw_space["peak_flow_SI"] > 0
-        shw_space["space_centroid"].each_with_index do |dist, coord|
-          shw_space["shw_piping_coord_dist"][coord] = (dist - centre_space["space_centroid"][coord]).abs
+    cond_spaces.each do |cond_space|
+      # Find the specific space_type properties from standard.json
+      spaceType_name = cond_space['space'].spaceType.get.nameString
+      sp_type = spaceType_name[15..-1]
+      # Including regular expressions in the following match for cases where extra characters, which do not belong, are
+      # added to either the space type in the model or the space type reference file.
+      sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+            data['building_type'].to_s == 'Space Function'
+      end
+      if sp_type_info.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
+        return false
+      end
+      next if sp_type_info['service_water_heating_peak_flow_per_area'].to_f == 0.0 && sp_type_info['service_water_heating_peak_flow_rate'].to_f == 0.0 || sp_type_info['service_water_heating_schedule'].nil?
+      space_area = OpenStudio.convert(cond_space['space'].floorArea, 'm^2', 'ft^2').get # ft2
+      # Calculate the peak shw flow rate for the space
+      space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f*space_area)*cond_space['space'].multiplier
+      space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
+      # Determine the total shw peak flow for the building.
+      total_peak_flow += space_peak_flow_SI
+      # I use centroid for the floor as the location of the source or point of use for the shw system.
+      if space_peak_flow_SI > 0
+        space_coord_dist = []
+        cond_space['space_centroid'].each_with_index do |dist, coord|
+          space_coord_dist << (dist - mech_room['space_centroid'][coord]).abs
         end
+        space_coord_dists << space_coord_dist
       end
     end
     # The piping run length from the shw tank to a given space is assumed to be the sum of the coordinates of the vector
     # described above.  The longest piping run becomes the one used for sizing.  Note that I double the length of this
     # piping run below when calculating head loss.
-    sizing_pipe_run = shw_spaces.max_by{|index| (index['shw_piping_coord_dist'][0] + index['shw_piping_coord_dist'][1] + index['shw_piping_coord_dist'][2])}
-    sizing_pipe_length = sizing_pipe_run['shw_piping_coord_dist'][0] + sizing_pipe_run['shw_piping_coord_dist'][1] + sizing_pipe_run['shw_piping_coord_dist'][2]
-
-    # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
-    # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
-    # flow rates for the entire building.  The length of the piping run is twice the calculated longest piping run
-    # described above.
-    # Step 1:  Calculate the Reynold's number.  Note kinematic viscosity is set for water at 60 C and pipe diameter is
-    #          set to 3/4".  These can be changed by passing different values to the method.  I got the kinematic
-    #          viscosity from www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html accessed 2018-07-05.
-    #          I got the pipe roughness from www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on
-    #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
-    #          it is for process water but we assume that is not the case).
-    # Determine the bulk velocity of the shw through the pipe.
-    pipe_vel = 4*total_peak_flow/(Math::PI*(pipe_dia_m**2))
-    # Get the Reynolds number.
-    re_pipe = (pipe_vel*pipe_dia_m)/kin_visc_SI
-    # Step 2:  Figure out what the Darcy-Weisbach friction factor is.
-    relative_rough = pipe_rough_m/pipe_dia_m
-    f = friction_factor(re_pipe, relative_rough)
-    # Step 3:  Calculate the major head loss
-    #          Note that you may be thinking that I forgot to divide the last term by 2 in the equation below.  I didn't.
-    #          I multiplied the piping length by 2 because I did not take pipe bends etc. into account and I calculate the
-    #          maximum piping run in a really approximate way.  Thus I multiply the piping run by 2.  If you can think
-    #          of something better please replace what I have.
-    # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
-    # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
-    # earth hence g is hard coded to 9.81 m/s^2.
-    hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*sizing_pipe_run['shw_piping_coord_dist'][2]*9.81
-    if hl_Pa < 1
-      hl_Pa = 1
+    space_coord_dists.each do |space_coord_dist|
+      sizing_pipe_length = space_coord_dist[0] + space_coord_dist[1] + space_coord_dist[2]
+      # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
+      # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
+      # flow rates for the entire building.  The length of the piping run is twice the calculated longest piping run
+      # described above.
+      # Step 1:  Calculate the Reynold's number.  Note kinematic viscosity is set for water at 60 C and pipe diameter is
+      #          set to 3/4".  These can be changed by passing different values to the method.  I got the kinematic
+      #          viscosity from www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html accessed 2018-07-05.
+      #          I got the pipe roughness from www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on
+      #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
+      #          it is for process water but we assume that is not the case).
+      # Determine the bulk velocity of the shw through the pipe.
+      pipe_vel = 4*total_peak_flow/(Math::PI*(pipe_dia_m**2))
+      # Get the Reynolds number.
+      re_pipe = (pipe_vel*pipe_dia_m)/kin_visc_SI
+      # Step 2:  Figure out what the Darcy-Weisbach friction factor is.
+      relative_rough = pipe_rough_m/pipe_dia_m
+      f = friction_factor(re_pipe, relative_rough)
+      # Step 3:  Calculate the major head loss
+      #          Note that you may be thinking that I forgot to divide the last term by 2 in the equation below.  I didn't.
+      #          I multiplied the piping length by 2 because I did not take pipe bends etc. into account and I calculate the
+      #          maximum piping run in a really approximate way.  Thus I multiply the piping run by 2.  If you can think
+      #          of something better please replace what I have.
+      # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
+      # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
+      # earth hence g is hard coded to 9.81 m/s^2.
+      hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*space_coord_dist[2]*9.81
+      if hl_Pa < 1
+        hl_Pa = 1
+      end
+      hl_Pas << hl_Pa
     end
-    return hl_Pa
+    # If no spaces with shw were found return the default pump head.
+    if hl_Pas.empty?
+      return 179532
+    else
+      return hl_Pas.max_by{|hl| (hl)}
+    end
   end
 
   def friction_factor(re_pipe, relative_rough)
@@ -557,5 +497,110 @@ class NECB2011
       f = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
     end
     return f
+  end
+
+  # This method determines where the mechanical room is in a building.  Mechanical rooms are assumed to be conditioned
+  # spaces that are not plenums.  It goes through all of the spaces in a model ignoring unconditioned spaces and plenums.
+  # It then determines the floor of the space, and the centroid of the floor.  It accumulates space floor area*floor
+  # centroid information and total floor area.  It uses this to determine the centroid of the building.  It also notes
+  # if the space has a space type with 'Electrical/Mechanical' in it.  If it does then it assumes that this is a
+  # mechanical room and tracks it separately.  Once it has gone through all of the spaces it determines if any mechanical
+  # rooms were found.  If some were found it finds the lowest one in the building (if more than one) and returns that
+  # along with all of the conditioned, non-plenum, spaces.  If none were found then it searches for the lowest space in
+  # the building closest to the building centroid and returns that as the centroid (along with eth conditioned,
+  # non-plenum, spaces).
+  def find_mech_room(model)
+    cond_spaces = []
+    total_peak_flow = 0
+    mech_rooms = []
+    check_spaces = nil
+    building_centre = Array.new(3, 0)
+    total_peak_flow = 0
+    lowest_space = 1000000000000000
+    sp_func_regex = Regexp.new('Space Function')
+    mech_regex = Regexp.new('Electrical/Mechanical')
+    mech_flag = false
+    index = 0
+    model.getSpaces.each do |space|
+      cooled = space_cooled?(space)
+      heated = space_heated?(space)
+      spaceType_name = space.spaceType.get.nameString
+      if heated || cooled
+        next if space_plenum?(space)
+        if mech_regex.match(spaceType_name)
+          mech_rooms << index
+        end
+        # Determine the bottom surface of the space and calculate it's centroid.  Note that the mech room is assumed to
+        # be in a space that conditioned and is not a plenum (or attic space).  Get the coordinates of the origin for
+        # the space (the coordinates of points in the space are relative to this).
+        xOrigin = space.xOrigin
+        yOrigin = space.yOrigin
+        zOrigin = space.zOrigin
+        # Get the surfaces for the space.
+        space_surfaces = space.surfaces
+        # Find the floor (aka the surface with the lowest centroid).
+        min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
+        # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
+        floor_centroid = [0, 0, 0]
+        space_surfaces.each do |sp_surface|
+          if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
+            floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+            floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+            floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
+          end
+        end
+
+        floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
+        floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
+
+        if lowest_space > (min_surf.centroid.z.to_f + zOrigin)
+          lowest_space = min_surf.centroid.z.to_f + zOrigin
+        end
+        # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
+        # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
+        building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
+        building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
+        building_centre[2] += (floor_centroid[2])
+        cond_space = {
+            "space_name" => space.nameString,
+            "space" => space,
+            "space_centroid" => [floor_centroid[0] + xOrigin, floor_centroid[1] + yOrigin, min_surf.centroid.z.to_f + zOrigin],
+            "building_cent_dist" => 0,
+        }
+        cond_spaces << cond_space
+        index += 1
+      end
+    end
+
+    if mech_rooms.size == 1
+      return [cond_spaces[mech_rooms[0]], cond_spaces]
+    elsif mech_rooms.size > 1
+      check_spaces = []
+      lowest_space == 10000000000000
+      mech_rooms.each do |mech_room|
+        check_spaces << cond_spaces[mech_room]
+        if cond_spaces[mech_room]['space_centroid'][2].to_f < lowest_space
+          lowest_space = cond_spaces[mech_room]['space_centroid'][2].to_f
+        end
+      end
+    else
+      check_spaces = cond_spaces
+    end
+    # This is where the average happens
+    building_centre[0] /= building_centre[2]
+    building_centre[1] /= building_centre[2]
+    # Go through each space on the lowest floor of the building and determine the distance between the centroid of the
+    # space's floors and the center of the building I calculated just above.
+    centre_spaces = []
+    check_spaces.each do |check_space|
+      if check_space['space_centroid'][2] == lowest_space
+        check_space['building_cent_dist'] = Math.sqrt(((check_space['space_centroid'][0] - building_centre[0])**2) + ((check_space['space_centroid'][1] - building_centre[1])**2))
+        centre_spaces << check_space
+      end
+    end
+    # Determine which of the floor spaces is closest to the centre of the building and that one becomes the location of
+    # the mechanical room.
+    centre_space = centre_spaces.min_by{|dist| dist['building_cent_dist'].round(1)}
+    return [centre_space, cond_spaces]
   end
 end

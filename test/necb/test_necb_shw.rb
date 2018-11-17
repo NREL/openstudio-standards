@@ -30,7 +30,7 @@ class SHW_test < Minitest::Test
           model = nil
           standard = nil
           # Open the Outpatient model.
-          model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/#{template}Outpatient.osm")
+          model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/NECB2011Outpatient.osm")
           # Set the weather file.
           BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
           # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
