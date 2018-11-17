@@ -63,7 +63,7 @@ class Standard
       name_prefix = 'Parking Areas and Drives'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -90,7 +90,7 @@ class Standard
       name_prefix = 'Building Facades'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -117,7 +117,7 @@ class Standard
       name_prefix = 'Main Entries'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of main entry length.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of main entry length.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -144,7 +144,7 @@ class Standard
       name_prefix = 'Other Doors'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of other doors.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of other doors.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -320,6 +320,8 @@ class Standard
 
       # store floor area ip
       floor_area_ip = OpenStudio.convert(hash[:floor_area], 'm^2', 'ft^2').get
+      effective_num_stories = model_effective_num_stories(model)
+      ground_floor_area_ip = floor_area_ip / effective_num_stories[:above_grade]
       num_spots = 0.0
 
       # load illuminated_parking_area_properties
@@ -361,10 +363,10 @@ class Standard
         other_doors_width_ip = 4 # ft
 
         # rollup not used
-        main_entries += (floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000'] * main_entry_width_ip
-        other_doors += (floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['others_doors_per_10,000'] * other_doors_width_ip
+        main_entries += (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000'] * main_entry_width_ip
+        other_doors += (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['others_doors_per_10,000'] * other_doors_width_ip
         unless exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].nil?
-          drive_through_windows += floor_area_ip / exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].to_f
+          drive_through_windows += ground_floor_area_ip / exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].to_f
         end
 
         # if any space types of building type that has canopy, then use that value, don't add to count for additional space types
@@ -387,7 +389,6 @@ class Standard
     area_length_count_hash[:drive_through_windows] = drive_through_windows
 
     # determine effective number of stories to find first above grade story exterior wall area
-    effective_num_stories = model_effective_num_stories(model)
     ground_story = effective_num_stories[:story_hash].keys[effective_num_stories[:below_grade]]
     ground_story_ext_wall_area_si = effective_num_stories[:story_hash][ground_story][:ext_wall_area]
     ground_story_ext_wall_area_ip = OpenStudio.convert(ground_story_ext_wall_area_si, 'm^2', 'ft^2').get
