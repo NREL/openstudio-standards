@@ -389,6 +389,7 @@ class Standard
     area_length_count_hash[:drive_through_windows] = drive_through_windows
 
     # determine effective number of stories to find first above grade story exterior wall area
+    effective_num_stories = model_effective_num_stories(model)
     ground_story = effective_num_stories[:story_hash].keys[effective_num_stories[:below_grade]]
     ground_story_ext_wall_area_si = effective_num_stories[:story_hash][ground_story][:ext_wall_area]
     ground_story_ext_wall_area_ip = OpenStudio.convert(ground_story_ext_wall_area_si, 'm^2', 'ft^2').get
