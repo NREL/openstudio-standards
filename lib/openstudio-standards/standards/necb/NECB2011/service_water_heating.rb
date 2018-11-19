@@ -432,7 +432,7 @@ class NECB2011
     # The piping run length from the shw tank to a given space is assumed to be the sum of the coordinates of the vector
     # described above.  The longest piping run becomes the one used for sizing.  Note that I double the length of this
     # piping run below when calculating head loss.
-    space_coord_dists.each do |space_coord_dist|
+    space_coord_dists.sort.each do |space_coord_dist|
       sizing_pipe_length = space_coord_dist[0] + space_coord_dist[1] + space_coord_dist[2]
       # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
       # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
@@ -524,7 +524,7 @@ class NECB2011
     mech_regex = Regexp.new('Electrical/Mechanical')
     mech_flag = false
     index = 0
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       spaceType_name = space.spaceType.get.nameString
       sp_type = spaceType_name[15..-1]
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
