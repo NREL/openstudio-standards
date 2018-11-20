@@ -391,6 +391,7 @@ class NECB2011
   def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.0000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
     mech_room, cond_spaces = find_mech_room(model)
+    return 179532 if mech_room.nil? || cond_spaces.nil?
     space_coord_dists = []
     total_peak_flow = 0
     hl_Pas = []
@@ -406,9 +407,11 @@ class NECB2011
         ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
             data['building_type'].to_s == 'Space Function'
       end
+
+      # If the space type could not be found let the use know and go on to the next space.
       if sp_type_info.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
-        return false
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
+        next
       end
       next if sp_type_info['service_water_heating_peak_flow_per_area'].to_f == 0.0 && sp_type_info['service_water_heating_peak_flow_rate'].to_f == 0.0 || sp_type_info['service_water_heating_schedule'].nil?
       space_area = OpenStudio.convert(cond_space['space'].floorArea, 'm^2', 'ft^2').get # ft2
@@ -429,7 +432,7 @@ class NECB2011
     # The piping run length from the shw tank to a given space is assumed to be the sum of the coordinates of the vector
     # described above.  The longest piping run becomes the one used for sizing.  Note that I double the length of this
     # piping run below when calculating head loss.
-    space_coord_dists.each do |space_coord_dist|
+    space_coord_dists.sort.each do |space_coord_dist|
       sizing_pipe_length = space_coord_dist[0] + space_coord_dist[1] + space_coord_dist[2]
       # The shw pump is sized by assuming that the sum of the peak shw volume flow rates for each space has to be fed
       # through the longest piping run.  So for the sizing calculations below, the flow rate is the sum of the peak volume
@@ -521,46 +524,68 @@ class NECB2011
     mech_regex = Regexp.new('Electrical/Mechanical')
     mech_flag = false
     index = 0
-    model.getSpaces.each do |space|
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+    model.getSpaces.sort.each do |space|
       spaceType_name = space.spaceType.get.nameString
-      if heated || cooled
-        next if space_plenum?(space)
+      sp_type = spaceType_name[15..-1]
+      # Including regular expressions in the following match for cases where extra characters, which do not belong, are
+      # added to either the space type in the model or the space type reference file.
+      sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+            data['building_type'].to_s == 'Space Function'
+      end
+      if sp_type_info.nil?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.model_add_swh', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
+        next
+      end
+      # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
+      # a plenum by checking if there is a hvac system associtated with it
+      if sp_type_info['heating_setpoint_schedule'].nil? then heated = FALSE else heated = TRUE end
+      if sp_type_info['cooling_setpoint_schedule'].nil? then cooled = FALSE else cooled = TRUE end
+      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then not_plenum = FALSE else not_plenum = TRUE end
+
+      # Determine the bottom surface of the space and calculate it's centroid.  Although the mech room is assumed to
+      # be in a space that conditioned and is not a plenum (or attic space) all spaces in the building may not be.
+      # Doing the following to determine the centroid for the entire building (including unconditioned or plenum
+      # spaces).
+
+      # Get the coordinates of the origin for the space (the coordinates of points in the space are relative to this).
+      xOrigin = space.xOrigin
+      yOrigin = space.yOrigin
+      zOrigin = space.zOrigin
+      # Get the surfaces for the space.
+      space_surfaces = space.surfaces
+      # Find the floor (aka the surface with the lowest centroid).
+      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
+      # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
+      floor_centroid = [0, 0, 0]
+      space_surfaces.each do |sp_surface|
+        if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
+          floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+          floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+          floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
+        end
+      end
+
+      floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
+      floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
+
+      if lowest_space > (min_surf.centroid.z.to_f + zOrigin)
+        lowest_space = min_surf.centroid.z.to_f + zOrigin
+      end
+      # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
+      # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
+      building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
+      building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
+      building_centre[2] += (floor_centroid[2])
+
+      # Check if the space is conditioned and not a plenum.  If it is then add it to the list of conditioned, non-plenum,
+      # spaces and check if it has a 'Mechanical/Electrical' space type.  Note that the mech room is assumed to
+      # be in a space that conditioned and is not a plenum (or attic space).
+
+      if (heated == TRUE || cooled == TRUE) and not_plenum == TRUE
         if mech_regex.match(spaceType_name)
           mech_rooms << index
         end
-        # Determine the bottom surface of the space and calculate it's centroid.  Note that the mech room is assumed to
-        # be in a space that conditioned and is not a plenum (or attic space).  Get the coordinates of the origin for
-        # the space (the coordinates of points in the space are relative to this).
-        xOrigin = space.xOrigin
-        yOrigin = space.yOrigin
-        zOrigin = space.zOrigin
-        # Get the surfaces for the space.
-        space_surfaces = space.surfaces
-        # Find the floor (aka the surface with the lowest centroid).
-        min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
-        # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
-        floor_centroid = [0, 0, 0]
-        space_surfaces.each do |sp_surface|
-          if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
-            floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
-            floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
-            floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
-          end
-        end
-
-        floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
-        floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
-
-        if lowest_space > (min_surf.centroid.z.to_f + zOrigin)
-          lowest_space = min_surf.centroid.z.to_f + zOrigin
-        end
-        # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
-        # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
-        building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
-        building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
-        building_centre[2] += (floor_centroid[2])
         cond_space = {
             "space_name" => space.nameString,
             "space" => space,
@@ -586,6 +611,13 @@ class NECB2011
     else
       check_spaces = cond_spaces
     end
+
+    # If no heated or cooled spaces were found then return false
+    if cond_spaces.empty?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.model_add_swh', "No heated or cooled spaces types could be found which were not also a plenum.")
+      return false
+    end
+
     # This is where the average happens
     building_centre[0] /= building_centre[2]
     building_centre[1] /= building_centre[2]
