@@ -1817,7 +1817,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1837,7 +1837,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1857,7 +1857,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1877,7 +1877,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1897,7 +1897,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1917,7 +1917,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1937,7 +1937,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1957,7 +1957,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -1977,7 +1977,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -1997,7 +1997,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2017,7 +2017,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2037,7 +2037,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2057,7 +2057,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2077,7 +2077,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2097,7 +2097,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2117,7 +2117,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2137,7 +2137,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2157,7 +2157,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2177,7 +2177,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2197,7 +2197,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2217,7 +2217,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -2237,7 +2237,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -2257,7 +2257,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -2277,7 +2277,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "PTAC-EIR-fEWB&OAT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PTHP.csv"
     },
     {
@@ -2297,7 +2297,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2317,7 +2317,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2337,7 +2337,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2357,7 +2357,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2377,7 +2377,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2397,7 +2397,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2417,7 +2417,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2437,7 +2437,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2457,7 +2457,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2477,7 +2477,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2497,7 +2497,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2517,7 +2517,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2537,7 +2537,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2557,7 +2557,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2577,7 +2577,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2597,7 +2597,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2617,7 +2617,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2637,7 +2637,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2657,7 +2657,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2677,7 +2677,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -2697,7 +2697,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2717,7 +2717,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2737,7 +2737,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2757,7 +2757,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2777,7 +2777,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2797,7 +2797,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2817,7 +2817,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2837,7 +2837,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2857,7 +2857,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2877,7 +2877,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2897,7 +2897,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2917,7 +2917,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2937,7 +2937,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2957,7 +2957,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2977,7 +2977,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -2997,7 +2997,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3017,7 +3017,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3037,7 +3037,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3057,7 +3057,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3077,7 +3077,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3097,7 +3097,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3117,7 +3117,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3137,7 +3137,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3157,7 +3157,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3177,7 +3177,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3197,7 +3197,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3217,7 +3217,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3237,7 +3237,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = HP"
     },
     {
@@ -3257,7 +3257,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3277,7 +3277,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3297,7 +3297,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3317,7 +3317,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3337,7 +3337,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3357,7 +3357,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3377,7 +3377,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3397,7 +3397,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3417,7 +3417,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3437,7 +3437,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3457,7 +3457,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -3477,7 +3477,7 @@
       "heat_cap_fflow": null,
       "heat_eir_ft": "SpltAC1Sp_EIR_fT",
       "heat_eir_fflow": null,
-      "heat_plf_fplr": null,
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
       "notes": "Forecast for LA100 project"
     }
   ]
