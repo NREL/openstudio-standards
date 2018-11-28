@@ -363,7 +363,9 @@ class Standard
         other_doors_width_ip = 4 # ft
 
         # rollup not used
-        main_entries += (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000'] * main_entry_width_ip
+        num_main_entries = (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000']
+        num_main_entries = 1.0 if num_main_entries > 0 && num_main_entries < 1 # Ensure there is always 1 main entry
+        main_entries += num_main_entries * main_entry_width_ip
         other_doors += (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['others_doors_per_10,000'] * other_doors_width_ip
         unless exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].nil?
           drive_through_windows += ground_floor_area_ip / exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].to_f
