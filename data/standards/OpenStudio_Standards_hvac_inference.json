@@ -168,6 +168,61 @@
     {
       "template": "Any",
       "size_category": "res_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "air",
+      "hvac_system_type": "PTAC",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "air",
+      "hvac_system_type": "PTAC",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "air",
+      "hvac_system_type": "PVAV Reheat",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "air",
+      "hvac_system_type": "PVAV Reheat",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_lg",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "air",
+      "hvac_system_type": "VAV Reheat",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_small",
       "heating_source": "DistrictAmbient",
       "cooling_source": "DistrictAmbient",
       "delivery_type": "air",
@@ -387,6 +442,61 @@
     },
     {
       "template": "Any",
+      "size_category": "res_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "air",
+      "hvac_system_type": "PSZ-AC",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "air",
+      "hvac_system_type": "PSZ-AC",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "air",
+      "hvac_system_type": "PSZ-AC",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "air",
+      "hvac_system_type": "PVAV Rheat",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_lg",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "air",
+      "hvac_system_type": "VAV Reheat",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
       "size_category": "res_med",
       "heating_source": "NaturalGas",
       "cooling_source": "Electricity",
@@ -402,7 +512,7 @@
       "heating_source": "NaturalGas",
       "cooling_source": "Electricity",
       "delivery_type": "hydronic",
-      "hvac_system_type": "Water Source Heat Pumps with DOAS",
+      "hvac_system_type": "Fan Coil with DOAS",
       "central_heating_fuel": "NaturalGas",
       "zone_heating_fuel": "NaturalGas",
       "cooling_fuel": "Electricity"
@@ -512,7 +622,7 @@
       "heating_source": "DistrictHeating",
       "cooling_source": "Electricity",
       "delivery_type": "hydronic",
-      "hvac_system_type": "Water Source Heat Pumps with DOAS",
+      "hvac_system_type": "Fan Coil with DOAS",
       "central_heating_fuel": "DistrictHeating",
       "zone_heating_fuel": "DistrictHeating",
       "cooling_fuel": "Electricity"
@@ -537,6 +647,61 @@
       "hvac_system_type": "Fan Coil with DOAS",
       "central_heating_fuel": "DistrictHeating",
       "zone_heating_fuel": "DistrictHeating",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "Electricity"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_lg",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "Electricity",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
       "cooling_fuel": "Electricity"
     },
     {
@@ -735,6 +900,61 @@
       "hvac_system_type": "Fan Coil with DOAS",
       "central_heating_fuel": "DistrictHeating",
       "zone_heating_fuel": "DistrictHeating",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with ERVs",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "res_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": null,
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_small",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_med",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
+      "cooling_fuel": "DistrictCooling"
+    },
+    {
+      "template": "Any",
+      "size_category": "nonres_lg",
+      "heating_source": "AirSourceHeatPump",
+      "cooling_source": "DistrictCooling",
+      "delivery_type": "hydronic",
+      "hvac_system_type": "Fan Coil with DOAS",
+      "central_heating_fuel": "AirSourceHeatPump",
+      "zone_heating_fuel": "AirSourceHeatPump",
       "cooling_fuel": "DistrictCooling"
     }
   ]
