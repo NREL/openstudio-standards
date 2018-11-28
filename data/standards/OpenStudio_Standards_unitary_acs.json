@@ -5890,10 +5890,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -5912,10 +5912,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -5934,10 +5934,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -5956,10 +5956,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -5978,10 +5978,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -6000,10 +6000,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -6022,10 +6022,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -6044,10 +6044,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "From DEER PkgAC.csv Subtype = AC"
     },
     {
@@ -6066,10 +6066,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6088,10 +6088,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6110,10 +6110,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6131,11 +6131,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6153,11 +6153,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6175,11 +6175,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6197,11 +6197,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6219,11 +6219,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6241,11 +6241,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6263,11 +6263,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6285,11 +6285,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6307,11 +6307,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6330,11 +6330,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6352,11 +6352,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6374,11 +6374,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6396,11 +6396,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6418,11 +6418,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6440,11 +6440,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6462,11 +6462,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER Pre-1975",
@@ -6484,11 +6484,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 1985",
@@ -6506,11 +6506,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 1996",
@@ -6528,11 +6528,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2003",
@@ -6550,11 +6550,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2007",
@@ -6572,11 +6572,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2011",
@@ -6594,11 +6594,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2014",
@@ -6616,11 +6616,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2015",
@@ -6638,11 +6638,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2017",
@@ -6660,11 +6660,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER 2020",
@@ -6682,10 +6682,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6704,10 +6704,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6726,10 +6726,10 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6747,11 +6747,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6769,11 +6769,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6791,11 +6791,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6813,11 +6813,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6835,11 +6835,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6857,11 +6857,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6879,11 +6879,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6901,11 +6901,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6923,11 +6923,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp-lt45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-lt45_CLoss_fPLR_Mod",
-      "cool_eir_ft": "SpltAC1Sp-lt45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-lt45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6946,11 +6946,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6968,11 +6968,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6990,11 +6990,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7012,11 +7012,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp-ge45_ClCap_fT",
-      "cool_cap_fflow": "SpltAC1Sp-ge45_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC1Sp-ge45_EIR_fT",
-      "cool_eir_fflow": "SpltAC1Sp-ge45_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7034,11 +7034,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7056,11 +7056,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7078,11 +7078,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpLoSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpLoSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7100,11 +7100,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7122,11 +7122,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7144,11 +7144,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7166,11 +7166,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7188,11 +7188,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7210,11 +7210,11 @@
       "ptac_eer_coefficient_1": null,
       "ptac_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": "SpltAC2SpHiSEER_CLoss_fPLR_Mod",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
-      "cool_eir_fflow": "SpltAC2SpHiSEER_CEIR_fPLR_Mod",
-      "cool_plf_fplr": "CoilClgDXEIRRatio_fQFrac",
-      "notes": "From DEER PkgAC.csv Subtype = AC"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
     }
   ]
 }

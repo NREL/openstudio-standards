@@ -5132,7 +5132,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5146,7 +5146,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 1.0,
@@ -5165,7 +5165,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5179,7 +5179,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 2.0,
@@ -5198,7 +5198,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5212,7 +5212,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 3.0,
@@ -5231,7 +5231,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5245,7 +5245,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 4.0,
@@ -5264,7 +5264,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5278,7 +5278,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 0.0,
@@ -5297,7 +5297,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5311,7 +5311,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 1.0,
@@ -5330,7 +5330,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5344,7 +5344,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 2.0,
@@ -5363,7 +5363,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5377,7 +5377,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 3.0,
@@ -5396,7 +5396,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5410,7 +5410,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 4.0,
@@ -5429,7 +5429,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5443,7 +5443,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 0.0,
@@ -5462,7 +5462,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5476,7 +5476,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 1.0,
@@ -5495,7 +5495,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5509,7 +5509,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 2.0,
@@ -5528,7 +5528,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5542,7 +5542,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 3.0,
@@ -5561,7 +5561,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5575,7 +5575,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     },
     {
       "exterior_lighting_zone_number": 4.0,
@@ -5594,7 +5594,7 @@
       "landscaping": null,
       "main_entries": 30.0,
       "other_doors": 25.0,
-      "entry_canopies": 4.0,
+      "entry_canopies": 1.5,
       "loading_docks": null,
       "sales_canopies": null,
       "outdoor_sales_open_areas": 0.5,
@@ -5608,7 +5608,7 @@
       "drive_through_windows_and_doors": 400.0,
       "parking_near_24_hour_entrances": 800.0,
       "roadway_parking": null,
-      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement"
+      "notes": "Same as DOE Ref 1980-2004; parking capped at 0.04 W/sf to account for replacement; canopies LPD adjusted from online research of actual hotels"
     }
   ]
 }
