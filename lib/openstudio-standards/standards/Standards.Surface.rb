@@ -211,4 +211,97 @@ class Standard
     }
     return exp_surf_info
   end
+
+  # This method finds the centroid of the highest roof(s).  It cycles through each space and finds which surfaces are
+  # described as roofceiling whose outside boundary condition is outdoors.  Of those surfaces that do it looks for the
+  # highest one(s) and finds the centroid of those.  It returns the following hash:
+  # roof_cent = {
+  #   top_spaces:  array of spaces which contain the highest roofs,
+  #   roof_centroid:  global x, y, and z coords of the centroid of the highest roof surfaces,
+  #   roof_area:  area of the highst roof surfaces}
+  #
+  # Each element of the top_spaces is a hash containing the following:
+  # top_space = {
+  #   space:  OpenStudio space containing the surface,
+  #   x:  global x coord of the centroid of roof surface(s),
+  #   y:  global y coord of the centroid of roof surface(s),
+  #   z:  global z coord of the centroid of roof surface(s),
+  #   area_m2:  area of the roof surface(s)}
+  def find_highest_roof_centre(model)
+    # Initialize some variables
+    tol = 6
+    max_height = -1000000000000000
+    top_spaces = []
+    spaces_info = []
+    roof_centroid = [0, 0, 0]
+    # Go through each space looking for outdoor roofs
+    model.getSpaces.sort.each do |space|
+      outdoor_roof = false
+      space_max = -1000000000000000
+      max_surf = nil
+      space_surfaces = space.surfaces
+      # Go through each surface in the space.  If it is an outdoor roofceiling then continue.  Otherwise go to the next
+      # space.
+      space_surfaces.each do |surface|
+        outdoor_roof = true if surface.surfaceType.to_s.upcase == 'ROOFCEILING' && surface.outsideBoundaryCondition.to_s.upcase == 'OUTDOORS'
+        # Is this surface the highest roof on this space?
+        if surface.centroid.z.to_f.round(tol) > space_max
+          space_max = surface.centroid.z.to_f.round(tol)
+          max_surf = surface
+        end
+      end
+      # If no outdoor roofceiling go to the next space.
+      next if outdoor_roof == false
+      z_Origin = space.zOrigin.to_f
+      ceiling_centroid = [0, 0, 0]
+
+      # Go through the surfaces and look for ones that are the highest.  Any that are the highest get added to the
+      # centroid calculation.
+      space_surfaces.each do |sp_surface|
+        if max_surf.centroid.z.to_f.round(tol) == sp_surface.centroid.z.to_f.round(tol)
+          ceiling_centroid[0] += sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+          ceiling_centroid[1] += sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+          ceiling_centroid[2] += sp_surface.grossArea.to_f
+        end
+      end
+
+      # Calculate the centroid of the highest surface/surfaces for this space.
+      ceiling_centroid[0] /= ceiling_centroid[2]
+      ceiling_centroid[1] /= ceiling_centroid[2]
+
+      # Put the info into an array containing hashes of spaces with outdoor roofceilings
+      spaces_info << {
+          space: space,
+          x: ceiling_centroid[0] + space.xOrigin.to_f,
+          y: ceiling_centroid[1] + space.yOrigin.to_f,
+          z: max_surf.centroid.z.to_f + z_Origin,
+          area_m2: ceiling_centroid[2]
+      }
+      # This is to determine which are the global highest outdoor roofceilings
+      if max_height.round(tol) < (max_surf.centroid.z.to_f + z_Origin).round(tol)
+        max_height = (max_surf.centroid.z.to_f + z_Origin).round(tol)
+      end
+    end
+    # Go through the roofceilings and find the highest one(s) and calculate the centroid.
+    spaces_info.each do |space_info|
+      # If the outdoor roofceiling is one of the highest ones add it to an array of hashes and get the info needed to
+      # calculate the centroid
+      if space_info[:z].to_f.round(tol) == max_height.round(tol)
+        top_spaces << space_info
+        roof_centroid[0] += space_info[:x]*space_info[:area_m2]
+        roof_centroid[1] += space_info[:y]*space_info[:area_m2]
+        roof_centroid[2] += space_info[:area_m2]
+      end
+    end
+    # calculate the centroid of the highest outdoor roofceiling(s) and add the info to a hash to return to whomever
+    # called this method.
+    roof_centroid[0] /= roof_centroid[2]
+    roof_centroid[1] /= roof_centroid[2]
+    roof_cent = {
+        top_spaces: top_spaces,
+        roof_centroid: [roof_centroid[0], roof_centroid[1], max_height],
+        roof_area: roof_centroid[2]
+    }
+    return roof_cent
+  end
 end
