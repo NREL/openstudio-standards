@@ -307,6 +307,9 @@ class NECB2011 < Standard
     # Commented out because it consumes a significant portion of the btap run time (30% - 50%).  The line below should
     # be uncommented when the flie clarity it affords is desired.
     # model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    model.getThermalZones.each do |tz|
+      puts thermal_zone_get_centroid_per_floor(tz)
+    end
     return model
   end
 
