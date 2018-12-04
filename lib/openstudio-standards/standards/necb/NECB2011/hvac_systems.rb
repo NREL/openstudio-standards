@@ -3168,7 +3168,7 @@ class NECB2011
   # Only spaces which are conditioned (heated or cooled) and are not plenums are included.
   def thermal_zone_get_centroid_per_floor(thermal_zone)
     stories = []
-    thermal_zone.spaces.each do |space|
+    thermal_zone.spaces.sort.each do |space|
       spaceType_name = space.spaceType.get.nameString
       sp_type = spaceType_name[15..-1]
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
@@ -3204,7 +3204,6 @@ class NECB2011
           # If this is not the first story in the array check if the story already is in the array.
           i = nil
           stories.each_with_index do |storycheck, index|
-            puts 'hello'
             if storycheck[:story_name] == story_name
               i = index
             end
