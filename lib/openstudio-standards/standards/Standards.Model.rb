@@ -4277,6 +4277,103 @@ class Standard
     return true
   end
 
+  # This method looks at occupancy profiles for the building as a whole and generates an hours of operation default
+  # schedule for the building. It also clears out any higher level hours of operation schedule assignments
+  #
+  # @author David Goldwasser
+  # @param model [Model]
+  # @param fraction_of_range_above_min [Double] fraction above min range required to start and end hours of operation
+  # @param invert_res [Bool] if true will reverse hours of operation for residential space types
+  # @return [ScheduleRuleset] assigned to hours of operation as the building default
+  def model_infer_hours_of_operation_building(model, fraction_of_range_above_min: 0.25, invert_res: true)
+
+    # create an array of non-residential and residential spaces
+    res_spaces = []
+    non_res_spaces = []
+    res_people_design = 0
+    non_res_people_design = 0
+    model.getSpaces.each do |space|
+      if space_residential?(space)
+        res_spaces << space
+        res_people_design += space.numberOfPeople * space.multiplier
+      else
+        non_res_spaces << space
+        non_res_people_design += space.numberOfPeople * space.multiplier
+      end
+    end
+
+    # create merged schedule for prevalent type
+    res_prevalent = false
+    if res_people_design > non_res_people_design
+      occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: "res_occ_merged")
+      res_prevalent = true
+    else
+      occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: "non_res_occ_merged")
+    end
+    min_max = schedule_ruleset_annual_min_max_value(occ_merged)
+
+    # use min max to get tolerance
+    tol_occ = min_max['min'] + (min_max['max'] - min_max['min'])*fraction_of_range_above_min
+
+    # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
+    if res_prevalent
+      occ_merged_on_off = spaces_get_occupancy_schedule(res_spaces,
+                                                        sch_name: "occ_merged_on_off_tol",
+                                                        occupied_percentage_threshold: tol_occ)
+    else
+      occ_merged_on_off = spaces_get_occupancy_schedule(non_res_spaces,
+                                                        sch_name: "occ_merged_on_off_tol",
+                                                        occupied_percentage_threshold: tol_occ)
+    end
+
+    # todo - validate that schedule only has single hours of operation and fix if necessary
+    hours_of_operation = occ_merged_on_off
+
+    # todo - reverse 1 and 0 values for res_prevalent building
+
+    # set hours of operation for building level hours of operation
+    model.getDefaultScheduleSets.each do |sch_set|
+      sch_set.resetHoursofOperationSchedule
+    end
+    if model.getBuilding.defaultScheduleSet.is_initialized
+      default_sch_set = model.getBuilding.defaultScheduleSet.get
+    else
+      default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
+      model.getBuilding.setDefaultScheduleSet(default_sch_set)
+    end
+    default_sch_set.setHoursofOperationSchedule(hours_of_operation)
+
+    return hours_of_operation
+  end
+
+  # This method users the hours of operation for a space and the existing ScheduleRuleset profiles to setup parametric schedule
+  # inputs. Inputs include one or more load profile formulas. Data is stored in model attributes for downstream
+  # application. This should impact all ScheduleRuleset objects in the model. Plant and Air loop hoours of operations
+  # shoudl be traced back to a space or spaces.
+  #
+  # @author David Goldwasser
+  # @param model [Model]
+  # @param step_ramp_logic [String]
+  # @return [Array] of overloaded ScheduleRuleset objects
+  def model_setup_parametric_schedules(model, step_ramp_logic)
+
+  end
+
+  # This method applies the hours of operation for a space and the load profile formulas in the overloaded ScheduleRulset
+  # objects to update time value pairs for ScheduleDay objects. Object type specific logic will be used to generate profiles
+  # for summer and winter design days.
+  #
+  # @note This measure will replace any prior chagnes made to ScheduleRule objects with new ScheduleRule values from
+  # profile formulas
+  # @author David Goldwasser
+  # @param model [Model]
+  # @param ramp_frequency [Double] ramp frequency in minutes. If nil method will match simulation timestep
+  # @param alter_swh_wo_space [Bool] when true will willl apply profile formula based on building level or most prevelent hours of operation schedule
+  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @return [Array] of modified ScheduleRuleset objects
+  def model_build_parametric_schedules(model, ramp_frequency: nil, alter_swh_wo_space: true, error_on_out_of_order: true)
+
+  end
 
   private
 
