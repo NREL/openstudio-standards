@@ -63,7 +63,7 @@ class Standard
       name_prefix = 'Parking Areas and Drives'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -90,7 +90,7 @@ class Standard
       name_prefix = 'Building Facades'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
       ext_lights_def.setDesignLevel(power)
@@ -117,7 +117,7 @@ class Standard
       name_prefix = 'Main Entries'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of main entry length.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of main entry length.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -144,7 +144,7 @@ class Standard
       name_prefix = 'Other Doors'
 
       # create ext light def
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft of lighting for #{multiplier} ft of other doors.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of other doors.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
       ext_lights_def.setName("#{name_prefix} Def (W/ft)")
       ext_lights_def.setDesignLevel(power)
@@ -320,11 +320,18 @@ class Standard
 
       # store floor area ip
       floor_area_ip = OpenStudio.convert(hash[:floor_area], 'm^2', 'ft^2').get
+      effective_num_stories = model_effective_num_stories(model)
+      ground_floor_area_ip = floor_area_ip / effective_num_stories[:above_grade]
       num_spots = 0.0
 
       # load illuminated_parking_area_properties
       search_criteria = { 'building_type' => building_type }
       illuminated_parking_area_lookup = model_find_object(standards_data['parking'], search_criteria)
+      if illuminated_parking_area_lookup.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find parking data for #{building_type}.")
+        return area_length_count_hash
+      end
+
       if !illuminated_parking_area_lookup['building_area_per_spot'].nil?
         num_spots += floor_area_ip / illuminated_parking_area_lookup['building_area_per_spot'].to_f
       elsif !illuminated_parking_area_lookup['units_per_spot'].nil?
@@ -341,6 +348,10 @@ class Standard
       # load illuninated_parking_area_properties
       search_criteria = { 'building_type' => building_type }
       exterior_lighting_assumptions_lookup = model_find_object(standards_data['entryways'], search_criteria)
+      if exterior_lighting_assumptions_lookup.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.exterior_lights', "Could not find entryway data for #{building_type}.")
+        return area_length_count_hash
+      end
 
       # lookup doors
       if use_model_for_entries_and_canopies
@@ -352,10 +363,12 @@ class Standard
         other_doors_width_ip = 4 # ft
 
         # rollup not used
-        main_entries += (floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000'] * main_entry_width_ip
-        other_doors += (floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['others_doors_per_10,000'] * other_doors_width_ip
+        num_main_entries = (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['entrance_doors_per_10,000']
+        num_main_entries = 1.0 if num_main_entries > 0 && num_main_entries < 1 # Ensure there is always 1 main entry
+        main_entries += num_main_entries * main_entry_width_ip
+        other_doors += (ground_floor_area_ip / 10_000.0) * exterior_lighting_assumptions_lookup['others_doors_per_10,000'] * other_doors_width_ip
         unless exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].nil?
-          drive_through_windows += floor_area_ip / exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].to_f
+          drive_through_windows += ground_floor_area_ip / exterior_lighting_assumptions_lookup['floor_area_per_drive_through_window'].to_f
         end
 
         # if any space types of building type that has canopy, then use that value, don't add to count for additional space types

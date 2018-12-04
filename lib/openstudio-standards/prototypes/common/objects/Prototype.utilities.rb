@@ -722,16 +722,16 @@ class Standard
       if airloop.airLoopHVACOutdoorAirSystem.is_initialized
         controller_mv = airloop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.controllerMechanicalVentilation
         controller_mv.setDemandControlledVentilation(true)
-        OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "Enabling demand control ventilation for #{air_loop.name}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Enabling demand control ventilation for #{air_loop.name}")
       else
-        OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "#{air_loop.name} not registering as an OpenStudio::Model::AirLoopHVAC object with an outdoor air system. Skipping.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "#{air_loop.name} not registering as an OpenStudio::Model::AirLoopHVAC object with an outdoor air system. Skipping.")
       end
     else
-      air_loops.each do |air_loop|
-        if airloop.airLoopHVACOutdoorAirSystem.is_initialized
-          controller_mv = airloop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.controllerMechanicalVentilation
+      model.getAirLoopHVACs.each do |loop|
+        if loop.airLoopHVACOutdoorAirSystem.is_initialized
+          controller_mv = loop.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir.controllerMechanicalVentilation
           controller_mv.setDemandControlledVentilation(true)
-          OpenStudio.logFree(OpenStudio::Debug, "openstudio.model.Model", "Enabling demand control ventilation for #{air_loop.name}")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Enabling demand control ventilation for #{loop.name}")
         end
       end
     end

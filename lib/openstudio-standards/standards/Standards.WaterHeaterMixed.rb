@@ -9,6 +9,14 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
+    # TODO remove this once workaround for HPWHs is removed
+    if water_heater_mixed.partLoadFactorCurve.is_initialized
+      if water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
+        return true
+      end
+    end
+
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -17,7 +25,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
-      capacity_w = capacity_w.get
+      capacity_w = capacity_w.get / water_heater_mixed.component_quantity
     end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -29,7 +37,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = volume_m3.get
+      volume_m3 = volume_m3.get / water_heater_mixed.component_quantity
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -157,15 +165,9 @@ class Standard
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    # TODO: Parasitic loss (pilot light)
-    # PNNL document says pilot lights were removed, but IDFs
-    # still have the on/off cycle parasitic fuel consumptions filled in
-    water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
-    # self.setOffCycleParasiticFuelConsumptionRate(??)
-    water_heater_mixed.setOnCycleParasiticHeatFractiontoTank(0)
-    water_heater_mixed.setOffCycleParasiticFuelType(fuel_type)
-    # self.setOffCycleParasiticFuelConsumptionRate(??)
-    water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
+    # Parasitic losses like pilot light are ignored.
+    # Instead, the parasitic loss fields are typically used
+    # to model pipe dump and pipe thermal losses.
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")

@@ -62,6 +62,7 @@ class Standard
 
     elevator_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_definition)
     elevator_equipment.setName("#{number_of_elevators.round} Elevator Lift Motors")
+    elevator_equipment.setEndUseSubcategory('Elevators')
     elevator_sch = model_add_schedule(model, elevator_schedule)
     elevator_equipment.setSchedule(elevator_sch)
     elevator_equipment.setSpace(space)
@@ -75,6 +76,7 @@ class Standard
 
     elevator_fan_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_fan_definition)
     elevator_fan_equipment.setName("#{number_of_elevators.round} Elevator Fans")
+    elevator_fan_equipment.setEndUseSubcategory('Elevators')
     elevator_fan_sch = model_add_schedule(model, elevator_fan_schedule)
     elevator_fan_equipment.setSchedule(elevator_fan_sch)
     elevator_fan_equipment.setSpace(space)
@@ -88,6 +90,7 @@ class Standard
 
     elevator_lights_equipment = OpenStudio::Model::ElectricEquipment.new(elevator_lights_definition)
     elevator_lights_equipment.setName("#{number_of_elevators.round} Elevator Lights")
+    elevator_lights_equipment.setEndUseSubcategory('Elevators')
     elevator_lights_sch = model_add_schedule(model, elevator_lights_schedule)
     elevator_lights_equipment.setSchedule(elevator_lights_sch)
     elevator_lights_equipment.setSpace(space)

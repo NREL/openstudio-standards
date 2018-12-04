@@ -41,21 +41,6 @@ cbes_prototype/test_medium_office.rb
 cbes_prototype/test_retail_standalone.rb
 
 necb/test_necb_airloop_sizing_parameters.rb
-necb/test_necb_bldg_full_service_restaurant.rb
-necb/test_necb_bldg_high_rise_apartment.rb
-necb/test_necb_bldg_large_hotel.rb
-necb/test_necb_bldg_large_office.rb
-necb/test_necb_bldg_medium_office.rb
-necb/test_necb_bldg_midrise_apartment_office.rb
-necb/test_necb_bldg_outpatient.rb
-necb/test_necb_bldg_primary_school.rb
-necb/test_necb_bldg_quick_service_restaurant.rb
-necb/test_necb_bldg_retail_standalone.rb
-necb/test_necb_bldg_retail_stripmall.rb
-necb/test_necb_bldg_secondary_school.rb
-necb/test_necb_bldg_small_hotel.rb
-necb/test_necb_bldg_small_office.rb
-necb/test_necb_bldg_warehouse.rb
 necb/test_necb_boiler_rules.rb
 necb/test_necb_chiller_rules.rb
 necb/test_necb_constructions_fdwr.rb

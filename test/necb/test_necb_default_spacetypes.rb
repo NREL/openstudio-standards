@@ -120,7 +120,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         shw__schedule = ""
         area_per_occ = 0.0
         area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
-        water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
+        water_fixture = standard.model_add_swh_end_uses_by_space(@model, shw_loop, space)
         if water_fixture.nil?
           shw_watts_per_person = 0.0
           shw__fraction_schedule = 0.0
@@ -132,6 +132,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
           # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
           shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
           shw_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
+          shw_target_temperature_schedule = shw_target_temperature_schedule.map{|val| val.to_f.round(1) }
         end
 
         header_output << "SpaceType,"
