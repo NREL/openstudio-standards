@@ -3155,6 +3155,121 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 
+  # This method cycles through the spaces in a thermal zone and then sorts them by story.  The method then cycles
+  # through the spaces on a story and then calculates the centroid of the spaces in the thermal zone on that floor.  The
+  # method returns an array of hashes, one for each story.  Each hash has the following structure:
+  #           {
+  #               story_name: Name of a given story.
+  #               spaces: Array containing all of the spaces in the thermal zone on the story in story_name.
+  #               centroid: Array containing the x, y, and z coordinates of the centroid of the ceilings of the spaces
+  #                         listed in 'spaces:' above.
+  #               ceiling_area: Total area of the ceilings of the spaces in 'spaces:' above.
+  #           }
+  # Only spaces which are conditioned (heated or cooled) and are not plenums are included.
+  def thermal_zone_get_centroid_per_floor(thermal_zone)
+    stories = []
+    thermal_zone.spaces.each do |space|
+      spaceType_name = space.spaceType.get.nameString
+      sp_type = spaceType_name[15..-1]
+      # Including regular expressions in the following match for cases where extra characters, which do not belong, are
+      # added to either the space type in the model or the space type reference file.
+      sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+            data['building_type'].to_s == 'Space Function'
+      end
+      if sp_type_info.nil?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.thermal_zone_get_centroid_per_floor', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
+        next
+      end
+      # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
+      # a plenum by checking if there is a hvac system associtated with it
+      if sp_type_info['heating_setpoint_schedule'].nil? then heated = FALSE else heated = TRUE end
+      if sp_type_info['cooling_setpoint_schedule'].nil? then cooled = FALSE else cooled = TRUE end
+      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then not_plenum = FALSE else not_plenum = TRUE end
+      # If the spaces are heated or cooled and are not a plenum then continue
+      if (heated || cooled) and not_plenum
+        # Get the story name and sit it to none if there is no story name
+        story_name = space.buildingStory.get.nameString
+        story_name = 'none' if story_name.nil?
+        # If this is the first story in the arry then add a new one.
+        if stories.empty?
+          stories << {
+              story_name: story_name,
+              spaces: [space],
+              centroid: [0, 0, 0],
+              ceiling_area: 0
+          }
+          next
+        else
+          # If this is not the first story in the array check if the story already is in the array.
+          i = nil
+          stories.each_with_index do |storycheck, index|
+            puts 'hello'
+            if storycheck[:story_name] == story_name
+              i = index
+            end
+          end
+          # If the story is not in the array then add it.
+          if i.nil?
+            stories << {
+                story_name: story_name,
+                spaces: [space],
+                centroid: [0, 0, 0],
+                ceiling_area: 0
+            }
+          else
+            # If the story is already in the arry then add the space to the array of spaces for that story
+            stories[i][:spaces] << space
+          end
+        end
+      end
+    end
+    # Go through each story in the array above
+    stories.each do |story|
+      tz_centre = [0, 0, 0, 0]
+      # Go through each space in a given story
+      story[:spaces].each do |space|
+        # Determine the top surface of the space and calculate it's centroid.
+        # Get the coordinates of the origin for the space (the coordinates of points in the space are relative to this).
+        xOrigin = space.xOrigin
+        yOrigin = space.yOrigin
+        zOrigin = space.zOrigin
+        # Go through each surface in the space and find ceilings by determining which is called 'RoofCeiing'.  Find the
+        # overall centroid of all the ceilings in the spaces.  Find centroid by multiplying the centroid of the surfaces
+        # multiplied by the area of the surface and add them all up.  Then divide this by the overall area.  This is the
+        # area weighted average of the centroid coordinates.
+        ceiling_centroid = [0, 0, 0, 0]
+        space.surfaces.each do |sp_surface|
+          if sp_surface.surfaceType.to_s.upcase == 'ROOFCEILING'
+            ceiling_centroid[0] = ceiling_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
+            ceiling_centroid[1] = ceiling_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+            ceiling_centroid[2] = ceiling_centroid[2] + sp_surface.centroid.z.to_f*sp_surface.grossArea.to_f
+            ceiling_centroid[3] = ceiling_centroid[3] + sp_surface.grossArea
+          end
+        end
+
+        ceiling_centroid[0] = ceiling_centroid[0]/ceiling_centroid[3]
+        ceiling_centroid[1] = ceiling_centroid[1]/ceiling_centroid[3]
+        ceiling_centroid[2] = ceiling_centroid[2]/ceiling_centroid[3]
+
+        # This part is used to determine the overall x, y centre of the thermal zone.  This is determined by summing the
+        # x and y components times the ceiling area and diving by the total ceiling area.  I also added z since the
+        # ceilings may not be all have the same height.
+        tz_centre[0] += (ceiling_centroid[0] + xOrigin)*ceiling_centroid[3]
+        tz_centre[1] += (ceiling_centroid[1] + yOrigin)*ceiling_centroid[3]
+        tz_centre[2] += (ceiling_centroid[2] + zOrigin)*ceiling_centroid[3]
+        tz_centre[3] += (ceiling_centroid[3])
+      end
+      tz_centre[0] /= tz_centre[3]
+      tz_centre[1] /= tz_centre[3]
+      tz_centre[2] /= tz_centre[3]
+      # Update the :centroid and :ceiling_area hashes for the story to reflect the x, y, and z coordinates of the
+      # overall centroid of spaces on that floor.
+      story[:centroid] = tz_centre[0..2]
+      story[:ceiling_area] = tz_centre[3]
+    end
+    return stories
+  end
 
 
 end

@@ -1540,49 +1540,4 @@ class Standard
     # How are these ojects identifed?
     # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mizing and dummy exhaust from the source zone
   end
-
-  def thermal_zone_get_centroid_per_floor(thermal_zone)
-    stories = []
-    thermal_zone.spaces.each do |space|
-      spaceType_name = space.spaceType.get.nameString
-      sp_type = spaceType_name[15..-1]
-      # Including regular expressions in the following match for cases where extra characters, which do not belong, are
-      # added to either the space type in the model or the space type reference file.
-      sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
-        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
-            data['building_type'].to_s == 'Space Function'
-      end
-      if sp_type_info.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.thermal_zone_get_centroid_per_floor', "The space type called #{sp_type} could not be found.  Please check that the schedules.json file is available and that the space types are spelled correctly")
-        next
-      end
-      # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
-      # a plenum by checking if there is a hvac system associtated with it
-      if sp_type_info['heating_setpoint_schedule'].nil? then heated = FALSE else heated = TRUE end
-      if sp_type_info['cooling_setpoint_schedule'].nil? then cooled = FALSE else cooled = TRUE end
-      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then not_plenum = FALSE else not_plenum = TRUE end
-      if (heated || cooled) and not_plenum
-        story = space.buildingStory.get.nameString
-        story = 'none' if story.nil?
-        if stories.empty?
-          stories << {
-              story_name: story,
-              spaces: [space]
-          }
-          next
-        else
-          index = stories.find_index({story_name: story})
-          if index.nil?
-            stories << {
-                story_name: story,
-                spaces: [space]
-            }
-          else
-            stories[index][:spaces] << space
-          end
-        end
-      end
-      puts 'hello'
-    end
-  end
 end
