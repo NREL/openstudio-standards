@@ -4,7 +4,7 @@ class TestParametricSchedules < Minitest::Test
 
   # todo - enable other tests. May be able to have single test and loop through hash of inputs. In the end I will compare prototype or starting model to parametric model
 
-  def no_test_add_elevators_office
+  def no_test_parametric_schedules_office
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -18,7 +18,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_small_hotel
+  def no_test_parametric_schedules_small_hotel
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -32,7 +32,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_large_hotel
+  def no_test_parametric_schedules_large_hotel
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -46,7 +46,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_midrise
+  def no_test_parametric_schedules_midrise
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -60,7 +60,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_hospital
+  def no_test_parametric_schedules_hospital
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -74,7 +74,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_outpatient
+  def no_test_parametric_schedules_outpatient
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -88,7 +88,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def test_add_elevators_secondary
+  def test_parametric_schedules_secondary
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -101,11 +101,12 @@ class TestParametricSchedules < Minitest::Test
     standard = Standard.build(template)
 
     # find hours of operation
-    hours_of_operation = standard.model_infer_hours_of_operation_building(model)
+    hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
 
     puts "Created a schedule named #{hours_of_operation.name}"
     puts hours_of_operation
-    puts hours_of_operation.defaultDaySchedule
+    puts hours_of_operation.scheduleRules.last.daySchedule # default profile doesn't reflect hours of operation, last rule will be a monday?
+    model.save("parametric_sch_test.osm", true)
 
     # todo - model_setup_parametric_schedules
 
@@ -117,7 +118,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_multi_story_retail
+  def no_test_parametric_schedules_multi_story_retail
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -131,7 +132,7 @@ class TestParametricSchedules < Minitest::Test
 
   end
 
-  def no_test_add_elevators_multi_story_warehouse
+  def no_test_parametric_schedules_multi_story_warehouse
 
     # Load the test model
     translator = OpenStudio::OSVersion::VersionTranslator.new

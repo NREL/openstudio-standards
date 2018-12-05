@@ -4282,10 +4282,10 @@ class Standard
   #
   # @author David Goldwasser
   # @param model [Model]
-  # @param fraction_of_range_above_min [Double] fraction above min range required to start and end hours of operation
+  # @param fraction_of_daily_occ_range [Double] fraction above min range required to start and end hours of operation
   # @param invert_res [Bool] if true will reverse hours of operation for residential space types
   # @return [ScheduleRuleset] assigned to hours of operation as the building default
-  def model_infer_hours_of_operation_building(model, fraction_of_range_above_min: 0.25, invert_res: true)
+  def model_infer_hours_of_operation_building(model, fraction_of_daily_occ_range: 0.25, invert_res: true, gen_occ_profile: false)
 
     # create an array of non-residential and residential spaces
     res_spaces = []
@@ -4302,28 +4302,29 @@ class Standard
       end
     end
 
-    # create merged schedule for prevalent type
-    res_prevalent = false
-    if res_people_design > non_res_people_design
-      occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: "res_occ_merged")
-      res_prevalent = true
-    else
-      occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: "non_res_occ_merged")
+    # create merged schedule for prevalent type (not used but can be generated for diagnostics)
+    if gen_occ_profile
+      res_prevalent = false
+      if res_people_design > non_res_people_design
+        occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: "res_occ_merged")
+        res_prevalent = true
+      else
+        occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: "non_res_occ_merged")
+      end
     end
-    min_max = schedule_ruleset_annual_min_max_value(occ_merged)
-
-    # use min max to get tolerance
-    tol_occ = min_max['min'] + (min_max['max'] - min_max['min'])*fraction_of_range_above_min
 
     # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
-    if res_prevalent
+    if res_people_design > non_res_people_design
       occ_merged_on_off = spaces_get_occupancy_schedule(res_spaces,
-                                                        sch_name: "occ_merged_on_off_tol",
-                                                        occupied_percentage_threshold: tol_occ)
+                                                        sch_name: "occ_merged_res_on_off_tol",
+                                                        occupied_percentage_threshold: fraction_of_daily_occ_range,
+                                                        threshold_calc_method: "normalized_daily_range")
+      res_prevalent = true
     else
       occ_merged_on_off = spaces_get_occupancy_schedule(non_res_spaces,
-                                                        sch_name: "occ_merged_on_off_tol",
-                                                        occupied_percentage_threshold: tol_occ)
+                                                        sch_name: "occ_merged_non_res_on_off_tol",
+                                                        occupied_percentage_threshold: fraction_of_daily_occ_range,
+                                                        threshold_calc_method: "normalized_daily_range")
     end
 
     # todo - validate that schedule only has single hours of operation and fix if necessary
@@ -4339,6 +4340,7 @@ class Standard
       default_sch_set = model.getBuilding.defaultScheduleSet.get
     else
       default_sch_set = OpenStudio::Model::DefaultScheduleSet.new(model)
+      default_sch_set.setName("Building Default Schedule Set")
       model.getBuilding.setDefaultScheduleSet(default_sch_set)
     end
     default_sch_set.setHoursofOperationSchedule(hours_of_operation)

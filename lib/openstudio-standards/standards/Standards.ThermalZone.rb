@@ -190,10 +190,25 @@ class Standard
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule based on threshold_calc_method
+  # @param threshold_calc_method [String] customizes behavior of occupied_percentage_threshold
+  # fractional passes raw value through,
+  # normalized_annual_range evaluates each value against the min/max range for the year
+  # normalized_daily_range evaluates each value against the min/max range for the day.
+  # The goal is a dynamic threshold that calibrates each day.
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil)
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: "value")
+
+    annual_normalized_tol = nil
+    if threshold_calc_method == "normalized_annual_range"
+      # run this method without threshold to get annual min and max
+      temp_merged = spaces_get_occupancy_schedule(spaces)
+      tem_min_max = schedule_ruleset_annual_min_max_value(temp_merged)
+      annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
+      temp_merged.remove
+    end
+
     # Get all the occupancy schedules in spaces.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}
@@ -270,6 +285,25 @@ class Standard
         day_sch_num_occ[day_schs[0]] = num_occ
       end
 
+      daily_normalized_tol = nil
+      if threshold_calc_method == "normalized_daily_range"
+        # pre-process day to get daily min and max
+        daily_spaces_occ_frac = []
+        times_on_this_day.uniq.sort.each do |time|
+          os_time = OpenStudio::Time.new(time)
+          os_date_time = OpenStudio::DateTime.new(os_date, os_time)
+          # Total number of people at each time
+          tot_occ_at_time = 0
+          day_sch_num_occ.each do |day_sch, num_occ|
+            occ_frac = day_sch.getValue(os_time)
+            tot_occ_at_time += occ_frac * num_occ
+          end
+          # Total fraction for the spaces at each time
+          daily_spaces_occ_frac << tot_occ_at_time / max_occ_in_spaces
+          daily_normalized_tol = daily_spaces_occ_frac.min + (daily_spaces_occ_frac.max - daily_spaces_occ_frac.min) * occupied_percentage_threshold
+        end
+      end
+
       # Determine the total fraction for the spaces at each time
       daily_times = []
       daily_os_times = []
@@ -292,6 +326,16 @@ class Standard
         # Otherwise use the actual spaces_occ_frac
         if occupied_percentage_threshold.nil?
           occ_status = spaces_occ_frac
+        elsif threshold_calc_method == "normalized_annual_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= annual_normalized_tol
+            occ_status = 1
+          end
+        elsif threshold_calc_method == "normalized_daily_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= daily_normalized_tol
+            occ_status = 1
+          end
         else
           occ_status = 0 # unoccupied
           if spaces_occ_frac >= occupied_percentage_threshold
