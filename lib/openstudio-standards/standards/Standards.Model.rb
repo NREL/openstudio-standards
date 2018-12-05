@@ -4276,7 +4276,7 @@ class Standard
 
     return true
   end
-
+  
   # This method looks at occupancy profiles for the building as a whole and generates an hours of operation default
   # schedule for the building. It also clears out any higher level hours of operation schedule assignments
   #
@@ -4306,31 +4306,59 @@ class Standard
     if gen_occ_profile
       res_prevalent = false
       if res_people_design > non_res_people_design
-        occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: "res_occ_merged")
+        occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: "Calculated Occupancy Fraction Residential Merged")
         res_prevalent = true
       else
-        occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: "non_res_occ_merged")
+        occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: "Calculated Occupancy Fraction NonResidential Merged")
       end
     end
 
     # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
+    # todo - could create and assign res and non res hours of operation to different spaces vs. picking one
     if res_people_design > non_res_people_design
-      occ_merged_on_off = spaces_get_occupancy_schedule(res_spaces,
-                                                        sch_name: "occ_merged_res_on_off_tol",
+      hours_of_operation = spaces_get_occupancy_schedule(res_spaces,
+                                                        sch_name: "Building Hours of Operation Residential",
                                                         occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                         threshold_calc_method: "normalized_daily_range")
       res_prevalent = true
     else
-      occ_merged_on_off = spaces_get_occupancy_schedule(non_res_spaces,
-                                                        sch_name: "occ_merged_non_res_on_off_tol",
+      hours_of_operation = spaces_get_occupancy_schedule(non_res_spaces,
+                                                         sch_name: "Building Hours of Operation NonResidential",
                                                         occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                         threshold_calc_method: "normalized_daily_range")
     end
 
-    # todo - validate that schedule only has single hours of operation and fix if necessary
-    hours_of_operation = occ_merged_on_off
+    # remove gaps resulting in multiple on off sycles for each rule in schedule so it will be valid hours of operation
+    # currently spaces_get_occupancy_schedule doesn't use defaultDayProflie, so only inspecting rules for now.
+    # todo - currently just keeping first and last two times, would be more robust inspect all operational gaps and remove all but largest
+    hours_of_operation.scheduleRules.each do |rule|
+      profile = rule.daySchedule
+      times = profile.times
+      values = profile.values
+      next if times.size <= 3 # length of 1-3 should produce valid hours_of_operation profiles
+      profile.clearValues
+      profile.addValue(times.first,values.first)
+      profile.addValue(times[times.size - 2],values[times.size - 2])
+      profile.addValue(times.last,values.last)
+    end
 
-    # todo - reverse 1 and 0 values for res_prevalent building
+    # reverse 1 and 0 values for res_prevalent building
+    # currently spaces_get_occupancy_schedule doesn't use defaultDayProflie, so only inspecting rules for now.
+    if invert_res && res_prevalent
+      hours_of_operation.scheduleRules.each do |rule|
+        profile = rule.daySchedule
+        times = profile.times
+        values = profile.values
+        profile.clearValues
+        times.each_with_index do |time,i|
+          orig_val = values[i]
+          new_value = nil
+          if orig_val == 0 then new_value = 1 end
+          if orig_val == 1 then new_value = 0 end
+          profile.addValue(time,new_value)
+        end
+      end
+    end
 
     # set hours of operation for building level hours of operation
     model.getDefaultScheduleSets.each do |sch_set|

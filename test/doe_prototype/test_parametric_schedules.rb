@@ -2,148 +2,59 @@ require_relative '../helpers/minitest_helper'
 
 class TestParametricSchedules < Minitest::Test
 
-  # todo - enable other tests. May be able to have single test and loop through hash of inputs. In the end I will compare prototype or starting model to parametric model
+  # inputs for tests to be run
+  def input_hash
+    test_hash = {}
+    # custom used to exercise mid day dip and see if clean hours of operation come out
+    test_hash["example_model_multipliers"] = {template: '90.1-2013', fraction_of_daily_occ_range: 0.75} # office building
+    test_hash["SmallHotel_5B_2004"] = {template: '90.1-2004'}
+    test_hash["LargeHotel_3A_2010"] = {template: '90.1-2010'}
+    test_hash["MidriseApartment_2A_2013"] = {template: '90.1-2013'}
+    test_hash["Hospital_4B_Pre1980"] = {template: 'DOE Ref Pre-1980'}
+    test_hash["Outpatient_7A_2010"] = {template: '90.1-2010'}
+    test_hash["SecondarySchool_6A_1980-2004"] = {template: 'DOE Ref 1980-2004'}
+    test_hash["MultiStoryRetail"] = {template: 'DOE Ref 1980-2004'}
+    test_hash["MultiStoryWarehouse"] = {template: 'DOE Ref 1980-2004'}
 
-  def no_test_parametric_schedules_office
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/example_model_multipliers.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2013'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_small_hotel
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SmallHotel_5B_2004.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2004'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_large_hotel
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/LargeHotel_3A_2010.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2010'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_midrise
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MidriseApartment_2A_2013.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2013'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_hospital
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Hospital_4B_Pre1980.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = 'DOE Ref Pre-1980'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_outpatient
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/Outpatient_7A_2010.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = '90.1-2010'
-    standard = Standard.build(template)
-
+    return test_hash
   end
 
   def test_parametric_schedules_secondary
 
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/SecondarySchool_6A_1980-2004.osm")
-    model = translator.loadModel(path)
-    model = model.get
+    input_hash.each do |k,v|
 
-    # create story hash
-    template = 'DOE Ref 1980-2004'
-    standard = Standard.build(template)
+      # Load the test model
+      translator = OpenStudio::OSVersion::VersionTranslator.new
+      path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/#{k}.osm")
+      model = translator.loadModel(path)
+      model = model.get
 
-    # find hours of operation
-    hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
+      # create story hash
+      template = v[:template]
+      standard = Standard.build(template)
 
-    puts "Created a schedule named #{hours_of_operation.name}"
-    puts hours_of_operation
-    puts hours_of_operation.scheduleRules.last.daySchedule # default profile doesn't reflect hours of operation, last rule will be a monday?
-    model.save("parametric_sch_test.osm", true)
+      # find hours of operation
+      if v.has_key?(:fraction_of_daily_occ_range)
+        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true,fraction_of_daily_occ_range: v[:fraction_of_daily_occ_range])
+      else
+        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
+      end
+      assert(hours_of_operation.to_ScheduleRuleset.is_initialized)
 
-    # todo - model_setup_parametric_schedules
+      puts "Created a schedule named #{hours_of_operation.name} for #{k}.osm"
+      #puts hours_of_operation
+      #puts hours_of_operation.scheduleRules.last.daySchedule # default profile doesn't reflect hours of operation, last rule will be a monday?
+      model.save("test_#{k}.osm", true)
 
-    # todo - model_build_parametric_schedules
+      # todo - model_setup_parametric_schedules
 
-    # check recommendation
-    # todo - loop through all schedules in orig model and store hash of schedule_ruleset_annual_equivalent_full_load_hrs
-    # todo - loop through parametric schedules and add asserts to compare against orig
+      # todo - model_build_parametric_schedules
 
-  end
+      # check recommendation
+      # todo - loop through all schedules in orig model and store hash of schedule_ruleset_annual_equivalent_full_load_hrs
+      # todo - loop through parametric schedules and add asserts to compare against orig
 
-  def no_test_parametric_schedules_multi_story_retail
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MultiStoryRetail.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = 'DOE Ref 1980-2004'
-    standard = Standard.build(template)
-
-  end
-
-  def no_test_parametric_schedules_multi_story_warehouse
-
-    # Load the test model
-    translator = OpenStudio::OSVersion::VersionTranslator.new
-    path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/MultiStoryWarehouse.osm")
-    model = translator.loadModel(path)
-    model = model.get
-
-    # create story hash
-    template = 'DOE Ref 1980-2004'
-    standard = Standard.build(template)
-
+    end
   end
 
 end

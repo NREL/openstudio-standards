@@ -333,12 +333,12 @@ class Standard
           end
         elsif threshold_calc_method == "normalized_daily_range"
           occ_status = 0 # unoccupied
-          if spaces_occ_frac >= daily_normalized_tol
+          if spaces_occ_frac > daily_normalized_tol
             occ_status = 1
           end
         else
           occ_status = 0 # unoccupied
-          if spaces_occ_frac >= occupied_percentage_threshold
+          if spaces_occ_frac > occupied_percentage_threshold
             occ_status = 1
           end
         end
@@ -376,6 +376,7 @@ class Standard
     end
     sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
     sch_ruleset.setName(sch_name.to_s)
+    sch_ruleset.setComment("#{max_occ_in_spaces} max_occ_in_spaces used for generating this schedule. Max based on sum of design level in spaces versus what is seen in the run period.")
 
     # Default - All Occupied
     day_sch = sch_ruleset.defaultDaySchedule
