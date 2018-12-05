@@ -230,7 +230,6 @@ class NECB2011 < Standard
       puts spacetype.name
     end
 
-
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
 

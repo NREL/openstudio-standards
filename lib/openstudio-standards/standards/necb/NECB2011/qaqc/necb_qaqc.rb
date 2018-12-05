@@ -46,7 +46,8 @@ class NECB2011
     # generate base qaqc hash
     qaqc = create_base_data(model)
     # performs the qaqc on the given base qaqc hash
-    necb_qaqc(qaqc, model)
+    #necb_qaqc(qaqc, model)
+    return qaqc
   end
 
   # generates only qaqc component
