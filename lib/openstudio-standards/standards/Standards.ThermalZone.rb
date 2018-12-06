@@ -435,7 +435,14 @@ class Standard
 
         # Set the dates when the rule applies
         sch_rule.setStartDate(end_of_prev_rule)
-        sch_rule.setEndDate(date)
+        # for end dates in last week of year force it to use 12/31. Avoids issues if year or start day of week changes
+        start_of_last_week = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 25, year.assumedYear)
+        if date >= start_of_last_week
+          year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year.assumedYear)
+          sch_rule.setEndDate(year_end_date)
+        else
+          sch_rule.setEndDate(date)
+        end
 
         # Individual Days
         sch_rule.setApplyMonday(true) if weekday == 'Monday'

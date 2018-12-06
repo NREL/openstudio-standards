@@ -25,6 +25,7 @@ class TestParametricSchedules < Minitest::Test
     input_hash.each do |k,v|
 
       # Load the test model
+      test_suffix = k.split(",").last
       k = k.split(",").first
       translator = OpenStudio::OSVersion::VersionTranslator.new
       path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/#{k}.osm")
@@ -45,7 +46,7 @@ class TestParametricSchedules < Minitest::Test
       end
       assert(hours_of_operation.to_ScheduleRuleset.is_initialized)
 
-      puts "Created a schedule named #{hours_of_operation.name} for #{k}.osm"
+      puts "Created a schedule named #{hours_of_operation.name} for #{k}_#{test_suffix}.osm"
       model.save("test_#{k}.osm", true)
 
       # inspect hours of operation
