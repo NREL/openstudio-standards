@@ -5410,13 +5410,24 @@ class OpenStudio::Model::Model
         water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(OpenStudio::OptionalDouble.new(0))
         water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(OpenStudio::OptionalDouble.new(0))
       end
+
+      # Try to find the HVAC Operation Schedule to assign to the supply air fan operating model. If you don't
+      # set the fan operating mode to align with the HVAC, then the ventilation will not work as expected.
+      hvac_operation_schedule = nil
+      self.getSchedules.each do |schedule|
+        if schedule.name.get.to_s =~ /HVACOperationSchd/
+          hvac_operation_schedule = schedule
+        end
+      end
+
+      # Assign the hvac_operation_schedule if it exists
+      water_to_air_hp_system.setSupplyAirFanOperatingModeSchedule(hvac_operation_schedule) if hvac_operation_schedule
       water_to_air_hp_system.addToThermalZone(zone)
 
       water_to_air_hp_systems << water_to_air_hp_system
-      
     end
 
-    return water_to_air_hp_systems                                                                                
+    return water_to_air_hp_systems
   end
 
   # Adds zone level ERVs for each zone.
