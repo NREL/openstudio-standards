@@ -47,7 +47,9 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     # "Warehouse"
     ]
 
-    templates = ['NECB2011']
+    templates = ['NECB2011',
+                 'NECB2015',
+                 'NECB2017']
     climate_zones = 'NECB HDD Method'
     epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
 
@@ -56,7 +58,9 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
     building_types.each do |building|
       epw_files.each do |epw|
         templates.each {|template|
-          run_argument_array << {'building' => building, 'epw' => epw, 'template' => template}
+          run_argument_array << { 'building' => building,
+                                  'epw' => epw,
+                                  'template' => template}
         }
       end
     end
