@@ -1620,6 +1620,104 @@ class Standard
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
+  # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
+  # report hours of operation. Won't be a single set of values, will be a collection of rules
+  #
+  # @author David Goldwasser
+  # @param model [Model]
+  # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+  # todo - add related methods like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off unitl need is a bit more defined.
+  def space_hours_of_operation(space)
+
+    default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
+    hours_of_operation = space.getDefaultSchedule(default_sch_type)
+    if !hours_of_operation.is_initialized
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Hours of Operation Schedule is not set for #{space.name}.")
+      return nil
+    end
+    hours_of_operation = hours_of_operation.get
+    if !hours_of_operation.to_ScheduleRuleset.is_initialized
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Hours of Operation Schedule #{hours_of_operation.name} is not a ScheduleRuleset.")
+      return nil
+    end
+    hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
+    profiles = {}
+
+    # add default profile to hash
+    hoo_start = nil
+    hoo_end = nil
+    times = hours_of_operation.defaultDaySchedule.times
+    values = hours_of_operation.defaultDaySchedule.values
+    times.each_with_index do |time,i|
+      if values[i] == 0 && hoo_start.nil?
+        hoo_start = time.totalHours
+      elsif values[i] == 1 && hoo_end.nil?
+        hoo_end = time.totalHours
+      end
+    end
+
+    # hours of operation start and finish
+    rule_hash = {}
+    rule_hash[:hoo_start] = hoo_start
+    rule_hash[:hoo_end] = hoo_end
+    profiles['default_day_schedule'] = rule_hash
+
+    hours_of_operation.scheduleRules.reverse.each do |rule|
+      # may not need date and days of week, will likley refer to specific date and get rule when applying parametricformula
+      rule_hash = {}
+      rule_hash[:rule_index] = rule.ruleIndex
+
+      hoo_start = nil
+      hoo_end = nil
+      times = rule.daySchedule.times
+      values = rule.daySchedule.values
+      times.each_with_index do |time,i|
+        if values[i] == 0 && hoo_start.nil?
+          hoo_start = time.totalHours
+        elsif values[i] == 1  && hoo_end.nil?
+          hoo_end = time.totalHours
+        end
+      end
+
+      # some validation
+      if times.size > 3 #|| values.uniq.sort != [0,1] || hoo_start.nil? || hoo_end.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+        return nil
+      end
+
+      # hours of operation start and finish
+      rule_hash[:hoo_start] = hoo_start
+      rule_hash[:hoo_end] = hoo_end
+
+      if rule.startDate.is_initialized
+        date = rule.startDate.get
+        rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      else
+        rule_hash[:start_date] = nil
+      end
+      if rule.endDate.is_initialized
+        date = rule.endDate.get
+        rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      else
+        rule_hash[:end_date] = nil
+      end
+      rule_hash[:mon] = rule.applyMonday
+      rule_hash[:tue] = rule.applyTuesday
+      rule_hash[:wed] = rule.applyWednesday
+      rule_hash[:thu] = rule.applyThursday
+      rule_hash[:fri] = rule.applyFriday
+      rule_hash[:sat] = rule.applySaturday
+      rule_hash[:sun] = rule.applySunday
+
+      # update hash
+      profiles[rule.name] = rule_hash
+
+    end
+
+    return profiles
+  end
+
   private
 
   # A series of private methods to modify polygons.  Most are

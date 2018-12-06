@@ -4301,6 +4301,7 @@ class Standard
         non_res_people_design += space.numberOfPeople * space.multiplier
       end
     end
+    OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "Model has design level of #{non_res_people_design} people in non residential spaces and #{res_people_design} people in residential spaces.")
 
     # create merged schedule for prevalent type (not used but can be generated for diagnostics)
     if gen_occ_profile
@@ -4345,6 +4346,7 @@ class Standard
     # reverse 1 and 0 values for res_prevalent building
     # currently spaces_get_occupancy_schedule doesn't use defaultDayProflie, so only inspecting rules for now.
     if invert_res && res_prevalent
+      OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "Per argument passed in hours of operation are being inverted for buildings with more people in residential versus non-residential spaces.")
       hours_of_operation.scheduleRules.each do |rule|
         profile = rule.daySchedule
         times = profile.times
