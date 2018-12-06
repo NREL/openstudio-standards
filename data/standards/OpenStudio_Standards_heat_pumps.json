@@ -5736,11 +5736,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 1985",
@@ -5758,11 +5758,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 1996",
@@ -5780,11 +5780,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2003",
@@ -5802,11 +5802,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2007",
@@ -5824,11 +5824,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2011",
@@ -5846,11 +5846,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2014",
@@ -5868,11 +5868,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2015",
@@ -5890,11 +5890,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER 2020",
@@ -5912,10 +5912,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -5934,10 +5934,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -5956,10 +5956,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -5978,10 +5978,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6000,10 +6000,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6022,10 +6022,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6044,10 +6044,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6066,10 +6066,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6088,10 +6088,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6110,10 +6110,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6132,10 +6132,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6154,10 +6154,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6176,11 +6176,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6198,11 +6198,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6220,11 +6220,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6242,11 +6242,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "PTAC-Cool-Cap-fEWB&OAT",
-      "cool_cap_fflow": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
       "cool_eir_ft": "PTAC-EIR-fEWB&OAT",
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PTHP.csv"
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PTHP.csv; extracted from MASControl2"
     },
     {
       "template": "DEER Pre-1975",
@@ -6264,11 +6264,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 1985",
@@ -6286,11 +6286,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 1996",
@@ -6308,11 +6308,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2003",
@@ -6330,11 +6330,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2007",
@@ -6352,11 +6352,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2011",
@@ -6374,11 +6374,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2014",
@@ -6396,11 +6396,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2015",
@@ -6418,11 +6418,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2020",
@@ -6440,10 +6440,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6462,10 +6462,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6484,10 +6484,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6505,11 +6505,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6527,11 +6527,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6549,11 +6549,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6571,11 +6571,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6593,11 +6593,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6615,11 +6615,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6637,11 +6637,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6659,11 +6659,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6681,11 +6681,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -6704,11 +6704,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6726,11 +6726,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6748,11 +6748,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6770,11 +6770,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6792,11 +6792,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -6814,11 +6814,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER Pre-1975",
@@ -6836,11 +6836,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 1985",
@@ -6858,11 +6858,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 1996",
@@ -6880,11 +6880,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2003",
@@ -6902,11 +6902,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2007",
@@ -6924,11 +6924,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2011",
@@ -6946,11 +6946,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2014",
@@ -6967,12 +6967,12 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2015",
@@ -6989,12 +6989,12 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2017",
@@ -7011,12 +7011,12 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER 2020",
@@ -7033,11 +7033,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7055,11 +7055,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7077,11 +7077,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7099,11 +7099,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7121,11 +7121,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7143,11 +7143,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7165,11 +7165,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7187,11 +7187,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7209,11 +7209,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7231,11 +7231,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7253,11 +7253,11 @@
       "minimum_integrated_energy_efficiency_ratio": null,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
-      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7276,10 +7276,10 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
       "notes": "Forecast for LA100 project"
     },
     {
@@ -7298,11 +7298,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7320,11 +7320,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7342,11 +7342,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7364,11 +7364,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7386,11 +7386,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7408,11 +7408,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7430,11 +7430,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7452,11 +7452,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpLoSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpLoSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7474,11 +7474,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7496,11 +7496,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7518,11 +7518,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7540,11 +7540,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     },
     {
       "template": "DEER High Perf",
@@ -7562,11 +7562,11 @@
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "SpltAC2SpHiSEER_ClCap_fT",
-      "cool_cap_fflow": null,
-      "cool_eir_ft": null,
-      "cool_eir_fflow": null,
-      "cool_plf_fplr": null,
-      "notes": "From DEER PkgAC.csv Subtype = HP"
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC2SpHiSEER_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
     }
   ]
 }

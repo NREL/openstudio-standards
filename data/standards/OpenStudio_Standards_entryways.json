@@ -278,7 +278,7 @@
     {
       "building_type": "Hsp",
       "rollup_doors_per_10,000": 0.03,
-      "entrance_doors_per_10,000": 2.0,
+      "entrance_doors_per_10,000": 0.67,
       "others_doors_per_10,000": 3.8,
       "entrance_canopies": null,
       "emergency_canopies": 1.0,
@@ -289,7 +289,7 @@
     {
       "building_type": "Htl",
       "rollup_doors_per_10,000": 0.0,
-      "entrance_doors_per_10,000": 2.0,
+      "entrance_doors_per_10,000": 0.67,
       "others_doors_per_10,000": 2.27,
       "entrance_canopies": 1.0,
       "emergency_canopies": null,
