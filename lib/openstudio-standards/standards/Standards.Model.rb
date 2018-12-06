@@ -4008,15 +4008,31 @@ class Standard
         elsif stds_bldg_type == 'StripMall'
           avg_unit_size = OpenStudio.convert(22_500.0 / 10.0, 'ft^2', 'm^2').get # calculated from prototype
           num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Htl' && (stds_space_type.include?('GuestRmOcc') || stds_space_type.include?('GuestRmUnOcc'))
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'MFm' && (stds_space_type.include?('ResBedroom') || stds_space_type.include?('ResLiving'))
+          avg_unit_size = OpenStudio.convert(949.9, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Mtl' && (stds_space_type.include?('GuestRmOcc') || stds_space_type.include?('GuestRmUnOcc'))
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Nrs' && stds_space_type.include?('PatientRoom')
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
         end
 
         # determine number of beds
         if stds_bldg_type == 'Hospital' && ['PatRoom', 'ICU_PatRm', 'ICU_Open'].include?(stds_space_type)
           num_beds = num_people
+        elsif stds_bldg_type == 'Hsp' && ['PatientRoom', 'HspSurgOutptLab', 'HspNursing'].include?(stds_space_type)
+          num_beds = num_people
         end
 
         # determine number of students
         if ['PrimarySchool', 'SecondarySchool'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
+          num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
+        elsif ['EPr', 'ESe', 'ERC', 'EUn', 'ECC'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
           num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
         end
 
