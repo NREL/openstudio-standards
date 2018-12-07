@@ -11740,7 +11740,7 @@ OS:Surface,
 
 OS:Building,
   {586eee9f-0959-42dd-8f3c-7b61ed86bab5}, !- Handle
-  NECB_2011HighriseApartment,             !- Name
+  ,                               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

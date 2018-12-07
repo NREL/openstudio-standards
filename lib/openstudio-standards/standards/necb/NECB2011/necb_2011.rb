@@ -185,6 +185,7 @@ class NECB2011 < Standard
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
+
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 x_scale: x_scale,
@@ -208,7 +209,8 @@ class NECB2011 < Standard
                            fdwr_set: 'MAXIMIZE',
                            ssr_set: 'MAXIMIZE'
   )
-
+    building_type =  model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
+    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
     # prototype generation.I'm current
