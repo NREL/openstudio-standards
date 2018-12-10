@@ -458,6 +458,46 @@ class Standard
       end
     end
 
+    # utilize default profile and common similar days of week for same date range
+    # todo - if move to method in Standards.ScheduleRuleset.rb udpate code to check if default profile is used before replacing it with lowest priority rule.
+    # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
+    prior_rules = []
+    sch_ruleset.scheduleRules.each do |rule|
+      if prior_rules.size == 0
+        prior_rules << rule
+        next
+      else
+        rules_combined = false
+        prior_rules.each do |prior_rule|
+          # see if they are similar
+          next if rules_combined
+          # todo - update to combine adjacent date ranges vs. just matching date ranges
+          next if prior_rule.startDate.get != rule.startDate.get
+          next if prior_rule.endDate.get != rule.endDate.get
+          next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
+          next if prior_rule.daySchedule.values.to_a != rule.daySchedule.values.to_a
+
+          # combine dates of week
+          if rule.applyMonday then prior_rule.setApplyMonday(true) && rules_combined = true end
+          if rule.applyTuesday then prior_rule.setApplyTuesday(true) && rules_combined = true end
+          if rule.applyWednesday then prior_rule.setApplyWednesday(true) && rules_combined = true end
+          if rule.applyThursday then prior_rule.setApplyThursday(true) && rules_combined = true end
+          if rule.applyFriday then prior_rule.setApplyFriday(true) && rules_combined = true end
+          if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
+          if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
+        end
+        if rules_combined then rule.remove else prior_rules << rule end
+      end
+    end
+    # replace unused default profile with lowest priority rule
+    values = prior_rules.last.daySchedule.values
+    times = prior_rules.last.daySchedule.times
+    prior_rules.last.remove
+    sch_ruleset.defaultDaySchedule.clearValues
+    values.size.times do |i|
+      sch_ruleset.defaultDaySchedule.addValue(times[i],values[i])
+    end
+
     return sch_ruleset
   end
 

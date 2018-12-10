@@ -4330,10 +4330,13 @@ class Standard
     end
 
     # remove gaps resulting in multiple on off sycles for each rule in schedule so it will be valid hours of operation
-    # currently spaces_get_occupancy_schedule doesn't use defaultDayProflie, so only inspecting rules for now.
     # todo - currently just keeping first and last two times, would be more robust inspect all operational gaps and remove all but largest
+    profiles = []
+    profiles << hours_of_operation.defaultDaySchedule
     hours_of_operation.scheduleRules.each do |rule|
-      profile = rule.daySchedule
+      profiles << rule.daySchedule
+    end
+    profiles.each do |profile|
       times = profile.times
       values = profile.values
       next if times.size <= 3 # length of 1-3 should produce valid hours_of_operation profiles
