@@ -4407,35 +4407,72 @@ class Standard
     # loop through space types (trace hours of operation back to space type).
     gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes,parametric_inputs)
 
-    # todo - loop through thermal zones (trace hours of operation back to spaces in thermal zone)
+    # loop through thermal zones (trace hours of operation back to spaces in thermal zone)
     model.getThermalZones.each do |zone|
-      # todo - identify hours of operation
-      # todo - zone HVAC equipment
-      # todo - exhaust
+      # identify hours of operation
+      # todo - convert this to hash with zone as key
+      hours_of_operation = select_hours_of_operation_from_space_array(zone.spaces)
     end
 
-    # todo - loop through air loops (trace hours of operation back through spaces served by air loops)
+
+    # loop through air loops (trace hours of operation back through spaces served by air loops)
     model.getAirLoopHVACs.each do |air_loop|
-      # todo - identify hours of operation
-      # todo - controls
-      # todo - supply components
-      # todo - demand components
+      # identify hours of operation
+      air_loop_spaces = []
+      air_loop.thermalZones.each do |zone|
+        air_loop_spaces = air_loop_spaces + zone.spaces
+      end
+      # todo - convert this to hash with zone as key
+      hours_of_operation = select_hours_of_operation_from_space_array(air_loop_spaces)
     end
 
-    # todo - loop through plant loops (trace hours of operation back through spaces served by plant loops)
-    model.getPlantLoops.each do |plant_loop|
-      # todo - identify hours of operation
-      # todo - controls
-      # todo - supply components
-      # todo - demand components
+    # todo - look through all model HVAC components, and compare against schedule (will go through zone, air loop and plant loop)
+    hvac_components = model.getHVACComponents
+    hvac_components.each do |component|
+      # identify zone, or air loop it refers to, some may refer to plant loop, OA or other component
+      thermal_zone = nil
+      air_loop = nil
+      plant_loop = nil
+      schedules = []
+      if component.to_ZoneHVACComponent.is_initialized && component.to_ZoneHVACComponent.get.thermalZone.is_initialized
+        thermal_zone = component.to_ZoneHVACComponent.get.thermalZone.get.name
+      end
+      if component.airLoopHVAC.is_initialized
+        air_loop = component.airLoopHVAC.get.name
+      else
+      end
+      if component.plantLoop.is_initialized
+        plant_loop = component.plantLoop.get.name
+      end
+      component.resources.each do |resource|
+        if resource.to_ThermalZone.is_initialized
+          thermal_zone = resource.to_ThermalZone.get.name
+        elsif resource.to_ScheduleRuleset.is_initialized
+          schedules << resource.to_ScheduleRuleset.get.name
+        end
+      end
+      next if schedules.size == 0
+      puts "***** #{component.name}: #{schedules.size} schedules *****"
+      string = ""
+      if !thermal_zone.nil?
+        string += "zone: #{thermal_zone},"
+      end
+      if !air_loop.nil?
+        string += "air_loop: #{air_loop},"
+      end
+      if !plant_loop.nil?
+        string += "plant_loop: #{plant_loop},"
+      end
+      string += "schedules: #{schedules.join(",")}"
+      puts string
     end
+
+    # note - not setting any schedules for plant loops
 
     # todo - Service Water Heating (may or may not be associated with a space)
     # todo - water use equipment definitions (temperature, sensible, latent)
     # todo - water use equipment (flow rate fraction)
-
     # todo - exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
-
 
     return parametric_inputs
   end
@@ -4708,6 +4745,26 @@ class Standard
     gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get,load_inst,parametric_inputs,hours_of_operation)
 
     return parametric_inputs
+  end
+
+  # find hours of operation for a collection of spaces. Will use on thermal zone, air loop, and plant looops
+  #
+  # @author David Goldwasser
+  # @param [array] space_array
+  # @return_hash [hash] hours of operation
+  def select_hours_of_operation_from_space_array(space_array, calc_logic: "most_spaces")
+    # todo - support expanded calc method. Will need to create new merged schedule
+
+    hours_of_operation_array = []
+    space_array.each do |space|
+      hoo_hash = space_hours_of_operation(space)
+      if !hoo_hash.nil?
+        hours_of_operation_array << hoo_hash
+      end
+    end
+    hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
+
+    return hours_of_operation
   end
 
   # method to process load instance schedules for model_setup_parametric_schedules
