@@ -31,6 +31,7 @@ class TestParametricSchedules < Minitest::Test
       path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/#{k}.osm")
       model = translator.loadModel(path)
       model = model.get
+      puts "Test: Loaded #{k}_#{test_suffix}.osm for parametric schedule testing."
 
       # create story hash
       template = v[:template]
@@ -45,25 +46,35 @@ class TestParametricSchedules < Minitest::Test
         hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
       end
       assert(hours_of_operation.to_ScheduleRuleset.is_initialized)
-
-      puts "Created a schedule named #{hours_of_operation.name} for #{k}_#{test_suffix}.osm"
-      model.save("test_#{k}.osm", true)
+      puts "Test: Created building hours of operation schedule named #{hours_of_operation.name}."
 
       # inspect hours of operation
       hours_of_operation = standard.space_hours_of_operation(model.getSpaces.first)
+      assert(hours_of_operation.size. > 0)
+      puts "Test: Extracted hours of operation schedule from space. Inspecting first entry returned."
+      puts "Test: #{hours_of_operation.keys.first}: #{hours_of_operation.values.first.inspect}"
 =begin
       hours_of_operation.each do |k,v|
         puts "#{k}: #{v.inspect}"
       end
 =end
 
-      # todo - model_setup_parametric_schedules
+      # model_setup_parametric_schedules
       parametric_inputs = standard.model_setup_parametric_schedules(model)
+      assert(parametric_inputs.size. > 0)
+      puts "Test: Generated schedule profile formulas and saved as AdditionalProperties objects. Inspecting first entry returned."
+      puts "Test: #{parametric_inputs.keys.first.name}: #{parametric_inputs.values.first.inspect}"
+=begin
       parametric_inputs.each do |k,v|
         puts "#{k.name}: #{v.inspect}"
       end
+=end
 
       # todo - model_build_parametric_schedules
+
+      # save resulting model
+      puts "Test: Saving model named test_#{k}.osm."
+      model.save("test_#{k}.osm", true)
 
       # check recommendation
       # todo - loop through all schedules in orig model and store hash of schedule_ruleset_annual_equivalent_full_load_hrs
