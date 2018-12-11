@@ -1624,7 +1624,7 @@ class Standard
   # report hours of operation. Won't be a single set of values, will be a collection of rules
   #
   # @author David Goldwasser
-  # @param model [Model]
+  # @param space [Space] takes space abd spaceType but not for buildingStory
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   # todo - add related methods like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
   # todo - ideally these could take in a date range, array of dates and or days of week. Hold off unitl need is a bit more defined.
@@ -1659,6 +1659,7 @@ class Standard
 
     # hours of operation start and finish
     rule_hash = {}
+    rule_hash[:rule_index] = -1 # indicate default profile
     rule_hash[:hoo_start] = hoo_start
     rule_hash[:hoo_end] = hoo_end
     profiles['default_day_schedule'] = rule_hash
@@ -1711,7 +1712,7 @@ class Standard
       rule_hash[:sun] = rule.applySunday
 
       # update hash
-      profiles[rule.name] = rule_hash
+      profiles[rule.name.get.to_s] = rule_hash
 
     end
 

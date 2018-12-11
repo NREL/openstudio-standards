@@ -51,11 +51,17 @@ class TestParametricSchedules < Minitest::Test
 
       # inspect hours of operation
       hours_of_operation = standard.space_hours_of_operation(model.getSpaces.first)
+=begin
       hours_of_operation.each do |k,v|
         puts "#{k}: #{v.inspect}"
       end
+=end
 
       # todo - model_setup_parametric_schedules
+      parametric_inputs = standard.model_setup_parametric_schedules(model)
+      parametric_inputs.each do |k,v|
+        puts "#{k.name}: #{v.inspect}"
+      end
 
       # todo - model_build_parametric_schedules
 
