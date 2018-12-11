@@ -4384,14 +4384,119 @@ class Standard
   # This method users the hours of operation for a space and the existing ScheduleRuleset profiles to setup parametric schedule
   # inputs. Inputs include one or more load profile formulas. Data is stored in model attributes for downstream
   # application. This should impact all ScheduleRuleset objects in the model. Plant and Air loop hoours of operations
-  # shoudl be traced back to a space or spaces.
+  # should be traced back to a space or spaces.
   #
   # @author David Goldwasser
   # @param model [Model]
   # @param step_ramp_logic [String]
-  # @return [Array] of overloaded ScheduleRuleset objects
-  def model_setup_parametric_schedules(model, step_ramp_logic)
+  # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
+  # @return [Hash] schedule is key, value is hash of number of objects
+  def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true)
 
+    parametric_inputs = {}
+    default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
+    # thermal zones, air loops, plant loops will require some logic if they refer to more than one hours of operaiton schedule.
+    # for initial use case while have same horus of operaiton so this can be pretty simple, but will have to re-visit it sometime
+    # possible solution A: choose hoa that contributes the largest fraction of floor area
+    # possible solution B: expand the hours of operation for a given day to include combined range of hoo objects
+    # whatever approach is used for gathering parametric inputs for existing ruleset schedules should also be used for model_build_parametric_schedules
+
+    # todo - loop through spaces (trace hours of operation back to space)
+    model.getSpaces.each do |space|
+      hours_of_operation = space_hours_of_operation(space)
+      if hours_of_operation.nil?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "Can't evaluate schedules for #{space.name}, doesn't have hours of operation.")
+        next
+      end
+      # loop through internal load instances
+      space.lights.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space.luminaires.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space.electricEquipment.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space.gasEquipment.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      # todo - not altering activitySchedule right now
+      space.people.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space.spaceInfiltrationDesignFlowRates.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space.spaceInfiltrationEffectiveLeakageAreas.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+    end
+
+    # todo - loop through space types (trace hours of operation back to space type).
+    # note: it is possible space type will have different horus of operation than the spaces that the loads are assigned to.
+    # with current approach if the load is in the space type it will use hours of operation from the space type. Otherwise
+    # it would be confusing to assign different schedules to different the same space load instances depending on space it is assined to
+    # if this is necessary may have to hard assign loads to space vs. space type, which isn't easy to undo later.
+    # example use case would be having first story have longer hours than same space type on upper stories.
+    model.getSpaceTypes.each do |space_type|
+      # get hours of operation for space type once
+      next if space_type.floorArea == 0
+      hours_of_operation = space_hours_of_operation(space_type)
+      if hours_of_operation.nil?
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "Can't evaluate schedules for #{space_type.name}, doesn't have hours of operation.")
+        next
+      end
+      # loop through internal load instances
+      space_type.lights.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space_type.luminaires.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space_type.electricEquipment.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space_type.gasEquipment.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      # todo - not altering activitySchedule right now
+      space_type.people.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      space_type.spaceInfiltrationEffectiveLeakageAreas.each do |load_inst|
+        load_hash = process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+      end
+      dsgn_spec_oa = space_type.designSpecificationOutdoorAir
+      if dsgn_spec_oa.is_initialized
+        load_hash = process_schedles_for_parametric_inputs(dsgn_spec_oa.get,parametric_inputs,hours_of_operation)
+      end
+    end
+
+    # todo - loop through thermal zones (trace hours of operation back to spaces in thermal zone)
+    model.getThermalZones.each do |zone|
+
+    end
+
+    # todo - loop through air loops (trace hours of operation back through spaces served by air loops)
+    model.getAirLoopHVACs.each do |air_loop|
+
+    end
+
+    # todo - loop through plant loops (trace hours of operation back through spaces served by plant loops)
+    model.getPlantLoops.each do |plant_loop|
+
+    end
+
+    # todo - Service Water Heating
+
+    # todo - exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
+
+
+    return parametric_inputs
   end
 
   # This method applies the hours of operation for a space and the load profile formulas in the overloaded ScheduleRulset
@@ -4403,10 +4508,12 @@ class Standard
   # @author David Goldwasser
   # @param model [Model]
   # @param ramp_frequency [Double] ramp frequency in minutes. If nil method will match simulation timestep
-  # @param alter_swh_wo_space [Bool] when true will willl apply profile formula based on building level or most prevelent hours of operation schedule
+  # @param alter_swh_wo_space [Bool] when true will will apply profile formula based on building level or most prevelent hours of operation schedule
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return [Array] of modified ScheduleRuleset objects
   def model_build_parametric_schedules(model, ramp_frequency: nil, alter_swh_wo_space: true, error_on_out_of_order: true)
+
+    # todo - this will include creating summer and winter design day profiles
 
   end
 
@@ -4584,4 +4691,40 @@ class Standard
     return model
 
   end
+
+  # method to process schedules for model_setup_parametric_schedules
+  #
+  # @author David Goldwasser
+  # @param opt_sch
+  # @return hash
+  def process_schedles_for_parametric_inputs(load_inst,parametric_inputs,hours_of_operation)
+    if load_inst.class.to_s == "OpenStudio::Model::People"
+      opt_sch = load_inst.numberofPeopleSchedule
+    elsif load_inst.class.to_s == "OpenStudio::Model::DesignSpecificationOutdoorAir"
+      opt_sch = load_inst.outdoorAirFlowRateFractionSchedule
+    else
+      opt_sch = load_inst.schedule
+    end
+    if !opt_sch.is_initialized || !opt_sch.get.to_ScheduleRuleset.is_initialized
+      return nil
+    end
+    sch = opt_sch.get.to_ScheduleRuleset.get
+    if parametric_inputs.has_key?(sch)
+      if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target]}.")
+        return nil
+      end
+    end
+    min_max = schedule_ruleset_annual_min_max_value(sch)
+    ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst.name.to_s, hoo_inputs: hours_of_operation}
+    # todo - need to update method so new model objects make it back to osm
+    props = sch.additionalProperties
+    props.setFeature("param_sch_floor",min_max['min'])
+    props.setFeature("param_sch_ceiling",min_max['max'])
+    props.setFeature("param_sch_target",load_inst.name.to_s)
+    parametric_inputs[sch] = ruleset_hash
+
+    return parametric_inputs
+  end
+
 end
