@@ -4411,7 +4411,20 @@ class Standard
     thermal_zone_hash = {} # key is zone and hash is hours of operation
     model.getThermalZones.each do |zone|
       # identify hours of operation
-      thermal_zone_hash[zone] = select_hours_of_operation_from_space_array(zone.spaces)
+      hours_of_operation = select_hours_of_operation_from_space_array(zone.spaces)
+      thermal_zone_hash[zone] = hours_of_operation
+      # get thermostat setpoint schedules
+      if zone.thermostatSetpointDualSetpoint.is_initialized
+        thermostat = zone.thermostatSetpointDualSetpoint.get
+        if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation)
+        end
+        if thermostat.coolingSetpointTemperatureSchedule.is_initialized&& thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
+          schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation)
+        end
+      end
     end
 
     # loop through air loops (trace hours of operation back through spaces served by air loops)
@@ -4422,8 +4435,24 @@ class Standard
       air_loop.thermalZones.each do |zone|
         air_loop_spaces = air_loop_spaces + zone.spaces
       end
-      air_loop_hash[air_loop] = select_hours_of_operation_from_space_array(air_loop_spaces)
-      # todo - make sure to directly get schedules for air loops object itself. Code below just does components on air loop
+      hours_of_operation = select_hours_of_operation_from_space_array(air_loop_spaces)
+      air_loop_hash[air_loop] = hours_of_operation
+      if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
+        schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
+        gather_inputs_parametric_schedules(schedule,air_loop,parametric_inputs,hours_of_operation)
+      end
+      avail_mgrs = air_loop.availabilityManagers
+      avail_mgrs.each do |avail_mgr|
+        # todo - I'm finding availability mangers, but not any resrouces for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
+        resources = avail_mgr.resources
+        resources = OpenStudio::Model.getRecursiveResources(avail_mgr)
+        resources.each do |resource|
+          if resource.to_ScheduleRuleset.is_initialized
+            schedule = resource.to_ScheduleRuleset.get
+            gather_inputs_parametric_schedules(schedule,avail_mgr,parametric_inputs,hours_of_operation)
+          end
+        end
+      end
     end
 
     # look through all model HVAC components find scheduleRuleset objects, resources, that use them and zone or air loop for hours of operation
@@ -4453,6 +4482,7 @@ class Standard
       end
 
       # inspect resources for children of objects found in thermal zone or plant loop
+      # get objects like OA controllers and unitary object components
       next if thermal_zone.nil? && air_loop.nil?
       children = OpenStudio::Model.getRecursiveChildren(component)
       children.each do |child|
@@ -4483,6 +4513,7 @@ class Standard
     end
 
     # todo - Service Water Heating (may or may not be associated with a space)
+    # todo - Refrigeration (will be associated with thermal zone)
     # todo - water use equipment definitions (temperature, sensible, latent)
     # todo - water use equipment (flow rate fraction)
     # todo - exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
