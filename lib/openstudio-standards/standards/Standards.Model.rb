@@ -4408,25 +4408,25 @@ class Standard
     gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes,parametric_inputs)
 
     # loop through thermal zones (trace hours of operation back to spaces in thermal zone)
+    thermal_zone_hash = {} # key is zone and hash is hours of operation
     model.getThermalZones.each do |zone|
       # identify hours of operation
-      # todo - convert this to hash with zone as key
-      hours_of_operation = select_hours_of_operation_from_space_array(zone.spaces)
+      thermal_zone_hash[zone] = select_hours_of_operation_from_space_array(zone.spaces)
     end
 
-
     # loop through air loops (trace hours of operation back through spaces served by air loops)
+    air_loop_hash = {} # key is zone and hash is hours of operation
     model.getAirLoopHVACs.each do |air_loop|
       # identify hours of operation
       air_loop_spaces = []
       air_loop.thermalZones.each do |zone|
         air_loop_spaces = air_loop_spaces + zone.spaces
       end
-      # todo - convert this to hash with zone as key
-      hours_of_operation = select_hours_of_operation_from_space_array(air_loop_spaces)
+      air_loop_hash[air_loop] = select_hours_of_operation_from_space_array(air_loop_spaces)
+      # todo - make sure to directly get schedules for air loops object itself. Code below just does components on air loop
     end
 
-    # todo - look through all model HVAC components, and compare against schedule (will go through zone, air loop and plant loop)
+    # look through all model HVAC components find scheduleRuleset objects, resources, that use them and zone or air loop for hours of operation
     hvac_components = model.getHVACComponents
     hvac_components.each do |component|
       # identify zone, or air loop it refers to, some may refer to plant loop, OA or other component
@@ -4435,39 +4435,52 @@ class Standard
       plant_loop = nil
       schedules = []
       if component.to_ZoneHVACComponent.is_initialized && component.to_ZoneHVACComponent.get.thermalZone.is_initialized
-        thermal_zone = component.to_ZoneHVACComponent.get.thermalZone.get.name
+        thermal_zone = component.to_ZoneHVACComponent.get.thermalZone.get
       end
       if component.airLoopHVAC.is_initialized
-        air_loop = component.airLoopHVAC.get.name
+        air_loop = component.airLoopHVAC.get
       else
       end
       if component.plantLoop.is_initialized
-        plant_loop = component.plantLoop.get.name
+        plant_loop = component.plantLoop.get
       end
       component.resources.each do |resource|
         if resource.to_ThermalZone.is_initialized
-          thermal_zone = resource.to_ThermalZone.get.name
+          thermal_zone = resource.to_ThermalZone.get
         elsif resource.to_ScheduleRuleset.is_initialized
-          schedules << resource.to_ScheduleRuleset.get.name
+          schedules << resource.to_ScheduleRuleset.get
         end
       end
-      next if schedules.size == 0
-      puts "***** #{component.name}: #{schedules.size} schedules *****"
-      string = ""
-      if !thermal_zone.nil?
-        string += "zone: #{thermal_zone},"
-      end
-      if !air_loop.nil?
-        string += "air_loop: #{air_loop},"
-      end
-      if !plant_loop.nil?
-        string += "plant_loop: #{plant_loop},"
-      end
-      string += "schedules: #{schedules.join(",")}"
-      puts string
-    end
 
-    # note - not setting any schedules for plant loops
+      # inspect resources for children of objects found in thermal zone or plant loop
+      next if thermal_zone.nil? && air_loop.nil?
+      children = OpenStudio::Model.getRecursiveChildren(component)
+      children.each do |child|
+        child.resources.each do |sub_resource|
+          if sub_resource.to_ScheduleRuleset.is_initialized
+            schedules << sub_resource.to_ScheduleRuleset.get
+          end
+        end
+      end
+
+      # process schedules found for this component
+      schedules.each do |schedule|
+        hours_of_operation = nil
+        if !thermal_zone.nil?
+          hours_of_operation = thermal_zone_hash[thermal_zone]
+        elsif !air_loop.nil?
+          hours_of_operation = air_loop_hash[air_loop]
+        elsif !plant_loop.nil?
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{schedule.name.get} is associated with plant loop, will not gather parametric inputs")
+          next
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
+          next
+        end
+        gather_inputs_parametric_schedules(schedule,component,parametric_inputs,hours_of_operation)
+      end
+
+    end
 
     # todo - Service Water Heating (may or may not be associated with a space)
     # todo - water use equipment definitions (temperature, sensible, latent)

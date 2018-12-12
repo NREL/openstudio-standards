@@ -6,7 +6,6 @@ class TestParametricSchedules < Minitest::Test
   def input_hash
     test_hash = {}
     test_hash["SecondarySchool_6A_1980-2004"] = {template: 'DOE Ref 1980-2004'}
-=begin
     # custom used to exercise mid day dip and see if clean hours of operation come out
     test_hash["example_model_multipliers"] = {template: '90.1-2013', fraction_of_daily_occ_range: 0.75} # office building
     test_hash["SmallHotel_5B_2004"] = {template: '90.1-2004'}
@@ -17,7 +16,6 @@ class TestParametricSchedules < Minitest::Test
     test_hash["Outpatient_7A_2010"] = {template: '90.1-2010'}
     test_hash["MultiStoryRetail"] = {template: 'DOE Ref 1980-2004'}
     test_hash["MultiStoryWarehouse"] = {template: 'DOE Ref 1980-2004'}
-=end
 
     return test_hash
   end
