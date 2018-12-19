@@ -33,8 +33,8 @@ class Standard
   # @param pump_tot_hd [Double] pump head in ft H2O
   # @param boiler_draft_type [String] Boiler type Condensing, MechanicalNoncondensing, Natural (default)
   # @param boiler_eff_curve_temp_eval_var [String] LeavingBoiler or EnteringBoiler temperature for the boiler efficiency curve
-  # @param boiler_lvg_temp_dsgn F [Double] boiler leaving design temperature
-  # @param boiler_out_temp_lmt [Double] boiler outlet temperature limit
+  # @param boiler_lvg_temp_dsgn [Double] boiler leaving design temperature in degrees Fahrenheit
+  # @param boiler_out_temp_lmt [Double] boiler outlet temperature limit in degrees Fahrenheit
   # @param boiler_max_plr [Double] boiler maximum part load ratio
   # @param boiler_sizing_factor [Double] boiler oversizing factor
   # @return [OpenStudio::Model::PlantLoop] the resulting hot water loop
@@ -115,7 +115,7 @@ class Standard
         district_heat.autosizeNominalCapacity
         hot_water_loop.addSupplyBranchForComponent(district_heat)
       # Ambient Loop
-      when 'HeatPump'
+      when 'HeatPump', 'AmbientLoop'
         water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
         water_to_water_hp.setName("#{hot_water_loop.name} Water to Water Heat Pump")
         hot_water_loop.addSupplyBranchForComponent(water_to_water_hp)
@@ -124,6 +124,9 @@ class Standard
           ambient_loop = model_get_or_add_ambient_water_loop(model)
         end
         ambient_loop.addDemandBranchForComponent(water_to_water_hp)
+      # Central Air Source Heat Pump
+      when 'AirSourceHeatPump', 'ASHP'
+        create_central_air_source_heat_pump(model, hot_water_loop)
       # Boiler
       when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
         if boiler_lvg_temp_dsgn.nil?
@@ -158,9 +161,9 @@ class Standard
     end
 
     # add hot water loop pipes
-    boiler_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
-    boiler_bypass_pipe.setName("#{hot_water_loop.name} Boiler Bypass")
-    hot_water_loop.addSupplyBranchForComponent(boiler_bypass_pipe)
+    supply_equipment_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+    supply_equipment_bypass_pipe.setName("#{hot_water_loop.name} Supply Equipment Bypass")
+    hot_water_loop.addSupplyBranchForComponent(supply_equipment_bypass_pipe)
 
     coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
     coil_bypass_pipe.setName("#{hot_water_loop.name} Coil Bypass")
@@ -1748,9 +1751,11 @@ class Standard
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
     end
 
-    # adjusted zone design heating temperature for pvav
-    dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
-    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    # adjusted zone design heating temperature for pvav unless it would cause a temperature higher than reheat water supply temperature
+    unless !hot_water_loop.nil? && hw_temp_c < OpenStudio.convert(140.0, 'F', 'C').get
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    end
 
     # default design settings used across all air loops
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
@@ -4542,6 +4547,10 @@ class Standard
         heating_type = 'Water'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        heating_type = 'Water'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       when 'Electricity'
         heating_type = main_heat_fuel
         hot_water_loop = nil
@@ -4573,6 +4582,11 @@ class Standard
         supplemental_heating_type = 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        heating_type = 'Water'
+        supplemental_heating_type = 'Electricity'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       when 'Electricity'
         heating_type = main_heat_fuel
         supplemental_heating_type = 'Electricity'
@@ -4633,6 +4647,9 @@ class Standard
       when 'NaturalGas', 'DistrictHeating', 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       else
         hot_water_loop = nil
       end
@@ -4656,6 +4673,9 @@ class Standard
       when 'NaturalGas', 'DistrictHeating'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       when 'Electricity'
         hot_water_loop = nil
       else
@@ -4714,6 +4734,10 @@ class Standard
         heating_type = main_heat_fuel
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        heating_type = main_heat_fuel
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       else
         heating_type = 'Electricity'
         hot_water_loop = nil
@@ -4757,6 +4781,10 @@ class Standard
         heating_type = main_heat_fuel
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        heating_type = main_heat_fuel
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
       else
         heating_type = 'Electricity'
         hot_water_loop = nil
@@ -4795,20 +4823,29 @@ class Standard
                            fan_pressure_rise: 4.0)
 
     when 'PVAV Reheat'
-      hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                       hot_water_loop_type: hot_water_loop_type)
-      chilled_water_loop = case cool_fuel
-                           when 'Electricity'
-                             nil
-                           else
-                             model_get_or_add_chilled_water_loop(model, cool_fuel,
+      case main_heat_fuel
+      when 'AirSourceHeatPump'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
+      else
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      end
+
+      case cool_fuel
+      when 'Electricity'
+        chilled_water_loop = nil
+      else
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
                                                                  chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
-                           end
+      end
+
       if zone_heat_fuel == 'Electricity'
         electric_reheat = true
       else
         electric_reheat = false
       end
+
       model_add_pvav(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -4870,8 +4907,14 @@ class Standard
 
     when 'DOAS'
       if air_loop_heating_type == 'Water'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                         hot_water_loop_type: hot_water_loop_type)
+        case main_heat_fuel
+        when 'AirSourceHeatPump'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: 'LowTemperature')
+        else
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        end
       else
         hot_water_loop = nil
       end
@@ -4888,8 +4931,14 @@ class Standard
 
     when 'DOAS with DCV'
       if air_loop_heating_type == 'Water'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                         hot_water_loop_type: hot_water_loop_type)
+        case main_heat_fuel
+        when 'AirSourceHeatPump'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: 'LowTemperature')
+        else
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        end
       else
         hot_water_loop = nil
       end
@@ -4908,8 +4957,14 @@ class Standard
 
     when 'DOAS with Economizing'
       if air_loop_heating_type == 'Water'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                         hot_water_loop_type: hot_water_loop_type)
+        case main_heat_fuel
+        when 'AirSourceHeatPump'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: 'LowTemperature')
+        else
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        end
       else
         hot_water_loop = nil
       end
@@ -4928,8 +4983,14 @@ class Standard
 
     when 'DOAS with DCV and Economizing'
       if air_loop_heating_type == 'Water'
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                         hot_water_loop_type: hot_water_loop_type)
+        case main_heat_fuel
+        when 'AirSourceHeatPump'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: 'LowTemperature')
+        else
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        end
       else
         hot_water_loop = nil
       end
