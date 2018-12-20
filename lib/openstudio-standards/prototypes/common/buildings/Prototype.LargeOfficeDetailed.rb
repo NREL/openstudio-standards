@@ -78,40 +78,6 @@ module LargeOfficeDetailed
     return true
   end
   
-def define_space_multiplier
-    # This map define the multipliers for spaces with multipliers not equals to 1
-    space_multiplier_map = {
-      'OpenOffice_Mid_ZN_1' => 10,
-	  'OpenOffice_Mid_ZN_2' => 10,
-	  'OpenOffice_Mid_ZN_3' => 10,
-	  'OpenOffice_Mid_ZN_4' => 10,
-	  'EnclosedOffice_Mid_ZN_1' => 10,
-	  'EnclosedOffice_Mid_ZN_2' => 10,
-	  'EnclosedOffice_Mid_ZN_3' => 10,
-	  'EnclosedOffice_Mid_ZN_4' => 10,
-	  'EnclosedOffice_Mid_ZN_5' => 10,
-	  'EnclosedOffice_Mid_ZN_6' => 10,
-	  'EnclosedOffice_Mid_ZN_7' => 10,
-	  'EnclosedOffice_Mid_ZN_8' => 10,
-      'Mechanical_Mid_ZN_1' => 10,
-	  'Mechanical_Mid_ZN_2' => 10,
-	  'Corridor_Mid_ZN_1' => 10,
-	  'Corridor_Mid_ZN_2' => 10,
-	  'Restroom_Mid_ZN' => 10,
-	  'Lobby_Mid_ZN' => 10,
-	  'Stair_Mid_ZN_1' => 10,
-	  'Stair_Mid_ZN_2' => 10,
-	  'Dining_Mid_ZN' => 10,
-	  'ConfRoom_Mid_ZN_1' => 10,
-	  'ConfRoom_Mid_ZN_2' => 10,
-	  'ActiveStorage_Mid_ZN' => 10,
-	  'Classroom_Mid_ZN' => 10,
-      'MidFloor_Plenum' => 10,
-	  'DataCenter_Mid_ZN' => 10
-    }
-    return space_multiplier_map
-  end
-  
   def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'

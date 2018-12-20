@@ -528,13 +528,8 @@ Standard.class_eval do
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
-    space_multiplier_map = {} if space_multiplier_map.nil?
-
-    # Remove any Thermal zones assigned
-    model.getThermalZones.each(&:remove)
-
-    # Create a thermal zone for each space in the self
+     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
+ 
     model.getSpaces.sort.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
       zone.setName("#{space.name} ZN")
@@ -560,11 +555,10 @@ Standard.class_eval do
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
         end
-      end
+     end
     end
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
-  end
+ end
 
   # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
   # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
