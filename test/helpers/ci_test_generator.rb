@@ -274,7 +274,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                 BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
                 if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
-                  BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+                  standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
                 end
                 standard.add_sys1_unitary_ac_baseboard_heating_multi_speed(
                     model,
