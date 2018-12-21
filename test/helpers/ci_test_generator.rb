@@ -276,7 +276,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
                   BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
                 end
-                BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys1(
+                standard.add_sys1_unitary_ac_baseboard_heating_multi_speed(
                     model,
                     model.getThermalZones,
                     boiler_fueltype,
@@ -442,12 +442,13 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
+            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+            standard.add_sys2_FPFC_sys5_TPFC(
                 model,
                 model.getThermalZones,
                 boiler_fueltype,
                 chiller_type,
+                'FPFC',
                 mua_cooling_type,
                 hw_loop)
             #Save the model after btap hvac.
@@ -574,9 +575,9 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+              standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             end
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
+            standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
                 model,
                 model.getThermalZones,
                 boiler_fueltype,
@@ -708,9 +709,9 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+              standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             end
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys4(
+            standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(
                 model,
                 model.getThermalZones,
                 boiler_fueltype,
@@ -842,12 +843,13 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
-            BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys5(
+            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+            standard.add_sys2_FPFC_sys5_TPFC(
                 model,
                 model.getThermalZones,
                 boiler_fueltype,
                 chiller_type,
+                'TPFC',
                 mua_cooling_type,
                 hw_loop)
             #Save the model after btap hvac.
@@ -985,9 +987,9 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
                 hw_loop = nil
                 if (baseboard_type == "Hot Water") || (heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
-                  BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+                  standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
                 end
-                BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
+                standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
                     model,
                     model.getThermalZones,
                     boiler_fueltype,

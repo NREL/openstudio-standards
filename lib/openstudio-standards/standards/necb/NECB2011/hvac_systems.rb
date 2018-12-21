@@ -2437,12 +2437,12 @@ class NECB2011
     # Chilled Water Plant
 
     chw_loop = OpenStudio::Model::PlantLoop.new(model)
-    chiller1, chiller2 = BTAP::Resources::HVAC::HVACTemplates::NECB2011.setup_chw_loop_with_components(model, chw_loop, chiller_type)
+    chiller1, chiller2 = self.setup_chw_loop_with_components(model, chw_loop, chiller_type)
 
     # Condenser System
 
     cw_loop = OpenStudio::Model::PlantLoop.new(model)
-    ctower = BTAP::Resources::HVAC::HVACTemplates::NECB2011.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
+    ctower = self.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|

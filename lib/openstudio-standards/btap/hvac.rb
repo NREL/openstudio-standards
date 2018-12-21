@@ -2297,6 +2297,7 @@ module BTAP
 
           end
         end
+=begin
 
         module NECB2011
 
@@ -3708,6 +3709,7 @@ module BTAP
           end
 
         end
+=end
 
       end # module HVACTemplates
       
