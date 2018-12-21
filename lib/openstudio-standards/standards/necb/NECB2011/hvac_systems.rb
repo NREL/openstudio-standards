@@ -1513,10 +1513,10 @@ class NECB2011
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
-        zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
+
         # add zone_baseboard to zone
         zone_baseboard.addToThermalZone(zone)
-
       end
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
@@ -1740,7 +1740,7 @@ class NECB2011
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
-        zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil)
         # add zone_baseboard to zone
         zone_baseboard.addToThermalZone(zone)
 
@@ -2082,7 +2082,7 @@ class NECB2011
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
-        zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
         # add zone_baseboard to zone
         zone_baseboard.addToThermalZone(zone)
       end
@@ -2261,7 +2261,7 @@ class NECB2011
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
-        zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
         # add zone_baseboard to zone
         zone_baseboard.addToThermalZone(zone)
       end
@@ -2405,7 +2405,7 @@ class NECB2011
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
-        zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
         # add zone_baseboard to zone
         zone_baseboard.addToThermalZone(zone)
       end
@@ -2546,7 +2546,7 @@ class NECB2011
             baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
             # Connect baseboard coil to hot water loop
             hw_loop.addDemandBranchForComponent(baseboard_coil)
-            zone_baseboard = BTAP::Resources::HVAC::ZoneEquipment.add_zone_baseboard_convective_water(model, always_on, baseboard_coil)
+            zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
             # add zone_baseboard to zone
             zone_baseboard.addToThermalZone(zone)
           end

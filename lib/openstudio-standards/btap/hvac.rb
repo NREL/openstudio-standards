@@ -623,6 +623,7 @@ module BTAP
       module ZoneEquipment
 
 
+=begin
         #Test Plant Module
         if __FILE__ == $0
           require 'test/unit'
@@ -676,6 +677,7 @@ module BTAP
 
           end
         end # End Test ZoneEquipment
+=end
 
         def self.add_ideal_air_loads(model,zone)
           zone.setUseIdealAirLoads(true)
@@ -821,6 +823,7 @@ module BTAP
       module HVACTemplates
         module OS
 
+=begin
           def self.add_rooftop_vav_with_reheat( model, zones = [] )
             airloop = OpenStudio::Model::addSystemType3(model).to_AirLoopHVAC.get
             zones.each { |zone| airloop.addBranchForZone(zone) }
@@ -867,6 +870,7 @@ module BTAP
             zones.each { |zone| airloop.addBranchForZone(zone) }
             return airloop
           end
+=end
         end #OpenStudio
         module ASHRAE90_1
           #These methods are works in progresss from Andrew Parker at NREL.
