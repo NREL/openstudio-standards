@@ -10,6 +10,7 @@ class HVACEfficienciesTest < MiniTest::Test
 begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_vav
+    standard = Standard.build("NECB2011")
     output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -29,16 +30,15 @@ begin
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type, 
-      chiller_type, 
-      vavfan_type,
-      hw_loop)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
+      model: model,
+      zones: model.getThermalZones,
+      heating_coil_type: heating_coil_type,
+      baseboard_type: baseboard_type,
+      chiller_type: chiller_type,
+      fan_type: vavfan_type,
+      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -100,6 +100,7 @@ end
 begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_heatpump
+    standard = Standard.build("NECB2011")
     output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -117,14 +118,13 @@ begin
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
+      model: model,
+      zones: model.getThermalZones,
+      heating_coil_type: heating_coil_type,
+      baseboard_type: baseboard_type,
+      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
