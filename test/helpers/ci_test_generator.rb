@@ -319,6 +319,15 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
 
             end
             result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+            fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+            severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+            if severe.size > 0 or fatal.size > 0
+              puts "#############################ERRORS########################################"
+              puts severe
+              puts fatal
+              result = false
+            end
             assert_equal(true, result, "Failure in Standards for #{name}")
           end
         end
@@ -460,6 +469,15 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
             assert_equal(true, result, "Failure in Standards for #{name}")
             #Run Sims
             result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+            fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+            severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+            if severe.size > 0 or fatal.size > 0
+              puts "#############################ERRORS########################################"
+              puts severe
+              puts fatal
+              result = false
+            end
             assert_equal(true, result, "Failure in Standards for #{name}")
           end
         end
@@ -597,6 +615,15 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
             assert_equal(true, result, "Failure in Standards for #{name}")
             #Run Sims
             result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+            fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+            severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+            if severe.size > 0 or fatal.size > 0
+              puts "#############################ERRORS########################################"
+              puts severe
+              puts fatal
+              result = false
+            end
             assert_equal(true, result, "Failure in Standards for #{name}")
           end
         end
@@ -729,6 +756,15 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.osm")
             assert_equal(true, result, "Failure in Standards for #{name}")
             result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+            fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+            severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+            if severe.size > 0 or fatal.size > 0
+              puts "#############################ERRORS########################################"
+              puts severe
+              puts fatal
+              result = false
+            end
             assert_equal(true, result, "Failure in Standards for #{name}")
           end
         end
@@ -861,6 +897,15 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.osm")
             assert_equal(true, result, "Failure in Standards for #{name}")
             result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+            warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+            fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+            severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+            if severe.size > 0 or fatal.size > 0
+              puts "#############################ERRORS########################################"
+              puts severe
+              puts fatal
+              result = false
+            end
             assert_equal(true, result, "Failure in Standards for #{name}")
           end
         end
@@ -1006,6 +1051,15 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
                 BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.osm")
                 assert_equal(true, result, "Failure in Standards for #{name}")
                 result = standard.model_run_simulation_and_log_errors(model, "#{output_folder}/#{name}/")
+                warnings = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='0' ").get
+                fatal = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='2' ").get
+                severe = model.sqlFile().get().execAndReturnVectorOfString("SELECT ErrorMessage FROM Errors WHERE ErrorType='1' ").get
+                if severe.size > 0 or fatal.size > 0
+                 puts "#############################ERRORS########################################"
+                 puts severe
+                 puts fatal
+                 result = false
+                end
                 assert_equal(true, result, "Failure in Standards for #{name}")
               end
             end

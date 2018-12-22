@@ -1461,17 +1461,6 @@ class NECB2011
 
     end # Create MAU
 
-    # Create a PTAC for each zone:
-    # PTAC DX Cooling with electric heating coil; electric heating coil is always off
-
-    # TO DO: need to apply this system to space types:
-    # (1) data processing area: control room, data centre
-    # when cooling capacity <= 20kW and
-    # (2) residential/accommodation: murb, hotel/motel guest room
-    # when building/space heated only (this as per NECB; apply to
-    # all for initial work? CAN-QUEST limitation)
-
-    # TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
 
     zones.each do |zone|
       # Zone sizing temperature
@@ -1481,25 +1470,19 @@ class NECB2011
       sizing_zone.setZoneCoolingSizingFactor(1.1)
       sizing_zone.setZoneHeatingSizingFactor(1.3)
 
-      # Set up PTAC heating coil; apply always off schedule
+      # Create a PTAC for each zone:
+      # PTAC DX Cooling with electric heating coil; electric heating coil is always off
+      # TO DO: need to apply this system to space types:
+      # (1) data processing area: control room, data centre
+      # when cooling capacity <= 20kW and
+      # (2) residential/accommodation: murb, hotel/motel guest room
+      # when building/space heated only (this as per NECB; apply to
+      # all for initial work? CAN-QUEST limitation)
+
+      # TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
-
-      # Set up PTAC DX coil with NECB performance curve characteristics;
-      clg_coil = self.add_onespeed_DX_coil(model, always_on)
-
-      # Set up PTAC constant volume supply fan
-      fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
-      fan.setPressureRise(640)
-
-      ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
-                                                                           always_on,
-                                                                           fan,
-                                                                           htg_coil,
-                                                                           clg_coil)
-      ptac.setName("#{zone.name} PTAC")
-      ptac.addToThermalZone(zone)
+      add_ptac_dx_cooling(model, zone)
 
       # add zone baseboards
       add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
@@ -1512,22 +1495,6 @@ class NECB2011
     end # of zone loop
 
     return true
-  end
-
-  def add_zone_baseboards(baseboard_type:, hw_loop:, model:, zone:)
-    always_on = model.alwaysOnDiscreteSchedule
-    if baseboard_type == 'Electric'
-      zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-      zone_elec_baseboard.addToThermalZone(zone)
-    end
-    if baseboard_type == 'Hot Water'
-      baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-      # Connect baseboard coil to hot water loop
-      hw_loop.addDemandBranchForComponent(baseboard_coil)
-      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-      # add zone_baseboard to zone
-      zone_baseboard.addToThermalZone(zone)
-    end
   end
 
   # sys1_unitary_ac_baseboard_heating
@@ -1685,17 +1652,7 @@ class NECB2011
 
     end # Create MAU
 
-    # Create a PTAC for each zone:
-    # PTAC DX Cooling with electric heating coil; electric heating coil is always off
 
-    # TO DO: need to apply this system to space types:
-    # (1) data processing area: control room, data centre
-    # when cooling capacity <= 20kW and
-    # (2) residential/accommodation: murb, hotel/motel guest room
-    # when building/space heated only (this as per NECB; apply to
-    # all for initial work? CAN-QUEST limitation)
-
-    # TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
 
     zones.each do |zone|
       # Zone sizing temperature
@@ -1708,22 +1665,7 @@ class NECB2011
       # Set up PTAC heating coil; apply always off schedule
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
-
-      # Set up PTAC DX coil with NECB performance curve characteristics;
-      clg_coil = self.add_onespeed_DX_coil(model, always_on)
-
-      # Set up PTAC constant volume supply fan
-      fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
-      fan.setPressureRise(640)
-
-      ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
-                                                                           always_on,
-                                                                           fan,
-                                                                           htg_coil,
-                                                                           clg_coil)
-      ptac.setName("#{zone.name} PTAC")
-      ptac.addToThermalZone(zone)
+      add_ptac_dx_cooling(model, zone)
 
       # add zone baseboards
       add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
@@ -3295,4 +3237,57 @@ class NECB2011
                                                            clg_energy_input_ratio_f_of_flow,
                                                            clg_part_load_ratio);
   end
+
+  # Zonal systems
+  def add_zone_baseboards(baseboard_type:, hw_loop:, model:, zone:)
+    always_on = model.alwaysOnDiscreteSchedule
+    if baseboard_type == 'Electric'
+      zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
+      zone_elec_baseboard.addToThermalZone(zone)
+    end
+    if baseboard_type == 'Hot Water'
+      baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+      # Connect baseboard coil to hot water loop
+      hw_loop.addDemandBranchForComponent(baseboard_coil)
+      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
+      # add zone_baseboard to zone
+      zone_baseboard.addToThermalZone(zone)
+    end
+  end
+
+
+  def add_ptac_dx_cooling(model, zone)
+    # Create a PTAC for each zone:
+    # PTAC DX Cooling with electric heating coil; electric heating coil is always off
+
+    # TO DO: need to apply this system to space types:
+    # (1) data processing area: control room, data centre
+    # when cooling capacity <= 20kW and
+    # (2) residential/accommodation: murb, hotel/motel guest room
+    # when building/space heated only (this as per NECB; apply to
+    # all for initial work? CAN-QUEST limitation)
+
+    # TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
+    always_on = model.alwaysOnDiscreteSchedule
+    always_off = BTAP::Resources::Schedules::StandardSchedules::ON_OFF.always_off(model)
+    htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
+
+    # Set up PTAC DX coil with NECB performance curve characteristics;
+    clg_coil = self.add_onespeed_DX_coil(model, always_on)
+
+    # Set up PTAC constant volume supply fan
+    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    fan.setPressureRise(640)
+
+    ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
+                                                                         always_on,
+                                                                         fan,
+                                                                         htg_coil,
+                                                                         clg_coil)
+    ptac.setName("#{zone.name} PTAC")
+    ptac.addToThermalZone(zone)
+  end
+
+
+
 end
