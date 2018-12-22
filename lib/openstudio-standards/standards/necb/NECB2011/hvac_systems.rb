@@ -1383,7 +1383,7 @@ class NECB2011
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
 
     always_on = model.alwaysOnDiscreteSchedule
-    always_off = model.alwaysOffDiscreteSchedule
+    always_off = BTAP::Resources::Schedules::StandardSchedules::ON_OFF.always_off(model)
 
     # Create MAU
     # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
@@ -1502,34 +1502,32 @@ class NECB2011
       ptac.addToThermalZone(zone)
 
       # add zone baseboards
-      if baseboard_type == 'Electric'
-
-        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard.addToThermalZone(zone)
-
-      end
-
-      if baseboard_type == 'Hot Water'
-        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-        # Connect baseboard coil to hot water loop
-        hw_loop.addDemandBranchForComponent(baseboard_coil)
-
-        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-
-        # add zone_baseboard to zone
-        zone_baseboard.addToThermalZone(zone)
-      end
+      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
       if mau_type == true
-
         diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-
       end # components for MAU
     end # of zone loop
 
     return true
+  end
+
+  def add_zone_baseboards(baseboard_type:, hw_loop:, model:, zone:)
+    always_on = model.alwaysOnDiscreteSchedule
+    if baseboard_type == 'Electric'
+      zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
+      zone_elec_baseboard.addToThermalZone(zone)
+    end
+    if baseboard_type == 'Hot Water'
+      baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+      # Connect baseboard coil to hot water loop
+      hw_loop.addDemandBranchForComponent(baseboard_coil)
+      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
+      # add zone_baseboard to zone
+      zone_baseboard.addToThermalZone(zone)
+    end
   end
 
   # sys1_unitary_ac_baseboard_heating
@@ -1728,23 +1726,7 @@ class NECB2011
       ptac.addToThermalZone(zone)
 
       # add zone baseboards
-      if baseboard_type == 'Electric'
-
-        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard.addToThermalZone(zone)
-
-      end
-
-      if baseboard_type == 'Hot Water'
-        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-        # Connect baseboard coil to hot water loop
-        hw_loop.addDemandBranchForComponent(baseboard_coil)
-
-        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil)
-        # add zone_baseboard to zone
-        zone_baseboard.addToThermalZone(zone)
-
-      end
+      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
       if mau == true
@@ -2068,24 +2050,7 @@ class NECB2011
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-
-      if baseboard_type == 'Electric'
-
-        #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard.addToThermalZone(zone)
-
-      end
-
-      if baseboard_type == 'Hot Water'
-        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-        # Connect baseboard coil to hot water loop
-        hw_loop.addDemandBranchForComponent(baseboard_coil)
-
-        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-        # add zone_baseboard to zone
-        zone_baseboard.addToThermalZone(zone)
-      end
+      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
     end # zone loop
 
     return true
@@ -2248,23 +2213,7 @@ class NECB2011
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
 
-      if baseboard_type == 'Electric'
-
-        #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard.addToThermalZone(zone)
-
-      end
-
-      if baseboard_type == 'Hot Water'
-        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-        # Connect baseboard coil to hot water loop
-        hw_loop.addDemandBranchForComponent(baseboard_coil)
-
-        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-        # add zone_baseboard to zone
-        zone_baseboard.addToThermalZone(zone)
-      end
+      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
     end # zone loop
 
     return true
@@ -2391,24 +2340,7 @@ class NECB2011
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
       air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-
-      if baseboard_type == 'Electric'
-
-        #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard.addToThermalZone(zone)
-
-      end
-
-      if baseboard_type == 'Hot Water'
-        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-        # Connect baseboard coil to hot water loop
-        hw_loop.addDemandBranchForComponent(baseboard_coil)
-
-        zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-        # add zone_baseboard to zone
-        zone_baseboard.addToThermalZone(zone)
-      end
+      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
     end # zone loop
 
     return true
@@ -2538,18 +2470,10 @@ class NECB2011
           vav_terminal.setDamperHeatingAction('Normal')
 
           # Set zone baseboards
-          if baseboard_type == 'Electric'
-            zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-            zone_elec_baseboard.addToThermalZone(zone)
-          end
-          if baseboard_type == 'Hot Water'
-            baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
-            # Connect baseboard coil to hot water loop
-            hw_loop.addDemandBranchForComponent(baseboard_coil)
-            zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
-            # add zone_baseboard to zone
-            zone_baseboard.addToThermalZone(zone)
-          end
+          add_zone_baseboards(model: model,
+                              zone: zone,
+                              baseboard_type: baseboard_type,
+                              hw_loop: hw_loop)
         end
       end
     end # next story
