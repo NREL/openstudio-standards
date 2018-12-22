@@ -1499,7 +1499,12 @@ class NECB2011
 
   # sys1_unitary_ac_baseboard_heating
 
-  def add_sys1_unitary_ac_baseboard_heating_multi_speed(model:, zones:, mau:, mau_heating_coil_type:, baseboard_type:, hw_loop:)
+  def add_sys1_unitary_ac_baseboard_heating_multi_speed(model:,
+                                                        zones:,
+                                                        mau:,
+                                                        mau_heating_coil_type:,
+                                                        baseboard_type:,
+                                                        hw_loop:)
     # System Type 1: PTAC with no heating (unitary AC)
     # Zone baseboards, electric or hot water depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
@@ -1684,7 +1689,12 @@ class NECB2011
 
   # sys1_unitary_ac_baseboard_heating
 
-  def add_sys2_FPFC_sys5_TPFC(model:, zones:, chiller_type:, fan_coil_type:, mau_cooling_type:, hw_loop:)
+  def add_sys2_FPFC_sys5_TPFC(model:,
+                              zones:,
+                              chiller_type:,
+                              fan_coil_type:,
+                              mau_cooling_type:,
+                              hw_loop:)
     # System Type 2: FPFC or System 5: TPFC
     # This measure creates:
     # -a four pipe or a two pipe fan coil unit for each zone in the building;
@@ -1876,7 +1886,11 @@ class NECB2011
 
   # add_sys2_FPFC_sys5_TPFC
 
-  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:, zones:, heating_coil_type:, baseboard_type:, hw_loop:)
+  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
+                                                                                         zones:,
+                                                                                         heating_coil_type:,
+                                                                                         baseboard_type:,
+                                                                                         hw_loop:)
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -2000,7 +2014,12 @@ class NECB2011
 
   # end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed
 
-  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model, zones, boiler_fueltype, heating_coil_type, baseboard_type, hw_loop)
+  def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model,
+                                                                                        zones,
+                                                                                        boiler_fueltype,
+                                                                                        heating_coil_type,
+                                                                                        baseboard_type,
+                                                                                        hw_loop)
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -2163,7 +2182,11 @@ class NECB2011
 
   # end add_sys3_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed
 
-  def add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model:, zones:, heating_coil_type:, baseboard_type:, hw_loop:)
+  def add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model:,
+                                                                   zones:,
+                                                                   heating_coil_type:,
+                                                                   baseboard_type:,
+                                                                   hw_loop:)
     # System Type 4: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -2290,7 +2313,13 @@ class NECB2011
 
   # end add_sys4_single_zone_make_up_air_unit_with_baseboard_heating
 
-  def add_sys6_multi_zone_built_up_system_with_baseboard_heating(model:, zones:, heating_coil_type:, baseboard_type:, chiller_type:, fan_type:, hw_loop:)
+  def add_sys6_multi_zone_built_up_system_with_baseboard_heating(model:,
+                                                                 zones:,
+                                                                 heating_coil_type:,
+                                                                 baseboard_type:,
+                                                                 chiller_type:,
+                                                                 fan_type:,
+                                                                 hw_loop:)
     # System Type 6: VAV w/ Reheat
     # This measure creates:
     # a single hot water loop with a natural gas or electric boiler or for the building
@@ -2426,7 +2455,10 @@ class NECB2011
     return true
   end
 
-  def setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, pump_flow_sch)
+  def setup_hw_loop_with_components(model,
+                                    hw_loop,
+                                    boiler_fueltype,
+                                    pump_flow_sch)
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
@@ -2579,7 +2611,10 @@ class NECB2011
   # @author phylroy.lopez@nrcan.gc.ca
   # @param model [OpenStudio::model::Model] A model object
   # @return [String] system_zone_array
-  def necb_autozone_and_autosystem_old(model: nil, runner: nil, use_ideal_air_loads: false, system_fuel_defaults:)
+  def necb_autozone_and_autosystem_old(model: nil,
+                                       runner: nil,
+                                       use_ideal_air_loads: false,
+                                       system_fuel_defaults:)
 
     # Create a data struct for the space to system to placement information.
 
@@ -3010,7 +3045,8 @@ class NECB2011
   #
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
-  def model_create_thermal_zones(model, space_multiplier_map = nil)
+  def model_create_thermal_zones(model,
+                                 space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
     space_multiplier_map = {} if space_multiplier_map.nil?
 
@@ -3239,7 +3275,10 @@ class NECB2011
   end
 
   # Zonal systems
-  def add_zone_baseboards(baseboard_type:, hw_loop:, model:, zone:)
+  def add_zone_baseboards(baseboard_type:,
+                          hw_loop:,
+                          model:,
+                          zone:)
     always_on = model.alwaysOnDiscreteSchedule
     if baseboard_type == 'Electric'
       zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
