@@ -276,14 +276,15 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
                   standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
                 end
-                standard.add_sys1_unitary_ac_baseboard_heating(
-                    model,
-                    model.getThermalZones,
-                    boiler_fueltype,
-                    mau_type,
-                    mau_heating_coil_type,
-                    baseboard_type,
-                    hw_loop)
+                standard.add_sys1_unitary_ac_baseboard_heating( model: model,
+                                                                zones: model.getThermalZones,
+                                                                mau_type: mau_type,
+                                                                mau_heating_coil_type: mau_heating_coil_type,
+                                                                baseboard_type: baseboard_type,
+                                                                hw_loop: hw_loop)
+
+
+
                 #Save the model after btap hvac.
                 BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
                 #run the standards
@@ -302,13 +303,12 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                 standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
               end
               standard.add_sys1_unitary_ac_baseboard_heating(
-                  model,
-                  model.getThermalZones,
-                  boiler_fueltype,
-                  mau_type,
-                  "Electric", #value will not be used.
-                  baseboard_type,
-                  hw_loop)
+                  model: model,
+                  zones: model.getThermalZones,
+                  mau_type: mau_type,
+                  mau_heating_coil_type: "Electric", #value will not be used.
+                  baseboard_type: baseboard_type,
+                  hw_loop: hw_loop)
               #Save the model after btap hvac.
               BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
@@ -443,14 +443,16 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
-            standard.add_sys2_FPFC_sys5_TPFC(
-                model,
-                model.getThermalZones,
-                boiler_fueltype,
-                chiller_type,
-                'FPFC',
-                mua_cooling_type,
-                hw_loop)
+            standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                  zones: model.getThermalZones,
+                                  chiller_type: chiller_type,
+                                  fan_coil_type: 'FPFC',
+                                  mau_cooling_type: mua_cooling_type,
+                                  hw_loop: hw_loop)
+
+
+
+
             #Save the model after btap hvac.
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
             result = run_the_measure(model, standard, "#{output_folder}/#{name}/sizing")
@@ -578,12 +580,16 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
               standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             end
             standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-                model,
-                model.getThermalZones,
-                boiler_fueltype,
-                heating_coil_type_sys3,
-                baseboard_type,
-                hw_loop)
+                model: model,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil_type_sys3,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
+
+
+
+
+
             #Save the model after btap hvac.
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
             result = run_the_measure(model, standard, "#{output_folder}/#{name}/sizing")
@@ -712,12 +718,11 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
               standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             end
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(
-                model,
-                model.getThermalZones,
-                boiler_fueltype,
-                heating_coil,
-                baseboard_type,
-                hw_loop)
+                model: model,
+                zones: model.getThermalZones,
+                heating_coil_type: heating_coil,
+                baseboard_type: baseboard_type,
+                hw_loop: hw_loop)
             #Save the model after btap hvac.
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
             result = run_the_measure(model, standard, "#{output_folder}/#{name}/sizing")
@@ -844,14 +849,12 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
             BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
-            standard.add_sys2_FPFC_sys5_TPFC(
-                model,
-                model.getThermalZones,
-                boiler_fueltype,
-                chiller_type,
-                'TPFC',
-                mua_cooling_type,
-                hw_loop)
+            standard.add_sys2_FPFC_sys5_TPFC( model: model,
+                                              zones: model.getThermalZones,
+                                              chiller_type: chiller_type,
+                                              fan_coil_type: 'TPFC',
+                                              mau_cooling_type: mua_cooling_type,
+                                              hw_loop: hw_loop)
             #Save the model after btap hvac.
             BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
             result = run_the_measure(model, standard, "#{output_folder}/#{name}/sizing")
@@ -990,14 +993,13 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
                   standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
                 end
                 standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
-                    model,
-                    model.getThermalZones,
-                    boiler_fueltype,
-                    heating_coil_type,
-                    baseboard_type,
-                    chiller_type,
-                    fan_type,
-                    hw_loop)
+                    model: model,
+                    zones: model.getThermalZones,
+                    heating_coil_type: heating_coil_type,
+                    baseboard_type: baseboard_type,
+                    chiller_type: chiller_type,
+                    fan_type: fan_type,
+                    hw_loop: hw_loop)
                 #Save the model after btap hvac.
                 BTAP::FileIO::save_osm(model, "#{output_folder}/#{name}.hvacrb")
                 result = run_the_measure( model, standard,"#{output_folder}/#{name}/sizing")
