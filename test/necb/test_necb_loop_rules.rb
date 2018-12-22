@@ -31,15 +31,13 @@ class NECB_HVAC_Tests < MiniTest::Test
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type, 
-      chiller_type, 
-      fan_type,
-      hw_loop)
+    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                        zones: model.getThermalZones,
+                                                                        heating_coil_type: heating_coil_type,
+                                                                        baseboard_type: baseboard_type,
+                                                                        chiller_type: chiller_type,
+                                                                        fan_type: fan_type,
+                                                                        hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -103,14 +101,12 @@ class NECB_HVAC_Tests < MiniTest::Test
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      chiller_type,
-      "FPFC",
-      mua_cooling_type,
-      hw_loop)
+    standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                     zones: model.getThermalZones,
+                                     chiller_type: chiller_type,
+                                     fan_coil_type: 'FPFC',
+                                     mau_cooling_type: mua_cooling_type,
+                                     hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -177,14 +173,12 @@ class NECB_HVAC_Tests < MiniTest::Test
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      chiller_type,
-      "FPFC",
-      mua_cooling_type,
-      hw_loop)
+    standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                     zones: model.getThermalZones,
+                                     chiller_type: chiller_type,
+                                     fan_coil_type: 'FPFC',
+                                     mau_cooling_type: mua_cooling_type,
+                                     hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards

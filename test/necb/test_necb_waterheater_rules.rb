@@ -55,13 +55,11 @@ class NECB_SHW_Tests < MiniTest::Test
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                zones: model.getThermalZones,
+                                                                                                heating_coil_type: heating_coil_type,
+                                                                                                baseboard_type: baseboard_type,
+                                                                                                hw_loop: hw_loop)
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
     # Save the model
@@ -132,13 +130,11 @@ class NECB_SHW_Tests < MiniTest::Test
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-          model, 
-          model.getThermalZones, 
-          boiler_fueltype, 
-          heating_coil_type, 
-          baseboard_type,
-          hw_loop)
+        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                    zones: model.getThermalZones,
+                                                                                                    heating_coil_type: heating_coil_type,
+                                                                                                    baseboard_type: baseboard_type,
+                                                                                                    hw_loop: hw_loop)
         # set volume and capacity of water tank
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
