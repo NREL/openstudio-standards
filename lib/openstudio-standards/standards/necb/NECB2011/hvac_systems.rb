@@ -1502,8 +1502,7 @@ class NECB2011
       # add zone baseboards
       if baseboard_type == 'Electric'
 
-        #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
         zone_elec_baseboard.addToThermalZone(zone)
 
       end
@@ -1729,8 +1728,7 @@ class NECB2011
       # add zone baseboards
       if baseboard_type == 'Electric'
 
-        #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
         zone_elec_baseboard.addToThermalZone(zone)
 
       end
@@ -2072,7 +2070,7 @@ class NECB2011
       if baseboard_type == 'Electric'
 
         #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
         zone_elec_baseboard.addToThermalZone(zone)
 
       end
@@ -2251,7 +2249,7 @@ class NECB2011
       if baseboard_type == 'Electric'
 
         #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
         zone_elec_baseboard.addToThermalZone(zone)
 
       end
@@ -2395,7 +2393,7 @@ class NECB2011
       if baseboard_type == 'Electric'
 
         #  zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
-        zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+        zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
         zone_elec_baseboard.addToThermalZone(zone)
 
       end
@@ -2539,7 +2537,7 @@ class NECB2011
 
           # Set zone baseboards
           if baseboard_type == 'Electric'
-            zone_elec_baseboard = BTAP::Resources::HVAC::Plant.add_elec_baseboard(model)
+            zone_elec_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
             zone_elec_baseboard.addToThermalZone(zone)
           end
           if baseboard_type == 'Hot Water'

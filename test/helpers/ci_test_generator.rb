@@ -1725,7 +1725,6 @@ end
     generate_hvac_sys4_files(verbose)
     # generate_hvac_sys5_files() # known failure
     generate_hvac_sys6_files(verbose)
-    generate_hvac_sys7_files(verbose)
 
     # generate ODE building tests
     generate_doe_building_test_files(verbose)
