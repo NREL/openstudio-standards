@@ -1430,7 +1430,7 @@ class NECB2011
 
       # Set up DX coil with default curves (set to NECB);
 
-      mau_clg_coil = BTAP::Resources::HVAC::Plant.add_onespeed_DX_coil(model, always_on)
+      mau_clg_coil = self.add_onespeed_DX_coil(model, always_on)
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -1485,7 +1485,7 @@ class NECB2011
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
 
       # Set up PTAC DX coil with NECB performance curve characteristics;
-      clg_coil = BTAP::Resources::HVAC::Plant.add_onespeed_DX_coil(model, always_on)
+      clg_coil = self.add_onespeed_DX_coil(model, always_on)
 
       # Set up PTAC constant volume supply fan
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
@@ -1508,7 +1508,7 @@ class NECB2011
       end
 
       if baseboard_type == 'Hot Water'
-        baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
@@ -1711,7 +1711,7 @@ class NECB2011
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_off)
 
       # Set up PTAC DX coil with NECB performance curve characteristics;
-      clg_coil = BTAP::Resources::HVAC::Plant.add_onespeed_DX_coil(model, always_on)
+      clg_coil = self.add_onespeed_DX_coil(model, always_on)
 
       # Set up PTAC constant volume supply fan
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
@@ -1734,7 +1734,7 @@ class NECB2011
       end
 
       if baseboard_type == 'Hot Water'
-        baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
@@ -1827,12 +1827,12 @@ class NECB2011
     # Create a chilled water loop
 
     chw_loop = OpenStudio::Model::PlantLoop.new(model)
-    chiller1, chiller2 = BTAP::Resources::HVAC::HVACTemplates::NECB2011.setup_chw_loop_with_components(model, chw_loop, chiller_type)
+    chiller1, chiller2 = self.setup_chw_loop_with_components(model, chw_loop, chiller_type)
 
     # Create a condenser Loop
 
     cw_loop = OpenStudio::Model::PlantLoop.new(model)
-    ctower = BTAP::Resources::HVAC::HVACTemplates::NECB2011.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
+    ctower = self.setup_cw_loop_with_components(model, cw_loop, chiller1, chiller2)
 
     # Set up make-up air unit for ventilation
     # TO DO: Need to investigate characteristics of make-up air unit for NECB reference
@@ -1877,7 +1877,7 @@ class NECB2011
 
     # Add DX or hydronic cooling coil
     if mua_cooling_type == 'DX'
-      clg_coil = BTAP::Resources::HVAC::Plant.add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
+      clg_coil = self.add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
     elsif mua_cooling_type == 'Hydronic'
       clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, tpfc_clg_availability_sch)
       chw_loop.addDemandBranchForComponent(clg_coil)
@@ -2076,7 +2076,7 @@ class NECB2011
       end
 
       if baseboard_type == 'Hot Water'
-        baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
@@ -2255,7 +2255,7 @@ class NECB2011
       end
 
       if baseboard_type == 'Hot Water'
-        baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
@@ -2344,7 +2344,7 @@ class NECB2011
 
       # Set up DX coil with NECB performance curve characteristics;
 
-      clg_coil = BTAP::Resources::HVAC::Plant.add_onespeed_DX_coil(model, always_on)
+      clg_coil = self.add_onespeed_DX_coil(model, always_on)
 
       # oa_controller
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
@@ -2399,7 +2399,7 @@ class NECB2011
       end
 
       if baseboard_type == 'Hot Water'
-        baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+        baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
         # Connect baseboard coil to hot water loop
         hw_loop.addDemandBranchForComponent(baseboard_coil)
 
@@ -2541,7 +2541,7 @@ class NECB2011
             zone_elec_baseboard.addToThermalZone(zone)
           end
           if baseboard_type == 'Hot Water'
-            baseboard_coil = BTAP::Resources::HVAC::Plant.add_hw_baseboard_coil(model)
+            baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
             # Connect baseboard coil to hot water loop
             hw_loop.addDemandBranchForComponent(baseboard_coil)
             zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
@@ -3268,5 +3268,67 @@ class NECB2011
     return stories
   end
 
+  #Create a new DX cooling coil with NECB curve characteristics
+  def add_onespeed_DX_coil(model,always_on)
 
+    #clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    clg_cap_f_of_temp.setCoefficient1Constant(0.867905)
+    clg_cap_f_of_temp.setCoefficient2x(0.0142459)
+    clg_cap_f_of_temp.setCoefficient3xPOW2(0.000554364)
+    clg_cap_f_of_temp.setCoefficient4y(-0.00755748)
+    clg_cap_f_of_temp.setCoefficient5yPOW2(3.3048e-05)
+    clg_cap_f_of_temp.setCoefficient6xTIMESY(-0.000191808)
+    clg_cap_f_of_temp.setMinimumValueofx(13.0)
+    clg_cap_f_of_temp.setMaximumValueofx(24.0)
+    clg_cap_f_of_temp.setMinimumValueofy(24.0)
+    clg_cap_f_of_temp.setMaximumValueofy(46.0)
+
+    #clg_cap_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    clg_cap_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    clg_cap_f_of_flow.setCoefficient1Constant(1.0)
+    clg_cap_f_of_flow.setCoefficient2x(0.0)
+    clg_cap_f_of_flow.setCoefficient3xPOW2(0.0)
+    clg_cap_f_of_flow.setMinimumValueofx(0.0)
+    clg_cap_f_of_flow.setMaximumValueofx(1.0)
+
+    #clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.116936)
+    clg_energy_input_ratio_f_of_temp.setCoefficient2x(0.0284933)
+    clg_energy_input_ratio_f_of_temp.setCoefficient3xPOW2(-0.000411156)
+    clg_energy_input_ratio_f_of_temp.setCoefficient4y(0.0214108)
+    clg_energy_input_ratio_f_of_temp.setCoefficient5yPOW2(0.000161028)
+    clg_energy_input_ratio_f_of_temp.setCoefficient6xTIMESY(-0.000679104)
+    clg_energy_input_ratio_f_of_temp.setMinimumValueofx(13.0)
+    clg_energy_input_ratio_f_of_temp.setMaximumValueofx(24.0)
+    clg_energy_input_ratio_f_of_temp.setMinimumValueofy(24.0)
+    clg_energy_input_ratio_f_of_temp.setMaximumValueofy(46.0)
+
+    #clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    clg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.0)
+    clg_energy_input_ratio_f_of_flow.setCoefficient2x(0.0)
+    clg_energy_input_ratio_f_of_flow.setCoefficient3xPOW2(0.0)
+    clg_energy_input_ratio_f_of_flow.setMinimumValueofx(0.0)
+    clg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
+
+    # NECB curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)
+    clg_part_load_ratio = OpenStudio::Model::CurveCubic.new(model)
+    clg_part_load_ratio.setCoefficient1Constant(0.0277)
+    clg_part_load_ratio.setCoefficient2x(4.9151)
+    clg_part_load_ratio.setCoefficient3xPOW2(-8.184)
+    clg_part_load_ratio.setCoefficient4xPOW3(4.2702)
+    clg_part_load_ratio.setMinimumValueofx(0.7)
+    clg_part_load_ratio.setMaximumValueofx(1.0)
+
+
+    return OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model,
+                                                           always_on,
+                                                           clg_cap_f_of_temp,
+                                                           clg_cap_f_of_flow,
+                                                           clg_energy_input_ratio_f_of_temp,
+                                                           clg_energy_input_ratio_f_of_flow,
+                                                           clg_part_load_ratio);
+  end
 end
