@@ -35,6 +35,7 @@ class NECB2015PumpPowerTest < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     template = 'NECB2015'
+    standard = Standard.build(template)
     clgtowerFanPowerFr = 0.013
     chiller_types.each do |chiller_type|
       name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
@@ -43,16 +44,15 @@ class NECB2015PumpPowerTest < MiniTest::Test
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule	
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys6(
-        model,
-        model.getThermalZones,
-        boiler_fueltype,
-        heating_coil_type,
-        baseboard_type,
-        chiller_type,
-        fan_type,
-        hw_loop)
+      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
+          model: model,
+          zones: model.getThermalZones,
+          heating_coil_type: heating_coil_type,
+          baseboard_type: baseboard_type,
+          chiller_type: chiller_type,
+          fan_type: fan_type,
+          hw_loop: hw_loop)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }

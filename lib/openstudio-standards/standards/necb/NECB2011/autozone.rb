@@ -280,19 +280,46 @@ class NECB2011
         when 0, nil
           # Do nothing no system assigned to zone. Used for Unconditioned spaces
         when 1
-          add_sys1_unitary_ac_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['mau_type'], system_fuel_defaults['mau_heating_coil_type'], system_fuel_defaults['baseboard_type'], hw_loop)
-        when 2
-          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+          add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                zones: zones,
+                                                mau_type: system_fuel_defaults['mau_type'],
+                                                mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
+                                                baseboard_type: system_fuel_defaults['baseboard_type'],
+                                                hw_loop: hw_loop)
+        when 2, 7
+          add_sys2_FPFC_sys5_TPFC(model: model,
+                                  zones: zones,
+                                  chiller_type: system_fuel_defaults['chiller_type'],
+                                  fan_coil_type: 'FPFC',
+                                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                                  hw_loop: hw_loop)
         when 3
-          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys3'], system_fuel_defaults['baseboard_type'], hw_loop)
+          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                             zones: zones,
+                                                                                             heating_coil_type: system_fuel_defaults['heating_coil_type_sys3'],
+                                                                                             baseboard_type: system_fuel_defaults['baseboard_type'],
+                                                                                             hw_loop: hw_loop)
         when 4
-          add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys4'], system_fuel_defaults['baseboard_type'], hw_loop)
+          add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                       zones: zones,
+                                                                       heating_coil_type: system_fuel_defaults['heating_coil_type_sys4'],
+                                                                       baseboard_type: system_fuel_defaults['baseboard_type'],
+                                                                       hw_loop: hw_loop)
         when 5
-          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'TPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+          add_sys2_FPFC_sys5_TPFC(model: model,
+                                  zones: zones,
+                                  chiller_type: system_fuel_defaults['chiller_type'],
+                                  fan_coil_type: 'TPFC',
+                                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                                  hw_loop: hw_loop)
         when 6
-          add_sys6_multi_zone_built_up_system_with_baseboard_heating(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['heating_coil_type_sys6'], system_fuel_defaults['baseboard_type'], system_fuel_defaults['chiller_type'], system_fuel_defaults['fan_type'], hw_loop)
-        when 7
-          add_sys2_FPFC_sys5_TPFC(model, zones, system_fuel_defaults['boiler_fueltype'], system_fuel_defaults['chiller_type'], 'FPFC', system_fuel_defaults['mau_cooling_type'], hw_loop)
+          add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                     zones: zones,
+                                                                     heating_coil_type: system_fuel_defaults['heating_coil_type_sys6'],
+                                                                     baseboard_type: system_fuel_defaults['baseboard_type'],
+                                                                     chiller_type: system_fuel_defaults['chiller_type'],
+                                                                     fan_type: system_fuel_defaults['fan_type'],
+                                                                     hw_loop: hw_loop)
         end
       end
     end

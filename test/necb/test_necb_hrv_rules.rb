@@ -29,13 +29,11 @@ class NECB_HVAC_Tests < MiniTest::Test
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                zones: model.getThermalZones,
+                                                                                                heating_coil_type: heating_coil_type,
+                                                                                                baseboard_type: baseboard_type,
+                                                                                                hw_loop: hw_loop)
     systems = model.getAirLoopHVACs
     # increase default outdoor air requirement so that some of the systems in the project would require an HRV
     for isys in 0..0

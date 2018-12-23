@@ -18,13 +18,13 @@ class NECB_HVAC_Tests < MiniTest::Test
     # Generate the osm files for all relevant cases to generate the test data for system 3
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
-    unitary_heating_types = ['Electric Resistance','All Other']
+    unitary_heating_types = ['Electric Resistance', 'All Other']
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    templates = ['NECB2011','NECB2015'] #list of templates
-    num_cap_intv = {'NECB2011' => 4,'NECB2015' => 5}
+    templates = ['NECB2011', 'NECB2015'] #list of templates
+    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5}
     templates.each do |template|
       unitary_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       standard = Standard.build(template)
@@ -55,11 +55,13 @@ class NECB_HVAC_Tests < MiniTest::Test
       # the relevant equipment capacity ranges
       heating_type_cap = {}
       heating_type_min_cap.each do |heating_type, cap|
-        unless heating_type_cap.key? heating_type then heating_type_cap[heating_type] = [] end
-        for i in 0..num_cap_intv[template]-2
-          heating_type_cap[heating_type] << 0.5 * (OpenStudio.convert(heating_type_min_cap[heating_type][i].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(heating_type_min_cap[heating_type][i+1].to_f, 'Btu/h', 'W').to_f)
+        unless heating_type_cap.key? heating_type then
+          heating_type_cap[heating_type] = []
         end
-        heating_type_cap[heating_type] << (heating_type_min_cap[heating_type][num_cap_intv[template]-1].to_f + 10000.0)
+        for i in 0..num_cap_intv[template] - 2
+          heating_type_cap[heating_type] << 0.5 * (OpenStudio.convert(heating_type_min_cap[heating_type][i].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(heating_type_min_cap[heating_type][i + 1].to_f, 'Btu/h', 'W').to_f)
+        end
+        heating_type_cap[heating_type] << (heating_type_min_cap[heating_type][num_cap_intv[template] - 1].to_f + 10000.0)
       end
 
       actual_unitary_cop = {}
@@ -78,14 +80,12 @@ class NECB_HVAC_Tests < MiniTest::Test
           BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-          standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-              model,
-              model.getThermalZones, 
-              boiler_fueltype, 
-              heating_coil_type, 
-              baseboard_type,
-              hw_loop)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                      zones: model.getThermalZones,
+                                                                                                      heating_coil_type: heating_coil_type,
+                                                                                                      baseboard_type: baseboard_type,
+                                                                                                      hw_loop: hw_loop)
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
           model.getCoilCoolingDXSingleSpeeds.each do |dxcoil|
@@ -114,24 +114,24 @@ class NECB_HVAC_Tests < MiniTest::Test
             actual_unitary_eff[heating_type][int] = (standard.cop_to_seer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
             output_line_text += "#{actual_unitary_eff[heating_type][int]},\n"
           elsif efficiency_type[heating_type][int] == 'Energy Efficiency Ratio (EER)'
-            actual_unitary_eff[heating_type][int] = (standard.cop_to_eer(actual_unitary_cop[heating_type][int].to_f,heating_type_cap[heating_type][int]) + 0.001).round(2)
+            actual_unitary_eff[heating_type][int] = (standard.cop_to_eer(actual_unitary_cop[heating_type][int].to_f, heating_type_cap[heating_type][int]) + 0.001).round(2)
             output_line_text += ",#{actual_unitary_eff[heating_type][int]}\n"
           end
         end
         unitary_res_file_output_text += output_line_text
       end
-    
+
       # Write actual results file
       test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_test_results.csv")
-      File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
+      File.open(test_result_file, 'w') {|f| f.write(unitary_res_file_output_text.chomp)}
       # Test that the values are correct by doing a file compare.
       expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       b_result = FileUtils.compare_file(expected_result_file, test_result_file)
       assert(b_result,
-         "test_unitary_efficiency: Unitary efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+             "test_unitary_efficiency: Unitary efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
     end
   end
- 
+
   # Test to validate the unitary performance curves
   def test_NECB2011_unitary_curves
     output_folder = "#{File.dirname(__FILE__)}/output/unitary_curves"
@@ -159,15 +159,13 @@ class NECB_HVAC_Tests < MiniTest::Test
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(
-          model, 
-          model.getThermalZones, 
-          boiler_fueltype, 
-          chiller_type,
-          "FPFC",
-          mua_cooling_type,
-          hw_loop)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                     zones: model.getThermalZones,
+                                     chiller_type: chiller_type,
+                                     fan_coil_type: 'FPFC',
+                                     mau_cooling_type: mua_cooling_type,
+                                     hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -179,37 +177,37 @@ class NECB_HVAC_Tests < MiniTest::Test
     unitary_cap_ft_curve = dx_units[0].totalCoolingCapacityFunctionOfTemperatureCurve.to_CurveBiquadratic.get
     unitary_res_file_output_text +=
         "#{unitary_curve_names[0]},biquadratic,#{'%.5E' % unitary_cap_ft_curve.coefficient1Constant},#{'%.5E' % unitary_cap_ft_curve.coefficient2x}," +
-        "#{'%.5E' % unitary_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_ft_curve.coefficient4y},#{'%.5E' % unitary_cap_ft_curve.coefficient5yPOW2}," +
-        "#{'%.5E' % unitary_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_cap_ft_curve.minimumValueofx},#{'%.5E' % unitary_cap_ft_curve.maximumValueofx}," +
-        "#{'%.5E' % unitary_cap_ft_curve.minimumValueofy},#{'%.5E' % unitary_cap_ft_curve.maximumValueofy}\n"
+            "#{'%.5E' % unitary_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_ft_curve.coefficient4y},#{'%.5E' % unitary_cap_ft_curve.coefficient5yPOW2}," +
+            "#{'%.5E' % unitary_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_cap_ft_curve.minimumValueofx},#{'%.5E' % unitary_cap_ft_curve.maximumValueofx}," +
+            "#{'%.5E' % unitary_cap_ft_curve.minimumValueofy},#{'%.5E' % unitary_cap_ft_curve.maximumValueofy}\n"
     unitary_eir_ft_curve = dx_units[0].energyInputRatioFunctionOfTemperatureCurve.to_CurveBiquadratic.get
     unitary_res_file_output_text +=
         "#{unitary_curve_names[1]},biquadratic,#{'%.5E' % unitary_eir_ft_curve.coefficient1Constant},#{'%.5E' % unitary_eir_ft_curve.coefficient2x}," +
-        "#{'%.5E' % unitary_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_ft_curve.coefficient4y},#{'%.5E' % unitary_eir_ft_curve.coefficient5yPOW2}," +
-        "#{'%.5E' % unitary_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_eir_ft_curve.minimumValueofx},#{'%.5E' % unitary_eir_ft_curve.maximumValueofx}," +
-        "#{'%.5E' % unitary_eir_ft_curve.minimumValueofy},#{'%.5E' % unitary_eir_ft_curve.maximumValueofy}\n"
+            "#{'%.5E' % unitary_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_ft_curve.coefficient4y},#{'%.5E' % unitary_eir_ft_curve.coefficient5yPOW2}," +
+            "#{'%.5E' % unitary_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_eir_ft_curve.minimumValueofx},#{'%.5E' % unitary_eir_ft_curve.maximumValueofx}," +
+            "#{'%.5E' % unitary_eir_ft_curve.minimumValueofy},#{'%.5E' % unitary_eir_ft_curve.maximumValueofy}\n"
     unitary_cap_flow_curve = dx_units[0].totalCoolingCapacityFunctionOfFlowFractionCurve.to_CurveQuadratic.get
     unitary_res_file_output_text +=
         "#{unitary_curve_names[2]},quadratic,#{'%.5E' % unitary_cap_flow_curve.coefficient1Constant},#{'%.5E' % unitary_cap_flow_curve.coefficient2x}," +
-        "#{'%.5E' % unitary_cap_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_flow_curve.minimumValueofx},#{'%.5E' % unitary_cap_flow_curve.maximumValueofx}\n"
+            "#{'%.5E' % unitary_cap_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_flow_curve.minimumValueofx},#{'%.5E' % unitary_cap_flow_curve.maximumValueofx}\n"
     unitary_eir_flow_curve = dx_units[0].energyInputRatioFunctionOfFlowFractionCurve.to_CurveQuadratic.get
     unitary_res_file_output_text +=
         "#{unitary_curve_names[3]},quadratic,#{'%.5E' % unitary_eir_flow_curve.coefficient1Constant},#{'%.5E' % unitary_eir_flow_curve.coefficient2x}," +
-        "#{'%.5E' % unitary_eir_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_flow_curve.minimumValueofx},#{'%.5E' % unitary_eir_flow_curve.maximumValueofx}\n"
+            "#{'%.5E' % unitary_eir_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_flow_curve.minimumValueofx},#{'%.5E' % unitary_eir_flow_curve.maximumValueofx}\n"
     unitary_plfvsplr__curve = dx_units[0].partLoadFractionCorrelationCurve.to_CurveCubic.get
     unitary_res_file_output_text +=
         "#{unitary_curve_names[4]},cubic,#{'%.5E' % unitary_plfvsplr__curve.coefficient1Constant},#{'%.5E' % unitary_plfvsplr__curve.coefficient2x}," +
-        "#{'%.5E' % unitary_plfvsplr__curve.coefficient3xPOW2},#{'%.5E' % unitary_plfvsplr__curve.coefficient4xPOW3}," + 
-        "#{'%.5E' % unitary_plfvsplr__curve.minimumValueofx},#{'%.5E' % unitary_plfvsplr__curve.maximumValueofx}\n"
+            "#{'%.5E' % unitary_plfvsplr__curve.coefficient3xPOW2},#{'%.5E' % unitary_plfvsplr__curve.coefficient4xPOW3}," +
+            "#{'%.5E' % unitary_plfvsplr__curve.minimumValueofx},#{'%.5E' % unitary_plfvsplr__curve.maximumValueofx}\n"
 
     # Write actual results file
     test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_curves_test_results.csv")
-    File.open(test_result_file, 'w') { |f| f.write(unitary_res_file_output_text.chomp) }
+    File.open(test_result_file, 'w') {|f| f.write(unitary_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
-    "Unitary performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+           "Unitary performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
   end
 
   def run_the_measure(model, template, sizing_dir)
@@ -219,7 +217,7 @@ class NECB_HVAC_Tests < MiniTest::Test
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)
-      
+
       # Make a directory to run the sizing run in
       unless Dir.exist? sizing_dir
         FileUtils.mkdir_p(sizing_dir)
