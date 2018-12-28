@@ -24,23 +24,24 @@ class NECB2011
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
     # "fan_type": "AF_or_BI_rdg_fancurve";"AF_or_BI_inletvanes";"fc_inletvanes";"var_speed_drive"
     #
-    system_6_data = Hash.new
-    system_6_data[:name] = 'Sys_6_VAV with Reheat'
-    system_6_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-    system_6_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
-    system_6_data[:AllOutdoorAirinCooling] = false
-    system_6_data[:AllOutdoorAirinHeating] = false
-    system_6_data[:MinimumSystemAirFlowRatio] = 0.3
+    system_data = Hash.new
+    system_data[:name] = 'Sys_6_VAV with Reheat'
+    system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
+    system_data[:AllOutdoorAirinCooling] = false
+    system_data[:AllOutdoorAirinHeating] = false
+    system_data[:MinimumSystemAirFlowRatio] = 0.3
+
+    
     #zone data
-    system_6_data[:system_supply_air_temperature] = 13.0
-    system_6_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_6_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
-    system_6_data[:ZoneCoolingSizingFactor] = 1.1
-    system_6_data[:ZoneHeatingSizingFactor] = 1.3
-    system_6_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002
-    system_6_data[:ZoneVAVMaxReheatTemp] = 43.0
-    system_6_data[:ZoneVAVDamperAction] = 'Normal'
-    system_data = system_6_data
+    system_data[:system_supply_air_temperature] = 13.0
+    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingSizingFactor] = 1.1
+    system_data[:ZoneHeatingSizingFactor] = 1.3
+    system_data[:ZoneVAVMinFlowFactorPerFloorArea] = 0.002
+    system_data[:ZoneVAVMaxReheatTemp] = 43.0
+    system_data[:ZoneVAVDamperAction] = 'Normal'
 
     always_on = model.alwaysOnDiscreteSchedule
 
@@ -58,15 +59,8 @@ class NECB2011
     model.getBuildingStorys.sort.each do |story|
       unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
 
-        air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+        air_loop = common_air_loop( model: model, system_data: system_data)
         air_loop.setName('Sys_6_VAV with Reheat')
-        sizing_system = air_loop.sizingSystem
-        sizing_system.autosizeDesignOutdoorAirFlowRate
-        sizing_system.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature] )
-        sizing_system.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature] )
-        sizing_system.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
-        sizing_system.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
-        sizing_system.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
 
         supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
         supply_fan.setName('Sys6 Supply Fan')
