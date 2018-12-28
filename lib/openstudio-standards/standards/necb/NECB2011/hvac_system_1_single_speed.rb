@@ -63,8 +63,6 @@ class NECB2011
 
     if mau_type == true
       mau_air_loop = common_air_loop(model: model, system_data: system_data)
-
-      air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio] )
       mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
       #MAU Heating type selection.
       if mau_heating_coil_type == 'Electric' # electric coil
