@@ -1358,12 +1358,6 @@ class NECB2011
     return "NECB-CNEB ClimatZone 4-8"
   end
 
-
-
-
-
-
-
   def setup_hw_loop_with_components(model,
                                     hw_loop,
                                     boiler_fueltype,
