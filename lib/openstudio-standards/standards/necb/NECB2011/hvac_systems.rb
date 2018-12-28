@@ -1678,6 +1678,7 @@ class NECB2011
   def add_onespeed_DX_coil(model, always_on)
 
     #clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    # model_add_curve("DXCOOL-NECB2011-REF-CAPFT")
     clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_cap_f_of_temp.setCoefficient1Constant(0.867905)
     clg_cap_f_of_temp.setCoefficient2x(0.0142459)
@@ -1698,6 +1699,7 @@ class NECB2011
     clg_cap_f_of_flow.setMinimumValueofx(0.0)
     clg_cap_f_of_flow.setMaximumValueofx(1.0)
 
+    # "DXCOOL-NECB2011-REF-COOLEIRFT"
     #clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.116936)
@@ -1712,6 +1714,7 @@ class NECB2011
     clg_energy_input_ratio_f_of_temp.setMaximumValueofy(46.0)
 
     #clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    # DXCOOL-NECB2011-REF-CAPFFLOW
     clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     clg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.0)
     clg_energy_input_ratio_f_of_flow.setCoefficient2x(0.0)
@@ -1720,6 +1723,7 @@ class NECB2011
     clg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
 
     # NECB curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)
+    # DXCOOL-NECB2011-REF-COOLPLFFPLR
     clg_part_load_ratio = OpenStudio::Model::CurveCubic.new(model)
     clg_part_load_ratio.setCoefficient1Constant(0.0277)
     clg_part_load_ratio.setCoefficient2x(4.9151)
