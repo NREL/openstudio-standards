@@ -1,1232 +1,1112 @@
 {
   "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_electric.rb": {
-    "start": 1541704553,
-    "end": 1541704575,
-    "total": 22
+    "start": 1545456489,
+    "end": 1545456506,
+    "total": 17
   },
   "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_gas.rb": {
-    "start": 1541704614,
-    "end": 1541704635,
-    "total": 21
-  },
-  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_electric.rb": {
-    "start": 1541703877,
-    "end": 1541703913,
-    "total": 36
-  },
-  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_gas.rb": {
-    "start": 1541703806,
-    "end": 1541703840,
-    "total": 34
-  },
-  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_electric.rb": {
-    "start": 1541704267,
-    "end": 1541704298,
-    "total": 31
-  },
-  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_gas.rb": {
-    "start": 1541704506,
-    "end": 1541704547,
-    "total": 41
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703885,
-    "total": 140
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_gas.rb": {
-    "start": 1541704032,
-    "end": 1541704190,
-    "total": 158
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_electric.rb": {
-    "start": 1541703745,
-    "end": 1541704075,
-    "total": 330
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_gas.rb": {
-    "start": 1541704181,
-    "end": 1541704575,
-    "total": 394
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_electric.rb": {
-    "start": 1541704304,
-    "end": 1541704634,
-    "total": 330
-  },
-  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_gas.rb": {
-    "start": 1541703894,
-    "end": 1541704279,
-    "total": 385
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2011_electric.rb": {
-    "start": 1541703745,
-    "end": 1541704793,
-    "total": 1048
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2011_gas.rb": {
-    "start": 1541704298,
-    "end": 1541705309,
-    "total": 1011
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2015_electric.rb": {
-    "start": 1541704547,
-    "end": 1541706581,
-    "total": 2034
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2015_gas.rb": {
-    "start": 1541703875,
-    "end": 1541706504,
-    "total": 2629
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2017_electric.rb": {
-    "start": 1541704126,
-    "end": 1541706405,
-    "total": 2279
-  },
-  "ci_test_files/test_necb_bldg_Hospital_NECB2017_gas.rb": {
-    "start": 1541704005,
-    "end": 1541706761,
-    "total": 2756
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_electric.rb": {
-    "start": 1541703989,
-    "end": 1541704158,
-    "total": 169
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_gas.rb": {
-    "start": 1541704442,
-    "end": 1541704621,
-    "total": 179
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_electric.rb": {
-    "start": 1541706761,
-    "end": 1541707059,
-    "total": 298
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_gas.rb": {
-    "start": 1541706761,
-    "end": 1541707103,
-    "total": 342
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_electric.rb": {
-    "start": 1541704294,
-    "end": 1541704639,
-    "total": 345
-  },
-  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_gas.rb": {
-    "start": 1541704310,
-    "end": 1541704687,
-    "total": 377
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_electric.rb": {
-    "start": 1541704309,
-    "end": 1541704349,
-    "total": 40
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_gas.rb": {
-    "start": 1541703745,
-    "end": 1541703801,
-    "total": 56
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_electric.rb": {
-    "start": 1541703787,
-    "end": 1541703873,
-    "total": 86
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_gas.rb": {
-    "start": 1541704351,
-    "end": 1541704462,
-    "total": 111
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703835,
-    "total": 90
-  },
-  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_gas.rb": {
-    "start": 1541703745,
-    "end": 1541703849,
-    "total": 104
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_electric.rb": {
-    "start": 1541704529,
-    "end": 1541704563,
-    "total": 34
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_gas.rb": {
-    "start": 1541704383,
-    "end": 1541704427,
-    "total": 44
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703820,
-    "total": 75
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_gas.rb": {
-    "start": 1541703872,
-    "end": 1541703948,
-    "total": 76
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_electric.rb": {
-    "start": 1541704015,
-    "end": 1541704082,
-    "total": 67
-  },
-  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_gas.rb": {
-    "start": 1541704009,
-    "end": 1541704085,
-    "total": 76
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_electric.rb": {
-    "start": 1541704269,
-    "end": 1541704310,
-    "total": 41
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_gas.rb": {
-    "start": 1541703962,
-    "end": 1541704009,
-    "total": 47
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_electric.rb": {
-    "start": 1541703877,
-    "end": 1541703962,
-    "total": 85
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_gas.rb": {
-    "start": 1541704434,
-    "end": 1541704529,
-    "total": 95
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_electric.rb": {
-    "start": 1541704334,
-    "end": 1541704423,
-    "total": 89
-  },
-  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_gas.rb": {
-    "start": 1541703745,
-    "end": 1541703842,
-    "total": 97
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2011_electric.rb": {
-    "start": 1541703971,
-    "end": 1541704408,
-    "total": 437
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2011_gas.rb": {
-    "start": 1541703856,
-    "end": 1541704357,
-    "total": 501
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2015_electric.rb": {
-    "start": 1541704225,
-    "end": 1541705100,
-    "total": 875
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2015_gas.rb": {
-    "start": 1541704235,
-    "end": 1541705253,
-    "total": 1018
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_electric.rb": {
-    "start": 1541703870,
-    "end": 1541704811,
-    "total": 941
-  },
-  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_gas.rb": {
-    "start": 1541704349,
-    "end": 1541705415,
-    "total": 1066
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_electric.rb": {
-    "start": 1541704590,
-    "end": 1541704710,
-    "total": 120
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_gas.rb": {
-    "start": 1541704121,
-    "end": 1541704238,
-    "total": 117
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703938,
-    "total": 193
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_gas.rb": {
-    "start": 1541704704,
-    "end": 1541704900,
-    "total": 196
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_electric.rb": {
-    "start": 1541704634,
-    "end": 1541704837,
-    "total": 203
-  },
-  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_gas.rb": {
-    "start": 1541703873,
-    "end": 1541704110,
-    "total": 237
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703767,
-    "total": 22
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_gas.rb": {
-    "start": 1541704146,
-    "end": 1541704168,
-    "total": 22
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_electric.rb": {
-    "start": 1541703745,
-    "end": 1541703788,
-    "total": 43
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_gas.rb": {
-    "start": 1541703745,
-    "end": 1541703788,
-    "total": 43
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_electric.rb": {
-    "start": 1541703948,
-    "end": 1541703987,
-    "total": 39
-  },
-  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_gas.rb": {
-    "start": 1541703885,
-    "end": 1541703923,
-    "total": 38
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_electric.rb": {
-    "start": 1541704119,
-    "end": 1541704144,
-    "total": 25
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_gas.rb": {
-    "start": 1541703913,
-    "end": 1541703942,
-    "total": 29
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_electric.rb": {
-    "start": 1541704051,
-    "end": 1541704097,
-    "total": 46
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_gas.rb": {
-    "start": 1541704686,
-    "end": 1541704735,
-    "total": 49
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_electric.rb": {
-    "start": 1541704081,
-    "end": 1541704130,
-    "total": 49
-  },
-  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_gas.rb": {
-    "start": 1541703873,
-    "end": 1541703926,
-    "total": 53
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_electric.rb": {
-    "start": 1541704231,
-    "end": 1541704273,
-    "total": 42
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_gas.rb": {
-    "start": 1541704051,
-    "end": 1541704095,
-    "total": 44
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_electric.rb": {
-    "start": 1541703857,
-    "end": 1541703924,
-    "total": 67
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_gas.rb": {
-    "start": 1541704172,
-    "end": 1541704246,
-    "total": 74
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_electric.rb": {
-    "start": 1541704519,
-    "end": 1541704591,
-    "total": 72
-  },
-  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_gas.rb": {
-    "start": 1541704166,
-    "end": 1541704239,
-    "total": 73
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_electric.rb": {
-    "start": 1541704333,
-    "end": 1541704634,
-    "total": 301
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_gas.rb": {
-    "start": 1541704611,
-    "end": 1541704902,
-    "total": 291
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_electric.rb": {
-    "start": 1541704710,
-    "end": 1541705138,
-    "total": 428
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_gas.rb": {
-    "start": 1541704398,
-    "end": 1541704903,
-    "total": 505
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_electric.rb": {
-    "start": 1541704264,
-    "end": 1541704786,
-    "total": 522
-  },
-  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_gas.rb": {
-    "start": 1541703849,
-    "end": 1541704398,
-    "total": 549
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_electric.rb": {
-    "start": 1541704621,
-    "end": 1541704774,
-    "total": 153
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_gas.rb": {
-    "start": 1541704149,
-    "end": 1541704310,
-    "total": 161
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_electric.rb": {
-    "start": 1541704304,
-    "end": 1541704614,
-    "total": 310
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_gas.rb": {
-    "start": 1541704083,
-    "end": 1541704473,
-    "total": 390
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_electric.rb": {
-    "start": 1541703745,
-    "end": 1541704081,
-    "total": 336
-  },
-  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_gas.rb": {
-    "start": 1541703745,
-    "end": 1541704121,
-    "total": 376
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_electric.rb": {
-    "start": 1541704305,
-    "end": 1541704329,
-    "total": 24
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_gas.rb": {
-    "start": 1541703844,
-    "end": 1541703870,
-    "total": 26
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_electric.rb": {
-    "start": 1541704453,
-    "end": 1541704495,
-    "total": 42
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_gas.rb": {
-    "start": 1541704462,
-    "end": 1541704506,
-    "total": 44
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_electric.rb": {
-    "start": 1541704450,
-    "end": 1541704498,
-    "total": 48
-  },
-  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_gas.rb": {
-    "start": 1541704596,
-    "end": 1541704644,
-    "total": 48
-  },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2011_electric.rb": {
-    "start": 1541703835,
-    "end": 1541703857,
-    "total": 22
-  },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2011_gas.rb": {
-    "start": 1541704552,
-    "end": 1541704579,
+    "start": 1545456687,
+    "end": 1545456714,
     "total": 27
   },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2015_electric.rb": {
-    "start": 1541704279,
-    "end": 1541704314,
-    "total": 35
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_electric.rb": {
+    "start": 1545455877,
+    "end": 1545455901,
+    "total": 24
   },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2015_gas.rb": {
-    "start": 1541704265,
-    "end": 1541704305,
-    "total": 40
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_gas.rb": {
+    "start": 1545456067,
+    "end": 1545456090,
+    "total": 23
   },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_electric.rb": {
-    "start": 1541703923,
-    "end": 1541703964,
-    "total": 41
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_electric.rb": {
+    "start": 1545455901,
+    "end": 1545455926,
+    "total": 25
   },
-  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_gas.rb": {
-    "start": 1541703909,
-    "end": 1541703952,
-    "total": 43
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-electric.rb": {
-    "start": 1541704078,
-    "end": 1541704119,
-    "total": 41
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-hot_water.rb": {
-    "start": 1541704273,
-    "end": 1541704318,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-electric.rb": {
-    "start": 1541704297,
-    "end": 1541704334,
-    "total": 37
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-hot_water.rb": {
-    "start": 1541704548,
-    "end": 1541704590,
-    "total": 42
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-electric.rb": {
-    "start": 1541704085,
-    "end": 1541704127,
-    "total": 42
-  },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-hot_water.rb": {
-    "start": 1541703942,
-    "end": 1541703989,
+  "ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2017_gas.rb": {
+    "start": 1545456599,
+    "end": 1545456646,
     "total": 47
   },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-electric.rb": {
-    "start": 1541704110,
-    "end": 1541704155,
-    "total": 45
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_electric.rb": {
+    "start": 1545456138,
+    "end": 1545456273,
+    "total": 135
   },
-  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-hot_water.rb": {
-    "start": 1541703796,
-    "end": 1541703844,
-    "total": 48
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2011_gas.rb": {
+    "start": 1545456119,
+    "end": 1545456265,
+    "total": 146
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-electric.rb": {
-    "start": 1541704314,
-    "end": 1541704351,
-    "total": 37
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_electric.rb": {
+    "start": 1545456213,
+    "end": 1545456541,
+    "total": 328
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-hot_water.rb": {
-    "start": 1541703745,
-    "end": 1541703787,
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2015_gas.rb": {
+    "start": 1545456646,
+    "end": 1545457015,
+    "total": 369
+  },
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_electric.rb": {
+    "start": 1545456743,
+    "end": 1545457075,
+    "total": 332
+  },
+  "ci_test_files/test_necb_bldg_HighriseApartment_NECB2017_gas.rb": {
+    "start": 1545455802,
+    "end": 1545456158,
+    "total": 356
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2011_electric.rb": {
+    "start": 1545455784,
+    "end": 1545456743,
+    "total": 959
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2011_gas.rb": {
+    "start": 1545456281,
+    "end": 1545457315,
+    "total": 1034
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2015_electric.rb": {
+    "start": 1545455860,
+    "end": 1545457967,
+    "total": 2107
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2015_gas.rb": {
+    "start": 1545456468,
+    "end": 1545458759,
+    "total": 2291
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2017_electric.rb": {
+    "start": 1545456057,
+    "end": 1545458384,
+    "total": 2327
+  },
+  "ci_test_files/test_necb_bldg_Hospital_NECB2017_gas.rb": {
+    "start": 1545456099,
+    "end": 1545458843,
+    "total": 2744
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_electric.rb": {
+    "start": 1545456265,
+    "end": 1545456430,
+    "total": 165
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2011_gas.rb": {
+    "start": 1545455790,
+    "end": 1545455954,
+    "total": 164
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_electric.rb": {
+    "start": 1545455770,
+    "end": 1545456080,
+    "total": 310
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2015_gas.rb": {
+    "start": 1545455750,
+    "end": 1545456107,
+    "total": 357
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_electric.rb": {
+    "start": 1545456030,
+    "end": 1545456361,
+    "total": 331
+  },
+  "ci_test_files/test_necb_bldg_LargeHotel_NECB2017_gas.rb": {
+    "start": 1545455816,
+    "end": 1545456169,
+    "total": 353
+  },
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_electric.rb": {
+    "start": 1545455966,
+    "end": 1545456008,
     "total": 42
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-electric.rb": {
-    "start": 1541704129,
-    "end": 1541704166,
-    "total": 37
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-hot_water.rb": {
-    "start": 1541704408,
-    "end": 1541704453,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-electric.rb": {
-    "start": 1541703745,
-    "end": 1541703796,
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2011_gas.rb": {
+    "start": 1545456801,
+    "end": 1545456852,
     "total": 51
   },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-hot_water.rb": {
-    "start": 1541703745,
-    "end": 1541703800,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-electric.rb": {
-    "start": 1541703860,
-    "end": 1541703909,
-    "total": 49
-  },
-  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-hot_water.rb": {
-    "start": 1541703970,
-    "end": 1541704021,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-electric.rb": {
-    "start": 1541703981,
-    "end": 1541704021,
-    "total": 40
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-hot_water.rb": {
-    "start": 1541703745,
-    "end": 1541703788,
-    "total": 43
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-electric.rb": {
-    "start": 1541703745,
-    "end": 1541703785,
-    "total": 40
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-hot_water.rb": {
-    "start": 1541704172,
-    "end": 1541704209,
-    "total": 37
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-electric.rb": {
-    "start": 1541703835,
-    "end": 1541703875,
-    "total": 40
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-hot_water.rb": {
-    "start": 1541703870,
-    "end": 1541703918,
-    "total": 48
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-electric.rb": {
-    "start": 1541703878,
-    "end": 1541703924,
-    "total": 46
-  },
-  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-hot_water.rb": {
-    "start": 1541704009,
-    "end": 1541704055,
-    "total": 46
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-dx.rb": {
-    "start": 1541704031,
-    "end": 1541704110,
-    "total": 79
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-hydronic.rb": {
-    "start": 1541704130,
-    "end": 1541704201,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-dx.rb": {
-    "start": 1541704310,
-    "end": 1541704383,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-hydronic.rb": {
-    "start": 1541704329,
-    "end": 1541704406,
-    "total": 77
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-dx.rb": {
-    "start": 1541703938,
-    "end": 1541704009,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-hydronic.rb": {
-    "start": 1541704688,
-    "end": 1541704757,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-dx.rb": {
-    "start": 1541703953,
-    "end": 1541704032,
-    "total": 79
-  },
-  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-hydronic.rb": {
-    "start": 1541704066,
-    "end": 1541704146,
-    "total": 80
-  },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-dx.rb": {
-    "start": 1541703869,
-    "end": 1541703944,
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_electric.rb": {
+    "start": 1545456044,
+    "end": 1545456119,
     "total": 75
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-hydronic.rb": {
-    "start": 1541704314,
-    "end": 1541704396,
-    "total": 82
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2015_gas.rb": {
+    "start": 1545456734,
+    "end": 1545456844,
+    "total": 110
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-dx.rb": {
-    "start": 1541703987,
-    "end": 1541704062,
-    "total": 75
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_electric.rb": {
+    "start": 1545456719,
+    "end": 1545456803,
+    "total": 84
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-hydronic.rb": {
-    "start": 1541704226,
-    "end": 1541704304,
-    "total": 78
+  "ci_test_files/test_necb_bldg_LargeOffice_NECB2017_gas.rb": {
+    "start": 1545456117,
+    "end": 1545456212,
+    "total": 95
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-dx.rb": {
-    "start": 1541704318,
-    "end": 1541704398,
-    "total": 80
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_electric.rb": {
+    "start": 1545456018,
+    "end": 1545456046,
+    "total": 28
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-hydronic.rb": {
-    "start": 1541704144,
-    "end": 1541704226,
-    "total": 82
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2011_gas.rb": {
+    "start": 1545456360,
+    "end": 1545456391,
+    "total": 31
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-dx.rb": {
-    "start": 1541704158,
-    "end": 1541704234,
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_electric.rb": {
+    "start": 1545456273,
+    "end": 1545456349,
     "total": 76
   },
-  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-hydronic.rb": {
-    "start": 1541704082,
-    "end": 1541704160,
-    "total": 78
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2015_gas.rb": {
+    "start": 1545456107,
+    "end": 1545456173,
+    "total": 66
   },
-  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-dx.rb": {
-    "start": 1541704062,
-    "end": 1541704129,
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_electric.rb": {
+    "start": 1545456808,
+    "end": 1545456882,
+    "total": 74
+  },
+  "ci_test_files/test_necb_bldg_MediumOffice_NECB2017_gas.rb": {
+    "start": 1545455863,
+    "end": 1545455926,
+    "total": 63
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_electric.rb": {
+    "start": 1545456044,
+    "end": 1545456078,
+    "total": 34
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2011_gas.rb": {
+    "start": 1545455796,
+    "end": 1545455835,
+    "total": 39
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_electric.rb": {
+    "start": 1545456718,
+    "end": 1545456808,
+    "total": 90
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2015_gas.rb": {
+    "start": 1545455779,
+    "end": 1545455863,
+    "total": 84
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_electric.rb": {
+    "start": 1545455956,
+    "end": 1545456029,
+    "total": 73
+  },
+  "ci_test_files/test_necb_bldg_MidriseApartment_NECB2017_gas.rb": {
+    "start": 1545455777,
+    "end": 1545455860,
+    "total": 83
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2011_electric.rb": {
+    "start": 1545456297,
+    "end": 1545456719,
+    "total": 422
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2011_gas.rb": {
+    "start": 1545456706,
+    "end": 1545457153,
+    "total": 447
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2015_electric.rb": {
+    "start": 1545455926,
+    "end": 1545456734,
+    "total": 808
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2015_gas.rb": {
+    "start": 1545455934,
+    "end": 1545456915,
+    "total": 981
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_electric.rb": {
+    "start": 1545456654,
+    "end": 1545457528,
+    "total": 874
+  },
+  "ci_test_files/test_necb_bldg_Outpatient_NECB2017_gas.rb": {
+    "start": 1545456548,
+    "end": 1545457572,
+    "total": 1024
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_electric.rb": {
+    "start": 1545455764,
+    "end": 1545455871,
+    "total": 107
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2011_gas.rb": {
+    "start": 1545455849,
+    "end": 1545455956,
+    "total": 107
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_electric.rb": {
+    "start": 1545456714,
+    "end": 1545456904,
+    "total": 190
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2015_gas.rb": {
+    "start": 1545455750,
+    "end": 1545455948,
+    "total": 198
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_electric.rb": {
+    "start": 1545456475,
+    "end": 1545456682,
+    "total": 207
+  },
+  "ci_test_files/test_necb_bldg_PrimarySchool_NECB2017_gas.rb": {
+    "start": 1545456227,
+    "end": 1545456437,
+    "total": 210
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_electric.rb": {
+    "start": 1545455750,
+    "end": 1545455764,
+    "total": 14
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2011_gas.rb": {
+    "start": 1545455750,
+    "end": 1545455765,
+    "total": 15
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_electric.rb": {
+    "start": 1545455750,
+    "end": 1545455777,
+    "total": 27
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2015_gas.rb": {
+    "start": 1545456857,
+    "end": 1545456882,
+    "total": 25
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_electric.rb": {
+    "start": 1545456760,
+    "end": 1545456801,
+    "total": 41
+  },
+  "ci_test_files/test_necb_bldg_QuickServiceRestaurant_NECB2017_gas.rb": {
+    "start": 1545456521,
+    "end": 1545456551,
+    "total": 30
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_electric.rb": {
+    "start": 1545455750,
+    "end": 1545455770,
+    "total": 20
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2011_gas.rb": {
+    "start": 1545456080,
+    "end": 1545456099,
+    "total": 19
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_electric.rb": {
+    "start": 1545456603,
+    "end": 1545456654,
+    "total": 51
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2015_gas.rb": {
+    "start": 1545455750,
+    "end": 1545455783,
+    "total": 33
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_electric.rb": {
+    "start": 1545456090,
+    "end": 1545456125,
+    "total": 35
+  },
+  "ci_test_files/test_necb_bldg_RetailStandalone_NECB2017_gas.rb": {
+    "start": 1545456008,
+    "end": 1545456044,
+    "total": 36
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_electric.rb": {
+    "start": 1545455976,
+    "end": 1545456008,
+    "total": 32
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2011_gas.rb": {
+    "start": 1545456196,
+    "end": 1545456242,
+    "total": 46
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_electric.rb": {
+    "start": 1545456647,
+    "end": 1545456718,
+    "total": 71
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2015_gas.rb": {
+    "start": 1545455956,
+    "end": 1545456016,
+    "total": 60
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_electric.rb": {
+    "start": 1545456847,
+    "end": 1545456906,
+    "total": 59
+  },
+  "ci_test_files/test_necb_bldg_RetailStripmall_NECB2017_gas.rb": {
+    "start": 1545456568,
+    "end": 1545456647,
+    "total": 79
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_electric.rb": {
+    "start": 1545456008,
+    "end": 1545456274,
+    "total": 266
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2011_gas.rb": {
+    "start": 1545455969,
+    "end": 1545456268,
+    "total": 299
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_electric.rb": {
+    "start": 1545455835,
+    "end": 1545456264,
+    "total": 429
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2015_gas.rb": {
+    "start": 1545456194,
+    "end": 1545456706,
+    "total": 512
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_electric.rb": {
+    "start": 1545456317,
+    "end": 1545456808,
+    "total": 491
+  },
+  "ci_test_files/test_necb_bldg_SecondarySchool_NECB2017_gas.rb": {
+    "start": 1545456494,
+    "end": 1545457028,
+    "total": 534
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_electric.rb": {
+    "start": 1545455796,
+    "end": 1545455934,
+    "total": 138
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2011_gas.rb": {
+    "start": 1545456262,
+    "end": 1545456427,
+    "total": 165
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_electric.rb": {
+    "start": 1545455989,
+    "end": 1545456281,
+    "total": 292
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2015_gas.rb": {
+    "start": 1545456078,
+    "end": 1545456405,
+    "total": 327
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_electric.rb": {
+    "start": 1545456404,
+    "end": 1545456727,
+    "total": 323
+  },
+  "ci_test_files/test_necb_bldg_SmallHotel_NECB2017_gas.rb": {
+    "start": 1545456405,
+    "end": 1545456772,
+    "total": 367
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_electric.rb": {
+    "start": 1545455750,
+    "end": 1545455768,
+    "total": 18
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2011_gas.rb": {
+    "start": 1545456196,
+    "end": 1545456221,
+    "total": 25
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_electric.rb": {
+    "start": 1545456460,
+    "end": 1545456489,
+    "total": 29
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2015_gas.rb": {
+    "start": 1545455850,
+    "end": 1545455885,
+    "total": 35
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_electric.rb": {
+    "start": 1545456268,
+    "end": 1545456320,
+    "total": 52
+  },
+  "ci_test_files/test_necb_bldg_SmallOffice_NECB2017_gas.rb": {
+    "start": 1545455883,
+    "end": 1545455920,
+    "total": 37
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2011_electric.rb": {
+    "start": 1545455969,
+    "end": 1545455985,
+    "total": 16
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2011_gas.rb": {
+    "start": 1545455950,
+    "end": 1545455966,
+    "total": 16
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2015_electric.rb": {
+    "start": 1545456877,
+    "end": 1545456908,
+    "total": 31
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2015_gas.rb": {
+    "start": 1545456844,
+    "end": 1545456874,
+    "total": 30
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_electric.rb": {
+    "start": 1545455790,
+    "end": 1545455819,
+    "total": 29
+  },
+  "ci_test_files/test_necb_bldg_Warehouse_NECB2017_gas.rb": {
+    "start": 1545456125,
+    "end": 1545456153,
+    "total": 28
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-electric.rb": {
+    "start": 1545455750,
+    "end": 1545455780,
+    "total": 30
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-electric-hot_water.rb": {
+    "start": 1545456817,
+    "end": 1545456857,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-electric.rb": {
+    "start": 1545456407,
+    "end": 1545456437,
+    "total": 30
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-false-hot_water-hot_water.rb": {
+    "start": 1545455816,
+    "end": 1545455849,
+    "total": 33
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-electric.rb": {
+    "start": 1545455783,
+    "end": 1545455816,
+    "total": 33
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-electric-hot_water.rb": {
+    "start": 1545455780,
+    "end": 1545455817,
+    "total": 37
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-electric.rb": {
+    "start": 1545455765,
+    "end": 1545455802,
+    "total": 37
+  },
+  "ci_test_files/test_necb_hvac_system_1-electricity-true-hot_water-hot_water.rb": {
+    "start": 1545455935,
+    "end": 1545455973,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-electric.rb": {
+    "start": 1545455902,
+    "end": 1545455935,
+    "total": 33
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-electric-hot_water.rb": {
+    "start": 1545456772,
+    "end": 1545456817,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-electric.rb": {
+    "start": 1545455750,
+    "end": 1545455779,
+    "total": 29
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-false-hot_water-hot_water.rb": {
+    "start": 1545456502,
+    "end": 1545456538,
+    "total": 36
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-electric.rb": {
+    "start": 1545456221,
+    "end": 1545456262,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-electric-hot_water.rb": {
+    "start": 1545456092,
+    "end": 1545456129,
+    "total": 37
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-electric.rb": {
+    "start": 1545455953,
+    "end": 1545455989,
+    "total": 36
+  },
+  "ci_test_files/test_necb_hvac_system_1-fuel_oil2-true-hot_water-hot_water.rb": {
+    "start": 1545455750,
+    "end": 1545455790,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-electric.rb": {
+    "start": 1545455924,
+    "end": 1545455953,
+    "total": 29
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-electric-hot_water.rb": {
+    "start": 1545455954,
+    "end": 1545455991,
+    "total": 37
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-electric.rb": {
+    "start": 1545455948,
+    "end": 1545455976,
+    "total": 28
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-false-hot_water-hot_water.rb": {
+    "start": 1545456158,
+    "end": 1545456194,
+    "total": 36
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-electric.rb": {
+    "start": 1545455750,
+    "end": 1545455784,
+    "total": 34
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-electric-hot_water.rb": {
+    "start": 1545456505,
+    "end": 1545456543,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-electric.rb": {
+    "start": 1545456612,
+    "end": 1545456656,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_1-natural_gas-true-hot_water-hot_water.rb": {
+    "start": 1545456029,
+    "end": 1545456067,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-dx.rb": {
+    "start": 1545456129,
+    "end": 1545456196,
     "total": 67
   },
+  "ci_test_files/test_necb_hvac_system_2_electricity-centrifugal-hydronic.rb": {
+    "start": 1545456682,
+    "end": 1545456760,
+    "total": 78
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-dx.rb": {
+    "start": 1545456704,
+    "end": 1545456776,
+    "total": 72
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-reciprocating-hydronic.rb": {
+    "start": 1545455885,
+    "end": 1545455950,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-dx.rb": {
+    "start": 1545455891,
+    "end": 1545455956,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-rotary_screw-hydronic.rb": {
+    "start": 1545456437,
+    "end": 1545456505,
+    "total": 68
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-dx.rb": {
+    "start": 1545456430,
+    "end": 1545456494,
+    "total": 64
+  },
+  "ci_test_files/test_necb_hvac_system_2_electricity-scroll-hydronic.rb": {
+    "start": 1545456073,
+    "end": 1545456138,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-dx.rb": {
+    "start": 1545455750,
+    "end": 1545455816,
+    "total": 66
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-centrifugal-hydronic.rb": {
+    "start": 1545455956,
+    "end": 1545456021,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-dx.rb": {
+    "start": 1545456391,
+    "end": 1545456456,
+    "total": 65
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-reciprocating-hydronic.rb": {
+    "start": 1545456852,
+    "end": 1545456916,
+    "total": 64
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-dx.rb": {
+    "start": 1545455861,
+    "end": 1545455924,
+    "total": 63
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-rotary_screw-hydronic.rb": {
+    "start": 1545456199,
+    "end": 1545456269,
+    "total": 70
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-dx.rb": {
+    "start": 1545455816,
+    "end": 1545455880,
+    "total": 64
+  },
+  "ci_test_files/test_necb_hvac_system_2_fuel_oil2-scroll-hydronic.rb": {
+    "start": 1545455750,
+    "end": 1545455814,
+    "total": 64
+  },
+  "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-dx.rb": {
+    "start": 1545455750,
+    "end": 1545455815,
+    "total": 65
+  },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-centrifugal-hydronic.rb": {
-    "start": 1541704639,
-    "end": 1541704716,
-    "total": 77
+    "start": 1545455789,
+    "end": 1545455853,
+    "total": 64
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-dx.rb": {
-    "start": 1541704473,
-    "end": 1541704548,
-    "total": 75
+    "start": 1545455819,
+    "end": 1545455883,
+    "total": 64
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-reciprocating-hydronic.rb": {
-    "start": 1541703994,
-    "end": 1541704076,
-    "total": 82
+    "start": 1545455750,
+    "end": 1545455816,
+    "total": 66
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-rotary_screw-dx.rb": {
-    "start": 1541703827,
-    "end": 1541703898,
+    "start": 1545456776,
+    "end": 1545456847,
     "total": 71
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-rotary_screw-hydronic.rb": {
-    "start": 1541704239,
-    "end": 1541704309,
-    "total": 70
+    "start": 1545456325,
+    "end": 1545456392,
+    "total": 67
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-scroll-dx.rb": {
-    "start": 1541703800,
-    "end": 1541703877,
-    "total": 77
+    "start": 1545456541,
+    "end": 1545456612,
+    "total": 71
   },
   "ci_test_files/test_necb_hvac_system_2_natural_gas-scroll-hydronic.rb": {
-    "start": 1541704635,
-    "end": 1541704711,
-    "total": 76
+    "start": 1545456808,
+    "end": 1545456879,
+    "total": 71
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-dx.rb": {
-    "start": 1541703745,
-    "end": 1541703800,
-    "total": 55
+    "start": 1545456392,
+    "end": 1545456431,
+    "total": 39
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-electric.rb": {
-    "start": 1541704398,
-    "end": 1541704442,
-    "total": 44
+    "start": 1545455853,
+    "end": 1545455891,
+    "total": 38
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-electric-gas.rb": {
-    "start": 1541704055,
-    "end": 1541704100,
-    "total": 45
+    "start": 1545456006,
+    "end": 1545456044,
+    "total": 38
   },
   "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-dx.rb": {
-    "start": 1541703825,
-    "end": 1541703878,
-    "total": 53
-  },
-  "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-electric.rb": {
-    "start": 1541704246,
-    "end": 1541704297,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-gas.rb": {
-    "start": 1541703877,
-    "end": 1541703941,
-    "total": 64
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-dx.rb": {
-    "start": 1541703952,
-    "end": 1541704005,
-    "total": 53
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-electric.rb": {
-    "start": 1541704283,
-    "end": 1541704333,
-    "total": 50
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-gas.rb": {
-    "start": 1541703875,
-    "end": 1541703920,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-dx.rb": {
-    "start": 1541703941,
-    "end": 1541703994,
-    "total": 53
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-electric.rb": {
-    "start": 1541704009,
-    "end": 1541704066,
-    "total": 57
-  },
-  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-gas.rb": {
-    "start": 1541704166,
-    "end": 1541704225,
-    "total": 59
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-dx.rb": {
-    "start": 1541704122,
-    "end": 1541704166,
-    "total": 44
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-electric.rb": {
-    "start": 1541704126,
-    "end": 1541704172,
-    "total": 46
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-gas.rb": {
-    "start": 1541703823,
-    "end": 1541703873,
-    "total": 50
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-dx.rb": {
-    "start": 1541703920,
-    "end": 1541703974,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-electric.rb": {
-    "start": 1541704427,
-    "end": 1541704479,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-gas.rb": {
-    "start": 1541703926,
-    "end": 1541703981,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-electric-electric.rb": {
-    "start": 1541703745,
-    "end": 1541703799,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-electric-gas.rb": {
-    "start": 1541704110,
-    "end": 1541704160,
-    "total": 50
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-electric.rb": {
-    "start": 1541703944,
-    "end": 1541703996,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-gas.rb": {
-    "start": 1541704209,
-    "end": 1541704264,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-electric.rb": {
-    "start": 1541704190,
-    "end": 1541704235,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-gas.rb": {
-    "start": 1541704548,
-    "end": 1541704596,
-    "total": 48
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-electric.rb": {
-    "start": 1541704160,
-    "end": 1541704214,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-gas.rb": {
-    "start": 1541703916,
-    "end": 1541703971,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-electric.rb": {
-    "start": 1541704097,
-    "end": 1541704149,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-gas.rb": {
-    "start": 1541704238,
-    "end": 1541704283,
-    "total": 45
-  },
-  "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-electric.rb": {
-    "start": 1541703818,
-    "end": 1541703870,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-gas.rb": {
-    "start": 1541703767,
-    "end": 1541703818,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541703785,
-    "end": 1541703827,
-    "total": 42
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541703964,
-    "end": 1541704015,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541704568,
-    "end": 1541704611,
+    "start": 1545456074,
+    "end": 1545456117,
     "total": 43
   },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1541704075,
-    "end": 1541704122,
-    "total": 47
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541704127,
-    "end": 1541704181,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704563,
-    "end": 1541704618,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541704245,
-    "end": 1541704294,
-    "total": 49
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541703788,
-    "end": 1541703844,
-    "total": 56
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541703745,
-    "end": 1541703804,
-    "total": 59
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704575,
-    "end": 1541704626,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541703804,
-    "end": 1541703856,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1541703842,
-    "end": 1541703894,
-    "total": 52
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541704634,
-    "end": 1541704688,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704168,
-    "end": 1541704231,
-    "total": 63
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541703918,
-    "end": 1541703973,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541704575,
-    "end": 1541704629,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541704635,
-    "end": 1541704681,
+  "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-electric.rb": {
+    "start": 1545455940,
+    "end": 1545455986,
     "total": 46
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704396,
-    "end": 1541704442,
-    "total": 46
+  "ci_test_files/test_necb_hvac_system_3_electricity-hot_water-gas.rb": {
+    "start": 1545456173,
+    "end": 1545456227,
+    "total": 54
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541703788,
-    "end": 1541703835,
-    "total": 47
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-dx.rb": {
+    "start": 1545456773,
+    "end": 1545456827,
+    "total": 54
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1541704406,
-    "end": 1541704450,
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-electric.rb": {
+    "start": 1545456349,
+    "end": 1545456389,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-electric-gas.rb": {
+    "start": 1545456320,
+    "end": 1545456360,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-dx.rb": {
+    "start": 1545456858,
+    "end": 1545456901,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-electric.rb": {
+    "start": 1545455815,
+    "end": 1545455859,
     "total": 44
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541703996,
-    "end": 1541704051,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704021,
-    "end": 1541704078,
-    "total": 57
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541704214,
-    "end": 1541704265,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541703974,
-    "end": 1541704031,
-    "total": 57
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541704160,
-    "end": 1541704214,
-    "total": 54
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704095,
-    "end": 1541704146,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541703820,
-    "end": 1541703877,
-    "total": 57
-  },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1541704199,
-    "end": 1541704245,
+  "ci_test_files/test_necb_hvac_system_3_fuel_oil2-hot_water-gas.rb": {
+    "start": 1545455814,
+    "end": 1545455860,
     "total": 46
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541704021,
-    "end": 1541704071,
-    "total": 50
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-dx.rb": {
+    "start": 1545456431,
+    "end": 1545456473,
+    "total": 42
   },
-  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704214,
-    "end": 1541704269,
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-electric.rb": {
+    "start": 1545455871,
+    "end": 1545455910,
+    "total": 39
+  },
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-electric-gas.rb": {
+    "start": 1545455750,
+    "end": 1545455789,
+    "total": 39
+  },
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-dx.rb": {
+    "start": 1545456361,
+    "end": 1545456404,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-electric.rb": {
+    "start": 1545455768,
+    "end": 1545455812,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_3_natural_gas-hot_water-gas.rb": {
+    "start": 1545456874,
+    "end": 1545456916,
+    "total": 42
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-electric-electric.rb": {
+    "start": 1545455750,
+    "end": 1545455790,
+    "total": 40
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-electric-gas.rb": {
+    "start": 1545455793,
+    "end": 1545455832,
+    "total": 39
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-electric.rb": {
+    "start": 1545456331,
+    "end": 1545456377,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_4_electricity-hot_water-gas.rb": {
+    "start": 1545456153,
+    "end": 1545456199,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-electric.rb": {
+    "start": 1545455986,
+    "end": 1545456027,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-electric-gas.rb": {
+    "start": 1545456506,
+    "end": 1545456548,
+    "total": 42
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-electric.rb": {
+    "start": 1545455899,
+    "end": 1545455940,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_4_fuel_oil2-hot_water-gas.rb": {
+    "start": 1545455750,
+    "end": 1545455796,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-electric.rb": {
+    "start": 1545455991,
+    "end": 1545456030,
+    "total": 39
+  },
+  "ci_test_files/test_necb_hvac_system_4_natural_gas-electric-gas.rb": {
+    "start": 1545456389,
+    "end": 1545456431,
+    "total": 42
+  },
+  "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-electric.rb": {
+    "start": 1545456242,
+    "end": 1545456297,
     "total": 55
   },
+  "ci_test_files/test_necb_hvac_system_4_natural_gas-hot_water-gas.rb": {
+    "start": 1545456264,
+    "end": 1545456325,
+    "total": 61
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1545456583,
+    "end": 1545456634,
+    "total": 51
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545455860,
+    "end": 1545455899,
+    "total": 39
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-fc_inletvanes.rb": {
+    "start": 1545456727,
+    "end": 1545456773,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-electric-var_speed_drive.rb": {
+    "start": 1545456366,
+    "end": 1545456407,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1545455832,
+    "end": 1545455877,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545455859,
+    "end": 1545455902,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1545455750,
+    "end": 1545455796,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-electric-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1545456803,
+    "end": 1545456858,
+    "total": 55
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1545455926,
+    "end": 1545455969,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545456323,
+    "end": 1545456366,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-fc_inletvanes.rb": {
+    "start": 1545456538,
+    "end": 1545456583,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-electric-var_speed_drive.rb": {
+    "start": 1545455817,
+    "end": 1545455861,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1545456027,
+    "end": 1545456073,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545455985,
+    "end": 1545456029,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1545455910,
+    "end": 1545455956,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_electricity-hot_water-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1545455959,
+    "end": 1545456006,
+    "total": 47
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1545456656,
+    "end": 1545456704,
+    "total": 48
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545455812,
+    "end": 1545455850,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-fc_inletvanes.rb": {
+    "start": 1545456169,
+    "end": 1545456213,
+    "total": 44
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-electric-var_speed_drive.rb": {
+    "start": 1545456377,
+    "end": 1545456415,
+    "total": 38
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1545455750,
+    "end": 1545455793,
+    "total": 43
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545456415,
+    "end": 1545456460,
+    "total": 45
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-fc_inletvanes.rb": {
+    "start": 1545456046,
+    "end": 1545456092,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-electric-scroll-hot_water-var_speed_drive.rb": {
+    "start": 1545456262,
+    "end": 1545456317,
+    "total": 55
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
+    "start": 1545456456,
+    "end": 1545456502,
+    "total": 46
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545456212,
+    "end": 1545456262,
+    "total": 50
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-fc_inletvanes.rb": {
+    "start": 1545456016,
+    "end": 1545456057,
+    "total": 41
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-electric-var_speed_drive.rb": {
+    "start": 1545456058,
+    "end": 1545456100,
+    "total": 42
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
+    "start": 1545456480,
+    "end": 1545456528,
+    "total": 48
+  },
+  "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
+    "start": 1545456473,
+    "end": 1545456521,
+    "total": 48
+  },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541704423,
-    "end": 1541704479,
-    "total": 56
+    "start": 1545456029,
+    "end": 1545456074,
+    "total": 45
   },
   "ci_test_files/test_necb_hvac_system_6_fuel_oil2-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541704201,
-    "end": 1541704261,
-    "total": 60
+    "start": 1545456274,
+    "end": 1545456331,
+    "total": 57
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541704226,
-    "end": 1541704267,
+    "start": 1545456427,
+    "end": 1545456468,
     "total": 41
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541703844,
-    "end": 1541703889,
-    "total": 45
+    "start": 1545455920,
+    "end": 1545455959,
+    "total": 39
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541704591,
-    "end": 1541704635,
-    "total": 44
+    "start": 1545456528,
+    "end": 1545456568,
+    "total": 40
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-electric-var_speed_drive.rb": {
-    "start": 1541704146,
-    "end": 1541704199,
-    "total": 53
+    "start": 1545456021,
+    "end": 1545456058,
+    "total": 37
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541704498,
-    "end": 1541704553,
-    "total": 55
+    "start": 1545455973,
+    "end": 1545456018,
+    "total": 45
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541703745,
-    "end": 1541703806,
-    "total": 61
+    "start": 1545456827,
+    "end": 1545456877,
+    "total": 50
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541704626,
-    "end": 1541704680,
-    "total": 54
+    "start": 1545456551,
+    "end": 1545456603,
+    "total": 52
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-electric-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541703745,
-    "end": 1541703806,
-    "total": 61
+    "start": 1545455925,
+    "end": 1545455969,
+    "total": 44
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_inletvanes.rb": {
-    "start": 1541704071,
-    "end": 1541704126,
-    "total": 55
+    "start": 1545456100,
+    "end": 1545456146,
+    "total": 46
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704687,
-    "end": 1541704738,
-    "total": 51
-  },
-  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-fc_inletvanes.rb": {
-    "start": 1541704650,
-    "end": 1541704704,
+    "start": 1545456269,
+    "end": 1545456323,
     "total": 54
   },
+  "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-fc_inletvanes.rb": {
+    "start": 1545456437,
+    "end": 1545456480,
+    "total": 43
+  },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-electric-var_speed_drive.rb": {
-    "start": 1541704076,
-    "end": 1541704126,
-    "total": 50
+    "start": 1545456431,
+    "end": 1545456475,
+    "total": 44
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_inletvanes.rb": {
-    "start": 1541704702,
-    "end": 1541704752,
-    "total": 50
+    "start": 1545456543,
+    "end": 1545456599,
+    "total": 56
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-af_or_bi_rdg_fancurve.rb": {
-    "start": 1541704261,
-    "end": 1541704314,
-    "total": 53
+    "start": 1545456146,
+    "end": 1545456196,
+    "total": 50
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-fc_inletvanes.rb": {
-    "start": 1541704680,
-    "end": 1541704741,
-    "total": 61
+    "start": 1545455880,
+    "end": 1545455925,
+    "total": 45
   },
   "ci_test_files/test_necb_hvac_system_6_natural_gas-hot_water-scroll-hot_water-var_speed_drive.rb": {
-    "start": 1541703898,
-    "end": 1541703953,
-    "total": 55
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-centrifugal-dx.rb": {
-    "start": 1541703788,
-    "end": 1541703860,
-    "total": 72
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-centrifugal-hydronic.rb": {
-    "start": 1541704479,
-    "end": 1541704552,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-reciprocating-dx.rb": {
-    "start": 1541703973,
-    "end": 1541704051,
-    "total": 78
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-reciprocating-hydronic.rb": {
-    "start": 1541704357,
-    "end": 1541704434,
-    "total": 77
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-rotary_screw-dx.rb": {
-    "start": 1541704100,
-    "end": 1541704172,
-    "total": 72
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-rotary_screw-hydronic.rb": {
-    "start": 1541703799,
-    "end": 1541703872,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-dx.rb": {
-    "start": 1541704495,
-    "end": 1541704568,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_electricity-scroll-hydronic.rb": {
-    "start": 1541704155,
-    "end": 1541704226,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-centrifugal-dx.rb": {
-    "start": 1541703806,
-    "end": 1541703877,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-centrifugal-hydronic.rb": {
-    "start": 1541703924,
-    "end": 1541704009,
-    "total": 85
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-dx.rb": {
-    "start": 1541703800,
-    "end": 1541703869,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-reciprocating-hydronic.rb": {
-    "start": 1541703745,
-    "end": 1541703823,
-    "total": 78
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-dx.rb": {
-    "start": 1541704006,
-    "end": 1541704083,
-    "total": 77
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-rotary_screw-hydronic.rb": {
-    "start": 1541704234,
-    "end": 1541704304,
-    "total": 70
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-dx.rb": {
-    "start": 1541704479,
-    "end": 1541704548,
-    "total": 69
-  },
-  "ci_test_files/test_necb_hvac_system_7_fuel_oil2-scroll-hydronic.rb": {
-    "start": 1541703924,
-    "end": 1541704006,
-    "total": 82
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-dx.rb": {
-    "start": 1541704629,
-    "end": 1541704702,
-    "total": 73
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-centrifugal-hydronic.rb": {
-    "start": 1541703801,
-    "end": 1541703875,
-    "total": 74
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-dx.rb": {
-    "start": 1541703889,
-    "end": 1541703970,
-    "total": 81
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-reciprocating-hydronic.rb": {
-    "start": 1541704442,
-    "end": 1541704519,
-    "total": 77
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-dx.rb": {
-    "start": 1541704618,
-    "end": 1541704686,
-    "total": 68
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-rotary_screw-hydronic.rb": {
-    "start": 1541704579,
-    "end": 1541704650,
-    "total": 71
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-scroll-dx.rb": {
-    "start": 1541703840,
-    "end": 1541703916,
-    "total": 76
-  },
-  "ci_test_files/test_necb_hvac_system_7_natural_gas-scroll-hydronic.rb": {
-    "start": 1541703745,
-    "end": 1541703825,
-    "total": 80
+    "start": 1545456634,
+    "end": 1545456687,
+    "total": 53
   }
 }

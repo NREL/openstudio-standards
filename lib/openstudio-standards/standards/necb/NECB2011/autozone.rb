@@ -160,7 +160,6 @@ class NECB2011
             next
           else
             space_zone_data[:system_number] = adj_space_data[:system_number]
-            puts space_zone_data[:space].name.get.to_s
             break
           end
         end
