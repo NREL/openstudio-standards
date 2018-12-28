@@ -290,6 +290,9 @@ class NECB2011 < Standard
                   heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
                   heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
       )
+      random = Random.new(1234)
+      model.getThermalZones.each{ |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
+      model.getSpaceTypes.each{ |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     else
       model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
     end

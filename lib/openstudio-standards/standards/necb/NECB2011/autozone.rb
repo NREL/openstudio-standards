@@ -475,8 +475,6 @@ class NECB2011
     # ----Dwelling units----------- will always have their own system per unit, so they should have their own thermal zone.
     model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
       zone = OpenStudio::Model::ThermalZone.new(model)
-
-      #zone.setRenderingColor(self.set_random_rendering_color(zone))
       zone.setName("DU_BT=#{space.spaceType.get.standardsBuildingType.get}_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory().get.name}_SCH#{ determine_dominant_schedule([space])}")
       unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
@@ -513,7 +511,6 @@ class NECB2011
       dominant_schedule = determine_dominant_schedule(space.model.getSpaces)
       #create new TZ and set space to the zone.
       zone = OpenStudio::Model::ThermalZone.new(model)
-      #zone.setRenderingColor(self.set_random_rendering_color(zone))
       space.setThermalZone(zone)
       tz_name = "WET_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory().get.name}_SCH#{dominant_schedule}"
       zone.setName(tz_name)
@@ -564,7 +561,6 @@ class NECB2011
       next unless space.thermalZone.empty?
       #create new zone for this space based on the space name.
       zone = OpenStudio::Model::ThermalZone.new(model)
-      # zone.setRenderingColor(self.set_random_rendering_color(zone))
       tz_name = "ALL_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory().get.name}_SCH=#{ determine_dominant_schedule([space])}"
       zone.setName(tz_name)
       #sets space mulitplier unless it is nil or 1.
@@ -611,7 +607,6 @@ class NECB2011
       next unless space.thermalZone.empty?
       #create new zone for this space based on the space name.
       zone = OpenStudio::Model::ThermalZone.new(model)
-      #zone.setRenderingColor(self.set_random_rendering_color(zone))
       tz_name = "WILD_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory().get.name}_SCH=#{determine_dominant_schedule(space.model.getSpaces)}"
       zone.setName(tz_name)
       #sets space mulitplier unless it is nil or 1.
@@ -699,7 +694,6 @@ class NECB2011
 
       #create new TZ and set space to the zone.
       zone = OpenStudio::Model::ThermalZone.new(model)
-      #zone.setRenderingColor(self.set_random_rendering_color(zone))
       space.setThermalZone(zone)
       zone.setName("Wild-ZN:BT=#{space.spaceType.get.standardsBuildingType.get}:ST=#{space.spaceType.get.standardsSpaceType.get}:FL=#{space.buildingStory().get.name}:")
       #Set multiplier from the original tz multiplier.
@@ -951,7 +945,6 @@ class NECB2011
         new_spacetype.setStandardsBuildingType(space.spaceType.get.standardsBuildingType.get)
         new_spacetype.setStandardsSpaceType(new_spacetype_name)
         new_spacetype.setName("#{space.spaceType.get.standardsBuildingType.get} #{new_spacetype_name}")
-        #new_spacetype.setRenderingColor(self.set_random_rendering_color(new_spacetype))
         space_type_apply_internal_loads(new_spacetype, true, true, true, true, true, true)
         space_type_apply_internal_load_schedules(new_spacetype, true, true, true, true, true, true, true)
       end
@@ -1371,12 +1364,12 @@ class NECB2011
   end
 
   # This method will create a color object used in SU, 3D Viewer and Floorspace.js
-  def set_random_rendering_color(object)
+  def set_random_rendering_color(object,random)
     rendering_color = OpenStudio::Model::RenderingColor.new(object.model)
     rendering_color.setName(object.name.get)
-    rendering_color.setRenderingRedValue(@random.rand(255))
-    rendering_color.setRenderingGreenValue(@random.rand(255))
-    rendering_color.setRenderingBlueValue(@random.rand(255))
+    rendering_color.setRenderingRedValue(random.rand(255))
+    rendering_color.setRenderingGreenValue(random.rand(255))
+    rendering_color.setRenderingBlueValue(random.rand(255))
     return rendering_color
   end
 =begin
