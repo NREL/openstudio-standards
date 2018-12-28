@@ -62,28 +62,8 @@ class NECB2011
     # TO DO: MAU sizing, characteristics (fan operation schedules, temperature setpoints, outdoor air, etc)
 
     if mau_type == true
-      mau_air_loop = common_air_loop(model: model)
-      mau_air_loop.setName(system_data[:name])
-      air_loop_sizing = mau_air_loop.sizingSystem
-      air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setPreheatDesignTemperature(system_data[:PreheatDesignTemperature])
-      air_loop_sizing.setPreheatDesignHumidityRatio(system_data[:PreheatDesignHumidityRatio])
-      air_loop_sizing.setPrecoolDesignTemperature(system_data[:PrecoolDesignTemperature])
-      air_loop_sizing.setPrecoolDesignHumidityRatio(system_data[:PrecoolDesignHumidityRatio])
-      air_loop_sizing.setSizingOption(system_data[:SizingOption] )
-      air_loop_sizing.setCoolingDesignAirFlowMethod(system_data[:CoolingDesignAirFlowMethod])
-      air_loop_sizing.setCoolingDesignAirFlowRate(system_data[:CoolingDesignAirFlowRate])
-      air_loop_sizing.setHeatingDesignAirFlowMethod(system_data[:HeatingDesignAirFlowMethod])
-      air_loop_sizing.setHeatingDesignAirFlowRate(system_data[:HeatingDesignAirFlowRate])
-      air_loop_sizing.setSystemOutdoorAirMethod(system_data[:SystemOutdoorAirMethod])
-      air_loop_sizing.setCentralCoolingDesignSupplyAirHumidityRatio(system_data[:CentralCoolingDesignSupplyAirHumidityRatio])
-      air_loop_sizing.setCentralHeatingDesignSupplyAirHumidityRatio(system_data[:CentralHeatingDesignSupplyAirHumidityRatio])
+      mau_air_loop = common_air_loop(model: model, system_data: system_data)
 
-      air_loop_sizing.setTypeofLoadtoSizeOn(system_data[:TypeofLoadtoSizeOn])
-      air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature])
-      air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature])
-      air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
-      air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
       air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio] )
       mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
       #MAU Heating type selection.

@@ -2232,6 +2232,7 @@ class NECB2011
 
   def common_air_loop(model: model, system_data: system_data)
     mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+    mau_air_loop.setName(system_data[:name])
     air_loop_sizing = mau_air_loop.sizingSystem
     air_loop_sizing.autosizeDesignOutdoorAirFlowRate
     air_loop_sizing.setPreheatDesignTemperature(system_data[:PreheatDesignTemperature]) unless system_data[:PreheatDesignTemperature].nil?
