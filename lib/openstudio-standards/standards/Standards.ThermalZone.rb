@@ -376,7 +376,13 @@ class Standard
     end
     sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
     sch_ruleset.setName(sch_name.to_s)
-    sch_ruleset.setComment("#{max_occ_in_spaces} max_occ_in_spaces used for generating this schedule. Max based on sum of design level in spaces versus what is seen in the run period.")
+    # add properties to schedule
+    props = sch_ruleset.additionalProperties
+    props.setFeature("max_occ_in_spaces",max_occ_in_spaces)
+    props.setFeature("number_of_spaces_included",spaces.size)
+    # nothing uses this but can make user be aware if this may be out of sync with current state of occupancy profiles
+    props.setFeature("date_parent_object_last_edited",Time.now.getgm.to_s)
+    props.setFeature("date_parent_object_created",Time.now.getgm.to_s)
 
     # Default - All Occupied
     day_sch = sch_ruleset.defaultDaySchedule

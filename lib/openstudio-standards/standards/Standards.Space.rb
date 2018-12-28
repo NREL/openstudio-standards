@@ -1627,7 +1627,7 @@ class Standard
   # @param space [Space] takes space abd spaceType but not for buildingStory
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   # todo - add related methods like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
-  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off unitl need is a bit more defined.
+  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
   def space_hours_of_operation(space)
 
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')

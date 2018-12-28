@@ -4512,10 +4512,29 @@ class Standard
 
     end
 
-    # todo - Service Water Heating (may or may not be associated with a space)
-    # todo - Refrigeration (will be associated with thermal zone)
+    # todo - Service Water Heating suppy side (may or may not be associated with a space)
     # todo - water use equipment definitions (temperature, sensible, latent)
     # todo - water use equipment (flow rate fraction)
+    model.getWaterUseEquipments.each do |water_use_equipment|
+
+      if water_use_equipment.flowRateFractionSchedule.is_initialized && water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.is_initialized
+        schedule = water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.get
+
+        opt_space = water_use_equipment.space
+        if opt_space.is_initialized
+          space = space.get
+          hours_of_operation = space_hours_of_operation(space)
+          gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation)
+        else
+          hours_of_operation = select_hours_of_operation_from_space_array(model.getSpaces)
+          if !hours_of_operation.nil?
+            gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation)
+          end
+        end
+
+      end
+    end
+    # todo - Refrigeration (will be associated with thermal zone)
     # todo - exterior lights (will be astronomical, but like AEDG's may have reduction later at night)
 
     return parametric_inputs
@@ -4795,7 +4814,7 @@ class Standard
   #
   # @author David Goldwasser
   # @param [array] space_array
-  # @return_hash [hash] hours of operation
+  # @return [hash] hours of operation
   def select_hours_of_operation_from_space_array(space_array, calc_logic: "most_spaces")
     # todo - support expanded calc method. Will need to create new merged schedule
 
@@ -4814,8 +4833,8 @@ class Standard
   # method to process load instance schedules for model_setup_parametric_schedules
   #
   # @author David Goldwasser
-  # @param sch
-  # @return hash
+  # @param [sch]
+  # @return [hash]
   def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation)
 
     if parametric_inputs.has_key?(sch)
@@ -4833,8 +4852,11 @@ class Standard
     props.setFeature("param_sch_ceiling",min_max['max'])
     props.setFeature("param_sch_target",load_inst.name.to_s)
 
+    # cleanup existing profiles
+    schedule_ruleset_cleanup_profiles(sch)
+
     # todo - step through rules and add additional properties to describe profiles
-    # todo - clone rules as necessary to address hours of operation for different dates and days of the week
+    # todo - clone rules as necessary to address hours of operation for different dates and days of the week (no, this will just be need when applying the parameters)
     # todo - consider storing all rules in ScheduleRuleset instead of scheduleRule. If store in rule, then rules cloned to address where to store data for runels made from different pattern in hours of operation
 
     return parametric_inputs
