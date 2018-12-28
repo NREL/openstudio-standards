@@ -123,7 +123,10 @@ class NECB2011
       add_ptac_dx_cooling(model, zone)
 
       # add zone baseboards
-      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
+      add_zone_baseboards(baseboard_type: baseboard_type,
+                          hw_loop: hw_loop,
+                          model: model,
+                          zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
       if mau_type == true

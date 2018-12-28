@@ -34,6 +34,7 @@ class NECB2011
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
+
     # System Type 4: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -46,6 +47,10 @@ class NECB2011
     # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
     # NOTE: This is the same as system type 3 (single zone make-up air unit and single zone rooftop unit are both PSZ systems)
     # SHOULD WE COMBINE sys3 and sys4 into one script?
+    #
+    #control_zone = determine_control_zone(zones)
+    # Todo change this when control zone method is working.
+    control_zone = zones.first
 
     always_on = model.alwaysOnDiscreteSchedule
 
@@ -55,12 +60,12 @@ class NECB2011
     # (2) supermarket/food service: food preparation with kitchen hood/vented appliance
     # (3) warehouse area (non-refrigerated spaces)
 
-    zones.each do |zone|
+
       air_loop = common_air_loop( model: model, system_data: system_data)
-      air_loop.setName("#{system_data[:name]}_#{zone.name}")
+      air_loop.setName("#{system_data[:name]}_#{control_zone.name}")
 
       # Zone sizing temperature
-      sizing_zone = zone.sizingZone
+      sizing_zone = control_zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
       sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
@@ -100,7 +105,7 @@ class NECB2011
       # Add a setpoint manager single zone reheat to control the
       # supply air temperature based on the needs of this zone
       setpoint_mgr_single_zone_reheat = OpenStudio::Model::SetpointManagerSingleZoneReheat.new(model)
-      setpoint_mgr_single_zone_reheat.setControlZone(zone)
+      setpoint_mgr_single_zone_reheat.setControlZone(control_zone)
       setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(system_data[:SetpointManagerSingleZoneReheatSupplyTempMin])
       setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(system_data[:SetpointManagerSingleZoneReheatSupplyTempMax])
       setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
@@ -121,7 +126,7 @@ class NECB2011
       #              Connect heat exchanger
       #              oa_node = oa_system.outboardOANode
       #              heat_exchanger.addToNode(oa_node.get)
-
+    zones.each do |zone|
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)

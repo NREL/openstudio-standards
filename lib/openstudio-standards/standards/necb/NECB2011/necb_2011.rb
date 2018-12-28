@@ -16,8 +16,8 @@ class NECB2011 < Standard
     @standards_data["tables"][table_name]
   end
 
-  def get_standard_constant_value(constant_name: )
-     puts "do nothing"
+  def get_standard_constant_value(constant_name:)
+    puts "do nothing"
   end
 
 
@@ -207,9 +207,11 @@ class NECB2011 < Standard
                            y_scale: 1.0,
                            z_scale: 1.0,
                            fdwr_set: 'MAXIMIZE',
-                           ssr_set: 'MAXIMIZE'
+                           ssr_set: 'MAXIMIZE',
+                           new_auto_zoner: false
+
   )
-    building_type =  model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
+    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
@@ -248,6 +250,7 @@ class NECB2011 < Standard
     #Set Loads/Schedules
     model_add_loads(model)
 
+
     #Add Infiltration
     model_apply_infiltration_standard(model)
 
@@ -273,7 +276,23 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+    if new_auto_zoner
+      auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
+      auto_system(model: model,
+                  boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
+                  baseboard_type: system_fuel_defaults['baseboard_type'],
+                  mau_type: system_fuel_defaults['mau_type'],
+                  mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
+                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                  chiller_type: system_fuel_defaults['chiller_type'],
+                  heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
+                  heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
+                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
+      )
+    else
+      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+    end
     model_add_swh(model)
     model_apply_sizing_parameters(model)
 
@@ -308,6 +327,9 @@ class NECB2011 < Standard
     # Commented out because it consumes a significant portion of the btap run time (30% - 50%).  The line below should
     # be uncommented when the flie clarity it affords is desired.
     # model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+
+    #set space_type colors
+    # model.getSpaceTypes.sort.each { |space_type| space_type.setRenderingColor(standard.set_random_rendering_color(space_type)) }
     return model
   end
 
