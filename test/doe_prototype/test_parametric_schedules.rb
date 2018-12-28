@@ -6,6 +6,7 @@ class TestParametricSchedules < Minitest::Test
   def input_hash
     test_hash = {}
     test_hash["MediumOffice_8A_2004"] = {template: '90.1-2004'}
+=begin
     test_hash["SecondarySchool_6A_1980-2004"] = {template: 'DOE Ref 1980-2004'}
     # custom used to exercise mid day dip and see if clean hours of operation come out
     test_hash["example_model_multipliers"] = {template: '90.1-2013', fraction_of_daily_occ_range: 0.75} # office building
@@ -17,6 +18,7 @@ class TestParametricSchedules < Minitest::Test
     test_hash["Outpatient_7A_2010"] = {template: '90.1-2010'}
     test_hash["MultiStoryRetail"] = {template: 'DOE Ref 1980-2004'}
     test_hash["MultiStoryWarehouse"] = {template: 'DOE Ref 1980-2004'}
+=end
 
     return test_hash
   end
@@ -75,7 +77,8 @@ class TestParametricSchedules < Minitest::Test
 
       # save resulting model
       puts "Test: Saving model named test_#{k}.osm."
-      model.save("test_#{k}.osm", true)
+      Dir.mkdir('output') unless Dir.exist?('output') # assuming test run from directory it is in
+      model.save("output/test_#{k}.osm", true)
 
       # check recommendation
       # todo - loop through all schedules in orig model and store hash of schedule_ruleset_annual_equivalent_full_load_hrs

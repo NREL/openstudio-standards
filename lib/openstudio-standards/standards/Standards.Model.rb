@@ -4843,19 +4843,48 @@ class Standard
         return nil
       end
     end
+
+    # cleanup existing profiles
+    schedule_ruleset_cleanup_profiles(sch)
+
+    # gather and store data for scheduleRuleset
     min_max = schedule_ruleset_annual_min_max_value(sch)
     ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst.name.to_s, hoo_inputs: hours_of_operation}
     parametric_inputs[sch] = ruleset_hash
-
     props = sch.additionalProperties
     props.setFeature("param_sch_floor",min_max['min'])
     props.setFeature("param_sch_ceiling",min_max['max'])
     props.setFeature("param_sch_target",load_inst.name.to_s)
 
-    # cleanup existing profiles
-    schedule_ruleset_cleanup_profiles(sch)
+    # step through rules and add additional properties to describe profiles
+    schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
+    schedule_days[sch.defaultDaySchedule] = day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
+    sch.scheduleRules.each do |rule|
+      schedule_days[rule.daySchedule] = day_schedule_equivalent_full_load_hrs(rule.daySchedule)
+    end
+    schedule_days.each_with_index do |(schedule_day,daily_flh),i|
+      props = schedule_day.additionalProperties
+      # todo - populate profile (first basic, then value variables, then time variables, then adjusted values to match target equiv hours)
+      props.setFeature("param_day_profile","") # this is used to hoo value and floor/ceiling
+      props.setFeature("param_day_secondary_logic","") # secondary logic method such as occupancy impacting schedule values
+      props.setFeature("param_day_secondary_logic_arg_val","") # optional argument used for some secondary logic applied to values
 
-    # todo - step through rules and add additional properties to describe profiles
+      # tag profile type
+      # may be useful for parametric changes to tag typical, medium, minimal, or same ones with off_peak prefix
+      # tagging min/max makes sense in fractional schedules but not temperature schedules like thermostats (specifically cooling setpoints)
+      # todo - add school specific logic hear or in post processing, currently default profile for school may not be most prevalent one
+      if i-1 == -1
+        props.setFeature("param_day_tag","typical")
+      elsif schedule_days[schedule_day] == schedule_days.values.min
+        props.setFeature("param_day_tag","minimal")
+      elsif schedule_days[schedule_day] == schedule_days.values.max
+        props.setFeature("param_day_tag","maximum") # normally this should not be used as typical should be the most active day
+      else
+        props.setFeature("param_day_tag","medium") # not min max or typical
+      end
+
+    end
+
     # todo - clone rules as necessary to address hours of operation for different dates and days of the week (no, this will just be need when applying the parameters)
     # todo - consider storing all rules in ScheduleRuleset instead of scheduleRule. If store in rule, then rules cloned to address where to store data for runels made from different pattern in hours of operation
 
