@@ -74,6 +74,9 @@ class TestParametricSchedules < Minitest::Test
 =end
 
       # todo - model_build_parametric_schedules
+      parametric_schedules = standard.model_build_parametric_schedules(model)
+      assert(parametric_schedules.size. > 0)
+      puts "Updated #{parametric_schedules.size} parametric schedules"
 
       # save resulting model
       puts "Test: Saving model named test_#{k}.osm."

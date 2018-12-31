@@ -4554,7 +4554,34 @@ class Standard
   # @return [Array] of modified ScheduleRuleset objects
   def model_build_parametric_schedules(model, ramp_frequency: nil, alter_swh_wo_space: true, error_on_out_of_order: true)
 
-    # todo - this will include creating summer and winter design day profiles
+    parametric_schedules = []
+    model.getScheduleRulesets.sort.each do |sch|
+
+      additional_properties = sch.additionalProperties
+      if !additional_properties.hasFeature("param_sch_ver")
+        # todo - address schedules that fall into this category, if they are used in the model
+        puts "******* #{sch.name} is not setup as parametric schedule"
+        next
+      end
+
+      # todo - process hoo and floor/ceiling vars to develop formulas without variables
+      # todo - clone rules as necessary to address hours of operation for different dates and days of the week
+
+      # todo - process variable free formula at requested time step
+
+      # todo - apply secondary logic
+
+      # todo - generate scheduleDay
+
+      # todo - create summer and winter design day profiles (make sure scheduleDay objects parametric)
+      # todo - should they have their own formula, or should this be hard coded logic by schedule type
+
+      # add schedule to array
+      parametric_schedules << sch
+
+    end
+
+    return parametric_schedules
 
   end
 
@@ -4835,7 +4862,7 @@ class Standard
   # @author David Goldwasser
   # @param [sch]
   # @return [hash]
-  def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation)
+  def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation,ramp = true,min_ramp_dur_hr = 2.0)
 
     if parametric_inputs.has_key?(sch)
       if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
@@ -4852,9 +4879,10 @@ class Standard
     ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst.name.to_s, hoo_inputs: hours_of_operation}
     parametric_inputs[sch] = ruleset_hash
     props = sch.additionalProperties
+    props.setFeature("param_sch_ver","0.0.1") # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
     props.setFeature("param_sch_floor",min_max['min'])
     props.setFeature("param_sch_ceiling",min_max['max'])
-    props.setFeature("param_sch_target",load_inst.name.to_s)
+    props.setFeature("param_sch_target",load_inst.name.to_s) # todo - I think this should be determined dynamically from multiple possible targets vs hard coded
 
     # step through rules and add additional properties to describe profiles
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
@@ -4865,7 +4893,87 @@ class Standard
     schedule_days.each_with_index do |(schedule_day,daily_flh),i|
       props = schedule_day.additionalProperties
       # todo - populate profile (first basic, then value variables, then time variables, then adjusted values to match target equiv hours)
-      props.setFeature("param_day_profile","") # this is used to hoo value and floor/ceiling
+      par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
+      times = schedule_day.times
+      values = schedule_day.values
+      values.each_with_index do |value,i|
+        current_time = times[i].totalHours
+        # if step height goes floor to ceiling then do not ramp.
+        if !ramp or values.uniq.size < 3
+          # this will result in steps like old profiles, update to ramp in most cases
+          if i == values.size - 1
+            par_val_time_hash[current_time] = [value,values.first]
+          else
+            par_val_time_hash[current_time] = [value,values[i+1]]
+          end
+        else
+          if i == 0
+            prev_time = times.last.totalHours - 24 # e.g. 24 would show as until 0
+          else
+            prev_time = times[i-1].totalHours
+          end
+          if i == values.size - 1
+            next_time = times.first.totalHours + 24 # e.g. 30 would show as until 30
+            next_value = values.first
+          else
+            next_time = times[i+1].totalHours
+            next_value = values[i+1]
+          end
+          # delta time is min min_ramp_dur_hr, half of previous dur, half of next dur
+          delta = [min_ramp_dur_hr,(current_time - prev_time)*0.5,(next_time - current_time)*0.5].min
+          # add value to left if not already added
+          if !par_val_time_hash.has_key?(current_time - delta)
+            time_left = current_time - delta
+            if time_left < 0.0 then time_left += 24.0 end
+            par_val_time_hash[time_left] = [value]
+          end
+          # add value to right
+          time_right = current_time + delta
+          if time_right > 24.0 then time_right -= 24.0 end
+          par_val_time_hash[time_right] = [next_value]
+        end
+      end
+
+      # todo - not critical but would be nice to get rid of un-necessary value at 24 when the previous and next values are the same, e.g. avail schedule
+
+      # sort hash by keys
+      par_val_time_hash.sort.to_h # todo confirm that this works as expected in test case that exercises it
+
+      # calculate estimated value
+      est_daily_flh = 0.0
+      prev_time = par_val_time_hash.keys.last - 24.0
+      prev_value = par_val_time_hash.values.last.last # last value in last optional pair of values
+      # todo - because existing schedules have a 24 value it will always work as 0 value, don't have to trim any right trapezoids, unless I clean un-necesssary 24 values.
+      par_val_time_hash.each do |time,value_array|
+        segment_length = time - prev_time
+        avg_value = (value_array.first + prev_value)*0.5
+        est_daily_flh += segment_length * avg_value
+        prev_time = time
+        prev_value = value_array.last
+      end
+
+      # test expected value against esimated value
+      if (daily_flh - est_daily_flh).abs > daily_flh * 0.01
+        # todo - address issues when this happens, may need to scale non local floor/ceiling values up or down to fit expected value.
+        # todo - see if actual values match expected once profiles are updated
+        puts "#{sch.name}, #{schedule_day.name} expected full load hours value is #{daily_flh.round(4)}, estimated value is #{est_daily_flh.round(4)}"
+      end
+
+      raw_string = []
+      par_val_time_hash.each do |time,value_array|
+        if value_array.size == 1
+          raw_string << "#{time}/#{value_array.first}"
+        else # should only have 1 or two values (value in and optional value out)
+          raw_string << "#{time}/#{value_array.first}/#{value_array.last}"
+        end
+      end
+      props.setFeature("param_day_profile_diagnostic",raw_string.join("|")) # this doesn't use variables, just added for testing purposes for stepped to ramped profiles
+      props.setFeature("param_day_profile","") # this uses hoo value and floor/ceiling
+
+      # todo - not used yet, but will add methods described below and others
+      # todo - lower infiltration based on air loop hours of operation if air loop has outdoor air object
+      # todo - lower lighting or plug loads based on occupancy at given time steps in a space
+      # todo - set elevator fraction based multiple factors such as trips, occupants per trip, and elevator type to determine floor consumption when not in use.
       props.setFeature("param_day_secondary_logic","") # secondary logic method such as occupancy impacting schedule values
       props.setFeature("param_day_secondary_logic_arg_val","") # optional argument used for some secondary logic applied to values
 
@@ -4884,9 +4992,6 @@ class Standard
       end
 
     end
-
-    # todo - clone rules as necessary to address hours of operation for different dates and days of the week (no, this will just be need when applying the parameters)
-    # todo - consider storing all rules in ScheduleRuleset instead of scheduleRule. If store in rule, then rules cloned to address where to store data for runels made from different pattern in hours of operation
 
     return parametric_inputs
   end
