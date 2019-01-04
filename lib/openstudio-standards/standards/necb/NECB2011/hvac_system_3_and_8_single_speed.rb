@@ -4,7 +4,8 @@ class NECB2011
                                                                                          zones:,
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
-                                                                                         hw_loop:)
+                                                                                         hw_loop:,
+                                                                                         new_auto_zoner: false)
 
 
     system_data = Hash.new
@@ -41,6 +42,40 @@ class NECB2011
     system_data[:ZoneHeatingSizingFactor] = 1.3
     system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
 
+
+    if new_auto_zoner
+    # Create system airloop
+    zones.each do |zone|
+      control_zone = zone
+      # Add Air Loop
+      air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
+      # Add Zone equipment
+      add_sys3_and_8_zone_equip(air_loop,
+                                baseboard_type,
+                                hw_loop,
+                                model,
+                                zone)
+    end
+    return true
+    else
+      # Create system airloop
+      zones.each do |zone|
+        control_zone = zone
+        # Add Air Loop
+        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
+        # Add Zone equipment
+        add_sys3_and_8_zone_equip(air_loop,
+                                  baseboard_type,
+                                  hw_loop,
+                                  model,
+                                  zone)
+      end
+      return true
+    end
+  end
+
+
+  def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -53,13 +88,8 @@ class NECB2011
     # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
 
     #control_zone = determine_control_zone(zones)
-    # Todo change this when control zone method is working.
-    control_zone = zones.first
-
 
     always_on = model.alwaysOnDiscreteSchedule
-
-
     air_loop = common_air_loop(model: model, system_data: system_data)
     air_loop.setName("#{system_data[:name]} #{control_zone.name}")
 
@@ -122,14 +152,17 @@ class NECB2011
     setpoint_mgr_single_zone_reheat.setMinimumSupplyAirTemperature(system_data[:SetpointManagerSingleZoneReheatSupplyTempMin])
     setpoint_mgr_single_zone_reheat.setMaximumSupplyAirTemperature(system_data[:SetpointManagerSingleZoneReheatSupplyTempMax])
     setpoint_mgr_single_zone_reheat.addToNode(air_loop.supplyOutletNode)
-    zones.each do |zone|
-      # Create a diffuser and attach the zone/diffuser pair to the air loop
-      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
-      add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
-    end # zone loop
+    return air_loop
+  end
 
-    return true
+  def add_sys3_and_8_zone_equip(air_loop,
+                                baseboard_type,
+                                hw_loop, model,
+                                zone)
+    always_on = model.alwaysOnDiscreteSchedule
+    diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
+    air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+    add_zone_baseboards(baseboard_type: baseboard_type, hw_loop: hw_loop, model: model, zone: zone)
   end
 
 end

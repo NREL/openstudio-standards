@@ -43,7 +43,7 @@ class NECB_HVAC_Tests < MiniTest::Test
         spaces.each do |ispace|
           oa_objs = ispace.designSpecificationOutdoorAir.get
           oa_flow_p_person = oa_objs.outdoorAirFlowperPerson
-          oa_objs.setOutdoorAirFlowperPerson(30.0*oa_flow_p_person)
+          oa_objs.setOutdoorAirFlowperPerson(30.0*oa_flow_p_person) #l/s
         end
       end
     end
