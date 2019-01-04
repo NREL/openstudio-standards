@@ -6,7 +6,6 @@ class TestParametricSchedules < Minitest::Test
   def input_hash
     test_hash = {}
     test_hash["MediumOffice_8A_2004"] = {template: '90.1-2004'}
-=begin
     test_hash["SecondarySchool_6A_1980-2004"] = {template: 'DOE Ref 1980-2004'}
     # custom used to exercise mid day dip and see if clean hours of operation come out
     test_hash["example_model_multipliers"] = {template: '90.1-2013', fraction_of_daily_occ_range: 0.75} # office building
@@ -18,7 +17,6 @@ class TestParametricSchedules < Minitest::Test
     test_hash["Outpatient_7A_2010"] = {template: '90.1-2010'}
     test_hash["MultiStoryRetail"] = {template: 'DOE Ref 1980-2004'}
     test_hash["MultiStoryWarehouse"] = {template: 'DOE Ref 1980-2004'}
-=end
 
     return test_hash
   end
@@ -56,27 +54,18 @@ class TestParametricSchedules < Minitest::Test
       assert(hours_of_operation.size. > 0)
       puts "Test: Extracted hours of operation schedule from space. Inspecting first entry returned."
       puts "Test: #{hours_of_operation.keys.first}: #{hours_of_operation.values.first.inspect}"
-=begin
-      hours_of_operation.each do |k,v|
-        puts "#{k}: #{v.inspect}"
-      end
-=end
 
       # model_setup_parametric_schedules
       parametric_inputs = standard.model_setup_parametric_schedules(model)
       assert(parametric_inputs.size. > 0)
-      puts "Test: Generated schedule profile formulas and saved as AdditionalProperties objects. Inspecting first entry returned."
+      puts "Test: Generated schedule profile formulas and saved as AdditionalProperties objects for #{parametric_inputs.size} schedules. Inspecting first entry returned."
       puts "Test: #{parametric_inputs.keys.first.name}: #{parametric_inputs.values.first.inspect}"
-=begin
-      parametric_inputs.each do |k,v|
-        puts "#{k.name}: #{v.inspect}"
-      end
-=end
 
-      # todo - model_build_parametric_schedules
+      # model_build_parametric_schedules
       parametric_schedules = standard.model_build_parametric_schedules(model)
       assert(parametric_schedules.size. > 0)
-      puts "Updated #{parametric_schedules.size} parametric schedules"
+      # todo - add in additional asserts of schedule profile area isn't expected
+      puts "Test: Updated #{parametric_schedules.size} parametric schedules"
 
       # save resulting model
       puts "Test: Saving model named test_#{k}.osm."
@@ -86,6 +75,7 @@ class TestParametricSchedules < Minitest::Test
       # check recommendation
       # todo - loop through all schedules in orig model and store hash of schedule_ruleset_annual_equivalent_full_load_hrs
       # todo - loop through parametric schedules and add asserts to compare against orig
+      # todo - run simulations and look at end uses.
 
     end
   end

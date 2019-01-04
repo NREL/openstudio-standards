@@ -4443,7 +4443,7 @@ class Standard
       end
       avail_mgrs = air_loop.availabilityManagers
       avail_mgrs.each do |avail_mgr|
-        # todo - I'm finding availability mangers, but not any resrouces for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
+        # todo - I'm finding availability mangers, but not any resources for them, even if I use OpenStudio::Model.getRecursiveChildren(avail_mgr)
         resources = avail_mgr.resources
         resources = OpenStudio::Model.getRecursiveResources(avail_mgr)
         resources.each do |resource|
@@ -4512,13 +4512,16 @@ class Standard
 
     end
 
-    # todo - Service Water Heating suppy side (may or may not be associated with a space)
-    # todo - water use equipment definitions (temperature, sensible, latent)
-    # todo - water use equipment (flow rate fraction)
+    # todo - Service Water Heating supply side (may or may not be associated with a space)
+    # todo - water use equipment definitions (temperature, sensible, latent) may be in multiple spaces, need to identify hoo, but typically constant schedules
+
+    # water use equipment (flow rate fraction)
+    # todo - address common schedules used across multiple instances
     model.getWaterUseEquipments.each do |water_use_equipment|
 
       if water_use_equipment.flowRateFractionSchedule.is_initialized && water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.is_initialized
         schedule = water_use_equipment.flowRateFractionSchedule.get.to_ScheduleRuleset.get
+        next if parametric_inputs.has_key?(schedule)
 
         opt_space = water_use_equipment.space
         if opt_space.is_initialized
@@ -4549,32 +4552,29 @@ class Standard
   # @author David Goldwasser
   # @param model [Model]
   # @param ramp_frequency [Double] ramp frequency in minutes. If nil method will match simulation timestep
-  # @param alter_swh_wo_space [Bool] when true will will apply profile formula based on building level or most prevelent hours of operation schedule
+  # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return [Array] of modified ScheduleRuleset objects
-  def model_build_parametric_schedules(model, ramp_frequency: nil, alter_swh_wo_space: true, error_on_out_of_order: true)
+  def model_build_parametric_schedules(model, ramp_frequency: nil, infer_hoo_for_non_assigned_objects: true, error_on_out_of_order: true)
+
+    # get ramp frequency (fractional hour) from timestep
+    if ramp_frequency.nil?
+      steps_per_hour = model.getSimulationControl.timestep.get.numberOfTimestepsPerHour
+      ramp_frequency = 1.0/steps_per_hour.to_f
+    end
 
     parametric_schedules = []
     model.getScheduleRulesets.sort.each do |sch|
-
-      additional_properties = sch.additionalProperties
-      if !additional_properties.hasFeature("param_sch_ver")
+      if !sch.hasAdditionalProperties or !sch.additionalProperties.hasFeature("param_sch_ver")
+        # for now don't look at schedules without targets, in future can alter these by looking at building level hours of operation
+        next if not sch.directUseCount > 0 # won't catch if used for space type load instance, but that space type isn't used
         # todo - address schedules that fall into this category, if they are used in the model
-        puts "******* #{sch.name} is not setup as parametric schedule"
+        puts "**** #{sch.sources.first.name}  ****  #{sch.name} is not setup as parametric schedule. has #{sch.sources.size} sources."
         next
       end
 
-      # todo - process hoo and floor/ceiling vars to develop formulas without variables
-      # todo - clone rules as necessary to address hours of operation for different dates and days of the week
-
-      # todo - process variable free formula at requested time step
-
-      # todo - apply secondary logic
-
-      # todo - generate scheduleDay
-
-      # todo - create summer and winter design day profiles (make sure scheduleDay objects parametric)
-      # todo - should they have their own formula, or should this be hard coded logic by schedule type
+      # apply parametric inputs
+      schedule_apply_parametric_inputs(sch,ramp_frequency,infer_hoo_for_non_assigned_objects,error_on_out_of_order)
 
       # add schedule to array
       parametric_schedules << sch
@@ -4913,14 +4913,22 @@ class Standard
             prev_time = times[i-1].totalHours
           end
           if i == values.size - 1
-            next_time = times.first.totalHours + 24 # e.g. 30 would show as until 30
+            next_time = times.first.totalHours + 24 # e.g. 6 would show as until 30
             next_value = values.first
+
+            # do nothing if value is same as first value
+            if value == next_value
+              next
+            end
+
           else
             next_time = times[i+1].totalHours
             next_value = values[i+1]
           end
           # delta time is min min_ramp_dur_hr, half of previous dur, half of next dur
-          delta = [min_ramp_dur_hr,(current_time - prev_time)*0.5,(next_time - current_time)*0.5].min
+          # todo - would be nice to change to 0.25 for vally less than 2 hours
+          multiplier = 0.5
+          delta = [min_ramp_dur_hr,(current_time - prev_time)*multiplier,(next_time - current_time)*multiplier].min
           # add value to left if not already added
           if !par_val_time_hash.has_key?(current_time - delta)
             time_left = current_time - delta
@@ -4934,17 +4942,14 @@ class Standard
         end
       end
 
-      # todo - not critical but would be nice to get rid of un-necessary value at 24 when the previous and next values are the same, e.g. avail schedule
-
       # sort hash by keys
-      par_val_time_hash.sort.to_h # todo confirm that this works as expected in test case that exercises it
+      par_val_time_hash.sort.to_h
 
-      # calculate estimated value
+      # calculate estimated value (not including any secondary logic)
       est_daily_flh = 0.0
-      prev_time = par_val_time_hash.keys.last - 24.0
+      prev_time = par_val_time_hash.keys.sort.last - 24.0
       prev_value = par_val_time_hash.values.last.last # last value in last optional pair of values
-      # todo - because existing schedules have a 24 value it will always work as 0 value, don't have to trim any right trapezoids, unless I clean un-necesssary 24 values.
-      par_val_time_hash.each do |time,value_array|
+      par_val_time_hash.sort.each do |time,value_array|
         segment_length = time - prev_time
         avg_value = (value_array.first + prev_value)*0.5
         est_daily_flh += segment_length * avg_value
@@ -4952,23 +4957,25 @@ class Standard
         prev_value = value_array.last
       end
 
-      # test expected value against esimated value
-      if (daily_flh - est_daily_flh).abs > daily_flh * 0.01
-        # todo - address issues when this happens, may need to scale non local floor/ceiling values up or down to fit expected value.
-        # todo - see if actual values match expected once profiles are updated
-        puts "#{sch.name}, #{schedule_day.name} expected full load hours value is #{daily_flh.round(4)}, estimated value is #{est_daily_flh.round(4)}"
+      # test expected value against estimated value
+      percent_change = ((daily_flh - est_daily_flh)/daily_flh) * 100.0
+      if percent_change.abs > 0.05
+        # todo - address issues when this happens, may need to scale non local floor/ceiling values up or down to fit expected value, change ramp max time
+        # post application checks compares against actual instead of estimated values
+        puts "**  #{percent_change.round(4)}%  **  #{sch.name}, #{schedule_day.name} expected full load hours value is #{daily_flh.round(4)}, estimated value is #{est_daily_flh.round(4)}"
       end
 
       raw_string = []
-      par_val_time_hash.each do |time,value_array|
+      par_val_time_hash.sort.each do |time,value_array|
         if value_array.size == 1
           raw_string << "#{time}/#{value_array.first}"
         else # should only have 1 or two values (value in and optional value out)
           raw_string << "#{time}/#{value_array.first}/#{value_array.last}"
         end
       end
-      props.setFeature("param_day_profile_diagnostic",raw_string.join("|")) # this doesn't use variables, just added for testing purposes for stepped to ramped profiles
-      props.setFeature("param_day_profile","") # this uses hoo value and floor/ceiling
+
+      # todo - update to use hoo and floor ceiling variables
+      props.setFeature("param_day_profile",raw_string.join("|")) # this uses hoo value and floor/ceiling
 
       # todo - not used yet, but will add methods described below and others
       # todo - lower infiltration based on air loop hours of operation if air loop has outdoor air object
@@ -4979,16 +4986,17 @@ class Standard
 
       # tag profile type
       # may be useful for parametric changes to tag typical, medium, minimal, or same ones with off_peak prefix
+      # todo - I would like to use these same tags for hours of operation and have parametric tags then ignore the days of week and date range from the rule object
       # tagging min/max makes sense in fractional schedules but not temperature schedules like thermostats (specifically cooling setpoints)
       # todo - add school specific logic hear or in post processing, currently default profile for school may not be most prevalent one
       if i-1 == -1
-        props.setFeature("param_day_tag","typical")
+        props.setFeature("param_day_tag","typical_operation")
       elsif schedule_days[schedule_day] == schedule_days.values.min
-        props.setFeature("param_day_tag","minimal")
+        props.setFeature("param_day_tag","minimal_operation")
       elsif schedule_days[schedule_day] == schedule_days.values.max
-        props.setFeature("param_day_tag","maximum") # normally this should not be used as typical should be the most active day
+        props.setFeature("param_day_tag","maximum_operation") # normally this should not be used as typical should be the most active day
       else
-        props.setFeature("param_day_tag","medium") # not min max or typical
+        props.setFeature("param_day_tag","medium_operation") # not min max or typical
       end
 
     end
