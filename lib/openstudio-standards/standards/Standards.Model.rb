@@ -4329,7 +4329,7 @@ class Standard
                                                         threshold_calc_method: "normalized_daily_range")
     end
 
-    # remove gaps resulting in multiple on off sycles for each rule in schedule so it will be valid hours of operation
+    # remove gaps resulting in multiple on off cycles for each rule in schedule so it will be valid hours of operation
     # todo - currently just keeping first and last two times, would be more robust inspect all operational gaps and remove all but largest
     profiles = []
     profiles << hours_of_operation.defaultDaySchedule
@@ -4399,7 +4399,7 @@ class Standard
     # for initial use case while have same horus of operaiton so this can be pretty simple, but will have to re-visit it sometime
     # possible solution A: choose hoo that contributes the largest fraction of floor area
     # possible solution B: expand the hours of operation for a given day to include combined range of hoo objects
-    # whatever approach is used for gathering parametric inputs for existing ruleset schedules should also be used for model_build_parametric_schedules
+    # whatever approach is used for gathering parametric inputs for existing ruleset schedules should also be used for model_apply_parametric_schedules
 
     # loop through spaces (trace hours of operation back to space)
     gather_inputs_parametric_space_space_type_schedules(model.getSpaces,parametric_inputs)
@@ -4555,7 +4555,7 @@ class Standard
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return [Array] of modified ScheduleRuleset objects
-  def model_build_parametric_schedules(model, ramp_frequency: nil, infer_hoo_for_non_assigned_objects: true, error_on_out_of_order: true)
+  def model_apply_parametric_schedules(model, ramp_frequency: nil, infer_hoo_for_non_assigned_objects: true, error_on_out_of_order: true)
 
     # get ramp frequency (fractional hour) from timestep
     if ramp_frequency.nil?
@@ -4892,7 +4892,6 @@ class Standard
     end
     schedule_days.each_with_index do |(schedule_day,daily_flh),i|
       props = schedule_day.additionalProperties
-      # todo - populate profile (first basic, then value variables, then time variables, then adjusted values to match target equiv hours)
       par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
       times = schedule_day.times
       values = schedule_day.values
@@ -4967,10 +4966,26 @@ class Standard
 
       raw_string = []
       par_val_time_hash.sort.each do |time,value_array|
-        if value_array.size == 1
-          raw_string << "#{time}/#{value_array.first}"
+
+        # add in value variables
+        # not currently using range, only using min max for constant schedules or schedules with just two values
+        value_array_var = []
+        value_array.each do |val|
+          if val == min_max['min'] && values.uniq.size < 3
+            value_array_var << 'flr'
+          elsif val == min_max['max'] && values.uniq.size < 3
+            value_array_var << 'clg'
+          else
+            value_array_var << val
+          end
+        end
+
+        # todo - add in hoo variables for time
+
+        if value_array_var.size == 1
+          raw_string << "#{time}/#{value_array_var.first}"
         else # should only have 1 or two values (value in and optional value out)
-          raw_string << "#{time}/#{value_array.first}/#{value_array.last}"
+          raw_string << "#{time}/#{value_array_var.first}/#{value_array_var.last}"
         end
       end
 
@@ -4988,6 +5003,7 @@ class Standard
       # may be useful for parametric changes to tag typical, medium, minimal, or same ones with off_peak prefix
       # todo - I would like to use these same tags for hours of operation and have parametric tags then ignore the days of week and date range from the rule object
       # tagging min/max makes sense in fractional schedules but not temperature schedules like thermostats (specifically cooling setpoints)
+      # todo - I think these tags should come from occpancy schedule for space(s) schedule. That way all schedules in a space will refer to same profile from hours of operation
       # todo - add school specific logic hear or in post processing, currently default profile for school may not be most prevalent one
       if i-1 == -1
         props.setFeature("param_day_tag","typical_operation")

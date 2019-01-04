@@ -380,16 +380,38 @@ class Standard
 
   # this will use parametric inputs contained in schedule and profiles along with inferred hours of operation to generate updated ruleset schedule profiles
   #
-  # @author David Goldwasser\
+  # @author David Goldwasser
   # @param schedule
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return schedule
   def schedule_apply_parametric_inputs(schedule,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
-    # store floor and celing value
-    val_flr = 0.1 #todo - replace temp value
-    val_clg = 0.9 #todo - replace temp value
+    starting_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
+
+    # store floor and ceiling value
+    val_flr = nil
+    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature("param_sch_floor")
+      val_flr = schedule.additionalProperties.getFeatureAsDouble("param_sch_floor").get
+    end
+    val_clg = nil
+    if schedule.hasAdditionalProperties && schedule.additionalProperties.hasFeature("param_sch_ceiling")
+      val_clg = schedule.additionalProperties.getFeatureAsDouble("param_sch_ceiling").get
+    end
+
+    # storre hours of operation hash
+    # todo - find the target object (it is stored in additional attributes but should try to get it dynamically, but issue if multiple targets)
+    # todo - write a method given a collection of objects to get a an array of spaces
+    # todo - write a method given a collection of spaces to get a combined hours of operation hash, can also use this elsewhere
+    source_names = []
+    schedule.sources.each do |source|
+      source_names << source.name
+    end
+    puts source_names.join(",")
+    # todo - identify space target is in
+    # todo - get hours of operation for space
+    # todo - remove temp hard coded first space solution below
+    hours_of_operation = space_hours_of_operation(schedule.model.getSpaces.first)
 
     # loop through schedule days from highest to lowest priority (with default as lowest priority)
     # if rule needs to be split to address hours of operation rules add new rule next to relevant existing rule
@@ -411,7 +433,7 @@ class Standard
     profiles.each do |sch_day,rule|
 
       # get hours of operation for this specific profile
-      hoo_start = 6.0 # todo - replace temp value
+      hoo_start = 8.0 # todo - replace temp value
       hoo_end = 18.0 # todo - replace temp value
 
       # todo - clone rules as necessary to address hours of operation for different dates and days of the week (make sure ot add param_day_tag value of autogen)
@@ -421,8 +443,8 @@ class Standard
       process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
       parametric_eflh = day_schedule_equivalent_full_load_hrs(sch_day)
       percent_change = ((starting_eflh - parametric_eflh)/starting_eflh) * 100.0
-      if percent_change.abs > 0.0
-        puts "******  #{percent_change.round(4)}%  ******  #{schedule.name} #{sch_day.name} daily effective equiv. hours changed by from #{starting_eflh.round(4)} to #{parametric_eflh.round(4)}"
+      if percent_change.abs > 0.05
+        puts "******  #{percent_change.round(4)}%  ******  #{schedule.name} #{sch_day.name} daily equiv. full load hours changed from #{starting_eflh.round(4)} to #{parametric_eflh.round(4)}"
       end
 
     end
@@ -430,18 +452,23 @@ class Standard
     # todo - create summer and winter design day profiles (make sure scheduleDay objects parametric)
     # todo - should they have their own formula, or should this be hard coded logic by schedule type
 
+    # check orig vs. updated aeflh
+    final_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
+    percent_change = ((starting_aeflh - final_aeflh)/starting_aeflh) * 100.0
+    if percent_change.abs > 0.05
+      puts "********  #{percent_change.round(4)}%  ********  #{schedule.name} #{schedule.name} annual equiv. full load hours changed from #{starting_aeflh.round(4)} to #{final_aeflh.round(4)}"
+    end
+
     return schedule
   end
 
   # process individual schedule profiles
-  # todo - update this to work when called by schedule_apply_parametric_inputs on individual schedule days
   #
   # @author David Goldwasser
   # @return schedule_day
   def process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
     # todo - process hoo and floor/ceiling vars to develop formulas without variables
-    # todo - process variable free formula at requested time step
     formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
     formula_hash = {}
     formula_string.split("|").each do |time_val_valopt|
@@ -472,8 +499,7 @@ class Standard
       time = time.gsub('vac',vac.to_s)
       begin
         time_float = eval(time)
-        # todo - fix float check
-        if 1 == 1 #time_float.to_i.to_s == time_float || time_float.to_f.to_s == time_float # check to see if numeric
+        if time_float.to_i.to_s == time_float.to_s || time_float.to_f.to_s == time_float.to_s # check to see if numeric
           time_float = time_float.to_f
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{sch_day.name} is invalid. It can't be converted to a float.")
@@ -491,8 +517,7 @@ class Standard
         val = val.gsub('range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
         begin
           val_float = eval(val)
-          # todo - fix float check
-          if 1 == 1 #val_float.to_i.to_s == val_float || val_float.to_f.to_s == val_float # check to see if numeric
+          if val_float.to_i.to_s == val_float.to_s or val_float.to_f.to_s == val_float.to_s # check to see if numeric
             val_float = val_float.to_f
           else
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Value formula #{val_float} for #{sch_day.name} is invalid. It can't be converted to a float.")
