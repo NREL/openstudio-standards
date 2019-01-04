@@ -123,7 +123,7 @@ class NECB2011
       add_ptac_dx_cooling(model, zone)
 
       # add zone baseboards
-      add_zone_baseboards(
+      add_zone_baseboards(baseboard_type: baseboard_type,
                           hw_loop: hw_loop,
                           model: model,
                           zone: zone)

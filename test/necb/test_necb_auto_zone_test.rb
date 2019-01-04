@@ -17,7 +17,7 @@ class NECB_Autozone_Tests < MiniTest::Test
   def test_FullServiceRestaurant()
     model = autozone("FullServiceRestaurant")
   end
-=begin
+
 
   def test_HighriseApartment()
     model = autozone("HighriseApartment")
@@ -70,7 +70,7 @@ class NECB_Autozone_Tests < MiniTest::Test
   def test_SecondarySchool()
     model = autozone("SecondarySchool")
   end
-=end
+
 
 
 

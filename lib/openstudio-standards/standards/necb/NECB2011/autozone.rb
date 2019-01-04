@@ -1215,11 +1215,14 @@ class NECB2011
   )
 
     system_zones_hash = {}
+    #store dwelling zones into array
     zones = []
     model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
       zones << space.thermalZone.get
     end
     zones.uniq!
+
+    #sort system 1 or 3 used for each dwelling unit as per T8.4.4.8.A NECB 2011-17
     zones.each do |zone|
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] = [] if system_zones_hash[get_necb_thermal_zone_system_selection(zone)].nil?
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] << zone
@@ -1271,7 +1274,6 @@ class NECB2011
           end
         end
       end
-
     end
   end
 
@@ -1376,5 +1378,4 @@ class NECB2011
     rendering_color.setRenderingBlueValue(random.rand(255))
     return rendering_color
   end
-
 end

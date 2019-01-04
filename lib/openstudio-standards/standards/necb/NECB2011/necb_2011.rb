@@ -221,10 +221,10 @@ class NECB2011 < Standard
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     #validate that model has information required.
-    puts 'Old SPace types'
-    model.getSpaceTypes.each do |spacetype|
-      puts spacetype.name
-    end
+    #puts 'Old SPace types'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
 
     return false unless validate_initial_model(model)
 
@@ -232,10 +232,10 @@ class NECB2011 < Standard
     return false unless validate_space_types(model)
 
     #puts Old SPace types
-    puts 'new spacetypes'
-    model.getSpaceTypes.each do |spacetype|
-      puts spacetype.name
-    end
+    # puts 'new spacetypes'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
 
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
