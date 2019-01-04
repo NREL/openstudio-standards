@@ -59,11 +59,12 @@ class NECB2011
     return true
     else
       # Create system airloop
-      zones.each do |zone|
-        control_zone = zone
+
+        control_zone = zones[0]
         # Add Air Loop
         air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
         # Add Zone equipment
+        zones.each do |zone|
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,

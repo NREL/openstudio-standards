@@ -991,7 +991,7 @@ class NECB2011
 
       # Ensure space floors are multiplied.
       mult = @space_multiplier_map[space.name.to_s].nil? ? 1.0 : @space_multiplier_map[space.name.to_s]
-      puts "this #{determine_necb_schedule_type(space)}"
+      # puts "this #{determine_necb_schedule_type(space)}"
       schedule_hash[determine_necb_schedule_type(space)] += space.floorArea * mult
     end
     # finds max value and returns NECB schedule letter.
