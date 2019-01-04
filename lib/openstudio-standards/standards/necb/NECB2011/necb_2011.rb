@@ -180,7 +180,9 @@ class NECB2011 < Standard
                                    y_scale: 1.0,
                                    z_scale: 1.0,
                                    fdwr_set: 'MAXIMIZE',
-                                   ssr_set: 'MAXIMIZE'
+                                   ssr_set: 'MAXIMIZE',
+                                   new_auto_zoner: false
+
   )
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
@@ -193,7 +195,8 @@ class NECB2011 < Standard
                                 z_scale: z_scale,
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
-                                ssr_set: ssr_set)
+                                ssr_set: ssr_set,
+                                new_auto_zoner: new_auto_zoner)
   end
 
 
