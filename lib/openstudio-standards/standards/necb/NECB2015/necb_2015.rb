@@ -64,7 +64,8 @@ class NECB2015 < NECB2011
                            y_scale: 1.0,
                            z_scale: 1.0,
                            fdwr_set: 'MAXIMIZE',
-                           ssr_set: 'MAXIMIZE')
+                           ssr_set: 'MAXIMIZE',
+                           new_auto_zoner: false)
 
     #Run everything like parent NECB2011 'model_apply_standard' method.
     model = super(model: model,
