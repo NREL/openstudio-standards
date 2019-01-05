@@ -7,6 +7,8 @@ class NECB2011
     return true
   end
 
+
+
   # NECB does not change damper positions
   #
   # return [Bool] returns true if successful, false if not
@@ -1501,447 +1503,6 @@ class NECB2011
   end
 
 
-  # This method will take a model that uses NECB2011 spacetypes , and..
-  # 1. Create a building story schema.
-  # 2. Remove all existing Thermal Zone defintions.
-  # 3. Create new thermal zones based on the following definitions.
-  # Rule1 all zones must contain only the same schedule / occupancy schedule.
-  # Rule2 zones must cater to similar solar gains (N,E,S,W)
-  # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level.
-  # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.
-  # Rule5 For NECB zones must contain spaces of similar system type only.
-  # Rule6 Residential / dwelling units must not share systems with other space types.
-  # @author phylroy.lopez@nrcan.gc.ca
-  # @param model [OpenStudio::model::Model] A model object
-  # @return [String] system_zone_array
-  def necb_autozone_and_autosystem_old(model: nil,
-                                       runner: nil,
-                                       use_ideal_air_loads: false,
-                                       system_fuel_defaults:)
-
-    # Create a data struct for the space to system to placement information.
-
-    # system assignment.
-    unless ['NaturalGas', 'Electricity', 'PropaneGas', 'FuelOil#1', 'FuelOil#2', 'Coal', 'Diesel', 'Gasoline', 'OtherFuel1'].include?(system_fuel_defaults['boiler_fueltype'])
-      BTAP.runner_register('ERROR', "boiler_fueltype = #{system_fuel_defaults['boiler_fueltype']}", runner)
-      return
-    end
-
-    unless [true, false].include?(system_fuel_defaults['mau_type'])
-      BTAP.runner_register('ERROR', "mau_type = #{system_fuel_defaults['mau_type']}", runner)
-      return
-    end
-
-    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['mau_heating_coil_type'])
-      BTAP.runner_register('ERROR', "mau_heating_coil_type = #{system_fuel_defaults['mau_heating_coil_type']}", runner)
-      return false
-    end
-
-    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['baseboard_type'])
-      BTAP.runner_register('ERROR', "baseboard_type = #{system_fuel_defaults['baseboard_type']}", runner)
-      return false
-    end
-
-    unless ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'].include?(system_fuel_defaults['chiller_type'])
-      BTAP.runner_register('ERROR', "chiller_type = #{system_fuel_defaults['chiller_type']}", runner)
-      return false
-    end
-    unless ['DX', 'Hydronic'].include?(system_fuel_defaults['mau_cooling_type'])
-      BTAP.runner_register('ERROR', "mau_cooling_type = #{system_fuel_defaults['mau_cooling_type']}", runner)
-      return false
-    end
-
-    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys3'])
-      BTAP.runner_register('ERROR', "heating_coil_type_sys3 = #{system_fuel_defaults['heating_coil_type_sys3']}", runner)
-      return false
-    end
-
-    unless ['Electric', 'Gas', 'DX'].include?(system_fuel_defaults['heating_coil_type_sys4'])
-      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
-      return false
-    end
-
-    unless ['Hot Water', 'Electric'].include?(system_fuel_defaults['heating_coil_type_sys6'])
-      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
-      return false
-    end
-
-    unless ['AF_or_BI_rdg_fancurve', 'AF_or_BI_inletvanes', 'fc_inletvanes', 'var_speed_drive'].include?(system_fuel_defaults['fan_type'])
-      BTAP.runner_register('ERROR', "fan_type = #{system_fuel_defaults['fan_type']}", runner)
-      return false
-    end
-    # REPEATED CODE!!
-    unless ['Electric', 'Hot Water'].include?(system_fuel_defaults['heating_coil_type_sys6'])
-      BTAP.runner_register('ERROR', "heating_coil_type_sys6 = #{system_fuel_defaults['heating_coil_type_sys6']}", runner)
-      return false
-    end
-    # REPEATED CODE!!
-    unless ['Electric', 'Gas'].include?(system_fuel_defaults['heating_coil_type_sys4'])
-      BTAP.runner_register('ERROR', "heating_coil_type_sys4 = #{system_fuel_defaults['heating_coil_type_sys4']}", runner)
-      return false
-    end
-
-    # Ensure that floors have been assigned by user.
-    raise('No building stories have been defined.. User must define building stories and spaces in model.') if model.getBuildingStorys.empty?
-    # BTAP::Geometry::BuildingStoreys::auto_assign_stories(model)
-
-    # this method will determine the spaces that should be set to each system
-    #
-    #
-    #
-    #
-    #
-    spacezoning_data = Struct.new(
-        :space, # the space object
-        :space_name, # the space name
-        :building_type_name, # space type name
-        :space_type_name, # space type name
-        :necb_hvac_system_selection_type, #
-        :system_number, # the necb system type
-        :number_of_stories, # number of stories
-        :horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-        :vertical_placment, # the vertical placement ( ground, top, both, middle )
-        :people_obj, # Spacetype people object
-        :heating_capacity,
-        :cooling_capacity,
-        :is_dwelling_unit, # Checks if it is a dwelling unit.
-        :is_wildcard
-    )
-
-    # Array to store schedule objects
-    schedule_type_array = []
-    space_zoning_data_array_json = []
-
-    # find the number of stories in the model this include multipliers.
-    number_of_stories = model.getBuilding.standardsNumberOfAboveGroundStories
-    if number_of_stories.empty?
-      raise 'Number of above ground stories not present in geometry model. Please ensure this is defined in your Building Object'
-    else
-      number_of_stories = number_of_stories.get
-    end
-
-    # set up system array containers. These will contain the spaces associated with the system types.
-    space_zoning_data_array = []
-
-    # First pass of spaces to collect information into the space_zoning_data_array .
-    model.getSpaces.sort.each do |space|
-      # this will get the spacetype system index 8.4.4.8A  from the SpaceTypeData and BuildingTypeData in  (1-12)
-      space_system_index = nil
-      if space.spaceType.empty?
-        space_system_index = nil
-      else
-        # gets row information from standards spreadsheet.
-        space_type_property = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => @template,
-                                                                                                        'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                                                        'building_type' => space.spaceType.get.standardsBuildingType.get})
-        raise("could not find necb system selection type for space: #{space.name} and spacetype #{space.spaceType.get.standardsSpaceType.get}") if space_type_property.nil?
-        # stores the Building or SpaceType System type name.
-        necb_hvac_system_selection_type = space_type_property['necb_hvac_system_selection_type']
-        # Check if the NECB HVAC system selection type name was found in the standards data
-        if necb_hvac_system_selection_type.nil?
-          raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-        end
-      end
-
-      # Get the heating and cooling load for the space. Only Zones with a defined thermostat will have a load.
-      # Make sure we don't have sideeffects by changing the argument variables.
-      cooling_load = nil
-      heating_load = nil
-      if space.spaceType.get.standardsSpaceType.get == '- undefined -'
-        cooling_load = 0.0
-        heating_load = 0.0
-      else
-        cooling_load = space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if cooling_load.nil?
-        heating_load = space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0 if heating_load.nil?
-      end
-
-      # identify space-system_index and assign the right NECB system type 1-7.
-
-      # Check if there is an hvac system selection category associated with the space.
-      if necb_hvac_system_selection_type.nil?
-        raise "#{space.name} does not have an NECB system association. Please define a NECB HVAC System Selection Type in the google docs standards database."
-      end
-
-      system = nil
-      is_dwelling_unit = false
-      is_wildcard = nil
-
-      # Get the NECB HVAC system selection table from standards_data which was ultimately read from necb_hvac_system_selection.JSON
-      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
-
-      # Using cooling_design_load as a selection criteria for necb hvac system section.  Set to zero to avoid triggering an exception in the
-      # main selection loop
-      necb_hvac_system_selection_cooling_desg_load = 0
-
-
-      # Make sure that we loaded the necb_hvac_system_selection_type.json file properly and that the information is stored in standards_data
-      if necb_hvac_system_selection_table.empty?
-        raise("Could not find necb system selection type table. Please make sure that the necb_havc_system_selection_type.json file is present")
-      else
-        # Loop through the NECB HVAC system selection table entries read from necb_hvac_system_selection_type table.JSON
-        # Look for the entry with the same type name that fits within the appropriate number of stories and cooling capacity criteria
-        # If one fits then read the associated HVAC system type number and check if it is defined as a dwelling unit or wildcard
-        necb_hvac_system_selection_table.each do |necb_hvac_system_select|
-          if necb_hvac_system_select['necb_hvac_system_selection_type'] == necb_hvac_system_selection_type and necb_hvac_system_select['min_stories'] <= number_of_stories && necb_hvac_system_select['max_stories'] >= number_of_stories and necb_hvac_system_select['min_cooling_capacity_kw'] <= necb_hvac_system_selection_cooling_desg_load && necb_hvac_system_select['max_cooling_capacity_kw'] >= necb_hvac_system_selection_cooling_desg_load
-            system = necb_hvac_system_select['system_type']
-            is_dwelling_unit = necb_hvac_system_select['dwelling']
-            if necb_hvac_system_select['necb_hvac_system_selection_type'] == 'Wildcard'
-              is_wildcard = true
-            end
-            break
-          end
-        end
-      end
-
-      # If the previous loop could not find an appropriate NECB HVAC system selection type then "system" will be defined by either nil, 0, or 'Wildcard'.
-      # If 'Wildcard' then the system remains at nil but is_wildard is true and the HVAC is dealt with elsewhere
-      # If 0, then the system will be treated as - undefined -.  Otherwise no system has been chosen so an error will be returned.
-      if system.nil? and is_wildcard.nil?
-        if necb_hvac_system_selection_type == 0
-          system = 0
-        else
-          raise "NECB HVAC System Selection Type #{necb_hvac_system_selection_type} not valid"
-        end
-      end
-
-      # get placement on floor, core or perimeter and if a top, bottom, middle or single story.
-      horizontal_placement, vertical_placement = BTAP::Geometry::Spaces.get_space_placement(space)
-      # dump all info into an array for debugging and iteration.
-      unless space.spaceType.empty?
-        space_type_name = space.spaceType.get.standardsSpaceType.get
-        building_type_name = space.spaceType.get.standardsBuildingType.get
-        space_zoning_data_array << spacezoning_data.new(space,
-                                                        space.name.get,
-                                                        building_type_name,
-                                                        space_type_name,
-                                                        necb_hvac_system_selection_type,
-                                                        system,
-                                                        number_of_stories,
-                                                        horizontal_placement,
-                                                        vertical_placement,
-                                                        space.spaceType.get.people,
-                                                        heating_load,
-                                                        cooling_load,
-                                                        is_dwelling_unit,
-                                                        is_wildcard)
-        schedule_type_array << determine_necb_schedule_type(space).to_s
-        space_zoning_data_array_json << {
-            space: space,
-            space_name: space.name.get,
-            building_type_name: space.spaceType.get.standardsBuildingType.get, # space type name
-            space_type_name: space.spaceType.get.standardsSpaceType.get, # space type name
-            necb_hvac_system_selection_type: necb_hvac_system_selection_type, #
-            system_number: system, # the necb system type
-            number_of_stories: number_of_stories, # number of stories
-            horizontal_placement: horizontal_placement, # the horizontal placement (norht, south, east, west, core)
-            vertical_placment: vertical_placement, # the vertical placement ( ground, top, both, middle )
-            heating_capacity: heating_load,
-            cooling_capacity: cooling_load,
-            is_dwelling_unit: is_dwelling_unit, # Checks if it is a dwelling unit.
-            is_wildcard: is_wildcard,
-            schedule_type: determine_necb_schedule_type(space).to_s
-        }
-      end
-    end
-    File.write("#{File.dirname(__FILE__)}/oldway.json", JSON.pretty_generate(space_zoning_data_array_json))
-    schedule_type_array.uniq!
-
-
-    # Deal with Wildcard spaces. Might wish to have logic to do coridors first.
-    space_zoning_data_array.sort_by(&:space_name).each do |space_zone_data|
-      # If it is a wildcard space.
-      if space_zone_data.system_number.nil?
-        # iterate through all adjacent spaces from largest shared wall area to smallest.
-        # Set system type to match first space system that is not nil.
-        adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, true)
-        if adj_spaces.nil?
-          puts "Warning: No adjacent spaces for #{space_zone_data.space.name} on same floor, looking for others above and below to set system"
-          adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space_zone_data.space, false)
-        end
-        adj_spaces.sort.each do |adj_space|
-          # if there are no adjacent spaces. Raise an error.
-          raise "Could not determine adj space to space #{space_zone_data.space.name.get}" if adj_space.nil?
-          adj_space_data = space_zoning_data_array.find {|data| data.space == adj_space[0]}
-          if adj_space_data.system_number.nil?
-            next
-          else
-            space_zone_data.system_number = adj_space_data.system_number
-            puts space_zone_data.space.name.get.to_s
-            break
-          end
-        end
-        raise "Could not determine adj space system to space #{space_zone_data.space.name.get}" if space_zone_data.system_number.nil?
-      end
-    end
-
-    # remove any thermal zones used for sizing to start fresh. Should only do this after the above system selection method.
-    model.getThermalZones.sort.each(&:remove)
-
-    # now lets apply the rules.
-    # Rule1 all zones must contain only the same schedule / occupancy schedule.
-    # Rule2 zones must cater to similar solar gains (N,E,S,W)
-    # Rule3 zones must not pass from floor to floor. They must be contained to a single floor or level.
-    # Rule4 Wildcard spaces will be associated with the nearest zone of similar schedule type in which is shared most of it's internal surface with.
-    # Rule5 NECB zones must contain spaces of similar system type only.
-    # Rule6 Multiplier zone will be part of the floor and orientation of the base space.
-    # Rule7 Residential / dwelling units must not share systems with other space types.
-    # Array of system types of Array of Spaces
-    system_zone_array = []
-    # Lets iterate by system
-    (0..7).each do |system_number|
-      system_zone_array[system_number] = []
-      # iterate by story
-      story_counter = 0
-      model.getBuildingStorys.sort.each do |story|
-        # puts "Story:#{story}"
-        story_counter += 1
-        # iterate by operation schedule type.
-        schedule_type_array.each do |schedule_type|
-          # iterate by horizontal location
-          ['north', 'east', 'west', 'south', 'core'].each do |horizontal_placement|
-            # puts "horizontal_placement:#{horizontal_placement}"
-            [true, false].each do |is_dwelling_unit|
-              space_array = []
-              space_zoning_data_array.each do |space_info|
-                # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
-                if (space_info.system_number == system_number) &&
-                    (space_info.space.buildingStory.get == story) &&
-                    (determine_necb_schedule_type(space_info.space).to_s == schedule_type) &&
-                    (space_info.horizontal_placement == horizontal_placement) &&
-                    (space_info.is_dwelling_unit == is_dwelling_unit)
-                  space_array << space_info.space
-                end
-              end
-
-              # create Thermal Zone if space_array is not empty.
-              unless space_array.empty?
-                # Process spaces that have multipliers associated with them first.
-                # This map define the multipliers for spaces with multipliers not equals to 1
-                space_multiplier_map = @space_multiplier_map
-
-                # create new zone and add the spaces to it.
-                space_array.each do |space|
-                  # Create thermalzone for each space.
-                  thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-                  # Create a more informative space name.
-                  thermal_zone.setName("Sp-#{space.name} Sys-#{system_number} Flr-#{story_counter} Sch-#{schedule_type} HPlcmt-#{horizontal_placement} ZN")
-                  # Add zone mulitplier if required.
-                  thermal_zone.setMultiplier(space_multiplier_map[space.name.to_s]) unless space_multiplier_map[space.name.to_s].nil?
-                  # Space to thermal zone. (for archetype work it is one to one)
-                  space.setThermalZone(thermal_zone)
-                  # Get thermostat for space type if it already exists.
-                  space_type_name = space.spaceType.get.name.get
-                  thermostat_name = space_type_name + ' Thermostat'
-                  thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
-                  if thermostat.empty?
-                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name} ZN")
-                    raise " Thermostat #{thermostat_name} not found for space name: #{space.name}"
-                  else
-                    thermostat_clone = thermostat.get.clone(model).to_ThermostatSetpointDualSetpoint.get
-                    thermal_zone.setThermostatSetpointDualSetpoint(thermostat_clone)
-                  end
-                  # Add thermal to zone system number.
-                  system_zone_array[system_number] << thermal_zone
-                end
-              end
-            end
-          end
-        end
-      end
-    end # system iteration
-
-    # Create and assign the zones to the systems.
-    if use_ideal_air_loads == true
-      # otherwise use ideal loads.
-      model.getThermalZones.sort.each do |thermal_zone|
-        thermal_zone_ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
-        thermal_zone_ideal_loads.addToThermalZone(thermal_zone)
-      end
-    else
-      hw_loop_needed = false
-      system_zone_array.each_with_index do |zones, system_index|
-        next if zones.empty?
-        if system_index == 1 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
-          hw_loop_needed = true
-        elsif system_index == 2 || system_index == 5 || system_index == 7
-          hw_loop_needed = true
-        elsif (system_index == 3 || system_index == 4) && system_fuel_defaults['baseboard_type'] == 'Hot Water'
-          hw_loop_needed = true
-        elsif system_index == 6 && (system_fuel_defaults['mau_heating_coil_type'] == 'Hot Water' || system_fuel_defaults['baseboard_type'] == 'Hot Water')
-          hw_loop_needed = true
-        end
-        if hw_loop_needed
-          break
-        end
-      end
-      if hw_loop_needed
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        setup_hw_loop_with_components(model, hw_loop, system_fuel_defaults['boiler_fueltype'], always_on)
-      end
-      system_zone_array.each_with_index do |zones, system_index|
-        # skip if no thermal zones for this system.
-        next if zones.empty?
-        case system_index
-        when 0, nil
-          # Do nothing no system assigned to zone. Used for Unconditioned spaces
-        when 1
-          add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                zones: zones,
-                                                mau_type: system_fuel_defaults['mau_type'],
-                                                mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
-                                                baseboard_type: system_fuel_defaults['baseboard_type'],
-                                                hw_loop: hw_loop)
-        when 2, 7
-          add_sys2_FPFC_sys5_TPFC(model: model,
-                                  zones: zones,
-                                  chiller_type: system_fuel_defaults['chiller_type'],
-                                  fan_coil_type: 'FPFC',
-                                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
-                                  hw_loop: hw_loop)
-        when 3
-          add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                             zones: zones,
-                                                                                             heating_coil_type: system_fuel_defaults['heating_coil_type_sys3'],
-                                                                                             baseboard_type: system_fuel_defaults['baseboard_type'],
-                                                                                             hw_loop: hw_loop)
-        when 4
-          add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                       zones: zones,
-                                                                       heating_coil_type: system_fuel_defaults['heating_coil_type_sys4'],
-                                                                       baseboard_type: system_fuel_defaults['baseboard_type'],
-                                                                       hw_loop: hw_loop)
-        when 5
-          add_sys2_FPFC_sys5_TPFC(model: model,
-                                  zones: zones,
-                                  chiller_type: system_fuel_defaults['chiller_type'],
-                                  fan_coil_type: 'TPFC',
-                                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
-                                  hw_loop: hw_loop)
-        when 6
-          add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
-                                                                     zones: zones,
-                                                                     heating_coil_type: system_fuel_defaults['heating_coil_type_sys6'],
-                                                                     baseboard_type: system_fuel_defaults['baseboard_type'],
-                                                                     chiller_type: system_fuel_defaults['chiller_type'],
-                                                                     fan_type: system_fuel_defaults['fan_type'],
-                                                                     hw_loop: hw_loop)
-        end
-      end
-    end
-    # Check to ensure that all spaces are assigned to zones except undefined ones.
-    errors = []
-    model.getSpaces.sort.each do |space|
-      if space.thermalZone.empty? && (space.spaceType.get.name.get != 'Space Function - undefined -')
-        errors << "space #{space.name} with spacetype #{space.spaceType.get.name.get} was not assigned a thermalzone."
-      end
-    end
-    unless errors.empty?
-      raise(" #{errors}")
-    end
-  end
-
-
   # Creates thermal zones to contain each space, as defined for each building in the
   # system_to_space_map inside the Prototype.building_name
   # e.g. (Prototype.secondary_school.rb) file.
@@ -2117,6 +1678,7 @@ class NECB2011
   def add_onespeed_DX_coil(model, always_on)
 
     #clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
+    # clg_cap_f_of_temp = model_add_curve("DXCOOL-NECB2011-REF-CAPFT")
     clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_cap_f_of_temp.setCoefficient1Constant(0.867905)
     clg_cap_f_of_temp.setCoefficient2x(0.0142459)
@@ -2137,6 +1699,7 @@ class NECB2011
     clg_cap_f_of_flow.setMinimumValueofx(0.0)
     clg_cap_f_of_flow.setMaximumValueofx(1.0)
 
+    # clg_energy_input_ratio_f_of_temp = = model_add_curve(""DXCOOL-NECB2011-REF-COOLEIRFT")
     #clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
     clg_energy_input_ratio_f_of_temp.setCoefficient1Constant(0.116936)
@@ -2151,6 +1714,7 @@ class NECB2011
     clg_energy_input_ratio_f_of_temp.setMaximumValueofy(46.0)
 
     #clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
+    # clg_energy_input_ratio_f_of_flow = = model_add_curve("DXCOOL-NECB2011-REF-CAPFFLOW")
     clg_energy_input_ratio_f_of_flow = OpenStudio::Model::CurveQuadratic.new(model)
     clg_energy_input_ratio_f_of_flow.setCoefficient1Constant(1.0)
     clg_energy_input_ratio_f_of_flow.setCoefficient2x(0.0)
@@ -2159,6 +1723,7 @@ class NECB2011
     clg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
 
     # NECB curve modified to take into account how PLF is used in E+, and PLF ranges (> 0.7)
+    # clg_part_load_ratio = model_add_curve("DXCOOL-NECB2011-REF-COOLPLFFPLR")
     clg_part_load_ratio = OpenStudio::Model::CurveCubic.new(model)
     clg_part_load_ratio.setCoefficient1Constant(0.0277)
     clg_part_load_ratio.setCoefficient2x(4.9151)
@@ -2230,23 +1795,29 @@ class NECB2011
     ptac.addToThermalZone(zone)
   end
 
-  def common_air_loop(model: model)
+  def common_air_loop(model:, system_data:)
     mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+    mau_air_loop.setName(system_data[:name])
     air_loop_sizing = mau_air_loop.sizingSystem
     air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-    air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
-    air_loop_sizing.setPreheatDesignTemperature(7.0)
-    air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
-    air_loop_sizing.setPrecoolDesignTemperature(13.0)
-    air_loop_sizing.setPrecoolDesignHumidityRatio(0.008)
-    air_loop_sizing.setSizingOption('NonCoincident')
-    air_loop_sizing.setCoolingDesignAirFlowMethod('DesignDay')
-    air_loop_sizing.setCoolingDesignAirFlowRate(0.0)
-    air_loop_sizing.setHeatingDesignAirFlowMethod('DesignDay')
-    air_loop_sizing.setHeatingDesignAirFlowRate(0.0)
-    air_loop_sizing.setSystemOutdoorAirMethod('ZoneSum')
-    air_loop_sizing.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
-    air_loop_sizing.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
+    air_loop_sizing.setPreheatDesignTemperature(system_data[:PreheatDesignTemperature]) unless system_data[:PreheatDesignTemperature].nil?
+    air_loop_sizing.setPreheatDesignHumidityRatio(system_data[:PreheatDesignHumidityRatio]) unless system_data[:PreheatDesignHumidityRatio].nil?
+    air_loop_sizing.setPrecoolDesignTemperature(system_data[:PrecoolDesignTemperature]) unless system_data[:PrecoolDesignTemperature].nil?
+    air_loop_sizing.setPrecoolDesignHumidityRatio(system_data[:PrecoolDesignHumidityRatio]) unless system_data[:PrecoolDesignHumidityRatio].nil?
+    air_loop_sizing.setSizingOption(system_data[:SizingOption] ) unless system_data[:SizingOption].nil?
+    air_loop_sizing.setCoolingDesignAirFlowMethod(system_data[:CoolingDesignAirFlowMethod]) unless system_data[:CoolingDesignAirFlowMethod].nil?
+    air_loop_sizing.setCoolingDesignAirFlowRate(system_data[:CoolingDesignAirFlowRate]) unless system_data[:CoolingDesignAirFlowRate].nil?
+    air_loop_sizing.setHeatingDesignAirFlowMethod(system_data[:HeatingDesignAirFlowMethod]) unless system_data[:HeatingDesignAirFlowMethod].nil?
+    air_loop_sizing.setHeatingDesignAirFlowRate(system_data[:HeatingDesignAirFlowRate]) unless system_data[:HeatingDesignAirFlowRate].nil?
+    air_loop_sizing.setSystemOutdoorAirMethod(system_data[:SystemOutdoorAirMethod]) unless system_data[:SystemOutdoorAirMethod].nil?
+    air_loop_sizing.setCentralCoolingDesignSupplyAirHumidityRatio(system_data[:CentralCoolingDesignSupplyAirHumidityRatio]) unless system_data[:CentralCoolingDesignSupplyAirHumidityRatio].nil?
+    air_loop_sizing.setCentralHeatingDesignSupplyAirHumidityRatio(system_data[:CentralHeatingDesignSupplyAirHumidityRatio]) unless system_data[:CentralHeatingDesignSupplyAirHumidityRatio].nil?
+    air_loop_sizing.setTypeofLoadtoSizeOn(system_data[:TypeofLoadtoSizeOn]) unless system_data[:TypeofLoadtoSizeOn].nil?
+    air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature]) unless system_data[:CentralCoolingDesignSupplyAirTemperature].nil?
+    air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
+    air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
+    air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
+    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio] ) unless system_data[:MinimumSystemAirFlowRatio].nil?
     return mau_air_loop
   end
 

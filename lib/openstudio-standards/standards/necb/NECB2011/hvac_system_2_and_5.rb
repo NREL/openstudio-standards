@@ -9,21 +9,36 @@ class NECB2011
                               hw_loop:)
 
     #System 2 AHU data
-    system_2_data = Hash.new
-    system_2_data[:name] = 'Sys_2_Make-up air unit'
-    system_2_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-    system_2_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
-    system_2_data[:AllOutdoorAirinCooling] = false
-    system_2_data[:AllOutdoorAirinHeating] = false
-    system_2_data[:TypeofLoadtoSizeOn] = 'Sensible'
-    system_2_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 13.0
-    system_2_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.1
+    system_data = Hash.new
+    system_data[:name] = 'Sys_2_Make-up air unit'
+    system_data[:PreheatDesignTemperature] = 7.0
+    system_data[:PreheatDesignHumidityRatio] = 0.008
+    system_data[:PrecoolDesignTemperature] = 13.0
+    system_data[:PrecoolDesignHumidityRatio] = 0.008
+    system_data[:SizingOption] = 'NonCoincident'
+    system_data[:CoolingDesignAirFlowMethod] = 'DesignDay'
+    system_data[:CoolingDesignAirFlowRate] = 0.0
+    system_data[:HeatingDesignAirFlowMethod] = 'DesignDay'
+    system_data[:HeatingDesignAirFlowRate] = 0.0
+    system_data[:SystemOutdoorAirMethod] = 'ZoneSum'
+    system_data[:CentralCoolingDesignSupplyAirHumidityRatio] = 0.0085
+    system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
+
+    system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
+    system_data[:AllOutdoorAirinCooling] = false
+    system_data[:AllOutdoorAirinHeating] = false
+    system_data[:TypeofLoadtoSizeOn] = 'Sensible'
+    system_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 13.0
+    system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.1
+    system_data[:MinimumSystemAirFlowRatio] = 1.0
+
     #System 2 Zone data
-    system_2_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_2_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
-    system_2_data[:ZoneCoolingSizingFactor] = 1.1
-    system_2_data[:ZoneHeatingSizingFactor] = 1.3
-    system_data = system_2_data
+    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneCoolingSizingFactor] = 1.1
+    system_data[:ZoneHeatingSizingFactor] = 1.3
+
 
 
     # System Type 2: FPFC or System 5: TPFC
@@ -57,14 +72,9 @@ class NECB2011
     # TO DO: Need to investigate characteristics of make-up air unit for NECB reference
     # and define them here
 
-    air_loop = mau_air_loop = common_air_loop(model: model)
+    air_loop = mau_air_loop = common_air_loop(model: model, system_data: system_data)
     air_loop.setName(system_data[:name])
-    air_loop_sizing = air_loop.sizingSystem # TODO units
-    air_loop_sizing.setTypeofLoadtoSizeOn(system_data[:TypeofLoadtoSizeOn])
-    air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature])
-    air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature])
-    air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
-    air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
+
 
 
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)

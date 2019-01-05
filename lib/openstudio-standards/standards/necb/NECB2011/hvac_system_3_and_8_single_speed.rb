@@ -4,28 +4,44 @@ class NECB2011
                                                                                          zones:,
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
-                                                                                         hw_loop:)
+                                                                                         hw_loop:,
+                                                                                         new_auto_zoner: false)
 
 
-    system_3_data = Hash.new
-    system_3_data[:name] = 'Sys_3_PSZ'
-    system_3_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-    system_3_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
-    system_3_data[:AllOutdoorAirinCooling] = false
-    system_3_data[:AllOutdoorAirinHeating] = false
-    system_3_data[:TypeofLoadtoSizeOn] = 'Sensible'
+    system_data = Hash.new
+    system_data[:name] = 'Sys_3_PSZ'
+    system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:AllOutdoorAirinCooling] = false
+    system_data[:AllOutdoorAirinHeating] = false
+    system_data[:TypeofLoadtoSizeOn] = 'Sensible'
+    system_data[:MinimumSystemAirFlowRatio] = 1.0
+
+    system_data[:PreheatDesignTemperature] = 7.0
+    system_data[:PreheatDesignHumidityRatio] = 0.008
+    system_data[:PrecoolDesignTemperature] = 13.0
+    system_data[:PrecoolDesignHumidityRatio] = 0.008
+    system_data[:SizingOption] = 'NonCoincident'
+    system_data[:CoolingDesignAirFlowMethod] = 'DesignDay'
+    system_data[:CoolingDesignAirFlowRate] = 0.0
+    system_data[:HeatingDesignAirFlowMethod] = 'DesignDay'
+    system_data[:HeatingDesignAirFlowRate] = 0.0
+    system_data[:SystemOutdoorAirMethod] = 'ZoneSum'
+    system_data[:CentralCoolingDesignSupplyAirHumidityRatio] = 0.0085
+    system_data[:CentralHeatingDesignSupplyAirHumidityRatio] = 0.0080
+
 
     #System 3 Zone data
-    system_3_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_3_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
-    system_3_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
-    system_3_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 43.0
-    system_3_data[:ZoneDXCoolingSizingFactor] = 1.0
-    system_3_data[:ZoneDXHeatingSizingFactor] = 1.3
-    system_3_data[:ZoneCoolingSizingFactor] = 1.1
-    system_3_data[:ZoneHeatingSizingFactor] = 1.3
-    system_3_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
-    system_data = system_3_data
+    system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:SetpointManagerSingleZoneReheatSupplyTempMin] = 13.0
+    system_data[:SetpointManagerSingleZoneReheatSupplyTempMax] = 43.0
+    system_data[:ZoneDXCoolingSizingFactor] = 1.0
+    system_data[:ZoneDXHeatingSizingFactor] = 1.3
+    system_data[:ZoneCoolingSizingFactor] = 1.1
+    system_data[:ZoneHeatingSizingFactor] = 1.3
+    system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
+
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -40,24 +56,8 @@ class NECB2011
     always_on = model.alwaysOnDiscreteSchedule
 
     zones.each do |zone|
-      air_loop = common_air_loop(model: model)
-
+      air_loop = common_air_loop(model: model, system_data: system_data)
       air_loop.setName("Sys_3_PSZ #{zone.name}")
-
-      # When an air_loop is constructed, its constructor creates a sizing:system object
-      # the default sizing:system constructor makes a system:sizing object
-      # appropriate for a multizone VAV system
-      # this systems is a constant volume system with no VAV terminals,
-      # and therfore needs different default settings
-      air_loop_sizing = air_loop.sizingSystem # TODO units
-      air_loop.setName("#{system_data[:name]} #{zone.name}")
-      air_loop_sizing = air_loop.sizingSystem # TODO units
-      air_loop_sizing.setTypeofLoadtoSizeOn(system_data[:TypeofLoadtoSizeOn])
-      air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature])
-      air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature])
-      air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
-      air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
-
 
       # Zone sizing temperature
       sizing_zone = zone.sizingZone
