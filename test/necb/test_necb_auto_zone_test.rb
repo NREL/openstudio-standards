@@ -1,8 +1,29 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
-
 class NECB_Autozone_Tests < MiniTest::Test
+  BUILDINGS = [
+      "FullServiceRestaurant",
+      "LargeHotel",
+      "LargeOffice",
+      "MediumOffice",
+      "MidriseApartment",
+      "Outpatient",
+      "PrimarySchool",
+      "QuickServiceRestaurant",
+      "RetailStandalone",
+      "RetailStripmall",
+      "SmallHotel",
+      "SmallOffice",
+      "Warehouse"
+  ]
+
+  #metacode to create tests dynamically for each archetype.
+  BUILDINGS.each do |attribute|
+    define_method(:"test_#{attribute}") {
+      model = autozone("#{attribute}")
+    }
+  end
 
   def setup()
     @output_folder = "#{File.dirname(__FILE__)}/output/autozoner"
@@ -13,67 +34,6 @@ class NECB_Autozone_Tests < MiniTest::Test
     FileUtils.mkdir_p(@output_folder) unless File.directory?(@output_folder)
   end
 
-
-  def test_FullServiceRestaurant()
-    model = autozone("FullServiceRestaurant")
-  end
-
-
-  def test_HighriseApartment()
-    model = autozone("HighriseApartment")
-  end
-
-  def test_LargeOffice()
-    model = autozone("LargeOffice")
-  end
-
-  def test_MediumOffice()
-    model = autozone("MediumOffice")
-  end
-  def test_MidriseApartment()
-    model = autozone("MidriseApartment")
-  end
-
-  def test_QuickServiceRestaurant()
-    model = autozone("QuickServiceRestaurant")
-  end
-
-  def test_RetailStandalone()
-    model = autozone("RetailStandalone")
-  end
-
-  def test_RetailStripmall()
-    model = autozone("RetailStripmall")
-  end
-
-
-  def test_SmallHotel()
-    model = autozone("SmallHotel")
-  end
-
-  def test_SmallOffice()
-    model = autozone("SmallOffice")
-  end
-
-  def test_Warehouse()
-    model = autozone("Warehouse")
-  end
-
-  def test_LargeHotel()
-    model = autozone("LargeHotel")
-  end
-
-  def test_PrimarySchool()
-    model = autozone("PrimarySchool")
-  end
-
-  def test_SecondarySchool()
-    model = autozone("SecondarySchool")
-  end
-
-
-
-
   # Test to validate the heat pump performance curves
   def autozone(building_type)
     outfile = @output_folder + "/#{building_type}_autozoned.osm"
@@ -81,11 +41,12 @@ class NECB_Autozone_Tests < MiniTest::Test
     outfile_json = @output_folder + "/#{building_type}_autozoned.json"
     File.delete(outfile_json) if File.exist?(outfile_json)
     standard = Standard.build("#{@template}")
-    model = standard.model_create_prototype_model( epw_file: @epw_file,
-                                                                        sizing_run_dir: "#{@output_folder}/sizing",
-                                                                        template: @template,
-                                                                        building_type: building_type,
-                                                                        new_auto_zoner: true)
+    model = standard.model_create_prototype_model(epw_file: @epw_file,
+                                                  sizing_run_dir: File.join(@output_folder, building_type, 'sizing'),
+                                                  template: @template,
+                                                  building_type: building_type,
+                                                  new_auto_zoner: true)
+
 
     puts "Writing Output #{outfile}"
     BTAP::FileIO::save_osm(model, outfile)
@@ -111,15 +72,16 @@ class NECB_Autozone_Tests < MiniTest::Test
           space_data[:surface_report] = standard.space_surface_report(space)
           zone_data[:spaces] << space_data
         end
-        zone_data[:spaces].sort! { |a, b| [a[:name]] <=> [b[:name]] }
+        zone_data[:spaces].sort! {|a, b| [a[:name]] <=> [b[:name]]}
         debug[:thermal_zones] << zone_data
       end
-      debug[:thermal_zones].sort! { |a, b| [a[:thermal_zone_name]] <=> [b[:thermal_zone_name]] }
+      debug[:thermal_zones].sort! {|a, b| [a[:thermal_zone_name]] <=> [b[:thermal_zone_name]]}
       air_loops << debug
     end
     outfile_json = @output_folder + "/#{building_type}_autozoned.json"
     puts "Writing Output #{outfile_json}"
-    air_loops.sort! { |a, b| [a[:airloop_name]] <=> [b[:airloop_name]] }
+    air_loops.sort! {|a, b| [a[:airloop_name]] <=> [b[:airloop_name]]}
     File.write(outfile_json, JSON.pretty_generate(air_loops))
+    assert(standard.model_run_simulation_and_log_errors(model, File.join(@output_folder, building_type)), "#{building_type} Failed to run.")
   end
 end

@@ -32,7 +32,7 @@ class NECB2011
     #Zone data
     system_data[:system_supply_air_temperature] = 20.0
     system_data[:ZoneCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0
+    system_data[:ZoneHeatingDesignSupplyAirTemperature] = 43.0 #Examine to see if this is a code or assumption. 13.1 maybe need to check
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
