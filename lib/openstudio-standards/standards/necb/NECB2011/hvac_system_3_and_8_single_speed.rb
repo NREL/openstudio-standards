@@ -43,28 +43,32 @@ class NECB2011
     system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation] = -10.0
 
 
-    if new_auto_zoner
-    # Create system airloop
-    zones.each do |zone|
-      control_zone = zone
-      # Add Air Loop
-      air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
-      # Add Zone equipment
-      add_sys3_and_8_zone_equip(air_loop,
-                                baseboard_type,
-                                hw_loop,
-                                model,
-                                zone)
-    end
-    return true
-    else
+    if new_auto_zoner == true
       # Create system airloop
 
-        control_zone = zones[0]
-        # Add Air Loop
-        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone)
-        # Add Zone equipment
-        zones.each do |zone|
+      # Add Air Loop
+      air_loop = add_system_3_and_8_airloop(heating_coil_type,
+                                            model,
+                                            system_data,
+                                            determine_control_zone(zones))
+      # Add Zone equipment
+      zones.each do |zone| # Zone sizing temperature
+        sizing_zone = zone.sizingZone
+        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
+        sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+        add_sys3_and_8_zone_equip(air_loop,
+                                  baseboard_type,
+                                  hw_loop,
+                                  model,
+                                  zone)
+
+      end
+      return true
+    else
+      zones.each do |zone|
+        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,
@@ -88,7 +92,6 @@ class NECB2011
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
 
-    #control_zone = determine_control_zone(zones)
 
     always_on = model.alwaysOnDiscreteSchedule
     air_loop = common_air_loop(model: model, system_data: system_data)
