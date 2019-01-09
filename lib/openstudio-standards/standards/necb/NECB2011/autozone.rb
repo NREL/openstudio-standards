@@ -1211,7 +1211,7 @@ class NECB2011
                                  mau_heating_coil_type:,
                                  mau_type:,
                                  model:,
-                                 dwelling_shared_ahu: false
+                                 dwelling_shared_ahu: true
   )
 
     system_zones_hash = {}
