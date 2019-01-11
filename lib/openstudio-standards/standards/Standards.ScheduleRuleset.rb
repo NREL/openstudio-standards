@@ -399,20 +399,6 @@ class Standard
       val_clg = schedule.additionalProperties.getFeatureAsDouble("param_sch_ceiling").get
     end
 
-    # storre hours of operation hash
-    # todo - find the target object (it is stored in additional attributes but should try to get it dynamically, but issue if multiple targets)
-    # todo - write a method given a collection of objects to get a an array of spaces
-    # todo - write a method given a collection of spaces to get a combined hours of operation hash, can also use this elsewhere
-    source_names = []
-    schedule.sources.each do |source|
-      source_names << source.name
-    end
-    puts source_names.join(",")
-    # todo - identify space target is in
-    # todo - get hours of operation for space
-    # todo - remove temp hard coded first space solution below
-    hours_of_operation = space_hours_of_operation(schedule.model.getSpaces.first)
-
     # loop through schedule days from highest to lowest priority (with default as lowest priority)
     # if rule needs to be split to address hours of operation rules add new rule next to relevant existing rule
     profiles = {}
@@ -430,21 +416,132 @@ class Standard
       end
     end
     profiles[schedule.defaultDaySchedule] = nil
+
+    # get indices for current schedule
+    year_description = schedule.model.yearDescription.get
+    year = year_description.assumedYear
+    year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+    year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+    indices_vector = schedule.getActiveRuleIndices(year_start_date, year_end_date)
+
+    # store hours of operation hash
+    # todo - find the target object (it is stored in additional attributes but should try to get it dynamically, but issue if multiple targets)
+    # todo - write a method given a collection of objects to get a an array of spaces
+    # todo - write a method given a collection of spaces to get a combined hours of operation hash, can also use this elsewhere
+    source_names = []
+    sources = schedule.sources
+    puts "Hello: #{sources.size} sources for #{schedule.name}"
+    sources.each do |source|
+      source_names << source.name
+    end
+
+    # todo - identify space target is in
+    # todo - remove temp hard coded first space solution below
+    hours_of_operation = space_hours_of_operation(schedule.model.getSpaces.first)
+
+    # process profiles
     profiles.each do |sch_day,rule|
 
-      # get hours of operation for this specific profile
-      hoo_start = 8.0 # todo - replace temp value
-      hoo_end = 18.0 # todo - replace temp value
+      # for current profile index identify hours of operation index that contains all days
+      if rule.nil?
+        current_rule_index = -1
+      else
+        current_rule_index = rule.ruleIndex
+      end
 
-      # todo - clone rules as necessary to address hours of operation for different dates and days of the week (make sure ot add param_day_tag value of autogen)
+      # loop through indices looking of rule in hoo that contains days in the rule
+      hoo_target_index = nil
+      days_used = []
+      indices_vector.each_with_index do |profile_index,i|
+        if profile_index == current_rule_index then days_used << i+1 end
+      end
+      # find days_used in hoo profiles that contains all days used from this profile
+      hoo_profile_match_hash = {}
+      best_fit_check = {}
+      hours_of_operation.each do |profile_index,value|
+        days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
+        hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
+        best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
+        if days_for_rule_not_in_hoo_profile.empty?
+          hoo_target_index = profile_index
+        end
+      end
+      clone_needed = false
+      hoo_target_index = best_fit_check.key(best_fit_check.values.min)
+      if best_fit_check[hoo_target_index] > 0
+        clone_needed = true
+      end
+
+      # get hours of operation for this specific profile
+      hoo_start = hours_of_operation[hoo_target_index][:hoo_start]
+      hoo_end = hours_of_operation[hoo_target_index][:hoo_end]
 
       # update scheduleDay
-      starting_eflh = day_schedule_equivalent_full_load_hrs(sch_day)
       process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
-      parametric_eflh = day_schedule_equivalent_full_load_hrs(sch_day)
-      percent_change = ((starting_eflh - parametric_eflh)/starting_eflh) * 100.0
-      if percent_change.abs > 0.05
-        puts "******  #{percent_change.round(4)}%  ******  #{schedule.name} #{sch_day.name} daily equiv. full load hours changed from #{starting_eflh.round(4)} to #{parametric_eflh.round(4)}"
+
+      # clone new rule if needed
+      if clone_needed
+
+        # make list of new rules needed as has or array
+        autogen_rules = {}
+        days_to_fill = hoo_profile_match_hash[hoo_target_index]
+        hours_of_operation.each do |profile_index,value|
+          remainder = days_to_fill - value[:days_used]
+          day_for_rule = days_to_fill - remainder
+          if remainder.size < days_to_fill.size
+            autogen_rules[profile_index] = {:days_to_fill => day_for_rule, :hoo_start => hours_of_operation[profile_index][:hoo_start], :hoo_end => hours_of_operation[profile_index][:hoo_end]}
+          end
+          days_to_fill = remainder
+        end
+
+        # loop through new rules to make and process
+        autogen_rules.each do |autogen_rule,hash|
+
+          # generate new rule
+          sch_rule_autogen = OpenStudio::Model::ScheduleRule.new(schedule)
+          if current_rule_index
+            target_index = schedule.scheduleRules.size - 1 # just above default
+          else
+            target_index = current_rule_index - 1 # confirm just above orig rule
+          end
+          current_rule_index = target_index
+          if rule.nil?
+            sch_rule_autogen.setName("autogen #{schedule.name.to_s} #{target_index}")
+          else
+            sch_rule_autogen.setName("autogen #{rule.name.to_s} #{target_index}")
+          end
+          schedule.setScheduleRuleIndex(sch_rule_autogen,target_index) # todo - confirm this is higher priority than the non-auto-generated rule
+          hash[:days_to_fill].each do |day|
+            date = OpenStudio::Date::fromDayOfYear(day,year)
+            sch_rule_autogen.addSpecificDate(date)
+          end
+          sch_rule_autogen.setApplySunday(true)
+          sch_rule_autogen.setApplyMonday(true)
+          sch_rule_autogen.setApplyTuesday(true)
+          sch_rule_autogen.setApplyWednesday(true)
+          sch_rule_autogen.setApplyThursday(true)
+          sch_rule_autogen.setApplyFriday(true)
+          sch_rule_autogen.setApplySaturday(true)
+
+          # match profile from source rule (don't add time/values need a formula to process)
+          sch_day_auto_gen = sch_rule_autogen.daySchedule
+          sch_day_auto_gen.additionalProperties.setFeature("param_day_tag","autogen")
+          val = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
+          sch_day_auto_gen.additionalProperties.setFeature("param_day_profile",val)
+          val = sch_day.additionalProperties.getFeatureAsString("param_day_secondary_logic").get
+          sch_day_auto_gen.additionalProperties.setFeature("param_day_secondary_logic",val)
+          val = sch_day.additionalProperties.getFeatureAsString("param_day_secondary_logic_arg_val").get
+          sch_day_auto_gen.additionalProperties.setFeature("param_day_secondary_logic_arg_val",val)
+
+          # get hours of operation for this specific profile
+          hoo_start = hash[:hoo_start]
+          hoo_end = hash[:hoo_end]
+
+          # process new rule
+          process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+
+        end
+
       end
 
     end

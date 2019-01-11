@@ -1644,6 +1644,14 @@ class Standard
     hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
     profiles = {}
 
+    # get indices for current schedule
+    year_description = hours_of_operation.model.yearDescription.get
+    year = year_description.assumedYear
+    year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+    year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+    indices_vector = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
+    asdf = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
+
     # add default profile to hash
     hoo_start = nil
     hoo_end = nil
@@ -1659,15 +1667,18 @@ class Standard
 
     # hours of operation start and finish
     rule_hash = {}
-    rule_hash[:rule_index] = -1 # indicate default profile
     rule_hash[:hoo_start] = hoo_start
     rule_hash[:hoo_end] = hoo_end
-    profiles['default_day_schedule'] = rule_hash
+    days_used = []
+    indices_vector.each_with_index do |profile_index,i|
+      if profile_index == -1 then days_used << i+1 end
+    end
+    rule_hash[:days_used] = days_used
+    profiles[-1] = rule_hash
 
     hours_of_operation.scheduleRules.reverse.each do |rule|
       # may not need date and days of week, will likley refer to specific date and get rule when applying parametricformula
       rule_hash = {}
-      rule_hash[:rule_index] = rule.ruleIndex
 
       hoo_start = nil
       hoo_end = nil
@@ -1690,7 +1701,13 @@ class Standard
       # hours of operation start and finish
       rule_hash[:hoo_start] = hoo_start
       rule_hash[:hoo_end] = hoo_end
+      days_used = []
+      indices_vector.each_with_index do |profile_index,i|
+        if profile_index == rule.ruleIndex then days_used << i+1 end
+      end
+      rule_hash[:days_used] = days_used
 
+      # todo - delete rule details below unless end up needing to use them
       if rule.startDate.is_initialized
         date = rule.startDate.get
         rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
@@ -1712,7 +1729,7 @@ class Standard
       rule_hash[:sun] = rule.applySunday
 
       # update hash
-      profiles[rule.name.get.to_s] = rule_hash
+      profiles[rule.ruleIndex] = rule_hash
 
     end
 

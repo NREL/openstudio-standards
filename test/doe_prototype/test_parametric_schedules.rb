@@ -59,7 +59,7 @@ class TestParametricSchedules < Minitest::Test
       hours_of_operation = standard.space_hours_of_operation(model.getSpaces.first)
       assert(hours_of_operation.size. > 0)
       puts "Test: Extracted hours of operation schedule from space."
-      puts "Test: #{hours_of_operation.keys.first}: #{hours_of_operation.values.first.inspect}"
+      #puts "Test: #{hours_of_operation.keys.first}: #{hours_of_operation.values.first.inspect}"
 
       # model_setup_parametric_schedules
       parametric_inputs = standard.model_setup_parametric_schedules(model)
@@ -94,18 +94,6 @@ class TestParametricSchedules < Minitest::Test
         delta_hours = orig_hours - final_hours
         percent_change = 100 * delta_hours/orig_hours
         schedule_csv_rows << [k, k2.name.get.to_s, orig_hours, final_hours,delta_hours,percent_change]
-        profiles = [k2.defaultDaySchedule]
-        k2.scheduleRules .each do |rule|
-          profiles << rule.daySchedule
-        end
-        profiles.each do |profile|
-          day_orig_hours = orig_sch_day_hash[profile]
-          day_final_hours = standard.day_schedule_equivalent_full_load_hrs(profile)
-          puts "#{k} orig #{day_orig_hours} final #{day_final_hours} for #{profile.name}"
-          day_delta_hours = day_orig_hours - day_final_hours
-          day_percent_change = 100 * day_delta_hours/day_orig_hours
-          rule_csv_rows << [k, k2.name, profile.name, day_orig_hours, day_final_hours,day_delta_hours,day_percent_change]
-        end
       end
       puts "Test: Saved schedule input analysis csv"
 
@@ -122,13 +110,6 @@ class TestParametricSchedules < Minitest::Test
       end
     end
     puts "saving sch_ann_equiv_hours.csv"
-    CSV.open("output/sch_day_equiv_hours.csv", "w") do |csv|
-      csv << ["model_name","schedule_name","profile_name", "orig_annual_hours", "final-annual_hours","delta_hours","percent_change"]
-      rule_csv_rows.each do |row|
-        csv << row
-      end
-    end
-    puts "saving sch_day_equiv_hours.csv"
 
   end
 end
