@@ -3,11 +3,6 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 class NECB_Autozone_Tests < MiniTest::Test
   BUILDINGS = [
-
-  ]
-
-
-=begin
       "FullServiceRestaurant",
       "LargeHotel",
       "LargeOffice",
@@ -22,7 +17,13 @@ class NECB_Autozone_Tests < MiniTest::Test
       "SmallOffice",
       "SecondarySchool",
       "Warehouse"
-=end
+
+  ]
+
+
+
+
+
 
   #metacode to create tests dynamically for each archetype.
   BUILDINGS.each do |attribute|

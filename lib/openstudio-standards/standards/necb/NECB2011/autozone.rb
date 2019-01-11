@@ -1206,7 +1206,7 @@ class NECB2011
 
     system_zones_hash = {}
     # Detemine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
-    dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get.to_d > 4
+    dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get > 4
     # store dwelling zones into array
     zones = []
     model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
