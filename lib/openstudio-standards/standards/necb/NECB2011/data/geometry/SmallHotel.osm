@@ -1810,7 +1810,7 @@ OS:Connection,
 OS:Space,
   {954d11c1-cc49-4d55-9727-b9739d08f378}, !- Handle
   MeetingRoomFlr1,                        !- Name
-  {f4f03fab-acd3-46d7-a05a-53c1d612a395}, !- Space Type Name
+  {415e8628-3cb9-47af-80d5-ea697667ea4a}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -17160,6 +17160,18 @@ OS:Site:GroundTemperature:BuildingSurface,
   20.121,                                 !- October Ground Temperature {C}
   19.802,                                 !- November Ground Temperature {C}
   19.633;                                 !- December Ground Temperature {C}
+
+OS:SpaceType,
+  {415e8628-3cb9-47af-80d5-ea697667ea4a}, !- Handle
+  Space Function Conf./meet./multi-purpose, !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  ,                                       !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Space Function,                         !- Standards Building Type
+  Conf./meet./multi-purpose;              !- Standards Space Type
+
+
 
 OS:SpaceType,
   {7cd7e6cd-0ad8-4a4f-89f8-1819ca4f265c}, !- Handle

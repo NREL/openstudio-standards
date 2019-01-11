@@ -16,12 +16,9 @@ class NECB_Autozone_Tests < MiniTest::Test
       "SmallHotel",
       "SmallOffice",
       "SecondarySchool",
-      "Warehouse"
-
+      "Warehouse",
+      "Hospital"
   ]
-
-
-
 
 
 
