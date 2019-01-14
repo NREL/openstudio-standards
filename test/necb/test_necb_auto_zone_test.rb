@@ -15,11 +15,8 @@ class NECB_Autozone_Tests < MiniTest::Test
       "RetailStripmall",
       "SmallHotel",
       "SmallOffice",
-      "SecondarySchool",
-      "Warehouse",
-      "Hospital"
+      "Warehouse"
   ]
-
 
 
   #metacode to create tests dynamically for each archetype.

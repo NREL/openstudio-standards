@@ -131,7 +131,7 @@ class NECB2011
               space_info_array = []
               space_zoning_data_array_json.each do |space_info|
                 # puts "Spacename: #{space_info.space.name}:#{space_info.space.spaceType.get.name}"
-                if  (space_info[:system_number] == system_number) &&
+                if (space_info[:system_number] == system_number) &&
                     (space_info[:space].buildingStory.get == story) &&
                     (determine_necb_schedule_type(space_info[:space]).to_s == schedule_type) &&
                     (space_info[:horizontal_placement] == horizontal_placement) &&
@@ -394,6 +394,14 @@ class NECB2011
                            boiler_fueltype: boiler_fueltype,
                            heating_coil_type_sys4: heating_coil_type_sys4,
                            model: model)
+
+
+    #Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
+    auto_system_storage_spaces(baseboard_type: baseboard_type,
+                               boiler_fueltype: boiler_fueltype,
+                               heating_coil_type_sys4: heating_coil_type_sys4,
+                               model: model)
+
 
     #Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(baseboard_type: baseboard_type,
@@ -860,6 +868,14 @@ class NECB2011
     return space.spaceType.get.standardsSpaceType.get.include?('Locker room') || space.spaceType.get.standardsSpaceType.get.include?('Washroom')
   end
 
+  # Check to see if this is a wet space that the NECB does not have a specified schedule or system for. Currently hardcoded to
+  # Locker room and washroom.
+  def is_an_necb_storage_space?(space)
+    #Hack! Should replace this with a proper table lookup.
+    return space.spaceType.get.standardsSpaceType.get.include?('Storage')
+  end
+
+
   # Check if the space spactype is a dwelling unit as per NECB.
   def is_a_necb_dwelling_unit?(space)
     space_type_data = standards_lookup_table_first(table_name: 'space_types',
@@ -1164,7 +1180,8 @@ class NECB2011
     zones = []
     other_spaces = model.getSpaces.select do |space|
       (not is_a_necb_dwelling_unit?(space)) and
-          (not is_an_necb_wildcard_space?(space))
+          (not is_an_necb_wildcard_space?(space)) and
+          (not is_an_necb_storage_space?(space))
     end
     other_spaces.each do |space|
       zones << space.thermalZone.get
@@ -1289,6 +1306,30 @@ class NECB2011
                                                                    hw_loop: @hw_loop)
     end
   end
+
+
+  # All wet spaces will be on their own system 4 AHU.
+  def auto_system_storage_spaces(baseboard_type:,
+                                 boiler_fueltype:,
+                                 heating_coil_type_sys4:,
+                                 model:)
+    #Determine what zones are wet zones.
+    tz = []
+    model.getSpaces.select {|space|
+      is_an_necb_storage_space?(space)}.each do |space|
+      tz << space.thermalZone.get
+    end
+    tz.uniq!
+    #create a system 4 for the  zones.
+    unless tz.empty?
+      add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                   zones: tz,
+                                                                   heating_coil_type: heating_coil_type_sys4,
+                                                                   baseboard_type: baseboard_type,
+                                                                   hw_loop: @hw_loop)
+    end
+  end
+
 
   # All wild spaces will be on a single system 4 ahu with the largests heating load zone being the control zone.
   def auto_system_wild_spaces(baseboard_type:,
