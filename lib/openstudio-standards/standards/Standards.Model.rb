@@ -4391,7 +4391,7 @@ class Standard
   # @param step_ramp_logic [String]
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @return [Hash] schedule is key, value is hash of number of objects
-  def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true)
+  def model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true,gather_data_only: false)
 
     parametric_inputs = {}
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
@@ -4402,27 +4402,27 @@ class Standard
     # whatever approach is used for gathering parametric inputs for existing ruleset schedules should also be used for model_apply_parametric_schedules
 
     # loop through spaces (trace hours of operation back to space)
-    gather_inputs_parametric_space_space_type_schedules(model.getSpaces,parametric_inputs)
+    gather_inputs_parametric_space_space_type_schedules(model.getSpaces,parametric_inputs,gather_data_only)
 
     # loop through space types (trace hours of operation back to space type).
-    gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes,parametric_inputs)
+    gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes,parametric_inputs,gather_data_only)
 
     # loop through thermal zones (trace hours of operation back to spaces in thermal zone)
     thermal_zone_hash = {} # key is zone and hash is hours of operation
     model.getThermalZones.each do |zone|
       # identify hours of operation
-      hours_of_operation = select_hours_of_operation_from_space_array(zone.spaces)
+      hours_of_operation = spaces_hours_of_operation(zone.spaces)
       thermal_zone_hash[zone] = hours_of_operation
       # get thermostat setpoint schedules
       if zone.thermostatSetpointDualSetpoint.is_initialized
         thermostat = zone.thermostatSetpointDualSetpoint.get
         if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
           schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation)
+          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
         end
         if thermostat.coolingSetpointTemperatureSchedule.is_initialized&& thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
           schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation)
+          gather_inputs_parametric_schedules(schedule,thermostat,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
         end
       end
     end
@@ -4434,12 +4434,13 @@ class Standard
       air_loop_spaces = []
       air_loop.thermalZones.each do |zone|
         air_loop_spaces = air_loop_spaces + zone.spaces
+        air_loop_spaces = air_loop_spaces + zone.spaces
       end
-      hours_of_operation = select_hours_of_operation_from_space_array(air_loop_spaces)
+      hours_of_operation = spaces_hours_of_operation(air_loop_spaces)
       air_loop_hash[air_loop] = hours_of_operation
       if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
         schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
-        gather_inputs_parametric_schedules(schedule,air_loop,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_schedules(schedule,air_loop,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
       end
       avail_mgrs = air_loop.availabilityManagers
       avail_mgrs.each do |avail_mgr|
@@ -4449,7 +4450,7 @@ class Standard
         resources.each do |resource|
           if resource.to_ScheduleRuleset.is_initialized
             schedule = resource.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule,avail_mgr,parametric_inputs,hours_of_operation)
+            gather_inputs_parametric_schedules(schedule,avail_mgr,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
           end
         end
       end
@@ -4507,7 +4508,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
           next
         end
-        gather_inputs_parametric_schedules(schedule,component,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_schedules(schedule,component,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
       end
 
     end
@@ -4527,11 +4528,11 @@ class Standard
         if opt_space.is_initialized
           space = space.get
           hours_of_operation = space_hours_of_operation(space)
-          gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation)
+          gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
         else
-          hours_of_operation = select_hours_of_operation_from_space_array(model.getSpaces)
+          hours_of_operation = spaces_hours_of_operation(model.getSpaces)
           if !hours_of_operation.nil?
-            gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation)
+            gather_inputs_parametric_schedules(schedule,water_use_equipment,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
           end
         end
 
@@ -4574,7 +4575,8 @@ class Standard
       end
 
       # apply parametric inputs
-      schedule_apply_parametric_inputs(sch,ramp_frequency,infer_hoo_for_non_assigned_objects,error_on_out_of_order)
+      parametric_inputs = model_setup_parametric_schedules(sch.model,gather_data_only: true)
+      schedule_apply_parametric_inputs(sch,ramp_frequency,infer_hoo_for_non_assigned_objects,error_on_out_of_order,parametric_inputs)
 
       # add schedule to array
       parametric_schedules << sch
@@ -4765,7 +4767,7 @@ class Standard
   # @author David Goldwasser
   # @param array of spaces or space types
   # @return hash
-  def gather_inputs_parametric_space_space_type_schedules(space_space_types,parametric_inputs)
+  def gather_inputs_parametric_space_space_type_schedules(space_space_types,parametric_inputs,gather_data_only)
 
     space_space_types.each do |space_type|
       # get hours of operation for space type once
@@ -4777,39 +4779,39 @@ class Standard
       end
       # loop through internal load instances
       space_type.lights.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.luminaires.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.electricEquipment.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.gasEquipment.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.steamEquipment.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.otherEquipment.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.people.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
         if load_inst.activityLevelSchedule.is_initialized && load_inst.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
           act_sch = load_inst.activityLevelSchedule.get.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(act_sch,load_inst,parametric_inputs,hours_of_operation)
+          gather_inputs_parametric_schedules(act_sch,load_inst,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
         end
       end
       space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       space_type.spaceInfiltrationEffectiveLeakageAreas.each do |load_inst|
-        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
       end
       dsgn_spec_oa = space_type.designSpecificationOutdoorAir
       if dsgn_spec_oa.is_initialized
-        gather_inputs_parametric_load_inst_schedules(dsgn_spec_oa.get,parametric_inputs,hours_of_operation)
+        gather_inputs_parametric_load_inst_schedules(dsgn_spec_oa.get,parametric_inputs,hours_of_operation,gather_data_only)
       end
     end
 
@@ -4821,7 +4823,7 @@ class Standard
   # @author David Goldwasser
   # @param opt_sch
   # @return hash
-  def gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation)
+  def gather_inputs_parametric_load_inst_schedules(load_inst,parametric_inputs,hours_of_operation,gather_data_only)
     if load_inst.class.to_s == "OpenStudio::Model::People"
       opt_sch = load_inst.numberofPeopleSchedule
     elsif load_inst.class.to_s == "OpenStudio::Model::DesignSpecificationOutdoorAir"
@@ -4832,29 +4834,9 @@ class Standard
     if !opt_sch.is_initialized || !opt_sch.get.to_ScheduleRuleset.is_initialized
       return nil
     end
-    gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get,load_inst,parametric_inputs,hours_of_operation)
+    gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get,load_inst,parametric_inputs,hours_of_operation,gather_data_only: gather_data_only)
 
     return parametric_inputs
-  end
-
-  # find hours of operation for a collection of spaces. Will use on thermal zone, air loop, and plant looops
-  #
-  # @author David Goldwasser
-  # @param [array] space_array
-  # @return [hash] hours of operation
-  def select_hours_of_operation_from_space_array(space_array, calc_logic: "most_spaces")
-    # todo - support expanded calc method. Will need to create new merged schedule
-
-    hours_of_operation_array = []
-    space_array.each do |space|
-      hoo_hash = space_hours_of_operation(space)
-      if !hoo_hash.nil?
-        hours_of_operation_array << hoo_hash
-      end
-    end
-    hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
-
-    return hours_of_operation
   end
 
   # method to process load instance schedules for model_setup_parametric_schedules
@@ -4862,7 +4844,10 @@ class Standard
   # @author David Goldwasser
   # @param [sch]
   # @return [hash]
-  def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation,ramp = true,min_ramp_dur_hr = 2.0)
+  def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation,ramp: true,min_ramp_dur_hr: 2.0,gather_data_only: false,hoo_var_method: "hours")
+    # todo - add default
+    # todo - fix un-needed value at end of forula, like thermostat
+    # hoo_start - 3.0 ~ val_flr ~ val_clg | hoo_end + 4.0 ~ val_clg ~ val_flr | hoo_end + 6.0 ~ val_flr ~ val_flr
 
     if parametric_inputs.has_key?(sch)
       if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
@@ -4871,26 +4856,74 @@ class Standard
       end
     end
 
-    # cleanup existing profiles
-    schedule_ruleset_cleanup_profiles(sch)
-
     # gather and store data for scheduleRuleset
     min_max = schedule_ruleset_annual_min_max_value(sch)
     ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst.name.to_s, hoo_inputs: hours_of_operation}
     parametric_inputs[sch] = ruleset_hash
+
+    # stop here if only gathering information otherwise will continue and generate additional parametric properties for schedules and rules
+    if gather_data_only then return parametric_inputs end
+
+    # set scheduleRuleset properties
     props = sch.additionalProperties
     props.setFeature("param_sch_ver","0.0.1") # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
     props.setFeature("param_sch_floor",min_max['min'])
     props.setFeature("param_sch_ceiling",min_max['max'])
-    props.setFeature("param_sch_target",load_inst.name.to_s) # todo - I think this should be determined dynamically from multiple possible targets vs hard coded
+    #props.setFeature("param_sch_target",load_inst.name.to_s) # todo - I think this should be determined dynamically from multiple possible targets vs hard coded
+
+    # cleanup existing profiles
+    schedule_ruleset_cleanup_profiles(sch)
 
     # step through rules and add additional properties to describe profiles
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
-    schedule_days[sch.defaultDaySchedule] = day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
     sch.scheduleRules.each do |rule|
-      schedule_days[rule.daySchedule] = day_schedule_equivalent_full_load_hrs(rule.daySchedule)
+      schedule_days[rule.daySchedule] = rule.ruleIndex
     end
-    schedule_days.each_with_index do |(schedule_day,daily_flh),i|
+    schedule_days[sch.defaultDaySchedule] = -1
+
+    # get indices for current schedule
+    year_description = sch.model.yearDescription.get
+    year = year_description.assumedYear
+    year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+    year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+    indices_vector = sch.getActiveRuleIndices(year_start_date, year_end_date)
+
+    # loop through schedule days
+    schedule_days.each_with_index do |(schedule_day,current_rule_index),i|
+
+      # loop through indices looking of rule in hoo that contains days in the rule
+      hoo_target_index = nil
+      days_used = []
+      indices_vector.each_with_index do |profile_index,i|
+        if profile_index == current_rule_index then days_used << i+1 end
+      end
+      # find days_used in hoo profiles that contains all days used from this profile
+      hoo_profile_match_hash = {}
+      best_fit_check = {}
+      hours_of_operation.each do |profile_index,value|
+        days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
+        hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
+        best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
+        if days_for_rule_not_in_hoo_profile.empty?
+          hoo_target_index = profile_index
+        end
+      end
+      # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
+      if hoo_target_index.nil?
+        hoo_start = nil
+        hoo_end = nil
+        occ = nil
+        vac = nil
+        # todo - issue warning when this happens on any profile that isn't a constant value
+      else
+        # get hours of operation for this specific profile
+        hoo_start = hours_of_operation[hoo_target_index][:hoo_start]
+        hoo_end = hours_of_operation[hoo_target_index][:hoo_end]
+        occ = hours_of_operation[hoo_target_index][:hoo_hours]
+        vac = 24.0 - hours_of_operation[hoo_target_index][:hoo_hours]
+      end
+
+      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
       props = schedule_day.additionalProperties
       par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
       times = schedule_day.times
@@ -4959,7 +4992,7 @@ class Standard
       # test expected value against estimated value
       percent_change = ((daily_flh - est_daily_flh)/daily_flh) * 100.0
       if percent_change.abs > 0.05
-        # todo - address issues when this happens, may need to scale non local floor/ceiling values up or down to fit expected value, change ramp max time
+        # todo - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
         # post application checks compares against actual instead of estimated values
         puts "**  #{percent_change.round(4)}%  **  #{sch.name}, #{schedule_day.name} expected full load hours value is #{daily_flh.round(4)}, estimated value is #{est_daily_flh.round(4)}"
       end
@@ -4972,25 +5005,104 @@ class Standard
         value_array_var = []
         value_array.each do |val|
           if val == min_max['min'] && values.uniq.size < 3
-            value_array_var << 'flr'
+            value_array_var << 'val_flr'
           elsif val == min_max['max'] && values.uniq.size < 3
-            value_array_var << 'clg'
+            value_array_var << 'val_clg'
           else
             value_array_var << val
           end
         end
 
-        # todo - add in hoo variables for time
+        # add in hoo variables when matching profile found
+        if !hoo_start.nil?
 
+          # identify which identifier (star,mid,end) time is closest to, which will impact formula structure
+          # includes code to identify delta for wrap around of 24
+          formula_identifier = {}
+          start_delta_array = [hoo_start - time, hoo_start - time + 24, hoo_start - time - 24]
+          start_delta_array_abs = [(hoo_start - time).abs, (hoo_start - time + 24).abs, (hoo_start - time - 24).abs]
+          start_delta_h = start_delta_array[start_delta_array_abs.index(start_delta_array_abs.min)]
+          formula_identifier["start"] = start_delta_h
+          mid_calc = hoo_start + occ * 0.5
+          mid_delta_array = [mid_calc - time, mid_calc - time + 24, mid_calc - time - 24]
+          mid_delta_array_abs = [(mid_calc - time).abs, (mid_calc - time + 24).abs, (mid_calc - time - 24).abs]
+          mid_delta_h = mid_delta_array[mid_delta_array_abs.index(mid_delta_array_abs.min)]
+          formula_identifier["mid"] = mid_delta_h
+          end_delta_array = [hoo_end - time, hoo_end - time + 24, hoo_end - time - 24]
+          end_delta_array_abs = [(hoo_end - time).abs, (hoo_end - time + 24).abs, (hoo_end - time - 24).abs]
+          end_delta_h = end_delta_array[end_delta_array_abs.index(end_delta_array_abs.min)]
+          formula_identifier["end"] = end_delta_h
+
+          # need to store min absolute value to pick the best fit
+          formula_identifier_min_abs = {}
+          formula_identifier.each do |k,v|
+            formula_identifier_min_abs[k] = v.abs
+          end
+
+          # pick from possible formula approaches for any datapoint where x is hour value
+          # minimize x, which should be no greater than 12, see if rounding to 2 decimal places works
+          min_key = formula_identifier_min_abs.key(formula_identifier_min_abs.values.min)
+          min_value = formula_identifier[min_key]
+
+          if hoo_var_method == "hours"
+
+            min_value = min_value.round(2)
+            if min_key == "start"
+              if min_value == 0
+                time = "hoo_start"
+              elsif min_value < 0
+                time = "hoo_start + #{min_value.abs}"
+              else # greater than 0
+                time = "hoo_start - #{min_value}"
+              end
+            elsif min_key == "mid"
+              if min_value == 0
+                time = "mid"
+                # converted to variable for simplicity but could also be described like this
+                # time = "hoo_start + occ * 0.5"
+              elsif min_value < 0
+                time = "mid + #{min_value.abs}"
+              else # greater than 0
+                time = "mid - #{min_value}"
+              end
+            else # min_key == "end"
+              if min_value == 0
+                time = "hoo_end"
+              elsif min_value < 0
+                time = "hoo_end + #{min_value.abs}"
+              else # greater than 0
+                time = "hoo_end - #{min_value}"
+              end
+            end
+
+          elsif hoo_var_method == "default" # fractional
+
+            # todo - pick from possible formula approaches for any datapoint where x is a fraction of occ or vac
+            # minimize x(hour before converted to fraction), which should be no greater than 0.5, see if rounding to 3 decimal places works
+            # time = "hoo_start - vac * x" #(how much of non occupied time is this time before hoo_start)
+            # time = "hoo_start + occ * x" #(how much of  occupied time is this time after hoo_start)
+            # time = "hoo_end - occ * x"
+            # time = "hoo_end + vac * x"
+            # time = "hoo_start + occ * 0.5 - occ * x" # variation to describe something near lunch vs. beginning and end of day
+            # time = "hoo_start + occ * 0.5 + occ * x" # variation to describe something near lunch vs. beginning and end of day
+            #
+          else # "none"
+            # do not add in hoo variables
+          end
+
+        end
+
+        # populate string
+        # todo - change divider so doesn't intefere with using / in formula
         if value_array_var.size == 1
-          raw_string << "#{time}/#{value_array_var.first}"
+          raw_string << "#{time} ~ #{value_array_var.first}"
         else # should only have 1 or two values (value in and optional value out)
-          raw_string << "#{time}/#{value_array_var.first}/#{value_array_var.last}"
+          raw_string << "#{time} ~ #{value_array_var.first} ~ #{value_array_var.last}"
         end
       end
 
-      # todo - update to use hoo and floor ceiling variables
-      props.setFeature("param_day_profile",raw_string.join("|")) # this uses hoo value and floor/ceiling
+      # store profile formula with hoo and value variables
+      props.setFeature("param_day_profile",raw_string.join(" | "))
 
       # todo - not used yet, but will add methods described below and others
       # todo - lower infiltration based on air loop hours of operation if air loop has outdoor air object

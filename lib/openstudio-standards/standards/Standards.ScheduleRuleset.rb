@@ -385,7 +385,7 @@ class Standard
   # @param infer_hoo_for_non_assigned_objects [Bool] # attempt to get hoo for objects like swh with and exterior lighting
   # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
   # @return schedule
-  def schedule_apply_parametric_inputs(schedule,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+  def schedule_apply_parametric_inputs(schedule,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order,parametric_inputs = nil)
 
     starting_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
 
@@ -424,20 +424,11 @@ class Standard
     year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     indices_vector = schedule.getActiveRuleIndices(year_start_date, year_end_date)
 
-    # store hours of operation hash
-    # todo - find the target object (it is stored in additional attributes but should try to get it dynamically, but issue if multiple targets)
-    # todo - write a method given a collection of objects to get a an array of spaces
-    # todo - write a method given a collection of spaces to get a combined hours of operation hash, can also use this elsewhere
-    source_names = []
-    sources = schedule.sources
-    puts "Hello: #{sources.size} sources for #{schedule.name}"
-    sources.each do |source|
-      source_names << source.name
+    # get hours_of_operation
+    if parametric_inputs.nil?
+      parametric_inputs = model_setup_parametric_schedules(schedule.model,gather_data_only: true)
     end
-
-    # todo - identify space target is in
-    # todo - remove temp hard coded first space solution below
-    hours_of_operation = space_hours_of_operation(schedule.model.getSpaces.first)
+    hours_of_operation = parametric_inputs[schedule][:hoo_inputs]
 
     # process profiles
     profiles.each do |sch_day,rule|
@@ -489,7 +480,7 @@ class Standard
           remainder = days_to_fill - value[:days_used]
           day_for_rule = days_to_fill - remainder
           if remainder.size < days_to_fill.size
-            autogen_rules[profile_index] = {:days_to_fill => day_for_rule, :hoo_start => hours_of_operation[profile_index][:hoo_start], :hoo_end => hours_of_operation[profile_index][:hoo_end]}
+            autogen_rules[profile_index] = {:days_to_fill => day_for_rule, :hoo_start => hoo_start, :hoo_end => hoo_end}
           end
           days_to_fill = remainder
         end
@@ -525,6 +516,7 @@ class Standard
 
           # match profile from source rule (don't add time/values need a formula to process)
           sch_day_auto_gen = sch_rule_autogen.daySchedule
+          sch_day_auto_gen.setName("#{sch_rule_autogen.name}_day_sch")
           sch_day_auto_gen.additionalProperties.setFeature("param_day_tag","autogen")
           val = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
           sch_day_auto_gen.additionalProperties.setFeature("param_day_profile",val)
@@ -538,7 +530,7 @@ class Standard
           hoo_end = hash[:hoo_end]
 
           # process new rule
-          process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+          process_hash(sch_day_auto_gen,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
         end
 
@@ -565,11 +557,11 @@ class Standard
   # @return schedule_day
   def process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
-    # todo - process hoo and floor/ceiling vars to develop formulas without variables
+    # process hoo and floor/ceiling vars to develop formulas without variables
     formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
     formula_hash = {}
     formula_string.split("|").each do |time_val_valopt|
-      a1 = time_val_valopt.to_s.split("/")
+      a1 = time_val_valopt.to_s.split("~")
       time = a1[0]
       value_array = a1.drop(1)
       formula_hash[time] = value_array
@@ -590,9 +582,11 @@ class Standard
     formula_hash.each do |time,val_in_out|
 
       # replace time variables with value
-      time = time.gsub('start',hoo_start.to_s)
-      time = time.gsub('end',hoo_end.to_s)
+      time = time.gsub('hoo_start',hoo_start.to_s)
+      time = time.gsub('hoo_end',hoo_end.to_s)
       time = time.gsub('occ',occ.to_s)
+      # can save special variables like lunch or break using this logic
+      time = time.gsub('mid',(hoo_start + occ * 0.5).to_s)
       time = time.gsub('vac',vac.to_s)
       begin
         time_float = eval(time)
@@ -609,9 +603,9 @@ class Standard
       val_in_out_float = []
       val_in_out.each do |val|
         # replace variables for values
-        val = val.gsub('flr',val_flr.to_s)
-        val = val.gsub('clg',val_clg.to_s)
-        val = val.gsub('range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
+        val = val.gsub('val_flr',val_flr.to_s)
+        val = val.gsub('val_clg',val_clg.to_s)
+        val = val.gsub('val_range',range.to_s) # will expect a fractional value and will scale within ceiling and floor
         begin
           val_float = eval(val)
           if val_float.to_i.to_s == val_float.to_s or val_float.to_f.to_s == val_float.to_s # check to see if numeric
@@ -664,6 +658,7 @@ class Standard
         last_time = time_value_pair[0]
       elsif time_value_pair[0] < last_time || neg_time_hash.has_key?(i)
 
+        # todo - it doesn't actually stop here now
         if error_on_out_of_order
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
         end
