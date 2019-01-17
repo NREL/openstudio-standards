@@ -7,6 +7,7 @@ class NECB_Autozone_Tests < MiniTest::Test
       "LargeHotel",
       "LargeOffice",
       "MediumOffice",
+      "HighriseApartment",
       "MidriseApartment",
       "Outpatient",
       "PrimarySchool",
@@ -15,7 +16,8 @@ class NECB_Autozone_Tests < MiniTest::Test
       "RetailStripmall",
       "SmallHotel",
       "SmallOffice",
-      "Warehouse"
+      "Warehouse",
+      "Hospital"
   ]
 
 
