@@ -529,7 +529,14 @@ Standard.class_eval do
   # @return [Bool] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
-    space_multiplier_map = {} if space_multiplier_map.nil?
+
+    # Retrieve zone multipliers if non assigned via the space_multiplier_map
+    if space_multiplier_map.nil?
+      space_multiplier_map = {}
+      model.getSpaces.each do |spc|
+        space_multiplier_map.store(spc.name.to_s, spc.thermalZone.get.multiplier.to_int)
+      end
+    end
 
     # Remove any Thermal zones assigned
     model.getThermalZones.each(&:remove)
