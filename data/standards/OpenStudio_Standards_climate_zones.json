@@ -115,6 +115,120 @@
       "bcl_weather_component_id": null
     },
     {
+      "name": "ASHRAE 169-2013-1A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-1B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-2A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-2B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-3A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-3B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-3C",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-4A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-4B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-4C",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-5A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-5B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-5C",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-6A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-6B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-7A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-7B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-8A",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "ASHRAE 169-2013-8B",
+      "standard": "ASHRAE 169-2013",
+      "representative_city": null,
+      "bcl_weather_component_id": null
+    },
+    {
       "name": "CEC T24-CEC1",
       "standard": "CEC T24",
       "representative_city": "Arcata",
