@@ -435,7 +435,7 @@ Standard.class_eval do
       adj_space = adj_surface.space.get
       if adj_space.spaceType.is_initialized && adj_space.spaceType.get.standardsSpaceType.is_initialized
         adj_std_space_type = adj_space.spaceType.get.standardsSpaceType.get
-        if adj_std_space_type == 'Plenum'
+        if adj_std_space_type.downcase == 'plenum'
           plenum_construction = adj_surface.construction
           if plenum_construction.is_initialized
             plenum_construction = plenum_construction.get
@@ -528,10 +528,27 @@ Standard.class_eval do
   # @param (see #add_constructions)
   # @return [Bool] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
-     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
- 
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
+
+    # Retrieve zone multipliers if non assigned via the space_multiplier_map
+    if space_multiplier_map.nil?
+      space_multiplier_map = {}
+      model.getSpaces.each do |spc|
+        space_multiplier_map.store(spc.name.to_s, spc.thermalZone.get.multiplier.to_int)
+      end
+    end
+
+    # Remove any Thermal zones assigned
+    model.getThermalZones.each(&:remove)
+
+    # Create a thermal zone for each space in the self
     model.getSpaces.sort.each do |space|
-    zone = space.thermalZone.get
+      zone = OpenStudio::Model::ThermalZone.new(model)
+      zone.setName("#{space.name} ZN")
+      unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
+        zone.setMultiplier(space_multiplier_map[space.name.to_s])
+      end
+      space.setThermalZone(zone)
 	
   # Skip thermostat for spaces with no space type
      next if space.spaceType.empty?

@@ -1,4 +1,5 @@
 require 'singleton'
+require 'open3'
 require_relative 'openstudio-standards/version'
 
 module OpenstudioStandards
@@ -233,6 +234,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/common/objects/Prototype.BoilerHotWater"
+  require_relative "#{proto}/common/objects/Prototype.CentralAirSourceHeatPump"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"
@@ -257,6 +259,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.swh"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
+  require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
@@ -308,4 +311,50 @@ module OpenstudioStandards
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanConstantVolume"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanOnOff"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
+  
+  # DLM: not sure where this code should go
+  def self.get_run_env()
+    # blank out bundler and gem path modifications, will be re-setup by new call
+    new_env = {}
+    new_env["BUNDLER_ORIG_MANPATH"] = nil
+    new_env["BUNDLER_ORIG_PATH"] = nil
+    new_env["BUNDLER_VERSION"] = nil
+    new_env["BUNDLE_BIN_PATH"] = nil
+    new_env["RUBYLIB"] = nil
+    new_env["RUBYOPT"] = nil
+    
+    # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
+    # requires to ruby gems will work, will fail if we require a native gem
+    #new_env["GEM_PATH"] = nil
+    #new_env["GEM_HOME"] = nil
+    
+    # DLM: for now, ignore current bundle in case it has binary dependencies in it
+    #bundle_gemfile = ENV['BUNDLE_GEMFILE']
+    #bundle_path = ENV['BUNDLE_PATH']    
+    #if bundle_gemfile.nil? || bundle_path.nil?
+      new_env['BUNDLE_GEMFILE'] = nil
+      new_env['BUNDLE_PATH'] = nil
+    #else
+    #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
+    #  new_env['BUNDLE_PATH'] = bundle_path    
+    #end  
+    
+    return new_env
+  end
+  
+  def self.run_command(command)
+    stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
+    if status.success?
+      puts "Command completed successfully"
+      #puts "stdout: #{stdout_str}"
+      #puts "stderr: #{stderr_str}"
+      return true
+    else
+      puts "Error running command: '#{command}'"
+      puts "stdout: #{stdout_str}"
+      puts "stderr: #{stderr_str}"
+      return false 
+    end
+  end
+  
 end
