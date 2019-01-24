@@ -434,7 +434,7 @@ OS:Surface,
 
 OS:Building,
   {57a0612b-80fa-4a4f-8704-b192e6d39f92}, !- Handle
-  90.1-2013-FullServiceRestaurant-ASHRAE 169-2006-1B created: 2018-06-08 11:55:46 -0700, !- Name
+  90.1-2013-FullServiceRestaurant-ASHRAE 169-1B created: 2018-06-08 11:55:46 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2555,7 +2555,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {039aecaf-7d41-4cb5-82f2-6871dd7bafa6}, !- Handle
-  90.1-2013 - FullSrvRest - ASHRAE 169-2006-1B, !- Name
+  90.1-2013 - FullSrvRest - ASHRAE 169-1B, !- Name
   {dd46e4aa-6d83-44f1-8929-774ecebf5461}, !- Default Exterior Surface Constructions Name
   {d3d7bd8c-51fc-44a4-846b-9533997db7d0}, !- Default Interior Surface Constructions Name
   {1e8f3caa-79ba-4051-a5c3-734c92e0eb89}, !- Default Ground Contact Surface Constructions Name
@@ -3075,7 +3075,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {7e0afb11-eaaa-4a08-b727-b819c2fe7988}, !- Handle
-  90.1-2013 - Attic - ASHRAE 169-2006-1B, !- Name
+  90.1-2013 - Attic - ASHRAE 169-1B, !- Name
   {1c2855e0-0b47-4c2f-b70b-6d067c4d4f49}, !- Default Exterior Surface Constructions Name
   {de467561-8b79-4d73-b06b-c1f5167c0ce2}, !- Default Interior Surface Constructions Name
   {b585bce8-9b99-4e43-86d6-ad7bf376ddf1}, !- Default Ground Contact Surface Constructions Name

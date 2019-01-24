@@ -8883,7 +8883,7 @@ OS:YearDescription,
 
 OS:Building,
   {9e9ffdf1-e55b-430a-815c-d47b238cd08f}, !- Handle
-  90.1-2013-Hospital-ASHRAE 169-2006-8A created: 2018-06-08 22:01:31 -0700, !- Name
+  90.1-2013-Hospital-ASHRAE 169-8A created: 2018-06-08 22:01:31 -0700, !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -14034,7 +14034,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {81a8e9b9-6e23-43b1-a019-d3570b921408}, !- Handle
-  90.1-2013 - Hospital - ASHRAE 169-2006-8A, !- Name
+  90.1-2013 - Hospital - ASHRAE 169-8A, !- Name
   {cbb68690-bd2a-406d-8103-c94b89bf8734}, !- Default Exterior Surface Constructions Name
   {65bcc38b-bd8a-451b-a4c1-f543cb7e5414}, !- Default Interior Surface Constructions Name
   {81aaaff5-d758-4306-82a4-22dd623e08cc}, !- Default Ground Contact Surface Constructions Name
@@ -14591,7 +14591,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {9aa0e7a0-922b-443e-8aa3-3c378abb3cc4}, !- Handle
-  90.1-2013 - Hospital - PatRoom - ASHRAE 169-2006-8A, !- Name
+  90.1-2013 - Hospital - PatRoom - ASHRAE 169-8A, !- Name
   {d52dd2b7-6f34-4b67-be3b-932e841cde2c}, !- Default Exterior Surface Constructions Name
   {b705fed2-e798-4604-a67e-4858fe7ea20b}, !- Default Interior Surface Constructions Name
   {f0d454bc-19a2-4a74-8146-b4b70ff7c7f1}, !- Default Ground Contact Surface Constructions Name

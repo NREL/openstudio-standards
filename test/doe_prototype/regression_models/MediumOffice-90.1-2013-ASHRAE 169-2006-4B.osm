@@ -2116,7 +2116,7 @@ OS:Surface,
 
 OS:Building,
   {ed36787e-0111-455c-a24c-be4262835f11}, !- Handle
-  90.1-2013-MediumOffice-ASHRAE 169-2006-4B created: 2018-06-07 14:32:07 -0700, !- Name
+  90.1-2013-MediumOffice-ASHRAE 169-4B created: 2018-06-07 14:32:07 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -4481,7 +4481,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {a3888f25-f76f-47f3-8bb2-0e7bc2c79a0a}, !- Handle
-  90.1-2013 - MedOffice - ASHRAE 169-2006-4B, !- Name
+  90.1-2013 - MedOffice - ASHRAE 169-4B, !- Name
   {4bc61d47-fccb-4a2e-aa45-496b67de0e71}, !- Default Exterior Surface Constructions Name
   {68346f69-4abf-4201-b037-dbe1b6d206ae}, !- Default Interior Surface Constructions Name
   {fd85250d-ec9d-4a7e-b1b8-6a40ae4ccf0f}, !- Default Ground Contact Surface Constructions Name

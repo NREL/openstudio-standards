@@ -184,7 +184,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:Building,
   {2359408b-6252-42dc-81e2-5632894e0032}, !- Handle
-  90.1-2010-QuickServiceRestaurant-ASHRAE 169-2006-2A created: 2017-02-06 09:38:12 -0700, !- Name
+  90.1-2010-QuickServiceRestaurant-ASHRAE 169-2A created: 2017-02-06 09:38:12 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2576,7 +2576,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {04a12ff8-34d4-4a19-90db-9fa24158aeb1}, !- Handle
-  90.1-2010 - QckSrvRest - ASHRAE 169-2006-2A, !- Name
+  90.1-2010 - QckSrvRest - ASHRAE 169-2A, !- Name
   {d346de42-8620-4717-afdc-09ab91b9f7fc}, !- Default Exterior Surface Constructions Name
   {4d89bc7b-ccd9-4d7f-a7b2-d40ffe507726}, !- Default Interior Surface Constructions Name
   {aeea7347-9059-47e8-9896-b26d54b5bb04}, !- Default Ground Contact Surface Constructions Name

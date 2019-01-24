@@ -5190,7 +5190,7 @@ OS:Rendering:Color,
 
 OS:DefaultConstructionSet,
   {b0d89c4d-8426-42c3-900f-66eeb484d220}, !- Handle
-  90.1-2010 - Retail - ASHRAE 169-2006-2A, !- Name
+  90.1-2010 - Retail - ASHRAE 169-2A, !- Name
   {52a8023d-cc31-4113-810a-e9d689c2fe2f}, !- Default Exterior Surface Constructions Name
   {e81ef0aa-72f0-4867-8848-a356ddaf141a}, !- Default Interior Surface Constructions Name
   {a7c5db2c-7c46-4daf-b86d-04484bdb3a1f}, !- Default Ground Contact Surface Constructions Name

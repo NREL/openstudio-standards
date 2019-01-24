@@ -95,9 +95,9 @@ class ASHRAE9012013 < ASHRAE901
     # Don't change the fuel if it purchased heating or cooling.
     if fuel_type == 'electric' || fuel_type == 'fossil'
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
-            'ASHRAE 169-2006-2A',
-            'ASHRAE 169-2006-3A'
+      when 'ASHRAE 169-1A',
+            'ASHRAE 169-2A',
+            'ASHRAE 169-3A'
         fuel_type = 'electric'
       else
         fuel_type = 'fossil'

@@ -4125,7 +4125,7 @@ OS:SubSurface,
 
 OS:Building,
   {9a5048da-f51f-4a23-bf2e-fd970cdf8aae}, !- Handle
-  90.1-2013-PrimarySchool-ASHRAE 169-2006-8A created: 2018-06-08 08:43:52 -0700, !- Name
+  90.1-2013-PrimarySchool-ASHRAE 169-8A created: 2018-06-08 08:43:52 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -10236,7 +10236,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {8a0601b0-33c1-481a-9bca-e48458217c5d}, !- Handle
-  90.1-2013 - PriSchl - ASHRAE 169-2006-8A, !- Name
+  90.1-2013 - PriSchl - ASHRAE 169-8A, !- Name
   {1f6a57ed-cc04-48a7-84c3-7524a78503c2}, !- Default Exterior Surface Constructions Name
   {c5b00a33-33d8-43ed-9324-5278ba0546eb}, !- Default Interior Surface Constructions Name
   {786d7221-a3f8-4797-95db-df5eb7fc1f91}, !- Default Ground Contact Surface Constructions Name
@@ -10781,7 +10781,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {6869e428-6cd0-428f-994e-751ecca9e6eb}, !- Handle
-  90.1-2013 - PriSchl - Office - ASHRAE 169-2006-8A, !- Name
+  90.1-2013 - PriSchl - Office - ASHRAE 169-8A, !- Name
   {4fc4f5f7-be44-4191-90cc-8b8a77b786b2}, !- Default Exterior Surface Constructions Name
   {6221ea2a-8ad3-4a29-95e4-3014a4e81a19}, !- Default Interior Surface Constructions Name
   {834427a5-9cef-409d-b208-320cdaff4add}, !- Default Ground Contact Surface Constructions Name

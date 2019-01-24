@@ -4831,7 +4831,7 @@ OS:Rendering:Color,
 
 OS:DefaultConstructionSet,
   {19507369-689d-46d5-a10a-630b06e2a9c2}, !- Handle
-  90.1-2010 - Office - ASHRAE 169-2006-2A, !- Name
+  90.1-2010 - Office - ASHRAE 169-2A, !- Name
   {48e111b8-5cf5-4ca0-b7f3-4b3122d80b29}, !- Default Exterior Surface Constructions Name
   {543d877b-e60d-4793-8779-6bca66deb004}, !- Default Interior Surface Constructions Name
   {e4aafb94-1968-46d8-8f7f-b2737cd40095}, !- Default Ground Contact Surface Constructions Name
@@ -8769,7 +8769,7 @@ OS:Rendering:Color,
 
 OS:DefaultConstructionSet,
   {f829a2e1-0c92-4222-8d44-c0d5b3e55e90}, !- Handle
-  90.1-2010 - LrgHotel - ASHRAE 169-2006-2A, !- Name
+  90.1-2010 - LrgHotel - ASHRAE 169-2A, !- Name
   {0464352d-564c-4a79-bb08-0f79ae44414b}, !- Default Exterior Surface Constructions Name
   {4725a71c-47db-450b-b35d-e4f4c5424023}, !- Default Interior Surface Constructions Name
   {d14d0a57-d084-40ba-b642-2915f655bcef}, !- Default Ground Contact Surface Constructions Name
@@ -8960,7 +8960,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:DefaultConstructionSet,
   {93d73bb4-b8a8-436e-b562-69647a035351}, !- Handle
-  90.1-2010 - LrgHotel - ASHRAE 169-2006-2A - Residential, !- Name
+  90.1-2010 - LrgHotel - ASHRAE 169-2A - Residential, !- Name
   {cf2b97a9-dde6-4513-8c8a-3bcd6b074e61}, !- Default Exterior Surface Constructions Name
   {1135d222-cb05-49c3-9d81-1a555e63464c}, !- Default Interior Surface Constructions Name
   {e2011c26-e8fd-431d-8735-99ab0fadd8fc}, !- Default Ground Contact Surface Constructions Name

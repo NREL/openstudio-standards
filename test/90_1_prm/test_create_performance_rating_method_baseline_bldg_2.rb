@@ -10,7 +10,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def ci_fail_test_lpd_bldg1 # disable this test, which succeeds locally but fails on circleci for no apparent reason
 
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -38,7 +38,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def ci_fail_test_lpd_bldg2 # disable this test, which succeeds locally but fails on circleci for no apparent reason
 
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -65,7 +65,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_lpd_bldg3
 
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -96,7 +96,7 @@ class Baseline9012013Test2 < Minitest::Test
   # Known failure due to currently not having parking space type
   def known_fail_test_lpd_bldg4
 
-    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -122,7 +122,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_lpd_bldg5
 
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -149,7 +149,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_lpd_bldg7
 
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     lpd_test_hash = {}
@@ -175,7 +175,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def ci_fail_test_daylighting_bldg1 # disable this test, which succeeds locally but fails on circleci for no apparent reason
 
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     daylighting_test_hash = {}
@@ -261,7 +261,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_daylighting_bldg3
 
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', true, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', true, true)
     failure_array = []
   
     daylighting_test_hash = {}
@@ -349,7 +349,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def ci_fail_test_system_type_bldg1 # disable this test, which succeeds locally but fails on circleci for no apparent reason
 
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     expected_system_string = "VAV_PFP_Boxes (Sys8)"
@@ -499,7 +499,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def known_fail_test_system_type_bldg2 # This test fails on circleci but succeeds locally.  Cannot figure out why.
 
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     expected_system_string = "PVAV_PFP_Boxes (Sys6)"
@@ -634,7 +634,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_system_type_bldg3
 
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # test main system type
@@ -874,7 +874,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_system_type_bldg4
 
-    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # test main system type
@@ -996,7 +996,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_system_type_bldg5
 
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # test main system type
@@ -1184,7 +1184,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_system_type_bldg7
 
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # test main system type
@@ -1344,7 +1344,7 @@ class Baseline9012013Test2 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_system_type_bldg7_electric
 
-    model = create_baseline_model('bldg_7_electric', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_7_electric', '90.1-2013', 'ASHRAE 169-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     # test main system type

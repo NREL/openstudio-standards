@@ -1614,7 +1614,7 @@ OS:YearDescription,
 
 OS:Building,
   {c23ded4b-6f18-4e30-b6db-cc00e1198751}, !- Handle
-  90.1-2013-Warehouse-ASHRAE 169-2006-3B created: 2018-06-07 17:15:31 -0700, !- Name
+  90.1-2013-Warehouse-ASHRAE 169-3B created: 2018-06-07 17:15:31 -0700, !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -3325,7 +3325,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {cf5a6373-92c8-49e5-a6e2-f2678c0907c0}, !- Handle
-  90.1-2013 - Warehouse - ASHRAE 169-2006-3B, !- Name
+  90.1-2013 - Warehouse - ASHRAE 169-3B, !- Name
   {f6ffb968-8fb8-4d3c-a044-99a781af8b49}, !- Default Exterior Surface Constructions Name
   {f239bf33-4ac9-4067-aa58-f770e0c00b26}, !- Default Interior Surface Constructions Name
   {e174e56e-daec-43eb-bf6c-d0c4ed40027c}, !- Default Ground Contact Surface Constructions Name
@@ -3856,7 +3856,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {74ef190a-e523-4c91-90fe-0f8d31c352e2}, !- Handle
-  90.1-2013 - Warehouse - Office - ASHRAE 169-2006-3B, !- Name
+  90.1-2013 - Warehouse - Office - ASHRAE 169-3B, !- Name
   {4754a66c-50e9-47f1-a1ec-7a85fee5b5c8}, !- Default Exterior Surface Constructions Name
   {c7a9a359-2c5d-44e9-8191-1ce59d916257}, !- Default Interior Surface Constructions Name
   {e31db890-bcba-407d-9aa7-38a9c9f57646}, !- Default Ground Contact Surface Constructions Name
@@ -3995,7 +3995,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:DefaultConstructionSet,
   {ebad190d-ac9e-4702-b11e-851be261df28}, !- Handle
-  90.1-2013 - Warehouse - Fine - ASHRAE 169-2006-3B, !- Name
+  90.1-2013 - Warehouse - Fine - ASHRAE 169-3B, !- Name
   {219ddcab-d77b-4f12-8341-2a746586c1c5}, !- Default Exterior Surface Constructions Name
   {5306b7fb-bbab-4415-ae60-a5f5bfff3de1}, !- Default Interior Surface Constructions Name
   {e7582954-ae09-4ee0-9414-fd82e5575714}, !- Default Ground Contact Surface Constructions Name
@@ -4143,7 +4143,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:DefaultConstructionSet,
   {50bbd4c1-cfb2-4a17-bf36-4531cd3eaf54}, !- Handle
-  90.1-2013 - Warehouse - Bulk - ASHRAE 169-2006-3B, !- Name
+  90.1-2013 - Warehouse - Bulk - ASHRAE 169-3B, !- Name
   {20c96351-a790-4e80-9636-ae9ad285c077}, !- Default Exterior Surface Constructions Name
   {7b4d1277-2964-4e6a-a61a-f416350f1e58}, !- Default Interior Surface Constructions Name
   {f16040cf-a053-4c53-b8a0-976eadb79730}, !- Default Ground Contact Surface Constructions Name

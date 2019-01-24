@@ -4384,7 +4384,7 @@ OS:Surface,
 
 OS:Building,
   {20e8b39b-b6e0-4ebf-9d32-e8ac4f6442af}, !- Handle
-  90.1-2004-SmallHotel-ASHRAE 169-2006-5B created: 2017-01-27 13:24:18 -0700, !- Name
+  90.1-2004-SmallHotel-ASHRAE 169-5B created: 2017-01-27 13:24:18 -0700, !- Name
   ,                                       !- Building Sector Type
   90,                                     !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -17985,7 +17985,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {6b131a1a-bbac-4520-98c6-255e015b568e}, !- Handle
-  90.1-2004 - SmHotel - ASHRAE 169-2006-5B, !- Name
+  90.1-2004 - SmHotel - ASHRAE 169-5B, !- Name
   {683d05a2-c835-438d-9e56-c0103cdae1bd}, !- Default Exterior Surface Constructions Name
   {bff40fe1-3f16-42ff-8c46-cbda0ad7ffb2}, !- Default Interior Surface Constructions Name
   {ea9cf39d-65f4-425e-89e8-986b3da641ef}, !- Default Ground Contact Surface Constructions Name

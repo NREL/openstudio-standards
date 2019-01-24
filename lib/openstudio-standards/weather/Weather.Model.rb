@@ -14,25 +14,25 @@ class Standard
 
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
-        'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
-        'ASHRAE 169-2006-1B' => 'SAU_Riyadh.404380_IWEC.epw',
-        'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
-        'ASHRAE 169-2006-2B' => 'USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw',
-        'ASHRAE 169-2006-3A' => 'USA_TN_Memphis.Intl.AP.723340_TMY3.epw',
-        'ASHRAE 169-2006-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
-        'ASHRAE 169-2006-3C' => 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw',
-        'ASHRAE 169-2006-4A' => 'USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw',
-        'ASHRAE 169-2006-4B' => 'USA_NM_Albuquerque.Intl.AP.723650_TMY3.epw',
-        'ASHRAE 169-2006-4C' => 'USA_OR_Salem-McNary.Field.726940_TMY3.epw',
-        'ASHRAE 169-2006-5A' => 'USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw',
-        'ASHRAE 169-2006-5B' => 'USA_ID_Boise.Air.Terminal.726810_TMY3.epw',
-        'ASHRAE 169-2006-5C' => 'CAN_BC_Vancouver.718920_CWEC.epw',
-        'ASHRAE 169-2006-6A' => 'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',
-        'ASHRAE 169-2006-6B' => 'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
-        'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+        'ASHRAE 169-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
+        'ASHRAE 169-1B' => 'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2.epw',
+        'ASHRAE 169-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
+        'ASHRAE 169-2B' => 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
+        'ASHRAE 169-3A' => 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
+        'ASHRAE 169-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+        'ASHRAE 169-3C' => 'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
+        'ASHRAE 169-4A' => 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
+        'ASHRAE 169-4B' => 'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
+        'ASHRAE 169-4C' => 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
+        'ASHRAE 169-5A' => 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
+        'ASHRAE 169-5B' => 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
+        'ASHRAE 169-5C' => 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
+        'ASHRAE 169-6A' => 'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
+        'ASHRAE 169-6B' => 'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
+        'ASHRAE 169-7A' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+        'ASHRAE 169-7B' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+        'ASHRAE 169-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+        'ASHRAE 169-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
         # For measure input
         'NECB HDD Method' => epw_file.to_s,
         # For testing
@@ -481,40 +481,40 @@ module BTAP
         hdd18 = self.hdd18.to_f
 
         if cdd10 > 6000 # Extremely Hot  Humid (0A), Dry (0B)
-          return 'ASHRAE 169-2006-0A'
+          return 'ASHRAE 169-0A'
 
         elsif (cdd10 > 5000) && (cdd10 <= 6000) # Very Hot  Humid (1A), Dry (1B)
-          return 'ASHRAE 169-2006-1A'
+          return 'ASHRAE 169-1A'
 
         elsif (cdd10 > 3500) && (cdd10 <= 5000) # Hot  Humid (2A), Dry (2B)
-          return 'ASHRAE 169-2006-2A'
+          return 'ASHRAE 169-2A'
 
         elsif ((cdd10 > 2500) && (cdd10 < 3500)) && (hdd18 <= 2000) # Warm  Humid (3A), Dry (3B)
-          return 'ASHRAE 169-2006-3A' # and 'ASHRAE 169-2006-3B'
+          return 'ASHRAE 169-3A' # and 'ASHRAE 169-3B'
 
         elsif (cdd10 <= 2500) && (hdd18 <= 2000) # Warm  Marine (3C)
-          return 'ASHRAE 169-2006-3C'
+          return 'ASHRAE 169-3C'
 
         elsif ((cdd10 > 1500) && (cdd10 < 3500)) && ((hdd18 > 2000) && (hdd18 <= 3000)) # Mixed  Humid (4A), Dry (4B)
-          return 'ASHRAE 169-2006-4A' # and 'ASHRAE 169-2006-4B'
+          return 'ASHRAE 169-4A' # and 'ASHRAE 169-4B'
 
         elsif (cdd10 <= 1500) && ((hdd18 > 2000) && (hdd18 <= 3000)) # Mixed  Marine
-          return 'ASHRAE 169-2006-4C'
+          return 'ASHRAE 169-4C'
 
         elsif ((cdd10 > 1000) && (cdd10 <= 3500)) && ((hdd18 > 3000) && (hdd18 <= 4000)) # Cool Humid (5A), Dry (5B)
-          return 'ASHRAE 169-2006-5A' # and 'ASHRAE 169-2006-5B'
+          return 'ASHRAE 169-5A' # and 'ASHRAE 169-5B'
 
         elsif (cdd10 <= 1000) && ((hdd18 > 3000) && (hdd18 <= 4000)) # Cool  Marine (5C)
-          return 'ASHRAE 169-2006-5C'
+          return 'ASHRAE 169-5C'
 
         elsif (hdd18 > 4000) && (hdd18 <= 5000) # Cold  Humid (6A), Dry (6B)
-          return 'ASHRAE 169-2006-6A' # and 'ASHRAE 169-2006-6B'
+          return 'ASHRAE 169-6A' # and 'ASHRAE 169-6B'
 
         elsif (hdd18 > 5000) && (hdd18 <= 7000) # Very Cold (7)
-          return 'ASHRAE 169-2006-7A'
+          return 'ASHRAE 169-7A'
 
         elsif hdd18 > 7000 # Subarctic/Arctic (8)
-          return 'ASHRAE 169-2006-8A'
+          return 'ASHRAE 169-8A'
 
         else
           # raise ("invalid cdd10 of #{cdd10} or hdd18 of #{hdd18}")

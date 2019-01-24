@@ -1050,30 +1050,30 @@ class Standard
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-2B'
+    when 'ASHRAE 169-1A',
+        'ASHRAE 169-1B',
+        'ASHRAE 169-2A',
+        'ASHRAE 169-2B'
       htg_lim_btu_per_ft2 = 5
-    when 'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C'
+    when 'ASHRAE 169-3A',
+        'ASHRAE 169-3B',
+        'ASHRAE 169-3C'
       htg_lim_btu_per_ft2 = 10
-    when 'ASHRAE 169-2006-4A',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
+    when 'ASHRAE 169-4A',
+        'ASHRAE 169-4B',
+        'ASHRAE 169-4C',
+        'ASHRAE 169-5A',
+        'ASHRAE 169-5B',
+        'ASHRAE 169-5C',
       htg_lim_btu_per_ft2 = 15
-    when 'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
+    when 'ASHRAE 169-6A',
+        'ASHRAE 169-6B',
+        'ASHRAE 169-7A',
+        'ASHRAE 169-7B',
       htg_lim_btu_per_ft2 = 20
     when
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+        'ASHRAE 169-8A',
+        'ASHRAE 169-8B'
       htg_lim_btu_per_ft2 = 25
     end
 

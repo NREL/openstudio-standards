@@ -1204,7 +1204,7 @@ OS:SubSurface,
 
 OS:Building,
   {6b25c3c7-39e4-4be7-84a9-17e80feecaf5}, !- Handle
-  90.1-2013-SmallOffice-ASHRAE 169-2006-5A created: 2018-06-07 14:10:39 -0700, !- Name
+  90.1-2013-SmallOffice-ASHRAE 169-5A created: 2018-06-07 14:10:39 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2676,7 +2676,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {b18840ac-d7fc-4586-b927-659d06b99e74}, !- Handle
-  90.1-2013 - SmOffice - ASHRAE 169-2006-5A, !- Name
+  90.1-2013 - SmOffice - ASHRAE 169-5A, !- Name
   {1ceadfa5-ed1d-4d56-9748-0ce7ba0d7635}, !- Default Exterior Surface Constructions Name
   {6a9c3cc7-c50f-41ac-99a6-434375042828}, !- Default Interior Surface Constructions Name
   {e0bfe3bd-64a4-4e9d-a231-7ba7b5c9da54}, !- Default Ground Contact Surface Constructions Name
@@ -3196,7 +3196,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {01cb19d4-d14d-402e-bd1a-55f4b59a04c7}, !- Handle
-  90.1-2013 - Attic - ASHRAE 169-2006-5A, !- Name
+  90.1-2013 - Attic - ASHRAE 169-5A, !- Name
   {d49529ac-35ea-4306-ab93-7ad8173cf384}, !- Default Exterior Surface Constructions Name
   {c18941fd-72cb-4796-8d41-3445a3aa0a06}, !- Default Interior Surface Constructions Name
   {8242266c-2d84-460b-8dbf-cb48309c4137}, !- Default Ground Contact Surface Constructions Name

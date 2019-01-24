@@ -1093,7 +1093,7 @@ OS:ConvergenceLimits,
 
 OS:Building,
   {677593f3-2d46-47f5-972e-d3010ee2ef98}, !- Handle
-  DOE Ref Pre-1980-SmallOffice-ASHRAE 169-2006-2A created: 2016-02-16 11:43:09 -0800, !- Name
+  DOE Ref Pre-1980-SmallOffice-ASHRAE 169-2A created: 2016-02-16 11:43:09 -0800, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -6673,7 +6673,7 @@ OS:Material,
 
 OS:DefaultConstructionSet,
   {399c1c33-b878-4d49-b80d-9992e19d26d2}, !- Handle
-  DOE Ref Pre-1980 - Office - ASHRAE 169-2006-2A adj roof insulation adj ext wall insulation, !- Name
+  DOE Ref Pre-1980 - Office - ASHRAE 169-2A adj roof insulation adj ext wall insulation, !- Name
   {c48395d8-172f-4666-8c0f-651ce13f8804}, !- Default Exterior Surface Constructions Name
   {d004fd29-6426-46ed-bfaa-bb853e579f32}, !- Default Interior Surface Constructions Name
   {ca0b7f90-7f06-4de5-91ea-e064ae558a65}, !- Default Ground Contact Surface Constructions Name

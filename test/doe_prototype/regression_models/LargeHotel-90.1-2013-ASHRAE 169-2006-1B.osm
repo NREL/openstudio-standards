@@ -254,7 +254,7 @@ OS:Space,
 
 OS:Building,
   {bb5b588d-ed54-4560-ae15-dfaff42d1cbb}, !- Handle
-  90.1-2013-LargeHotel-ASHRAE 169-2006-1B created: 2018-06-08 11:52:10 -0700, !- Name
+  90.1-2013-LargeHotel-ASHRAE 169-1B created: 2018-06-08 11:52:10 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -8777,7 +8777,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {9d2c4670-2a7a-42e1-845c-fd2ead8f3083}, !- Handle
-  90.1-2013 - LrgHotel - ASHRAE 169-2006-1B, !- Name
+  90.1-2013 - LrgHotel - ASHRAE 169-1B, !- Name
   {2b6daf6b-2da3-4253-a379-06b8e2e592b1}, !- Default Exterior Surface Constructions Name
   {5c3eb281-77d5-4092-a083-4833bb4127ab}, !- Default Interior Surface Constructions Name
   {b1245f49-ed62-42a7-a085-54027c583bd8}, !- Default Ground Contact Surface Constructions Name
@@ -9327,7 +9327,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {74fe514f-b14b-4305-9a83-fabfed8a9d31}, !- Handle
-  90.1-2013 - LrgHotel - GuestRoom - ASHRAE 169-2006-1B, !- Name
+  90.1-2013 - LrgHotel - GuestRoom - ASHRAE 169-1B, !- Name
   {23f26027-81a1-4e8d-9cc2-457fd9b6546c}, !- Default Exterior Surface Constructions Name
   {3b5fc11e-1386-4968-975c-10a08e8938f6}, !- Default Interior Surface Constructions Name
   {4c639538-c96b-4fd3-9d9f-fc298811624b}, !- Default Ground Contact Surface Constructions Name

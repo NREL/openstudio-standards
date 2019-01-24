@@ -2109,7 +2109,7 @@ OS:YearDescription,
 
 OS:Building,
   {2b0bfd6c-8754-4347-b436-1d7c3e63c79e}, !- Handle
-  90.1-2013-RetailStripmall-ASHRAE 169-2006-1A created: 2018-06-07 18:17:57 -0700, !- Name
+  90.1-2013-RetailStripmall-ASHRAE 169-1A created: 2018-06-07 18:17:57 -0700, !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -5732,7 +5732,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {9cafd1df-a96c-4172-80f2-427468c33616}, !- Handle
-  90.1-2013 - StMall - ASHRAE 169-2006-1A, !- Name
+  90.1-2013 - StMall - ASHRAE 169-1A, !- Name
   {0847a9b3-2648-436c-b99e-2032f48fac7e}, !- Default Exterior Surface Constructions Name
   {1ec6a6ee-a555-4c22-aecc-e6c9046401c4}, !- Default Interior Surface Constructions Name
   {01351653-0539-4d11-a250-c9bf29f7b253}, !- Default Ground Contact Surface Constructions Name

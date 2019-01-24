@@ -2400,7 +2400,7 @@ OS:Surface,
 
 OS:Building,
   {9458e43b-b7b0-46f5-82b4-529de66fc6c8}, !- Handle
-  90.1-2013-LargeOffice-ASHRAE 169-2006-5A created: 2018-06-07 15:20:16 -0700, !- Name
+  90.1-2013-LargeOffice-ASHRAE 169-5A created: 2018-06-07 15:20:16 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -5546,7 +5546,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {be6a5690-162d-4d52-9ecc-60dcd658637d}, !- Handle
-  90.1-2013 - LrgOffice - ASHRAE 169-2006-5A, !- Name
+  90.1-2013 - LrgOffice - ASHRAE 169-5A, !- Name
   {f6031209-7e35-4018-9351-5fc27ec6bc01}, !- Default Exterior Surface Constructions Name
   {ff0617a0-a38d-4493-9f82-2e32f223ae7a}, !- Default Interior Surface Constructions Name
   {b5daa9ec-e215-43f6-b21d-9b49fccd5189}, !- Default Ground Contact Surface Constructions Name

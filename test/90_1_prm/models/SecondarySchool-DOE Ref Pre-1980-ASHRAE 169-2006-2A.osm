@@ -5812,7 +5812,7 @@ OS:Surface,
 
 OS:Building,
   {667be65a-e2bd-454f-9a6e-53896804cfd1}, !- Handle
-  DOE Ref Pre-1980-SecondarySchool-ASHRAE 169-2006-2A created: 2016-03-30 09:08:00 -0600, !- Name
+  DOE Ref Pre-1980-SecondarySchool-ASHRAE 169-2A created: 2016-03-30 09:08:00 -0600, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -11926,7 +11926,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {48e307b9-1ab4-4398-a750-989f822eaf00}, !- Handle
-  DOE Ref Pre-1980 - SecSchl - ASHRAE 169-2006-2A, !- Name
+  DOE Ref Pre-1980 - SecSchl - ASHRAE 169-2A, !- Name
   {b2f1c64e-e02c-470e-b53b-3e75382ceced}, !- Default Exterior Surface Constructions Name
   {51bfa3f9-be9a-47c3-8a3d-5b6336e1f3a7}, !- Default Interior Surface Constructions Name
   {d7ed768b-3ef1-4376-865e-55a8740c1449}, !- Default Ground Contact Surface Constructions Name

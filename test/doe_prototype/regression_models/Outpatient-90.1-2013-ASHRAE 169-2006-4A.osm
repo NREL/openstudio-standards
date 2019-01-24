@@ -5141,7 +5141,7 @@ OS:Surface,
 
 OS:Building,
   {9e3e5eef-9590-4941-bdaa-4a05a47e12d6}, !- Handle
-  90.1-2013-Outpatient-ASHRAE 169-2006-4A created: 2018-06-08 20:46:30 -0700, !- Name
+  90.1-2013-Outpatient-ASHRAE 169-4A created: 2018-06-08 20:46:30 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -30359,7 +30359,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {4711f951-6350-47c3-bf48-9157c594a614}, !- Handle
-  90.1-2013 - Outpatient - ASHRAE 169-2006-4A, !- Name
+  90.1-2013 - Outpatient - ASHRAE 169-4A, !- Name
   {1843aee2-a83c-4aa1-8d0e-efdff7b2b0ca}, !- Default Exterior Surface Constructions Name
   {ef39417f-50a6-4863-ab57-c736762ab5ee}, !- Default Interior Surface Constructions Name
   {eab103df-7922-4961-a7c2-e93898617a40}, !- Default Ground Contact Surface Constructions Name
@@ -30904,7 +30904,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {9061648e-f1e5-4a75-b161-e71f9845a58a}, !- Handle
-  90.1-2013 - Outpatient - Office - ASHRAE 169-2006-4A, !- Name
+  90.1-2013 - Outpatient - Office - ASHRAE 169-4A, !- Name
   {9ad6b727-9b46-4045-9f7b-ffa98909b3be}, !- Default Exterior Surface Constructions Name
   {c19a60ce-0bc2-43f9-bbcf-9879cc7246e0}, !- Default Interior Surface Constructions Name
   {bac8c736-9efb-453d-9f89-4b4c24705cb3}, !- Default Ground Contact Surface Constructions Name

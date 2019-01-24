@@ -1090,7 +1090,7 @@ OS:Surface,
 
 OS:Building,
   {761ed503-73d7-48c5-8197-2a7009e22170}, !- Handle
-  90.1-2013-MidriseApartment-ASHRAE 169-2006-5A created: 2018-06-08 19:17:27 -0700, !- Name
+  90.1-2013-MidriseApartment-ASHRAE 169-5A created: 2018-06-08 19:17:27 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -6951,7 +6951,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {5351d55b-bbdf-4fb3-86bd-637f44c8e9c5}, !- Handle
-  90.1-2013 - MidApt - ASHRAE 169-2006-5A, !- Name
+  90.1-2013 - MidApt - ASHRAE 169-5A, !- Name
   {bb2abb53-9429-4bfa-84d8-e313e2013f51}, !- Default Exterior Surface Constructions Name
   {8ca74215-a9ca-43db-9911-04ad2266d41c}, !- Default Interior Surface Constructions Name
   {be656980-a02f-4a9b-a60c-0631c55ff565}, !- Default Ground Contact Surface Constructions Name
@@ -7496,7 +7496,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {c13af32c-bd13-4f97-98f3-d0b1382fc575}, !- Handle
-  90.1-2013 - MidApt - Office - ASHRAE 169-2006-5A, !- Name
+  90.1-2013 - MidApt - Office - ASHRAE 169-5A, !- Name
   {9ee917c7-3f5e-44e4-923b-42ecbce1c516}, !- Default Exterior Surface Constructions Name
   {0888f588-1d7c-462e-9e3c-f304f9062700}, !- Default Interior Surface Constructions Name
   {8e03ee25-94b9-4199-9719-6f826062dfc3}, !- Default Ground Contact Surface Constructions Name

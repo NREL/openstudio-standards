@@ -29,21 +29,21 @@ class TestAllBldgTypes < CreateDOEPrototypeBuildingTest
      '90.1-2013'
   ]
   climate_zones = [
-    'ASHRAE 169-2006-1A',
-    'ASHRAE 169-2006-2A',
-    'ASHRAE 169-2006-2B',
-    'ASHRAE 169-2006-3A',
-    'ASHRAE 169-2006-3B',
-    'ASHRAE 169-2006-3C',
-    'ASHRAE 169-2006-4A',
-    'ASHRAE 169-2006-4B',
-    'ASHRAE 169-2006-4C',
-    'ASHRAE 169-2006-5A',
-    'ASHRAE 169-2006-5B',
-    'ASHRAE 169-2006-6A',
-    'ASHRAE 169-2006-6B',
-    'ASHRAE 169-2006-7A',
-    'ASHRAE 169-2006-8A'
+    'ASHRAE 169-1A',
+    'ASHRAE 169-2A',
+    'ASHRAE 169-2B',
+    'ASHRAE 169-3A',
+    'ASHRAE 169-3B',
+    'ASHRAE 169-3C',
+    'ASHRAE 169-4A',
+    'ASHRAE 169-4B',
+    'ASHRAE 169-4C',
+    'ASHRAE 169-5A',
+    'ASHRAE 169-5B',
+    'ASHRAE 169-6A',
+    'ASHRAE 169-6B',
+    'ASHRAE 169-7A',
+    'ASHRAE 169-8A'
   ]
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw'] # not used for ASHRAE/DOE archetypes, but required for call
   create_models = true

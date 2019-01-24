@@ -5211,7 +5211,7 @@ OS:Surface,
 
 OS:Building,
   {d51e5796-e368-46e3-9443-963f0bbac6c9}, !- Handle
-  90.1-2013-SmallHotel-ASHRAE 169-2006-8B created: 2018-06-11 18:59:08 -0700, !- Name
+  90.1-2013-SmallHotel-ASHRAE 169-8B created: 2018-06-11 18:59:08 -0700, !- Name
   ,                                       !- Building Sector Type
   180,                                    !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -18159,7 +18159,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {48fa5fef-2ced-4867-acfd-8c9fe2b5b026}, !- Handle
-  90.1-2013 - SmHotel - ASHRAE 169-2006-8B, !- Name
+  90.1-2013 - SmHotel - ASHRAE 169-8B, !- Name
   {f323df04-73c1-479e-87f9-d17a4247f798}, !- Default Exterior Surface Constructions Name
   {34fc6033-572f-452b-a453-5d1804104b44}, !- Default Interior Surface Constructions Name
   {a8d30b17-1c87-46dd-92b2-c4dd153e51f9}, !- Default Ground Contact Surface Constructions Name
@@ -18716,7 +18716,7 @@ OS:StandardsInformation:Construction,
 
 OS:DefaultConstructionSet,
   {b5994eb0-c388-4648-a935-d238d3f3f711}, !- Handle
-  90.1-2013 - SmHotel - Office - ASHRAE 169-2006-8B, !- Name
+  90.1-2013 - SmHotel - Office - ASHRAE 169-8B, !- Name
   {70e90997-d33b-43d3-a55f-62008655943c}, !- Default Exterior Surface Constructions Name
   {f8f4d3f8-3bdd-46ad-952d-51ac86f01ae9}, !- Default Interior Surface Constructions Name
   {cebbc402-a7a3-4f2d-94cf-bbf7de5e8fa3}, !- Default Ground Contact Surface Constructions Name

@@ -1093,7 +1093,7 @@ OS:ConvergenceLimits,
 
 OS:Building,
   {677593f3-2d46-47f5-972e-d3010ee2ef98}, !- Handle
-  DOE Ref Pre-1980-SmallOffice-ASHRAE 169-2006-2A created: 2016-02-16 11:43:09 -0800, !- Name
+  DOE Ref Pre-1980-SmallOffice-ASHRAE 169-2A created: 2016-02-16 11:43:09 -0800, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2401,7 +2401,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {1c3d225e-4903-4085-ba48-e6f68276b870}, !- Handle
-  DOE Ref Pre-1980 - Office - ASHRAE 169-2006-2A, !- Name
+  DOE Ref Pre-1980 - Office - ASHRAE 169-2A, !- Name
   {3a7438d3-63d8-435c-9260-3494ba9c77bf}, !- Default Exterior Surface Constructions Name
   {0e3b4c8d-e0ae-4706-be64-2f6988e5a3c2}, !- Default Interior Surface Constructions Name
   {a416d0f3-7abe-4703-b571-a8bc8096f4f4}, !- Default Ground Contact Surface Constructions Name

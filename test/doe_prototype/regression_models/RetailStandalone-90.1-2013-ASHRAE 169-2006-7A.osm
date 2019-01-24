@@ -931,7 +931,7 @@ OS:Timestep,
 
 OS:Building,
   {aa071399-e221-47e9-8f4a-f45735eb331f}, !- Handle
-  90.1-2013-RetailStandalone-ASHRAE 169-2006-7A created: 2018-06-08 08:22:09 -0700, !- Name
+  90.1-2013-RetailStandalone-ASHRAE 169-7A created: 2018-06-08 08:22:09 -0700, !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -3888,7 +3888,7 @@ OS:Construction,
 
 OS:DefaultConstructionSet,
   {7dedc02b-2f57-4a09-a885-d7ef8ac1ca01}, !- Handle
-  90.1-2013 - Retail - ASHRAE 169-2006-7A, !- Name
+  90.1-2013 - Retail - ASHRAE 169-7A, !- Name
   {6005f7c7-bb3b-40dd-b4ae-5d639a287269}, !- Default Exterior Surface Constructions Name
   {c5ca60b0-82da-4cb4-9bea-5ee90bbfa733}, !- Default Interior Surface Constructions Name
   {c853ce78-9042-4263-80d1-302b32bdfe94}, !- Default Ground Contact Surface Constructions Name
