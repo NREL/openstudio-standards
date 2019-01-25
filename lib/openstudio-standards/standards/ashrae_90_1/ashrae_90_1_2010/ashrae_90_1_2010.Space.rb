@@ -66,19 +66,21 @@ class ASHRAE9012010 < ASHRAE901
     end
 
     # Retail spaces exception (c) to Section 9.4.1.4
-    case space.spaceType.get().standardsSpaceType.to_s
-    # Retail standalone
-    # req_sec_ctrl set to true to create a second reference point
-    when 'Core_Retail'
-      req_pri_ctrl = false
-      req_sec_ctrl = true
-    when 'Entry', 'Front_Retail', 'Point_of_Sale'
-      req_pri_ctrl = false
-      req_sec_ctrl = false
-    # Strip mall
-    when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
-      req_pri_ctrl = false
-      req_sec_ctrl = false
+    if space.spaceType.is_initialized	
+      case space.spaceType.get.standardsSpaceType.to_s
+      # Retail standalone
+      # req_sec_ctrl set to true to create a second reference point
+      when 'Core_Retail'
+        req_pri_ctrl = false
+        req_sec_ctrl = true
+      when 'Entry', 'Front_Retail', 'Point_of_Sale'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      # Strip mall
+      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      end
     end
 
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
