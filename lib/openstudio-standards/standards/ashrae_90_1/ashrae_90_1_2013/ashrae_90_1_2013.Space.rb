@@ -70,6 +70,22 @@ class ASHRAE9012013 < ASHRAE901
       req_top_ctrl = false
     end
 
+    # Retail spaces exception (3) to Section 9.4.1.1(e)
+    case space.spaceType.get().standardsSpaceType.to_s
+    # Retail standalone
+    # req_sec_ctrl set to true to create a second reference point
+    when 'Core_Retail'
+      req_pri_ctrl = false
+      req_sec_ctrl = true
+    when 'Entry', 'Front_Retail', 'Point_of_Sale'
+      req_pri_ctrl = false
+      req_sec_ctrl = false
+    # Strip mall
+    when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+      req_pri_ctrl = false
+      req_sec_ctrl = false
+    end
+
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
@@ -117,7 +133,8 @@ class ASHRAE9012013 < ASHRAE901
       sensor_1_window = sorted_skylights[0]
       # Sensor 2 controls secondary area
       sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
-      sensor_2_window = sorted_windows[0]
+      # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
+      sensor_2_window = sorted_skylights[0]
     elsif req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
