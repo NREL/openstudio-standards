@@ -68,6 +68,7 @@ class ASHRAE9012010 < ASHRAE901
     # Retail spaces exception (c) to Section 9.4.1.4
     case space.spaceType.get().standardsSpaceType.to_s
     # Retail standalone
+    # req_sec_ctrl set to true to create a second reference point
     when 'Core_Retail'
       req_pri_ctrl = false
       req_sec_ctrl = true
