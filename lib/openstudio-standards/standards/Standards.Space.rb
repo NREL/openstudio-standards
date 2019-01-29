@@ -1213,7 +1213,8 @@ class Standard
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
-    # Determine the total building baseline infiltration rate
+    # Determine the total building baseline infiltration rate in cfm per ft2 of exterior above grade envelope area at 75 Pa
+    # exterior above grade envelope area includes any surface with boundary condition 'Outdoors' in OpenStudio/EnergyPlus
     basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa(space)
 
     # Do nothing if no infiltration
@@ -1223,29 +1224,15 @@ class Standard
     # 1 m^3/s*m^2 = 196.85 cfm/ft2
     conv_fact = 196.85
 
-    # Adjust the infiltration rate to the average pressure
-    # for the prototype buildings.
+    # Adjust the infiltration rate to the average pressure for the prototype buildings.
     adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
-    # Get the exterior wall area
-    exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space)
 
-    # Don't create an object if there is no exterior wall area
-    if exterior_wall_and_window_area_m2 <= 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
-      return true
+    if space.exteriorArea <= 0.0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Space '#{space.name}' has no exterior wall or window area; an infiltration object with a zero infiltration rate will be added.")
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Space '#{space.name}' infiltration rate set to #{adj_infil_rate_cfm_per_ft2.round(3)} cfm/ft2 exterior surface area (#{basic_infil_rate_cfm_per_ft2} cfm/ft2 @75Pa).")
     end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, set infiltration rate to #{adj_infil_rate_cfm_per_ft2.round(3)} cfm/ft2 exterior wall area (aka #{basic_infil_rate_cfm_per_ft2} cfm/ft2 @75Pa).")
-
-    # Calculate the total infiltration, assuming
-    # that it only occurs through exterior walls
-    tot_infil_m3_per_s = adj_infil_rate_m3_per_s_per_m2 * exterior_wall_and_window_area_m2
-
-    # Now spread the total infiltration rate over all
-    # exterior surface areas (for the E+ input field)
-    all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorArea
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Space', "For #{space.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2.")
 
     # Get any infiltration schedule already assigned to this space or its space type
     # If not, the always on schedule will be applied.
@@ -1274,8 +1261,7 @@ class Standard
     # Create an infiltration rate object for this space
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
     infiltration.setName("#{space.name} Infiltration")
-    # infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2)
-    infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
+    infiltration.setFlowperExteriorSurfaceArea(adj_infil_rate_m3_per_s_per_m2)
     infiltration.setSchedule(infil_sch)
     infiltration.setConstantTermCoefficient(0.0)
     infiltration.setTemperatureTermCoefficient 0.0
@@ -1287,12 +1273,11 @@ class Standard
     return true
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Baseline infiltration rate
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2
-  # defaults to no infiltration.
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade envelope area at 75 Pa
   def space_infiltration_rate_75_pa(space)
-    basic_infil_rate_cfm_per_ft2 = 0
+    basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
 
