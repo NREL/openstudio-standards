@@ -472,53 +472,31 @@ Standard.class_eval do
       internal_masses = space.internalMass
       internal_masses.each do |internal_mass|
         internal_mass.internalMassDefinition.setConstruction(construction)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Set internal mass construction for internal mass '#{internal_mass.name}' in space '#{space.name}'.")
       end
-    end
-
-    # get all the space types that are conditioned
-    # not required for NECB2011
-    unless template == 'NECB2011'
-      conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
     end
 
     # add internal mass
     # not required for NECB2011
     unless (template == 'NECB2011') ||
-        ((building_type == 'SmallHotel') &&
-            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+           ((building_type == 'SmallHotel') && (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
-      conditioned_space_names.each do |conditioned_space_name|
-        space = model.getSpaceByName(conditioned_space_name)
-        if space.is_initialized
-          space = space.get
-          internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
-          internal_mass.setName("#{space.name} Mass")
-          internal_mass.setSpace(space)
-        end
+      model.getSpaces.each do |space|
+        # only add internal mass objects to conditioned spaces
+        next unless space_cooled?(space)
+        next unless space_heated?(space)
+        internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
+        internal_mass.setName("#{space.name} Mass")
+        internal_mass.setSpace(space)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added internal mass '#{internal_mass.name}' to space '#{space.name}'.")
       end
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
 
     return true
-  end
-
-  # Get the list of all conditioned spaces, as defined for each building in the
-  # system_to_space_map inside the Prototype.building_name
-  # e.g. (Prototype.secondary_school.rb) file.
-  #
-  # @param (see #add_constructions)
-  # @return [Array<String>] returns an array of space names as strings
-  def model_find_conditioned_space_names(model, building_type, climate_zone)
-    conditioned_space_names = OpenStudio::StringVector.new
-    @system_to_space_map.each do |system|
-      system['space_names'].each do |space_name|
-        conditioned_space_names << space_name
-      end
-    end
-    return conditioned_space_names
   end
 
   # Creates thermal zones to contain each space, as defined for each building in the
