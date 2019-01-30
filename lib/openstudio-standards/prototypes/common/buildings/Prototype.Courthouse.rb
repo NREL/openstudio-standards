@@ -36,16 +36,16 @@ module Courthouse
       infiltration_entrydoor.setName('entry door Infiltration')
       infiltration_per_zone_entrydoor = 0
       if template == '90.1-2004'
-        infiltration_per_zone_entrydoor = 1.04300287
-        infiltration_entrydoor.setSchedule(model_add_schedule(model,'OfficeMedium INFIL_Door_Opening_SCH'))
+        infiltration_per_zone_entrydoor = 3.242751
+        infiltration_entrydoor.setSchedule(model_add_schedule(model,'Courthouse INFIL_Door_Opening_SCH'))
       elsif template == '90.1-2007' || template == '90.1-2010'|| template == '90.1-2013'
         case climate_zone
         when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
-          infiltration_per_zone_entrydoor = 1.04300287
-          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
+          infiltration_per_zone_entrydoor = 3.242751
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'Courthouse INFIL_Door_Opening_SCH'))
         else
-          infiltration_per_zone_entrydoor = 0.678659786
-          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
+          infiltration_per_zone_entrydoor = 2.220041
+          infiltration_entrydoor.setSchedule(model_add_schedule(model, 'Courthouse INFIL_Door_Opening_SCH'))
         end
       end
       infiltration_entrydoor.setDesignFlowRate(infiltration_per_zone_entrydoor)
