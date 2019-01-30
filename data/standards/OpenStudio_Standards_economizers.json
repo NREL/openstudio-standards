@@ -2,1330 +2,1330 @@
   "economizers": [
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref Pre-1980",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "DOE Ref 1980-2004",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2004"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2010 Table 6.5.1B"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2010",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2010 Table 6.5.1A"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2013 Table 6.5.1-2"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "90.1-2013",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "90.1-2013 Table 6.5.1-1"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": true,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": true,
       "capacity_limit": 135000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": false,
       "capacity_limit": null,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": false,
       "capacity_limit": 54000.0,
       "notes": "Same as 90.1-2013"
@@ -1486,266 +1486,266 @@
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2004",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2004 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-1A",
+      "climate_zone": "ASHRAE 169-1A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-1B",
+      "climate_zone": "ASHRAE 169-1B",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-2A",
+      "climate_zone": "ASHRAE 169-2A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3A",
+      "climate_zone": "ASHRAE 169-3A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4A",
+      "climate_zone": "ASHRAE 169-4A",
       "data_center": true,
       "capacity_limit": null,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-2B",
+      "climate_zone": "ASHRAE 169-2B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5A",
+      "climate_zone": "ASHRAE 169-5A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-6A",
+      "climate_zone": "ASHRAE 169-6A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-7A",
+      "climate_zone": "ASHRAE 169-7A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-7B",
+      "climate_zone": "ASHRAE 169-7B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-8A",
+      "climate_zone": "ASHRAE 169-8A",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-8B",
+      "climate_zone": "ASHRAE 169-8B",
       "data_center": true,
       "capacity_limit": 35000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3B",
+      "climate_zone": "ASHRAE 169-3B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-3C",
+      "climate_zone": "ASHRAE 169-3C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4B",
+      "climate_zone": "ASHRAE 169-4B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-4C",
+      "climate_zone": "ASHRAE 169-4C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5B",
+      "climate_zone": "ASHRAE 169-5B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-5C",
+      "climate_zone": "ASHRAE 169-5C",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
     },
     {
       "template": "90.1-2007",
-      "climate_zone": "ASHRAE 169-2006-6B",
+      "climate_zone": "ASHRAE 169-6B",
       "data_center": true,
       "capacity_limit": 65000.0,
       "notes": "90.1-2007 Table 6.5.1"
