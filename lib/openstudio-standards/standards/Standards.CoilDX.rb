@@ -112,6 +112,12 @@ module CoilDX
                  end
     end
 
+    # For PSZ-AC only, retrieve the heating section type
+    unless @htg_coil_type.nil?
+      if @htg_coil_type != 'Electric'
+        htg_type = 'All Other'
+      end
+    end
     return htg_type
   end
 
