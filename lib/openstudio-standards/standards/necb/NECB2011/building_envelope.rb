@@ -635,12 +635,12 @@ class NECB2011
 
 
     # IF FDWR is greater than 1 then something is wrong raise an error.
-    if fdwr_lim > 1
+    if fdwr_max > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger window area than there is wall area.")
       return false
     end
     # Get the required window area.
-    win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
+    win_area = fdwr_max*exp_surf_info["total_exp_wall_area_m2"]
     # Try to put the windows on non-plenum walls if possible.  So determine if you can fit the required window area
     # on the non-plenum wall area.
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
@@ -661,13 +661,13 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_max)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_max)
       end
     end
     return true
