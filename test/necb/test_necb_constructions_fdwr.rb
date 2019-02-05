@@ -146,8 +146,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
 
         standard.apply_standard_construction_properties(@model) # standards candidate
-        standard.apply_standard_window_to_wall_ratio(@model) # standards candidate
-        standard.apply_standard_skylight_to_roof_ratio(@model) # standards candidate
+        standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
+        standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
 
 
         #Add Infiltration rates to the space objects themselves. 
