@@ -1,14 +1,27 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model, fdwr_set: 'MAXIMIZE')
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 'MAXIMIZE')
+
+    # NECB FDWR limit
+    hdd = self.get_necb_hdd18(model)
+    fdwr_lim = (max_fdwr(hdd) * 100.0).round(1)
+
     # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
     # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr(model) if fdwr_set == 'MAXIMIZE'
+    case fdwr_set
+    when 'MAXIMIZE'
+      return apply_max_fdwr(model: model, fdwr_max: fdwr_lim)
+    else
+      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
+    end
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
     # separately.  Include space multipliers.
+  end
+
+  def apply_limit_fdwr(model:, fdwr_lim:)
     nr_wall_m2 = 0.001 # Avoids divide by zero errors later
     nr_wind_m2 = 0
     res_wall_m2 = 0.001
@@ -111,9 +124,7 @@ class NECB2011
     red_res = wwr_res > wwr_lim
     red_sh = wwr_sh > wwr_lim
 
-    # NECB FDWR limit
-    hdd = self.get_necb_hdd18(model)
-    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
@@ -144,9 +155,19 @@ class NECB2011
   # will be done by shrinking vertices toward the centroid.
   #
   def apply_standard_skylight_to_roof_ratio(model, ssr_set: 'MAXIMIZE')
+    # SRR limit
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
     # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
     # method.  Otherwise, follow the original intent of the method.
-    return apply_max_ssr(model) if ssr_set == 'MAXIMIZE'
+    case ssr_set
+    when 'MAXIMIZE'
+      return apply_max_ssr(model)
+    else
+      return apply_limit_srr(model, srr_lim)
+    end
+  end
+
+  def apply_limit_srr(model, srr_lim)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -208,8 +229,7 @@ class NECB2011
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-    # SRR limit
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -244,7 +264,7 @@ class NECB2011
   # @author phylroy.lopez@nrcan.gc.ca
   # @param hdd [Float]
   # @return [Double] a constant float
-  def max_fwdr(hdd)
+  def max_fdwr(hdd)
     #get formula from json database.
     return eval(self.get_standards_formula('fdwr_formula'))
   end
@@ -602,7 +622,8 @@ class NECB2011
   # spaces.  It distinguishes between plenums and other conditioned spaces.  It uses both to calculate the maximum window
   # area to be applied to the building but attempts to put these windows only on non-plenum conditioned spaces (if
   # possible).
-  def apply_max_fdwr(model)
+  def apply_max_fdwr(model:, fdwr_max:)
+
     # First determine which vertical (between 89 and 91 degrees from horizontal) walls are adjacent to conditioned
     # spaces.
     exp_surf_info = find_exposed_conditioned_vertical_surfaces(model)
@@ -611,10 +632,7 @@ class NECB2011
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "This building has no exposed walls adjacent to heated spaces.")
       return false
     end
-    # Get the heating degree days according to the NECB and determine the maximum fenestration and door to wall ratio
-    # for that heating degree day range.
-    hdd = self.get_necb_hdd18(model)
-    fdwr_lim = (max_fwdr(hdd))
+
 
     # IF FDWR is greater than 1 then something is wrong raise an error.
     if fdwr_lim > 1
