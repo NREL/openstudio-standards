@@ -270,8 +270,8 @@ class NECB2011 < Standard
 
     # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
     # are adjacent to conditioned spaces.
-    apply_standard_window_to_wall_ratio(model: model)
-    apply_standard_skylight_to_roof_ratio(model: model)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, ssr_set: ssr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false

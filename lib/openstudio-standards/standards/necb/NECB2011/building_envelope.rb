@@ -4,19 +4,17 @@ class NECB2011
   def apply_standard_window_to_wall_ratio(model:, fdwr_set: 'MAXIMIZE')
     # NECB FDWR limit
     hdd = self.get_necb_hdd18(model)
+    #For some reason the max fdwr and
     fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
-    # Get the heating degree days according to the NECB and determine the maximum fenestration and door to wall ratio
-    # for that heating degree day range.
-
-
+    fdwr_lim_2 = (max_fwdr(hdd))
     # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
     # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim / 100.0) if fdwr_set == 'MAXIMIZE'
+    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim_2) if fdwr_set == 'MAXIMIZE'
 
-    return apply_limit_fdwr(fdwr_lim, model)
+    return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
   end
 
-  def apply_limit_fdwr(fdwr_lim, model)
+  def apply_limit_fdwr(model:, fdwr_lim:)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -160,11 +158,6 @@ class NECB2011
     # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
     # method.  Otherwise, follow the original intent of the method.
     return apply_max_ssr(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
-
-    return apply_limit_ssr(model, srr_lim)
-  end
-
-  def apply_limit_ssr(model, srr_lim)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
