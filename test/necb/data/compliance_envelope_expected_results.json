@@ -61,7 +61,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.3667,
+      "fdwr": 0.367,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
@@ -121,7 +121,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.2333,
+      "fdwr": 0.233,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -243,7 +243,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.3667,
+      "fdwr": 0.367,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
@@ -303,7 +303,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.2333,
+      "fdwr": 0.233,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -425,7 +425,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.3667,
+      "fdwr": 0.367,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
       "outdoor_walls_average_conductances": 0.247,
@@ -485,7 +485,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.2333,
+      "fdwr": 0.233,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.21,
