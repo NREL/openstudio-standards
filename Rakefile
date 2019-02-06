@@ -64,7 +64,7 @@ namespace :test do
 
   desc 'Run NECB Building regression test'
   Rake::TestTask.new(:necb_regression_test) do |t|
-    file_list = FileList.new('test/necb/necb_bldg_regression.rb')
+    file_list = FileList.new('./test/test_run_necb_regression_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = true
