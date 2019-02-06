@@ -1756,7 +1756,7 @@ class NECB2011
       baseboard_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
       # Connect baseboard coil to hot water loop
       hw_loop.addDemandBranchForComponent(baseboard_coil)
-      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil);
+      zone_baseboard = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, always_on, baseboard_coil)
       # add zone_baseboard to zone
       zone_baseboard.addToThermalZone(zone)
     end

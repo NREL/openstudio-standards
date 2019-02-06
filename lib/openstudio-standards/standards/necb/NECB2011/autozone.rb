@@ -15,10 +15,8 @@ class NECB2011
 
   def necb_autozone_and_autosystem(model: nil, runner: nil, use_ideal_air_loads: false, system_fuel_defaults:)
 
-
     unique_schedule_types = [] # Array to store schedule objects
     space_zoning_data_array_json = []
-
 
     # First pass of spaces to collect information into the space_zoning_data_array .
     model.getSpaces.sort.each do |space|
@@ -42,7 +40,6 @@ class NECB2011
 
       cooling_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
       heating_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
-
 
       # identify space-system_index and assign the right NECB system type 1-7.
       necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
@@ -320,7 +317,6 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 
-
   # Top level method that merges spaces into zones where possible. This requires a sizing run. This follows the spirit of
   # the EE4 modelling manual found here https://www.nrcan.gc.ca/energy/software-tools/7457 where the
   # A zone includes those areas in the building that meet three criteria:
@@ -330,8 +326,8 @@ class NECB2011
   # Some expections are dwelling units wet zone and wild zones.  These spaces will have special considerations when autozoning a
   # building.
 
-  def auto_zoning(model:, sizing_run_dir: Dir.pwd())
-    #The first thing we need to do is get a sizing run to determine the heating loads of all the spaces. The default
+  def auto_zoning(model:, sizing_run_dir: Dir.pwd)
+    # The first thing we need to do is get a sizing run to determine the heating loads of all the spaces. The default
     # btap geometry has a one to one relationship of zones to spaces.. So we simply create the thermal zones for all the spaces.
     # to do this we need to create thermals zone for each space.
 
@@ -340,8 +336,11 @@ class NECB2011
     # create new thermal zones one to one with spaces.
     model_create_thermal_zones(model)
     # do a sizing run.
-    raise("autorun sizing run failed!") if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
-    #collect sizing information on each space.
+    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
+      raise('autorun sizing run failed!')
+    end
+
+    # collect sizing information on each space.
     self.store_space_sizing_loads(model)
 
     # Remove any Thermal zones assigned again to start fresh.
@@ -396,6 +395,14 @@ class NECB2011
                            heating_coil_type_sys4: heating_coil_type_sys4,
                            model: model)
 
+
+    #Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
+    auto_system_storage_spaces(baseboard_type: baseboard_type,
+                               boiler_fueltype: boiler_fueltype,
+                               heating_coil_type_sys4: heating_coil_type_sys4,
+                               model: model)
+
+
     #Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(baseboard_type: baseboard_type,
                             heating_coil_type_sys4: heating_coil_type_sys4,
@@ -415,7 +422,6 @@ class NECB2011
                                  mau_type: mau_type
     )
   end
-
 
   # Method to store space sizing loads. This is needed because later when the zones are destroyed this information will be lost.
   def store_space_sizing_loads(model)
@@ -519,7 +525,6 @@ class NECB2011
       unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
-
 
       #this method will determine if the right schedule was used for this wet & wild space if not.. it will reset the space
       # to use the correct schedule version of the wet and wild space type.
@@ -649,8 +654,7 @@ class NECB2011
     end
     return other_tz_array
 
-
-    wild_zone_array = Array.new
+    wild_zone_array = []
     #Get a list of all the wild spaces.
     model.getSpaces.select {|space| is_an_necb_wildcard_space?(space) and not is_an_necb_wet_space?(space)}.each do |space|
       #if this space was already assigned to something skip it.
@@ -658,7 +662,6 @@ class NECB2011
       #find adjacent spaces to the current space.
       adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space, true)
       adj_spaces = adj_spaces.map {|key, value| key}
-
 
       # find unassigned adjacent wild spaces that have not been assigned that have the same multiplier these will be
       # lumped together in the same zone.
@@ -678,7 +681,6 @@ class NECB2011
             adj_space.thermalZone.get.spaces.size == 1 and
             space_multiplier_map[space.name.to_s] == space_multiplier_map[adj_space.name.to_s]
       end
-
 
       #If there are adjacent spaces that fit the above criteria.
       # We will need to set each space to the dominant floor schedule by setting the spaces spacetypes to that
@@ -846,7 +848,6 @@ class NECB2011
     end
     surface_report.sort! {|a, b| [a[:surface_type], a[:azimuth], a[:tilt], a[:boundary_condition]] <=> [b[:surface_type], b[:azimuth], b[:tilt], b[:boundary_condition]]}
 
-
     return surface_report
   end
 
@@ -866,6 +867,14 @@ class NECB2011
     #Hack! Should replace this with a proper table lookup.
     return space.spaceType.get.standardsSpaceType.get.include?('Locker room') || space.spaceType.get.standardsSpaceType.get.include?('Washroom')
   end
+
+  # Check to see if this is a wet space that the NECB does not have a specified schedule or system for. Currently hardcoded to
+  # Locker room and washroom.
+  def is_an_necb_storage_space?(space)
+    #Hack! Should replace this with a proper table lookup.
+    return space.spaceType.get.standardsSpaceType.get.include?('Storage')
+  end
+
 
   # Check if the space spactype is a dwelling unit as per NECB.
   def is_a_necb_dwelling_unit?(space)
@@ -999,7 +1008,6 @@ class NECB2011
     return schedule_hash.max_by(&:last).first
   end
 
-
   # This model determines the dominant NECB schedule type
   # @param model [OpenStudio::model::Model] A model object
   # return s.each [String]
@@ -1018,7 +1026,6 @@ class NECB2011
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
   end
-
 
   ################################################# NECB Systems
 
@@ -1173,7 +1180,8 @@ class NECB2011
     zones = []
     other_spaces = model.getSpaces.select do |space|
       (not is_a_necb_dwelling_unit?(space)) and
-          (not is_an_necb_wildcard_space?(space))
+          (not is_an_necb_wildcard_space?(space)) and
+          (not is_an_necb_storage_space?(space))
     end
     other_spaces.each do |space|
       zones << space.thermalZone.get
@@ -1196,9 +1204,9 @@ class NECB2011
                        zones: zones)
   end
 
-
   # This methos will ensure that all dwelling units are assigned to a system 1 or 3. There is an option to have a shared
   # AHU or not. Currently set to false. So by default all dwelling units will have their own AHU.
+
   def auto_system_dwelling_units(baseboard_type:,
                                  boiler_fueltype:,
                                  chiller_type:,
@@ -1210,12 +1218,13 @@ class NECB2011
                                  mau_cooling_type:,
                                  mau_heating_coil_type:,
                                  mau_type:,
-                                 model:,
-                                 dwelling_shared_ahu: false
+                                 model:
   )
 
     system_zones_hash = {}
-    #store dwelling zones into array
+    # Detemine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
+    dwelling_shared_ahu = model.getBuilding.standardsNumberOfAboveGroundStories.get > 4
+    # store dwelling zones into array
     zones = []
     model.getSpaces.select {|space| is_a_necb_dwelling_unit?(space)}.each do |space|
       zones << space.thermalZone.get
@@ -1227,7 +1236,6 @@ class NECB2011
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] = [] if system_zones_hash[get_necb_thermal_zone_system_selection(zone)].nil?
       system_zones_hash[get_necb_thermal_zone_system_selection(zone)] << zone
     end
-
 
     # go through each system and zones pairs to
     system_zones_hash.each_pair do |system, zones|
@@ -1299,6 +1307,30 @@ class NECB2011
     end
   end
 
+
+  # All wet spaces will be on their own system 4 AHU.
+  def auto_system_storage_spaces(baseboard_type:,
+                                 boiler_fueltype:,
+                                 heating_coil_type_sys4:,
+                                 model:)
+    #Determine what zones are wet zones.
+    tz = []
+    model.getSpaces.select {|space|
+      is_an_necb_storage_space?(space)}.each do |space|
+      tz << space.thermalZone.get
+    end
+    tz.uniq!
+    #create a system 4 for the  zones.
+    unless tz.empty?
+      add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                   zones: tz,
+                                                                   heating_coil_type: heating_coil_type_sys4,
+                                                                   baseboard_type: baseboard_type,
+                                                                   hw_loop: @hw_loop)
+    end
+  end
+
+
   # All wild spaces will be on a single system 4 ahu with the largests heating load zone being the control zone.
   def auto_system_wild_spaces(baseboard_type:,
                               heating_coil_type_sys4:,
@@ -1330,7 +1362,6 @@ class NECB2011
     zones.each {|zone| zone_heating_load_hash[zone] = self.stored_zone_heating_load(zone)}
     return zone_heating_load_hash.max_by(&:last).first
   end
-
 
   # This method is used to determine if there are single zones that can be grouped with zones of similar loads.
   def group_similar_zones_together(zones)
@@ -1370,7 +1401,7 @@ class NECB2011
   end
 
   # This method will create a color object used in SU, 3D Viewer and Floorspace.js
-  def set_random_rendering_color(object,random)
+  def set_random_rendering_color(object, random)
     rendering_color = OpenStudio::Model::RenderingColor.new(object.model)
     rendering_color.setName(object.name.get)
     rendering_color.setRenderingRedValue(random.rand(255))

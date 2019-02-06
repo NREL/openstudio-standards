@@ -146,8 +146,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
 
         standard.apply_standard_construction_properties(@model) # standards candidate
-        standard.apply_standard_window_to_wall_ratio(@model) # standards candidate
-        standard.apply_standard_skylight_to_roof_ratio(@model) # standards candidate
+        standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
+        standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
 
 
         #Add Infiltration rates to the space objects themselves. 
@@ -185,11 +185,13 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
 
+        srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
+        fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(@model)
 
         #Output conductances
         @json_test_output[template][@hdd] = {}
-        @json_test_output[template][@hdd]['fdwr'] = BTAP::Geometry::get_fwdr(@model).round(4)
-        @json_test_output[template][@hdd]['srr'] = BTAP::Geometry::get_srr(@model).round(4)
+        @json_test_output[template][@hdd]['fdwr'] = fdwr_info["fdwr"].round(4)
+        @json_test_output[template][@hdd]['srr'] = srr_info["srr"].round(4)
         @json_test_output[template][@hdd]['outdoor_roofs_average_conductances'] = outdoor_roofs_average_conductance.round(4)
         @json_test_output[template][@hdd]['outdoor_walls_average_conductances'] = outdoor_walls_average_conductance.round(4)
         @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = outdoor_floors_average_conductance.round(4)

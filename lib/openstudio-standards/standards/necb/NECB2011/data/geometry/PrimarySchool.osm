@@ -6508,17 +6508,17 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {43550672-a0de-4b16-a79f-be6d541e30a6}, !- Handle
-  Space Function Lobby - elevator,        !- Name
+  Space Function Lobby - other,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {c09f17aa-19cc-4797-a0f4-39a845c209f9}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Lobby - elevator;                       !- Standards Space Type
+  Lobby - other;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {c09f17aa-19cc-4797-a0f4-39a845c209f9}, !- Handle
-  Space Function Lobby - elevator,        !- Name
+  Space Function Lobby - other,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value

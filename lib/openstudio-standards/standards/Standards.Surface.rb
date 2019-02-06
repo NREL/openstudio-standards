@@ -119,6 +119,8 @@ class Standard
     exp_plenum_area = 0
     total_exp_area = 0
     exp_nonplenum_area = 0
+    sub_surfaces_info = []
+    sub_surface_area = 0
     # Sort through each space
     model.getSpaces.sort.each do |space|
       # Is the space heated or cooled?
@@ -135,6 +137,7 @@ class Standard
           # Determine if the wall is vertical which I define as being between 89 and 91 degrees from horizontal.
           tilt_radian = surface.tilt
           tilt_degrees = OpenStudio.convert(tilt_radian, 'rad', 'deg').get
+          sub_surface_info = []
           if tilt_degrees <= max_angle and tilt_degrees >= min_angle
             # If the wall is vertical determine if it is adjacent to a plenum.  If yes include it in the array of
             # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
@@ -146,6 +149,21 @@ class Standard
               # counter (accounting for space multipliers).
               exposed_surfaces << surface
               exp_nonplenum_area += surface.grossArea*space.multiplier
+              surface.subSurfaces.sort.each do |sub_surface|
+                sub_surface_area += sub_surface.grossArea.to_f*space.multiplier
+                sub_surface_info << {
+                    "subsurface_name" => sub_surface.nameString,
+                    "subsurface_type" => sub_surface.subSurfaceType,
+                    "gross_area_m2" => sub_surface.grossArea.to_f,
+                    "construction_name" => sub_surface.construction.get.nameString
+                }
+              end
+              unless sub_surface_info.empty?
+                sub_surfaces_info << {
+                    "surface_name" => surface.nameString,
+                    "subsurfaces" => sub_surface_info
+                }
+              end
             end
             # Regardless of if the wall is adjacent to a plenum or not add it to the exposed wall area adjacent to
             # conditioned spaces (accounting for space multipliers).
@@ -154,13 +172,19 @@ class Standard
         end
       end
     end
+    fdwr = 999
+    unless exp_nonplenum_area < 0.1
+      fdwr = sub_surface_area/exp_nonplenum_area
+    end
     # Add everything into a hash and return that hash to whomever called the method.
     exp_surf_info = {
         "total_exp_wall_area_m2" => total_exp_area,
         "exp_plenum_wall_area_m2" => exp_plenum_area,
         "exp_nonplenum_wall_area_m2" => exp_nonplenum_area,
         "exp_plenum_walls" => plenum_surfaces,
-        "exp_nonplenum_walls" => exposed_surfaces
+        "exp_nonplenum_walls" => exposed_surfaces,
+        "fdwr" => fdwr,
+        "sub_surfaces" => sub_surfaces_info
     }
     return exp_surf_info
   end
@@ -173,6 +197,8 @@ class Standard
     exp_plenum_area = 0
     total_exp_area = 0
     exp_nonplenum_area = 0
+    sub_surfaces_info = []
+    sub_surface_area = 0
     # Sort through each space and determine if it conditioned.  Conditioned meaning it is either heated, cooled, or both.
     model.getSpaces.sort.each do |space|
       cooled = space_cooled?(space)
@@ -184,6 +210,7 @@ class Standard
           next unless surface.surfaceType == 'RoofCeiling'
           next unless surface.outsideBoundaryCondition == 'Outdoors'
           # Determine if the roof is adjacent to a plenum.
+          sub_surface_info = []
           if space_plenum?(space)
             # If the roof is adjacent to a plenum add it to the plenum roof array and the plenum roof area counter
             # (accounting for space multipliers).
@@ -194,6 +221,21 @@ class Standard
             # counter (accounting for space multipliers).
             exposed_surfaces << surface
             exp_nonplenum_area += surface.grossArea*space.multiplier
+            surface.subSurfaces.sort.each do |sub_surface|
+              sub_surface_area += sub_surface.grossArea.to_f*space.multiplier
+              sub_surface_info << {
+                  "subsurface_name" => sub_surface.nameString,
+                  "subsurface_type" => sub_surface.subSurfaceType,
+                  "gross_area_m2" => sub_surface.grossArea.to_f,
+                  "construction_name" => sub_surface.construction.get.nameString
+              }
+            end
+            unless sub_surface_info.empty?
+              sub_surfaces_info << {
+                  "surface_name" => surface.nameString,
+                  "subsurfaces" => sub_surface_info
+              }
+            end
           end
           # Regardless of if the roof is adjacent to a plenum or not add it to the total roof area counter (accounting
           # for space multipliers).
@@ -201,13 +243,19 @@ class Standard
         end
       end
     end
+    srr = 999
+    unless exp_nonplenum_area < 0.1
+      srr = sub_surface_area/exp_nonplenum_area
+    end
     # Put the information into a hash and return it to whomever called this method.
     exp_surf_info = {
         "total_exp_roof_area_m2" => total_exp_area,
         "exp_plenum_roof_area_m2" => exp_plenum_area,
         "exp_nonplenum_roof_area_m2" => exp_nonplenum_area,
         "exp_plenum_roofs" => plenum_surfaces,
-        "exp_nonplenum_roofs" => exposed_surfaces
+        "exp_nonplenum_roofs" => exposed_surfaces,
+        "srr" => srr,
+        "sub_surfaces" => sub_surfaces_info
     }
     return exp_surf_info
   end

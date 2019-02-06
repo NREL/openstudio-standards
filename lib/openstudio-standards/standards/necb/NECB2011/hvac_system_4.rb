@@ -127,6 +127,11 @@ class NECB2011
       #              oa_node = oa_system.outboardOANode
       #              heat_exchanger.addToNode(oa_node.get)
     zones.each do |zone|
+      sizing_zone = zone.sizingZone
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(system_data[:ZoneHeatingDesignSupplyAirTemperature])
+      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
       # Create a diffuser and attach the zone/diffuser pair to the air loop
       # diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model,always_on)
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)

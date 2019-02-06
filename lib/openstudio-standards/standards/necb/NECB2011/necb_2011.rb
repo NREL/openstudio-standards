@@ -270,8 +270,8 @@ class NECB2011 < Standard
 
     # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
     # are adjacent to conditioned spaces.
-    apply_standard_window_to_wall_ratio(model, fdwr_set: fdwr_set)
-    apply_standard_skylight_to_roof_ratio(model, ssr_set: ssr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, ssr_set: ssr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
@@ -294,8 +294,8 @@ class NECB2011 < Standard
                   heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
       )
       random = Random.new(1234)
-      model.getThermalZones.each{ |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
-      model.getSpaceTypes.each{ |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
+      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     else
       model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
     end

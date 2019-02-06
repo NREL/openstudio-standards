@@ -1,10 +1,20 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model, fdwr_set: 'MAXIMIZE')
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 'MAXIMIZE')
+    # NECB FDWR limit
+    hdd = self.get_necb_hdd18(model)
+    #For some reason the max fdwr and
+    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+
     # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
     # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr(model) if fdwr_set == 'MAXIMIZE'
+    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
+
+    return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
+  end
+
+  def apply_limit_fdwr(model:, fdwr_lim:)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -111,9 +121,7 @@ class NECB2011
     red_res = wwr_res > wwr_lim
     red_sh = wwr_sh > wwr_lim
 
-    # NECB FDWR limit
-    hdd = self.get_necb_hdd18(model)
-    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
@@ -143,10 +151,13 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model, ssr_set: 'MAXIMIZE')
+  def apply_standard_skylight_to_roof_ratio(model:, ssr_set: 'MAXIMIZE')
+    # SRR limit
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+
     # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
     # method.  Otherwise, follow the original intent of the method.
-    return apply_max_ssr(model) if ssr_set == 'MAXIMIZE'
+    return apply_max_ssr(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -208,8 +219,7 @@ class NECB2011
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-    # SRR limit
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -602,7 +612,7 @@ class NECB2011
   # spaces.  It distinguishes between plenums and other conditioned spaces.  It uses both to calculate the maximum window
   # area to be applied to the building but attempts to put these windows only on non-plenum conditioned spaces (if
   # possible).
-  def apply_max_fdwr(model)
+  def apply_max_fdwr(model:, fdwr_lim:)
     # First determine which vertical (between 89 and 91 degrees from horizontal) walls are adjacent to conditioned
     # spaces.
     exp_surf_info = find_exposed_conditioned_vertical_surfaces(model)
@@ -611,15 +621,18 @@ class NECB2011
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "This building has no exposed walls adjacent to heated spaces.")
       return false
     end
-    # Get the heating degree days according to the NECB and determine the maximum fenestration and door to wall ratio
-    # for that heating degree day range.
-    hdd = self.get_necb_hdd18(model)
-    fdwr_lim = (max_fwdr(hdd))
 
-    # IF FDWR is greater than 1 then something is wrong raise an error.
+
+    # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
+    # should go.
     if fdwr_lim > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger window area than there is wall area.")
       return false
+    elsif fdwr_lim < 0.001
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
     end
     # Get the required window area.
     win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
@@ -659,7 +672,7 @@ class NECB2011
   # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
   # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
   # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
-  def apply_max_ssr(model)
+  def apply_max_ssr(model:, srr_lim: )
     # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
     exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
     # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
@@ -668,13 +681,18 @@ class NECB2011
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.")
       return false
     end
-    # Determine what the skylight to roof ratio (SRR) is supposed to be for the appropriate NECB flavour.
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
 
-    # If the SRR is greater than one something is seriously wrong so raise an error.
+
+    # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
+    # all the skylights should go.
     if srr_lim > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger skylight area than there is roof area.")
       return false
+    elsif srr_lim < 0.001
+      exp_surf_info["exp_nonplenum_roofs"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
     end
 
     # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
