@@ -6,10 +6,10 @@ class NECB2011
     hdd = self.get_necb_hdd18(model)
     #For some reason the max fdwr and
     fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
-    fdwr_lim_2 = (max_fwdr(hdd))
+
     # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
     # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim_2) if fdwr_set == 'MAXIMIZE'
+    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
 
     return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
   end
@@ -623,10 +623,16 @@ class NECB2011
     end
 
 
-    # IF FDWR is greater than 1 then something is wrong raise an error.
+    # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
+    # should go.
     if fdwr_lim > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger window area than there is wall area.")
       return false
+    elsif fdwr_lim < 0.001
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
     end
     # Get the required window area.
     win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
@@ -677,10 +683,16 @@ class NECB2011
     end
 
 
-    # If the SRR is greater than one something is seriously wrong so raise an error.
+    # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
+    # all the skylights should go.
     if srr_lim > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger skylight area than there is roof area.")
       return false
+    elsif srr_lim < 0.001
+      exp_surf_info["exp_nonplenum_roofs"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
     end
 
     # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
