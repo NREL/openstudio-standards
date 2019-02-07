@@ -9,7 +9,7 @@ class NECB2011
 
     # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
     # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
 
     return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
   end
@@ -157,7 +157,7 @@ class NECB2011
 
     # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
     # method.  Otherwise, follow the original intent of the method.
-    return apply_max_ssr(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -612,7 +612,7 @@ class NECB2011
   # spaces.  It distinguishes between plenums and other conditioned spaces.  It uses both to calculate the maximum window
   # area to be applied to the building but attempts to put these windows only on non-plenum conditioned spaces (if
   # possible).
-  def apply_max_fdwr(model:, fdwr_lim:)
+  def apply_max_fdwr_nrcan(model:, fdwr_lim:)
     # First determine which vertical (between 89 and 91 degrees from horizontal) walls are adjacent to conditioned
     # spaces.
     exp_surf_info = find_exposed_conditioned_vertical_surfaces(model)
@@ -672,7 +672,7 @@ class NECB2011
   # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
   # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
   # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
-  def apply_max_ssr(model:, srr_lim: )
+  def apply_max_srr_nrcan(model:, srr_lim: )
     # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
     exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
     # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
