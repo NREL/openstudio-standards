@@ -4719,6 +4719,13 @@ class Standard
                                    cooling: false,
                                    ventilation: false)
 
+    when 'Residential Forced Air Furnace with AC'
+      model_add_furnace_central_ac(model,
+                                   zones,
+                                   heating: true,
+                                   cooling: true,
+                                   ventilation: false)
+
     when 'Residential Air Source Heat Pump'
       heating = true unless main_heat_fuel.nil?
       cooling = true unless cool_fuel.nil?
