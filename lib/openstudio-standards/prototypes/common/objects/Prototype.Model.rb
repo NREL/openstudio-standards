@@ -32,6 +32,7 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
@@ -255,7 +256,7 @@ Standard.class_eval do
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
-      when 'SmallOffice', 'MediumOffice', 'LargeOffice','SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
         new_lookup_building_type = building_type
       else
         new_lookup_building_type = model_get_lookup_name(building_type)
@@ -450,6 +451,17 @@ Standard.class_eval do
     # window_construction = sub_surface.fixedWindowConstruction.get
     # sub_surface.setSkylightConstruction(window_construction)
 
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+
+    return true
+  end
+
+  # Adds internal mass objects and constructions based on the building type
+  #
+  # @param building_type [String] the type of building
+  # @return [Bool] returns true if successful, false if not
+  def model_add_internal_mass(model, building_type)
+
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     material.setName('Std Wood 6inch')
@@ -478,8 +490,7 @@ Standard.class_eval do
 
     # add internal mass
     # not required for NECB2011
-    unless (template == 'NECB2011') ||
-           ((building_type == 'SmallHotel') && (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+    unless (template == 'NECB2011') || ((building_type == 'SmallHotel') && (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -494,7 +505,7 @@ Standard.class_eval do
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding internal mass')
 
     return true
   end
@@ -527,11 +538,11 @@ Standard.class_eval do
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
       space.setThermalZone(zone)
-	
-  # Skip thermostat for spaces with no space type
-     next if space.spaceType.empty?
 
-   # Add a thermostat
+    # Skip thermostat for spaces with no space type
+    next if space.spaceType.empty?
+
+    # Add a thermostat
     space_type_name = space.spaceType.get.name.get
     thermostat_name = space_type_name + ' Thermostat'
     thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
