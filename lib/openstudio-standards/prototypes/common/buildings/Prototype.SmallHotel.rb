@@ -73,7 +73,27 @@ module SmallHotel
     return true
   end
 
+  def update_waterheater_loss_coefficient(model)
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('300gal')
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
+        end
+      else
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
+        end
+      end
+    end
+  end
+
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    update_waterheater_loss_coefficient(model)
+
     return true
   end
 end

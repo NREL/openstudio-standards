@@ -75,7 +75,23 @@ module SecondarySchool
     end
   end
 
+  def update_waterheater_loss_coefficient(model)
+    case template
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        model.getWaterHeaterMixeds.sort.each do |water_heater|
+          if water_heater.name.include? "Booster"
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.591045154)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.591045154)
+          elsif
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.60100579)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.60100579)
+          end
+        end
+    end
+  end
+
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    update_waterheater_loss_coefficient(model)
     return true
   end
 end

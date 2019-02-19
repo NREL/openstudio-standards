@@ -208,17 +208,23 @@ module FullServiceRestaurant
   end
 
   def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          if water_heater.name.to_s.include?('Booster')
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('Booster')
+        case template
+          when '90.1-2004', '90.1-2007'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.257965315)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.257965315)
+          when '90.1-2010', '90.1-2013', 'NECB2011'
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-          else
+        end
+      else
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286505)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286505)
           end
-        end
+      end
     end
   end
 

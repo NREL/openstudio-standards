@@ -125,10 +125,15 @@ module RetailStandalone
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
+      when '90.1-2010', '90.1-2013', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
+        end
+      when '90.1-2004', '90.1-2007'
+        model.getWaterHeaterMixeds.sort.each do |water_heater|
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(5.477430026)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(5.477430026)
         end
     end
   end

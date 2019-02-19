@@ -142,22 +142,35 @@ module Hospital
   end
 
   def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          if water_heater.name.to_s.include?('Booster')
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('600gal')
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.6010057946521)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.6010057946521)
+        end
+      elsif water_heater.name.to_s.include?('300gal')
+        case template
+          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
+        end
+      elsif water_heater.name.to_s.include?('6.0gal')
+        case template
+          when '90.1-2004', '90.1-2007'
+            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.25796531511459)
+            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.25796531511459)
+          when '90.1-2010', '90.1-2013'
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-          else
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.60100708)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.60100708)
-          end
         end
+      end
     end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_loss_coefficient(model)
+
     return true
   end
 

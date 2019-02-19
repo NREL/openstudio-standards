@@ -9,10 +9,15 @@ module Warehouse
 
   def update_waterheater_loss_coefficient(model)
     case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
+      when '90.1-2010', '90.1-2013', 'NECB2011'
         model.getWaterHeaterMixeds.sort.each do |water_heater|
           water_heater.setOffCycleLossCoefficienttoAmbientTemperature(0.798542707)
           water_heater.setOnCycleLossCoefficienttoAmbientTemperature(0.798542707)
+        end
+      when '90.1-2004', '90.1-2007'
+        model.getWaterHeaterMixeds.sort.each do |water_heater|
+          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.42530487240476)
+          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.42530487240476)
         end
     end
   end
