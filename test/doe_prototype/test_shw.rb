@@ -228,18 +228,18 @@ class TestSHW < CreateDOEPrototypeBuildingTest
       end
     end
 
-    # Secondary School - 90.1-2013
-    #template = '90.1-2013'
-    #building_type = 'SecondarySchool'
+    # Secondary School - 90.1-2010
+    template = '90.1-2010'
+    building_type = 'SecondarySchool'
 
-    #model = TestSHW.model_test(template, building_type)  
-    #model.getWaterHeaterMixeds.sort.each do |water_heater|
-	#  if water_heater.name.to_s.include?('Booster')
-	#    assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 1.591045154)
-	#  else
-	#    assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 15.60100579)
-    #  end
-    #end
+    model = TestSHW.model_test(template, building_type)  
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+	  if water_heater.name.to_s.include?('Booster')
+	    assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 1.591045154)
+	  else
+	    assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 15.60100579)
+      end
+    end
 
     # Warehouse - 90.1-2004
     template = '90.1-2004'
