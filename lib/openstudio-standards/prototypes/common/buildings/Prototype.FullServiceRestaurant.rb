@@ -207,7 +207,7 @@ module FullServiceRestaurant
     end
   end
 
-  def update_waterheater_loss_coefficient(model)
+  def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         case template
@@ -218,6 +218,9 @@ module FullServiceRestaurant
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
         end
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen ZN').get)
       else
         case template
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
@@ -229,7 +232,7 @@ module FullServiceRestaurant
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+    update_waterheater_ambient_parameters(model)
 
     return true
   end

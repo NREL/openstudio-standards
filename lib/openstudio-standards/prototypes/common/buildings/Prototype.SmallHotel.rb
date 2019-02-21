@@ -73,7 +73,7 @@ module SmallHotel
     return true
   end
 
-  def update_waterheater_loss_coefficient(model)
+  def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
         case template
@@ -87,12 +87,15 @@ module SmallHotel
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
         end
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('LaundryRoomFlr1 ZN').get)
       end
     end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+    update_waterheater_ambient_parameters(model)
 
     return true
   end

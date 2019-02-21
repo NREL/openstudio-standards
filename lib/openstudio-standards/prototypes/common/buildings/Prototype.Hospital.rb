@@ -141,7 +141,7 @@ module Hospital
     end
   end
 
-  def update_waterheater_loss_coefficient(model)
+  def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         case template
@@ -155,6 +155,9 @@ module Hospital
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
         end
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
       elsif water_heater.name.to_s.include?('6.0gal')
         case template
           when '90.1-2004', '90.1-2007'
@@ -164,12 +167,15 @@ module Hospital
             water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
             water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
         end
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
       end
     end
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+    update_waterheater_ambient_parameters(model)
 
     return true
   end
