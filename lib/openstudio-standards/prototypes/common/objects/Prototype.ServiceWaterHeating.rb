@@ -199,11 +199,11 @@ class Standard
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
 	      indoor_temp = 71.6
         else
-	      indoor_temp = 70.0
+	      indoor_temp = 70
         end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                                   OpenStudio.convert(indoor_temp, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s)
+                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s + 'f')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
       water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)

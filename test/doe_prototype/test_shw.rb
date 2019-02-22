@@ -76,7 +76,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
 
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
-      assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 2.012559766 * 23)
+      assert(water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value == 46.288874618)
     end
 
     # Hospital - 90.1-2004
