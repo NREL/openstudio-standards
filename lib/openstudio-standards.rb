@@ -221,6 +221,10 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
+  require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
+  
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -230,6 +234,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/common/objects/Prototype.BoilerHotWater"
+  require_relative "#{proto}/common/objects/Prototype.CentralAirSourceHeatPump"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
   require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"
