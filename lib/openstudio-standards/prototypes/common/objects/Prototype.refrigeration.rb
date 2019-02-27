@@ -1282,6 +1282,7 @@ def model_add_refrigeration_system(model,
       #
       ref_walkin.setDefrostSchedule(defrost_sch)
       ref_walkin.setDefrostDripDownSchedule(dripdown_sch)
+      ref_sys.addWalkin(ref_walkin)
       ########################################
       cooling_cap += ref_walkin.ratedCoilCoolingCapacity # calculate total cooling capacity of the cases + walkins
     end
