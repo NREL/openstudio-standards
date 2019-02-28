@@ -38,12 +38,13 @@
     "type": "Refrigeration_system",
     "compressor_type": "Low Temp",
     "cases": [{
-      "case_type": "Case Quick Service Resataurant",
+      "case_type": "Case Quick Service Restaurant",
       "space_names": ["Kitchen"]}],
     "walkins": [{
-      "walkin_type": "Walk-In Quick Service Resataurant",
+      "walkin_type": "Walk-In Quick Service Restaurant",
       "space_names": ["Kitchen"],
       "number_of_walkins": 1 }],
-    "name": "RefrSystem - Quick Service Resataurant",
+    "name": "RefrSystem - Quick Service Restaurant",
     "space_names": ["Kitchen"]}
 ]
+
