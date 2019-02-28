@@ -210,23 +210,9 @@ module FullServiceRestaurant
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
-        case template
-          when '90.1-2004', '90.1-2007'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.257965315)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.257965315)
-          when '90.1-2010', '90.1-2013', 'NECB2011'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-        end
         water_heater.resetAmbientTemperatureSchedule
         water_heater.setAmbientTemperatureIndicator('ThermalZone')		
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen ZN').get)
-      else
-        case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286505)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286505)
-          end
       end
     end
   end

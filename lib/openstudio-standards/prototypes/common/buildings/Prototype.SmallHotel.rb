@@ -75,18 +75,7 @@ module SmallHotel
 
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
-      if water_heater.name.to_s.include?('300gal')
-        case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
-        end
-      else
-        case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.64328650469705)
-        end
+	  if water_heater.name.to_s.include?('200gal')
         water_heater.resetAmbientTemperatureSchedule
         water_heater.setAmbientTemperatureIndicator('ThermalZone')		
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('LaundryRoomFlr1 ZN').get)

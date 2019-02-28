@@ -76,20 +76,12 @@ module SecondarySchool
   end
 
   def update_waterheater_ambient_parameters(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          if water_heater.name.to_s.include?('Booster')
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.591045154)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.591045154)
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('Booster')
         water_heater.resetAmbientTemperatureSchedule
         water_heater.setAmbientTemperatureIndicator('ThermalZone')		
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
-          elsif
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.60100579)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.60100579)
-          end
-        end
+      end
     end
   end
 

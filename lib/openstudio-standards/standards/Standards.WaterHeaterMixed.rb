@@ -29,7 +29,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = volume_m3.get
+	  volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -85,12 +85,16 @@ class Standard
         # this system of equations:
         # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
         # 0.82 = (ua*67.5+cap*re)/cap
-        cap = 75_000.0
-        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+        # Solutions to the system of equations were determined
+        # for discrete values of EF and modeled using a regression
+        re = -0.1137 * ef **2 + 0.1997 * ef + 0.731
         # Calculate the skin loss coefficient (UA)
-        # based on the actual capacity.
-        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
+        # Input capacity is assumed to be the output capacity
+        # divided by a burner efficiency of 80%
+        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
       end
+      # Two booster water heaters
+	  ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     # Typically specified this way for large electric water heaters
@@ -102,7 +106,8 @@ class Standard
       sl_drt = wh_props['standby_loss_volume_allowance']
       sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
       # Calculate the skin loss coefficient (UA)
-      ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+      ua_btu_per_hr_per_f = @instvarbuilding_type == 'MidriseApartment' ? sl_btu_per_hr / 70 * 23 :  sl_btu_per_hr / 70
+      ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     # Typically specified this way for newer large electric water heaters
@@ -128,8 +133,15 @@ class Standard
       sl_cap_adj = wh_props['standby_loss_capacity_allowance']
       sl_vol_drt = wh_props['standby_loss_volume_allowance']
       et = wh_props['thermal_efficiency']
+      # Estimate storage tank volume
+      tank_volume = volume_gal > 100 ? (volume_gal - 100).round(0) : 0
+      wh_tank_volume = volume_gal > 100 ? 100 : volume_gal
+      # SL Storage Tank: polynomial regression based on a set of manufacturer data
+      sl_tank = 0.0000005 * tank_volume**3 - 0.001 * tank_volume**2 + 1.3519 * tank_volume + 64.456 # in Btu/h
       # Calculate the max allowable standby loss (SL)
-      sl_btu_per_hr = (capacity_btu_per_hr / sl_cap_adj + sl_vol_drt * Math.sqrt(volume_gal))
+      # Output capacity is assumed to be 10 * Tank volume
+      # Input capacity = Output capacity / Et
+      sl_btu_per_hr = (capacity_btu_per_hr / et / sl_cap_adj + sl_vol_drt * Math.sqrt(wh_tank_volume) + sl_tank)
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
       # Calculate water heater efficiency

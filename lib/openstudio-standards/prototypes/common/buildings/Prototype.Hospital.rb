@@ -143,30 +143,11 @@ module Hospital
 
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
-      if water_heater.name.to_s.include?('600gal')
-        case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(15.6010057946521)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(15.6010057946521)
-        end
-      elsif water_heater.name.to_s.include?('300gal')
-        case template
-          when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.2541398681688)
-        end
+      if water_heater.name.to_s.include?('300gal')
         water_heater.resetAmbientTemperatureSchedule
         water_heater.setAmbientTemperatureIndicator('ThermalZone')		
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
       elsif water_heater.name.to_s.include?('6.0gal')
-        case template
-          when '90.1-2004', '90.1-2007'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.25796531511459)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.25796531511459)
-          when '90.1-2010', '90.1-2013'
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-        end
         water_heater.resetAmbientTemperatureSchedule
         water_heater.setAmbientTemperatureIndicator('ThermalZone')		
         water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_5 ZN').get)
