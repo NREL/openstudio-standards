@@ -141,11 +141,12 @@ class Standard
       # Calculate the max allowable standby loss (SL)
       # Output capacity is assumed to be 10 * Tank volume
       # Input capacity = Output capacity / Et
-      sl_btu_per_hr = (capacity_btu_per_hr / et / sl_cap_adj + sl_vol_drt * Math.sqrt(wh_tank_volume) + sl_tank)
+	  p_on = capacity_btu_per_hr / et
+      sl_btu_per_hr = p_on / sl_cap_adj + sl_vol_drt * Math.sqrt(wh_tank_volume) + sl_tank
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
       # Calculate water heater efficiency
-      water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+      water_heater_eff = (ua_btu_per_hr_per_f * 70 + p_on * et) / p_on
     end
 
     # Ensure that efficiency and UA were both set\
