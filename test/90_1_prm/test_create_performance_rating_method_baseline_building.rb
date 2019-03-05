@@ -23,7 +23,7 @@ class Baseline9012013Test < Minitest::Test
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
-    check_shw(base_model, prop_model,building_type) 
+    check_shw(base_model, prop_model, building_type)
     
   end  
 
@@ -85,7 +85,7 @@ class Baseline9012013Test < Minitest::Test
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
-    check_shw(base_model, prop_model,building_type)
+    check_shw(base_model, prop_model, building_type)
  
   end  
   
@@ -149,7 +149,7 @@ class Baseline9012013Test < Minitest::Test
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
-    check_shw(base_model, prop_model,building_type)   
+    check_shw(base_model, prop_model, building_type)
     
   end
   

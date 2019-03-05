@@ -951,8 +951,8 @@ module Baseline9012013
             
             # test
             assert_in_delta(e_ht, eff, delta=0.01, "#{prm_maj_sec}: baseline water heater efficiency")
-            assert_in_delta(ua, ua_off, delta=0.1, "#{prm_maj_sec}: baseline water heater UA")
-            assert_in_delta(ua, ua_on, delta=0.1, "#{prm_maj_sec}: baseline water heater UA")
+            assert_in_delta(ua, ua_off, delta=0.1, "#{prm_maj_sec}: baseline water heater UA on")
+            assert_in_delta(ua, ua_on, delta=0.1, "#{prm_maj_sec}: baseline water heater UA off")
           end
       
         end
