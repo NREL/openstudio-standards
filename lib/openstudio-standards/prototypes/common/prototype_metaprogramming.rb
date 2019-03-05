@@ -21,7 +21,10 @@ def create_class_array
       'SmallOffice',
       'RetailStripmall',
       'Warehouse',
-      'SuperMarket'
+      'SuperMarket',
+	  'SmallOfficeDetailed',
+	  'MediumOfficeDetailed',
+	  'LargeOfficeDetailed'
   ]
 
   templates = ['ASHRAE9012004',
@@ -128,7 +131,11 @@ end
         lookup_name = 'Office'
       when 'LargeOffice'
         lookup_name = 'Office'
-      when 'LargeOfficeDetail'
+      when 'SmallOfficeDetailed'
+        lookup_name = 'Office'
+      when 'MediumOfficeDetailed'
+        lookup_name = 'Office'
+	  when 'LargeOfficeDetailed'
         lookup_name = 'Office'
       when 'RetailStandalone'
         lookup_name = 'Retail'
@@ -739,7 +746,7 @@ end
         lookup_name = 'Office'
       when 'LargeOffice'
         lookup_name = 'Office'
-      when 'LargeOfficeDetail'
+      when 'LargeOfficeDetailed'
         lookup_name = 'Office'
       when 'RetailStandalone'
         lookup_name = 'Retail'

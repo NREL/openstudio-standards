@@ -424,11 +424,14 @@ class Standard
     sizing_plant.setLoopType('Condenser')
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    cw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      sup_wtr_temp_c,
-                                                      name = "#{condenser_water_loop.name} Temp - #{sup_wtr_temp.round(0)}F")
-    cw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, cw_temp_sch)
-    cw_stpt_manager.setName("#{condenser_water_loop.name} Setpoint Manager")
+
+    # follow outdoor air wetbulb with given approach temperature
+    cw_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)
+    cw_stpt_manager.setName("#{condenser_water_loop.name} Setpoint Manager Follow OATwb with #{wet_bulb_approach}F Approach")
+    cw_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
+    cw_stpt_manager.setMaximumSetpointTemperature(dsgn_sup_wtr_temp_c)
+    cw_stpt_manager.setMinimumSetpointTemperature(sup_wtr_temp_c)
+    cw_stpt_manager.setOffsetTemperatureDifference(wet_bulb_approach_k)
     cw_stpt_manager.addToNode(condenser_water_loop.supplyOutletNode)
 
     # create condenser water pump
