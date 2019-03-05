@@ -82,16 +82,6 @@ module MidriseApartment
     end
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(2.012559766)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(2.012559766)
-        end
-    end
-  end
-
   # add extra infiltration for ground floor corridor
   def add_door_infiltration(climate_zone, model)
     case template
@@ -133,7 +123,6 @@ module MidriseApartment
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
 
     return true
   end
