@@ -39,7 +39,7 @@ class ASHRAE9012010 < ASHRAE901
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
-      if sidelighted_effective_aperture < 0.1
+      if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
