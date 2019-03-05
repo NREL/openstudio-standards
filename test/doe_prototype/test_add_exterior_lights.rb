@@ -137,11 +137,10 @@ class TestAddExteriorLights < Minitest::Test
     assert(exterior_lights.has_key?("Other Doors"))
     assert(exterior_lights["Parking Areas and Drives"].exteriorLightsDefinition.designLevel == 0.15)
     assert_in_delta(31185.0,exterior_lights["Parking Areas and Drives"].multiplier,100.0) # 405 ft^2 per spot * 77 rooms * 1 unit per spot
-    assert_in_delta(69.0,exterior_lights["Main Entries"].multiplier,1.0) #  8 ft per entry * 2 entries per * 43,202 ft^2  / 10,000 ft^2
-    assert_in_delta(499.6,exterior_lights["Other Doors"].multiplier,1.0) #  4 ft per entry * 28.91 entries per * 43,202 ft^2  / 10,000 ft^2
+    assert_in_delta(17.28,exterior_lights["Main Entries"].multiplier,1.0) #  8 ft per entry * 2 entries per 10,000 ft^2 * 10,800 ft^2 ground floor area / 10,000 ft^2
+    assert_in_delta(124.9,exterior_lights["Other Doors"].multiplier,1.0) #  4 ft per entry * 28.91 entries per 10,000 ft^2 * 10,800 ft^2 ground floor area / 10,000 ft^2
     assert(exterior_lights["Entry Canopies"].multiplier == 720.0)
     assert(exterior_lights["Entry Canopies"].exteriorLightsDefinition.designLevel == 1.25)
-
   end
 
   def test_add_exterior_lights_hospital

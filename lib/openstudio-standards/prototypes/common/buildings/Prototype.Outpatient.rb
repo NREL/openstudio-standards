@@ -175,21 +175,6 @@ module Outpatient
     end
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          if water_heater.name.to_s.include?('Booster')
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-          else
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286505)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286505)
-          end
-        end
-    end
-  end
-
   # add humidifier to AHU1 (contains operating room1)
   def add_humidifier(hot_water_loop, model)
     operatingroom1_space = model.getSpaceByName('Floor 1 Operating Room 1').get
@@ -365,7 +350,6 @@ module Outpatient
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
 
     return true
   end
