@@ -165,7 +165,7 @@ class Standard
     water_heater_mixed.setOnCycleParasiticHeatFractiontoTank(0)
     water_heater_mixed.setOffCycleParasiticFuelType(fuel_type)
     # self.setOffCycleParasiticFuelConsumptionRate(??)
-    water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
+    water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0)
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
