@@ -1,0 +1,382 @@
+{
+  "refrigeration_system": [
+    {
+      "template": "DEER Pre-1975",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    }
+  ]
+}
