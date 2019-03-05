@@ -148,7 +148,7 @@ class Standard
     max_occ_on_thermal_zone = 0
 
     # Get the people objects
-    spaces.each do |space|
+    thermal_zone.spaces.each do |space|
       # From the space type
       if space.spaceType.is_initialized
         space.spaceType.get.people.each do |people|
