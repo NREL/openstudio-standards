@@ -1,4 +1,55 @@
  -EnergyPlus Weather Converter V8.1.0.005
+ -Input File Type=EPW, with FileName=C:\Users\lero023\OneDrive - PNNL\Documents\Projects\OpenStudio Prototypes\nrel_master\openstudio-standards\data\weather\USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw
+ -Out of Range Data items will NOT be corrected.
+ Warning ** Dew Point= -11.70°C > Dry Bulb= -13.00°C on date=12/31 at hour= 2
+ Warning ** Dew Point= -11.10°C > Dry Bulb= -12.00°C on date=12/31 at hour= 3
+ Warning ** Dew Point= -11.70°C > Dry Bulb= -13.00°C on date=12/31 at hour= 4
+ Warning ** Dew Point= -11.10°C > Dry Bulb= -13.00°C on date=12/31 at hour= 5
+ Warning ** Dew Point= -11.70°C > Dry Bulb= -12.00°C on date=12/31 at hour= 6
+ Warning ** Dew Point= -10.60°C > Dry Bulb= -11.00°C on date=12/31 at hour= 9
+ Warning ** Dew Point= -10.60°C > Dry Bulb= -11.00°C on date=12/31 at hour=10
+ Warning ** Dew Point= -10.60°C > Dry Bulb= -11.00°C on date=12/31 at hour=11
+ Warning ** Missing Data Found on Source Weather Data File
+ ** Missing (and corrected) Albedo, Number of items= 7320
+ ** Missing (and corrected) Liquid Precip Depth, Number of items= 7321
+ Warning ** Out of Range Data Found on Weather Data File
+ ** Out of Range Dew Point Temperatures > Dry Bulb Temperatures, Number of items=    8
+
+
+
+ - Start Date/End Date for Weather Source
+ Start Date=Jan  1; End Date=Dec 31
+
+ - Actual Data Years for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	         	 1987	 1986	 1982	 1996	 1978	 1989	 1976	 1987	 1988	 1989	 2001	 1987	
+ - ** Not all weather data sources represent contiguous years.
+ - ** Monthly data values may come from different years.
+
+ - Days per Month for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	           	 31	 28	 31	 30	 31	 30	 31	 31	 30	 31	 30	 31	
+ - ** Number of days per month seems okay.
+
+ - Data Sources should be checked for relevancy to these statistics.
+
+ Average Delta DB Change=  0.91°C ; Std Dev=  0.87°C
+ Average Delta DP Change=  0.71°C ; Std Dev=  0.81°C
+ Average Delta Relative Humidity Change=  3.85% ; Std Dev=  4.19%
+ Average Delta Wind Speed Change=  0.89m/s ; Std Dev=  0.93m/s
+ Hourly Dry Bulb temperature change trigger = minimum of  13.30°C  and  10.°C
+     13.30°C = calculated trigger based on mean change in dry-bulb temperature and standard deviation shown above
+     10.°C = trigger set by user
+
+ Changes indicated in delta temperatures, details follow.
+ *****
+ - Delta DB/DP Range Triggered for Jul  3
+ - Change in DP=-11.10°C, Hour=15
+ - Change in DP= 11.10°C, Hour=16
+
+ -Report on input file
+
+
  Statistics for USA_AK_Fairbanks.Intl.AP.702610_TMY3
  Location -- Fairbanks Intl Arpt AK USA  
       {N 64° 49'} {W 147° 51'} {GMT -9.0 Hours}
@@ -6,7 +57,7 @@
  Standard Pressure at Elevation --  99737Pa
  Data Source -- TMY3
 
- WMO Station 702610
+ -WMO Station 702610
 
  - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
  - ASHRAE design conditions are carefully generated from a period of record 
@@ -371,6 +422,7 @@
  	22:01-23:00	    0	    0	    0	    0	    0	    6	    1	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 Max Hour*	  13 	  12 	  13 	  14 	  10*	  11*	  10*	  14 	  12 	  12 	  12 	  13 	
+ ** Possible error in Solar Radiation values (warning for <12pm or >3pm)
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
  - Average Hourly Statistics for Diffuse Horizontal Solar Radiation Wh/m²
@@ -400,6 +452,7 @@
  	22:01-23:00	    0	    0	    0	    0	    0	    1	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 Max Hour*	  12 	  13 	  12 	  13 	  12 	  12 	  14 	  13 	  11*	  12 	  14 	  12 	
+ ** Possible error in Solar Radiation values (warning for <12pm or >3pm)
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
  - Average Hourly Statistics for Global Horizontal Solar Radiation Wh/m²

@@ -1,4 +1,56 @@
  -EnergyPlus Weather Converter V8.1.0.005
+ -Input File Type=EPW, with FileName=C:\Users\lero023\OneDrive - PNNL\Documents\Projects\OpenStudio Prototypes\nrel_master\openstudio-standards\data\weather\USA_TX_El.Paso.Intl.AP.722700_TMY3.epw
+ -Out of Range Data items will NOT be corrected.
+ Warning ** Missing Data Found on Source Weather Data File
+ ** Missing (and corrected) Albedo, Number of items= 1464
+ ** Missing (and corrected) Liquid Precip Depth, Number of items= 1466
+
+
+
+ - Start Date/End Date for Weather Source
+ Start Date=Jan  1; End Date=Dec 31
+
+ - Actual Data Years for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	         	 2004	 2001	 1980	 2001	 1999	 2004	 2002	 2004	 1986	 2005	 2002	 2000	
+ - ** Not all weather data sources represent contiguous years.
+ - ** Monthly data values may come from different years.
+
+ - Days per Month for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	           	 31	 28	 31	 30	 31	 30	 31	 31	 30	 31	 30	 31	
+ - ** Number of days per month seems okay.
+
+ - Data Sources should be checked for relevancy to these statistics.
+
+ Average Delta DB Change=  1.22°C ; Std Dev=  1.06°C
+ Average Delta DP Change=  0.77°C ; Std Dev=  0.97°C
+ Average Delta Relative Humidity Change=  3.80% ; Std Dev=  4.11%
+ Average Delta Wind Speed Change=  1.37m/s ; Std Dev=  1.32m/s
+ Hourly Dry Bulb temperature change trigger = minimum of  16.70°C  and  10.°C
+     16.70°C = calculated trigger based on mean change in dry-bulb temperature and standard deviation shown above
+     10.°C = trigger set by user
+
+ Changes indicated in delta temperatures, details follow.
+ *****
+ - Delta DB/DP Range Triggered for Jan  1
+ - Change in DP=-15.00°C, Hour= 5
+ *****
+ - Delta DB/DP Range Triggered for Feb 14
+ - Change in DP= 10.50°C, Hour=17
+ *****
+ - Delta DB/DP Range Triggered for Mar 10
+ - Change in DP=-11.70°C, Hour=18
+ *****
+ - Delta DB/DP Range Triggered for Apr 17
+ - Change in DP=-20.50°C, Hour= 1
+ *****
+ - Delta DB/DP Range Triggered for Jun 17
+ - Change in DP= 11.60°C, Hour= 9
+
+ -Report on input file
+
+
  Statistics for USA_TX_El.Paso.Intl.AP.722700_TMY3
  Location -- El Paso International Ap  Ut TX USA  
       {N 31° 46'} {W 106° 30'} {GMT -7.0 Hours}
@@ -6,7 +58,7 @@
  Standard Pressure at Elevation --  87865Pa
  Data Source -- TMY3
 
- WMO Station 722700
+ -WMO Station 722700
 
  - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
  - ASHRAE design conditions are carefully generated from a period of record 
@@ -371,6 +423,7 @@
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 Max Hour*	  11*	  13 	  11*	  12 	  14 	  14 	  13 	  12 	  13 	  14 	  14 	  11*	
+ ** Possible error in Solar Radiation values (warning for <12pm or >3pm)
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
  - Average Hourly Statistics for Diffuse Horizontal Solar Radiation Wh/m²

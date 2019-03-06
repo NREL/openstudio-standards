@@ -1,12 +1,71 @@
  -EnergyPlus Weather Converter V8.1.0.005
- Statistics for USA_NM_Albuquerque.Intl.AP.723650_TMY3
- Location -- Albuquerque Intl Arpt  Isis NM USA  
+ -Input File Type=EPW, with FileName=C:\Users\lero023\OneDrive - PNNL\Documents\Projects\OpenStudio Prototypes\nrel_master\openstudio-standards\data\weather\USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw
+ -Out of Range Data items will NOT be corrected.
+ Warning ** Missing Data Found on Source Weather Data File
+ ** Missing (and corrected) Albedo, Number of items= 5088
+ ** Missing (and corrected) Liquid Precip Depth, Number of items= 5090
+
+
+
+ - Start Date/End Date for Weather Source
+ Start Date=Jan  1; End Date=Dec 31
+
+ - Actual Data Years for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	         	 1981	 1979	 1979	 2003	 1999	 1979	 1981	 1986	 1981	 1997	 2002	 1999	
+ - ** Not all weather data sources represent contiguous years.
+ - ** Monthly data values may come from different years.
+
+ - Days per Month for Monthly Data**
+ 	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	           	 31	 28	 31	 30	 31	 30	 31	 31	 30	 31	 30	 31	
+ - ** Number of days per month seems okay.
+
+ - Data Sources should be checked for relevancy to these statistics.
+
+ Average Delta DB Change=  1.28°C ; Std Dev=  1.07°C
+ Average Delta DP Change=  0.75°C ; Std Dev=  1.00°C
+ Average Delta Relative Humidity Change=  4.28% ; Std Dev=  4.40%
+ Average Delta Wind Speed Change=  1.39m/s ; Std Dev=  1.32m/s
+ Hourly Dry Bulb temperature change trigger = minimum of  17.05°C  and  10.°C
+     17.05°C = calculated trigger based on mean change in dry-bulb temperature and standard deviation shown above
+     10.°C = trigger set by user
+
+ Changes indicated in delta temperatures, details follow.
+ *****
+ - Delta DB/DP Range Triggered for May 21
+ - Change in DP=-12.80°C, Hour= 1
+ *****
+ - Delta DB/DP Range Triggered for Jun 23
+ - Change in DP=-12.70°C, Hour=20
+ *****
+ - Delta DB/DP Range Triggered for Jun 28
+ - Change in DP= 11.60°C, Hour=13
+ - Change in DP=-14.40°C, Hour=18
+ *****
+ - Delta DB/DP Range Triggered for Jul  3
+ - Change in DP=-10.60°C, Hour=24
+ *****
+ - Delta DB/DP Range Triggered for Oct 24
+ - Change in DB= 10.00°C, Hour=14
+ *****
+ - Delta DB/DP Range Triggered for Nov  2
+ - Change in DP= 10.60°C, Hour=19
+ *****
+ - Delta DB/DP Range Triggered for Nov  3
+ - Change in DP=-13.40°C, Hour=17
+
+ -Report on input file
+
+
+ Statistics for USA_NM_Albuquerque.Intl.Sunport.723650_TMY3
+ Location -- Albuquerque Intl Sunport NM USA  
       {N 35°  2'} {W 106° 37'} {GMT -7.0 Hours}
  Elevation --  1619m above sea level
  Standard Pressure at Elevation --  83328Pa
  Data Source -- TMY3
 
- WMO Station 723650
+ -WMO Station 723650
 
  - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
  - ASHRAE design conditions are carefully generated from a period of record 
@@ -371,6 +430,7 @@
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 Max Hour*	  14 	  13 	  12 	  10*	  11*	  11*	  12 	  12 	  13 	  11*	  11*	  10*	
+ ** Possible error in Solar Radiation values (warning for <12pm or >3pm)
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
  - Average Hourly Statistics for Diffuse Horizontal Solar Radiation Wh/m²
