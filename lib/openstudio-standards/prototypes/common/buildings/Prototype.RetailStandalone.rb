@@ -28,7 +28,14 @@ module RetailStandalone
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entry.setName('Entry door Infiltration')
       case climate_zone
-      when 'ASHRAE 169-2006-1A','ASHRAE 169-2006-1B','ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+      when 'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B'
         infiltration_per_zone = 1.418672682
         infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
       else
@@ -56,7 +63,14 @@ module RetailStandalone
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = case climate_zone
-    when 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A'
+    when 'ASHRAE 169-2006-6A',
+        'ASHRAE 169-2006-6B',
+        'ASHRAE 169-2006-7A',
+        'ASHRAE 169-2006-8A',
+        'ASHRAE 169-2013-6A',
+        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-7A',
+        'ASHRAE 169-2013-8A'
       [
           { 'stds_spc_type' => 'Core_Retail',
             'sensor_1_frac' => 0.1724,
