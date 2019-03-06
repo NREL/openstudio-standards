@@ -1014,7 +1014,7 @@ class Standard
     # Get the zone that the space is in
     zone = space.thermalZone
     if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{name.get} has no thermal zone")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{space.name} has no thermal zone")
     else
       zone = zone.get
     end
