@@ -1537,7 +1537,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
       end
 
-      num_ppl = people.getNumberOfPeople(floorArea)
+      num_ppl = people.getNumberOfPeople(space.floorArea)
 
       ppl_w = num_ppl * w_per_person
 

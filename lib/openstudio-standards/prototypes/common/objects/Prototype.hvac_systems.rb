@@ -2431,6 +2431,7 @@ class Standard
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
       oa_controller.setName("#{air_loop.name} OA System Controller")
       oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+      oa_controller.autosizeMinimumOutdoorAirFlowRate
       oa_controller.resetEconomizerMinimumLimitDryBulbTemperature
       oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
       oa_system.setName("#{air_loop.name} OA System")

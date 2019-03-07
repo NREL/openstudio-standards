@@ -194,10 +194,16 @@ class Standard
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
 
     if water_heater_thermal_zone.nil?
-      # Assume the water heater is indoors at 70F for now
+      # Assume the water heater is indoors at 70F or 72F
+      case template
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+	      indoor_temp = 71.6
+        else
+	      indoor_temp = 70
+        end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                                  OpenStudio.convert(70.0, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - 70F')
+                                                                                  OpenStudio.convert(indoor_temp, 'F', 'C').get,
+                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s + 'f')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
       water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
@@ -327,10 +333,16 @@ class Standard
     water_heater.setSetpointTemperatureSchedule(swh_temp_sch)
 
     if booster_water_heater_thermal_zone.nil?
-      # Assume the water heater is indoors at 70F for now
+      # Assume the water heater is indoors at 70F or 72F
+      case template
+        when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+	      indoor_temp = 71.6
+        else
+	      indoor_temp = 70.0
+        end
       default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                                  OpenStudio.convert(70.0, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - 70F')
+                                                                                  OpenStudio.convert(indoor_temp, 'F', 'C').get,
+                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s)
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
       water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
