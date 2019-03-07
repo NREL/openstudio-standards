@@ -23,25 +23,25 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
       'HighriseApartment',
       'Warehouse']
 	@climate_zones [
-      'ASHRAE 169-2006-1A',
-      'ASHRAE 169-2006-1B',
-      'ASHRAE 169-2006-2A',
-      'ASHRAE 169-2006-2B',
-      'ASHRAE 169-2006-3A',
-      'ASHRAE 169-2006-3B',
-      'ASHRAE 169-2006-3C',
-      'ASHRAE 169-2006-4A',
-      'ASHRAE 169-2006-4B',
-      'ASHRAE 169-2006-4C',
-      'ASHRAE 169-2006-5A',
-      'ASHRAE 169-2006-5B',
-      'ASHRAE 169-2006-5C',
-      'ASHRAE 169-2006-6A',
-      'ASHRAE 169-2006-6B',
-      'ASHRAE 169-2006-7A',
-      'ASHRAE 169-2006-7B',
-      'ASHRAE 169-2006-8A',
-      'ASHRAE 169-2006-8B']
+      'ASHRAE 169-2013-1A',
+      'ASHRAE 169-2013-1B',
+      'ASHRAE 169-2013-2A',
+      'ASHRAE 169-2013-2B',
+      'ASHRAE 169-2013-3A',
+      'ASHRAE 169-2013-3B',
+      'ASHRAE 169-2013-3C',
+      'ASHRAE 169-2013-4A',
+      'ASHRAE 169-2013-4B',
+      'ASHRAE 169-2013-4C',
+      'ASHRAE 169-2013-5A',
+      'ASHRAE 169-2013-5B',
+      'ASHRAE 169-2013-5C',
+      'ASHRAE 169-2013-6A',
+      'ASHRAE 169-2013-6B',
+      'ASHRAE 169-2013-7A',
+      'ASHRAE 169-2013-7B',
+      'ASHRAE 169-2013-8A',
+      'ASHRAE 169-2013-8B']
 	@templates = [
       '90.1-2004',
       '90.1-2007',
@@ -74,8 +74,3 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
     end
   end
 end
-
-
-
-
-
