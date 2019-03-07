@@ -306,9 +306,9 @@ class Standard
         # multiplication factor or 1.2 to account for interfloor traffic
 
         # determine time per ride based on number of floors and elevator type
-        if elevator_type = 'Hydraulic'
+        if elevator_type == 'Hydraulic'
           time_per_ride = 8.7 + (effective_num_stories[:above_grade] * 5.6)
-        elsif elevator_type = 'Traction'
+        elsif elevator_type == 'Traction'
           time_per_ride = 5.6 + (effective_num_stories[:above_grade] * 2.1)
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Elevator type #{elevator_type} not recognized.")
