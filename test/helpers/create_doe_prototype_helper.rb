@@ -76,7 +76,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       epw_file,
       create_models,
       run_models,
+      run_type,
       compare_results,
+	  compare_results_object_by_object,
       debug )
 
     method_name = nil
@@ -157,6 +159,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           ]
           # BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
 
+          if run_type == 'dd-only'
+            # Get summer and winter design days days/month
+            sim_ctrl = model.getSimulationControl
+            sim_ctrl.setRunSimulationforSizingPeriods(true)
+            sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+		  end
+
           # Save the model
           model.save(osm_path, true)
 
@@ -180,8 +189,86 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           model = prototype_creator.safe_load_model(osm_path_string)
         end
 
-        # Run the annual simulation
-        prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        if run_type == 'dd-only'
+          # Get summer and winter design days days/month
+          sim_ctrl = model.getSimulationControl
+          sim_ctrl.setRunSimulationforSizingPeriods(true)
+          sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+          
+          # Remove all meters
+          model.getOutputMeters.each(&:remove)
+          
+          # Creating individual meters
+          # Cooling - Electricity
+          clg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          clg_elec_mtr.setName("Cooling:Electricity")
+          clg_elec_mtr.setReportingFrequency("Monthly")
+          # Heating - Electricity
+          htg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          htg_elec_mtr.setName("Heating:Electricity")
+          htg_elec_mtr.setReportingFrequency("Monthly")
+          # Heating - Gas
+          htg_gas_mtr = OpenStudio::Model::OutputMeter.new(model)
+          htg_gas_mtr.setName("Heating:Gas")
+          htg_gas_mtr.setReportingFrequency("Monthly")
+          # Interior Lighting - Electricity
+          int_ltg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          int_ltg_elec_mtr.setName("InteriorLights:Electricity")
+          int_ltg_elec_mtr.setReportingFrequency("Monthly")
+          # Exterior Lighting - Electricity
+          ext_ltg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          ext_ltg_elec_mtr.setName("ExteriorLights:Electricity")
+          ext_ltg_elec_mtr.setReportingFrequency("Monthly")
+          # Interior Equipment - Electricity
+          int_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          int_eqp_elec_mtr.setName("InteriorEquipment:Electricity")
+          int_eqp_elec_mtr.setReportingFrequency("Monthly")
+          # Exterior Equipment - Electricity
+          ext_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          ext_eqp_elec_mtr.setName("ExteriorEquipment:Electricity")
+          ext_eqp_elec_mtr.setReportingFrequency("Monthly")
+          # Exterior Equipment - Gas
+          ext_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          ext_eqp_elec_mtr.setName("ExteriorEquipment:Gas")
+          ext_eqp_elec_mtr.setReportingFrequency("Monthly")
+          # Fans - Electricity
+          fans_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          fans_elec_mtr.setName("Fans:Electricity")
+          fans_elec_mtr.setReportingFrequency("Monthly")
+          # Pumps - Electricity
+          pumps_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          pumps_elec_mtr.setName("Pumps:Electricity")
+          pumps_elec_mtr.setReportingFrequency("Monthly")
+          # Heat Rejection - Electricity
+          heat_rej_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          heat_rej_elec_mtr.setName("HeatRejection:Electricity")
+          heat_rej_elec_mtr.setReportingFrequency("Monthly")
+          # Humidification - Electricity
+          hum_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          hum_elec_mtr.setName("Humidifier:Electricity")
+          hum_elec_mtr.setReportingFrequency("Monthly")
+          # Heat Recovery - Electricity
+          heat_rec_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          heat_rec_elec_mtr.setName("HeatRecovery:Electricity")
+          heat_rec_elec_mtr.setReportingFrequency("Monthly")
+          # Water Systems - Electricity
+          heat_rec_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          heat_rec_elec_mtr.setName("WaterSystems:Electricity")
+          heat_rec_elec_mtr.setReportingFrequency("Monthly")
+          # Water Systems - Gas
+          swh_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          swh_elec_mtr.setName("WaterSystems:Gas")
+          swh_elec_mtr.setReportingFrequency("Monthly")
+          # Refrigeration - Electricity
+          ref_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
+          ref_elec_mtr.setName("Refrigeration:Electricity")
+          ref_elec_mtr.setReportingFrequency("Monthly")
+
+          prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        else
+          # Run the annual simulation
+          prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        end
 
       end           
 
@@ -202,7 +289,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         acceptable_error_percentage = 0.0
 
         # Get the legacy simulation results
-        legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+        #legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+        legacy_values = 0.0
         if legacy_values.nil?
           result_diffs << "Could not find legacy simulation results for #{building_type} #{template} #{climate_zone}, cannot compare results."
         else
@@ -211,7 +299,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           results_comparison << ['Building Type', 'Template', 'Climate Zone', 'Fuel Type', 'End Use', 'Legacy Value', 'Current Value', 'Percent Error', 'Difference']
 
           # Get the current simulation results
-          current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+          if run_type == 'dd-only'
+            current_values = prototype_creator.model_dd_results_by_end_use_and_fuel_type(model)
+          else         
+            current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+          end
 
           # Get the osm values for all fuel type/end use pairs
           # and compare to the legacy simulation results
@@ -221,10 +313,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           total_current_water = 0.0
           current_values.each_key do |end_use_fuel_type|
             end_use = end_use_fuel_type.split('|')[0]
-            fuel_type = end_use_fuel_type.split('|')[1]
-
+            fuel_type = end_use_fuel_type.split('|')[1]  
             legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
-            current_val = current_values["#{end_use}|#{fuel_type}"]
+            current_val = current_values["#{end_use}|#{fuel_type}"]  
 
             # Add the energy to the total
             if fuel_type == 'Water'
@@ -297,29 +388,31 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           end
         end
 
-        ### Compare models object by object ###
+        if compare_results_object_by_object
+          ### Compare models object by object ###
 
-        # Load the model from disk if not already in memory
-        if model.nil?
-          model = prototype_creator.safe_load_model(osm_path_string)
-        end
+          # Load the model from disk if not already in memory
+          if model.nil?
+            model = prototype_creator.safe_load_model(osm_path_string)
+          end
 
-        # Load the truth model from disk and compare to the newly-created model
-        if File.exist?(truth_osm_path_string)
-          truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
-          # Remove unused resources to make comparison cleaner
-          prototype_creator.model_remove_unused_resource_objects(truth_model)
-          model_diffs = compare_osm_files(truth_model, model)
-        else
-          model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
-        end
+          # Load the truth model from disk and compare to the newly-created model
+          if File.exist?(truth_osm_path_string)
+            truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
+            # Remove unused resources to make comparison cleaner
+            prototype_creator.model_remove_unused_resource_objects(truth_model)
+            model_diffs = compare_osm_files(truth_model, model)
+          else
+            model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
+          end
 
-        # Write the model diffs to a file
-        if model_diffs.size > 0
-          diff_file_path = "#{run_dir}/compare_models.log"
-          File.open(diff_file_path, 'w') do |file|
-            model_diffs.each do |d|
-              file.puts d
+          # Write the model diffs to a file
+          if model_diffs.size > 0
+            diff_file_path = "#{run_dir}/compare_models.log"
+            File.open(diff_file_path, 'w') do |file|
+              model_diffs.each do |d|
+                file.puts d
+              end
             end
           end
         end
@@ -344,6 +437,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Assert if there were any errors
       assert(errors.size == 0, errors.reverse.join("\n"))
+	  
+	    # Assert if there is no difference in results
+      assert(result_diffs.size == 0)
 
     end
   end
