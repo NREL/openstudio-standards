@@ -130,7 +130,7 @@ class TestAddHVACSystems < Minitest::Test
         model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        climate_zone = 'ASHRAE 169-2006-7A'
+        climate_zone = 'ASHRAE 169-2013-7A'
         standard.model_add_design_days_and_weather_file(model, climate_zone, '')
         standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
 
@@ -157,7 +157,7 @@ class TestAddHVACSystems < Minitest::Test
       unmet_heating_hrs = standard.model_annual_occupied_unmet_heating_hours(model)
       unmet_cooling_hrs = standard.model_annual_occupied_unmet_cooling_hours(model)
       unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
-      max_unmet_hrs = 550
+      max_unmet_hrs = 685
       if unmet_hrs
         errs << "For #{type_desc} there were #{unmet_heating_hrs.round(1)} unmet occupied heating hours and #{unmet_cooling_hrs.round(1)} unmet occupied cooling hours (total: #{unmet_hrs.round(1)}), more than the limit of #{max_unmet_hrs}." if unmet_hrs > max_unmet_hrs
       else

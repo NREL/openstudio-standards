@@ -4133,7 +4133,7 @@ class Standard
 
   # Converts the climate zone in the model into the format used
   # by the openstudio-standards lookup tables.  For example:
-  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
+  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
   # institution: CEC, value: 3  becomes: CEC T24-CEC3.
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -4145,9 +4145,9 @@ class Standard
       if cz.institution == 'ASHRAE'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
         climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2006-#{cz.value}A"
+                         "ASHRAE 169-2013-#{cz.value}A"
                        else
-                         "ASHRAE 169-2006-#{cz.value}"
+                         "ASHRAE 169-2013-#{cz.value}"
                        end
       elsif cz.institution == 'CEC'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
@@ -4164,7 +4164,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] the model
   # @param climate_zone [String] the climate zone in openstudio-standards format.
-  # For example: ASHRAE 169-2006-2A, CEC T24-CEC3
+  # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
   # @return [Boolean] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)
     # Remove previous climate zones from the model
@@ -4172,6 +4172,8 @@ class Standard
     # Split the string into the correct institution and value
     if climate_zone.include? 'ASHRAE 169-2006-'
       model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+    elsif climate_zone.include? 'ASHRAE 169-2013-'
+      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
     elsif climate_zone.include? 'CEC T24-CEC'
       model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
 
