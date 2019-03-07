@@ -9,7 +9,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def known_fail_test_bldg_9
 
-    base_model = create_baseline_model('bldg_9', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_9', '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
 
   end
 
@@ -18,7 +18,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_10'
     building_type = 'MediumOffice'
-    climate_zone = 'ASHRAE 169-2006-5B'
+    climate_zone = 'ASHRAE 169-2013-5B'
     
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
@@ -32,7 +32,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_10'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice' ,'Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice' ,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_purchased_energy(base_model, prop_model) 
@@ -44,7 +44,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_10'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_boilers(base_model, prop_model) 
@@ -56,7 +56,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_10'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_chillers(base_model, prop_model) 
@@ -68,7 +68,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_10'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_plant_controls(base_model, prop_model)
@@ -80,7 +80,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
-    climate_zone = 'ASHRAE 169-2006-5B'
+    climate_zone = 'ASHRAE 169-2013-5B'
     
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
@@ -94,7 +94,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_11'
     building_type = 'LargeOffice'
-    climate_zone = 'ASHRAE 169-2006-5B'
+    climate_zone = 'ASHRAE 169-2013-5B'
     
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
@@ -108,7 +108,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_11'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_boilers(base_model, prop_model) 
@@ -120,7 +120,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_11'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_chillers(base_model, prop_model) 
@@ -132,7 +132,7 @@ class Baseline9012013Test < Minitest::Test
  
     test_model_name = 'bldg_11'
 
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'LargeOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_plant_controls(base_model, prop_model) 
@@ -144,7 +144,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_12'
     building_type = 'MidriseApartment'
-    climate_zone = 'ASHRAE 169-2006-5B'
+    climate_zone = 'ASHRAE 169-2013-5B'
     
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
@@ -158,7 +158,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_12'
     building_type = 'MidriseApartment'
-    climate_zone = 'ASHRAE 169-2006-5B'
+    climate_zone = 'ASHRAE 169-2013-5B'
     
     base_model = create_baseline_model(test_model_name, '90.1-2013', climate_zone, building_type,'Xcel Energy CO EDA', false, true)
 
@@ -178,7 +178,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_12'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_boilers(base_model, prop_model)
@@ -190,7 +190,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_12'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_num_chillers(base_model, prop_model)
@@ -202,7 +202,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_12'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_plant_controls(base_model, prop_model)
@@ -212,7 +212,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_13_economizer
 
-    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_economizers(base_model)
     
   end
@@ -220,7 +220,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_13_sat_delta
 
-    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_sat_delta(base_model)
     
   end
@@ -228,7 +228,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_13_sat_reset
   
-    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_sat_reset(base_model)
     
   end
@@ -236,7 +236,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_13_min_vav_setpoints
 
-    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_min_vav_setpoints(base_model)
     
   end
@@ -244,7 +244,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_13_coil_efficiencies
 
-    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_13', '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     check_coil_efficiencies(base_model)
   
   end
@@ -254,7 +254,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_13'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'SmallOffice','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
 
     check_ventilation_rates(base_model, prop_model)    
@@ -264,7 +264,7 @@ class Baseline9012013Test < Minitest::Test
   # @author Matt Steen, Eric Ringold, Ambient Energy
   def test_bldg_14_coil_efficiencies
 
-    base_model = create_baseline_model('bldg_14', '90.1-2013', 'ASHRAE 169-2006-5B', 'Warehouse','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model('bldg_14', '90.1-2013', 'ASHRAE 169-2013-5B', 'Warehouse','Xcel Energy CO EDA', false, true)
     check_coil_efficiencies(base_model)
   
   end
@@ -274,7 +274,7 @@ class Baseline9012013Test < Minitest::Test
 
     test_model_name = 'bldg_14'
     
-    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2006-5B', 'Warehouse','Xcel Energy CO EDA', false, true)
+    base_model = create_baseline_model(test_model_name, '90.1-2013', 'ASHRAE 169-2013-5B', 'Warehouse','Xcel Energy CO EDA', false, true)
     prop_model = load_test_model(test_model_name)
     
     check_ventilation_rates(base_model, prop_model)    
@@ -285,7 +285,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_15_retail_standalone
   
     # Create the baseline model
-    model = create_baseline_model('bldg_15', '90.1-2013', 'ASHRAE 169-2006-5B', 'RetailStandalone','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_15', '90.1-2013', 'ASHRAE 169-2013-5B', 'RetailStandalone','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     
@@ -330,7 +330,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_16_medium_office
 
     # Create the baseline model
-    model = create_baseline_model('bldg_16', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_16', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     
@@ -402,7 +402,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_17_midrise_apartment_lowrise_iecc_constructions
   
     # Create the baseline model
-    model = create_baseline_model('bldg_17', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_17', '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     
@@ -458,7 +458,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_18_retail_standalone
   
     # Create the baseline model
-    model = create_baseline_model('bldg_18', '90.1-2013', 'ASHRAE 169-2006-5B', 'RetailStandalone','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_18', '90.1-2013', 'ASHRAE 169-2013-5B', 'RetailStandalone','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     
@@ -505,7 +505,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_19_medium_office
   
     # Create the baseline model
-    model = create_baseline_model('bldg_19', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_19', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     
@@ -546,7 +546,7 @@ class Baseline9012013Test < Minitest::Test
   def known_fail_test_bldg_20_large_hotel
   
     # Create the baseline model
-    model = create_baseline_model('bldg_20', '90.1-2013', 'ASHRAE 169-2006-5B', 'LargeHotel','Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_20', '90.1-2013', 'ASHRAE 169-2013-5B', 'LargeHotel','Xcel Energy CO EDA', false, true)
   
     # Conditions expected to be true in the baseline model
     

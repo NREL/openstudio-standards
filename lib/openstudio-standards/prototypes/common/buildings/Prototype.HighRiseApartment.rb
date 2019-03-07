@@ -64,7 +64,12 @@ module HighriseApartment
         infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentHighRise INFIL_Door_Opening_SCH_0.144'))
       when '90.1-2007', '90.1-2010', '90.1-2013'
         case climate_zone
-          when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+          when 'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B'
             infiltration_g_corridor_door.setDesignFlowRate(1.523916863)
             infiltration_g_corridor_door.setSchedule(model_add_schedule(model, 'ApartmentHighRise INFIL_Door_Opening_SCH_0.144'))
           else
