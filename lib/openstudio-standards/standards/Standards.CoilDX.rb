@@ -93,9 +93,7 @@ module CoilDX
     # If on an AirLoop
     if coil_dx.airLoopHVAC.is_initialized
       air_loop = coil_dx.airLoopHVAC.get
-      htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
-                   'Electric Resistance or None'
-                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
+      htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
                    'All Other'
@@ -107,17 +105,13 @@ module CoilDX
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
                    'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
+                   'Electric Resistance or None'
                  else
                    'Electric Resistance or None'
                  end
     end
 
-    # For PSZ-AC only, retrieve the heating section type
-    unless @htg_coil_type.nil?
-      if @htg_coil_type != 'Electric'
-        htg_type = 'All Other'
-      end
-    end
     return htg_type
   end
 

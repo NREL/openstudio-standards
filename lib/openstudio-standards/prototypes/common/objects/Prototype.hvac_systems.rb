@@ -2278,13 +2278,9 @@ class Standard
         return []
       end
 
-      # store the heating section type, used for looking up the correct efficiency for unitary equipment
-      @htg_coil_type = nil
-
       # create heating coil
       case heating_type
       when 'NaturalGas', 'Gas'
-        @htg_coil_type = 'Gas'
         htg_coil = create_coil_heating_gas(model,
                                            name: "#{air_loop.name} Gas Htg Coil")
       when 'Water'
@@ -2300,18 +2296,15 @@ class Standard
                                              rated_inlet_air_temperature: dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
                                              rated_outlet_air_temperature: dsgn_temps['htg_dsgn_sup_air_temp_c'])
       when 'Single Speed Heat Pump'
-        @htg_coil_type = 'HP'
         htg_coil = create_coil_heating_dx_single_speed(model,
                                                        name: "#{zone.name} HP Htg Coil",
                                                        type: 'PSZ-AC',
                                                        cop: 3.3)
       when 'Water To Air Heat Pump'
-        @htg_coil_type = 'HP'
         htg_coil = create_coil_heating_water_to_air_heat_pump_equation_fit(model,
                                                                            hot_water_loop,
                                                                            name: "#{air_loop.name} Water-to-Air HP Htg Coil")
       when 'Electricity', 'Electric'
-        @htg_coil_type = 'Electric'
         htg_coil = create_coil_heating_electric(model,
                                                 name: "#{air_loop.name} Electric Htg Coil")
       else
