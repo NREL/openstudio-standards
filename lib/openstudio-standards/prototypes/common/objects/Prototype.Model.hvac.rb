@@ -139,8 +139,6 @@ class Standard
                            model.getPlantLoopByName('Hot Water Loop').get
                          elsif building_type == 'MediumOffice'
                            nil
-						 elsif building_type == 'MediumOfficeDetailed'
-                           nil
                          else
                            model_add_hw_loop(model,
                                              'NaturalGas',
