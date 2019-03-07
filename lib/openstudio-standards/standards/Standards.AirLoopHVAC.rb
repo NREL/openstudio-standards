@@ -817,10 +817,10 @@ class Standard
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @param climate_zone [String] valid choices: 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
-  # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C',
-  # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
-  # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+  # @param climate_zone [String] valid choices: 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B',
+  # 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C', 'ASHRAE 169-2013-4A', 'ASHRAE 169-2013-4B', 'ASHRAE 169-2013-4C',
+  # 'ASHRAE 169-2013-5A', 'ASHRAE 169-2013-5B', 'ASHRAE 169-2013-5C', 'ASHRAE 169-2013-6A', 'ASHRAE 169-2013-6B', 'ASHRAE 169-2013-7A',
+  # 'ASHRAE 169-2013-7B', 'ASHRAE 169-2013-8A', 'ASHRAE 169-2013-8B'
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
@@ -981,16 +981,35 @@ class Standard
           'ASHRAE 169-2006-6B',
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+          'ASHRAE 169-2006-8B',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2B',
+          'ASHRAE 169-2013-3B',
+          'ASHRAE 169-2013-3C',
+          'ASHRAE 169-2013-4B',
+          'ASHRAE 169-2013-4C',
+          'ASHRAE 169-2013-5B',
+          'ASHRAE 169-2013-5C',
+          'ASHRAE 169-2013-6B',
+          'ASHRAE 169-2013-7B',
+          'ASHRAE 169-2013-8A',
+          'ASHRAE 169-2013-8B'
         drybulb_limit_f = 75
       when 'ASHRAE 169-2006-5A',
           'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-7A'
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2013-5A',
+          'ASHRAE 169-2013-6A',
+          'ASHRAE 169-2013-7A'
         drybulb_limit_f = 70
       when 'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A'
+          'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-3A',
+          'ASHRAE 169-2013-4A'
         drybulb_limit_f = 65
       end
     when 'FixedEnthalpy'
@@ -1057,26 +1076,45 @@ class Standard
       # Exception c, Systems in climate zones 1,2,3a,4a,5a,5b,6,7,8
       case climate_zone
       when 'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B',
-          'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-5A',
-          'ASHRAE 169-2006-5B',
-          'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-6B',
-          'ASHRAE 169-2006-7A',
-          'ASHRAE 169-2006-7B',
-          'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2006-3A',
+           'ASHRAE 169-2006-4A',
+           'ASHRAE 169-2006-5A',
+           'ASHRAE 169-2006-5B',
+           'ASHRAE 169-2006-6A',
+           'ASHRAE 169-2006-6B',
+           'ASHRAE 169-2006-7A',
+           'ASHRAE 169-2006-7B',
+           'ASHRAE 169-2006-8A',
+           'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B',
+           'ASHRAE 169-2013-3A',
+           'ASHRAE 169-2013-4A',
+           'ASHRAE 169-2013-5A',
+           'ASHRAE 169-2013-5B',
+           'ASHRAE 169-2013-6A',
+           'ASHRAE 169-2013-6B',
+           'ASHRAE 169-2013-7A',
+           'ASHRAE 169-2013-7B',
+           'ASHRAE 169-2013-8A',
+           'ASHRAE 169-2013-8B'
         integrated_economizer_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: non-integrated economizer per 6.5.1.3 exception c, climate zone #{climate_zone}.")
       when 'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2006-5C'
+           'ASHRAE 169-2006-3C',
+           'ASHRAE 169-2006-4B',
+           'ASHRAE 169-2006-4C',
+           'ASHRAE 169-2006-5C',
+           'ASHRAE 169-2013-3B',
+           'ASHRAE 169-2013-3C',
+           'ASHRAE 169-2013-4B',
+           'ASHRAE 169-2013-4C',
+           'ASHRAE 169-2013-5C'
         integrated_economizer_required = true
       end
     end
@@ -1100,10 +1138,15 @@ class Standard
     # Determine the minimum capacity that requires an economizer
     case climate_zone
     when 'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+         'ASHRAE 169-2006-1B',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       min_int_area_served_ft2 = infinity_ft2 # No requirement
       min_ext_area_served_ft2 = infinity_ft2 # No requirement
     else
@@ -1211,22 +1254,37 @@ class Standard
 
     case climate_zone
     when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-5C',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-5C',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 75
     when 'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-7A'
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A',
+         'ASHRAE 169-2013-7A'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 70
     else
@@ -1273,27 +1331,43 @@ class Standard
     prohibited_types = []
     case climate_zone
     when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7A',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       prohibited_types = ['FixedEnthalpy']
-    when
-      'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+    when 'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       prohibited_types = ['DifferentialDryBulb']
-    when
-      'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
+    when 'ASHRAE 169-2006-5A',
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A'
         prohibited_types = []
     end
 

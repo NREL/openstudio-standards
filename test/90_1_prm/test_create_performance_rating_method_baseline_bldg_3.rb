@@ -11,7 +11,7 @@ class Baseline9012013Test3 < Minitest::Test
   # Known failures due to code not yet accounting for zone multipliers affecting components.
   def known_fail_test_hvac_eff_bldg1
   
-    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_1', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # check coil efficiencies
@@ -66,7 +66,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_hvac_eff_bldg2
   
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # check coil efficiencies
@@ -115,7 +115,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_hvac_eff_bldg3
   
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # check coil efficiencies
@@ -174,7 +174,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_hvac_eff_bldg4
   
-    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_4', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     # check coil efficiencies
@@ -204,7 +204,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_hvac_eff_bldg5
   
-    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_5', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     # check fan powers
@@ -249,7 +249,7 @@ class Baseline9012013Test3 < Minitest::Test
   # if there is DDC control of VAV terminals.
   def known_fail_test_hvac_eff_bldg7
   
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # check coil efficiencies
@@ -287,7 +287,7 @@ class Baseline9012013Test3 < Minitest::Test
   def test_dhw_bldg2_electric
     
     building_type = "MediumOffice"
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', building_type, 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', building_type, 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     expected_fuel_type = "Electricity"
@@ -394,7 +394,7 @@ class Baseline9012013Test3 < Minitest::Test
   def test_dhw_bldg2_naturalgas
     
     building_type = "PrimarySchool"
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-4B', building_type, 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-4B', building_type, 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     expected_fuel_type = "NaturalGas"
@@ -511,7 +511,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_dhw_bldg3
     
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     found_dhw_loop = false
@@ -589,7 +589,7 @@ class Baseline9012013Test3 < Minitest::Test
   # in the baseline the motor efficiency will be set to the minimum value.
   def known_fail_test_dhw_bldg7
     
-    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2006-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_7', '90.1-2013', 'ASHRAE 169-2013-5B', 'MidriseApartment', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     found_dhw_loop = false
@@ -669,7 +669,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def known_fail_test_dcv_bldg3
   
-    model = create_baseline_model('bldg_3_LockerOtherDCV', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3_LockerOtherDCV', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     dcv_test_hash = {}
@@ -726,7 +726,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_erv_bldg3
   
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-6B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-6B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     dcv_test_hash = {}
@@ -910,7 +910,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_non_predominant_heating_condition_bldg_2
   
-    model = create_baseline_model('bldg_2_NonPredominantHeating', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2_NonPredominantHeating', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     # modified model so that DOAS serving Flr2 has a gas heating coil instead of an electric heating coil
@@ -941,7 +941,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_sizing_factors_bldg2
   
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     expected_cooling_sizing_factor = 1.15
@@ -966,7 +966,7 @@ class Baseline9012013Test3 < Minitest::Test
   def test_economizing_bldg2_5B
   
     # Climate zone is 5B.  All systems except 1, 2, 9 and 10 should have economizers
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     model.getAirLoopHVACs.each do |airloop|
@@ -1032,7 +1032,7 @@ class Baseline9012013Test3 < Minitest::Test
   def test_economizing_bldg2_1A
   
     # Climate zone is 1A.  No systems should have economizers
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-1A', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-1A', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     model.getAirLoopHVACs.each do |airloop|
@@ -1068,7 +1068,7 @@ class Baseline9012013Test3 < Minitest::Test
   def test_economizing_bldg2_5A
   
     # Climate zone is 5A.  All systems except 1, 2, 9 and 10 should have economizers
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5A', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5A', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
 
     model.getAirLoopHVACs.each do |airloop|
@@ -1132,7 +1132,7 @@ class Baseline9012013Test3 < Minitest::Test
   # SAT/Zone Sizing/System Sizing Test
   # @author Matt Leach, NORESCO
   def test_design_supply_air_temp_bldg2_thermostat_mod
-    model = create_baseline_model('bldg_2_thermostat_mod', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2_thermostat_mod', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # check zone sizing objects
@@ -1252,7 +1252,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_vav_terminal_min_flows_bldg3
   
-    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_3', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     expected_min_oa_rates_m3_per_s_hash = {}
@@ -1302,7 +1302,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_fan_powered_terminals_bldg2
   
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
   
     # minimum flow fraction should be 30% and max secondary flow should be 50% of terminal size
@@ -1355,7 +1355,7 @@ class Baseline9012013Test3 < Minitest::Test
   # @author Matt Leach, NORESCO
   def test_fan_operation_bldg2
   
-    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2006-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
+    model = create_baseline_model('bldg_2', '90.1-2013', 'ASHRAE 169-2013-5B', 'MediumOffice', 'Xcel Energy CO EDA', false, true)
     failure_array = []
     
     model.getAirLoopHVACs.each do |airloop|
