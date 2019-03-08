@@ -22,7 +22,7 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
       'MidriseApartment',
       'HighriseApartment',
       'Warehouse']
-	@climate_zones [
+    @climate_zones = [
       'ASHRAE 169-2013-1A',
       'ASHRAE 169-2013-1B',
       'ASHRAE 169-2013-2A',
@@ -42,12 +42,12 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
       'ASHRAE 169-2013-7B',
       'ASHRAE 169-2013-8A',
       'ASHRAE 169-2013-8B']
-	@templates = [
+    @templates = [
       '90.1-2004',
       '90.1-2007',
       '90.1-2010',
       '90.1-2013']
-	@epw_files = [
+    @epw_files = [
       'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
       'SAU_Riyadh.404380_IWEC.epw',
       'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',

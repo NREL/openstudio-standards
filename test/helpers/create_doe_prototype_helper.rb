@@ -50,7 +50,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       create_models = true,
       run_models = true,
       compare_results = true,
-      debug = false)
+      debug = false,
+      run_type = 'annual',
+      compare_results_object_by_object = true )
 
     building_types.each do |building_type|
       templates.each do |template|
@@ -58,12 +60,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
-              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
+              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
             end 
           else
             #otherwise it will go as normal with the american method and wipe the epw_file variable. 
             epw_file = ""
-            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
+            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
           end
         end
       end
@@ -76,10 +78,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       epw_file,
       create_models,
       run_models,
-      run_type,
       compare_results,
-	  compare_results_object_by_object,
-      debug )
+      debug,
+      run_type,
+      compare_results_object_by_object )
 
     method_name = nil
     case template
@@ -289,8 +291,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         acceptable_error_percentage = 0.0
 
         # Get the legacy simulation results
-        #legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
-        legacy_values = 0.0
+        if run_type == 'dd-only'
+          legacy_values = nil
+        else
+          legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+        end
         if legacy_values.nil?
           result_diffs << "Could not find legacy simulation results for #{building_type} #{template} #{climate_zone}, cannot compare results."
         else
@@ -313,9 +318,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           total_current_water = 0.0
           current_values.each_key do |end_use_fuel_type|
             end_use = end_use_fuel_type.split('|')[0]
-            fuel_type = end_use_fuel_type.split('|')[1]  
+            fuel_type = end_use_fuel_type.split('|')[1]
+
             legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
-            current_val = current_values["#{end_use}|#{fuel_type}"]  
+            current_val = current_values["#{end_use}|#{fuel_type}"]
 
             # Add the energy to the total
             if fuel_type == 'Water'
@@ -438,7 +444,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       # Assert if there were any errors
       assert(errors.size == 0, errors.reverse.join("\n"))
 	  
-	    # Assert if there is no difference in results
+      # Assert if there is no difference in results
       assert(result_diffs.size == 0)
 
     end
