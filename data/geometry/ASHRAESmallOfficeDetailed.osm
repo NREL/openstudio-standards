@@ -4251,25 +4251,6 @@ OS:Surface,
   4.572, 13.88745, 3.048;                 !- X,Y,Z Vertex 8 {m}
 
 OS:Surface,
-  {620836cb-28ae-4b50-9e15-33c6f49ab667}, !- Handle
-  Surface 135,                            !- Name
-  Floor,                                  !- Surface Type
-  ,                                       !- Construction Name
-  {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
-  Ground,                                 !- Outside Boundary Condition
-  ,                                       !- Outside Boundary Condition Object
-  NoSun,                                  !- Sun Exposure
-  NoWind,                                 !- Wind Exposure
-  ,                                       !- View Factor to Ground
-  ,                                       !- Number of Vertices
-  4.572, 13.88745, 3.048,                 !- X,Y,Z Vertex 1 {m}
-  5.7912, 12.66825, 3.048,                !- X,Y,Z Vertex 2 {m}
-  5.7912, 5.7912, 3.048,                  !- X,Y,Z Vertex 3 {m}
-  13.84538125, 5.7912, 3.048,             !- X,Y,Z Vertex 4 {m}
-  13.84538125, 4.572, 3.048,              !- X,Y,Z Vertex 5 {m}
-  4.572, 4.572, 3.048;                    !- X,Y,Z Vertex 6 {m}
-
-OS:Surface,
   {b6225bfb-9bf7-47f0-8b50-6948eeb4fe48}, !- Handle
   Surface 8,                              !- Name
   Floor,                                  !- Surface Type
