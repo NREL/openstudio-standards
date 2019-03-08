@@ -552,7 +552,7 @@ class Standard
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
     water_fixture_def.setName("#{space_name.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
-    mixed_water_temp_c = data['service_water_heating_target_temperature']
+    mixed_water_temp_c = OpenStudio.convert(data['service_water_heating_target_temperature'].to_f, 'F', 'C').get.round
     mixed_water_temp_f = OpenStudio.convert(mixed_water_temp_c, 'C', 'F').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
                                                                mixed_water_temp_c,
