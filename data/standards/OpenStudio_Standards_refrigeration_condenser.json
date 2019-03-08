@@ -1,0 +1,424 @@
+{
+  "refrigeration_condenser": [
+    {
+      "template": "DEER Pre-1975",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 1985",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 1985",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 1996",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 1996",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2003",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2003",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2007",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2007",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2011",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2011",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2014",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2014",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2015",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2015",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2017",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2017",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2020",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2020",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2025",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2025",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2030",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2030",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2035",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2035",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2040",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2040",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2045",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2045",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2050",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2050",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2055",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2055",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2060",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2060",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2065",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2065",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2070",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2070",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    },
+    {
+      "template": "DEER 2075",
+      "condenser_name": "MT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 11.111111,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_MT"
+    },
+    {
+      "template": "DEER 2075",
+      "condenser_name": "LT condenser",
+      "subcool_t": 1.11111,
+      "eir*td_=_fanpower/": 0.42,
+      "min_airflow": 0.0,
+      "fan_speed_control": "FixedLinear",
+      "delta_t": 8.3,
+      "ratedeffectivetotalheatrejectionratecurve": "DEER_Heat_Rejections_LT"
+    }
+  ]
+}

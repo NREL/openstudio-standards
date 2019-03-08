@@ -53,7 +53,7 @@ class Standard
                                  OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
                                  space_name)
         end
-      elsif building_type == 'LargeOfficeDetailed' && template != 'NECB2011'
+      elsif building_type == 'LargeOfficeDetail' && template != 'NECB2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1', 'Mechanical_Mid_ZN_1', 'Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office

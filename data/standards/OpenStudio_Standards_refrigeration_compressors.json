@@ -2,6 +2,7 @@
   "refrigeration_compressors": [
     {
       "template": "DOE Ref Pre-1980",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "Old_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Low_Temp_Comp_Cap_Curve",
@@ -9,6 +10,7 @@
     },
     {
       "template": "DOE Ref Pre-1980",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "Old_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Med_Temp_Comp_Cap_Curve",
@@ -16,6 +18,7 @@
     },
     {
       "template": "DOE Ref 1980-2004",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "Old_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Low_Temp_Comp_Cap_Curve",
@@ -23,6 +26,7 @@
     },
     {
       "template": "DOE Ref 1980-2004",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "Old_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Med_Temp_Comp_Cap_Curve",
@@ -30,6 +34,7 @@
     },
     {
       "template": "90.1-2004",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "Old_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Low_Temp_Comp_Cap_Curve",
@@ -37,6 +42,7 @@
     },
     {
       "template": "90.1-2004",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "Old_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Med_Temp_Comp_Cap_Curve",
@@ -44,6 +50,7 @@
     },
     {
       "template": "90.1-2007",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "Old_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Low_Temp_Comp_Cap_Curve",
@@ -51,6 +58,7 @@
     },
     {
       "template": "90.1-2007",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "Old_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Med_Temp_Comp_Cap_Curve",
@@ -58,6 +66,7 @@
     },
     {
       "template": "90.1-2010",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "Old_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Low_Temp_Comp_Cap_Curve",
@@ -65,6 +74,7 @@
     },
     {
       "template": "90.1-2010",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "Old_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "Old_Med_Temp_Comp_Cap_Curve",
@@ -72,6 +82,7 @@
     },
     {
       "template": "90.1-2013",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "New_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "New_Low_Temp_Comp_Cap_Curve",
@@ -79,6 +90,7 @@
     },
     {
       "template": "90.1-2013",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "New_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "New_Med_Temp_Comp_Cap_Curve",
@@ -86,6 +98,7 @@
     },
     {
       "template": "NREL ZNE Ready 2017",
+      "compressor_name": null,
       "compressor_type": "Low Temp",
       "power_curve": "New_Low_Temp_Comp_Pwr_Curve",
       "capacity_curve": "New_Low_Temp_Comp_Cap_Curve",
@@ -93,9 +106,1186 @@
     },
     {
       "template": "NREL ZNE Ready 2017",
+      "compressor_name": null,
       "compressor_type": "Med Temp",
       "power_curve": "New_Med_Temp_Comp_Pwr_Curve",
       "capacity_curve": "New_Med_Temp_Comp_Cap_Curve",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER Pre-1975",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 1985",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 1996",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2003",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2007",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2011",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2014",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2015",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2017",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2020",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2025",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2030",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2035",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2040",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2045",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2050",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2055",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2060",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2065",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2070",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "MT_1",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_1",
+      "capacity_curve": "DEER_MT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "MT_2",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_2",
+      "capacity_curve": "DEER_MT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "MT_4",
+      "compressor_type": "Med Temp",
+      "power_curve": "DEER_MT_power_4",
+      "capacity_curve": "DEER_MT_capacity_4",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "LT_1",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_1",
+      "capacity_curve": "DEER_LT_capacity_1",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "LT_2",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_2",
+      "capacity_curve": "DEER_LT_capacity_2",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "LT_5",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_5",
+      "capacity_curve": "DEER_LT_capacity_5",
+      "notes": null
+    },
+    {
+      "template": "DEER 2075",
+      "compressor_name": "LT_6",
+      "compressor_type": "Low Temp",
+      "power_curve": "DEER_LT_power_6",
+      "capacity_curve": "DEER_LT_capacity_6",
       "notes": null
     }
   ]

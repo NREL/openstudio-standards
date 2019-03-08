@@ -65,24 +65,6 @@ class ASHRAE9012010 < ASHRAE901
       end
     end
 
-    # Retail spaces exception (c) to Section 9.4.1.4
-    if space.spaceType.is_initialized	
-      case space.spaceType.get.standardsSpaceType.to_s
-      # Retail standalone
-      # req_sec_ctrl set to true to create a second reference point
-      when 'Core_Retail'
-        req_pri_ctrl = false
-        req_sec_ctrl = true
-      when 'Entry', 'Front_Retail', 'Point_of_Sale'
-        req_pri_ctrl = false
-        req_sec_ctrl = false
-      # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
-        req_pri_ctrl = false
-        req_sec_ctrl = false
-      end
-    end
-
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
@@ -121,14 +103,6 @@ class ASHRAE9012010 < ASHRAE901
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
       sensor_1_window = sorted_skylights[0]
-    elsif req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
-      # Sensor 1 controls toplighted area
-      sensor_1_frac = areas['toplighted_area'] / space_area_m2
-      sensor_1_window = sorted_skylights[0]
-      # Sensor 2 controls secondary area
-      sensor_2_frac = (areas['secondary_sidelighted_area'] / space_area_m2)
-      # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
-      sensor_2_window = sorted_skylights[0]
     elsif !req_top_ctrl && req_pri_ctrl
       if sorted_windows.size == 1
         # Sensor 1 controls the whole primary area
@@ -147,9 +121,10 @@ class ASHRAE9012010 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Baseline infiltration rate
+  # Determine the base infiltration rate at 75 PA.
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2
+  # defaults to no infiltration.
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2

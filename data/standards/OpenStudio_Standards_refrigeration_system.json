@@ -1,0 +1,256 @@
+{
+  "refrigeration_system": [
+    {
+      "template": "DEER Pre-1975",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1985",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 1996",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2003",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2007",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2011",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2014",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2015",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2017",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2020",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2020",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2025",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2025",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2030",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2030",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2035",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2035",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2040",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2040",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2045",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2045",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2050",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2050",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2060",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2060",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2065",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2065",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2070",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2070",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2075",
+      "system_name": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2075",
+      "system_name": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    }
+  ]
+}

@@ -52,15 +52,11 @@ class Standard
     case building_type
       when 'SmallOffice'
         lookup_name = 'Office'
-	  when 'SmallOfficeDetailed'
-        lookup_name = 'Office'
       when 'MediumOffice'
-        lookup_name = 'Office'
-      when 'MediumOfficeDetailed'
         lookup_name = 'Office'
       when 'LargeOffice'
         lookup_name = 'Office'
-      when 'LargeOfficeDetailed'
+      when 'LargeOfficeDetail'
         lookup_name = 'Office'
       when 'RetailStandalone'
         lookup_name = 'Retail'
@@ -112,6 +108,7 @@ class Standard
     standards_files << 'OpenStudio_Standards_refrigeration_compressors.json'
     standards_files << 'OpenStudio_Standards_hvac_inference.json'
     standards_files << 'OpenStudio_Standards_size_category.json'
+    standards_files << 'OpenStudio_Standards_elevators.json'
     #    standards_files << 'OpenStudio_Standards_unitary_hps.json'
     # Combine the data from the JSON files into a single hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
