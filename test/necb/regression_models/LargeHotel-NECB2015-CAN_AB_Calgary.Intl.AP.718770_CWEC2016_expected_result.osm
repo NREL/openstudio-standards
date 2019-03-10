@@ -13541,7 +13541,7 @@ OS:Boiler:HotWater,
   {ab2cd236-a39f-43ad-bddc-20543b28748f}, !- Handle
   Primary Boiler 2630kBtu/hr 0.833 Combustion Eff, !- Name
   NaturalGas,                             !- Fuel Type
-  770684.216895462,                       !- Nominal Capacity {W}
+  770684.21689,                           !- Nominal Capacity {W}
   0.826,                                  !- Nominal Thermal Efficiency
   ,                                       !- Efficiency Curve Temperature Evaluation Variable
   {a6643850-ccd6-4d0c-8392-b1206db02e64}, !- Normalized Boiler Efficiency Curve Name
