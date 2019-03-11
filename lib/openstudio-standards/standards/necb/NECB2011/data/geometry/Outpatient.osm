@@ -33067,13 +33067,13 @@ OS:SpaceType,
 
 OS:SpaceType,
   {b003bb07-9b63-49cb-a76e-56ffbda01639}, !- Handle
-  Space Function Hospital - nurses' station, !- Name
+  Space Function Hospital - nurses station, !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Hospital - nurses' station;             !- Standards Space Type
+  Hospital - nurses station;             !- Standards Space Type
 
 OS:SpaceType,
   {931efada-9c2a-4700-9593-e3140f08a63d}, !- Handle
