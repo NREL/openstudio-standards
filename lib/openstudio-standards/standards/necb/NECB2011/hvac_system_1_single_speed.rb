@@ -120,7 +120,7 @@ class NECB2011
       # TO DO: PTAC characteristics: sizing, fan schedules, temperature setpoints, interaction with MAU
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-      zero_outdoor_air = true
+      zero_outdoor_air = true  # flag to set outside air flow to 0.0
       add_ptac_dx_cooling(model, zone, zero_outdoor_air)
 
       # add zone baseboards

@@ -172,7 +172,7 @@ class NECB2011
       # Set up PTAC heating coil; apply always off schedule
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
-      zero_outdoor_air = true
+      zero_outdoor_air = true  # flag to set outside air flow to zero
       add_ptac_dx_cooling(model, zone, zero_outdoor_air)
 
       # add zone baseboards
