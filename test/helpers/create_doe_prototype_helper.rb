@@ -199,72 +199,20 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           
           # Remove all meters
           model.getOutputMeters.each(&:remove)
+
+          # EnergyPlus I/O Reference Manual, Table 5.3
+          end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
+
+          # EnergyPLus I/O Reference Manual, Table 5.1
+          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
           
           # Creating individual meters
-          # Cooling - Electricity
-          clg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          clg_elec_mtr.setName("Cooling:Electricity")
-          clg_elec_mtr.setReportingFrequency("Monthly")
-          # Heating - Electricity
-          htg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          htg_elec_mtr.setName("Heating:Electricity")
-          htg_elec_mtr.setReportingFrequency("Monthly")
-          # Heating - Gas
-          htg_gas_mtr = OpenStudio::Model::OutputMeter.new(model)
-          htg_gas_mtr.setName("Heating:Gas")
-          htg_gas_mtr.setReportingFrequency("Monthly")
-          # Interior Lighting - Electricity
-          int_ltg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          int_ltg_elec_mtr.setName("InteriorLights:Electricity")
-          int_ltg_elec_mtr.setReportingFrequency("Monthly")
-          # Exterior Lighting - Electricity
-          ext_ltg_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          ext_ltg_elec_mtr.setName("ExteriorLights:Electricity")
-          ext_ltg_elec_mtr.setReportingFrequency("Monthly")
-          # Interior Equipment - Electricity
-          int_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          int_eqp_elec_mtr.setName("InteriorEquipment:Electricity")
-          int_eqp_elec_mtr.setReportingFrequency("Monthly")
-          # Exterior Equipment - Electricity
-          ext_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          ext_eqp_elec_mtr.setName("ExteriorEquipment:Electricity")
-          ext_eqp_elec_mtr.setReportingFrequency("Monthly")
-          # Exterior Equipment - Gas
-          ext_eqp_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          ext_eqp_elec_mtr.setName("ExteriorEquipment:Gas")
-          ext_eqp_elec_mtr.setReportingFrequency("Monthly")
-          # Fans - Electricity
-          fans_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          fans_elec_mtr.setName("Fans:Electricity")
-          fans_elec_mtr.setReportingFrequency("Monthly")
-          # Pumps - Electricity
-          pumps_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          pumps_elec_mtr.setName("Pumps:Electricity")
-          pumps_elec_mtr.setReportingFrequency("Monthly")
-          # Heat Rejection - Electricity
-          heat_rej_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          heat_rej_elec_mtr.setName("HeatRejection:Electricity")
-          heat_rej_elec_mtr.setReportingFrequency("Monthly")
-          # Humidification - Electricity
-          hum_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          hum_elec_mtr.setName("Humidifier:Electricity")
-          hum_elec_mtr.setReportingFrequency("Monthly")
-          # Heat Recovery - Electricity
-          heat_rec_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          heat_rec_elec_mtr.setName("HeatRecovery:Electricity")
-          heat_rec_elec_mtr.setReportingFrequency("Monthly")
-          # Water Systems - Electricity
-          heat_rec_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          heat_rec_elec_mtr.setName("WaterSystems:Electricity")
-          heat_rec_elec_mtr.setReportingFrequency("Monthly")
-          # Water Systems - Gas
-          swh_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          swh_elec_mtr.setName("WaterSystems:Gas")
-          swh_elec_mtr.setReportingFrequency("Monthly")
-          # Refrigeration - Electricity
-          ref_elec_mtr = OpenStudio::Model::OutputMeter.new(model)
-          ref_elec_mtr.setName("Refrigeration:Electricity")
-          ref_elec_mtr.setReportingFrequency("Monthly")
+          meters = end_uses.product fuels
+          meters.each do |end_use, fuel|
+            mtr = OpenStudio::Model::OutputMeter.new(model)
+            mtr.setName(end_use + ":" + fuel)
+            mtr.setReportingFrequency("Monthly")
+          end
 
           prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
         else
