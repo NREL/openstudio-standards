@@ -1763,7 +1763,7 @@ class NECB2011
   end
 
 
-  def add_ptac_dx_cooling(model, zone)
+  def add_ptac_dx_cooling(model, zone, zero_outdoor_air)
     # Create a PTAC for each zone:
     # PTAC DX Cooling with electric heating coil; electric heating coil is always off
 
@@ -1792,6 +1792,11 @@ class NECB2011
                                                                          htg_coil,
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
+    if zero_outdoor_air
+      ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded (1.0e-5)
+      ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
+      ptac.setOutdoorAirFlowRateDuringHeatingOperation(1.0e-5)
+    end
     ptac.addToThermalZone(zone)
   end
 
