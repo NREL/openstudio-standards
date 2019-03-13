@@ -190,10 +190,25 @@ class Standard
   # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule based on threshold_calc_method
+  # @param threshold_calc_method [String] customizes behavior of occupied_percentage_threshold
+  # fractional passes raw value through,
+  # normalized_annual_range evaluates each value against the min/max range for the year
+  # normalized_daily_range evaluates each value against the min/max range for the day.
+  # The goal is a dynamic threshold that calibrates each day.
   # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
   # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil)
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: "value")
+
+    annual_normalized_tol = nil
+    if threshold_calc_method == "normalized_annual_range"
+      # run this method without threshold to get annual min and max
+      temp_merged = spaces_get_occupancy_schedule(spaces)
+      tem_min_max = schedule_ruleset_annual_min_max_value(temp_merged)
+      annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
+      temp_merged.remove
+    end
+
     # Get all the occupancy schedules in spaces.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}
@@ -270,6 +285,25 @@ class Standard
         day_sch_num_occ[day_schs[0]] = num_occ
       end
 
+      daily_normalized_tol = nil
+      if threshold_calc_method == "normalized_daily_range"
+        # pre-process day to get daily min and max
+        daily_spaces_occ_frac = []
+        times_on_this_day.uniq.sort.each do |time|
+          os_time = OpenStudio::Time.new(time)
+          os_date_time = OpenStudio::DateTime.new(os_date, os_time)
+          # Total number of people at each time
+          tot_occ_at_time = 0
+          day_sch_num_occ.each do |day_sch, num_occ|
+            occ_frac = day_sch.getValue(os_time)
+            tot_occ_at_time += occ_frac * num_occ
+          end
+          # Total fraction for the spaces at each time
+          daily_spaces_occ_frac << tot_occ_at_time / max_occ_in_spaces
+          daily_normalized_tol = daily_spaces_occ_frac.min + (daily_spaces_occ_frac.max - daily_spaces_occ_frac.min) * occupied_percentage_threshold
+        end
+      end
+
       # Determine the total fraction for the spaces at each time
       daily_times = []
       daily_os_times = []
@@ -292,9 +326,19 @@ class Standard
         # Otherwise use the actual spaces_occ_frac
         if occupied_percentage_threshold.nil?
           occ_status = spaces_occ_frac
+        elsif threshold_calc_method == "normalized_annual_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= annual_normalized_tol
+            occ_status = 1
+          end
+        elsif threshold_calc_method == "normalized_daily_range"
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac > daily_normalized_tol
+            occ_status = 1
+          end
         else
           occ_status = 0 # unoccupied
-          if spaces_occ_frac >= occupied_percentage_threshold
+          if spaces_occ_frac > occupied_percentage_threshold
             occ_status = 1
           end
         end
@@ -332,6 +376,13 @@ class Standard
     end
     sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
     sch_ruleset.setName(sch_name.to_s)
+    # add properties to schedule
+    props = sch_ruleset.additionalProperties
+    props.setFeature("max_occ_in_spaces",max_occ_in_spaces)
+    props.setFeature("number_of_spaces_included",spaces.size)
+    # nothing uses this but can make user be aware if this may be out of sync with current state of occupancy profiles
+    props.setFeature("date_parent_object_last_edited",Time.now.getgm.to_s)
+    props.setFeature("date_parent_object_created",Time.now.getgm.to_s)
 
     # Default - All Occupied
     day_sch = sch_ruleset.defaultDaySchedule
@@ -390,7 +441,14 @@ class Standard
 
         # Set the dates when the rule applies
         sch_rule.setStartDate(end_of_prev_rule)
-        sch_rule.setEndDate(date)
+        # for end dates in last week of year force it to use 12/31. Avoids issues if year or start day of week changes
+        start_of_last_week = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 25, year.assumedYear)
+        if date >= start_of_last_week
+          year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year.assumedYear)
+          sch_rule.setEndDate(year_end_date)
+        else
+          sch_rule.setEndDate(date)
+        end
 
         # Individual Days
         sch_rule.setApplyMonday(true) if weekday == 'Monday'
@@ -404,6 +462,46 @@ class Standard
         # Reset the previous rule end date
         end_of_prev_rule = date + OpenStudio::Time.new(0, 24, 0, 0)
       end
+    end
+
+    # utilize default profile and common similar days of week for same date range
+    # todo - if move to method in Standards.ScheduleRuleset.rb udpate code to check if default profile is used before replacing it with lowest priority rule.
+    # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
+    prior_rules = []
+    sch_ruleset.scheduleRules.each do |rule|
+      if prior_rules.size == 0
+        prior_rules << rule
+        next
+      else
+        rules_combined = false
+        prior_rules.each do |prior_rule|
+          # see if they are similar
+          next if rules_combined
+          # todo - update to combine adjacent date ranges vs. just matching date ranges
+          next if prior_rule.startDate.get != rule.startDate.get
+          next if prior_rule.endDate.get != rule.endDate.get
+          next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
+          next if prior_rule.daySchedule.values.to_a != rule.daySchedule.values.to_a
+
+          # combine dates of week
+          if rule.applyMonday then prior_rule.setApplyMonday(true) && rules_combined = true end
+          if rule.applyTuesday then prior_rule.setApplyTuesday(true) && rules_combined = true end
+          if rule.applyWednesday then prior_rule.setApplyWednesday(true) && rules_combined = true end
+          if rule.applyThursday then prior_rule.setApplyThursday(true) && rules_combined = true end
+          if rule.applyFriday then prior_rule.setApplyFriday(true) && rules_combined = true end
+          if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
+          if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
+        end
+        if rules_combined then rule.remove else prior_rules << rule end
+      end
+    end
+    # replace unused default profile with lowest priority rule
+    values = prior_rules.last.daySchedule.values
+    times = prior_rules.last.daySchedule.times
+    prior_rules.last.remove
+    sch_ruleset.defaultDaySchedule.clearValues
+    values.size.times do |i|
+      sch_ruleset.defaultDaySchedule.addValue(times[i],values[i])
     end
 
     return sch_ruleset
