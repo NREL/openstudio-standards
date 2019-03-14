@@ -1184,7 +1184,7 @@ class Standard
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
     begin
-      array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
+      array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
     rescue ArgumentError => e
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Unable to sort array_of_zones by #{key_to_inspect} due to #{e.message}, defaulting to order that was passed")
     end
@@ -1204,6 +1204,12 @@ class Standard
       all_areas << area.round
       all_zn_names << zn['zone'].name.get.to_s
     end
+
+    if total_area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Total area is zero for array_of_zones with key #{key_to_inspect}, unable to calculate area-weighted average.")
+      return false
+    end
+
     avg = total / total_area
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Values for #{field_name}, tol = #{tolerance} #{units}, area ft2:")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "vals  #{all_vals.join(', ')}")
@@ -1211,11 +1217,14 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "names #{all_zn_names.join(', ')}")
 
     # Calculate the biggest delta and the index of the biggest delta
-    biggest_delta_i = nil
+    biggest_delta_i = 0 # array at first item in case delta is 0
     biggest_delta = 0.0
     worst = nil
     array_of_zones.each_with_index do |zn, i|
       val = zn[key_to_inspect]
+      if worst.nil? # array at first item in case delta is 0
+        worst = val
+      end
       delta = (val - avg).abs
       if delta >= biggest_delta
         biggest_delta = delta
@@ -1855,7 +1864,7 @@ class Standard
     rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-      return false
+      return model.alwaysOnDiscreteSchedule
     end
 
     # Make a schedule ruleset
@@ -2732,6 +2741,10 @@ class Standard
       result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
+	elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
+      result = 46_320
+    elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
+      result = 4982  
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
@@ -2750,6 +2763,8 @@ class Standard
     elsif building_type == 'SmallHotel' # 43,200 ft^2
       result = 4014
     elsif building_type == 'SmallOffice' # 5500 ft^2
+      result = 511
+    elsif building_type == 'SmallOfficeDetailed' # 5500 ft^2
       result = 511
     elsif building_type == 'StripMall' # 22,500 ft^2
       result = 2090
@@ -3632,7 +3647,7 @@ class Standard
       result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
       result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
       result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
-    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
+    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice','LargeOfficeDetailed', 'MediumOfficeDetailed', 'SmallOfficeDetailed'].include? building_type
       result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
@@ -4118,7 +4133,7 @@ class Standard
 
   # Converts the climate zone in the model into the format used
   # by the openstudio-standards lookup tables.  For example:
-  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
+  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
   # institution: CEC, value: 3  becomes: CEC T24-CEC3.
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -4130,9 +4145,9 @@ class Standard
       if cz.institution == 'ASHRAE'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
         climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2006-#{cz.value}A"
+                         "ASHRAE 169-2013-#{cz.value}A"
                        else
-                         "ASHRAE 169-2006-#{cz.value}"
+                         "ASHRAE 169-2013-#{cz.value}"
                        end
       elsif cz.institution == 'CEC'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
@@ -4149,7 +4164,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] the model
   # @param climate_zone [String] the climate zone in openstudio-standards format.
-  # For example: ASHRAE 169-2006-2A, CEC T24-CEC3
+  # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
   # @return [Boolean] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)
     # Remove previous climate zones from the model
@@ -4157,6 +4172,8 @@ class Standard
     # Split the string into the correct institution and value
     if climate_zone.include? 'ASHRAE 169-2006-'
       model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+    elsif climate_zone.include? 'ASHRAE 169-2013-'
+      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
     elsif climate_zone.include? 'CEC T24-CEC'
       model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
 

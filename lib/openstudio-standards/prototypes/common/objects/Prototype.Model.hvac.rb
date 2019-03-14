@@ -139,6 +139,8 @@ class Standard
                            model.getPlantLoopByName('Hot Water Loop').get
                          elsif building_type == 'MediumOffice'
                            nil
+						 elsif building_type == 'MediumOfficeDetailed'
+                           nil
                          else
                            model_add_hw_loop(model,
                                              'NaturalGas',
@@ -341,18 +343,18 @@ class Standard
       when 'Baseboards'
         case system['heating_type']
         when 'Gas', 'DistrictHeating'
-          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel)
+          hot_water_loop = model_get_or_add_hot_water_loop(model, system['heating_type'])
         when 'Electricity'
           hot_water_loop = nil
         when nil
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Baseboards must have heating_type specified.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Baseboards must have heating_type specified.')
         end
         model_add_baseboard(model,
                             thermal_zones,
                             hot_water_loop: hot_water_loop)
 
       when 'Unconditioned'
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "System type is Unconditioned.  No system will be added.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'System type is Unconditioned.  No system will be added.')
 
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "System type '#{system['type']}' is not recognized for system named '#{system['name']}'.  This system will not be added.")
@@ -360,10 +362,10 @@ class Standard
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished adding HVAC")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding HVAC')
 
     return true
-  end # add hvac
+  end
 
   # Determine the typical system type given the inputs.
   #

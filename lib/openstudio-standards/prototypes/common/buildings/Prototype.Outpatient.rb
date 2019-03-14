@@ -102,7 +102,12 @@ module Outpatient
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
           case climate_zone
-            when 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-3B'
+            when 'ASHRAE 169-2006-1B',
+                 'ASHRAE 169-2006-2B',
+                 'ASHRAE 169-2006-3B',
+                 'ASHRAE 169-2013-1B',
+                 'ASHRAE 169-2013-2B',
+                 'ASHRAE 169-2013-3B'
               thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, 'OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM'))
           end
       end
@@ -162,7 +167,12 @@ module Outpatient
             infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
           when '90.1-2007', '90.1-2010', '90.1-2013'
             case climate_zone
-              when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+              when 'ASHRAE 169-2006-1A',
+                   'ASHRAE 169-2006-2A',
+                   'ASHRAE 169-2006-2B',
+                   'ASHRAE 169-2013-1A',
+                   'ASHRAE 169-2013-2A',
+                   'ASHRAE 169-2013-2B'
                 infiltration_rate_vestibule_door = 1.186002811
                 infiltration_vestibule_door.setSchedule(model_add_schedule(model, 'OutPatientHealthCare INFIL_Door_Opening_SCH_0.144'))
               else
@@ -172,21 +182,6 @@ module Outpatient
         end
         infiltration_vestibule_door.setDesignFlowRate(infiltration_rate_vestibule_door)
         infiltration_vestibule_door.setSpace(vestibule_space)
-    end
-  end
-
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          if water_heater.name.to_s.include?('Booster')
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053159296)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053159296)
-          else
-            water_heater.setOffCycleLossCoefficienttoAmbientTemperature(9.643286505)
-            water_heater.setOnCycleLossCoefficienttoAmbientTemperature(9.643286505)
-          end
-        end
     end
   end
 
@@ -365,7 +360,6 @@ module Outpatient
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
 
     return true
   end

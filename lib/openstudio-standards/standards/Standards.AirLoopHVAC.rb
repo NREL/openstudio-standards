@@ -817,10 +817,10 @@ class Standard
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @param climate_zone [String] valid choices: 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
-  # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C',
-  # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
-  # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+  # @param climate_zone [String] valid choices: 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B',
+  # 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C', 'ASHRAE 169-2013-4A', 'ASHRAE 169-2013-4B', 'ASHRAE 169-2013-4C',
+  # 'ASHRAE 169-2013-5A', 'ASHRAE 169-2013-5B', 'ASHRAE 169-2013-5C', 'ASHRAE 169-2013-6A', 'ASHRAE 169-2013-6B', 'ASHRAE 169-2013-7A',
+  # 'ASHRAE 169-2013-7B', 'ASHRAE 169-2013-8A', 'ASHRAE 169-2013-8B'
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
@@ -842,7 +842,7 @@ class Standard
     }
     econ_limits = model_find_object(standards_data['economizers'], search_criteria)
     if econ_limits.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for #{template}, #{climate_zone}, assuming no economizer required.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for template: #{template}, climate zone: #{climate_zone}, and data center: #{is_dc}; assuming no economizer required.")
       return economizer_required
     end
 
@@ -981,16 +981,35 @@ class Standard
           'ASHRAE 169-2006-6B',
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+          'ASHRAE 169-2006-8B',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2B',
+          'ASHRAE 169-2013-3B',
+          'ASHRAE 169-2013-3C',
+          'ASHRAE 169-2013-4B',
+          'ASHRAE 169-2013-4C',
+          'ASHRAE 169-2013-5B',
+          'ASHRAE 169-2013-5C',
+          'ASHRAE 169-2013-6B',
+          'ASHRAE 169-2013-7B',
+          'ASHRAE 169-2013-8A',
+          'ASHRAE 169-2013-8B'
         drybulb_limit_f = 75
       when 'ASHRAE 169-2006-5A',
           'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-7A'
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2013-5A',
+          'ASHRAE 169-2013-6A',
+          'ASHRAE 169-2013-7A'
         drybulb_limit_f = 70
       when 'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A'
+          'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-3A',
+          'ASHRAE 169-2013-4A'
         drybulb_limit_f = 65
       end
     when 'FixedEnthalpy'
@@ -1057,26 +1076,45 @@ class Standard
       # Exception c, Systems in climate zones 1,2,3a,4a,5a,5b,6,7,8
       case climate_zone
       when 'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B',
-          'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-5A',
-          'ASHRAE 169-2006-5B',
-          'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-6B',
-          'ASHRAE 169-2006-7A',
-          'ASHRAE 169-2006-7B',
-          'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2006-3A',
+           'ASHRAE 169-2006-4A',
+           'ASHRAE 169-2006-5A',
+           'ASHRAE 169-2006-5B',
+           'ASHRAE 169-2006-6A',
+           'ASHRAE 169-2006-6B',
+           'ASHRAE 169-2006-7A',
+           'ASHRAE 169-2006-7B',
+           'ASHRAE 169-2006-8A',
+           'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B',
+           'ASHRAE 169-2013-3A',
+           'ASHRAE 169-2013-4A',
+           'ASHRAE 169-2013-5A',
+           'ASHRAE 169-2013-5B',
+           'ASHRAE 169-2013-6A',
+           'ASHRAE 169-2013-6B',
+           'ASHRAE 169-2013-7A',
+           'ASHRAE 169-2013-7B',
+           'ASHRAE 169-2013-8A',
+           'ASHRAE 169-2013-8B'
         integrated_economizer_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: non-integrated economizer per 6.5.1.3 exception c, climate zone #{climate_zone}.")
       when 'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2006-5C'
+           'ASHRAE 169-2006-3C',
+           'ASHRAE 169-2006-4B',
+           'ASHRAE 169-2006-4C',
+           'ASHRAE 169-2006-5C',
+           'ASHRAE 169-2013-3B',
+           'ASHRAE 169-2013-3C',
+           'ASHRAE 169-2013-4B',
+           'ASHRAE 169-2013-4C',
+           'ASHRAE 169-2013-5C'
         integrated_economizer_required = true
       end
     end
@@ -1100,10 +1138,15 @@ class Standard
     # Determine the minimum capacity that requires an economizer
     case climate_zone
     when 'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+         'ASHRAE 169-2006-1B',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       min_int_area_served_ft2 = infinity_ft2 # No requirement
       min_ext_area_served_ft2 = infinity_ft2 # No requirement
     else
@@ -1211,22 +1254,37 @@ class Standard
 
     case climate_zone
     when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-5C',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-5C',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 75
     when 'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-7A'
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A',
+         'ASHRAE 169-2013-7A'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 70
     else
@@ -1273,27 +1331,43 @@ class Standard
     prohibited_types = []
     case climate_zone
     when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7A',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       prohibited_types = ['FixedEnthalpy']
-    when
-      'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+    when 'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       prohibited_types = ['DifferentialDryBulb']
-    when
-      'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
+    when 'ASHRAE 169-2006-5A',
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A'
         prohibited_types = []
     end
 
@@ -2164,8 +2238,7 @@ class Standard
     return has_erv
   end
 
-  # Set the VAV damper control to single maximum or
-  # dual maximum control depending on the standard.
+  # Set the VAV damper control to single maximum or dual maximum control depending on the standard.
   #
   # @return [Bool] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
@@ -2187,8 +2260,7 @@ class Standard
                             end
     end
 
-    # Set the control for any VAV reheat terminals
-    # on this airloop.
+    # Set the control for any VAV reheat terminals on this airloop.
     control_type_set = false
     air_loop_hvac.demandComponents.each do |equip|
       if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
@@ -2214,8 +2286,8 @@ class Standard
     return true
   end
 
-  # Determine whether the VAV damper control is single maximum or
-  # dual maximum control.  Defults to 90.1-2007.
+  # Determine whether the VAV damper control is single maximum or dual maximum control.
+  # Defaults to 90.1-2007.
   #
   # @return [String] the damper control type: Single Maximum, Dual Maximum
   def air_loop_hvac_vav_damper_action(air_loop_hvac)
@@ -2234,8 +2306,7 @@ class Standard
       return motorized_oa_damper_required
     end
 
-    # If the system has an economizer, it must have
-    # a motorized damper.
+    # If the system has an economizer, it must have a motorized damper.
     if air_loop_hvac_economizer?(air_loop_hvac)
       motorized_oa_damper_required = true
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Because the system has an economizer, it requires a motorized OA damper.")
@@ -3009,28 +3080,11 @@ class Standard
     return sp_reset_required
   end
 
-  # Determine if a system's fans must shut off when
-  # not required.
-  #
+  # Determine if a system's fans must shut off when not required.
+  # Per ASHRAE 90.1 section 6.4.3.3, HVAC systems are required to have off-hour controls
   # @return [Bool] true if required, false if not
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = true
-
-    # Per 90.1 6.4.3.4.5, systems less than 0.75 HP
-    # must turn off when unoccupied.
-    minimum_fan_hp = 0.75
-
-    # Determine the system fan horsepower
-    total_hp = 0.0
-    air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-      total_hp += fan_motor_horsepower(fan)
-    end
-
-    # Check the HP exception
-    if total_hp < minimum_fan_hp
-      shutoff_required = false
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Unoccupied fan shutoff not required because system fan HP of #{total_hp.round(2)} HP is less than the minimum threshold of #{minimum_fan_hp} HP.")
-    end
 
     return shutoff_required
   end

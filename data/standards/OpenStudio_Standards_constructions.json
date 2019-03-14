@@ -707,28 +707,6 @@
       ]
     },
     {
-      "name": "Typical Carpeted 6in Slab Floor",
-      "intended_surface_type": "GroundContactFloor",
-      "standards_construction_type": "Mass",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "6 in. Normalweight Concrete Floor",
-        "Typical Carpet Pad"
-      ]
-    },
-    {
-      "name": "Typical Carpeted 8in Slab Floor",
-      "intended_surface_type": "GroundContactFloor",
-      "standards_construction_type": "Mass",
-      "insulation_layer": null,
-      "skylight_framing": null,
-      "materials": [
-        "8 in. Concrete Block Basement Wall",
-        "Typical Carpet Pad"
-      ]
-    },
-    {
       "name": "Typical IEAD Roof",
       "intended_surface_type": "ExteriorRoof",
       "standards_construction_type": "IEAD",
@@ -750,6 +728,28 @@
         "Roof Membrane - Highly Reflective",
         "Typical Insulation",
         "Metal Roof Surface"
+      ]
+    },
+    {
+      "name": "Typical Insulated 6in Slab Floor",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
+      "materials": [
+        "Typical Insulation",
+        "6 in. Normalweight Concrete Floor"
+      ]
+    },
+    {
+      "name": "Typical Insulated 8in Slab Floor",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": "Mass",
+      "insulation_layer": "Typical Insulation",
+      "skylight_framing": null,
+      "materials": [
+        "Typical Insulation",
+        "8 in. Normalweight Concrete Floor"
       ]
     },
     {
@@ -1044,13 +1044,23 @@
       ]
     },
     {
-      "name": "Typical Uncarpeted 6in Slab Floor",
+      "name": "Typical Uninsulated 6in Slab Floor",
       "intended_surface_type": "GroundContactFloor",
       "standards_construction_type": "Mass",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
         "6 in. Normalweight Concrete Floor"
+      ]
+    },
+    {
+      "name": "Typical Uninsulated 8in Slab Floor",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": "Mass",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "8 in. Normalweight Concrete Floor"
       ]
     },
     {
@@ -1061,6 +1071,17 @@
       "skylight_framing": null,
       "materials": [
         "8 in. Concrete Block Basement Wall"
+      ]
+    },
+    {
+      "name": "Typical Uninsulated Carpeted 8in Slab Floor",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": "Mass",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "8 in. Concrete Block Basement Wall",
+        "Typical Carpet Pad"
       ]
     },
     {
@@ -1152,12 +1173,23 @@
     {
       "name": "Typical Uninsulated Wood Joist Attic Roof",
       "intended_surface_type": "AtticRoof",
-      "standards_construction_type": null,
+      "standards_construction_type": "WoodFramed",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
         "Asphalt Shingles",
         "5/8 in. Plywood"
+      ]
+    },
+    {
+      "name": "Typical Unisulated Carpeted 6in Slab Floor",
+      "intended_surface_type": "GroundContactFloor",
+      "standards_construction_type": "Mass",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "6 in. Normalweight Concrete Floor",
+        "Typical Carpet Pad"
       ]
     },
     {

@@ -79,5 +79,27 @@
     "space_names": [
       "EL2 East Perim Spc (G.E3)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL2 East Perim Spc (G.E3) Exhaust Fan",
+    "flow_rate": 0.495714724,
+    "operation_schedule": "D_EPr_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Primary School Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL2 East Perim Spc (G.E3)"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL2 North Perim Spc (G.N2) Exhaust Fan",
+    "flow_rate": 0.35366798,
+    "operation_schedule": "D_EPr_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "EL2 North Perim Spc (G.N2)"
+    ]
   }
 ]

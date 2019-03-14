@@ -28,7 +28,14 @@ module RetailStandalone
       infiltration_entry = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
       infiltration_entry.setName('Entry door Infiltration')
       case climate_zone
-      when 'ASHRAE 169-2006-1A','ASHRAE 169-2006-1B','ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+      when 'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B'
         infiltration_per_zone = 1.418672682
         infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
       else
@@ -56,7 +63,14 @@ module RetailStandalone
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = case climate_zone
-    when 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A'
+    when 'ASHRAE 169-2006-6A',
+        'ASHRAE 169-2006-6B',
+        'ASHRAE 169-2006-7A',
+        'ASHRAE 169-2006-8A',
+        'ASHRAE 169-2013-6A',
+        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-7A',
+        'ASHRAE 169-2013-8A'
       [
           { 'stds_spc_type' => 'Core_Retail',
             'sensor_1_frac' => 0.1724,
@@ -123,18 +137,7 @@ module RetailStandalone
     return true
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(4.10807252)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(4.10807252)
-        end
-    end
-  end
-
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
 
     return true
   end
