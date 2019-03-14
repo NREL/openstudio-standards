@@ -335,11 +335,11 @@
       "rollup_doors_per_10,000": 0.0,
       "entrance_doors_per_10,000": 2.0,
       "others_doors_per_10,000": 28.91,
-      "entrance_canopies": 1.0,
+      "entrance_canopies": null,
       "emergency_canopies": null,
-      "canopy_size": 720,
+      "canopy_size": null,
       "floor_area_per_drive_through_window": null,
-      "notes": "SmallHotel appears to have exterior entries for all units, No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+      "notes": "Assuming no canopy; this is different from the DOE SmallHotel prototype.  The DOE SmallHotel appears to have exterior entries for all units, No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
     },
     {
       "building_type": "Nrs",
