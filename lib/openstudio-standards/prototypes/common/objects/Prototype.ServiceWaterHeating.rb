@@ -817,7 +817,7 @@ class Standard
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
-    water_fixture_def.setName("#{use_name} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
+    water_fixture_def.setName("#{use_name} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
     # Target mixed water temperature
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
     mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
