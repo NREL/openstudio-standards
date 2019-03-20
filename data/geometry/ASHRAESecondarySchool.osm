@@ -521,7 +521,7 @@ OS:Connection,
 OS:Space,
   {dda8118e-5bf7-4453-bed7-34efb3eb3a63}, !- Handle
   Mult_Class_1_Pod_3_ZN_1_FLR_2,          !- Name
-  {3fbc61e2-5ba2-47f6-854e-20a037673eaa}, !- Space Type Name
+  {c73772b8-aa19-4b80-ab3c-a8d3178978d0}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -1035,7 +1035,7 @@ OS:Connection,
 OS:Space,
   {8c061ff2-4149-4bdf-95af-a72da9c80a3d}, !- Handle
   Mult_Class_2_Pod_3_ZN_1_FLR_2,          !- Name
-  {3fbc61e2-5ba2-47f6-854e-20a037673eaa}, !- Space Type Name
+  {c73772b8-aa19-4b80-ab3c-a8d3178978d0}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -13366,6 +13366,23 @@ OS:SpaceType,
 OS:Rendering:Color,
   {cb3854c6-e817-4be8-a30e-8daa0a5bf51f}, !- Handle
   SecondarySchool Classroom,              !- Name
+  120,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  199;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {c73772b8-aa19-4b80-ab3c-a8d3178978d0}, !- Handle
+  SecondarySchool ComputerRoom,           !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {27d027f7-2a45-4c89-a187-5aae2be88f12}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  SecondarySchool,                        !- Standards Building Type
+  ComputerRoom;                           !- Standards Space Type
+
+OS:Rendering:Color,
+  {27d027f7-2a45-4c89-a187-5aae2be88f12}, !- Handle
+  SecondarySchool ComputerRoom,           !- Name
   120,                                    !- Rendering Red Value
   230,                                    !- Rendering Green Value
   199;                                    !- Rendering Blue Value
