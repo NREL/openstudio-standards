@@ -149,13 +149,14 @@ class Standard
 
     # determine elevator type
     # todo - add logic here or upstream to have some multi-story buildings without elevators (e.g. small multi-family and small hotels)
-    elevator_type = nil
     if effective_num_stories[:below_grade] + effective_num_stories[:above_grade] < 2
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'The building only has 1 story, no elevators will be added.')
       return nil # don't add elevators
     elsif effective_num_stories[:below_grade] + effective_num_stories[:above_grade] < 6
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'The building has fewer than 6 effective stories; assuming Hydraulic elevators.')
       elevator_type = 'Hydraulic'
     else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'The building has 6 or more effective stories; assuming Traction elevators.')
       elevator_type = 'Traction'
     end
 
@@ -236,12 +237,12 @@ class Standard
     add_pass_elevs = 0.0
     building_types.uniq.each do |building_type|
       # load elevator_data
-        search_criteria = { 'building_type' => building_type }
-        elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
-        if elevator_data_lookup.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
-          return area_length_count_hash
-        end
+      search_criteria = { 'building_type' => building_type }
+      elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
+      if elevator_data_lookup.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
+        return nil
+      end
 
       # determine number of additional passenger elevators
       if !elevator_data_lookup['additional_passenger_elevators'].nil?
@@ -249,7 +250,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Adding #{elevator_data_lookup['additional_passenger_elevators']} additional passenger elevators.")
       else
         add_pass_elevs += 0.0
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "No additional passenger elevators added to model.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'No additional passenger elevators added to model.')
       end
     end
 
@@ -307,16 +308,16 @@ class Standard
         # multiplication factor or 1.2 to account for interfloor traffic
 
         # determine time per ride based on number of floors and elevator type
-        if elevator_type = 'Hydraulic'
+        if elevator_type == 'Hydraulic'
           time_per_ride = 8.7 + (effective_num_stories[:above_grade] * 5.6)
-        elsif elevator_type = 'Traction'
+        elsif elevator_type == 'Traction'
           time_per_ride = 5.6 + (effective_num_stories[:above_grade] * 2.1)
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Elevator type #{elevator_type} not recognized.")
           return nil
         end
 
-        #determine elevator operation fraction for each timestep
+        # determine elevator operation fraction for each timestep
         people_per_ride = 5
         rides_per_elevator = (change_num_people / people_per_ride) / number_of_elevators
         operation_time = rides_per_elevator * time_per_ride
@@ -351,10 +352,9 @@ class Standard
     # For elevator lights and fan, assume 100% operation during hours that elevator fraction > 0 (when elevator is in operation).
     # elevator lights
     lights_sch = occ_schedule.clone(model)
-    lights_sch= lights_sch.to_ScheduleRuleset.get
+    lights_sch = lights_sch.to_ScheduleRuleset.get
     profiles = []
-    defaultProfile = lights_sch.defaultDaySchedule
-    profiles << defaultProfile
+    profiles << lights_sch.defaultDaySchedule
     rules = lights_sch.scheduleRules
     rules.each do |rule|
       profiles << rule.daySchedule
@@ -362,9 +362,9 @@ class Standard
     profiles.each do |profile|
       times = profile.times
       values = profile.values
-      values.each_with_index do |val,i|
+      values.each_with_index do |val, i|
         if val > 0
-          profile.addValue(times[i],1.0)
+          profile.addValue(times[i], 1.0)
         end
       end
     end
@@ -374,8 +374,7 @@ class Standard
     fan_sch = occ_schedule.clone(model)
     fan_sch = fan_sch.to_ScheduleRuleset.get
     profiles = []
-    defaultProfile = fan_sch.defaultDaySchedule
-    profiles << defaultProfile
+    profiles << fan_sch.defaultDaySchedule
     rules = fan_sch.scheduleRules
     rules.each do |rule|
       profiles << rule.daySchedule
@@ -383,9 +382,9 @@ class Standard
     profiles.each do |profile|
       times = profile.times
       values = profile.values
-      values.each_with_index do |val,i|
+      values.each_with_index do |val, i|
         if val > 0
-          profile.addValue(times[i],1.0)
+          profile.addValue(times[i], 1.0)
         end
       end
     end
@@ -415,5 +414,5 @@ class Standard
     end
 
     return elevator
-    end
   end
+end
