@@ -2741,10 +2741,6 @@ class Standard
       result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
-	elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
-      result = 46_320
-    elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
-      result = 4982  
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
@@ -2763,8 +2759,6 @@ class Standard
     elsif building_type == 'SmallHotel' # 43,200 ft^2
       result = 4014
     elsif building_type == 'SmallOffice' # 5500 ft^2
-      result = 511
-    elsif building_type == 'SmallOfficeDetailed' # 5500 ft^2
       result = 511
     elsif building_type == 'StripMall' # 22,500 ft^2
       result = 2090
@@ -3647,7 +3641,7 @@ class Standard
       result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
       result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
       result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
-    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice','LargeOfficeDetailed', 'MediumOfficeDetailed', 'SmallOfficeDetailed'].include? building_type
+    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
       result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
@@ -4014,15 +4008,31 @@ class Standard
         elsif stds_bldg_type == 'StripMall'
           avg_unit_size = OpenStudio.convert(22_500.0 / 10.0, 'ft^2', 'm^2').get # calculated from prototype
           num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Htl' && (stds_space_type.include?('GuestRmOcc') || stds_space_type.include?('GuestRmUnOcc'))
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'MFm' && (stds_space_type.include?('ResBedroom') || stds_space_type.include?('ResLiving'))
+          avg_unit_size = OpenStudio.convert(949.9, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Mtl' && (stds_space_type.include?('GuestRmOcc') || stds_space_type.include?('GuestRmUnOcc'))
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
+        elsif stds_bldg_type == 'Nrs' && stds_space_type.include?('PatientRoom')
+          avg_unit_size = OpenStudio.convert(354.2, 'ft^2', 'm^2').get # calculated from prototype
+          num_units = floor_area / avg_unit_size
         end
 
         # determine number of beds
         if stds_bldg_type == 'Hospital' && ['PatRoom', 'ICU_PatRm', 'ICU_Open'].include?(stds_space_type)
           num_beds = num_people
+        elsif stds_bldg_type == 'Hsp' && ['PatientRoom', 'HspSurgOutptLab', 'HspNursing'].include?(stds_space_type)
+          num_beds = num_people
         end
 
         # determine number of students
         if ['PrimarySchool', 'SecondarySchool'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
+          num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
+        elsif ['EPr', 'ESe', 'ERC', 'EUn', 'ECC'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
           num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
         end
 
@@ -4133,7 +4143,7 @@ class Standard
 
   # Converts the climate zone in the model into the format used
   # by the openstudio-standards lookup tables.  For example:
-  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
+  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
   # institution: CEC, value: 3  becomes: CEC T24-CEC3.
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -4145,9 +4155,9 @@ class Standard
       if cz.institution == 'ASHRAE'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
         climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2013-#{cz.value}A"
+                         "ASHRAE 169-2006-#{cz.value}A"
                        else
-                         "ASHRAE 169-2013-#{cz.value}"
+                         "ASHRAE 169-2006-#{cz.value}"
                        end
       elsif cz.institution == 'CEC'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
@@ -4164,7 +4174,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] the model
   # @param climate_zone [String] the climate zone in openstudio-standards format.
-  # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
+  # For example: ASHRAE 169-2006-2A, CEC T24-CEC3
   # @return [Boolean] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)
     # Remove previous climate zones from the model
@@ -4172,8 +4182,6 @@ class Standard
     # Split the string into the correct institution and value
     if climate_zone.include? 'ASHRAE 169-2006-'
       model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    elsif climate_zone.include? 'ASHRAE 169-2013-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
     elsif climate_zone.include? 'CEC T24-CEC'
       model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
 

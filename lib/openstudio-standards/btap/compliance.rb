@@ -825,8 +825,6 @@ module BTAP
                         space_multiplier_map = PrototypeBuilding::MidriseApartment.define_space_multiplier
                       when 'LargeOffice'
                         space_multiplier_map = PrototypeBuilding::LargeOffice.define_space_multiplier
-					  when 'LargeOfficeDetailed'
-                        space_multiplier_map = PrototypeBuilding::LargeOfficeDetailed.define_space_multiplier	
                       when 'Hospital'
                         space_multiplier_map = PrototypeBuilding::Hospital.define_space_multiplier
                       else

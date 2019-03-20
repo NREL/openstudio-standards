@@ -62,9 +62,21 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer_2014/deer_2014"
   require_relative "#{stds}/deer/deer_2015/deer_2015"
   require_relative "#{stds}/deer/deer_2017/deer_2017"
+  require_relative "#{stds}/deer/deer_2020/deer_2020"
+  require_relative "#{stds}/deer/deer_2025/deer_2025"
+  require_relative "#{stds}/deer/deer_2030/deer_2030"
+  require_relative "#{stds}/deer/deer_2035/deer_2035"
+  require_relative "#{stds}/deer/deer_2040/deer_2040"
+  require_relative "#{stds}/deer/deer_2045/deer_2045"
+  require_relative "#{stds}/deer/deer_2050/deer_2050"
+  require_relative "#{stds}/deer/deer_2055/deer_2055"
+  require_relative "#{stds}/deer/deer_2060/deer_2060"
+  require_relative "#{stds}/deer/deer_2065/deer_2065"
+  require_relative "#{stds}/deer/deer_2070/deer_2070"
+  require_relative "#{stds}/deer/deer_2075/deer_2075"
 
   require_relative "#{stds}/oeesc/oeesc"
-  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"  
+  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"
 
   require_relative "#{stds}/icc_iecc/icc_iecc"
   require_relative "#{stds}/icc_iecc/icc_iecc_2015/icc_iecc_2015"
@@ -192,6 +204,7 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
+  require_relative "#{stds}/deer/deer.PlanarSurface"
   # CBES Common
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
@@ -221,10 +234,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
-  require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
-  require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
-  require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
-  
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -323,8 +332,10 @@ module OpenstudioStandards
     
     # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
     # requires to ruby gems will work, will fail if we require a native gem
-    #new_env["GEM_PATH"] = nil
-    #new_env["GEM_HOME"] = nil
+    ### DO NOT MERGE TO MASTER ###
+    new_env["GEM_PATH"] = nil
+    new_env["GEM_HOME"] = nil
+    ### DO NOT MERGE TO MASTER ###
     
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
     #bundle_gemfile = ENV['BUNDLE_GEMFILE']
@@ -343,14 +354,28 @@ module OpenstudioStandards
   def self.run_command(command)
     stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
     if status.success?
-      puts "Command completed successfully"
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.command', "Successfully ran command: '#{command}'")
       #puts "stdout: #{stdout_str}"
       #puts "stderr: #{stderr_str}"
       return true
     else
-      puts "Error running command: '#{command}'"
-      puts "stdout: #{stdout_str}"
-      puts "stderr: #{stderr_str}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stdout: #{stdout_str}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stderr: #{stderr_str}")
+      # Print the ENV for debugging
+      final_env = []
+      env_changes = get_run_env()
+      ENV.each do |env_var, val|
+        next if env_changes.key?(env_var) && env_changes[env_var].nil?
+        final_env << "#{env_var} = #{val}"
+      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: \n #{final_env.join("\n")}")
+      # List the gems available to openstudio at this point
+      cli_path = OpenStudio.getOpenStudioCLI
+      cmd = "\"#{cli_path}\" gem_list"
+      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env(), cmd)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Gems available to openstudio cli according to (openstudio gem_list): \n #{stdout_str_2}")
+
       return false 
     end
   end
