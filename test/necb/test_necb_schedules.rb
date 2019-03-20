@@ -145,7 +145,7 @@ class NECB2011ScheduleTests < Minitest::Test
         shw__schedule = ""
         area_per_occ = 0.0
         area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
-        water_fixture = standard.model_add_swh_end_uses_by_space(@model, st.standardsBuildingType.get, 'NECB HDD Method', shw_loop, st.standardsSpaceType.get, space.name.get)
+        water_fixture = standard.model_add_swh_end_uses_by_space(@model, shw_loop, space)
 
         #Get shw schedule rules from shw equipment for this space type and add to schedule array for this space type.
 

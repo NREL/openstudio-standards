@@ -57,6 +57,9 @@ class OpenStudio::Model::Model
   # Heating and cooling fuel methods
   require_relative 'Siz.HeatingCoolingFuels'
   
+  # Component quantity methods
+  require_relative 'Siz.HVACComponent'
+  
   # Takes the values calculated by the EnergyPlus sizing routines
   # and puts them into all objects model in place of the autosized fields.
   # Must have previously completed a run with sql output for this to work.
