@@ -67,15 +67,29 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 #      'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
 #      'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
 
-    @building_types = [
-      'SmallOffice']
+  @building_types = ['SecondarySchool']
 	@climate_zones = [
-      'ASHRAE 169-2006-1A']
-	@templates = [
-      '90.1-2004']
-	@epw_files = [
-      'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
-      'SAU_Riyadh.404380_IWEC.epw']
+      'ASHRAE 169-2006-1A',
+      'ASHRAE 169-2006-1B',
+      'ASHRAE 169-2006-2A',
+      'ASHRAE 169-2006-2B',
+      'ASHRAE 169-2006-3A',
+      'ASHRAE 169-2006-3B',
+      'ASHRAE 169-2006-3C',
+      'ASHRAE 169-2006-4A',
+      'ASHRAE 169-2006-4B',
+      'ASHRAE 169-2006-4C',
+      'ASHRAE 169-2006-5A',
+      'ASHRAE 169-2006-5B',
+      'ASHRAE 169-2006-5C',
+      'ASHRAE 169-2006-6A',
+      'ASHRAE 169-2006-6B',
+      'ASHRAE 169-2006-7A',
+      'ASHRAE 169-2006-7B',
+      'ASHRAE 169-2006-8A',
+      'ASHRAE 169-2006-8B']
+	@templates = ['90.1-2004']
+	@epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
     all_comp =  @building_types.product @epw_files, @templates, @climate_zones
     all_comp.each do |building_type, epw_file, template, climate_zone|
 	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, false, false, 'dd-only', false)
