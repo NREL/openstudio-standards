@@ -67,7 +67,7 @@ class TestAddRefrigeration < Minitest::Test
     standard.model_add_typical_refrigeration(model, 'Gro')
 
     # Log the messages
-    log_messages_to_file("#{__dir__}/output/test_add_typical_refrigeration_openstudio-standards.log", debug=false)
+    # log_messages_to_file("#{__dir__}/output/test_add_typical_refrigeration_openstudio-standards.log", debug=false)
 
     mt_system = model.getRefrigerationSystemByName('Medium Temperature').get
 
