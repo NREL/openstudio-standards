@@ -20,8 +20,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 1.0
-    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")    
+    expected_elev = 2.0
+    assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/Office.osm", true)
   end
 
   def test_add_elevators_small_hotel
@@ -41,8 +42,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 1.0
+    expected_elev = 2.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/SmallHotel.osm", true)
   end
 
   def test_add_elevators_large_hotel
@@ -52,7 +54,6 @@ class TestAddElevators < Minitest::Test
     path = OpenStudio::Path.new("#{File.dirname(__FILE__)}/models/LargeHotel_3A_2010.osm")
     model = translator.loadModel(path)
     model = model.get
-
     # create story hash
     template = '90.1-2010'
     standard = Standard.build(template)
@@ -62,8 +63,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 4.0
+    expected_elev = 6.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/LargeHotel.osm", true)
   end
 
   def test_add_elevators_midrise
@@ -85,6 +87,7 @@ class TestAddElevators < Minitest::Test
     # check recommendation
     expected_elev = 1.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/Midrise.osm", true)
   end
 
   def test_add_elevators_hospital
@@ -104,9 +107,10 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 7.0
+    expected_elev = 8.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
     assert(elevators.definition.to_ElectricEquipmentDefinition.get.fractionLost == 1.0)
+    model.save("output/Hospital.osm", true)
   end
 
   def test_add_elevators_outpatient
@@ -128,6 +132,7 @@ class TestAddElevators < Minitest::Test
     # check recommendation
     expected_elev = 3.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/Outpatient.osm", true)
   end
 
   def test_add_elevators_secondary
@@ -147,8 +152,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 2.0
+    expected_elev = 3.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/SecondarySchool.osm", true)
   end
 
   def test_add_elevators_multi_story_retail
@@ -168,8 +174,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 7.0
+    expected_elev = 3.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/Retail.osm", true)
   end
 
   def test_add_elevators_multi_story_warehouse
@@ -189,8 +196,9 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 1.0
+    expected_elev = 3.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
+    model.save("output/Warehouse.osm", true)
   end
 
 end
