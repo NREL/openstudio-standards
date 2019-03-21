@@ -589,6 +589,16 @@ class Standard
         ref_walkin.setZoneBoundaryTotalInsulatedSurfaceAreaFacingZone(ref_walkin.zoneBoundaryTotalInsulatedSurfaceAreaFacingZone.get * floor_area_scaling_factor)
         ref_walkin.setInsulatedFloorSurfaceArea(ref_walkin.insulatedFloorSurfaceArea * floor_area_scaling_factor)
 
+        # Check that walkin physically fits inside the thermal zone.
+        # If not, remove the walkin and warn.
+        walkin_floor_area_ft2 = OpenStudio.convert(ref_walkin.insulatedFloorSurfaceArea, 'm^2', 'ft^2').get.round
+        walkin_zone_floor_area_ft2 = OpenStudio.convert(thermal_zone_walkin.floorArea, 'm^2', 'ft^2').get.round
+        if walkin_floor_area_ft2 > walkin_zone_floor_area_ft2
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Walkin #{ref_walkin.name} has an area of #{walkin_floor_area_ft2} ft^2, which is larger than the #{walkin_zone_floor_area_ft2} ft^2 zone.  Walkin will be removed from model.")
+          ref_walkin.remove
+          next
+        end
+
         # Find defrost and dripdown properties
         search_criteria = {
           'template' => template,
@@ -674,6 +684,9 @@ class Standard
 
       # Add refrigeration systems
       ref_system_lineups.each do |ref_system_lineup|
+        # Skip if no cases or walkins are attached to the system
+        next if ref_system_lineup['ref_cases'].empty? && ref_system_lineup['walkins'].empty?
+
         # Add refrigeration system
         ref_system = OpenStudio::Model::RefrigerationSystem.new(model)
         ref_system.setName(system_type)
