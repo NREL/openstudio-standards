@@ -23,7 +23,7 @@ class Standard
     sizing_system.setPrecoolDesignHumidityRatio(0.008)
     sizing_system.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     sizing_system.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+    sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
     sizing_system.setSizingOption(sizing_option)
     sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)

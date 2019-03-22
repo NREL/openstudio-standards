@@ -916,7 +916,7 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1145,7 +1145,7 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1406,7 +1406,7 @@ class Standard
     # default design temperatures and settings used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
+    sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
