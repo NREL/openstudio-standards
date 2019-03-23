@@ -30,6 +30,7 @@ doe_prototype/test_small_hotel.rb
 doe_prototype/test_small_office.rb
 doe_prototype/test_small_office_detailed.rb
 doe_prototype/test_high_rise_apartment.rb
+doe_prototype/test_supermarket.rb
 
 doe_prototype/test_add_elevators.rb
 doe_prototype/test_add_exhaust.rb
