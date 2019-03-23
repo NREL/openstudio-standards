@@ -208,7 +208,7 @@
     "compressor_type": "Low Temp",
     "cases": [
       {
-        "case_type": "LT ReachIn IceCream",
+        "case_type": "Ice Cream Reach-Ins",
         "lighting_schedule": "",
         "restocking_schedule": "RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
         "space_names": [
@@ -216,7 +216,7 @@
         ]
       },
       {
-        "case_type": "LT Coffin IceCream",
+        "case_type": "Ice Cream Coffins",
         "space_names": [
           "Main Sales"
         ]
@@ -224,7 +224,7 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Walk-In Grocery Freezer",
+        "walkin_type": "Grocery Freezer",
         "space_names": [
           "Active Storage"
         ],
@@ -242,7 +242,7 @@
     "compressor_type": "Low Temp",
     "cases": [
       {
-        "case_type": "LT ReachIn Frozen Food",
+        "case_type": "Frozen Food Reach-Ins",
         "space_names": [
           "Main Sales"
         ]
@@ -250,7 +250,7 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Walk-In Bakery Freezer",
+        "walkin_type": "Bakery Freezer",
         "space_names": [
           "Bakery"
         ],
@@ -267,31 +267,31 @@
     "compressor_type": "Med Temp",
     "cases": [
       {
-        "case_type": "LT ReachIn Deli Cases",
+        "case_type": "Deli Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Dairy",
+        "case_type": "Dairy Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Dairy_Meat",
+        "case_type": "Dairy_Meat Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Meat",
+        "case_type": "Dairy_Meat Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Service Meat",
+        "case_type": "Service Meat Cases",
         "space_names": [
           "Main Sales"
         ]
@@ -299,14 +299,14 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Walk-In Dairy Cooler",
+        "walkin_type": "Dairy Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In Beer Cooler",
+        "walkin_type": "Beer Cooler",
         "space_names": [
           "Active Storage"
         ],
@@ -323,49 +323,49 @@
     "compressor_type": "Med Temp",
     "cases": [
       {
-        "case_type": "MT Vertical Open Beverage",
+        "case_type": "Beverage Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Service Deli",
+        "case_type": "Deli Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Salad_Produce",
+        "case_type": "Salad Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Coffin Produce",
+        "case_type": "Produce Cases Low",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Coffin Produce Island",
+        "case_type": "Produce Islands",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Floral",
+        "case_type": "Floral Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Service Bakery",
+        "case_type": "Service Bakery Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "MT Vertical Open Prepared Food",
+        "case_type": "Prepared Foods Cases",
         "space_names": [
           "Main Sales"
         ]
@@ -373,42 +373,42 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Walk-In Meat Cooler",
+        "walkin_type": "Meat Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In MeatPrep Cooler",
+        "walkin_type": "Meat Prep",
         "space_names": [
           "Deli"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In BloomBox Cooler",
+        "walkin_type": "Bloom Box",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In Deli Cooler",
+        "walkin_type": "Deli Cooler",
         "space_names": [
           "Deli"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In Produce Cooler",
+        "walkin_type": "Produce Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Walk-In Fish Cooler",
+        "walkin_type": "Fish Cooler",
         "space_names": [
           "Active Storage"
         ],
