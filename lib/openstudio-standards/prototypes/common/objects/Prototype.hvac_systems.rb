@@ -4187,6 +4187,10 @@ class Standard
       ideal_loads.setLatentHeatRecoveryEffectiveness(heat_recovery_latent_eff)
       ideal_loads.addToThermalZone(zone)
       ideal_systems << ideal_loads
+
+      # set zone sizing parameters
+      zone_sizing = zone.sizingZone
+      zone_sizing.setHeatingMaximumAirFlowFraction(1.0)
     end
 
     if add_output_meters

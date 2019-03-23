@@ -78,7 +78,7 @@ class Standard
     # Determine if circulating or non-circulating based on supplied head pressure
     swh_pump_head_press_pa = service_water_pump_head
     circulating = true
-    if swh_pump_head_press_pa <= 1 || swh_pump_head_press_pa.nil?
+    if swh_pump_head_press_pa.nil? || swh_pump_head_press_pa <= 1
       # As if there is no circulation pump
       swh_pump_head_press_pa = 0.001
       service_water_pump_motor_efficiency = 1

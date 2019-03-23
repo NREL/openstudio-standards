@@ -18,7 +18,7 @@ class TestFullServiceRestaurant < CreateDOEPrototypeBuildingTest
   epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
 
   create_models = true
-  run_models = false
+  run_models = true
   compare_results = false
   
   debug = false
