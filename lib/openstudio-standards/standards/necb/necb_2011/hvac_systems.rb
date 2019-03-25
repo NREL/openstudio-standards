@@ -1226,7 +1226,11 @@ class NECB2011
       air_loop_sizing = mau_air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('VentilationRequirement')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -1422,7 +1426,11 @@ class NECB2011
       air_loop_sizing = mau_air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(12.8)
@@ -1677,7 +1685,11 @@ class NECB2011
     air_loop_sizing = air_loop.sizingSystem # TODO units
     air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
     air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-    air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+    else
+      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     air_loop_sizing.setPreheatDesignTemperature(7.0)
     air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
     air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -1803,7 +1815,11 @@ class NECB2011
       air_loop_sizing = air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -1960,7 +1976,11 @@ class NECB2011
       air_loop_sizing = air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -2129,7 +2149,11 @@ class NECB2011
       air_loop_sizing = air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(13.0)
@@ -2275,7 +2299,11 @@ class NECB2011
         sizing_system.setCentralCoolingDesignSupplyAirTemperature(13.0)
         sizing_system.setCentralHeatingDesignSupplyAirTemperature(13.1)
         sizing_system.autosizeDesignOutdoorAirFlowRate
-        sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(0.3)
+        if model.version < OpenStudio::VersionString.new('2.7.0')
+          sizing_system.setMinimumSystemAirFlowRatio(0.3)
+        else
+          sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(0.3)
+        end
         sizing_system.setPreheatDesignTemperature(7.0)
         sizing_system.setPreheatDesignHumidityRatio(0.008)
         sizing_system.setPrecoolDesignTemperature(13.0)
