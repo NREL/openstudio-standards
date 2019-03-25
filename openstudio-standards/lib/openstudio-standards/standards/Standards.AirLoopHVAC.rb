@@ -2034,8 +2034,6 @@ class OpenStudio::Model::AirLoopHVAC
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
 
     # System primary airflow rate (whether autosized or hard-sized)
-    v_ps = 0.0
-
     v_ps = if autosizedDesignSupplyAirFlowRate.is_initialized
              autosizedDesignSupplyAirFlowRate.get
            else
@@ -2105,8 +2103,12 @@ class OpenStudio::Model::AirLoopHVAC
           end
         elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
           term = equip.to_AirTerminalSingleDuctVAVReheat.get
-          mdp_term = term.constantMinimumAirFlowFraction
-          min_zn_flow = term.fixedMinimumAirFlowRate
+          if term.constantMinimumAirFlowFraction.is_initialized
+            mdp_term = term.constantMinimumAirFlowFraction.get
+          end
+          if term.fixedMinimumAirFlowRate.is_initialized
+            min_zn_flow = term.fixedMinimumAirFlowRate.get
+          end
         end
       end
 
