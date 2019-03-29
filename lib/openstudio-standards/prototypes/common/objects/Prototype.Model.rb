@@ -5,12 +5,16 @@ Standard.class_eval do
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
-    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB2011. This is a quick check.
-    if @instvarbuilding_type == 'HighriseApartment'
+    # There are no reference models for HighriseApartment and data centers at vintages Pre-1980 and 1980-2004,
+    # nor for NECB2011. This is a quick check.
+    case @instvarbuilding_type
+    when 'HighriseApartment','SmallDataCenterLowITE','SmallDataCenterHighITE','LargeDataCenterLowITE','LargeDataCenterHighITE'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
       end
+    else
+      # do nothing
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'

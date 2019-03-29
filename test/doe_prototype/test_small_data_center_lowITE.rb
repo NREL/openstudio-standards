@@ -3,8 +3,8 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 class TestSmallDataCenterLowITE < CreateDOEPrototypeBuildingTest
   building_types = ['SmallDataCenterLowITE']
-  # templates = ['90.1-2004','90.1-2007','90.1-2010','90.1-2013']
-  templates = ['90.1-2013']
+  templates = ['90.1-2004','90.1-2007','90.1-2010','90.1-2013']
+  # templates = ['90.1-2013']
   climate_zones = ['ASHRAE 169-2006-8A']
   # climate_zones = ['ASHRAE 169-2006-6A','ASHRAE 169-2006-6B','ASHRAE 169-2006-7A','ASHRAE 169-2006-8A']
   # climate_zones = ['ASHRAE 169-2006-2A','ASHRAE 169-2006-3B','ASHRAE 169-2006-5A','ASHRAE 169-2006-8A']

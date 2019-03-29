@@ -2815,7 +2815,7 @@ class Standard
                      hvac_op_sch: nil,
                      oa_damper_sch: nil,
                      fan_location: 'DrawThrough',
-                     fan_type: 'VariableVolume',
+                     fan_type: 'ConstantVolume',
                      cooling_type: 'Single Speed DX AC')
 
     # hvac operation schedule
