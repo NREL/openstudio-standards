@@ -20,6 +20,7 @@ Standard.class_eval do
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
+    model_custom_geometry_tweaks(building_type, climate_zone, @prototype_input, model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     # save new basefile to new geometry folder as class name.
