@@ -1620,6 +1620,9 @@ class Standard
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
+  # todo - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
+
   # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
   # report hours of operation. Won't be a single set of values, will be a collection of rules
   # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
@@ -1627,8 +1630,6 @@ class Standard
   # @author David Goldwasser
   # @param space [Space] takes space
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
-  # todo - add related methods like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
-  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
   def space_hours_of_operation(space)
 
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
@@ -1651,10 +1652,8 @@ class Standard
     year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
     year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     indices_vector = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
-    asdf = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
 
     # add default profile to hash
-    # todo - roll this into loop through rules, will need to address skipping start end date, days of week and rule index
     hoo_start = nil
     hoo_end = nil
     unexpected_val = false
@@ -1674,7 +1673,7 @@ class Standard
     if !hoo_start.nil? && hoo_end.nil?
       hoo_end = hoo_start
     elsif !hoo_end.nil? && hoo_start.nil?
-    hoo_start = hoo_end
+      hoo_start = hoo_end
     end
 
     # some validation
@@ -1689,7 +1688,7 @@ class Standard
     rule_hash[:hoo_end] = hoo_end
     hoo_hours = nil
     if hoo_start == hoo_end
-      if values .uniq == [1]
+      if values.uniq == [1]
         hoo_hours = 24
       else
         hoo_hours = 0
@@ -1744,7 +1743,7 @@ class Standard
       rule_hash[:hoo_end] = hoo_end
       hoo_hours = nil
       if hoo_start == hoo_end
-        if values .uniq == [1]
+        if values.uniq == [1]
           hoo_hours = 24
         else
           hoo_hours = 0
@@ -1802,16 +1801,30 @@ class Standard
   # @param space [Spaces] takes array of spaces
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def spaces_hours_of_operation(spaces)
-
-    # todo - replace this with logic to get combined hours of operation for collection of spaces.
-
     hours_of_operation_array = []
+    space_names = []
     spaces.each do |space|
+      space_names << space.name.to_s
       hoo_hash = space_hours_of_operation(space)
       if !hoo_hash.nil?
+        puts "hello, this is the hash for #{space.name}"
+        puts hoo_hash
         hours_of_operation_array << hoo_hash
       end
     end
+
+    # todo - replace this with logic to get combined hours of operation for collection of spaces.
+    # each hours_of_operation_array is hash with key for each profile.
+    # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
+    # my goal is to compare profiles and days used across all profiles to create new entries as necessary
+    # then for all days I need to extend hours of operation addressing any situations where multile occupancy gaps occur
+    #
+    # loop through all 365/366 days
+
+    puts "hello, evaluating hours of operation for #{space_names.join(",")}"
+    puts hours_of_operation_array
+
+    # todo - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
     hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
 
     return hours_of_operation

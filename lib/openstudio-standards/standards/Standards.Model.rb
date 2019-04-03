@@ -4278,13 +4278,20 @@ class Standard
   end
   
   # This method looks at occupancy profiles for the building as a whole and generates an hours of operation default
-  # schedule for the building. It also clears out any higher level hours of operation schedule assignments
+  # schedule for the building. It also clears out any higher level hours of operation schedule assignments.
+  # Spaces are organized by res and non_res. Whichever of the two groups has higher design level of people is used for building hours of operation
+  # Resulting hours of operation can have as many rules as necessary to describe the operation.
+  # Each ScheduleDay should be an on/off schedule with only values of 0 and 1. There should not be more than one on/off cycle per day.
+  # In future this could create different hours of operation for residential vs. non-residential, by building type, story, or space type.
+  # However this measure is a stop gap to convert old generic schedules to parametric schedules.
+  # Future new schedules should be designed as paramtric from the start and would not need to run through this inference process
   #
   # @author David Goldwasser
   # @param model [Model]
-  # @param fraction_of_daily_occ_range [Double] fraction above min range required to start and end hours of operation
+  # @param fraction_of_daily_occ_range [Double] fraction above/below daily min range required to start and end hours of operation
   # @param invert_res [Bool] if true will reverse hours of operation for residential space types
-  # @return [ScheduleRuleset] assigned to hours of operation as the building default
+  # @param gen_occ_profile [Bool] if true creates a merged occupancy schedule for diagnostic purposes. This schedule is added to the model but no specifically returned by this method
+  # @return [ScheduleRuleset] schedule that is assigned to the building as default hours of operation
   def model_infer_hours_of_operation_building(model, fraction_of_daily_occ_range: 0.25, invert_res: true, gen_occ_profile: false)
 
     # create an array of non-residential and residential spaces
@@ -4315,7 +4322,6 @@ class Standard
     end
 
     # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
-    # todo - could create and assign res and non res hours of operation to different spaces vs. picking one
     if res_people_design > non_res_people_design
       hours_of_operation = spaces_get_occupancy_schedule(res_spaces,
                                                         sch_name: "Building Hours of Operation Residential",
@@ -4330,7 +4336,6 @@ class Standard
     end
 
     # remove gaps resulting in multiple on off cycles for each rule in schedule so it will be valid hours of operation
-    # todo - currently just keeping first and last two times, would be more robust inspect all operational gaps and remove all but largest
     profiles = []
     profiles << hours_of_operation.defaultDaySchedule
     hours_of_operation.scheduleRules.each do |rule|
@@ -4340,10 +4345,40 @@ class Standard
       times = profile.times
       values = profile.values
       next if times.size <= 3 # length of 1-3 should produce valid hours_of_operation profiles
+      if values.first == 0 && values.last == 0
+        wrap_dur_left_hr = time.totalHours
+      else
+        wrap_dur_left_hr = 0
+      end
+      occ_gap_hash = {}
+      prev_time = 0
+      prev_val = nil
+      times.each_with_index do |time,i|
+        next if time.totalHours == 0.0 # should not see this
+        next if values.i == prev_val # check if two 0 until time next to each other
+        if values.i == 0 # only store vacant segments
+          if time.totalHours == 24 && ! wrap_dur_left_hr > 0
+            occ_gap_hash[prev_time] = time.totalHours - prev_time_hr + wrap_dur_left_hr
+          else
+            occ_gap_hash[prev_time] = time.totalHours - prev_time.totalHours
+          end
+        end
+        prev_time = time
+        prev_val = values.i
+      end
       profile.clearValues
-      profile.addValue(times.first,values.first)
-      profile.addValue(times[times.size - 2],values[times.size - 2])
-      profile.addValue(times.last,values.last)
+      max_occ_gap_start = occ_gap_hash.key(occ_gap_hash.values.max)
+      max_occ_gap_end_hr = max_occ_gap_start.totalHours + occ_gap_hash[max_occ_gap_start] # can't add time and duration in hours
+      if max_occ_gap_end_hr > 24.0 then max_occ_gap_end_hr -= 24.0 end
+      max_occ_gap_end = OpenStudio::Time.new(0, max_occ_gap_end_hr, 0, 0)
+      profile.addValue(max_occ_gap_start,1)
+      profile.addValue(max_occ_gap_end,0)
+      os_time_24 = OpenStudio::Time.new(0, 24, 0, 0)
+      if max_occ_gap_start > max_occ_gap_end
+        profile.addValue(os_time_24,0)
+      else
+        profile.addValue(os_time_24,1)
+      end
     end
 
     # reverse 1 and 0 values for res_prevalent building
@@ -4843,22 +4878,20 @@ class Standard
   #
   # @author David Goldwasser
   # @param [sch]
+  # @param [hoo_var_Method] accepts hours and fractional. Any other value value will result in hoo variables not being applied
   # @return [hash]
   def gather_inputs_parametric_schedules(sch,load_inst,parametric_inputs,hours_of_operation,ramp: true,min_ramp_dur_hr: 2.0,gather_data_only: false,hoo_var_method: "hours")
-    # todo - add default
-    # todo - fix un-needed value at end of forula, like thermostat
-    # hoo_start - 3.0 ~ val_flr ~ val_clg | hoo_end + 4.0 ~ val_clg ~ val_flr | hoo_end + 6.0 ~ val_flr ~ val_flr
 
     if parametric_inputs.has_key?(sch)
       if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
-        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target]}.")
+        OpenStudio::logFree(OpenStudio::Warn, "openstudio.Standards.Model", "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name.to_s}.")
         return nil
       end
     end
 
     # gather and store data for scheduleRuleset
     min_max = schedule_ruleset_annual_min_max_value(sch)
-    ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst.name.to_s, hoo_inputs: hours_of_operation}
+    ruleset_hash = {floor: min_max['min'], ceiling: min_max['max'], target: load_inst, hoo_inputs: hours_of_operation}
     parametric_inputs[sch] = ruleset_hash
 
     # stop here if only gathering information otherwise will continue and generate additional parametric properties for schedules and rules
@@ -4869,17 +4902,19 @@ class Standard
     props.setFeature("param_sch_ver","0.0.1") # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
     props.setFeature("param_sch_floor",min_max['min'])
     props.setFeature("param_sch_ceiling",min_max['max'])
-    #props.setFeature("param_sch_target",load_inst.name.to_s) # todo - I think this should be determined dynamically from multiple possible targets vs hard coded
 
     # cleanup existing profiles
     schedule_ruleset_cleanup_profiles(sch)
 
-    # step through rules and add additional properties to describe profiles
+    # gather profiles
+    daily_flhs = [] # will be used to tag, min,medium,max operation for non typical operations
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
     sch.scheduleRules.each do |rule|
       schedule_days[rule.daySchedule] = rule.ruleIndex
+      daily_flhs << day_schedule_equivalent_full_load_hrs(rule.daySchedule)
     end
     schedule_days[sch.defaultDaySchedule] = -1
+    daily_flhs << day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
 
     # get indices for current schedule
     year_description = sch.model.yearDescription.get
@@ -4888,7 +4923,7 @@ class Standard
     year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     indices_vector = sch.getActiveRuleIndices(year_start_date, year_end_date)
 
-    # loop through schedule days
+    # step through profiles and add additional properties to describe profiles
     schedule_days.each_with_index do |(schedule_day,current_rule_index),i|
 
       # loop through indices looking of rule in hoo that contains days in the rule
@@ -4923,28 +4958,33 @@ class Standard
         vac = 24.0 - hours_of_operation[hoo_target_index][:hoo_hours]
       end
 
-      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
       props = schedule_day.additionalProperties
       par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
       times = schedule_day.times
       values = schedule_day.values
-      values.each_with_index do |value,i|
-        current_time = times[i].totalHours
+      values.each_with_index do |value,j|
+
+        # don't add value until 24 if it is the same as first value for non constant profiles
+        if values.size > 1 && j == values.size - 1 && value == values.first
+          next
+        end
+
+        current_time = times[j].totalHours
         # if step height goes floor to ceiling then do not ramp.
         if !ramp or values.uniq.size < 3
           # this will result in steps like old profiles, update to ramp in most cases
-          if i == values.size - 1
+          if j == values.size - 1
             par_val_time_hash[current_time] = [value,values.first]
           else
-            par_val_time_hash[current_time] = [value,values[i+1]]
+            par_val_time_hash[current_time] = [value,values[j+1]]
           end
         else
-          if i == 0
+          if j == 0
             prev_time = times.last.totalHours - 24 # e.g. 24 would show as until 0
           else
-            prev_time = times[i-1].totalHours
+            prev_time = times[j-1].totalHours
           end
-          if i == values.size - 1
+          if j == values.size - 1
             next_time = times.first.totalHours + 24 # e.g. 6 would show as until 30
             next_value = values.first
 
@@ -4954,8 +4994,8 @@ class Standard
             end
 
           else
-            next_time = times[i+1].totalHours
-            next_value = values[i+1]
+            next_time = times[j+1].totalHours
+            next_value = values[j+1]
           end
           # delta time is min min_ramp_dur_hr, half of previous dur, half of next dur
           # todo - would be nice to change to 0.25 for vally less than 2 hours
@@ -4990,6 +5030,7 @@ class Standard
       end
 
       # test expected value against estimated value
+      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
       percent_change = ((daily_flh - est_daily_flh)/daily_flh) * 100.0
       if percent_change.abs > 0.05
         # todo - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
@@ -5040,12 +5081,11 @@ class Standard
           end
 
           # pick from possible formula approaches for any datapoint where x is hour value
-          # minimize x, which should be no greater than 12, see if rounding to 2 decimal places works
           min_key = formula_identifier_min_abs.key(formula_identifier_min_abs.values.min)
           min_value = formula_identifier[min_key]
 
           if hoo_var_method == "hours"
-
+            # minimize x, which should be no greater than 12, see if rounding to 2 decimal places works
             min_value = min_value.round(2)
             if min_key == "start"
               if min_value == 0
@@ -5075,17 +5115,48 @@ class Standard
               end
             end
 
-          elsif hoo_var_method == "default" # fractional
+          elsif hoo_var_method == "fractional"
 
-            # todo - pick from possible formula approaches for any datapoint where x is a fraction of occ or vac
-            # minimize x(hour before converted to fraction), which should be no greater than 0.5, see if rounding to 3 decimal places works
-            # time = "hoo_start - vac * x" #(how much of non occupied time is this time before hoo_start)
-            # time = "hoo_start + occ * x" #(how much of  occupied time is this time after hoo_start)
-            # time = "hoo_end - occ * x"
-            # time = "hoo_end + vac * x"
-            # time = "hoo_start + occ * 0.5 - occ * x" # variation to describe something near lunch vs. beginning and end of day
-            # time = "hoo_start + occ * 0.5 + occ * x" # variation to describe something near lunch vs. beginning and end of day
-            #
+            # minimize x(hour before converted to fraction), which should be no greater than 0.5 as fraction, see if rounding to 3 decimal places works
+            if occ > 0
+              min_value_occ_fract = min_value.abs/occ
+            else
+              min_value_occ_fract = 0.0
+            end
+            if vac > 0
+              min_value_vac_fract = min_value.abs/vac
+            else
+              min_value_vac_fract = 0.0
+            end
+            if min_key == "start"
+              if min_value == 0
+                time = "hoo_start"
+              elsif min_value < 0
+                time = "hoo_start + occ * #{min_value_occ_fract.round(3)}"
+              else # greater than 0
+                time = "hoo_start - vac * #{min_value_vac_fract.round(3)}"
+              end
+            elsif min_key == "mid"
+              # todo - see what is going wrong with after mid in formula
+              if min_value == 0
+                time = "mid"
+                # converted to variable for simplicity but could also be described like this
+                # time = "hoo_start + occ * 0.5"
+              elsif min_value < 0
+                time = "mid + occ * #{min_value_occ_fract.round(3)}"
+              else # greater than 0
+                time = "mid - occ * #{min_value_occ_fract.round(3)}"
+              end
+            else # min_key == "end"
+              if min_value == 0
+                time = "hoo_end"
+              elsif min_value < 0
+                time = "hoo_end + vac * #{min_value_vac_fract.round(3)}"
+              else # greater than 0
+                time = "hoo_end - occ * #{min_value_occ_fract.round(3)}"
+              end
+            end
+
           else # "none"
             # do not add in hoo variables
           end
@@ -5093,7 +5164,6 @@ class Standard
         end
 
         # populate string
-        # todo - change divider so doesn't intefere with using / in formula
         if value_array_var.size == 1
           raw_string << "#{time} ~ #{value_array_var.first}"
         else # should only have 1 or two values (value in and optional value out)
@@ -5117,11 +5187,11 @@ class Standard
       # tagging min/max makes sense in fractional schedules but not temperature schedules like thermostats (specifically cooling setpoints)
       # todo - I think these tags should come from occpancy schedule for space(s) schedule. That way all schedules in a space will refer to same profile from hours of operation
       # todo - add school specific logic hear or in post processing, currently default profile for school may not be most prevalent one
-      if i-1 == -1
+      if current_rule_index == -1
         props.setFeature("param_day_tag","typical_operation")
-      elsif schedule_days[schedule_day] == schedule_days.values.min
+      elsif daily_flh == daily_flhs.min
         props.setFeature("param_day_tag","minimal_operation")
-      elsif schedule_days[schedule_day] == schedule_days.values.max
+      elsif daily_flh == daily_flhs.max
         props.setFeature("param_day_tag","maximum_operation") # normally this should not be used as typical should be the most active day
       else
         props.setFeature("param_day_tag","medium_operation") # not min max or typical
