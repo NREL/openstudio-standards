@@ -1728,7 +1728,7 @@ class Standard
       # address schedule that is always on or always off (start and end can not both be nil unless unexpected value was found)
       if !hoo_start.nil? && hoo_end.nil?
         hoo_end = hoo_start
-      else !hoo_end.nil? && hoo_start.nil?
+      elsif !hoo_end.nil? && hoo_start.nil?
         hoo_start = hoo_end
       end
 
