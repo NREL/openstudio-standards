@@ -192,10 +192,14 @@ class Standard
       floor_area_ip = OpenStudio.convert(hash[:floor_area], 'm^2', 'ft^2').get
 
       # load elevator_data
-      search_criteria = { 'building_type' => building_type }
+      search_criteria = {
+          'building_type' => building_type,
+          'template' => template
+      }
       elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
       if elevator_data_lookup.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
+        return nil
       end
 
       # determine number of passenger elevators
