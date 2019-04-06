@@ -57,10 +57,10 @@ class TestParametricSchedules < Minitest::Test
       puts "Test: Created building hours of operation schedule named #{hours_of_operation.name}."
 
       # report back hours of operation
-      hours_of_operation = standard.space_hours_of_operation(model.getSpaces.first)
-      assert(hours_of_operation.size > 0)
+      hours_of_operation_hash = standard.space_hours_of_operation(model.getSpaces.first)
+      assert(hours_of_operation_hash.size > 0)
       puts "Test: Extracted hours of operation schedule from space."
-      #puts "Test: #{hours_of_operation.keys.first}: #{hours_of_operation.values.first.inspect}"
+      puts "Test: #{hours_of_operation_hash.keys.first}: #{hours_of_operation_hash.values.inspect}"
 
       # model_setup_parametric_schedules
       parametric_inputs = standard.model_setup_parametric_schedules(model,gather_data_only: false)
@@ -77,6 +77,40 @@ class TestParametricSchedules < Minitest::Test
       model.getScheduleDays.each do |sch_day|
         orig_sch_day_hash[sch_day] = standard.day_schedule_equivalent_full_load_hrs(sch_day)
       end
+
+      # todo - add in test code to change hours of operation for just one vs. the entire model. Make sure has unique days and hours
+
+
+=begin
+      # todo - temp code to chane hours of operation.
+      default_sch = hours_of_operation.defaultDaySchedule
+      default_sch.clearValues
+      # office hoo_start is 8 hoo_end is 18
+      os_time = OpenStudio::Time.new(0, 5, 30, 0) # day, hour, min, sec
+      default_sch.addValue(os_time,1)
+      os_time = OpenStudio::Time.new(0, 19, 30, 0) # day, hour, min, sec
+      default_sch.addValue(os_time,0)
+      os_time = OpenStudio::Time.new(0, 24, 0, 0) # day, hour, min, sec
+      default_sch.addValue(os_time,1)
+=end
+
+
+=begin
+      # todo - temp code to change profile shape for occupancy schedule
+      target_name = "OfficeMedium BLDG_OCC_SCH Default"
+      model.getScheduleDays.each do |sch_day|
+        next if sch_day.name.get.to_s != target_name
+
+        model.getAdditionalPropertiess.each do |prop|
+          next if prop.modelObject != sch_day
+
+          #formula = "hoo_start - 7.0 ~ 0.0 | hoo_start - 2.5 ~ 0.0 | hoo_start - 1.5 ~ 0.1 | hoo_start - 0.5 ~ 0.2 | hoo_start + 0.5 ~ 0.95 | mid - 1.5 ~ 0.95 | mid - 0.5 ~ 0.5 | mid + 0.5 ~ 0.95 | hoo_end - 1.5 ~ 0.95 | hoo_end - 0.5 ~ 0.3 | hoo_end + 0.5 ~ 0.1 | hoo_end + 3.0 ~ 0.1 | hoo_end + 5.0 ~ 0.05"
+          formula = "hoo_start - 7.0 ~ 0.0 | hoo_start - 2.5 ~ 0.0 | hoo_start - 1.5 ~ 0.1 | hoo_start - 0.5 ~ 0.2 | hoo_start + 0.5 ~ 0.85 | hoo_start + 1.5 ~ 0.95| hoo_start + 3 ~ 0.95 | hoo_end - 3 ~ 0.85| hoo_end - 1.5 ~ 0.6 | hoo_end - 0.5 ~ 0.3 | hoo_end + 0.5 ~ 0.2 | hoo_end + 3.0 ~ 0.1 | hoo_end + 5.0 ~ 0.05"
+
+          prop.setFeature("param_day_profile",formula)
+        end
+      end
+=end
 
       # model_build_parametric_schedules
       parametric_schedules = standard.model_apply_parametric_schedules(model)
