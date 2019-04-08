@@ -137,13 +137,13 @@ module BTAP
 
     module Wizards
       def self.create_shape_courtyard(model,
-          length = 50,
-          width = 30,
-          courtyard_length = 15,
-          courtyard_width = 5,
+          length = 50.0,
+          width = 30.0,
+          courtyard_length = 15.0,
+          courtyard_width = 5.0,
           num_floors = 3,
           floor_to_floor_height = 3.8,
-          plenum_height = 1,
+          plenum_height = 1.0,
           perimeter_zone_depth = 4.57)
         if length <= 1e-4
           raise("Length must be greater than 0.")
@@ -182,17 +182,17 @@ module BTAP
 
         shortest_side = [length, width].min
         if perimeter_zone_depth < 0 or 4 * perimeter_zone_depth >= (shortest_side - 1e-4)
-          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 4}m.")
+          raise("Perimeter zone depth must be greater than or equal to 0 and less than #{shortest_side / 4.0}m.")
           return false
         end
 
         if courtyard_length >= (length - 4 * perimeter_zone_depth - 1e-4)
-          raise("Courtyard length must be less than #{length - 4 * perimeter_zone_depth}m.")
+          raise("Courtyard length must be less than #{length - 4.0 * perimeter_zone_depth}m.")
           return false
         end
 
         if courtyard_width >= (width - 4 * perimeter_zone_depth - 1e-4)
-          raise("Courtyard width must be less than #{width - 4 * perimeter_zone_depth}m.")
+          raise("Courtyard width must be less than #{width - 4.0 * perimeter_zone_depth}m.")
           return false
         end
 
@@ -208,33 +208,33 @@ module BTAP
           story.setName("Story #{floor + 1}")
 
 
-          nw_point = OpenStudio::Point3d.new(0, width, z)
+          nw_point = OpenStudio::Point3d.new(0.0, width, z)
           ne_point = OpenStudio::Point3d.new(length, width, z)
-          se_point = OpenStudio::Point3d.new(length, 0, z)
-          sw_point = OpenStudio::Point3d.new(0, 0, z)
+          se_point = OpenStudio::Point3d.new(length, 0.0, z)
+          sw_point = OpenStudio::Point3d.new(0.0, 0.0, z)
 
-          courtyard_nw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2, (width - courtyard_width) / 2 + courtyard_width, z)
-          courtyard_ne_point = OpenStudio::Point3d.new((length - courtyard_length) / 2 + courtyard_length, (width - courtyard_width) / 2 + courtyard_width, z)
-          courtyard_se_point = OpenStudio::Point3d.new((length - courtyard_length) / 2 + courtyard_length, (width - courtyard_width) / 2, z)
-          courtyard_sw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2, (width - courtyard_width) / 2, z)
+          courtyard_nw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0, (width - courtyard_width) / 2.0 + courtyard_width, z)
+          courtyard_ne_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0 + courtyard_length, (width - courtyard_width) / 2.0 + courtyard_width, z)
+          courtyard_se_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0 + courtyard_length, (width - courtyard_width) / 2.0, z)
+          courtyard_sw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0, (width - courtyard_width) / 2.0, z)
 
           # Identity matrix for setting space origins
-          m = OpenStudio::Matrix.new(4, 4, 0)
-          m[0, 0] = 1
-          m[1, 1] = 1
-          m[2, 2] = 1
-          m[3, 3] = 1
+          m = OpenStudio::Matrix.new(4, 4, 0.0)
+          m[0, 0] = 1.0
+          m[1, 1] = 1.0
+          m[2, 2] = 1.0
+          m[3, 3] = 1.0
 
           # Define polygons for a building with a courtyard
           if perimeter_zone_depth > 0
-            outer_perimeter_nw_point = nw_point + OpenStudio::Vector3d.new(perimeter_zone_depth, -perimeter_zone_depth, 0)
-            outer_perimeter_ne_point = ne_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, -perimeter_zone_depth, 0)
-            outer_perimeter_se_point = se_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, perimeter_zone_depth, 0)
-            outer_perimeter_sw_point = sw_point + OpenStudio::Vector3d.new(perimeter_zone_depth, perimeter_zone_depth, 0)
-            inner_perimeter_nw_point = courtyard_nw_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, perimeter_zone_depth, 0)
-            inner_perimeter_ne_point = courtyard_ne_point + OpenStudio::Vector3d.new(perimeter_zone_depth, perimeter_zone_depth, 0)
-            inner_perimeter_se_point = courtyard_se_point + OpenStudio::Vector3d.new(perimeter_zone_depth, -perimeter_zone_depth, 0)
-            inner_perimeter_sw_point = courtyard_sw_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, -perimeter_zone_depth, 0)
+            outer_perimeter_nw_point = nw_point + OpenStudio::Vector3d.new(perimeter_zone_depth, -perimeter_zone_depth, 0.0)
+            outer_perimeter_ne_point = ne_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, -perimeter_zone_depth, 0.0)
+            outer_perimeter_se_point = se_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, perimeter_zone_depth, 0.0)
+            outer_perimeter_sw_point = sw_point + OpenStudio::Vector3d.new(perimeter_zone_depth, perimeter_zone_depth, 0.0)
+            inner_perimeter_nw_point = courtyard_nw_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, perimeter_zone_depth, 0.0)
+            inner_perimeter_ne_point = courtyard_ne_point + OpenStudio::Vector3d.new(perimeter_zone_depth, perimeter_zone_depth, 0.0)
+            inner_perimeter_se_point = courtyard_se_point + OpenStudio::Vector3d.new(perimeter_zone_depth, -perimeter_zone_depth, 0.0)
+            inner_perimeter_sw_point = courtyard_sw_point + OpenStudio::Vector3d.new(-perimeter_zone_depth, -perimeter_zone_depth, 0.0)
 
             west_outer_perimeter_polygon = OpenStudio::Point3dVector.new
             west_outer_perimeter_polygon << sw_point
@@ -1381,11 +1381,9 @@ module BTAP
           #Set vertical story position
           story.setNominalZCoordinate(z)
 
-          #Ensure that underground stories (when z<0 have Ground set as Boundary conditions. 
-          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model, BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z <= 0
-          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model, BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Outdoors") if z > 0
-
-
+          #Ensure that underground stories (when z<0 have Ground set as Boundary conditions). Apply the Ground BC to all surfaces, the top ceiling will be 
+          # corrected below when the surface matching algorithm is called. 
+          BTAP::Geometry::Surfaces::set_surfaces_boundary_condition(model, BTAP::Geometry::Surfaces::get_surfaces_from_building_stories(model, story), "Ground") if z < 0
         end #End of floor loop
 
         #    runner.destroyProgressBar
