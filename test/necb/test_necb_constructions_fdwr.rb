@@ -194,7 +194,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @json_test_output[template][@hdd]['srr'] = srr_info["srr"].round(4)
         @json_test_output[template][@hdd]['outdoor_roofs_average_conductances'] = outdoor_roofs_average_conductance.round(4)
         @json_test_output[template][@hdd]['outdoor_walls_average_conductances'] = outdoor_walls_average_conductance.round(4)
-        @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = outdoor_floors_average_conductance.round(4)
+        @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = outdoor_floors_average_conductance.to_f.round(4)
         @json_test_output[template][@hdd]['ground_roofs_average_conductances'] = ground_roofs_average_conductances.round(4)
         @json_test_output[template][@hdd]['ground_walls_average_conductances'] = ground_walls_average_conductances.round(4)
         @json_test_output[template][@hdd]['ground_floors_average_conductances'] = ground_floors_average_conductances.round(4)
