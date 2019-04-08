@@ -39,7 +39,7 @@ class DefaultSystemSelectionTests < Minitest::Test
           (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}
 
           #Go Through each space type. with a counter
-          standard.model_find_objects(standard.standards_data["space_types"], {"template" => template}).each_with_index do |space_type_properties, index|
+          standard.standards_lookup_table_many(table_name: "space_types", search_criteria: {"template" => template}).each_with_index do |space_type_properties, index|
 
             # Create a space type
             #puts "Testing spacetype #{space_type_properties["building_type"]}-#{space_type_properties["space_type"]}"

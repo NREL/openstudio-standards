@@ -27,9 +27,9 @@ class NECBRegressionHelper < Minitest::Test
       end
 
       model = Standard.build("#{template}").model_create_prototype_model( epw_file: epw_file,
-                                                                                sizing_run_dir: run_dir,
-                                                                                template: template,
-                                                                                building_type: building_type)
+                                                                          sizing_run_dir: run_dir,
+                                                                          template: template,
+                                                                          building_type: building_type)
       print model.class.name
       unless model.instance_of?( OpenStudio::Model::Model )
         puts "Creation of Model for #{osm_model_path} failed. Please check output for errors."

@@ -33,7 +33,6 @@ necb/test_necb_chiller_rules.rb
 necb/test_necb_constructions_fdwr.rb
 necb/test_necb_coolingtower_rules.rb
 necb/test_necb_default_spacetypes.rb
-necb/test_necb_default_system_selection.rb
 necb/test_necb_fan_rules.rb
 necb/test_necb_heatpump_rules.rb
 necb/test_necb_hrv_rules.rb
@@ -46,6 +45,7 @@ necb/test_necb_schedules.rb
 necb/test_necb_pumppower_rules.rb
 necb/test_necb_shw.rb
 necb/test_remove_duplicate_materials_and_constructions.rb
+necb/test_necb_total_and_tz_ceiling_centroid.rb
 ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_electric.rb
 ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2011_gas.rb
 ci_test_files/test_necb_bldg_FullServiceRestaurant_NECB2015_electric.rb

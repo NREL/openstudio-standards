@@ -1,7 +1,20 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 'MAXIMIZE')
+    # NECB FDWR limit
+    hdd = self.get_necb_hdd18(model)
+    #For some reason the max fdwr and
+    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+
+    # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
+    # rest of the method.  Otherwise, follow the original intent of the method.
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
+
+    return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
+  end
+
+  def apply_limit_fdwr(model:, fdwr_lim:)
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -66,17 +79,17 @@ class NECB2011
 
       # Add to the correct category
       case cat
-        when 'Unconditioned'
-          next # Skip unconditioned spaces
-        when 'NonResConditioned'
-          nr_wall_m2 += wall_area_m2
-          nr_wind_m2 += wind_area_m2
-        when 'ResConditioned'
-          res_wall_m2 += wall_area_m2
-          res_wind_m2 += wind_area_m2
-        when 'Semiheated'
-          sh_wall_m2 += wall_area_m2
-          sh_wind_m2 += wind_area_m2
+      when 'Unconditioned'
+        next # Skip unconditioned spaces
+      when 'NonResConditioned'
+        nr_wall_m2 += wall_area_m2
+        nr_wind_m2 += wind_area_m2
+      when 'ResConditioned'
+        res_wall_m2 += wall_area_m2
+        res_wind_m2 += wind_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_wind_m2 += wind_area_m2
       end
     end
 
@@ -108,9 +121,7 @@ class NECB2011
     red_res = wwr_res > wwr_lim
     red_sh = wwr_sh > wwr_lim
 
-    # NECB FDWR limit
-    hdd = self.get_necb_hdd18(model)
-    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
@@ -140,7 +151,13 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model)
+  def apply_standard_skylight_to_roof_ratio(model:, ssr_set: 'MAXIMIZE')
+    # SRR limit
+    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+
+    # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
+    # method.  Otherwise, follow the original intent of the method.
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
@@ -181,15 +198,15 @@ class NECB2011
 
       # Add to the correct category
       case cat
-        when 'NonRes'
-          nr_wall_m2 += wall_area_m2
-          nr_sky_m2 += sky_area_m2
-        when 'Res'
-          res_wall_m2 += wall_area_m2
-          res_sky_m2 += sky_area_m2
-        when 'Semiheated'
-          sh_wall_m2 += wall_area_m2
-          sh_sky_m2 += sky_area_m2
+      when 'NonRes'
+        nr_wall_m2 += wall_area_m2
+        nr_sky_m2 += sky_area_m2
+      when 'Res'
+        res_wall_m2 += wall_area_m2
+        res_sky_m2 += sky_area_m2
+      when 'Semiheated'
+        sh_wall_m2 += wall_area_m2
+        sh_sky_m2 += sky_area_m2
       end
       total_roof_m2 += wall_area_m2
       total_subsurface_m2 += sky_area_m2
@@ -202,8 +219,7 @@ class NECB2011
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-    # SRR limit
-    srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
+
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -311,14 +327,22 @@ class NECB2011
     new_name = "#{old_name} at hdd = #{hdd}"
 
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval(self.get_standards_table('surface_thermal_transmittance', {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
+    wall_rsi = 1.0 / (scale_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                           search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                         search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
+    door_rsi = 1.0 / (scale_door * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
+    window_rsi = 1.0 / (scale_window * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
+                                                                             search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
@@ -347,12 +371,12 @@ class NECB2011
     if surface.outsideBoundaryCondition.casecmp('outdoors').zero?
 
       case surface.surfaceType.downcase
-        when 'wall'
-          conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'floor'
-          conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'roofceiling'
-          conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'wall'
+        conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'floor'
+        conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'roofceiling'
+        conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -362,12 +386,12 @@ class NECB2011
 
     if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
-        when 'wall'
-          conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'floor'
-          conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when 'roofceiling'
-          conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'wall'
+        conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'floor'
+        conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when 'roofceiling'
+        conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -385,10 +409,10 @@ class NECB2011
 
     if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
-        when /window/
-          conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
-        when /door/
-          conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when /window/
+        conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+      when /door/
+        conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       subsurface.setRSI(1 / conductance_value)
     end
@@ -460,9 +484,9 @@ class NECB2011
   end
 
 
-  def model_add_construction_set_from_osm(model: ,
-                                          construction_set_name:'BTAP-Mass',
-                                          osm_path: File.absolute_path(File.join(__FILE__, '..', '..','common/construction_defaults.osm')))
+  def model_add_construction_set_from_osm(model:,
+                                          construction_set_name: 'BTAP-Mass',
+                                          osm_path: File.absolute_path(File.join(__FILE__, '..', '..', 'common/construction_defaults.osm')))
     # load resources model
     construction_library = BTAP::FileIO::load_osm(osm_path)
 
@@ -474,7 +498,6 @@ class NECB2011
     new_construction_set = selected_construction_set.clone(model).to_DefaultConstructionSet.get
     return new_construction_set
   end
-
 
 
   def assign_contruction_to_adiabatic_surfaces(model)
@@ -573,9 +596,9 @@ class NECB2011
     # Identity matrix for setting space origins
     m = OpenStudio::Matrix.new(4, 4, 0)
 
-    m[0, 0] = 1.0/x_scale
-    m[1, 1] = 1.0/y_scale
-    m[2, 2] = 1.0/z_scale
+    m[0, 0] = 1.0 / x_scale
+    m[1, 1] = 1.0 / y_scale
+    m[2, 2] = 1.0 / z_scale
     m[3, 3] = 1.0
     t = OpenStudio::Transformation.new(m)
     model.getPlanarSurfaceGroups().each do |planar_surface|
@@ -584,4 +607,103 @@ class NECB2011
     return model
   end
 
+  # This method applies the maximum fenestration and door to wall ratio to a building as per NECB 2011 8.4.4.3 and
+  # 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for al exterior walls adjacent to conditioned
+  # spaces.  It distinguishes between plenums and other conditioned spaces.  It uses both to calculate the maximum window
+  # area to be applied to the building but attempts to put these windows only on non-plenum conditioned spaces (if
+  # possible).
+  def apply_max_fdwr_nrcan(model:, fdwr_lim:)
+    # First determine which vertical (between 89 and 91 degrees from horizontal) walls are adjacent to conditioned
+    # spaces.
+    exp_surf_info = find_exposed_conditioned_vertical_surfaces(model)
+    # If there are none (or very few) then throw a warning.
+    if exp_surf_info["total_exp_wall_area_m2"] < 0.1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "This building has no exposed walls adjacent to heated spaces.")
+      return false
+    end
+
+
+    # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
+    # should go.
+    if fdwr_lim > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger window area than there is wall area.")
+      return false
+    elsif fdwr_lim < 0.001
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
+    end
+    # Get the required window area.
+    win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
+    # Try to put the windows on non-plenum walls if possible.  So determine if you can fit the required window area
+    # on the non-plenum wall area.
+    if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
+      # If you can fit the windows on the non-plenum wall area then recalculate the window ratio so that is is only for
+      # the non-plenum walls.
+      nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
+        # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
+      end
+    else
+      # There was not enough non-plenum wall area so add the windows to both the plenum and non-plenum walls.  This is
+      # done separately because the 'find_exposed_conditioned_vertical_surfaces' method returns the plenum and
+      # non-plenum walls separately.
+      exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
+        # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
+        # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+      end
+      exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
+        # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
+        # type (which will be 'fixedwindow')
+        remove_All_Subsurfaces(surface: exp_surf)
+        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+      end
+    end
+    return true
+  end
+
+  # This method is similar to the 'apply_max_fdwr' method above but applies the maximum skylight to roof area ratio to a
+  # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
+  # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
+  # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
+  def apply_max_srr_nrcan(model:, srr_lim: )
+    # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
+    exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
+    # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
+    # idea to warn the user.
+    if exp_surf_info["exp_nonplenum_roof_area_m2"] < 0.1
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.")
+      return false
+    end
+
+
+    # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
+    # all the skylights should go.
+    if srr_lim > 1
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "This building requires a larger skylight area than there is roof area.")
+      return false
+    elsif srr_lim < 0.001
+      exp_surf_info["exp_nonplenum_roofs"].sort.each do |exp_surf|
+        remove_All_Subsurfaces(surface: exp_surf)
+      end
+      return true
+    end
+
+    # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
+    # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
+    # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
+    # ('skylight' in this case).  Note that this method will only work if the surface does not fold into itself (like an
+    # L or a V).
+    exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
+      # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
+      sub_surface_create_scaled_subsurfaces_from_surface(roof, srr_lim, model)
+    end
+    return true
+  end
 end

@@ -1,0 +1,18 @@
+{
+  "tables": {
+    "murb_hrv_compliance": {
+      "data_type": "table",
+      "refs": [
+        "NECB2011-5.2.10.4"
+      ],
+      "ignored_spacetypes_regex": "(stair|corr|lobby)",
+      "dwelling_unit_spacetype_regex": "(dwelling)",
+      "table": [
+        {
+          "var": "hrv_required?",
+          "expected_value": true
+        }
+      ]
+    }
+  }
+}

@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "boilers",
+  "tables": {
+    "boilers": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -121,5 +120,5 @@
         }
       ]
     }
-  ]
+  }
 }

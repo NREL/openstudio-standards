@@ -8,17 +8,54 @@ class NECB2011 < Standard
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
 
+  def get_standards_table(table_name:)
+    if @standards_data["tables"][table_name].nil?
+      message = "Could not find table #{table_name} in database."
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', message)
+    end
+    @standards_data["tables"][table_name]
+  end
+
+  def get_standard_constant_value(constant_name:)
+    puts "do nothing"
+  end
+
+
   # Combine the data from the JSON files into a single hash
   # Load JSON files differently depending on whether loading from
   # the OpenStudio CLI embedded filesystem or from typical gem installation
   def load_standards_database_new()
     @standards_data = {}
-    @standards_data["tables"] = []
+    @standards_data["tables"] = {}
+
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      embedded_files_relative('../common', /.*\.json/).each do |file|
+        data = JSON.parse(EmbeddedScripting.getFileAsString(file))
+        if not data["tables"].nil? and data["tables"].first["data_type"] == "table"
+          @standards_data["tables"] << data["tables"].first
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    else
+      path = "#{File.dirname(__FILE__)}/../common/"
+      raise ('Could not find common folder') unless Dir.exist?(path)
+      files = Dir.glob("#{path}/*.json").select {|e| File.file? e}
+      files.each do |file|
+        data = JSON.parse(File.read(file))
+        if not data["tables"].nil?
+          @standards_data["tables"] = [*@standards_data["tables"], *data["tables"]].to_h
+        else
+          @standards_data[data.keys.first] = data[data.keys.first]
+        end
+      end
+    end
+
 
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
+        if not data["tables"].nil? and data["tables"].first["data_type"] == "table"
           @standards_data["tables"] << data["tables"].first
         else
           @standards_data[data.keys.first] = data[data.keys.first]
@@ -28,18 +65,16 @@ class NECB2011 < Standard
       files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
       files.each do |file|
         data = JSON.parse(File.read(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-          @standards_data["tables"] << data["tables"].first
+        if not data["tables"].nil?
+          @standards_data["tables"] = [*@standards_data["tables"], *data["tables"]].to_h
         else
           @standards_data[data.keys.first] = data[data.keys.first]
         end
       end
     end
+    # Write database to file.
+    # File.open(File.join(File.dirname(__FILE__), '..', 'NECB2011.json'), 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
 
-    #needed for compatibility of standards database format
-    @standards_data['tables'].each do |table|
-      @standards_data[table['name']] = table
-    end
     return @standards_data
   end
 
@@ -55,28 +90,21 @@ class NECB2011 < Standard
   end
 
   def get_standards_constant(name)
-    object = @standards_data['constants'].detect {|constant| constant['name'] == name}
-    raise("could not find #{name} in standards constants database. ") if object.nil? or object['value'].nil?
+    object = @standards_data['constants'][name]
+
+    if object.nil? or object['value'].nil?
+      raise("could not find #{name} in standards constants database. ")
+    end
+
     return object['value']
   end
 
   def get_standards_formula(name)
-    object = @standards_data['formulas'].detect {|formula| formula['name'] == name}
+    object = @standards_data['formulas'][name]
     raise("could not find #{name} in standards formual database. ") if object.nil? or object['value'].nil?
     return object['value']
   end
 
-  def get_standards_table(table_name, search_criteria = nil)
-    return_objects = nil
-    object = @standards_data['tables'].detect {|table| table['name'] == table_name}
-    raise("could not find #{table_name} in standards table database. ") if object.nil? or object['table'].nil?
-    if search_criteria.nil?
-      return object['table']
-    else
-      return_objects = model_find_objects(object['table'], search_criteria)
-      return return_objects
-    end
-  end
 
   def initialize
     super()
@@ -88,23 +116,23 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types']['table'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return standards_lookup_table_many(table_name: 'space_types').map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
   def distance(loc1, loc2)
-    rad_per_deg = Math::PI/180 # PI / 180
+    rad_per_deg = Math::PI / 180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
     rm = rkm * 1000 # Radius in meters
 
-    dlat_rad = (loc2[0]-loc1[0]) * rad_per_deg # Delta, converted to rad
-    dlon_rad = (loc2[1]-loc1[1]) * rad_per_deg
+    dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
+    dlon_rad = (loc2[1] - loc1[1]) * rad_per_deg
 
     lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
     lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
 
-    a = Math.sin(dlat_rad/2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad/2)**2
-    c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
+    a = Math.sin(dlat_rad / 2) ** 2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2) ** 2
+    c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1 - a))
     rm * c # Delta in meters
   end
 
@@ -112,7 +140,7 @@ class NECB2011 < Standard
   def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['tables'].detect {|table| table['name'] == 'regional_fuel_use'}['table'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
+    fuel_sources = standards_lookup_table_many(table_name: 'regional_fuel_use').detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
@@ -123,7 +151,7 @@ class NECB2011 < Standard
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
     #this extracts the table from the json database.
-    necb_2015_table_c1 = @standards_data['tables'].detect {|table| table['name'] == 'necb_2015_table_c1'}['table']
+    necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
       next if necb['lat_long'].nil? #Need this until Tyson cleans up table.
       dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
@@ -133,35 +161,42 @@ class NECB2011 < Standard
       end
     end
     if (min_distance / 1000.0) > max_distance_tolerance and not epw.hdd18.nil?
-      puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance/1000.0}km away. Using epw hdd18 instead."
+      puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance / 1000.0}km away. Using epw hdd18 instead."
       return epw.hdd18.to_f
     else
-      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of #{'%.2f' % (min_distance/1000.0)}km from epw location. Ref:necb_2015_table_c1"
+      puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of #{'%.2f' % (min_distance / 1000.0)}km from epw location. Ref:necb_2015_table_c1"
       return necb_closest['degree_days_below_18_c'].to_f
     end
   end
 
 
-
   # This method is a wrapper to create the 16 archetypes easily.
   def model_create_prototype_model(template:,
-                            building_type:,
-                            epw_file:,
-                            debug: false,
-                            sizing_run_dir: Dir.pwd,
-                            x_scale: 1.0,
-                            y_scale: 1.0,
-                            z_scale: 1.0
+                                   building_type:,
+                                   epw_file:,
+                                   debug: false,
+                                   sizing_run_dir: Dir.pwd,
+                                   x_scale: 1.0,
+                                   y_scale: 1.0,
+                                   z_scale: 1.0,
+                                   fdwr_set: 'MAXIMIZE',
+                                   ssr_set: 'MAXIMIZE',
+                                   new_auto_zoner: false
+
   )
-    osm_model_path = File.absolute_path(File.join(__FILE__,'..','..','..',"necb/#{template}/data/geometry/#{building_type}.osm"))
+    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
-    return model_apply_standard( model: model,
-                                 epw_file: epw_file,
-                                 x_scale: x_scale,
-                                 y_scale: y_scale,
-                                 z_scale: z_scale,
-                                 sizing_run_dir: sizing_run_dir )
+
+    return model_apply_standard(model: model,
+                                epw_file: epw_file,
+                                x_scale: x_scale,
+                                y_scale: y_scale,
+                                z_scale: z_scale,
+                                sizing_run_dir: sizing_run_dir,
+                                fdwr_set: fdwr_set,
+                                ssr_set: ssr_set,
+                                new_auto_zoner: new_auto_zoner)
   end
 
 
@@ -173,24 +208,40 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            x_scale: 1.0,
                            y_scale: 1.0,
-                           z_scale: 1.0
-  )
+                           z_scale: 1.0,
+                           fdwr_set: 'MAXIMIZE',
+                           ssr_set: 'MAXIMIZE',
+                           new_auto_zoner: false
 
+  )
+    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
+    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     #validate that model has information required.
+    #puts 'Old SPace types'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
+
     return false unless validate_initial_model(model)
 
     #Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
 
+    #puts Old SPace types
+    # puts 'new spacetypes'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
+
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
 
     #Set simulation start day to be consistent.
-    model.yearDescription.get.setDayofWeekforStartDay('Sunday')
+    model.getYearDescription.setDayofWeekforStartDay('Sunday')
 
     #Set climate data.
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
@@ -201,6 +252,7 @@ class NECB2011 < Standard
 
     #Set Loads/Schedules
     model_add_loads(model)
+
 
     #Add Infiltration
     model_apply_infiltration_standard(model)
@@ -213,13 +265,13 @@ class NECB2011 < Standard
     model_add_constructions(model)
     apply_standard_construction_properties(model)
 
-    #Set FDWR and SSR
-    apply_standard_window_to_wall_ratio(model)
-    apply_standard_skylight_to_roof_ratio(model)
-
     #Set up thermal zones for initial sizing run.
     model_create_thermal_zones(model, @space_multiplier_map)
 
+    # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
+    # are adjacent to conditioned spaces.
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, ssr_set: ssr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
@@ -227,7 +279,26 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    model_add_hvac(model, epw_file) # standards for NECB Prototype for NREL candidate
+    if new_auto_zoner
+      auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
+      auto_system(model: model,
+                  boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
+                  baseboard_type: system_fuel_defaults['baseboard_type'],
+                  mau_type: system_fuel_defaults['mau_type'],
+                  mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
+                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                  chiller_type: system_fuel_defaults['chiller_type'],
+                  heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
+                  heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
+                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
+      )
+      random = Random.new(1234)
+      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
+      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+    else
+      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+    end
     model_add_swh(model)
     model_apply_sizing_parameters(model)
 
@@ -258,26 +329,78 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
-    # Remove duplicate materials and constructions
-    model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    # Remove duplicate materials and constructions (currently commented out).
+    # Commented out because it consumes a significant portion of the btap run time (30% - 50%).  The line below should
+    # be uncommented when the flie clarity it affords is desired.
+    # model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+
+    #set space_type colors
+    # model.getSpaceTypes.sort.each { |space_type| space_type.setRenderingColor(standard.set_random_rendering_color(space_type)) }
     return model
+  end
+
+  #this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
+  # determine it.
+  def determine_spacetype_vintage(model)
+    #this code is the list of available vintages
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017']
+    #this reorders the list to do the current class first.
+    space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
+    #Set the space_type
+    space_type_vintage = nil
+    # get list of space types used in model and a mapped string.
+    model_space_type_names = model.getSpaceTypes.map do |spacetype|
+      [spacetype.standardsBuildingType.get.to_s + '-' + spacetype.standardsSpaceType.get.to_s]
+    end
+    #Now iterate though each vintage
+    space_type_vintage_list.each do |template|
+      #Create the standard object and get a list of all the spacetypes available for that vintage.
+      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
+      # set array to contain unknown spacetypes.
+      unknown_spacetypes = []
+      # iterate though all space types that the model is using
+      model_space_type_names.each do |space_type_name|
+        # push unknown spacetypes into the array.
+        unknown_spacetypes << space_type_name unless standard_space_type_list.include?(space_type_name)
+      end
+      if unknown_spacetypes.empty?
+        #No unknowns, so return the template and don't bother looking for others.
+        return template
+      end
+    end
+    return space_type_vintage
   end
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
   def validate_space_types(model)
-    space_type_list = get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' +spacetype[1].to_s]}
-    space_type_names = model.getSpaceTypes.map {|spacetype| [spacetype.standardsBuildingType.get.to_s + '-' + spacetype.standardsSpaceType.get.to_s]}
-    unknown_spacetypes = []
-    space_type_names.each do |space_type_name|
-      unknown_spacetypes << space_type_name unless space_type_list.include?(space_type_name)
-    end
-    if unknown_spacetypes.size > 0
-      message = "These spacetypes are not part of the defined #{self.class.name.to_s} standard.\n #{unknown_spacetypes}\n please ensure all spacetype in model are correct."
+    space_type_vintage = determine_spacetype_vintage(model)
+    if space_type_vintage.nil?
+      message = "These some of the spacetypes in the model are not part of any necb standard.\n  Please ensure all spacetype in model are correct."
       puts "Error: #{message}"
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.NECB', message)
       return false
+    elsif space_type_vintage == self.class.name
+      # the spacetype in the model match the version we are trying to create.
+      # no translation neccesary.
+      return true
+    else
+      #Need to translate to current vintage.
+      no_errors = true
+      st_model_vintage_string = "#{space_type_vintage}_space_type"
+      bt_model_vintage_string = "#{space_type_vintage}_building_type"
+      st_target_vintage_string = "#{self.class.name}_space_type"
+      bt_target_vintage_string = "#{self.class.name}_building_type"
+      space_type_upgrade_map = standards_lookup_table_many(table_name: 'space_type_upgrade_map')
+      model.getSpaceTypes.sort.each do |st|
+        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
+        raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
+        #Set name of spacetype to new name.
+        st.setName("#{st.standardsBuildingType.get.to_s} #{st.standardsSpaceType.get.to_s}")
+      end
+      return no_errors
     end
-    return true
   end
 
   def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
@@ -389,13 +512,8 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
-    spacetype_data = nil
-    if @standards_data['space_types'].is_a?(Hash) == true
-      spacetype_data = @standards_data['space_types']['table']
-    else
-      spacetype_data = @standards_data['space_types']
-    end
-    raise "Undefined spacetype for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
+    spacetype_data = standards_lookup_table_many(table_name: 'space_types')
+    raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
     return space_type_properties['necb_schedule_type'].strip
@@ -487,10 +605,10 @@ class NECB2011 < Standard
         # Check if space type for this space matches NECB2011 specific space type
         # for occupancy sensor that is area dependent. Note: space.floorArea in m2.
 
-        if (space_type_name == 'Storage area' && space.floorArea < 100) ||
-            (space_type_name == 'Storage area - refrigerated' && space.floorArea < 100) ||
-            (space_type_name == 'Hospital - medical supply' && space.floorArea < 100) ||
-            (space_type_name == 'Office - enclosed' && space.floorArea < 25)
+        #Evaluate the formula in the database.
+        standard_space_type_name = space_type_name
+        floor_area = space.floorArea
+        if eval(@standards_data['formulas']['occupancy_sensors_space_types_formula']['value'])
           # If there is only one space assigned to this space type, then reassign this stub
           # to the @@template duplicate with appendage " - occsens", otherwise create a new stub
           # for this space. Required to use reduced LPD by NECB2011 0.9 factor.

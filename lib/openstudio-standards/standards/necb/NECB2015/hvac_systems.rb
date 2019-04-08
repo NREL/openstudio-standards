@@ -35,7 +35,7 @@ class NECB2015
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
+    chlr_props = standards_lookup_table_first(table_name: 'chillers', search_criteria: search_criteria, capacity: capacity_tons, date: Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
       successfully_set_all_properties = false
@@ -117,18 +117,8 @@ class NECB2015
       # to a total which will be used to determine how much to modify the pump power consumption later.
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_CentralHeatPumpSystem'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
-          when 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
-          when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
-          when 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
-          when 'OS_HeatPump_WaterToWater_EquationFit_Cooling'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
-          when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'WSHP')['total_normalized_pump_power_wperkw']
+          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData','OS_HeatPump_WaterToWater_EquationFit_Cooling','OS_HeatPump_WaterToWater_EquationFit_Heating'
+            max_powertoload = standards_lookup_table_first(table_name: 'max_total_loop_pump_power', search_criteria: {'hydronic_system_type' => 'WSHP'})['total_normalized_pump_power_wperkw']
           when 'OS_Pump_VariableSpeed'
             pumps << supplycomp.to_PumpVariableSpeed.get
             total_pump_power += model.getAutosizedValue(supplycomp, 'Design Power Consumption', 'W').to_f
@@ -153,11 +143,11 @@ class NECB2015
       unless max_powertoload > 0
         case plantloop.sizingPlant.loopType
           when 'Heating'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heating')['total_normalized_pump_power_wperkw']
+            max_powertoload = standards_lookup_table_first(table_name: 'max_total_loop_pump_power', search_criteria: {'hydronic_system_type' => 'Heating'})['total_normalized_pump_power_wperkw']
           when 'Cooling'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Cooling')['total_normalized_pump_power_wperkw']
+            max_powertoload = standards_lookup_table_first(table_name: 'max_total_loop_pump_power', search_criteria: {'hydronic_system_type' => 'Cooling'})['total_normalized_pump_power_wperkw']
           when 'Condenser'
-            max_powertoload = model_find_object(@standards_data['max_total_loop_pump_power'], 'hydronic_system_type' => 'Heat_rejection')['total_normalized_pump_power_wperkw']
+            max_powertoload = standards_lookup_table_first(table_name: 'max_total_loop_pump_power', search_criteria: {'hydronic_system_type' => 'Heat_rejection'})['total_normalized_pump_power_wperkw']
         end
       end
       # If nothing was found then do nothing (though by this point if nothing was found then an error should have been thrown).

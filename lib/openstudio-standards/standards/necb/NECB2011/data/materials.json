@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "materials",
+  "tables": {
+    "materials": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -45600,5 +45599,5 @@
         }
       ]
     }
-  ]
+  }
 }

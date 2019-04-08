@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "necb_2015_table_c1",
+  "tables": {
+    "necb_2015_table_c1": {
       "data_type": "table",
       "notes": "Table imported from NECB 2015 by NRC. GoogleAPI used to supplement lat_long data",
       "refs": [
@@ -11554,5 +11553,5 @@
         }
       ]
     }
-  ]
+  }
 }

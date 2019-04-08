@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "heat_rejection",
+  "tables": {
+    "heat_rejection": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -225,5 +224,5 @@
         }
       ]
     }
-  ]
+  }
 }

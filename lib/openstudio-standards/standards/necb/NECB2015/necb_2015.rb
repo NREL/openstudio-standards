@@ -16,8 +16,8 @@ class NECB2015 < NECB2011
     super()
     #replace template to 2015 for all tables.
     #puts JSON.pretty_generate( @standards_data['tables'] )
-    @standards_data['tables'].each do |table|
-      table['table'].each do |row|
+    @standards_data['tables'].each do |key,value|
+      value['table'].each do |row|
         ["lighting_standard", "ventilation_standard", "template"].each do |item|
           row[item].gsub!('NECB2011', 'NECB2015') unless row[item].nil?
         end
@@ -27,29 +27,30 @@ class NECB2015 < NECB2011
     if __dir__[0] == ':' # Running from OpenStudio CLI
       embedded_files_relative('data/', /.*\.json/).each do |file|
         data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-          @standards_data["tables"] << data["tables"].first
-        else
-          @standards_data[data.keys.first] = data[data.keys.first]
+        if !data['tables'].nil?
+          @standards_data['tables'] = [*@standards_data['tables'], *data['tables']].to_h
+        elsif !data['constants'].nil?
+          @standards_data['constants'] = [*@standards_data['constants'], *data['constants']].to_h
+        elsif !data['constants'].nil?
+          @standards_data['formulas'] = [*@standards_data['formulas'], *data['formulas']].to_h
         end
       end
     else
       files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
       files.each do |file|
         data = JSON.parse(File.read(file))
-        if not data["tables"].nil? and data["tables"].first["data_type"] =="table"
-          @standards_data["tables"] << data["tables"].first
-        else
-          @standards_data[data.keys.first] = data[data.keys.first]
+        if !data['tables'].nil?
+          @standards_data['tables'] = [*@standards_data['tables'], *data['tables']].to_h
+        elsif !data['constants'].nil?
+          @standards_data['constants'] = [*@standards_data['constants'], *data['constants']].to_h
+        elsif !data['formulas'].nil?
+          @standards_data['formulas'] = [*@standards_data['formulas'], *data['formulas']].to_h
         end
       end
     end
+    # Write database to file.
+    # File.open(File.join(File.dirname(__FILE__), '..', 'NECB2017.json'), 'w') {|f| f.write(JSON.pretty_generate(@standards_data))}
 
-
-    #needed for compatibility of standards database format
-    @standards_data['tables'].each do |table|
-      @standards_data[table['name']] = table
-    end
     return @standards_data
   end
 
@@ -61,7 +62,10 @@ class NECB2015 < NECB2011
                            sizing_run_dir: Dir.pwd,
                            x_scale: 1.0,
                            y_scale: 1.0,
-                           z_scale: 1.0)
+                           z_scale: 1.0,
+                           fdwr_set: 'MAXIMIZE',
+                           ssr_set: 'MAXIMIZE',
+                           new_auto_zoner: false)
 
     #Run everything like parent NECB2011 'model_apply_standard' method.
     model = super(model: model,
@@ -70,7 +74,9 @@ class NECB2015 < NECB2011
                   sizing_run_dir: sizing_run_dir,
                   x_scale: x_scale,
                   y_scale: y_scale,
-                  z_scale: z_scale)
+                  z_scale: z_scale,
+                  fdwr_set: fdwr_set,
+                  ssr_set: ssr_set)
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then

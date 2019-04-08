@@ -1,7 +1,6 @@
 {
-  "constants": [
-    {
-      "name": "skylight_to_roof_ratio_max_value",
+  "constants": {
+    "skylight_to_roof_ratio_max_value": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_3.2.1.4(2)"
@@ -10,8 +9,7 @@
       "units": "ratio",
       "notes": ""
     },
-    {
-      "name": "sizing_factor_max_cooling",
+    "sizing_factor_max_cooling": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_8.4.4.9(1)"
@@ -20,8 +18,7 @@
       "units": "ratio",
       "notes": ""
     },
-    {
-      "name": "sizing_factor_max_heating",
+    "sizing_factor_max_heating": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_8.4.4.9(2)"
@@ -30,8 +27,7 @@
       "units": "ratio",
       "notes": ""
     },
-    {
-      "name": "fan_constant_volume_pressure_rise_value",
+    "fan_constant_volume_pressure_rise_value": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_5.Assumption"
@@ -40,8 +36,7 @@
       "units": "Pa",
       "notes": ""
     },
-    {
-      "name": "supply_fan_variable_volume_pressure_rise_value",
+    "supply_fan_variable_volume_pressure_rise_value": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_5.Assumption"
@@ -50,8 +45,7 @@
       "units": "Pa",
       "notes": "Sets the supply fan pressure rise based on the Prototype buildings inputs"
     },
-    {
-      "name": "return_fan_variable_volume_pressure_rise_value",
+    "return_fan_variable_volume_pressure_rise_value": {
       "data_type": "value",
       "refs": [
         "NECB2011_S_5.Assumption"
@@ -60,28 +54,16 @@
       "units": "Pa",
       "notes": "Sets the return fan pressure rise based on the Prototype buildings inputs"
     },
-    {
-      "name": "infiltration_rate_m3_per_s_per_m2",
-      "data_type": "value",
-      "refs": [
-        "NECB2011_S_5.Assumption"
-      ],
-      "value": 0.00025,
-      "units": "m3/s/m2",
-      "notes": ""
-    },
-    {
-      "name": "infiltration_constant_term_coefficient",
-      "data_type": "value",
-      "refs": [
-        "NECB2011_S_5.Assumption"
-      ],
-      "value": 0.0,
-      "units": "",
-      "notes": ""
-    },
-    {
-      "name": "infiltration_temperature_term_coefficient",
+    "infiltration_rate_m3_per_s_per_m2":{
+    "data_type": "value",
+    "refs": [
+      "NECB2011_S_5.Assumption"
+    ],
+    "value": 0.00025,
+    "units": "m3/s/m2",
+    "notes": ""
+  },
+    "infiltration_constant_term_coefficient":{
       "data_type": "value",
       "refs": [
         "NECB2011_S_5.Assumption"
@@ -90,35 +72,32 @@
       "units": "",
       "notes": ""
     },
-    {
-      "name": "infiltration_velocity_term_coefficient",
-      "data_type": "value",
-      "refs": [
-        "Assumption"
-      ],
-      "value": 0.224,
-      "units": "",
-      "notes": ""
-    },
-    {
-      "name": "infiltration_velocity_squared_term_coefficient",
-      "data_type": "value",
-      "refs": [
-        "Assumption"
-      ],
-      "value": 0.0,
-      "units": "",
-      "notes": ""
-    },
-    {
-      "name": "skylight_to_roof_ratio",
-      "data_type": "value",
-      "refs": [
-        "NECB2011_S_3.2.1.4(2)"
-      ],
-      "value": 0.05,
-      "units": "",
-      "notes": ""
-    }
-  ]
+    "infiltration_temperature_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "NECB2011_S_5.Assumption"
+    ],
+    "value": 0.0,
+    "units": "",
+    "notes": ""
+  },
+    "infiltration_velocity_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "Assumption"
+    ],
+    "value": 0.224,
+    "units": "",
+    "notes": ""
+  },
+    "infiltration_velocity_squared_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "Assumption"
+    ],
+    "value": 0.0,
+    "units": "",
+    "notes": ""
+  }
+  }
 }

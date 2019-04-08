@@ -1,7 +1,6 @@
 {
-  "tables": [
-    {
-      "name": "motors",
+  "tables": {
+    "motors": {
       "data_type": "table",
       "refs": [
         "assumption"
@@ -319,5 +318,5 @@
         }
       ]
     }
-  ]
+  }
 }
