@@ -2839,73 +2839,72 @@ class Standard
     setup_mgr.setCallingPoint('BeginNewEnvironment')
     setup_mgr.addProgram(num_stg_prg)
 
-    ### Economizer Control ###
-
-    # Actuators
-    econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
-    econ_eff_act.setName("#{snc}TimestepEconEff")
-
-    # Programs
-    econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
-    econ_prg.setName("#{snc}EconomizerCTRLProg")
-    econ_prg_body = <<-EMS
-      SET #{econ_eff_act.handle} = 0.7
-      SET MaxE = 0.7
-      SET #{dat_sen.handle} = (#{dat_sen.handle}*1.8)+32
-      SET OATF = (#{oat_db_c_sen.handle}*1.8)+32
-      SET OAwbF = (#{oat_wb_c_sen.handle}*1.8)+32
-      IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-        SET EconoActive = 1
-      ELSE
-        SET EconoActive = 0
-      ENDIF
-      SET dTNeeded = 75-#{dat_sen.handle}
-      SET CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55
-      SET CoolLoad = dTNeeded/ CoolDesdT
-      IF CoolLoad > 1
-        SET CoolLoad = 1
-      ELSEIF CoolLoad < 0
-        SET CoolLoad = 0
-      ENDIF
-      IF EconoActive == 1
-        SET Stage = #{snc}NumberofStages
-        IF Stage == 2
-          IF CoolLoad < 0.6
-            SET #{econ_eff_act.handle} = MaxE
-          ELSE
-            SET ECOEff = 0-2.18919863612305
-            SET ECOEff = ECOEff+(0-0.674461284910428*CoolLoad)
-            SET ECOEff = ECOEff+(0.000459106275872404*(OATF^2))
-            SET ECOEff = ECOEff+(0-0.00000484778537945252*(OATF^3))
-            SET ECOEff = ECOEff+(0.182915713033586*OAwbF)
-            SET ECOEff = ECOEff+(0-0.00382838660261133*(OAwbF^2))
-            SET ECOEff = ECOEff+(0.0000255567460240583*(OAwbF^3))
-            SET #{econ_eff_act.handle} = ECOEff
-          ENDIF
-        ELSE
-          SET ECOEff = 2.36337942464462
-          SET ECOEff = ECOEff+(0-0.409939515512619*CoolLoad)
-          SET ECOEff = ECOEff+(0-0.0565205596792225*OAwbF)
-          SET ECOEff = ECOEff+(0-0.0000632612294169389*(OATF^2))
-          SET #{econ_eff_act.handle} = ECOEff+(0.000571724868775081*(OAwbF^2))
-        ENDIF
-        IF #{econ_eff_act.handle} > MaxE
-          SET #{econ_eff_act.handle} = MaxE
-        ELSEIF #{econ_eff_act.handle} < (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-          SET #{econ_eff_act.handle} = (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-        ENDIF
-      ENDIF
-    EMS
-    econ_prg.setBody(econ_prg_body)
-
-    # Program Calling Managers
-    econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
-    econ_mgr.setName("#{snc}EcoManager")
-    econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
-    econ_mgr.addProgram(econ_prg)
-
     ### Fan Control ###
     if fan_control
+
+      ### Economizer Control ###
+      # Actuators
+      econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
+      econ_eff_act.setName("#{snc}TimestepEconEff")
+
+      # Programs
+      econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
+      econ_prg.setName("#{snc}EconomizerCTRLProg")
+      econ_prg_body = <<-EMS
+        SET #{econ_eff_act.handle} = 0.7
+        SET MaxE = 0.7
+        SET #{dat_sen.handle} = (#{dat_sen.handle}*1.8)+32
+        SET OATF = (#{oat_db_c_sen.handle}*1.8)+32
+        SET OAwbF = (#{oat_wb_c_sen.handle}*1.8)+32
+        IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+          SET EconoActive = 1
+        ELSE
+          SET EconoActive = 0
+        ENDIF
+        SET dTNeeded = 75-#{dat_sen.handle}
+        SET CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55
+        SET CoolLoad = dTNeeded/ CoolDesdT
+        IF CoolLoad > 1
+          SET CoolLoad = 1
+        ELSEIF CoolLoad < 0
+          SET CoolLoad = 0
+        ENDIF
+        IF EconoActive == 1
+          SET Stage = #{snc}NumberofStages
+          IF Stage == 2
+            IF CoolLoad < 0.6
+              SET #{econ_eff_act.handle} = MaxE
+            ELSE
+              SET ECOEff = 0-2.18919863612305
+              SET ECOEff = ECOEff+(0-0.674461284910428*CoolLoad)
+              SET ECOEff = ECOEff+(0.000459106275872404*(OATF^2))
+              SET ECOEff = ECOEff+(0-0.00000484778537945252*(OATF^3))
+              SET ECOEff = ECOEff+(0.182915713033586*OAwbF)
+              SET ECOEff = ECOEff+(0-0.00382838660261133*(OAwbF^2))
+              SET ECOEff = ECOEff+(0.0000255567460240583*(OAwbF^3))
+              SET #{econ_eff_act.handle} = ECOEff
+            ENDIF
+          ELSE
+            SET ECOEff = 2.36337942464462
+            SET ECOEff = ECOEff+(0-0.409939515512619*CoolLoad)
+            SET ECOEff = ECOEff+(0-0.0565205596792225*OAwbF)
+            SET ECOEff = ECOEff+(0-0.0000632612294169389*(OATF^2))
+            SET #{econ_eff_act.handle} = ECOEff+(0.000571724868775081*(OAwbF^2))
+          ENDIF
+          IF #{econ_eff_act.handle} > MaxE
+            SET #{econ_eff_act.handle} = MaxE
+          ELSEIF #{econ_eff_act.handle} < (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+            SET #{econ_eff_act.handle} = (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+          ENDIF
+        ENDIF
+      EMS
+      econ_prg.setBody(econ_prg_body)
+
+      # Program Calling Managers
+      econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
+      econ_mgr.setName("#{snc}EcoManager")
+      econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
+      econ_mgr.addProgram(econ_prg)
 
       # Sensors
       zn_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Temperature')
