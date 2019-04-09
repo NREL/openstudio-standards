@@ -9,6 +9,6 @@ class TestSuperMarket < CreateDOEPrototypeBuildingTest
   create_models = true
   run_models = false
   compare_results = false
-  debug = false
+  debug = true
   TestSuperMarket.create_run_model_tests(building_types, templates, climate_zones, epw_files, create_models, run_models, compare_results, debug)
 end

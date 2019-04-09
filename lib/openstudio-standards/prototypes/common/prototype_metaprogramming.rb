@@ -609,6 +609,15 @@ end
     return true
   end
 
+  # Makes changes to the geometry that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not  
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+  
   # Makes changes to the daylighting sensors that are too
   # specific to be coded generically.
   #
@@ -771,6 +780,15 @@ end
   #
   # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  # Makes changes to the geometry that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not  
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
     return true
   end
 
