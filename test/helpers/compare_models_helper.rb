@@ -249,6 +249,15 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     # Check true value directly against compare value
     next if compare_value == true_value
 
+    # Check numeric values if numeric
+    if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)
+      diff = true_value.to_f - compare_value.to_f
+      unless true_value.zero?
+        # next if less than a tenth of a percent difference
+        next if (diff / true_value.to_f) < 0.001
+      end
+    end
+
     # Check true value to aliases from compare model
     renamed_in_true = alias_hash[true_value].uniq
     if renamed_in_true.map(&:downcase).include?(compare_value)
