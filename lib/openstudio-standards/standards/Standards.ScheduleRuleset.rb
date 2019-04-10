@@ -47,7 +47,7 @@ class Standard
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', 'WARNING: Year description is not specified; assuming 2009, the default year OS uses.')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
     end
@@ -174,7 +174,7 @@ class Standard
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     else
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', 'WARNING: Year description is not specified; assuming 2009, the default year OS uses.')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
       year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
       year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
     end
@@ -387,6 +387,28 @@ class Standard
   # @return schedule
   def schedule_apply_parametric_inputs(schedule,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order,parametric_inputs = nil)
 
+    # Check if parametric inputs were supplied and generate them if not
+    if parametric_inputs.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, no parametric inputs were not supplied so they will be generated now.")
+      parametric_inputs = model_setup_parametric_schedules(schedule.model, gather_data_only: true)
+    end
+
+    # Check that parametric inputs exist for this schedule after generation
+    if parametric_inputs[schedule].nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, no parametric inputs exists so schedule will not be changed.")
+      return schedule
+    end
+
+    # Check that an hours of operation schedule is associated with this schedule
+    if parametric_inputs[schedule][:hoo_inputs].nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, no associated hours of operation schedule was found so schedule will not be changed.")
+      return schedule
+    end
+
+    # Get the hours of operation schedule
+    hours_of_operation = parametric_inputs[schedule][:hoo_inputs]
+    # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name} hours_of_operation = #{hours_of_operation.name}.")
+
     starting_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
 
     # store floor and ceiling value
@@ -406,8 +428,8 @@ class Standard
       # remove any use manually generated non parametric rules or any auto-generated rules from prior application of formulas and hoo
       sch_day = rule.daySchedule
       if !sch_day.hasAdditionalProperties or !sch_day.additionalProperties.hasFeature("param_day_tag") or sch_day.additionalProperties.getFeatureAsString("param_day_tag").get == "autogen"
-        sch_day.remove # removing rule doesn't get rid of this
-        rule.remove
+        sch_day.remove # remove day schedule for this rule
+        rule.remove # remove the rule
       elsif !sch_day.additionalProperties.hasFeature("param_day_profile")
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule.name} doesn't have a parametric forumla for #{rule.name} This profile will not be altered.")
         next
@@ -423,12 +445,6 @@ class Standard
     year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
     year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
     indices_vector = schedule.getActiveRuleIndices(year_start_date, year_end_date)
-
-    # get hours_of_operation
-    if parametric_inputs.nil?
-      parametric_inputs = model_setup_parametric_schedules(schedule.model,gather_data_only: true)
-    end
-    hours_of_operation = parametric_inputs[schedule][:hoo_inputs]
 
     # process profiles
     profiles.each do |sch_day,rule|
@@ -468,7 +484,7 @@ class Standard
       hoo_end = hours_of_operation[hoo_target_index][:hoo_end]
 
       # update scheduleDay
-      process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+      process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
       # clone new rule if needed
       if clone_needed
@@ -530,7 +546,7 @@ class Standard
           hoo_end = hash[:hoo_end]
 
           # process new rule
-          process_hash(sch_day_auto_gen,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+          process_hrs_of_operation_hash(sch_day_auto_gen, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
         end
 
@@ -545,17 +561,92 @@ class Standard
     final_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
     percent_change = ((starting_aeflh - final_aeflh)/starting_aeflh) * 100.0
     if percent_change.abs > 0.05
-      puts "********  #{percent_change.round(4)}%  ********  #{schedule.name} #{schedule.name} annual equiv. full load hours changed from #{starting_aeflh.round(4)} to #{final_aeflh.round(4)}"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
     end
 
     return schedule
+  end
+
+  # Apply specified hours of operation values to rules in this schedule.
+  # Weekday values will be applied to the default profile.
+  # Weekday values will be applied to any rules that are used on a weekday.
+  # Saturday values will be applied to any rules that are used on a Saturday.
+  # Sunday values will be applied to any rules that are used on a Sunday.
+  # If a rule applies to Weekdays, Saturdays, and/or Sundays, values will be applied in that order of precedence.
+  # If a rule does not apply to any of these days, it is unused and will not be modified.
+  # @param wkdy_start_time [OpenStudio::Time] Weekday start time. If nil, no change will be made to this day.
+  # @param wkdy_end_time [OpenStudio::Time] Weekday end time.  If greater than 24:00, hours of operation will wrap over midnight.
+  # @param sat_start_time [OpenStudio::Time] Saturday start time. If nil, no change will be made to this day.
+  # @param sat_end_time [OpenStudio::Time] Saturday end time.  If greater than 24:00, hours of operation will wrap over midnight.
+  # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
+  # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
+  # @return [Bool] Returns true if successful, false if not
+  def schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
+    # Default day is assumed to represent weekdays
+    if wkdy_start_time && wkdy_end_time
+      schedule_day_set_hours_of_operation(schedule_ruleset.defaultDaySchedule, wkdy_start_time, wkdy_end_time)
+      # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, set default operating hours to #{wkdy_start_time}-#{wkdy_end_time}.")
+    end
+
+    # Modify each rule
+    schedule_ruleset.scheduleRules.each do |rule|
+      if rule.applyMonday || rule.applyTuesday || rule.applyWednesday || rule.applyThursday || rule.applyFriday
+        if wkdy_start_time && wkdy_end_time
+          schedule_day_set_hours_of_operation(rule.daySchedule, wkdy_start_time, wkdy_end_time)
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, set Saturday rule operating hours to #{wkdy_start_time}-#{wkdy_end_time}.")
+        end
+      elsif rule.applySaturday
+        if sat_start_time && sat_end_time
+          schedule_day_set_hours_of_operation(rule.daySchedule, sat_start_time, sat_end_time)
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, set Saturday rule operating hours to #{sat_start_time}-#{sat_end_time}.")
+        end
+      elsif rule.applySunday
+        if sun_start_time && sun_end_time
+          schedule_day_set_hours_of_operation(rule.daySchedule, sun_start_time, sun_end_time)
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, set Sunday rule operating hours to #{sun_start_time}-#{sun_end_time}.")
+        end
+      else
+        # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, rule does not apply to any day of the week, will not be modified.")
+      end
+    end
+
+    return true
+  end
+
+  private
+
+  # Set the hours of operation (0 or 1) for a ScheduleDay.
+  # Clears out existing time/value pairs and sets to supplied values.
+  #
+  # @author Andrew Parker
+  # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
+  # @param start_time [OpenStudio::Time] Start time.
+  # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
+
+  # @return [Void]
+  # @api private
+  def schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+    schedule_day.clearValues
+    twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
+    if end_time < twenty_four_hours
+      # Operating hours don't wrap over midnight
+      schedule_day.addValue(start_time, 0) # 0 until start time
+      schedule_day.addValue(end_time, 1) # 1 from start time until end time
+      schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
+    else
+      # Operating hours start on previous day
+      schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
+      schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
+      schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
+    end
   end
 
   # process individual schedule profiles
   #
   # @author David Goldwasser
   # @return schedule_day
-  def process_hash(sch_day,hoo_start,hoo_end,val_flr,val_clg,ramp_frequency,infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+  # @api private
+  def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
     # process hoo and floor/ceiling vars to develop formulas without variables
     formula_string = sch_day.additionalProperties.getFeatureAsString("param_day_profile").get
@@ -774,6 +865,9 @@ class Standard
     end
 
     # todo - apply secondary logic
+
+    # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
+    sch_day.setInterpolatetoTimestep(true)
 
     return sch_day
 
