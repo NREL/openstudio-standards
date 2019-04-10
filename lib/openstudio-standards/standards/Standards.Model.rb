@@ -4611,9 +4611,16 @@ class Standard
 
     # get ramp frequency (fractional hour) from timestep
     if ramp_frequency.nil?
-      steps_per_hour = model.getSimulationControl.timestep.get.numberOfTimestepsPerHour
+      steps_per_hour = if model.getSimulationControl.timestep.is_initialized
+                         model.getSimulationControl.timestep.get.numberOfTimestepsPerHour
+                       else
+                         6 # default OpenStudio timestep if none specified
+                       end
       ramp_frequency = 1.0/steps_per_hour.to_f
     end
+
+    # Go through model and create parametric formulas for all schedules
+    parametric_inputs = model_setup_parametric_schedules(model,gather_data_only: true)
 
     parametric_schedules = []
     model.getScheduleRulesets.sort.each do |sch|
@@ -4621,12 +4628,11 @@ class Standard
         # for now don't look at schedules without targets, in future can alter these by looking at building level hours of operation
         next if not sch.directUseCount > 0 # won't catch if used for space type load instance, but that space type isn't used
         # todo - address schedules that fall into this category, if they are used in the model
-        puts "**** #{sch.sources.first.name}  ****  #{sch.name} is not setup as parametric schedule. has #{sch.sources.size} sources."
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
         next
       end
 
       # apply parametric inputs
-      parametric_inputs = model_setup_parametric_schedules(sch.model,gather_data_only: true)
       schedule_apply_parametric_inputs(sch,ramp_frequency,infer_hoo_for_non_assigned_objects,error_on_out_of_order,parametric_inputs)
 
       # add schedule to array
@@ -5051,7 +5057,7 @@ class Standard
       if percent_change.abs > 0.05
         # todo - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
         # post application checks compares against actual instead of estimated values
-        puts "**  #{percent_change.round(4)}%  **  #{sch.name}, #{schedule_day.name} expected full load hours value is #{daily_flh.round(4)}, estimated value is #{est_daily_flh.round(4)}"
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
       end
 
       raw_string = []

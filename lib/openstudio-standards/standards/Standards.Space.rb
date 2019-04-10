@@ -1807,8 +1807,7 @@ class Standard
       space_names << space.name.to_s
       hoo_hash = space_hours_of_operation(space)
       if !hoo_hash.nil?
-        puts "hello, this is the hash for #{space.name}"
-        puts hoo_hash
+        # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, hours of operation hash = #{hoo_hash}.")
         hours_of_operation_array << hoo_hash
       end
     end
@@ -1821,8 +1820,7 @@ class Standard
     #
     # loop through all 365/366 days
 
-    puts "hello, evaluating hours of operation for #{space_names.join(",")}"
-    puts hours_of_operation_array
+    # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
     # todo - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
     hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
