@@ -208,7 +208,6 @@ class Standard
       annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
       temp_merged.remove
     end
-
     # Get all the occupancy schedules in spaces.
     # Include people added via the SpaceType and hard-assigned to the Space itself.
     occ_schedules_num_occ = {}
@@ -261,28 +260,42 @@ class Standard
     end
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
 
-    # For each day of the year, determine time_value_pairs = []
+    # Store arrays of 365 day schedules used by each occ schedule once for later
+    # Store arrays of day schedule times for later
+    occ_schedules_day_schedules = {}
+    day_schedule_times = {}
     year = spaces[0].model.getYearDescription
+    first_date_of_year = year.makeDate(1)
+    end_date_of_year = year.makeDate(365)
+    occ_schedules_num_occ.each do |occ_sch, num_occ|
+      day_schedules = occ_sch.getDaySchedules(first_date_of_year, end_date_of_year)
+      # Store array of day schedules
+      occ_schedules_day_schedules[occ_sch] = day_schedules
+      day_schedules.uniq.each do |day_sch|
+        # Skip schedules that have been stored previously
+        next unless day_schedule_times[day_sch].nil?
+        # Store times
+        times = []
+        day_sch.times.each do |time|
+          times << time.toString
+        end
+        day_schedule_times[day_sch] = times
+      end
+    end
+
+    # For each day of the year, determine time_value_pairs = []
     yearly_data = []
-    yearly_times = OpenStudio::DateTimeVector.new
-    yearly_values = []
     (1..365).each do |i|
       times_on_this_day = []
       os_date = year.makeDate(i)
       day_of_week = os_date.dayOfWeek.valueName
 
       # Get the unique time indices and corresponding day schedules
-      occ_schedules_day_schs = {}
       day_sch_num_occ = {}
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        # Get the day schedules for this day
-        # (there should only be one)
-        day_schs = occ_sch.getDaySchedules(os_date, os_date)
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Schedule #{occ_sch.name} has #{day_schs.size} day schs") unless day_schs.size == 1
-        day_schs[0].times.each do |time|
-          times_on_this_day << time.toString
-        end
-        day_sch_num_occ[day_schs[0]] = num_occ
+        daily_sch = occ_schedules_day_schedules[occ_sch][i-1]
+        times_on_this_day += day_schedule_times[daily_sch]
+        day_sch_num_occ[daily_sch] = num_occ
       end
 
       daily_normalized_tol = nil
@@ -291,7 +304,6 @@ class Standard
         daily_spaces_occ_frac = []
         times_on_this_day.uniq.sort.each do |time|
           os_time = OpenStudio::Time.new(time)
-          os_date_time = OpenStudio::DateTime.new(os_date, os_time)
           # Total number of people at each time
           tot_occ_at_time = 0
           day_sch_num_occ.each do |day_sch, num_occ|
@@ -311,7 +323,6 @@ class Standard
       daily_occs = []
       times_on_this_day.uniq.sort.each do |time|
         os_time = OpenStudio::Time.new(time)
-        os_date_time = OpenStudio::DateTime.new(os_date, os_time)
         # Total number of people at each time
         tot_occ_at_time = 0
         day_sch_num_occ.each do |day_sch, num_occ|
@@ -369,7 +380,6 @@ class Standard
 
     # Create a TimeSeries from the data
     # time_series = OpenStudio::TimeSeries.new(times, values, 'unitless')
-
     # Make a schedule ruleset
     if sch_name.nil?
       sch_name = "#{spaces.size} space(s) Occ Sch"
@@ -402,7 +412,6 @@ class Standard
     day_sch = sch_ruleset.summerDesignDaySchedule
     day_sch.setName("#{sch_name} Summer Design Day")
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
-
     # Create ruleset schedules, attempting to create the minimum number of unique rules
     ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
       end_of_prev_rule = yearly_data[0]['date']
@@ -414,7 +423,7 @@ class Standard
         date = daily_data['date']
         times = daily_data['times']
         values = daily_data['values']
-        daily_occs = daily_data['daily_occs']
+        daily_os_times = daily_data['daily_os_times']
 
         # If the next (Monday, Tuesday, etc.) is the same as today, keep going
         # If the next is different, or if we've reached the end of the year, create a new rule
@@ -423,9 +432,6 @@ class Standard
           next_day_values = yearly_data[k + 7]['values']
           next if times == next_day_times && values == next_day_values
         end
-
-        daily_os_times = daily_data['daily_os_times']
-        daily_occs = daily_data['daily_occs']
 
         # If here, we need to make a rule to cover from the previous rule to today
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
