@@ -4355,22 +4355,32 @@ class Standard
       prev_val = nil
       times.each_with_index do |time,i|
         next if time.totalHours == 0.0 # should not see this
-        next if values.i == prev_val # check if two 0 until time next to each other
-        if values.i == 0 # only store vacant segments
+        next if values[i] == prev_val # check if two 0 until time next to each other
+        if values[i] == 0 # only store vacant segments
           if time.totalHours == 24 && ! wrap_dur_left_hr > 0
-            occ_gap_hash[prev_time] = time.totalHours - prev_time_hr + wrap_dur_left_hr
+            occ_gap_hash[prev_time] = time.totalHours - prev_time + wrap_dur_left_hr
           else
-            occ_gap_hash[prev_time] = time.totalHours - prev_time.totalHours
+            occ_gap_hash[prev_time] = time.totalHours - prev_time
           end
         end
-        prev_time = time
-        prev_val = values.i
+        prev_time = time.totalHours
+        prev_val = values[i]
       end
       profile.clearValues
       max_occ_gap_start = occ_gap_hash.key(occ_gap_hash.values.max)
-      max_occ_gap_end_hr = max_occ_gap_start.totalHours + occ_gap_hash[max_occ_gap_start] # can't add time and duration in hours
+      max_occ_gap_end_hr = max_occ_gap_start + occ_gap_hash[max_occ_gap_start] # can't add time and duration in hours
       if max_occ_gap_end_hr > 24.0 then max_occ_gap_end_hr -= 24.0 end
-      max_occ_gap_end = OpenStudio::Time.new(0, max_occ_gap_end_hr, 0, 0)
+
+      # time for gap start
+      target_start_hr = max_occ_gap_start.truncate
+      target_start_min = ((max_occ_gap_start - target_start_hr) * 60.0).truncate
+      max_occ_gap_start = OpenStudio::Time.new(0, target_start_hr, target_start_min, 0)
+
+      # time for gap end
+      target_end_hr = max_occ_gap_end_hr.truncate
+      target_end_min = ((max_occ_gap_end_hr - target_end_hr) * 60.0).truncate
+      max_occ_gap_end = OpenStudio::Time.new(0, target_end_hr, target_end_min, 0)
+
       profile.addValue(max_occ_gap_start,1)
       profile.addValue(max_occ_gap_end,0)
       os_time_24 = OpenStudio::Time.new(0, 24, 0, 0)
