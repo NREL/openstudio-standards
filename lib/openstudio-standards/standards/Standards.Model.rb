@@ -4361,10 +4361,19 @@ class Standard
       times = profile.times
       values = profile.values
       next if times.size <= 3 # length of 1-3 should produce valid hours_of_operation profiles
+      # Find the latest time where the value == 1
+      latest_time = nil
+      times.zip(values).each do |time, value|
+        if value > 0
+          latest_time = time
+        end
+      end
+      # Skip profiles that are zero all the time
+      next if latest_time.nil?
+      # Calculate the duration from this point to midnight
+      wrap_dur_left_hr = 0
       if values.first == 0 && values.last == 0
-        wrap_dur_left_hr = time.totalHours
-      else
-        wrap_dur_left_hr = 0
+        wrap_dur_left_hr = 24.0 - latest_time.totalHours
       end
       occ_gap_hash = {}
       prev_time = 0
@@ -4373,7 +4382,7 @@ class Standard
         next if time.totalHours == 0.0 # should not see this
         next if values[i] == prev_val # check if two 0 until time next to each other
         if values[i] == 0 # only store vacant segments
-          if time.totalHours == 24 && ! wrap_dur_left_hr > 0
+          if time.totalHours == 24
             occ_gap_hash[prev_time] = time.totalHours - prev_time + wrap_dur_left_hr
           else
             occ_gap_hash[prev_time] = time.totalHours - prev_time
