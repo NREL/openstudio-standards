@@ -123,7 +123,7 @@ class NECB2011
       # iterate by story
       model.getBuildingStorys.sort.each_with_index do |story, building_index|
         # iterate by unique schedule type.
-        space_zoning_data_array_json.map {|item| item[:schedule_type]}.uniq!.each do |schedule_type|
+        space_zoning_data_array_json.map {|item| item[:schedule_type]}.uniq.each do |schedule_type|
           # iterate by horizontal location
           ['north', 'east', 'west', 'south', 'core'].each do |horizontal_placement|
             # puts "horizontal_placement:#{horizontal_placement}"
