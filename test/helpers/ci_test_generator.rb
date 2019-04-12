@@ -51,7 +51,7 @@ module CITestGenerator
         "LargeOffice",
         "MediumOffice",
         "MidriseApartment",
-        "Outpatient",
+#        "Outpatient",
         "PrimarySchool",
         "QuickServiceRestaurant",
         "RetailStandalone",
