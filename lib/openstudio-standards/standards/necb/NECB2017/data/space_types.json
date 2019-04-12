@@ -2767,7 +2767,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -2846,7 +2846,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -2925,7 +2925,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -3004,7 +3004,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -3083,7 +3083,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -3162,7 +3162,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -3241,7 +3241,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -3320,7 +3320,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -3399,7 +3399,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -3478,7 +3478,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -3557,7 +3557,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -3636,7 +3636,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -3715,7 +3715,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -3794,7 +3794,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -3873,7 +3873,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -3952,7 +3952,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -4031,7 +4031,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -4110,7 +4110,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -4189,7 +4189,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -4268,7 +4268,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -4347,7 +4347,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -4426,7 +4426,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -4505,7 +4505,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -4584,7 +4584,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -4663,7 +4663,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -4742,7 +4742,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -4821,7 +4821,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -4900,7 +4900,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -4979,7 +4979,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -5058,7 +5058,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -5137,7 +5137,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -5216,7 +5216,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -5295,7 +5295,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -6006,7 +6006,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -6085,7 +6085,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -6164,7 +6164,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -6243,7 +6243,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -6322,7 +6322,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -6401,7 +6401,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -6480,7 +6480,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -6559,7 +6559,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -6638,7 +6638,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -6717,7 +6717,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -6796,7 +6796,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -14222,7 +14222,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -14301,7 +14301,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -14380,7 +14380,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -14459,7 +14459,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -14538,7 +14538,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -14617,7 +14617,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -14696,7 +14696,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -14775,7 +14775,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -14854,7 +14854,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -14933,7 +14933,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -15012,7 +15012,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "General Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -15644,7 +15644,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -15723,7 +15723,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -15802,7 +15802,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -15881,7 +15881,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -15960,7 +15960,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -16039,7 +16039,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -16118,7 +16118,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -16197,7 +16197,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -16276,7 +16276,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -16355,7 +16355,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -16434,7 +16434,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Assembly Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -17461,7 +17461,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -17540,7 +17540,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -17619,7 +17619,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -17698,7 +17698,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -17777,7 +17777,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -17856,7 +17856,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -17935,7 +17935,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -18014,7 +18014,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -18093,7 +18093,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -18172,7 +18172,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -18251,7 +18251,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -18330,7 +18330,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -18409,7 +18409,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -18488,7 +18488,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -18567,7 +18567,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -18646,7 +18646,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -18725,7 +18725,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -18804,7 +18804,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -18883,7 +18883,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -18962,7 +18962,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -19041,7 +19041,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -19120,7 +19120,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
@@ -19199,7 +19199,7 @@
           "exhaust_schedule": "NECB-A-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "A",
           "notes": null
         },
@@ -19278,7 +19278,7 @@
           "exhaust_schedule": "NECB-B-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "B",
           "notes": null
         },
@@ -19357,7 +19357,7 @@
           "exhaust_schedule": "NECB-C-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "C",
           "notes": null
         },
@@ -19436,7 +19436,7 @@
           "exhaust_schedule": "NECB-D-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "D",
           "notes": null
         },
@@ -19515,7 +19515,7 @@
           "exhaust_schedule": "NECB-E-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "E",
           "notes": null
         },
@@ -19594,7 +19594,7 @@
           "exhaust_schedule": "NECB-F-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "F",
           "notes": null
         },
@@ -19673,7 +19673,7 @@
           "exhaust_schedule": "NECB-G-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "G",
           "notes": null
         },
@@ -19752,7 +19752,7 @@
           "exhaust_schedule": "NECB-H-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "H",
           "notes": null
         },
@@ -19831,7 +19831,7 @@
           "exhaust_schedule": "NECB-I-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "I",
           "notes": null
         },
@@ -19910,7 +19910,7 @@
           "exhaust_schedule": "NECB-J-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "J",
           "notes": null
         },
@@ -19989,7 +19989,7 @@
           "exhaust_schedule": "NECB-K-FAN",
           "balanced_exhaust_fraction_schedule": null,
           "is_residential": null,
-          "necb_hvac_system_selection_type": "Warehouse Area",
+          "necb_hvac_system_selection_type": "Wildcard",
           "necb_schedule_type": "K",
           "notes": null
         },
