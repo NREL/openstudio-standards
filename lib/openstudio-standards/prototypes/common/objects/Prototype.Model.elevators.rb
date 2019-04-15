@@ -198,8 +198,8 @@ class Standard
       }
       elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
       if elevator_data_lookup.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
-        return nil
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}, elevator counts will not account for serving this portion of the building area.")
+        next
       end
 
       # determine number of passenger elevators
