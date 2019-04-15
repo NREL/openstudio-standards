@@ -1,17 +1,24 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 'MAXIMIZE')
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 1.1)
     # NECB FDWR limit
     hdd = self.get_necb_hdd18(model)
-    #For some reason the max fdwr and
-    fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+    # Get the maximum NECB fdwr
 
-    # If fdwr_set is set to 'MAXIMIZE' apply the maximum fenestration and door to wall ratio to the model and ignore the
-    # rest of the method.  Otherwise, follow the original intent of the method.
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim / 100) if fdwr_set == 'MAXIMIZE'
+    # If fdwr_set is 1.1 apply the NECB maximum fenestration and door to wall ratio to the model and ignore the
+    # rest of the method.  If it is between 0.0 and 1.0 apply whatever was passed.  If it is greater than 1.2 follow the
+    # original apply_limit_fdwr method which sets the necb fdwr only if the fdwr in the building is greater than the
+    # maximum allowed NECB fdwr.
 
-    return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim)
+    if fdwr_set > 1.0 && fdwr_set < 1.2
+      fdwr_set = (max_fwdr(hdd)).round(3)
+    elsif fdwr_set > 1.2
+      fdwr_set = (max_fwdr(hdd) * 100.0).round(1)
+      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_set)
+    end
+
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set)
   end
 
   def apply_limit_fdwr(model:, fdwr_lim:)
@@ -151,13 +158,20 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model:, ssr_set: 'MAXIMIZE')
+  def apply_standard_skylight_to_roof_ratio(model:, srr_set: 1.1)
+
+    # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
+    # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
+    # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
+    
+    if srr_set < 1.2
+      srr_set = self.get_standards_constant('skylight_to_roof_ratio_max_value') if srr_set > 1.0
+      apply_max_srr_nrcan(model: model, srr_lim: srr_set)
+    end
+
     # SRR limit
     srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value') * 100.0
 
-    # If srr_set is set to 'MAXIMIZE' apply the maximum surface to roof ratio to the model and ignore the rest of this
-    # method.  Otherwise, follow the original intent of the method.
-    return apply_max_srr_nrcan(model: model, srr_lim: srr_lim / 100.0) if ssr_set == 'MAXIMIZE'
     # Loop through all spaces in the model, and
     # per the PNNL PRM Reference Manual, find the areas
     # of each space conditioning category (res, nonres, semi-heated)
