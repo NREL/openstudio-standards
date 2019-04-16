@@ -5,13 +5,16 @@ class NECB2011
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
     if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      shw_pump_head = auto_size_shw_pump_head(model, default: true)
+      # Only add a shw_loop if at least one space calls for shw.  If no space calls for shw put out a warning but do not
+      # add a shw loop.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
+      return true
     else
       shw_pump_head = auto_size_shw_pump_head(model, default: false)
     end
-    shw_pump_motor_eff = 0.9
 
     # Add the main service water heating loop
+    shw_pump_motor_eff = 0.9
 
     swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
@@ -27,15 +30,12 @@ class NECB2011
                                        shw_sizing['parasitic_loss'],
                                        nil)
 
-    if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
-    else
-      # Note that when water use equipment is assigned to spaces then the water used
-      # by the equipment is multiplied by the space (ultimately thermal zone) multiplier.  Note that there is a separate
-      # water use equipment multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
-    end
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by
+    # the space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier
+    # as well which is different than the space (ultimately thermal zone) multiplier.
+    shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
+
     return true
   end
 

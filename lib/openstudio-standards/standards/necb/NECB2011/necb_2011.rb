@@ -179,8 +179,8 @@ class NECB2011 < Standard
                                    x_scale: 1.0,
                                    y_scale: 1.0,
                                    z_scale: 1.0,
-                                   fdwr_set: 'MAXIMIZE',
-                                   ssr_set: 'MAXIMIZE',
+                                   fdwr_set: 1.1,
+                                   srr_set: 1.1,
                                    new_auto_zoner: false
 
   )
@@ -195,7 +195,7 @@ class NECB2011 < Standard
                                 z_scale: z_scale,
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
-                                ssr_set: ssr_set,
+                                srr_set: srr_set,
                                 new_auto_zoner: new_auto_zoner)
   end
 
@@ -209,8 +209,8 @@ class NECB2011 < Standard
                            x_scale: 1.0,
                            y_scale: 1.0,
                            z_scale: 1.0,
-                           fdwr_set: 'MAXIMIZE',
-                           ssr_set: 'MAXIMIZE',
+                           fdwr_set: 1.1,
+                           srr_set: 1.1,
                            new_auto_zoner: false
 
   )
@@ -271,7 +271,7 @@ class NECB2011 < Standard
     # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
     # are adjacent to conditioned spaces.
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
-    apply_standard_skylight_to_roof_ratio(model: model, ssr_set: ssr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
