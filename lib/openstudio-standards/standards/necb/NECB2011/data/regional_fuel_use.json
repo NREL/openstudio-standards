@@ -13,7 +13,6 @@
         {
           "state_province_regions": [
             "AB",
-            "BC",
             "NB",
             "NS",
             "ON",
@@ -33,6 +32,7 @@
         },
         {
           "state_province_regions": [
+            "BC",
             "MB",
             "PE",
             "PQ",

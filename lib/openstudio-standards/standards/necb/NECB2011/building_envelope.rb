@@ -11,14 +11,14 @@ class NECB2011
     # original apply_limit_fdwr method which sets the necb fdwr only if the fdwr in the building is greater than the
     # maximum allowed NECB fdwr.
 
-    if fdwr_set > 1.0 && fdwr_set < 1.2
+    if fdwr_set.to_f > 1.0 && fdwr_set.to_f < 1.2
       fdwr_set = (max_fwdr(hdd)).round(3)
-    elsif fdwr_set > 1.2
+    elsif fdwr_set.to_f > 1.2
       fdwr_set = (max_fwdr(hdd) * 100.0).round(1)
       return apply_limit_fdwr(model: model, fdwr_lim: fdwr_set)
     end
 
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set)
+    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
   end
 
   def apply_limit_fdwr(model:, fdwr_lim:)
@@ -164,9 +164,9 @@ class NECB2011
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
     
-    if srr_set < 1.2
-      srr_set = self.get_standards_constant('skylight_to_roof_ratio_max_value') if srr_set > 1.0
-      apply_max_srr_nrcan(model: model, srr_lim: srr_set)
+    if srr_set.to_f < 1.2
+      srr_set = self.get_standards_constant('skylight_to_roof_ratio_max_value') if srr_set.to_f > 1.0
+      return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
     end
 
     # SRR limit
