@@ -105,6 +105,11 @@ class Standard
     ref_case.setUnderCaseHVACReturnAirFraction(0)
     ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
 
+    ref_case_addprops = ref_case.additionalProperties
+    ref_case_addprops.setFeature("case_model", props['case_model'] )
+
+
+
     length_ft = OpenStudio.convert(case_length, 'm', 'ft').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
 
@@ -286,6 +291,10 @@ class Standard
     end
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
+
+    ref_walkin_addprops = ref_walkin.additionalProperties
+    ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
+
 
     insulated_floor_area_ft2 = OpenStudio.convert(floor_surface_area, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 walkin called #{walkin_type} with a capacity of #{rated_cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
