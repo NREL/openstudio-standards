@@ -74,9 +74,7 @@ module RetailStandalone
       [
           { 'stds_spc_type' => 'Core_Retail',
             'sensor_1_frac' => 0.1724,
-            'sensor_1_xyz' => [14.2, 14.2, 0],
-            'sensor_2_frac' => 0.1724,
-            'sensor_2_xyz' => [3.4, 14.2, 0]
+            'sensor_1_xyz' => [9.144, 24.698, 0],
           }
       ]
     else
@@ -85,7 +83,7 @@ module RetailStandalone
             'sensor_1_frac' => 0.25,
             'sensor_1_xyz' => [14.2, 14.2, 0],
             'sensor_2_frac' => 0.25,
-            'sensor_2_xyz' => [3.4, 14.2, 0]
+            'sensor_2_xyz' => [3.4, 14.2, 0],
           }
       ]
     end
