@@ -76,63 +76,51 @@ module SmallOffice
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting daylight sensor positions and fractions')
 
     adjustments = [
-                    { '90.1-2010' => { 
-																		'Perimeter_ZN_1' => {
-																													'sensor_1_frac' => 0.02,
-																													'sensor_2_frac' => 0.1,
-																													'sensor_1_xyz' => [3.3236, 1.6002, 0.762],
-																													'sensor_2_xyz' => [8.9611, 1.6002, 0.762],
+                    { '90.1-2010' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.02,
+                                                             'sensor_2_frac' => 0.1,
+                                                             'sensor_1_xyz' => [3.3236, 1.6002, 0.762],
+                                                             'sensor_2_xyz' => [8.9611, 1.6002, 0.762],
 																												},
-																		'Perimeter_ZN_2' => {
-																													'sensor_1_frac' => 0.06,
-																													'sensor_2_frac' => 0.15,
-																													'sensor_1_xyz' => [26.0898, 3.3236, 0.762],
-																													'sensor_2_xyz' => [26.0898, 9.23, 0.762],
+                                       'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.06,
+                                                             'sensor_2_frac' => 0.15,
+                                                             'sensor_1_xyz' => [26.0898, 3.3236, 0.762],
+                                                             'sensor_2_xyz' => [26.0898, 9.23, 0.762],
 																												},
-																		'Perimeter_ZN_3' => {
-																													'sensor_1_frac' => 0.1,
-																													'sensor_2_frac' => 0.02,
-																													'sensor_1_xyz' => [13.8684, 16.8598, 0.762],
-																													'sensor_2_xyz' => [24.3664, 16.8598, 0.762],
+                                       'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.1,
+                                                             'sensor_2_frac' => 0.02,
+                                                             'sensor_1_xyz' => [13.8684, 16.8598, 0.762],
+                                                             'sensor_2_xyz' => [24.3664, 16.8598, 0.762],
 																												},
-																		'Perimeter_ZN_4' => {
-																													'sensor_1_frac' => 0.06,
-																													'sensor_2_frac' => 0.15,
-																													'sensor_1_xyz' => [1.6002, 15.1364, 0.762],
-																													'sensor_2_xyz' => [1.6002, 9.2446, 0.762],
+                                       'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.06,
+                                                             'sensor_2_frac' => 0.15,
+                                                             'sensor_1_xyz' => [1.6002, 15.1364, 0.762],
+                                                             'sensor_2_xyz' => [1.6002, 9.2446, 0.762],
 																												},
-																		},
-											'90.1-2013' => { 
-																		'Perimeter_ZN_1' => {
-																													'sensor_1_frac' => 0.2399,
-																													'sensor_2_frac' => 0.0302,
-																													'sensor_1_xyz' => [9.144, 1.6337, 0.762],
-																													'sensor_2_xyz' => [9.144, 3.2675, 0.762],
+                                      },
+                      '90.1-2013' => { 'Perimeter_ZN_1' => { 'sensor_1_frac' => 0.2399,
+                                                             'sensor_2_frac' => 0.0302,
+                                                             'sensor_1_xyz' => [9.144, 1.6337, 0.762],
+                                                             'sensor_2_xyz' => [9.144, 3.2675, 0.762],
 																												},
-																		'Perimeter_ZN_2' => {
-																													'sensor_1_frac' => 0.2399,
-																													'sensor_2_frac' => 0.0302,
-																													'sensor_1_xyz' => [26.0898, 9.144, 0.762],
-																													'sensor_2_xyz' => [24.4561, 9.144, 0.762],
+                                       'Perimeter_ZN_2' => { 'sensor_1_frac' => 0.2399,
+                                                             'sensor_2_frac' => 0.0302,
+                                                             'sensor_1_xyz' => [26.0898, 9.144, 0.762],
+                                                             'sensor_2_xyz' => [24.4561, 9.144, 0.762],
 																												},
-																		'Perimeter_ZN_3' => {
-																													'sensor_1_frac' => 0.2399,
-																													'sensor_2_frac' => 0.0302,
-																													'sensor_1_xyz' => [18.288, 16.825, 0.762],
-																													'sensor_2_xyz' => [18.288, 15.1925, 0.762],
+                                       'Perimeter_ZN_3' => { 'sensor_1_frac' => 0.2399,
+                                                             'sensor_2_frac' => 0.0302,
+                                                             'sensor_1_xyz' => [18.288, 16.825, 0.762],
+                                                             'sensor_2_xyz' => [18.288, 15.1925, 0.762],
 																												},
-																		'Perimeter_ZN_4' => {
-																													'sensor_1_frac' => 0.2399,
-																													'sensor_2_frac' => 0.0302,
-																													'sensor_1_xyz' => [1.6337, 9.144, 0.762],
-																													'sensor_2_xyz' => [3.2675, 9.144, 0.762],
+                                       'Perimeter_ZN_4' => { 'sensor_1_frac' => 0.2399,
+                                                             'sensor_2_frac' => 0.0302,
+                                                             'sensor_1_xyz' => [1.6337, 9.144, 0.762],
+                                                             'sensor_2_xyz' => [3.2675, 9.144, 0.762],
 																												},
-																		},
+                                      },
 										}
                   ]
 
-    
-		
 		# Adjust daylight sensors in each space
     model.getSpaces.each do |space|
 			if adjustments[0][template].keys.include? (space.name.to_s)
