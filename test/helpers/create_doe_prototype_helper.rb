@@ -236,11 +236,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
         ### Compare simulation results ###
 
-        acceptable_error_percentage = 0.0
+        acceptable_error_percentage = 0.001
 
         # Get the legacy simulation results
         if run_type == 'dd-only'
-          legacy_values = nil
+          legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
         else
           legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
         end
@@ -313,7 +313,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if total_current_energy > 0 && total_legacy_energy > 0
             # If both
             total_energy_percent_error = ((total_current_energy - total_legacy_energy)/total_legacy_energy) * 100
-            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+            if total_energy_percent_error.abs > acceptable_error_percentage
+              result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+            end
           elsif total_current_energy > 0 && total_legacy_energy == 0
             # The osm has a fuel/end use that the legacy idf does not
             total_energy_percent_error = 1000
@@ -394,6 +396,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 	  
       # Assert if there is no difference in results
       assert(result_diffs.size == 0)
+
+      if result_diffs.size > 0
+        puts result_diffs
+      end
 
     end
   end

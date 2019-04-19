@@ -22,14 +22,14 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
     'HighriseApartment',
     'Warehouse']
 	 @climate_zones = [
-    'ASHRAE 169-2013-1A']#,
+#    'ASHRAE 169-2013-1A',
 #    'ASHRAE 169-2013-1B',
 #    'ASHRAE 169-2013-2A',
 #    'ASHRAE 169-2013-2B',
 #    'ASHRAE 169-2013-3A',
 #    'ASHRAE 169-2013-3B',
 #    'ASHRAE 169-2013-3C',
-#    'ASHRAE 169-2013-4A',
+    'ASHRAE 169-2013-4A'],
 #    'ASHRAE 169-2013-4B',
 #    'ASHRAE 169-2013-4C',
 #    'ASHRAE 169-2013-5A',
