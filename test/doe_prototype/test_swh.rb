@@ -34,7 +34,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     template = '90.1-2004'
     building_type = 'LargeHotel'
 
-    model = TestSHW.model_test(template, building_type)  
+    model = TestSHW.model_test(template, building_type)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         off_cycle_loss_coeff_to_amb = water_heater.getOffCycleLossCoefficienttoAmbientTemperature.get.value.round(0)
