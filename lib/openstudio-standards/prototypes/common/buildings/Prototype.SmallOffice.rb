@@ -123,42 +123,44 @@ module SmallOffice
 
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
-      if adjustments[0][template].keys.include? (space.name.to_s)
-        adj = adjustments[0][template][space.name.to_s]
-        next if space.thermalZone.empty?
-        zone = space.thermalZone.get
-        next if space.spaceType.empty?
-        spc_type = space.spaceType.get
-        next if spc_type.standardsSpaceType.empty?
-        stds_spc_type = spc_type.standardsSpaceType.get
-        # Adjust the primary sensor
-        if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
-          zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
-          pri_ctrl = zone.primaryDaylightingControl.get
-          if adj['sensor_1_xyz']
-            x = adj['sensor_1_xyz'][0]
-            y = adj['sensor_1_xyz'][1]
-            z = adj['sensor_1_xyz'][2]
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
-            pri_ctrl.setPositionXCoordinate(x)
-            pri_ctrl.setPositionYCoordinate(y)
-            pri_ctrl.setPositionZCoordinate(z)
+      if adjustments[0].keys.include? (template)
+        if adjustments[0][template].keys.include? (space.name.to_s)
+          adj = adjustments[0][template][space.name.to_s]
+          next if space.thermalZone.empty?
+          zone = space.thermalZone.get
+          next if space.spaceType.empty?
+          spc_type = space.spaceType.get
+          next if spc_type.standardsSpaceType.empty?
+          stds_spc_type = spc_type.standardsSpaceType.get
+          # Adjust the primary sensor
+          if adj['sensor_1_frac'] && zone.primaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor to control #{adj['sensor_1_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbyPrimaryDaylightingControl(adj['sensor_1_frac'])
+            pri_ctrl = zone.primaryDaylightingControl.get
+            if adj['sensor_1_xyz']
+              x = adj['sensor_1_xyz'][0]
+              y = adj['sensor_1_xyz'][1]
+              z = adj['sensor_1_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting primary daylight sensor position to [#{x}, #{y}, #{z}].")
+              pri_ctrl.setPositionXCoordinate(x)
+              pri_ctrl.setPositionYCoordinate(y)
+              pri_ctrl.setPositionZCoordinate(z)
+            end
           end
-        end
-        # Adjust the secondary sensor
-        if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
-          zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
-          sec_ctrl = zone.secondaryDaylightingControl.get
-          if adj['sensor_2_xyz']
-            x = adj['sensor_2_xyz'][0]
-            y = adj['sensor_2_xyz'][1]
-            z = adj['sensor_2_xyz'][2]
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
-            sec_ctrl.setPositionXCoordinate(x)
-            sec_ctrl.setPositionYCoordinate(y)
-            sec_ctrl.setPositionZCoordinate(z)
+          # Adjust the secondary sensor
+          if adj['sensor_2_frac'] && zone.secondaryDaylightingControl.is_initialized
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor to control #{adj['sensor_2_frac']} of the lighting.")
+            zone.setFractionofZoneControlledbySecondaryDaylightingControl(adj['sensor_2_frac'])
+            sec_ctrl = zone.secondaryDaylightingControl.get
+            if adj['sensor_2_xyz']
+              x = adj['sensor_2_xyz'][0]
+              y = adj['sensor_2_xyz'][1]
+              z = adj['sensor_2_xyz'][2]
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "For #{zone.name}: Adjusting secondary daylight sensor position to [#{x}, #{y}, #{z}].")
+              sec_ctrl.setPositionXCoordinate(x)
+              sec_ctrl.setPositionYCoordinate(y)
+              sec_ctrl.setPositionZCoordinate(z)
+            end
           end
         end
       end
