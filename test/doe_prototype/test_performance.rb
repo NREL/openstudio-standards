@@ -29,7 +29,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 #    'ASHRAE 169-2013-3A',
 #    'ASHRAE 169-2013-3B',
 #    'ASHRAE 169-2013-3C',
-    'ASHRAE 169-2013-4A'],
+    'ASHRAE 169-2013-4A']#,
 #    'ASHRAE 169-2013-4B',
 #    'ASHRAE 169-2013-4C',
 #    'ASHRAE 169-2013-5A',
