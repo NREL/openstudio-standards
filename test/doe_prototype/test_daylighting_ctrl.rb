@@ -88,45 +88,45 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     building_type = 'MediumOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
     model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
-    true_daylght_ctrl = {"Perimeter_bot_ZN_1  Daylt Sensor 1" => [3.048, 1.524, 0.762],
-                         "Perimeter_bot_ZN_1  Daylt Sensor 2" => [24.9555, 1.524, 0.762],
-                         "Perimeter_bot_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_bot_ZN_2  Daylt Sensor 2" => [48.387, 3.048, 0.762],
-                         "Perimeter_bot_ZN_3  Daylt Sensor 1" => [24.9514, 31.7498, 0.762],
-                         "Perimeter_bot_ZN_3  Daylt Sensor 2" => [46.863, 31.7498, 0.762],
-                         "Perimeter_bot_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_bot_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762],
-                         "Perimeter_mid_ZN_1  Daylt Sensor 1" => [3.048, 1.524, 0.762],
-                         "Perimeter_mid_ZN_1  Daylt Sensor 2" => [24.9555, 1.524, 0.762],
-                         "Perimeter_mid_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_mid_ZN_2  Daylt Sensor 2" => [48.387, 3.048, 0.762],
-                         "Perimeter_mid_ZN_3  Daylt Sensor 1" => [24.9514, 31.7498, 0.762],
-                         "Perimeter_mid_ZN_3  Daylt Sensor 2" => [46.863, 31.7498, 0.762],
-                         "Perimeter_mid_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_mid_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762],
-                         "Perimeter_top_ZN_1  Daylt Sensor 1" => [3.048, 1.524, 0.762],
-                         "Perimeter_top_ZN_1  Daylt Sensor 2" => [24.9555, 1.524, 0.762],
-                         "Perimeter_top_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_top_ZN_2  Daylt Sensor 2" => [48.387, 3.048, 0.762],
-                         "Perimeter_top_ZN_3  Daylt Sensor 1" => [24.9514, 31.7498, 0.762],
-                         "Perimeter_top_ZN_3  Daylt Sensor 2" => [46.863, 31.7498, 0.762],
-                         "Perimeter_top_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_top_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762]}
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [3.048, 1.524, 0.762],
+                         "Perimeter_bot_ZN_1 Daylt Sensor 2" => [24.9555, 1.524, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 2" => [48.387, 3.048, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 1" => [24.9514, 31.7498, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 2" => [46.863, 31.7498, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 2" => [1.524, 30.2514, 0.762],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 1" => [3.048, 1.524, 4.7244],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 2" => [24.9555, 1.524, 4.7244],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 4.7244],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 2" => [48.387, 3.048, 4.7244],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 1" => [24.9514, 31.7498, 4.7244],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 2" => [46.863, 31.7498, 4.7244],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 4.7244],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 2" => [1.524, 30.2514, 4.7244],
+                         "Perimeter_top_ZN_1 Daylt Sensor 1" => [3.048, 1.524, 8.687],
+                         "Perimeter_top_ZN_1 Daylt Sensor 2" => [24.9555, 1.524, 8.687],
+                         "Perimeter_top_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 8.687],
+                         "Perimeter_top_ZN_2 Daylt Sensor 2" => [48.387, 3.048, 8.687],
+                         "Perimeter_top_ZN_3 Daylt Sensor 1" => [24.9514, 31.7498, 8.687],
+                         "Perimeter_top_ZN_3 Daylt Sensor 2" => [46.863, 31.7498, 8.687],
+                         "Perimeter_top_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 8.687],
+                         "Perimeter_top_ZN_4 Daylt Sensor 2" => [1.524, 30.2514, 8.687],}
     model.getDaylightingControls.each do |daylght_ctrl|
       assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Medium Office - 2010 - 1A - Sensor Position Incorrect')
     end
-    true_daylght_ctrl = { "Perimeter_bot_ZN_1" => [0.08, 0.46]
-                          "Perimeter_bot_ZN_2" => [0.43, 0.12]
-                          "Perimeter_bot_ZN_3" => [0.46, 0.08]
-                          "Perimeter_bot_ZN_4" => [0.43, 0.12]
-                          "Perimeter_mid_ZN_1" => [0.08, 0.46]
-                          "Perimeter_mid_ZN_2" => [0.43, 0.12]
-                          "Perimeter_mid_ZN_3" => [0.46, 0.08]
-                          "Perimeter_mid_ZN_4" => [0.43, 0.12]
-                          "Perimeter_top_ZN_1" => [0.08, 0.46]
-                          "Perimeter_top_ZN_2" => [0.43, 0.12]
-                          "Perimeter_top_ZN_3" => [0.46, 0.08]
-                          "Perimeter_top_ZN_4" => [0.43, 0.12]}                             
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1" => [0.08, 0.46],
+                         "Perimeter_bot_ZN_2" => [0.43, 0.12],
+                         "Perimeter_bot_ZN_3" => [0.46, 0.08],
+                         "Perimeter_bot_ZN_4" => [0.43, 0.12],
+                         "Perimeter_mid_ZN_1" => [0.08, 0.46],
+                         "Perimeter_mid_ZN_2" => [0.43, 0.12],
+                         "Perimeter_mid_ZN_3" => [0.46, 0.08],
+                         "Perimeter_mid_ZN_4" => [0.43, 0.12],
+                         "Perimeter_top_ZN_1" => [0.08, 0.46],
+                         "Perimeter_top_ZN_2" => [0.43, 0.12],
+                         "Perimeter_top_ZN_3" => [0.46, 0.08],
+                         "Perimeter_top_ZN_4" => [0.43, 0.12]}                             
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
@@ -139,45 +139,45 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     building_type = 'MediumOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
     model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
-    true_daylght_ctrl = {"Perimeter_bot_ZN_1  Daylt Sensor 1" => [24.9555, 1.524, 0.762],
-                         "Perimeter_bot_ZN_1  Daylt Sensor 2" => [3.048, 1.524, 0.762],
-                         "Perimeter_bot_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_bot_ZN_2  Daylt Sensor 2" => [46.863, 16.6369, 0.762],
-                         "Perimeter_bot_ZN_3  Daylt Sensor 1" => [24.9555, 31.7498, 0.762],
-                         "Perimeter_bot_ZN_3  Daylt Sensor 2" => [24.9555, 30.2258, 0.762],
-                         "Perimeter_bot_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_bot_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762],
-                         "Perimeter_mid_ZN_1  Daylt Sensor 1" => [24.9555, 1.524, 0.762],
-                         "Perimeter_mid_ZN_1  Daylt Sensor 2" => [3.048, 1.524, 0.762],
-                         "Perimeter_mid_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_mid_ZN_2  Daylt Sensor 2" => [46.863, 16.6369, 0.762],
-                         "Perimeter_mid_ZN_3  Daylt Sensor 1" => [24.9555, 31.7498, 0.762],
-                         "Perimeter_mid_ZN_3  Daylt Sensor 2" => [24.9555, 30.2258, 0.762],
-                         "Perimeter_mid_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_mid_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762],
-                         "Perimeter_top_ZN_1  Daylt Sensor 1" => [24.9555, 1.524, 0.762],
-                         "Perimeter_top_ZN_1  Daylt Sensor 2" => [3.048, 1.524, 0.762],
-                         "Perimeter_top_ZN_2  Daylt Sensor 1" => [48.387, 16.6369, 0.762],
-                         "Perimeter_top_ZN_2  Daylt Sensor 2" => [46.863, 16.6369, 0.762],
-                         "Perimeter_top_ZN_3  Daylt Sensor 1" => [24.9555, 31.7498, 0.762],
-                         "Perimeter_top_ZN_3  Daylt Sensor 2" => [24.9555, 30.2258, 0.762],
-                         "Perimeter_top_ZN_4  Daylt Sensor 1" => [1.524, 16.6369, 0.762],
-                         "Perimeter_top_ZN_4  Daylt Sensor 2" => [1.524, 30.2514, 0.762],}
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [24.9555, 1.524, 0.762],
+                         "Perimeter_bot_ZN_1 Daylt Sensor 2" => [24.9555, 3.048, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 2" => [46.863, 16.6369, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 1" => [24.9555, 31.7498, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 2" => [24.9555, 30.2258, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 2" => [3.048, 16.6369, 0.762],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 1" => [24.9555, 1.524, 4.7244],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 2" => [24.9555, 3.048, 4.7244],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 4.7244],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 2" => [46.863, 16.6369, 4.7244],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 1" => [24.9555, 31.7498, 4.7244],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 2" => [24.9555, 30.2258, 4.7244],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 4.7244],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 2" => [3.048, 16.6369, 4.7244],
+                         "Perimeter_top_ZN_1 Daylt Sensor 1" => [24.9555, 1.524, 8.687],
+                         "Perimeter_top_ZN_1 Daylt Sensor 2" => [24.9555, 3.048, 8.687],
+                         "Perimeter_top_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 8.687],
+                         "Perimeter_top_ZN_2 Daylt Sensor 2" => [46.863, 16.6369, 8.687],
+                         "Perimeter_top_ZN_3 Daylt Sensor 1" => [24.9555, 31.7498, 8.687],
+                         "Perimeter_top_ZN_3 Daylt Sensor 2" => [24.9555, 30.2258, 8.687],
+                         "Perimeter_top_ZN_4 Daylt Sensor 1" => [1.524, 16.6369, 8.687],
+                         "Perimeter_top_ZN_4 Daylt Sensor 2" => [3.048, 16.6369, 8.687],}
     model.getDaylightingControls.each do |daylght_ctrl|
       assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Medium Office - 2013 - 1A - Sensor Position Incorrect')
     end
-    true_daylght_ctrl = { "Perimeter_bot_ZN_1" => [0.3835, 0.1395]
-                          "Perimeter_bot_ZN_2" => [0.3835, 0.1395]
-                          "Perimeter_bot_ZN_3" => [0.3835, 0.1395]
-                          "Perimeter_bot_ZN_4" => [0.3835, 0.1395]
-                          "Perimeter_mid_ZN_1" => [0.3835, 0.1395]
-                          "Perimeter_mid_ZN_2" => [0.3835, 0.1395]
-                          "Perimeter_mid_ZN_3" => [0.3835, 0.1395]
-                          "Perimeter_mid_ZN_4" => [0.3835, 0.1395]
-                          "Perimeter_top_ZN_1" => [0.3835, 0.1395]
-                          "Perimeter_top_ZN_2" => [0.3835, 0.1395]
-                          "Perimeter_top_ZN_3" => [0.3835, 0.1395]
-                          "Perimeter_top_ZN_4" => [0.3835, 0.1395]}                             
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1" => [0.3835, 0.1395],
+                         "Perimeter_bot_ZN_2" => [0.3835, 0.1395],
+                         "Perimeter_bot_ZN_3" => [0.3835, 0.1395],
+                         "Perimeter_bot_ZN_4" => [0.3835, 0.1395],
+                         "Perimeter_mid_ZN_1" => [0.3835, 0.1395],
+                         "Perimeter_mid_ZN_2" => [0.3835, 0.1395],
+                         "Perimeter_mid_ZN_3" => [0.3835, 0.1395],
+                         "Perimeter_mid_ZN_4" => [0.3835, 0.1395],
+                         "Perimeter_top_ZN_1" => [0.3835, 0.1395],
+                         "Perimeter_top_ZN_2" => [0.3835, 0.1395],
+                         "Perimeter_top_ZN_3" => [0.3835, 0.1395],
+                         "Perimeter_top_ZN_4" => [0.3835, 0.1395]}                             
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
