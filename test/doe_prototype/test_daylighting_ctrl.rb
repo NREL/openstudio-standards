@@ -29,59 +29,59 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
   end
 
   def test_daylighting_ctrl
-    # Small Office
-    template = '90.1-2010'
-    building_type = 'SmallOffice'
-    climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
-    true_daylght_ctrl = {"Perimeter_ZN_3 Daylt Sensor 2" => [24.3664, 16.8598, 0.762],
-                         "Perimeter_ZN_1 Daylt Sensor 1" => [3.3236, 1.6002, 0.762],
-                         "Perimeter_ZN_4 Daylt Sensor 1" => [1.6002, 15.1364, 0.762],
-                         "Perimeter_ZN_2 Daylt Sensor 1" => [26.0898, 3.3236, 0.762],
-                         "Perimeter_ZN_1 Daylt Sensor 2" => [8.9611, 1.6002, 0.762],
-                         "Perimeter_ZN_2 Daylt Sensor 2" => [24.46608, 6.925, 0.762],
-                         "Perimeter_ZN_3 Daylt Sensor 1" => [13.8684, 16.8598, 0.762],
-                         "Perimeter_ZN_4 Daylt Sensor 2" => [1.6002, 9.2446, 0.762]}
-    model.getDaylightingControls.each do |daylght_ctrl|
-      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Small Office - 2010 - 2A - Sensor Position Incorrect')
-    end
-    true_daylght_ctrl = {"Perimeter_ZN_1" => [0.02, 0.1],
-                         "Attic" => [1.0, 0.0],
-                         "Perimeter_ZN_2" => [0.06, 0.15],
-                         "Perimeter_ZN_3" => [0.1, 0.02],
-                         "Perimeter_ZN_4" => [0.06, 0.15],
-                         "Core_ZN"=>[1.0, 0.0]}
-    model.getSpaces.each do |space|
-      zone = space.thermalZone.get
-      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2010 - 2A - Fraction Incorrect')
-    end
-
-    # Small Office
-    template = '90.1-2013'
-    building_type = 'SmallOffice'
-    climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
-    true_daylght_ctrl = {"Perimeter_ZN_3 Daylt Sensor 2" => [18.288, 15.1925, 0.762],
-                         "Perimeter_ZN_1 Daylt Sensor 1" => [9.144, 1.6337, 0.762],
-                         "Perimeter_ZN_4 Daylt Sensor 1" => [1.6337, 9.144, 0.762],
-                         "Perimeter_ZN_2 Daylt Sensor 1" => [26.0898, 9.144, 0.762],
-                         "Perimeter_ZN_1 Daylt Sensor 2" => [9.144, 3.2675, 0.762],
-                         "Perimeter_ZN_2 Daylt Sensor 2" => [24.4561, 9.144, 0.762],
-                         "Perimeter_ZN_3 Daylt Sensor 1" => [18.288, 16.825, 0.762],
-                         "Perimeter_ZN_4 Daylt Sensor 2" => [3.2675, 9.144, 0.762]}
-    model.getDaylightingControls.each do |daylght_ctrl|
-      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Small Office - 2013 - 2A - Sensor Position Incorrect')
-    end
-    true_daylght_ctrl = {"Perimeter_ZN_1" => [0.2399, 0.0302],
-                         "Attic" => [1.0, 0.0],
-                         "Perimeter_ZN_2" => [0.2399, 0.0302],
-                         "Perimeter_ZN_3" => [0.2399, 0.0302],
-                         "Perimeter_ZN_4" => [0.2399, 0.0302],
-                         "Core_ZN"=>[1.0, 0.0]}
-    model.getSpaces.each do |space|
-      zone = space.thermalZone.get
-      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2013 - 2A - Fraction Incorrect')
-    end
+#    # Small Office
+#    template = '90.1-2010'
+#    building_type = 'SmallOffice'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
+#    true_daylght_ctrl = {"Perimeter_ZN_3 Daylt Sensor 2" => [24.3664, 16.8598, 0.762],
+#                         "Perimeter_ZN_1 Daylt Sensor 1" => [3.3236, 1.6002, 0.762],
+#                         "Perimeter_ZN_4 Daylt Sensor 1" => [1.6002, 15.1364, 0.762],
+#                         "Perimeter_ZN_2 Daylt Sensor 1" => [26.0898, 3.3236, 0.762],
+#                         "Perimeter_ZN_1 Daylt Sensor 2" => [8.9611, 1.6002, 0.762],
+#                         "Perimeter_ZN_2 Daylt Sensor 2" => [24.46608, 6.925, 0.762],
+#                         "Perimeter_ZN_3 Daylt Sensor 1" => [13.8684, 16.8598, 0.762],
+#                         "Perimeter_ZN_4 Daylt Sensor 2" => [1.6002, 9.2446, 0.762]}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Small Office - 2010 - 2A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Perimeter_ZN_1" => [0.02, 0.1],
+#                         "Attic" => [1.0, 0.0],
+#                         "Perimeter_ZN_2" => [0.06, 0.15],
+#                         "Perimeter_ZN_3" => [0.1, 0.02],
+#                         "Perimeter_ZN_4" => [0.06, 0.15],
+#                         "Core_ZN"=>[1.0, 0.0]}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2010 - 2A - Fraction Incorrect')
+#    end
+#
+#    # Small Office
+#    template = '90.1-2013'
+#    building_type = 'SmallOffice'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
+#    true_daylght_ctrl = {"Perimeter_ZN_3 Daylt Sensor 2" => [18.288, 15.1925, 0.762],
+#                         "Perimeter_ZN_1 Daylt Sensor 1" => [9.144, 1.6337, 0.762],
+#                         "Perimeter_ZN_4 Daylt Sensor 1" => [1.6337, 9.144, 0.762],
+#                         "Perimeter_ZN_2 Daylt Sensor 1" => [26.0898, 9.144, 0.762],
+#                         "Perimeter_ZN_1 Daylt Sensor 2" => [9.144, 3.2675, 0.762],
+#                         "Perimeter_ZN_2 Daylt Sensor 2" => [24.4561, 9.144, 0.762],
+#                         "Perimeter_ZN_3 Daylt Sensor 1" => [18.288, 16.825, 0.762],
+#                         "Perimeter_ZN_4 Daylt Sensor 2" => [3.2675, 9.144, 0.762]}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Small Office - 2013 - 2A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Perimeter_ZN_1" => [0.2399, 0.0302],
+#                         "Attic" => [1.0, 0.0],
+#                         "Perimeter_ZN_2" => [0.2399, 0.0302],
+#                         "Perimeter_ZN_3" => [0.2399, 0.0302],
+#                         "Perimeter_ZN_4" => [0.2399, 0.0302],
+#                         "Core_ZN"=>[1.0, 0.0]}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2013 - 2A - Fraction Incorrect')
+#    end
 
     # Medium Office
     template = '90.1-2010'
@@ -130,7 +130,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2010 - 2A - Fraction Incorrect')
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2010 - 1A - Fraction Incorrect')
       end
     end
 
@@ -181,7 +181,109 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Small Office - 2013 - 2A - Fraction Incorrect')
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Medium Office - 2013 - 1A - Fraction Incorrect')
+      end
+    end
+
+    # Large Office
+    template = '90.1-2010'
+    building_type = 'LargeOffice'
+    climate_zone = 'ASHRAE 169-2013-1A'
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [3.1242, 1.6764, 0.762],
+                         "Perimeter_bot_ZN_1 Daylt Sensor 2" => [36.5536, 1.6764, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 1" => [71.4308, 24.3691, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 2" => [71.4308, 3.1242, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 1" => [36.5536, 47.0617, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 2" => [70.0034, 47.0617, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 1" => [1.6764, 24.3691, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 2" => [1.6764, 45.6194, 0.762],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 1" => [3.1242, 1.6764, 17.526],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 2" => [36.5536, 1.6764, 17.526],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 1" => [71.4308, 24.3691, 17.526],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 2" => [71.4308, 3.1242, 17.526],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 1" => [36.5536, 47.0617, 17.526],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 2" => [70.0034, 47.0617, 17.526],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 1" => [1.6764, 24.3691, 17.526],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 2" => [1.6764, 45.6194, 17.526],
+                         "Perimeter_top_ZN_1 Daylt Sensor 1" => [3.1242, 1.6764, 34.29],
+                         "Perimeter_top_ZN_1 Daylt Sensor 2" => [36.5536, 1.6764, 34.29],
+                         "Perimeter_top_ZN_2 Daylt Sensor 1" => [71.4308, 24.3691, 34.29],
+                         "Perimeter_top_ZN_2 Daylt Sensor 2" => [71.4308, 3.1242, 34.29],
+                         "Perimeter_top_ZN_3 Daylt Sensor 1" => [36.5536, 47.0617, 34.29],
+                         "Perimeter_top_ZN_3 Daylt Sensor 2" => [70.0034, 47.0617, 34.29],
+                         "Perimeter_top_ZN_4 Daylt Sensor 1" => [1.6764, 24.3691, 34.29],
+                         "Perimeter_top_ZN_4 Daylt Sensor 2" => [1.6764, 45.6194, 34.29],}
+    model.getDaylightingControls.each do |daylght_ctrl|
+      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Large Office - 2010 - 1A - Sensor Position Incorrect')
+    end
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1" => [0.05, 0.51],
+                         "Perimeter_bot_ZN_2" => [0.49, 0.08],
+                         "Perimeter_bot_ZN_3" => [0.51, 0.05],
+                         "Perimeter_bot_ZN_4" => [0.49, 0.08],
+                         "Perimeter_mid_ZN_1" => [0.05, 0.51],
+                         "Perimeter_mid_ZN_2" => [0.49, 0.08],
+                         "Perimeter_mid_ZN_3" => [0.51, 0.05],
+                         "Perimeter_mid_ZN_4" => [0.49, 0.08],
+                         "Perimeter_top_ZN_1" => [0.05, 0.51],
+                         "Perimeter_top_ZN_2" => [0.49, 0.08],
+                         "Perimeter_top_ZN_3" => [0.51, 0.05],
+                         "Perimeter_top_ZN_4" => [0.49, 0.08]}                             
+    model.getSpaces.each do |space|
+      zone = space.thermalZone.get
+      if true_daylght_ctrl.keys.include? (space.name.to_s)
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2010 - 1A - Fraction Incorrect')
+      end
+    end
+
+    # Large Office
+    template = '90.1-2013'
+    building_type = 'LargeOffice'
+    climate_zone = 'ASHRAE 169-2013-1A'
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [36.576, 1.6764, 0.762],
+                         "Perimeter_bot_ZN_1 Daylt Sensor 2" => [36.576, 3.3528, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 1" => [71.4308, 24.384, 0.762],
+                         "Perimeter_bot_ZN_2 Daylt Sensor 2" => [69.7544, 24.384, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 1" => [36.576, 47.0617, 0.762],
+                         "Perimeter_bot_ZN_3 Daylt Sensor 2" => [36.576, 45.3847, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 1" => [1.6764, 24.384, 0.762],
+                         "Perimeter_bot_ZN_4 Daylt Sensor 2" => [3.3528, 24.384, 0.762],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 1" => [36.576, 1.6764, 17.526],
+                         "Perimeter_mid_ZN_1 Daylt Sensor 2" => [36.576, 3.3528, 17.526],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 1" => [71.4308, 24.384, 17.526],
+                         "Perimeter_mid_ZN_2 Daylt Sensor 2" => [69.7544, 24.384, 17.526],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 1" => [36.576, 47.0617, 17.526],
+                         "Perimeter_mid_ZN_3 Daylt Sensor 2" => [36.576, 45.3847, 17.526],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 1" => [1.6764, 24.384, 17.526],
+                         "Perimeter_mid_ZN_4 Daylt Sensor 2" => [3.3528, 24.384, 17.526],
+                         "Perimeter_top_ZN_1 Daylt Sensor 1" => [36.576, 1.6764, 34.29],
+                         "Perimeter_top_ZN_1 Daylt Sensor 2" => [36.576, 3.3528, 34.29],
+                         "Perimeter_top_ZN_2 Daylt Sensor 1" => [71.4308, 24.384, 34.29],
+                         "Perimeter_top_ZN_2 Daylt Sensor 2" => [69.7544, 24.384, 34.29],
+                         "Perimeter_top_ZN_3 Daylt Sensor 1" => [36.576, 47.0617, 34.29],
+                         "Perimeter_top_ZN_3 Daylt Sensor 2" => [36.576, 45.3847, 34.29],
+                         "Perimeter_top_ZN_4 Daylt Sensor 1" => [1.6764, 24.384, 34.29],
+                         "Perimeter_top_ZN_4 Daylt Sensor 2" => [3.3528, 24.384, 34.29]}
+    model.getDaylightingControls.each do |daylght_ctrl|
+      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Large Office - 2013 - 1A - Sensor Position Incorrect')
+    end
+    true_daylght_ctrl = {"Perimeter_bot_ZN_1" => [0.3857, 0.1385],
+                         "Perimeter_bot_ZN_2" => [0.3857, 0.1385],
+                         "Perimeter_bot_ZN_3" => [0.3857, 0.1385],
+                         "Perimeter_bot_ZN_4" => [0.3857, 0.1385],
+                         "Perimeter_mid_ZN_1" => [0.3857, 0.1385],
+                         "Perimeter_mid_ZN_2" => [0.3857, 0.1385],
+                         "Perimeter_mid_ZN_3" => [0.3857, 0.1385],
+                         "Perimeter_mid_ZN_4" => [0.3857, 0.1385],
+                         "Perimeter_top_ZN_1" => [0.3857, 0.1385],
+                         "Perimeter_top_ZN_2" => [0.3857, 0.1385],
+                         "Perimeter_top_ZN_3" => [0.3857, 0.1385],
+                         "Perimeter_top_ZN_4" => [0.3857, 0.1385]}                             
+    model.getSpaces.each do |space|
+      zone = space.thermalZone.get
+      if true_daylght_ctrl.keys.include? (space.name.to_s)
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Large Office - 2013 - 1A - Fraction Incorrect')
       end
     end
   end

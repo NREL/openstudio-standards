@@ -130,7 +130,7 @@ class ASHRAE9012010 < ASHRAE901
       # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
       sensor_2_window = sorted_skylights[0]
     elsif !req_top_ctrl && req_pri_ctrl
-      if sorted_windows.size == 1 and (@instvarbuilding_type != 'MediumOffice' or @instvarbuilding_type != 'MediumOffice')
+      if sorted_windows.size == 1 and @instvarbuilding_type != 'MediumOffice' and @instvarbuilding_type != 'LargeOffice'
         # Sensor 1 controls the whole primary area
         sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
