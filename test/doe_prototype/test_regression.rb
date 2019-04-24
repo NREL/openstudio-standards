@@ -5,24 +5,24 @@ require_relative './doe_prototype_regression_helper'
 
 class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
   def test_regression()
-#   @building_types = [
-#     'SmallOffice',
-#     'MediumOffice',
-#     'LargeOffice',
-#     'RetailStandalone',
-#     'RetailStripmall',
-#     'PrimarySchool',
-#     'SecondarySchool',
-#     'Outpatient',
-#     'Hospital',
-#     'SmallHotel',
-#     'LargeHotel',
-#     'QuickServiceRestaurant',
-#     'FullServiceRestaurant',
-#     'MidriseApartment',
-#     'HighriseApartment',
-#     'Warehouse']
-#   @climate_zones = [
+   @building_types = [
+     'SmallOffice',
+     'MediumOffice',
+     'LargeOffice',
+     'RetailStandalone',
+     'RetailStripmall',
+     'PrimarySchool',
+     'SecondarySchool',
+     'Outpatient',
+     'Hospital',
+     'SmallHotel',
+     'LargeHotel',
+     'QuickServiceRestaurant',
+     'FullServiceRestaurant',
+     'MidriseApartment',
+     'HighriseApartment',
+     'Warehouse']
+   @climate_zones = [
 #     'ASHRAE 169-2013-1A',
 #     'ASHRAE 169-2013-1B',
 #     'ASHRAE 169-2013-2A',
@@ -30,7 +30,7 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
 #     'ASHRAE 169-2013-3A',
 #     'ASHRAE 169-2013-3B',
 #     'ASHRAE 169-2013-3C',
-#     'ASHRAE 169-2013-4A',
+     'ASHRAE 169-2013-4A']#,
 #     'ASHRAE 169-2013-4B',
 #     'ASHRAE 169-2013-4C',
 #     'ASHRAE 169-2013-5A',
@@ -42,12 +42,12 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
 #     'ASHRAE 169-2013-7B',
 #     'ASHRAE 169-2013-8A',
 #     'ASHRAE 169-2013-8B']
-#   @templates = [
-#     '90.1-2004',
+   @templates = [
+     '90.1-2004',
 #     '90.1-2007',
 #     '90.1-2010',
-#     '90.1-2013']
-#   @epw_files = ['USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
+     '90.1-2013']
+   @epw_files = ['USA_HI_Honolulu.Intl.AP.911820_TMY3.epw']#,
 #                 'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2.epw',
 #                 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
 #                 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
@@ -67,29 +67,6 @@ class TestDOEPrototypesRegression < TestDOEPrototypesRegressionHelper
 #                 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
 #                 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw']
 
-  @building_types = ['SecondarySchool']
-	@climate_zones [
-      'ASHRAE 169-2006-1A',
-      'ASHRAE 169-2006-1B',
-      'ASHRAE 169-2006-2A',
-      'ASHRAE 169-2006-2B',
-      'ASHRAE 169-2006-3A',
-      'ASHRAE 169-2006-3B',
-      'ASHRAE 169-2006-3C',
-      'ASHRAE 169-2006-4A',
-      'ASHRAE 169-2006-4B',
-      'ASHRAE 169-2006-4C',
-      'ASHRAE 169-2006-5A',
-      'ASHRAE 169-2006-5B',
-      'ASHRAE 169-2006-5C',
-      'ASHRAE 169-2006-6A',
-      'ASHRAE 169-2006-6B',
-      'ASHRAE 169-2006-7A',
-      'ASHRAE 169-2006-7B',
-      'ASHRAE 169-2006-8A',
-      'ASHRAE 169-2006-8B']
-	@templates = ['90.1-2004']
-	@epw_files = ['USA_FL_Miami.Intl.AP.722020_TMY3.epw']
     all_comp =  @building_types.product @epw_files, @templates, @climate_zones
     all_comp.each do |building_type, epw_file, template, climate_zone|
 	  result, msg = create_model_and_regression_test(building_type, epw_file, template, climate_zone)

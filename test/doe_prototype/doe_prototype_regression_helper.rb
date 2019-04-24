@@ -38,6 +38,10 @@ class TestDOEPrototypesRegressionHelper < Minitest::Test
 
       # Compare the two models.
       diffs = compare_osm_files(old_model, model)
+      # Catch errors related to OS:AdditionalProperties, the only diff can be the name 
+      diffs.delete_if {|diff| diff.to_s.include?("OS:AdditionalProperties")}
+      # Catch node name
+      diffs.delete_if {|diff| diff.to_s.include?("A OS:Node called")}
     rescue => exception
       # Log error/exception and then keep going.
       error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})"
