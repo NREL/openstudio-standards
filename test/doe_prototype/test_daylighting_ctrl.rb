@@ -372,40 +372,111 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 #        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Warehouse - 2013 - 1A - Fraction Incorrect')
 #      end
 #    end
+#
+#    # Full Service Restaurant
+#    template = '90.1-2010'
+#    building_type = 'FullServiceRestaurant'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [1.9812, 1.9812, 0.762],
+#                         "Dining Daylt Sensor 2" => [20.574, 1.9812, 0.762],}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2010 - 1A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Dining" => [0.135, 0.135],}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      if true_daylght_ctrl.keys.include? (space.name.to_s)
+#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
+#      end
+#    end
+#
+#    # Full Service Restaurant
+#    template = '90.1-2013'
+#    building_type = 'FullServiceRestaurant'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [2.6548, 2.6548, 0.762],
+#                         "Dining Daylt Sensor 2" => [19.9539, 2.6548, 0.762],}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2013 - 1A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Dining" => [0.25, 0.25],}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      if true_daylght_ctrl.keys.include? (space.name.to_s)
+#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
+#      end
+#    end
+#
+#    # Quick Service Restaurant
+#    template = '90.1-2010'
+#    building_type = 'QuickServiceRestaurant'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [1.9812, 1.9812, 0.762],
+#                         "Dining Daylt Sensor 2" => [13.2588, 1.9812, 0.762],}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2010 - 1A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Dining" => [0.22, 0.22],}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      if true_daylght_ctrl.keys.include? (space.name.to_s)
+#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
+#      end
+#    end
+#
+#    # Full Service Restaurant
+#    template = '90.1-2013'
+#    building_type = 'QuickServiceRestaurant'
+#    climate_zone = 'ASHRAE 169-2013-1A'
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [2.6548, 2.6548, 0.762],
+#                         "Dining Daylt Sensor 2" => [12.588, 2.6548, 0.762],}
+#    model.getDaylightingControls.each do |daylght_ctrl|
+#      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2013 - 1A - Sensor Position Incorrect')
+#    end
+#    true_daylght_ctrl = {"Dining" => [0.38, 0.38],}
+#    model.getSpaces.each do |space|
+#      zone = space.thermalZone.get
+#      if true_daylght_ctrl.keys.include? (space.name.to_s)
+#        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
+#      end
+#    end
 
-    # Full Service Restaurant
+    # Retail Standalone
     template = '90.1-2013'
-    building_type = 'FullServiceRestaurant'
+    building_type = 'RetailStandalone'
     climate_zone = 'ASHRAE 169-2013-1A'
     model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
-    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [2.6548, 2.6548, 0.762],
-                         "Dining Daylt Sensor 2" => [19.9539, 2.6548, 0.762],}
+    true_daylght_ctrl = {"Core_Retail Daylt Sensor 1" => [14.2, 14.2, 0],
+                         "Core_Retail Daylt Sensor 2" => [3.4, 14.2, 0],}
     model.getDaylightingControls.each do |daylght_ctrl|
-      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2013 - 1A - Sensor Position Incorrect')
+      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Standalone Retail - 2013 - 1A - Sensor Position Incorrect')
     end
-    true_daylght_ctrl = {"Dining" => [0.25, 0.25],}
+    true_daylght_ctrl = {"Core_Retail" => [0.25, 0.25],}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2013 - 1A - Fraction Incorrect')
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 1A - Fraction Incorrect')
       end
     end
 
-    # Full Service Restaurant
-    template = '90.1-2010'
-    building_type = 'FullServiceRestaurant'
-    climate_zone = 'ASHRAE 169-2013-1A'
+    # Retail Standalone
+    template = '90.1-2013'
+    building_type = 'RetailStandalone'
+    climate_zone = 'ASHRAE 169-2013-8A'
     model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
-    true_daylght_ctrl = {"Dining Daylt Sensor 1" => [1.9812, 1.9812, 0.762],
-                         "Dining Daylt Sensor 2" => [20.574, 1.9812, 0.762],}
+    true_daylght_ctrl = {"Core_Retail Daylt Sensor 1" => [9.144, 24.698, 0],}
     model.getDaylightingControls.each do |daylght_ctrl|
-      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Full Service Restaurant - 2010 - 1A - Sensor Position Incorrect')
+      assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Standalone Retail - 2013 - 8A - Sensor Position Incorrect')
     end
-    true_daylght_ctrl = {"Dining" => [0.135, 0.135],}
+    true_daylght_ctrl = {"Core_Retail" => [0.1724, 0],}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
-        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Full Service Restaurant - 2010 - 1A - Fraction Incorrect')
+        assert([zone.getFractionofZoneControlledbyPrimaryDaylightingControl.value, zone.getFractionofZoneControlledbySecondaryDaylightingControl.value] == true_daylght_ctrl[space.name.to_s], 'Standalone Retail - 2013 - 8A - Fraction Incorrect')
       end
     end
 
