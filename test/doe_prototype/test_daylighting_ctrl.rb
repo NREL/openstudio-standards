@@ -317,7 +317,6 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Zone2 Fine Storage Daylt Sensor 1" => [27.8892, 24.9936, 0.762],
                          "Zone2 Fine Storage Daylt Sensor 2" => [3.81, 24.9936, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
-      #puts daylght_ctrl
       assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Warehouse - 2010 - 1A - Sensor Position Incorrect')
     end
     true_daylght_ctrl = {"Zone3 Bulk Storage" => [0.25, 0.25],
