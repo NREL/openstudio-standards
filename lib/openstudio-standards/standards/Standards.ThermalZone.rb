@@ -1556,12 +1556,15 @@ class Standard
       next if exhaust_per_area.nil?
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
       maximum_flow_rate_si = OpenStudio.convert(maximum_flow_rate_ip, 'cfm', 'm^3/s').get
-      if space_type_properties['exhaust_schedule'].nil?
+      if space_type_properties['exhaust_availability_schedule'].nil?
         exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
+        exhaust_flow_schedule = exhaust_schedule
       else
-        sch_name = space_type_properties['exhaust_schedule']
+        sch_name = space_type_properties['exhaust_availability_schedule']
         exhaust_schedule = model_add_schedule(thermal_zone.model, sch_name)
-        unless exhaust_schedule
+        flow_sch_name = space_type_properties['exhaust_flow_fraction_schedule']
+        exhaust_flow_schedule = model_add_schedule(thermal_zone.model, flow_sch_name)
+          unless exhaust_schedule
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "Could not find an exhaust schedule called #{sch_name}, exhaust fans will run continuously.")
           exhaust_schedule = thermal_zone.model.alwaysOnDiscreteSchedule
         end
@@ -1571,6 +1574,7 @@ class Standard
       zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
       zone_exhaust_fan.setName(thermal_zone.name.to_s + ' Exhaust Fan')
       zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
+      zone_exhaust_fan.setFlowFractionSchedule(exhaust_flow_schedule)
       # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
       zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate_si)
       zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')

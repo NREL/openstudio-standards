@@ -82,6 +82,22 @@
     },
     {
       "template": "90.1-2004",
+      "building_type": "Office",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": 500000.0,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "90.1-2004",
       "building_type": "LargeOffice",
       "elevator_type": null,
       "number_of_elevators": null,
@@ -210,7 +226,7 @@
     },
     {
       "template": "90.1-2004",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -226,7 +242,7 @@
     },
     {
       "template": "90.1-2004",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -418,6 +434,22 @@
     },
     {
       "template": "90.1-2007",
+      "building_type": "Office",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": 500000.0,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "90.1-2007",
       "building_type": "LargeOffice",
       "elevator_type": null,
       "number_of_elevators": null,
@@ -546,7 +578,7 @@
     },
     {
       "template": "90.1-2007",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -562,7 +594,7 @@
     },
     {
       "template": "90.1-2007",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -754,6 +786,22 @@
     },
     {
       "template": "90.1-2010",
+      "building_type": "Office",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": 500000.0,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "90.1-2010",
       "building_type": "LargeOffice",
       "elevator_type": null,
       "number_of_elevators": null,
@@ -882,7 +930,7 @@
     },
     {
       "template": "90.1-2010",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -898,7 +946,7 @@
     },
     {
       "template": "90.1-2010",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -1090,6 +1138,22 @@
     },
     {
       "template": "90.1-2013",
+      "building_type": "Office",
+      "elevator_type": null,
+      "number_of_elevators": null,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": 500000.0,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "90.1-2013",
       "building_type": "LargeOffice",
       "elevator_type": null,
       "number_of_elevators": null,
@@ -1218,7 +1282,7 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -1234,7 +1298,7 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -9874,7 +9938,7 @@
     },
     {
       "template": "DOE Ref 1980-2004",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -9890,7 +9954,7 @@
     },
     {
       "template": "DOE Ref 1980-2004",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10178,7 +10242,7 @@
     },
     {
       "template": "DOE Ref Pre-1980",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10194,7 +10258,7 @@
     },
     {
       "template": "DOE Ref Pre-1980",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10514,7 +10578,7 @@
     },
     {
       "template": "NECB 2011",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10530,7 +10594,7 @@
     },
     {
       "template": "NECB 2011",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10722,7 +10786,7 @@
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "building_type": "RetailStandalone",
+      "building_type": "Retail",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
@@ -10738,7 +10802,7 @@
     },
     {
       "template": "NREL ZNE Ready 2017",
-      "building_type": "RetailStripmall",
+      "building_type": "StripMall",
       "elevator_type": null,
       "number_of_elevators": 0.0,
       "elevator_schedule": null,
