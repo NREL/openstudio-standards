@@ -28,10 +28,11 @@ Standard.class_eval do
     model_apply_infiltration_standard(model)
     model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
     model_modify_surface_convection_algorithm(model)
-    model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_create_thermal_zones(model, @space_multiplier_map)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
+    model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
+    model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
@@ -255,7 +256,7 @@ Standard.class_eval do
     # TODO: this is a workaround.  Need to synchronize the building type names
     # across different parts of the code, including splitting of Office types
     case building_type
-      when 'SmallOffice', 'MediumOffice', 'LargeOffice'
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
         new_lookup_building_type = building_type
       else
         new_lookup_building_type = model_get_lookup_name(building_type)
@@ -450,6 +451,17 @@ Standard.class_eval do
     # window_construction = sub_surface.fixedWindowConstruction.get
     # sub_surface.setSkylightConstruction(window_construction)
 
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+
+    return true
+  end
+
+  # Adds internal mass objects and constructions based on the building type
+  #
+  # @param building_type [String] the type of building
+  # @return [Bool] returns true if successful, false if not
+  def model_add_internal_mass(model, building_type)
+
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     material.setName('Std Wood 6inch')
@@ -472,53 +484,30 @@ Standard.class_eval do
       internal_masses = space.internalMass
       internal_masses.each do |internal_mass|
         internal_mass.internalMassDefinition.setConstruction(construction)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Set internal mass construction for internal mass '#{internal_mass.name}' in space '#{space.name}'.")
       end
-    end
-
-    # get all the space types that are conditioned
-    # not required for NECB2011
-    unless template == 'NECB2011'
-      conditioned_space_names = model_find_conditioned_space_names(model, building_type, climate_zone)
     end
 
     # add internal mass
     # not required for NECB2011
-    unless (template == 'NECB2011') ||
-        ((building_type == 'SmallHotel') &&
-            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+    unless (template == 'NECB2011') || ((building_type == 'SmallHotel') && (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
-      conditioned_space_names.each do |conditioned_space_name|
-        space = model.getSpaceByName(conditioned_space_name)
-        if space.is_initialized
-          space = space.get
-          internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
-          internal_mass.setName("#{space.name} Mass")
-          internal_mass.setSpace(space)
-        end
+      model.getSpaces.each do |space|
+        # only add internal mass objects to conditioned spaces
+        next unless space_cooled?(space)
+        next unless space_heated?(space)
+        internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
+        internal_mass.setName("#{space.name} Mass")
+        internal_mass.setSpace(space)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added internal mass '#{internal_mass.name}' to space '#{space.name}'.")
       end
     end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding internal mass')
 
     return true
-  end
-
-  # Get the list of all conditioned spaces, as defined for each building in the
-  # system_to_space_map inside the Prototype.building_name
-  # e.g. (Prototype.secondary_school.rb) file.
-  #
-  # @param (see #add_constructions)
-  # @return [Array<String>] returns an array of space names as strings
-  def model_find_conditioned_space_names(model, building_type, climate_zone)
-    conditioned_space_names = OpenStudio::StringVector.new
-    @system_to_space_map.each do |system|
-      system['space_names'].each do |space_name|
-        conditioned_space_names << space_name
-      end
-    end
-    return conditioned_space_names
   end
 
   # Creates thermal zones to contain each space, as defined for each building in the
@@ -529,7 +518,14 @@ Standard.class_eval do
   # @return [Bool] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
-    space_multiplier_map = {} if space_multiplier_map.nil?
+
+    # Retrieve zone multipliers if non assigned via the space_multiplier_map
+    if space_multiplier_map.nil?
+      space_multiplier_map = {}
+      model.getSpaces.each do |spc|
+        space_multiplier_map.store(spc.name.to_s, spc.thermalZone.get.multiplier.to_int)
+      end
+    end
 
     # Remove any Thermal zones assigned
     model.getThermalZones.each(&:remove)
@@ -543,13 +539,13 @@ Standard.class_eval do
       end
       space.setThermalZone(zone)
 
-      # Skip thermostat for spaces with no space type
-      next if space.spaceType.empty?
+    # Skip thermostat for spaces with no space type
+    next if space.spaceType.empty?
 
-      # Add a thermostat
-      space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
-      thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
+    # Add a thermostat
+    space_type_name = space.spaceType.get.name.get
+    thermostat_name = space_type_name + ' Thermostat'
+    thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
       else
@@ -560,11 +556,10 @@ Standard.class_eval do
           ideal_loads = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
           ideal_loads.addToThermalZone(zone)
         end
-      end
+     end
     end
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
-  end
+ end
 
   # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
   # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
@@ -923,33 +918,29 @@ Standard.class_eval do
       nondimming_ext_lts.setControlOption('AstronomicalClock')
     end
 
-    # Fuel Equipment, As Exterior:FuelEquipment is not supported by OpenStudio yet,
-    # temporarily use Exterior:Lights and set the control option to ScheduleNameOnly
-    # todo: change it to Exterior:FuelEquipment when OpenStudio supported it.
+    # Fuel Equipment
     unless prototype_input['exterior_fuel_equipment1_power'].nil?
       fuel_ext_power = prototype_input['exterior_fuel_equipment1_power']
       fuel_ext_sch_name = prototype_input['exterior_fuel_equipment1_schedule']
       fuel_ext_name = 'Fuel equipment 1'
-      fuel_ext_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
+      fuel_ext_def = OpenStudio::Model::ExteriorFuelEquipmentDefinition.new(model)
       fuel_ext_def.setName("#{fuel_ext_name} Def")
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
-      fuel_ext_lts = OpenStudio::Model::ExteriorLights.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
       fuel_ext_lts.setName(fuel_ext_name.to_s)
-      fuel_ext_lts.setControlOption('ScheduleNameOnly')
     end
 
     unless prototype_input['exterior_fuel_equipment2_power'].nil?
       fuel_ext_power = prototype_input['exterior_fuel_equipment2_power']
       fuel_ext_sch_name = prototype_input['exterior_fuel_equipment2_schedule']
       fuel_ext_name = 'Fuel equipment 2'
-      fuel_ext_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
+      fuel_ext_def = OpenStudio::Model::ExteriorFuelEquipmentDefinition.new(model)
       fuel_ext_def.setName("#{fuel_ext_name} Def")
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
-      fuel_ext_lts = OpenStudio::Model::ExteriorLights.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
       fuel_ext_lts.setName(fuel_ext_name.to_s)
-      fuel_ext_lts.setControlOption('ScheduleNameOnly')
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding exterior lights')
@@ -1076,7 +1067,7 @@ Standard.class_eval do
         end
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
-          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'LargeOfficeDetail', 'Outpatient', 'PrimarySchool'
+          when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed','LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
             clg = 1.0
             htg = 1.0
         end
@@ -1785,7 +1776,7 @@ Standard.class_eval do
         if oa_sys.is_initialized
           oa_sys = oa_sys.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but it has no OA system.")
           next
         end
         oa_control = oa_sys.getControllerOutdoorAir
