@@ -20,7 +20,7 @@ class ASHRAE9012010 < ASHRAE901
   # @param space [OpenStudio::Model::Space] the space in question
   # @param areas [Hash] a hash of daylighted areas
   # @return [Array<Bool>] req_top_ctrl, req_pri_ctrl, req_sec_ctrl
-  def space_daylighting_control_required?(space, areas)
+  def space_daylighting_control_required?(space, areas, climate_zone)
     req_top_ctrl = true
     req_pri_ctrl = true
     req_sec_ctrl = false
@@ -39,14 +39,19 @@ class ASHRAE9012010 < ASHRAE901
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
-      if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
+      # Based on Table 5.50 from Thornton et al. 2010
+      if (sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?) or
+         (@instvarbuilding_type == 'Warehouse' and 
+         (climate_zone == 'ASHRAE 169-2006-1A' or climate_zone == 'ASHRAE 169-2006-2A' or
+          climate_zone == 'ASHRAE 169-2006-2B' or climate_zone == 'ASHRAE 169-2006-3C' or 
+          climate_zone == 'ASHRAE 169-2013-1A' or climate_zone == 'ASHRAE 169-2013-2A' or
+          climate_zone == 'ASHRAE 169-2013-2B' or climate_zone == 'ASHRAE 169-2013-3C'))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
     end
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "toplighted_area = #{areas['toplighted_area']}")
-
     # Toplighting
     # Check if the toplit area < 900 ft2
     if areas['toplighted_area'] == 0.0
@@ -101,7 +106,8 @@ class ASHRAE9012010 < ASHRAE901
                                               sorted_skylights,
                                               req_top_ctrl,
                                               req_pri_ctrl,
-                                              req_sec_ctrl)
+                                              req_sec_ctrl, 
+                                              climate_zone)
     sensor_1_frac = 0.0
     sensor_2_frac = 0.0
     sensor_1_window = nil
@@ -117,10 +123,30 @@ class ASHRAE9012010 < ASHRAE901
       # Sensor 2 controls primary area
       sensor_2_frac = areas['primary_sidelighted_area'] / space_area_m2
       sensor_2_window = sorted_windows[0]
+    elsif req_top_ctrl && @instvarbuilding_type == 'Warehouse'
+      case climate_zone
+        when 'ASHRAE 169-2006-6A',
+             'ASHRAE 169-2006-6B',
+             'ASHRAE 169-2006-7A',
+             'ASHRAE 169-2006-8A',
+             'ASHRAE 169-2013-6A',
+             'ASHRAE 169-2013-6B',
+             'ASHRAE 169-2013-7A',
+             'ASHRAE 169-2013-8A'
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+        else
+          # Sensor 1 controls toplighted area
+          sensor_1_frac = areas['toplighted_area'] / space_area_m2
+          sensor_1_window = sorted_skylights[0]
+          sensor_2_frac = sensor_1_frac
+          sensor_2_window = sensor_1_window
+      end
     elsif req_top_ctrl && !req_pri_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
-      sensor_1_window = sorted_skylights[0]
+      sensor_1_window = sorted_skylights[0]      
     elsif req_top_ctrl && !req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
       sensor_1_frac = areas['toplighted_area'] / space_area_m2
@@ -130,7 +156,7 @@ class ASHRAE9012010 < ASHRAE901
       # sorted_skylights[0] assigned to sensor_2_window so a second reference point is added for top daylighting
       sensor_2_window = sorted_skylights[0]
     elsif !req_top_ctrl && req_pri_ctrl
-      if sorted_windows.size == 1 and @instvarbuilding_type != 'MediumOffice' and @instvarbuilding_type != 'LargeOffice'
+      if sorted_windows.size == 1 && @instvarbuilding_type != 'MediumOffice' && @instvarbuilding_type != 'LargeOffice'
         # Sensor 1 controls the whole primary area
         sensor_1_frac = areas['primary_sidelighted_area'] / space_area_m2
         sensor_1_window = sorted_windows[0]
@@ -140,7 +166,7 @@ class ASHRAE9012010 < ASHRAE901
         # the fraction controlled and the position of the
         # sensors is adjusted using the building specific
         # 'model_custom_daylighting_tweaks' method
-        
+
         # Sensor 1 controls half the primary area
         sensor_1_frac = (areas['primary_sidelighted_area'] / space_area_m2) / 2
         sensor_1_window = sorted_windows[0]
