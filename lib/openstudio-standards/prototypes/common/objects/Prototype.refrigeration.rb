@@ -106,7 +106,8 @@ class Standard
     ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
 
     ref_case_addprops = ref_case.additionalProperties
-    ref_case_addprops.setFeature("case_model", props['case_model'] )
+    ref_case_addprops.setFeature("case_type", case_type )
+    # ref_case_addprops.setFeature("case_model", props['case_model'] )
 
 
 
