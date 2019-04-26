@@ -104,12 +104,7 @@ class Standard
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
     ref_case.setUnderCaseHVACReturnAirFraction(0)
     ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
-
-    ref_case_addprops = ref_case.additionalProperties
-    ref_case_addprops.setFeature("case_type", case_type )
-    # ref_case_addprops.setFeature("case_model", props['case_model'] )
-
-
+    
 
     length_ft = OpenStudio.convert(case_length, 'm', 'ft').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
