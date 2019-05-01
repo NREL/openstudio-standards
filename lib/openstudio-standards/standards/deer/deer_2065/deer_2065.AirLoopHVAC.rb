@@ -11,6 +11,15 @@ class DEER2065 < DEER
     return is_sat_reset_required
   end
 
+  # Determine if a system's fans must shut off when not required.
+  # Per ASHRAE 90.1 section 6.4.3.3, HVAC systems are required to have off-hour controls
+  # @return [Bool] true if required, false if not
+  def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
+    shutoff_required = true
+
+    return shutoff_required
+  end
+
   # Determine if a motorized OA damper is required
   # Defaults to true for DEER 2065.
   #
