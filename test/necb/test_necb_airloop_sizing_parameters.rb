@@ -10,6 +10,7 @@ class HVACEfficienciesTest < MiniTest::Test
 begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_vav
+    standard = Standard.build("NECB2011")
     output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -29,16 +30,15 @@ begin
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type, 
-      chiller_type, 
-      vavfan_type,
-      hw_loop)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
+      model: model,
+      zones: model.getThermalZones,
+      heating_coil_type: heating_coil_type,
+      baseboard_type: baseboard_type,
+      chiller_type: chiller_type,
+      fan_type: vavfan_type,
+      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -100,6 +100,7 @@ end
 begin
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_heatpump
+    standard = Standard.build("NECB2011")
     output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -117,14 +118,13 @@ begin
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
+      model: model,
+      zones: model.getThermalZones,
+      heating_coil_type: heating_coil_type,
+      baseboard_type: baseboard_type,
+      hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
@@ -146,11 +146,11 @@ begin
         diff = (heating_sizing_factor.to_f - necb_heating_sizing_factor).abs / necb_heating_sizing_factor
         heating_sizing_factor_set_correctly = true
         if diff > tol then heating_sizing_factor_set_correctly = false end
-        assert(heating_sizing_factor_set_correctly, "test_airloop_sizing_rules_heatpump: Heating sizing factor does not match necb requirement #{name}")
+        assert(heating_sizing_factor_set_correctly, "test_airloop_sizing_rules_heatpump: Heating sizing factor does not match necb requirement #{name} got #{heating_sizing_factor} expected #{necb_heating_sizing_factor}")
         diff = (cooling_sizing_factor.to_f - necb_cooling_sizing_factor).abs / necb_cooling_sizing_factor
         cooling_sizing_factor_set_correctly = true
         if diff > tol then cooling_sizing_factor_set_correctly = false end
-        assert(cooling_sizing_factor_set_correctly, "test_airloop_sizing_rules_heatpump: Cooling sizing factor does not match necb requirement #{name}")
+        assert(cooling_sizing_factor_set_correctly, "test_airloop_sizing_rules_heatpump: Cooling sizing factor does not match necb requirement #{name} got #{cooling_sizing_factor} expected #{necb_cooling_sizing_factor}")
         # check supply temperatures
         heating_sizing_temp = sizing_zone.zoneHeatingDesignSupplyAirTemperature
         cooling_sizing_temp = sizing_zone.zoneCoolingDesignSupplyAirTemperature
@@ -209,7 +209,7 @@ end
         puts "found sizing run #{sizing_dir}/SizingRun1"
       end
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
       standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
@@ -217,7 +217,7 @@ end
       standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
 
       return true
     end

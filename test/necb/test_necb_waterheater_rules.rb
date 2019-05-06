@@ -2,14 +2,14 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class SHWTests < MiniTest::Test
+class NECB_SHW_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
   # Test to validate part-load performance curve of gas fired shw heater
-  def test_shw_curves
+  def test_NECB2011_shw_curves
     output_folder = "#{File.dirname(__FILE__)}/output/shw_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -52,15 +52,13 @@ class SHWTests < MiniTest::Test
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    always_on = model.alwaysOnDiscreteSchedule
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                zones: model.getThermalZones,
+                                                                                                heating_coil_type: heating_coil_type,
+                                                                                                baseboard_type: baseboard_type,
+                                                                                                hw_loop: hw_loop)
     # run the standards
     result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
     # Save the model
@@ -84,7 +82,7 @@ class SHWTests < MiniTest::Test
   end
 
   # Test to validate efficiency and standby losses of electric shw heater
-  def test_shw_elec_efficiency_standby_losses
+  def test_NECB2011_shw_elec_efficiency_standby_losses
     output_folder = "#{File.dirname(__FILE__)}/output/shw_elec_eff_losses"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -128,15 +126,13 @@ class SHWTests < MiniTest::Test
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule	
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
-          model, 
-          model.getThermalZones, 
-          boiler_fueltype, 
-          heating_coil_type, 
-          baseboard_type,
-          hw_loop)
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                    zones: model.getThermalZones,
+                                                                                                    heating_coil_type: heating_coil_type,
+                                                                                                    baseboard_type: baseboard_type,
+                                                                                                    hw_loop: hw_loop)
         # set volume and capacity of water tank
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)

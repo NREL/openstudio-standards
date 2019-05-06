@@ -51,7 +51,7 @@ class Standard
     search_criteria = {}
     search_criteria['template'] = template
     search_criteria['fuel_type'] = fuel_type
-    wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props = standards_lookup_table_first(table_name: 'water_heaters', search_criteria:search_criteria , capacity: capacity_btu_per_hr)
     unless wh_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
       return false

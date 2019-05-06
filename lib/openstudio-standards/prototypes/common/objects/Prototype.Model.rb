@@ -42,7 +42,6 @@ Standard.class_eval do
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-    # set climate zone and building type
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
     # Perform a sizing model_run(model)
@@ -179,7 +178,7 @@ Standard.class_eval do
   end
 
   def model_add_full_space_type_libs(model)
-    space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB2011')
+    space_type_properties_list = standards_lookup_table_many(table_name: 'space_types')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
@@ -412,7 +411,9 @@ Standard.class_eval do
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = model_find_object(standards_data['space_types'], 'template' => template, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
+          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => template,
+                                                                                           'building_type' => new_lookup_building_type,
+                                                                                           'space_type' => space_type_name})
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end

@@ -2,7 +2,7 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class HVACEfficienciesTest < MiniTest::Test
+class NECB_HVAC_Test < MiniTest::Test
   #set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   #set to true to run the simulations.
@@ -10,11 +10,12 @@ class HVACEfficienciesTest < MiniTest::Test
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
-  def test_chiller_cop
+  def test_NECB2011_chiller_cop
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_cop"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_expected_results.csv')
+    standard = Standard.build('NECB2011')
 
     # Initialize hashes for storing expected chiller cop data from file
     chiller_type_min_cap = {}
@@ -83,20 +84,21 @@ class HVACEfficienciesTest < MiniTest::Test
         model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule	
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys2(
-          model,
-          model.getThermalZones,
-          boiler_fueltype,
-          chiller_type,
-          mua_cooling_type,
-          hw_loop)
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                         zones: model.getThermalZones,
+                                         chiller_type: chiller_type,
+                                         fan_coil_type: 'FPFC',
+                                         mau_cooling_type: mua_cooling_type,
+                                         hw_loop: hw_loop)
+
+
         # Save the model after btap hvac. 
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-        model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
+        model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
         # run the standards
-        result = run_the_measure(model,"#{output_folder}/#{name}/sizing")
+        result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
         # Save the model
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
         assert_equal(true, result, "Failure in Standards for #{name}")
@@ -119,22 +121,24 @@ class HVACEfficienciesTest < MiniTest::Test
 
     # Write actual results file
     test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_test_results.csv')
-    File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+    File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data','compliance_chiller_cop_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result,
-    "Chiller COP test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_cop_expected_results.csv')
+    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
+    assert(b_result,
+           "Chiller COP test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity. 
   # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
-  def test_number_of_chillers
+  def test_NECB2011_number_of_chillers
     output_folder = "#{File.dirname(__FILE__)}/output/num_of_chillers"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
@@ -155,20 +159,18 @@ class HVACEfficienciesTest < MiniTest::Test
         model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule	
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys6(
-          model,
-          model.getThermalZones,
-          boiler_fueltype,
-          heating_coil_type,
-          baseboard_type,
-          chiller_type,
-          fan_type,
-          hw_loop)
+        always_on = model.alwaysOnDiscreteSchedule
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                            zones: model.getThermalZones,
+                                                                            heating_coil_type: heating_coil_type,
+                                                                            baseboard_type: baseboard_type,
+                                                                            chiller_type: chiller_type,
+                                                                            fan_type: fan_type,
+                                                                            hw_loop: hw_loop)
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-        model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
+        model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
         # run the standards
         result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
         # Save the model
@@ -177,7 +179,9 @@ class HVACEfficienciesTest < MiniTest::Test
         chillers = model.getChillerElectricEIRs
         # check that there are two chillers in the model
         num_of_chillers_is_correct = false
-        if chillers.size == 2 then num_of_chillers_is_correct = true end
+        if chillers.size == 2 then
+          num_of_chillers_is_correct = true
+        end
         assert(num_of_chillers_is_correct, 'Number of chillers is not 2')
         this_is_the_first_cap_range = false
         this_is_the_second_cap_range = false
@@ -195,17 +199,21 @@ class HVACEfficienciesTest < MiniTest::Test
             elsif this_is_the_second_cap_range
               cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
             end
-            if cap_diff < tol then chiller_cap_is_correct = true end
+            if cap_diff < tol then
+              chiller_cap_is_correct = true
+            end
             assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct')
           end
           if ichiller.name.to_s.include? 'Secondary Chiller'
             chiller_cap_is_correct = false
             if this_is_the_first_cap_range
-              cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs 
+              cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs
             elsif this_is_the_second_cap_range
               cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
             end
-            if cap_diff < tol then chiller_cap_is_correct = true end
+            if cap_diff < tol then
+              chiller_cap_is_correct = true
+            end
             assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct')
           end
         end
@@ -214,10 +222,12 @@ class HVACEfficienciesTest < MiniTest::Test
   end
 
   # Test to validate the chiller performance curves
-  def test_chiller_curves
+  def test_NECB2011_chiller_curves
     output_folder = "#{File.dirname(__FILE__)}/output/chiller_curves"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build('NECB2011')
+
     chiller_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_expected_results.csv')
     chiller_curve_names = {}
     chiller_curve_names['Scroll'] = []
@@ -242,15 +252,14 @@ class HVACEfficienciesTest < MiniTest::Test
       model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule	
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-      BTAP::Resources::HVAC::HVACTemplates::NECB2011.assign_zones_sys5(
-          model,
-          model.getThermalZones,
-          boiler_fueltype,
-          chiller_type,
-          mua_cooling_type,
-          hw_loop)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                       zones: model.getThermalZones,
+                                       chiller_type: chiller_type,
+                                       fan_coil_type: 'FPFC',
+                                       mau_cooling_type: mua_cooling_type,
+                                       hw_loop: hw_loop)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       # run the standards
@@ -261,30 +270,30 @@ class HVACEfficienciesTest < MiniTest::Test
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature
       chiller_res_file_output_text +=
-        "#{chiller_type},#{chiller_curve_names[chiller_type][0]},biquadratic,#{'%.5E' % chiller_cap_ft_curve.coefficient1Constant},#{'%.5E' % chiller_cap_ft_curve.coefficient2x}," +
-        "#{'%.5E' % chiller_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_cap_ft_curve.coefficient4y},#{'%.5E' % chiller_cap_ft_curve.coefficient5yPOW2}," +
-        "#{'%.5E' % chiller_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_cap_ft_curve.minimumValueofx},#{'%.5E' % chiller_cap_ft_curve.maximumValueofx}," +
-        "#{'%.5E' % chiller_cap_ft_curve.minimumValueofy},#{'%.5E' % chiller_cap_ft_curve.maximumValueofy}\n"
+          "#{chiller_type},#{chiller_curve_names[chiller_type][0]},biquadratic,#{'%.5E' % chiller_cap_ft_curve.coefficient1Constant},#{'%.5E' % chiller_cap_ft_curve.coefficient2x}," +
+              "#{'%.5E' % chiller_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_cap_ft_curve.coefficient4y},#{'%.5E' % chiller_cap_ft_curve.coefficient5yPOW2}," +
+              "#{'%.5E' % chiller_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_cap_ft_curve.minimumValueofx},#{'%.5E' % chiller_cap_ft_curve.maximumValueofx}," +
+              "#{'%.5E' % chiller_cap_ft_curve.minimumValueofy},#{'%.5E' % chiller_cap_ft_curve.maximumValueofy}\n"
       chiller_eir_ft_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfTemperature
       chiller_res_file_output_text +=
-        "#{chiller_type},#{chiller_curve_names[chiller_type][1]},biquadratic,#{'%.5E' % chiller_eir_ft_curve.coefficient1Constant},#{'%.5E' % chiller_eir_ft_curve.coefficient2x}," +
-        "#{'%.5E' % chiller_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_ft_curve.coefficient4y},#{'%.5E' % chiller_eir_ft_curve.coefficient5yPOW2}," +
-        "#{'%.5E' % chiller_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_eir_ft_curve.minimumValueofx},#{'%.5E' % chiller_eir_ft_curve.maximumValueofx}," +
-        "#{'%.5E' % chiller_eir_ft_curve.minimumValueofy},#{'%.5E' % chiller_eir_ft_curve.maximumValueofy}\n"
+          "#{chiller_type},#{chiller_curve_names[chiller_type][1]},biquadratic,#{'%.5E' % chiller_eir_ft_curve.coefficient1Constant},#{'%.5E' % chiller_eir_ft_curve.coefficient2x}," +
+              "#{'%.5E' % chiller_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_ft_curve.coefficient4y},#{'%.5E' % chiller_eir_ft_curve.coefficient5yPOW2}," +
+              "#{'%.5E' % chiller_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % chiller_eir_ft_curve.minimumValueofx},#{'%.5E' % chiller_eir_ft_curve.maximumValueofx}," +
+              "#{'%.5E' % chiller_eir_ft_curve.minimumValueofy},#{'%.5E' % chiller_eir_ft_curve.maximumValueofy}\n"
       chiller_eir_plr_curve = chillers[0].electricInputToCoolingOutputRatioFunctionOfPLR
       chiller_res_file_output_text +=
-        "#{chiller_type},#{chiller_curve_names[chiller_type][2]},quadratic,#{'%.5E' % chiller_eir_plr_curve.coefficient1Constant},#{'%.5E' % chiller_eir_plr_curve.coefficient2x}," +
-        "#{'%.5E' % chiller_eir_plr_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_plr_curve.minimumValueofx},#{'%.5E' % chiller_eir_plr_curve.maximumValueofx}\n"
+          "#{chiller_type},#{chiller_curve_names[chiller_type][2]},quadratic,#{'%.5E' % chiller_eir_plr_curve.coefficient1Constant},#{'%.5E' % chiller_eir_plr_curve.coefficient2x}," +
+              "#{'%.5E' % chiller_eir_plr_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_plr_curve.minimumValueofx},#{'%.5E' % chiller_eir_plr_curve.maximumValueofx}\n"
     end
 
     # Write actual results file
     test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_test_results.csv')
-    File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+    File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_chiller_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
-    "Chiller performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+           "Chiller performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
   end
 
   def run_simulations(output_folder)
@@ -326,7 +335,7 @@ class HVACEfficienciesTest < MiniTest::Test
         puts "found sizing run #{sizing_dir}/SizingRun1"
       end
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
       standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
@@ -334,7 +343,7 @@ class HVACEfficienciesTest < MiniTest::Test
       standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
 
       return true
     end

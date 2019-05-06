@@ -1,4 +1,5 @@
 require 'bundler/gem_tasks'
+require 'json'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
@@ -16,18 +17,59 @@ namespace :test do
     # Select only .rb files that exist
     full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
     full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
+    File.open('test/circleci_tests.json', 'w') do |f|
+      f.write(JSON.pretty_generate(full_file_list.to_a))
+    end
+
+
+    require_relative './test/helpers/ci_test_generator'
+    CITestGenerator::generate(true, false)
+    # load test files from file.
+    local_full_file_list = FileList.new(File.readlines('test/local_circleci_tests.txt'))
+    # Select only .rb files that exist
+    local_full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
+    local_full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
+    File.open('test/local_circleci_tests.json', 'w') do |f|
+      f.write(JSON.pretty_generate(local_full_file_list.to_a))
+    end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
   end
 
-  desc 'Parallel Run Locally NECB bldgs regression tests'
-  Rake::TestTask.new(:necb_local_bldgs_regression_tests) do |t|
-    file_list = FileList.new('test/necb/test_all_buildings_locally.rb')
+
+  desc 'Run All CircleCI tests locally'
+  Rake::TestTask.new('local-circ-all-tests') do |t|
+    file_list = FileList.new('test/test_run_all_test_locally.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = false
+  end
+
+  desc 'Run All NECB tests locally'
+  Rake::TestTask.new('local-circ-necb-tests') do |t|
+    file_list = FileList.new('test/test_run_necb_test_locally.rb')
+    t.libs << 'test'
+    t.test_files = file_list
+    t.verbose = false
+  end
+
+
+  desc 'Generate CircleCI test files'
+  task :'gen-circ-files' do
+    require_relative './test/helpers/ci_test_generator'
+    CITestGenerator::generate(local_run: false)
+  end
+
+
+  desc 'Run NECB Building regression test'
+  Rake::TestTask.new(:necb_regression_test) do |t|
+    file_list = FileList.new('./test/test_run_necb_regression_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = true
   end
+
 
   desc 'Run BTAP.perform_qaqc() test'
   Rake::TestTask.new(:btap_json_test) do |t|
@@ -37,23 +79,10 @@ namespace :test do
     t.verbose = true
   end
 
-  ['90_1_prm', '90_1_general', 'doe_prototype', 'necb', 'necb_bldg'].each do |type|
-    desc "Manual Run CircleCI tests #{type}"
-    Rake::TestTask.new("circ-#{type}") do |t|
-      array = full_file_list.select { |item| item.include?(type.to_s) }
-      t.libs << 'test'
-      t.test_files = array
-    end
-  end
 
-  desc 'Manual Run All CircleCI tests'
-  Rake::TestTask.new('circ-all-tests') do |t|
-    array = full_file_list
-    t.libs << 'test'
-    t.test_files = array
-  end
 
-  # These tests only available in the CI environment
+
+# These tests only available in the CI environment
   if ENV['CI'] == 'true'
 
     desc 'Run CircleCI tests'
@@ -86,6 +115,7 @@ namespace :test do
       end
     end
 
+
     desc 'Summarize the test timing'
     task 'times' do |t|
       require 'nokogiri'
@@ -93,7 +123,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) { |f| Nokogiri::XML(f) }
+        doc = File.open(xml) {|f| Nokogiri::XML(f)}
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')

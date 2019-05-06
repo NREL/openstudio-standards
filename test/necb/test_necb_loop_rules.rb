@@ -2,17 +2,20 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class HVACEfficienciesTest < MiniTest::Test
+class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
   # Test to validate hot water loop rules
-  def test_hw_loop_rules
+  def test_NECB2011_hw_loop_rules
     output_folder = "#{File.dirname(__FILE__)}/output/hw_loop_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    template = 'NECB2011'
+    standard = Standard.build(template)
+
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
@@ -26,21 +29,19 @@ class HVACEfficienciesTest < MiniTest::Test
     name = "sys6"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys6(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type, 
-      chiller_type, 
-      fan_type,
-      hw_loop)
+    always_on = model.alwaysOnDiscreteSchedule
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                        zones: model.getThermalZones,
+                                                                        heating_coil_type: heating_coil_type,
+                                                                        baseboard_type: baseboard_type,
+                                                                        chiller_type: chiller_type,
+                                                                        fan_type: fan_type,
+                                                                        hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    result = run_the_measure(model,  template,"#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
     assert_equal(true, result, "test_hw_loop_rules: Failure in Standards for #{name}")
@@ -80,10 +81,13 @@ class HVACEfficienciesTest < MiniTest::Test
   end
 
   # Test to validate chilled water loop rules
-  def test_chw_loop_rules
+  def test_NECB2011_chw_loop_rules
     output_folder = "#{File.dirname(__FILE__)}/output/chw_loop_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    template = 'NECB2011'
+    standard = Standard.build(template)
+
     # Generate the osm files for all relevant cases to generate the test data for system 2
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
@@ -96,18 +100,17 @@ class HVACEfficienciesTest < MiniTest::Test
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      chiller_type, 
-      mua_cooling_type,
-      hw_loop)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                     zones: model.getThermalZones,
+                                     chiller_type: chiller_type,
+                                     fan_coil_type: 'FPFC',
+                                     mau_cooling_type: mua_cooling_type,
+                                     hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
     assert_equal(true, result, "test_chw_loop_rules: Failure in Standards for #{name}")
@@ -150,10 +153,13 @@ class HVACEfficienciesTest < MiniTest::Test
   end
   
   # Test to validate condenser loop rules
-  def test_cw_loop_rules
+  def test_NECB2011_cw_loop_rules
     output_folder = "#{File.dirname(__FILE__)}/output/cw_loop_rules"
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    template = 'NECB2011'
+    standard = Standard.build(template)
+
     # Generate the osm files for all relevant cases to generate the test data for system 2
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
@@ -165,19 +171,18 @@ class HVACEfficienciesTest < MiniTest::Test
     name = "sys2"
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys2(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      chiller_type, 
-      mua_cooling_type,
-      hw_loop)
+    always_on = model.alwaysOnDiscreteSchedule
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                     zones: model.getThermalZones,
+                                     chiller_type: chiller_type,
+                                     fan_coil_type: 'FPFC',
+                                     mau_cooling_type: mua_cooling_type,
+                                     hw_loop: hw_loop)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    result = run_the_measure(model, template,"#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
     assert_equal(true, result, "test_cw_loop_rules: Failure in Standards for #{name}")
@@ -223,10 +228,10 @@ class HVACEfficienciesTest < MiniTest::Test
     end
   end
   
-  def run_the_measure(model, sizing_dir)
+  def run_the_measure(model, template, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB2011'
+      building_vintage = template
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)

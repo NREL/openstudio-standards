@@ -2,17 +2,18 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
 
 
-class HRVTests < MiniTest::Test
+class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
   # Test to validate the effectiveness of the hrv
-  def test_hrv_eff
+  def test_NECB2011_hrv_eff
     output_folder = "#{File.dirname(__FILE__)}/output/hrv_eff"
     FileUtils.rm_rf(output_folder)
-    standard = Standard.build('NECB2011')
+    template = 'NECB2011'
+    standard = Standard.build(template)
  
     # Generate the osm files for all relevant cases to generate the test data
     model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
@@ -26,15 +27,13 @@ class HRVTests < MiniTest::Test
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    BTAP::Resources::HVAC::HVACTemplates::NECB2011::assign_zones_sys3(
-      model, 
-      model.getThermalZones, 
-      boiler_fueltype, 
-      heating_coil_type, 
-      baseboard_type,
-      hw_loop)
+    always_on = model.alwaysOnDiscreteSchedule
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                zones: model.getThermalZones,
+                                                                                                heating_coil_type: heating_coil_type,
+                                                                                                baseboard_type: baseboard_type,
+                                                                                                hw_loop: hw_loop)
     systems = model.getAirLoopHVACs
     # increase default outdoor air requirement so that some of the systems in the project would require an HRV
     for isys in 0..0
@@ -44,13 +43,13 @@ class HRVTests < MiniTest::Test
         spaces.each do |ispace|
           oa_objs = ispace.designSpecificationOutdoorAir.get
           oa_flow_p_person = oa_objs.outdoorAirFlowperPerson
-          oa_objs.setOutdoorAirFlowperPerson(30.0*oa_flow_p_person)
+          oa_objs.setOutdoorAirFlowperPerson(30.0*oa_flow_p_person) #l/s
         end
       end
     end
 
     # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing")
+    result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
     # Save the model
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
     assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
@@ -93,10 +92,10 @@ class HRVTests < MiniTest::Test
     end
   end
 
-  def run_the_measure(model, sizing_dir)
+  def run_the_measure(model, template, sizing_dir)
     if PERFORM_STANDARDS
       # Hard-code the building vintage
-      building_vintage = 'NECB2011'
+      building_vintage = template
       building_type = 'NECB'
       climate_zone = 'NECB'
       standard = Standard.build(building_vintage)
@@ -115,7 +114,7 @@ class HRVTests < MiniTest::Test
         puts "found sizing run #{sizing_dir}/SizingRun1"
       end
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
 
       # need to set prototype assumptions so that HRV added
       standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
@@ -123,7 +122,7 @@ class HRVTests < MiniTest::Test
       standard.model_apply_hvac_efficiency_standard(model, climate_zone)
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
+      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
 
       return true
     end

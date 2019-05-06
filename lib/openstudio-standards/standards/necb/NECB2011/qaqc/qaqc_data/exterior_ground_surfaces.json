@@ -1,0 +1,120 @@
+{
+  "tables": {
+    "exterior_ground_surfaces_compliance": {
+      "data_type": "table",
+      "refs": [
+        "NECB2011-Section 3.2.3.1"
+      ],
+      "table": [
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.568,
+          "climate_index": 0
+        },
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.379,
+          "climate_index": 1
+        },
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 2
+        },
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 3
+        },
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 4
+        },
+        {
+          "var": "ground_wall_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.210,
+          "climate_index": 5
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.568,
+          "climate_index": 0
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.379,
+          "climate_index": 1
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 2
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 3
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.284,
+          "climate_index": 4
+        },
+        {
+          "var": "ground_roof_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.210,
+          "climate_index": 5
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.757,
+          "climate_index": 0
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.757,
+          "climate_index": 1
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.757,
+          "climate_index": 2
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.757,
+          "climate_index": 3
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.757,
+          "climate_index": 4
+        },
+        {
+          "var": "ground_floor_conductances",
+          "bool_operator": "==",
+          "expected_value": 0.379,
+          "climate_index": 5
+        }
+      ]
+    }
+  }
+}

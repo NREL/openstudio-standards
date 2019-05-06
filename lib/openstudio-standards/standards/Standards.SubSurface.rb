@@ -183,4 +183,139 @@ class Standard
     # If here, we have a rectangle
     return true
   end
+
+  # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
+  # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
+  # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
+  # themselves (like an 'L' or a 'V').
+  def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction, model)
+    # Get rid of all existing subsurfaces.
+    remove_All_Subsurfaces(surface: surface)
+    # What is the centroid of the surface.
+    surf_cent = surface.centroid
+    scale_factor = Math.sqrt(area_fraction)
+
+    # Create an array to collect the new vertices
+    new_vertices = []
+
+    # Loop on vertices (Point3ds)
+    surface.vertices.each do |vertex|
+      # Point3d - Point3d = Vector3d
+      # Vector from centroid to vertex (GA, GB, GC, etc)
+      centroid_vector = vertex - surf_cent
+
+      # Resize the vector (done in place) according to scale_factor
+      centroid_vector.setLength(centroid_vector.length * scale_factor)
+
+      # Move the vertex toward the centroid
+      new_vertex = surf_cent + centroid_vector
+
+      # Add the new vertices to an array of vertices.
+      new_vertices << new_vertex
+    end
+    # Create a new subsurface with the vertices determined above.
+    new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+    # Put this sub-surface on the surface.
+    new_sub_surface.setSurface(surface)
+    # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
+    # 'skylight').
+    new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+    new_sub_surface.setName(new_name)
+    # There is now only one surface on the subsurface.  Enforce this
+    new_sub_surface.setMultiplier(1)
+  end
+
+  # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
+  # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
+  # fraction of the surface (set by area_fraction).  This method is different than the
+  # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
+  # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
+  # loops that cycle through the verticies in a surface.
+  def sub_surface_create_scaled_subsurfaces_from_surface (surface, area_fraction, model)
+    # Get rid of all existing subsurfaces.
+    remove_All_Subsurfaces(surface: surface)
+    # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
+    # concave.
+
+    # Throw an error if the roof is not flat.
+    surface.vertices.each do |surf_vert|
+      surface.vertices.each do |surf_vert_2|
+        unless surf_vert_2.z.to_f == surf_vert.z.to_f
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
+        end
+      end
+    end
+    new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: 12)
+
+    # What is the centroid of the surface.
+    new_surf_cents = []
+    for i in 0..(new_surfaces.length - 1)
+      new_surf_cents << BTAP::Geometry::Surfaces.surf_centroid(surf: new_surfaces[i])
+    end
+
+    # Turn everything back into OpenStudio stuff
+    os_surf_points = []
+    os_surf_cents =[]
+    for i in 0..(new_surfaces.length - 1)
+      os_surf_point = []
+      for j in 0..(new_surfaces[i].length - 1)
+        os_surf_point << OpenStudio::Point3d.new(new_surfaces[i][j][:x].to_f, new_surfaces[i][j][:y].to_f, new_surfaces[i][j][:z].to_f)
+      end
+      os_surf_cents << OpenStudio::Point3d.new(new_surf_cents[i][:x].to_f, new_surf_cents[i][:y].to_f, new_surf_cents[i][:z].to_f)
+      os_surf_points << os_surf_point
+    end
+    scale_factor = Math.sqrt(area_fraction)
+
+    new_sub_vertices = []
+    os_surf_points.each_with_index do |new_surf, index|
+      # Create an array to collect the new vertices
+      new_vertices = []
+      # Loop on vertices
+      new_surf.each do |vertex|
+        # Point3d - Point3d = Vector3d
+        # Vector from centroid to vertex (GA, GB, GC, etc)
+        centroid_vector = vertex - os_surf_cents[index]
+
+        # Resize the vector (done in place) according to scale_factor
+        centroid_vector.setLength(centroid_vector.length * scale_factor)
+
+        # Move the vertex toward the centroid
+        new_vertex = os_surf_cents[index] + centroid_vector
+
+        # Add the new vertices to an array of vertices.
+        new_vertices << new_vertex
+      end
+      # Create a new subsurface with the vertices determined above.
+      new_sub_surface = OpenStudio::Model::SubSurface.new(new_vertices, model)
+      # Put this sub-surface on the surface.
+      new_sub_surface.setSurface(surface)
+      # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
+      # 'skylight').  If there will be more than one subsurface then add a counter at the end.
+      new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+      if new_surfaces.length > 1
+        new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + "#{index}"
+      end
+      new_sub_surface.setName(new_name)
+      # There is now only one surface on the subsurface.  Enforce this
+      new_sub_surface.setMultiplier(1)
+    end
+  end
+
+  # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
+  # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
+  def set_Window_To_Wall_Ratio_set_name(surface, area_fraction)
+    surface.setWindowToWallRatio(area_fraction)
+    surface.subSurfaces.sort.each do |sub_surf|
+      new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
+      sub_surf.setName(new_name)
+    end
+  end
+
+  # This removes all of the subsurfaces from a surface.  Is a preparation for replaceing windows or clearing doors
+  # before adding windows.
+  def remove_All_Subsurfaces(surface:)
+    surface.subSurfaces.sort.each do |sub_surface|
+      sub_surface.remove
+    end
+  end
 end
