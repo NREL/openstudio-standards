@@ -308,7 +308,7 @@ class NECB2011 < Standard
 
     #Do a second sizing run for the plant and loops.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-      raise("sizing run 1 failed!")
+      raise("sizing run 1 failed! check #{sizing_run_dir}")
     end
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
