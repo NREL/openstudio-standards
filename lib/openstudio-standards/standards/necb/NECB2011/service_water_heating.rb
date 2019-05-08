@@ -161,7 +161,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas' || 'FuelOil#2'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOil#2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
