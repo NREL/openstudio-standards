@@ -4234,6 +4234,15 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
+    elsif water_heater_fuel == 'FuelOil#2'
+      water_heater.setHeaterFuelType('FuelOil#2')
+      water_heater.setHeaterThermalEfficiency(0.78)
+      water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOnCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
+      water_heater.setOffCycleParasiticFuelType('FuelOil#2')
+      water_heater.setOnCycleParasiticFuelType('FuelOil#2')
+      water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
+      water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     end
 
     if set_peak_use_flowrate
