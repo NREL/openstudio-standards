@@ -284,6 +284,8 @@ class Standard
       sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
       # Change the chilled water loop to have a two-way common pipes
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No pumping type specified for the chilled water loop.')
     end
 
     # check for existence of condenser_water_loop if WaterCooled
@@ -3626,6 +3628,181 @@ class Standard
     end
 
     return fcus
+  end
+
+  # Adds low temperature radiant loop systems to each zone.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
+  # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
+  # @param control_strategy [String] name of control strategy
+  # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
+  # TODO - Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
+  def model_add_low_temp_radiant(model,
+                                 thermal_zones,
+                                 hot_water_loop,
+                                 chilled_water_loop,
+                                 include_carpet: true,
+                                 control_strategy: 'proportional_control')
+
+    # create internal source constructions for surfaces
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Replacing floor constructions with new radiant slab constructions.')
+    mat_concrete_3_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
+    mat_concrete_3_5in.setName('Radiant Slab Concrete - 3.5 in.')
+    mat_concrete_1_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0381, 2.31, 2322, 832)
+    mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
+    mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0015, 45.006, 7680, 418.4)
+    mat_metal_deck.setName('Radiant Slab Metal Deck')
+    if include_carpet
+      mat_thin_carpet_tile = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'VeryRough', 0.10567) # R-0.6
+      mat_thin_carpet_tile.setThermalAbsorptance(0.9)
+      mat_thin_carpet_tile.setSolarAbsorptance(0.7)
+      mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
+      mat_thin_carpet_tile.setName('Radiant Slab Thin Carpet Tile R-0.5')
+    end
+
+    # determine insulation thickness by climate zone
+    climate_zone = model_standards_climate_zone(model)
+    if climate_zone.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to R-20.')
+      cz_mult = 4
+    else
+      climate_zone_set = model_find_climate_zone_set(model, climate_zone)
+      case climate_zone_set.gsub('ClimateZone ', '')
+      when '1', '2', '2A', '2B', 'CEC15'
+        cz_mult = 2
+      when '3', '3A', '3B', '3C', 'CEC3', 'CEC4', 'CEC5', 'CEC6', 'CEC7', 'CEC8', 'CEC9', 'CEC10', 'CEC11', 'CEC12', 'CEC13', 'CEC14'
+        cz_mult = 3
+      when '4', '4A', '4B', '4C', '5', '5A', '5B', '5C', '6', '6A', '6B', 'CEC1', 'CEC2', 'CEC16'
+        cz_mult = 4
+      when '7', '8'
+        cz_mult = 5
+      else # default to 4
+        cz_mult = 4
+      end
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation and R-#{((cz_mult + 1) * 5).to_i} exterior insulation.")
+    end
+    slab_thickness_m = 0.0254 * cz_mult
+    mat_slab_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', slab_thickness_m, 0.02, 56.06, 1210)
+    mat_slab_insulation.setName("Radiant Ground Slab Insulation - #{cz_mult} in.")
+    ext_thickness_m = 0.0254 * (cz_mult + 1)
+    mat_ext_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', ext_thickness_m, 0.02, 56.06, 1210)
+    mat_ext_insulation.setName("Radiant Exterior Slab Insulation - #{cz_mult} in.")
+
+    layers = []
+    layers << mat_slab_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_ground_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_ground_slab_construction.setName('Radiant Ground Slab Construction')
+    radiant_ground_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_ground_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_ground_slab_construction.setTubeSpacing(0.02286) # 9 inches
+
+    layers = []
+    layers << mat_ext_insulation
+    layers << mat_metal_deck
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_exterior_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_exterior_slab_construction.setName('Radiant Exterior Slab Construction')
+    radiant_exterior_slab_construction.setSourcePresentAfterLayerNumber(3)
+    radiant_exterior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(4)
+    radiant_exterior_slab_construction.setTubeSpacing(0.02286) # 9 inches
+
+    layers = []
+    layers << mat_metal_deck
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_interior_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_interior_slab_construction.setName('Radiant Interior Slab Construction')
+    radiant_interior_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_interior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_interior_slab_construction.setTubeSpacing(0.02286) # 9 inches
+
+    # default temperature controls for radiant system
+    zn_radiant_htg_dsgn_temp_f = 68.0
+    zn_radiant_htg_dsgn_temp_c = OpenStudio.convert(zn_radiant_htg_dsgn_temp_f, 'F', 'C').get
+    zn_radiant_clg_dsgn_temp_f = 74.0
+    zn_radiant_clg_dsgn_temp_c = OpenStudio.convert(zn_radiant_clg_dsgn_temp_f, 'F', 'C').get
+
+    htg_control_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                               zn_radiant_htg_dsgn_temp_c,
+                                                               name = "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F")
+    clg_control_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                               zn_radiant_clg_dsgn_temp_c,
+                                                               name = "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F")
+    throttling_range_f = 4.0 # 2 degF on either side of control temperature
+    throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
+
+    # make a low temperature radiant loop for each zone
+    radiant_loops = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding radiant loop for #{zone.name}.")
+
+      # create radiant coils
+      if hot_water_loop
+        radiant_loop_htg_coil = OpenStudio::Model::CoilHeatingLowTempRadiantVarFlow.new(model, htg_control_temp_sch)
+        radiant_loop_htg_coil.setName("#{zone.name} Radiant Loop Heating Coil")
+        radiant_loop_htg_coil.setHeatingControlThrottlingRange(throttling_range_c)
+        hot_water_loop.addDemandBranchForComponent(radiant_loop_htg_coil)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Radiant loops require a hot water loop, but none was provided.')
+      end
+
+      if chilled_water_loop
+        radiant_loop_clg_coil = OpenStudio::Model::CoilCoolingLowTempRadiantVarFlow.new(model, clg_control_temp_sch)
+        radiant_loop_clg_coil.setName("#{zone.name} Radiant Loop Cooling Coil")
+        radiant_loop_clg_coil.setCoolingControlThrottlingRange(throttling_range_c)
+        chilled_water_loop.addDemandBranchForComponent(radiant_loop_clg_coil)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Radiant loops require a chilled water loop, but none was provided.')
+      end
+
+      radiant_loop = OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow.new(model,
+                                                                          model.alwaysOnDiscreteSchedule,
+                                                                          radiant_loop_htg_coil,
+                                                                          radiant_loop_clg_coil)
+
+      # assign internal source construction to floors in zone
+      zone.spaces.each do |space|
+        space.surfaces.each do |surface|
+          if surface.surfaceType == 'Floor'
+            if surface.outsideBoundaryCondition == 'Ground'
+              surface.setConstruction(radiant_ground_slab_construction)
+            elsif surface.outsideBoundaryCondition == 'Outdoors'
+              surface.setConstruction(radiant_exterior_slab_construction)
+            else # interior
+              surface.setConstruction(radiant_interior_slab_construction)
+            end
+          end
+        end
+      end
+
+      # radiant loop surfaces
+      radiant_loop.setName("#{zone.name} Radiant Loop")
+      radiant_loop.setRadiantSurfaceType('Floors')
+
+      # radiant loop layout details
+      radiant_loop.setHydronicTubingInsideDiameter(0.015875) # 5/8 in. ID, 3/4 in. OD
+      # TODO include a method to determine tubing length in the zone
+      # loop_length = 7*zone.floorArea
+      # radiant_loop.setHydronicTubingLength()
+      radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
+      radiant_loop.setCircuitLength(106.7)
+
+      # radiant loop controls
+      # TODO include proportional control strategy code
+      radiant_loop.setTemperatureControlType('MeanAirTemperature')
+      radiant_loop.addToThermalZone(zone)
+      radiant_loops << radiant_loop
+    end
+
+    return radiant_loops
   end
 
   # Adds a window air conditioner to each zone.
