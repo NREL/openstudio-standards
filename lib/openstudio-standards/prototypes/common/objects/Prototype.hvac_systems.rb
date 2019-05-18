@@ -3796,10 +3796,14 @@ class Standard
       radiant_loop.setCircuitLength(106.7)
 
       # radiant loop controls
-      # TODO include proportional control strategy code
       radiant_loop.setTemperatureControlType('MeanAirTemperature')
       radiant_loop.addToThermalZone(zone)
       radiant_loops << radiant_loop
+
+      # set radiant loop controls
+      if control_strategy == 'proportional_control'
+        ems_radiant_proportional_controls(model, zone, radiant_loop)
+      end
     end
 
     return radiant_loops
