@@ -2,11 +2,26 @@ class Standard
   # These EnergyPlus objects implement a proportional control for a single thermal zone with a radiant system.
   # @ref [References::CBERadiantSystems]
   # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
-  def ems_radiant_proportional_controls(model, zone, radiant_loop)
+  # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
+  # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
+  # @param minimum_operation [Double] Minimum number of hours of operation for radiant system before it shuts off.
+  # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
+  # @param early_reset_out_arg [Double] Time at which the weekend temperature reset is removed.
+  def ems_radiant_proportional_controls(model, zone, radiant_loop,
+                                        proportional_gain: 0.3,
+                                        minimum_operation: 1,
+                                        weekend_temperature_reset: 2,
+                                        early_reset_out_arg: 20)
+
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
     coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
     coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+
+    # zone occupancy hours
+    # @TODO harvest from schedules
+    model_occ_hr_start = 6
+    model_occ_hr_end = 18
 
     #####
     # List of schedule objects used to hold calculation results
@@ -365,15 +380,15 @@ class Standard
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg_body = <<-EMS
-        SET occ_hr_start       = 8,
-        SET occ_hr_end         = 18,
+        SET occ_hr_start       = #{model_occ_hr_start},
+        SET occ_hr_end         = #{model_occ_hr_end},
         SET occ_duration       = occ_hr_end - occ_hr_start,
         SET unocc_duration     = 24 - occ_duration,
-        SET prp_k              = 0.3,
-        SET min_oper           = 1,
+        SET prp_k              = #{proportional_gain},
+        SET min_oper           = #{minimum_operation},
         SET ctrl_temp_offset   = 0.5,
-        SET wkend_temp_reset   = 2,
-        SET early_reset_out    = 20
+        SET wkend_temp_reset   = #{weekend_temperature_reset},
+        SET early_reset_out    = #{early_reset_out_arg}
       EMS
       set_constant_values_prg.setBody(set_constant_values_prg_body)
     end
