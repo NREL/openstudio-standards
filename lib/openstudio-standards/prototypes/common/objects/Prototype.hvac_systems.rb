@@ -3652,7 +3652,7 @@ class Standard
     mat_concrete_3_5in.setName('Radiant Slab Concrete - 3.5 in.')
     mat_concrete_1_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0381, 2.31, 2322, 832)
     mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
-    mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0015, 45.006, 7680, 418.4)
+    mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.003175, 45.006, 7680, 418.4)
     mat_metal_deck.setName('Radiant Slab Metal Deck')
     if include_carpet
       mat_thin_carpet_tile = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'VeryRough', 0.10567) # R-0.6

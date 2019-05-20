@@ -4,9 +4,9 @@ class Standard
   # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
   def ems_radiant_proportional_controls(model, zone, radiant_loop)
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
-
-    # logic to get radiant loop in zone
-    # radiant_loop
+    zone_timestep = model.getTimestep.numberOfTimestepsPerHour
+    coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
+    coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
 
     #####
     # List of schedule objects used to hold calculation results
@@ -18,8 +18,9 @@ class Standard
     sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
                                                               0.0,
                                                               name = "#{zone_name}_Sch_Radiant_ClgSetP")
+    coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
     cmd_cold_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_clgsetp,
-                                                                                'Schedule:Constant',
+                                                                                'Schedule:Year',
                                                                                 'Schedule Value')
     cmd_cold_water_ctrl.setName("#{zone_name}_CMD_COLD_WATER_CTRL")
 
@@ -29,17 +30,32 @@ class Standard
     sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
                                                               -60.0,
                                                               name = "#{zone_name}_Sch_Radiant_HtgSetP")
+    coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
     cmd_hot_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_htgsetp,
-                                                                               'Schedule:Constant',
+                                                                               'Schedule:Year',
                                                                                'Schedule Value')
     cmd_hot_water_ctrl.setName("#{zone_name}_CMD_HOT_WATER_CTRL")
+
+    # set schedule type limits for hot water control
+    hot_water_schedule_type_limits = model.getScheduleTypeLimitsByName('Radiant_Hot_water_Ctrl_Temperature_Limits')
+    if hot_water_schedule_type_limits.is_initialized
+      hot_water_schedule_type_limits = hot_water_schedule_type_limits.get
+    else
+      hot_water_schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+      hot_water_schedule_type_limits.setName('Radiant_Hot_water_Ctrl_Temperature_Limits')
+      hot_water_schedule_type_limits.setLowerLimitValue(-60.0)
+      hot_water_schedule_type_limits.setUpperLimitValue(100.0)
+      hot_water_schedule_type_limits.setNumericType('Continuous')
+      hot_water_schedule_type_limits.setUnitType('Temperature')
+    end
+    sch_radiant_htgsetp.setScheduleTypeLimits(hot_water_schedule_type_limits)
 
     # Calculated active slab cooling temperature setpoint. Default temperature is taken at the slab surface.
     sch_slab_csp = model_add_constant_schedule_ruleset(model,
                                                        25.0,
                                                        name = "#{zone_name}_Sch_Slab_CSP")
     cmd_slab_csp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_csp,
-                                                                         'Schedule:Constant',
+                                                                         'Schedule:Year',
                                                                          'Schedule Value')
     cmd_slab_csp.setName("#{zone_name}_CMD_SLAB_CSP")
 
@@ -48,7 +64,7 @@ class Standard
                                                        21.0,
                                                        name = "#{zone_name}_Sch_Slab_HSP")
     cmd_slab_hsp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_hsp,
-                                                                         'Schedule:Constant',
+                                                                         'Schedule:Year',
                                                                          'Schedule Value')
     cmd_slab_hsp.setName("#{zone_name}_CMD_SLAB_HSP")
 
@@ -57,7 +73,7 @@ class Standard
                                                         0.0,
                                                         name = "#{zone_name}_Sch_CSP_Error")
     cmd_csp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_csp_error,
-                                                                          'Schedule:Constant',
+                                                                          'Schedule:Year',
                                                                           'Schedule Value')
     cmd_csp_error.setName("#{zone_name}_CMD_CSP_ERROR")
 
@@ -66,7 +82,7 @@ class Standard
                                                         0.0,
                                                         name = "#{zone_name}_Sch_HSP_Error")
     cmd_hsp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_hsp_error,
-                                                                          'Schedule:Constant',
+                                                                          'Schedule:Year',
                                                                           'Schedule Value')
     cmd_hsp_error.setName("#{zone_name}_CMD_HSP_ERROR")
 
@@ -75,18 +91,18 @@ class Standard
                                                             20.0,
                                                             name = "#{zone_name}_Sch_Avg_Ctrl_Temp")
     cmd_ctrl_temp_running_mean = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_avg_ctrl_temp,
-                                                                                       'Schedule:Constant',
+                                                                                       'Schedule:Year',
                                                                                        'Schedule Value')
     cmd_ctrl_temp_running_mean.setName("#{zone_name}_CMD_CTRL_TEMP_RUNNING_MEAN")
 
     # Averaged outdoor air temperature. Averaged over the last 24 hours.
-    sch_oat_running_mean = model.getScheduleConstantByName('Sch_Oat_Running_Mean')
+    sch_oat_running_mean = model.getScheduleConstantByName('SCH_OAT_RUNNING_MEAN')
     if sch_oat_running_mean.is_initialized
       sch_oat_running_mean = sch_oat_running_mean.get
     else
       sch_oat_running_mean = model_add_constant_schedule_ruleset(model,
                                                                  20.0,
-                                                                 name = 'Sch_Oat_Running_Mean')
+                                                                 name = 'SCH_OAT_RUNNING_MEAN')
     end
 
     cmd_oat_running_mean = model.getEnergyManagementSystemActuatorByName('CMD_OAT_RUNNING_MEAN')
@@ -94,7 +110,7 @@ class Standard
       cmd_oat_running_mean = cmd_oat_running_mean.get
     else
       cmd_oat_running_mean = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_oat_running_mean,
-                                                                                   'Schedule:Constant',
+                                                                                   'Schedule:Year',
                                                                                    'Schedule Value')
       cmd_oat_running_mean.setName('CMD_OAT_RUNNING_MEAN')
     end
@@ -302,12 +318,12 @@ class Standard
     # Radiant system water flow rate used to determine if there is active hydronic cooling in the radiant system.
     zone_rad_cool_operation = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
     zone_rad_cool_operation.setName("#{zone_name}_Rad_Cool_Operation")
-    zone_rad_cool_operation.setKeyName(radiant_loop.coolingCoil.to_StraightComponent.get.inletModelObject.get.name.get)
+    zone_rad_cool_operation.setKeyName(coil_cooling_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
     # Radiant system water flow rate used to determine if there is active hydronic heating in the radiant system.
     zone_rad_heat_operation = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'System Node Mass Flow Rate')
     zone_rad_heat_operation.setName("#{zone_name}_Rad_Heat_Operation")
-    zone_rad_heat_operation.setKeyName(radiant_loop.heatingCoil.to_StraightComponent.get.inletModelObject.get.name.get)
+    zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
     # Last 24 hours trend for the outdoor air temperature.
     oat_trend = model.getEnergyManagementSystemTrendVariableByName('OAT_Trend')
@@ -316,23 +332,28 @@ class Standard
     else
       oat_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, oat)
       oat_trend.setName('OAT_Trend')
+      oat_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
     end
 
     # Last 24 hours trend for active slab surface temperature.
     zone_srf_temp_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_srf_temp)
     zone_srf_temp_trend.setName("#{zone_name}_Srf_Temp_Trend")
+    zone_srf_temp_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
 
     # Last 24 hours trend for the zone controlled temperature.
     zone_ctrl_temperature_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_ctrl_temperature)
     zone_ctrl_temperature_trend.setName("#{zone_name}_Ctrl_Temperature_Trend")
+    zone_ctrl_temperature_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
 
     # Last 24 hours trend for radiant system in cooling mode.
     zone_rad_cool_operation_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_rad_cool_operation)
     zone_rad_cool_operation_trend.setName("#{zone_name}_Rad_Cool_Operation_Trend")
+    zone_rad_cool_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
 
     # Last 24 hours trend for radiant system in heating mode.
     zone_rad_heat_operation_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_rad_heat_operation)
     zone_rad_heat_operation_trend.setName("#{zone_name}_Rad_Heat_Operation_Trend")
+    zone_rad_heat_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
 
     #####
     # List of EMS programs to implement the proportional control for the radiant system.
@@ -350,10 +371,9 @@ class Standard
         SET unocc_duration     = 24 - occ_duration,
         SET prp_k              = 0.3,
         SET min_oper           = 1,
-        SET cont_rad_oper      = 0,
         SET ctrl_temp_offset   = 0.5,
         SET wkend_temp_reset   = 2,
-        SET early_reset_out    = 20;
+        SET early_reset_out    = 20
       EMS
       set_constant_values_prg.setBody(set_constant_values_prg_body)
     end
@@ -372,7 +392,7 @@ class Standard
             SET weekend = 1,
         ELSE,
             SET weekend = 0,
-        ENDIF;
+        ENDIF
       EMS
       determine_weekend_prg.setBody(determine_weekend_prg_body)
     end
@@ -385,7 +405,7 @@ class Standard
       determine_unoccupied_prg_body = <<-EMS
         IF (DayOfWeek == 1) || (DayOfWeek == 7),
             SET unoccupied = 0,
-        ELSEIF (CurrentTime > occ_hrE) || (CurrentTime < occ_hr_start),
+        ELSEIF (CurrentTime > occ_hr_end) || (CurrentTime < occ_hr_start),
             IF (DayOfWeek == 2) && (CurrentTime < occ_hr_start),
                 SET unoccupied = 0,
             ELSEIF (DayOfWeek == 6) && (CurrentTime > occ_hr_end),
@@ -395,7 +415,7 @@ class Standard
             ENDIF,
         ELSE,
             SET unoccupied = 0,
-        ENDIF;
+        ENDIF
       EMS
       determine_unoccupied_prg.setBody(determine_unoccupied_prg_body)
     end
@@ -404,8 +424,8 @@ class Standard
     set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg_body = <<-EMS
-      SET #{zone_name}_max_ctrl_temp      = Upper_Comfort_Limit,
-      SET #{zone_name}_min_ctrl_temp      = Lower_Comfort_Limit,
+      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_Upper_Comfort_Limit,
+      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_Lower_Comfort_Limit,
       SET #{zone_name}_cont_neutral_oper  = 0,
       SET #{zone_name}_zone_mode          = 0,
       SET #{zone_name}_switch_over_time   = 24,
@@ -417,7 +437,7 @@ class Standard
       SET #{zone_name}_daily_cool_sum     = 0,
       SET #{zone_name}_daily_heat_sum     = 0,
       SET #{zone_name}_daily_cool_sum_one = 0,
-      SET #{zone_name}_daily_heat_sum_one = 0;
+      SET #{zone_name}_daily_heat_sum_one = 0
     EMS
     set_constant_zone_values_prg.setBody(set_constant_zone_values_prg_body)
 
@@ -426,9 +446,9 @@ class Standard
     calculate_trends_prg.setName("#{zone_name}_Calculate_Trends")
     calculate_trends_prg_body = <<-EMS
       SET mean_oat                                = @TrendAverage OAT_Trend 24/ZoneTimeStep,
-      SET #{zone_name}_mean_ctrl                  = @TrendAverage Srf_Temp_Trend 24/ZoneTimeStep,
+      SET #{zone_name}_mean_ctrl                  = @TrendAverage #{zone_name}_Srf_Temp_Trend 24/ZoneTimeStep,
       SET CMD_OAT_RUNNING_MEAN                    = mean_oat + 0,
-      SET #{zone_name}_CMD_CTRL_TEMP_RUNNING_MEAN = #{zone_name}_mean_ctrl + 0;
+      SET #{zone_name}_CMD_CTRL_TEMP_RUNNING_MEAN = #{zone_name}_mean_ctrl + 0
     EMS
     calculate_trends_prg.setBody(calculate_trends_prg_body)
 
@@ -441,7 +461,7 @@ class Standard
           SET #{zone_name}_CMD_CSP_ERROR = (#{zone_name}_Upper_Comfort_Limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
           SET #{zone_name}_min_ctrl_temp = @TrendMin #{zone_name}_Ctrl_Temperature_Trend occ_duration/ZoneTimeStep,
           SET #{zone_name}_CMD_HSP_ERROR = (#{zone_name}_Lower_Comfort_Limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
-      ENDIF;
+      ENDIF
     EMS
     calculate_errors_from_comfort_prg.setBody(calculate_errors_from_comfort_prg_body)
 
@@ -453,7 +473,7 @@ class Standard
           SET #{zone_name}_cont_neutral_oper = 0,
       ELSE,
           SET #{zone_name}_cont_neutral_oper = #{zone_name}_cont_neutral_oper + ZoneTimeStep,
-      ENDIF;
+      ENDIF
     EMS
     calculate_neutral_time_prg.setBody(calculate_neutral_time_prg_body)
 
@@ -465,7 +485,7 @@ class Standard
           SET #{zone_name}_cont_rad_oper = #{zone_name}_cont_rad_oper + ZoneTimeStep,
       ELSE,
           SET #{zone_name}_cont_rad_oper = 0,
-      ENDIF;
+      ENDIF
     EMS
     calculate_continuous_radiant_operation_prg.setBody(calculate_continuous_radiant_operation_prg_body)
 
@@ -475,7 +495,7 @@ class Standard
     determine_zone_mode_prg_body = <<-EMS
       SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_Rad_Cool_Operation_Trend 24/ZoneTimeStep,
       SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_Rad_Heat_Operation_Trend 24/ZoneTimeStep,
-      IF (#{zone_name}_zone_mode <> 0) && (#{zone_name}_cont_neutral_oper > switch_over_time),
+      IF (#{zone_name}_zone_mode <> 0) && (#{zone_name}_cont_neutral_oper > #{zone_name}_switch_over_time),
           SET #{zone_name}_zone_mode = 0,
       ELSEIF (#{zone_name}_cont_cool_oper > 0) && (#{zone_name}_zone_mode == 0),
           SET #{zone_name}_zone_mode = 1,
@@ -483,7 +503,7 @@ class Standard
           SET #{zone_name}_zone_mode = -1,
       ELSE,
           SET #{zone_name}_zone_mode = #{zone_name}_zone_mode,
-      ENDIF;
+      ENDIF
     EMS
     determine_zone_mode_prg.setBody(determine_zone_mode_prg_body)
 
@@ -508,7 +528,7 @@ class Standard
           IF (#{zone_name}_daily_cool_sum_one > 0) || ((#{zone_name}_daily_heat_sum_one <= 0) && (#{zone_name}_CMD_CSP_ERROR < 0)),
               SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP + (#{zone_name}_CMD_CSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
           ENDIF,
-      ENDIF;
+      ENDIF
     EMS
     calculate_cool_ctrl_setpoint_prg.setBody(calculate_cool_ctrl_setpoint_prg_body)
 
@@ -520,7 +540,7 @@ class Standard
           IF (#{zone_name}_daily_heat_sum_one > 0) || ((#{zone_name}_daily_cool_sum_one <= 0) && (#{zone_name}_CMD_HSP_ERROR > 0)),
               SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
           ENDIF,
-      ENDIF;
+      ENDIF
     EMS
     calculate_heat_ctrl_setpoint_prg.setBody(calculate_heat_ctrl_setpoint_prg_body)
 
@@ -541,7 +561,7 @@ class Standard
       ELSEIF (CurrentTime == turn_on_hour) && (DayOfWeek == turn_on_day),
           SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP - wkend_temp_reset,
           SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP + wkend_temp_reset,
-      ENDIF;
+      ENDIF
     EMS
     implement_setback_prg.setBody(implement_setback_prg_body)
 
@@ -569,7 +589,7 @@ class Standard
       ELSE,                                     ! Operation during designday and warmupdays
           SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
           SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
-      ENDIF;
+      ENDIF
     EMS
     determine_radiant_operation_prg.setBody(determine_radiant_operation_prg_body)
 
@@ -617,15 +637,15 @@ class Standard
     average_building_temperature.addProgram(calculate_cumulative_sum_prg)
 
     programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    average_building_temperature.setName("#{zone_name}_Programs_At_Beginning_Of_Timestep")
-    average_building_temperature.setCallingPoint('BeginTimestepBeforePredictor')
-    average_building_temperature.addProgram(determine_weekend_prg)
-    average_building_temperature.addProgram(determine_unoccupied_prg)
-    average_building_temperature.addProgram(determine_zone_mode_prg)
-    average_building_temperature.addProgram(implement_setback_prg)
-    average_building_temperature.addProgram(calculate_cool_ctrl_setpoint_prg)
-    average_building_temperature.addProgram(calculate_heat_ctrl_setpoint_prg)
-    average_building_temperature.addProgram(determine_radiant_operation_prg)
+    programs_at_beginning_of_timestep.setName("#{zone_name}_Programs_At_Beginning_Of_Timestep")
+    programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+    programs_at_beginning_of_timestep.addProgram(determine_weekend_prg)
+    programs_at_beginning_of_timestep.addProgram(determine_unoccupied_prg)
+    programs_at_beginning_of_timestep.addProgram(determine_zone_mode_prg)
+    programs_at_beginning_of_timestep.addProgram(implement_setback_prg)
+    programs_at_beginning_of_timestep.addProgram(calculate_cool_ctrl_setpoint_prg)
+    programs_at_beginning_of_timestep.addProgram(calculate_heat_ctrl_setpoint_prg)
+    programs_at_beginning_of_timestep.addProgram(determine_radiant_operation_prg)
 
     #####
     # List of variables for output.
