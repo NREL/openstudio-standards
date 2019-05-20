@@ -666,12 +666,20 @@ class Standard
     # List of variables for output.
     ####
     zone_max_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_max_ctrl_temp)
+    zone_max_ctrl_temp_output.setName("#{zone_name} Maximum occupied temperature in zone")
     zone_min_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_min_ctrl_temp)
+    zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
     zone_zone_mode_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_zone_mode)
+    zone_zone_mode_output.setName("#{zone_name} Zone Mode of Operation")
     zone_cont_neutral_oper_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_cont_neutral_oper)
-    zone_daily_cool_sum_output  = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_cool_sum)
-    zone_daily_heat_sum_output  = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_heat_sum)
-    zone_daily_cool_sum_one_output  = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_cool_sum_one)
-    zone_daily_heat_sum_one_output  = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_heat_sum_one)
+    zone_cont_neutral_oper_output.setName("#{zone_name} Number of Hours in Neutral Operation")
+    zone_daily_cool_sum_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_cool_sum)
+    zone_daily_cool_sum_output.setName("#{zone_name} Daily Building Cool Operation")
+    zone_daily_heat_sum_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_heat_sum)
+    zone_daily_heat_sum_output.setName("#{zone_name} Daily Building Heat Operation")
+    zone_daily_cool_sum_one_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_cool_sum_one)
+    zone_daily_cool_sum_one_output.setName("#{zone_name} Daily Building Cool Operation One")
+    zone_daily_heat_sum_one_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_heat_sum_one)
+    zone_daily_heat_sum_one_output.setName("#{zone_name} Daily Building Heat Operation One")
   end
 end
