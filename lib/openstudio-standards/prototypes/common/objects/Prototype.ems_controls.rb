@@ -584,7 +584,7 @@ class Standard
     determine_radiant_operation_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     determine_radiant_operation_prg.setName("#{zone_name}_Determine_Radiant_Operation")
     determine_radiant_operation_prg_body = <<-EMS
-      IF (CurrentEnvironment) == 2,            ! Operation during annual simulation
+      IF (CurrentEnvironment) == 3,            ! Operation during annual simulation
           IF (#{zone_name}_zone_mode >= 0) && (#{zone_name}_Srf_Temp > #{zone_name}_CMD_SLAB_CSP),
               SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
               SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
