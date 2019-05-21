@@ -3802,6 +3802,8 @@ class Standard
 
       # set radiant loop controls
       if control_strategy == 'proportional_control'
+        # rename nodes before adding EMS code
+        rename_plant_loop_nodes(model)
         ems_radiant_proportional_controls(model, zone, radiant_loop)
       end
     end
