@@ -105,6 +105,7 @@ class Standard
     hw_pump.setMotorEfficiency(0.9)
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
+    hw_pump.setEndUseSubcategory('Hot Water Pump')
 
     # create boiler and add to loop
     case boiler_fuel_type
@@ -261,6 +262,7 @@ class Standard
       pri_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0)
       pri_chw_pump.setPumpControlType('Intermittent')
       pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+      pri_chw_pump.setEndUseSubcategory('Chilled Water Pump')
     elsif chw_pumping_type == 'const_pri_var_sec'
       # primary chilled water pump
       pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
@@ -269,6 +271,7 @@ class Standard
       pri_chw_pump.setMotorEfficiency(0.9)
       pri_chw_pump.setPumpControlType('Intermittent')
       pri_chw_pump.addToNode(chilled_water_loop.supplyInletNode)
+      pri_chw_pump.setEndUseSubcategory('Chilled Water Pump')
       # secondary chilled water pump
       sec_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
       sec_chw_pump.setName("#{chilled_water_loop.name} Secondary Pump")
@@ -282,6 +285,7 @@ class Standard
       sec_chw_pump.setCoefficient4ofthePartLoadPerformanceCurve(0.5753)
       sec_chw_pump.setPumpControlType('Intermittent')
       sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
+      sec_chw_pump.setEndUseSubcategory('Chilled Water Pump')
       # Change the chilled water loop to have a two-way common pipes
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
     end
@@ -448,6 +452,7 @@ class Standard
     end
     cw_pump.setName("#{condenser_water_loop.name} #{pump_spd_ctrl} Pump")
     cw_pump.setPumpControlType('Intermittent')
+    cw_pump.setEndUseSubcategory('Condenser Water Pump')
 
     if pump_tot_hd.nil?
       pump_tot_hd_pa =  OpenStudio.convert(49.7, 'ftH_{2}O', 'Pa').get
@@ -593,6 +598,7 @@ class Standard
     hp_pump.setRatedPumpHead(OpenStudio.convert(60.0, 'ftH_{2}O', 'Pa').get)
     hp_pump.setPumpControlType('Intermittent')
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
+    hp_pump.setEndUseSubcategory('Heat Pump Loop Pump')
 
     # create cooling towers or fluid coolers
     # TODO: replace this system with a FluidCoolor:TwoSpeed once the simulation failures are resolved
@@ -688,6 +694,7 @@ class Standard
     pump.setRatedPumpHead(OpenStudio.convert(60.0, 'ftH_{2}O', 'Pa').get)
     pump.setPumpControlType('Intermittent')
     pump.addToNode(ground_hx_loop.supplyInletNode)
+    pump.setEndUseSubcategory('Ground Heat Exchanger Loop Pump')
 
     # use EMS and a PlantComponentTemperatureSource to mimic the operation of the ground heat exchanger.
 
@@ -798,6 +805,7 @@ class Standard
     pump.setRatedPumpHead(OpenStudio.convert(60.0, 'ftH_{2}O', 'Pa').get)
     pump.setPumpControlType('Intermittent')
     pump.addToNode(ambient_loop.supplyInletNode)
+    pump.setEndUseSubcategory('Ambient Loop Pump')
 
     # cooling
     district_cooling = OpenStudio::Model::DistrictCooling.new(model)
