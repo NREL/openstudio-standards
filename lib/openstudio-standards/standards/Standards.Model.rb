@@ -2045,7 +2045,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
 
     # Find all the schedule rules that match the name
-    rules = standards_lookup_table_many(table_name: 'schedules', search_criteria: {'name' => schedule_name})
+    rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return model.alwaysOnDiscreteSchedule
@@ -2151,7 +2151,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = standards_lookup_table_first(table_name: 'materials', search_criteria: {'name' => material_name})
+    data = model_find_object(standards_data['materials'], 'name' => material_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false # TODO: change to return empty optional material
@@ -2252,7 +2252,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = standards_lookup_table_first(table_name: 'constructions', search_criteria: {'name' => construction_name})
+    data = model_find_object(standards_data['constructions'], 'name' => construction_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2343,7 +2343,7 @@ class Standard
       if data['skylight_framing']
         # Get the skylight framing material
         framing_name = data['skylight_framing']
-        frame_data = standards_lookup_table_first(table_name: 'materials', search_criteria: {'name' => framing_name})
+        frame_data = model_find_object(standards_data['materials'], 'name' => framing_name)
         if frame_data
           frame_width_in = frame_data['frame_width'].to_f
           frame_with_m = OpenStudio.convert(frame_width_in, 'in', 'm').get
@@ -2411,12 +2411,12 @@ class Standard
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = standards_lookup_table_first(table_name:'construction_properties',
-                                         search_criteria: {'template' => template,
+    props = model_find_object(standards_data['construction_properties'],
+                              'template' => template,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category})
+                              'building_category' => building_category)
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -2457,17 +2457,10 @@ class Standard
     end
 
     # Get the object data
-
-    data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                           'climate_zone_set' => climate_zone_set,
-                                                                                           'building_type' => building_type,
-                                                                                           'space_type' => spc_type,
-                                                                                           'is_residential' => is_residential})
+    data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                             'climate_zone_set' => climate_zone_set,
-                                                                                             'building_type' => building_type,
-                                                                                             'space_type' => spc_type, })
+      # Search again without the is_residential criteria in the case that this field is not specified for a standard
+      data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
         # if nothing matches say that we could not find it
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
@@ -2679,7 +2672,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
-    data = standards_lookup_table_first(table_name: 'curves', search_criteria: {'name' => curve_name})
+    data = model_find_object(standards_data['curves'], 'name' => curve_name)
     if data.nil?
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.Model.Model", "Could not find a curve called '#{curve_name}' in the standards.")
       return nil
@@ -3417,7 +3410,8 @@ class Standard
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = standards_lookup_table_first(table_name: 'construction_properties', search_criteria: search_criteria)
+    construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+
 
     return construction_properties
   end
@@ -4023,7 +4017,7 @@ class Standard
             'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
+          space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}

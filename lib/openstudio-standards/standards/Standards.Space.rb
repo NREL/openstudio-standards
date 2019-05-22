@@ -981,7 +981,7 @@ class Standard
         'space_type' => standards_space_type
       }
 
-      data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
+      data = model_find_object(standards_data['space_types'], search_criteria)
       if data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
       else

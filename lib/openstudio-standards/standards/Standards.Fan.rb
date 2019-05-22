@@ -224,6 +224,7 @@ module Fan
     return [fan_motor_eff, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
+    motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
     search_criteria = {
@@ -238,9 +239,7 @@ module Fan
     if fan_small_fan?(fan)
       nominal_hp = 0.5
     else
-      motor_properties = standards_lookup_table_first(table_name: 'motors',
-                                                      search_criteria: search_criteria,
-                                                      capacity: motor_bhp)
+      motor_properties = model_find_object(motors, search_criteria, motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
@@ -261,9 +260,7 @@ module Fan
 
     # Get the efficiency based on the nominal horsepower
     # Add 0.01 hp to avoid search errors.
-    motor_properties = standards_lookup_table_first(table_name: 'motors',
-                                                    search_criteria: search_criteria,
-                                                    capacity: nominal_hp + 0.01)
+    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
 
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
