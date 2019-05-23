@@ -110,6 +110,7 @@ class NECB2011 < Standard
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    self.corrupt_standards_database()
     #puts "loaded these tables..."
     #puts @standards_data.keys.size
     #raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -632,6 +633,22 @@ class NECB2011 < Standard
       end
     end
     return true
+  end
+
+  # 2019-05-23 ckirney  This is an ugly, disgusting, hack (hence the name) that I dreamed out so that we could quickly
+  # and easily finish the merge from the nrcan branch (using OS 2.6.0) to master (using OS 2.8.0).  This must be revised
+  # and a more elegant solution found.
+  #
+  # This method takes everything in the @standards_data['tables'] hash and adds it to the main @standards_data hash.
+  # This was done because other contributors insist on using the 'model_find_object' method which is passed a hash and
+  # some search criteria.  The 'model_find_objects' then looks through the hash to information matching the search
+  # criteria.  NECB standards assumes that the 'standards_lookup_table_first' method is used.  This does basically the
+  # some thing as 'model_find_objects' only it assumes that you are looking in the standards hash and you tell it which
+  # table in the standards hash to look for.
+  def corrupt_standards_database()
+    @standards_data['tables'].each do |table|
+      @standards_data[table[0]] = table[1]['table']
+    end
   end
 
 end

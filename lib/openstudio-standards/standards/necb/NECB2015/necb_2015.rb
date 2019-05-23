@@ -9,6 +9,7 @@ class NECB2015 < NECB2011
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    self.corrupt_standards_database()
   end
 
   def load_standards_database_new()
