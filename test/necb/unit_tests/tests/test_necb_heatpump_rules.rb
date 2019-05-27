@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_Tests < MiniTest::Test
@@ -8,17 +8,27 @@ class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate the heating efficiency generated against expected values stored in the file:
   # 'compliance_heatpump_efficiencies_expected_results.csv
-  def test_NECB2011_heatpump_efficiency
-    output_folder = "#{File.dirname(__FILE__)}/output/heatpump_efficiency"
+  def test_heatpump_efficiency
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
 
     templates = ['NECB2011', 'NECB2015']
     templates.each do |template|
 
-      heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
+      heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
       standard = Standard.build(template)
 
       # Initialize hashes for storing expected heat pump efficiency data from file
@@ -51,14 +61,14 @@ class NECB_HVAC_Tests < MiniTest::Test
       boiler_fueltype = 'Electricity'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       # save baseline
       BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
       test_caps.each do |cap|
         name = "#{template}_sys3_HtgDXCoilCap~#{cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
@@ -97,10 +107,10 @@ class NECB_HVAC_Tests < MiniTest::Test
       heatpump_res_file_output_text += output_line_text
 
       # Write actual results file
-      test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_efficiencies_test_results.csv")
+      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_test_results.csv")
       File.open(test_result_file, 'w') {|f| f.write(heatpump_res_file_output_text.chomp)}
       # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
+      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
       b_result = FileUtils.compare_file(expected_result_file, test_result_file)
       assert(b_result,
              "test_heatpump_efficiency: Heat pump efficiency test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -108,14 +118,14 @@ class NECB_HVAC_Tests < MiniTest::Test
   end
 
   # Test to validate the heat pump performance curves
-  def test_NECB2011_heatpump_curves
-    output_folder = "#{File.dirname(__FILE__)}/output/heatpump_curves"
+  def test_heatpump_curves
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     template = 'NECB2011'
     standard = Standard.build(template)
 
-    heatpump_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
+    heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
     heatpump_curve_names = []
     CSV.foreach(heatpump_expected_result_file, headers: true) do |data|
       heatpump_curve_names << data['Curve Name']
@@ -125,7 +135,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -173,10 +183,10 @@ class NECB_HVAC_Tests < MiniTest::Test
             "#{'%.5E' % heatpump_plfvsplr__curve.minimumValueofx},#{'%.5E' % heatpump_plfvsplr__curve.maximumValueofx}\n"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_curves_test_results.csv")
+    test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_curves_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(heatpump_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
+    expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
            "Heat pump performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")

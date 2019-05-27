@@ -1,5 +1,5 @@
-require_relative '../helpers/minitest_helper'
-require_relative '../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
@@ -25,16 +25,13 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_System_3_Test < MiniTest::Test
-  WEATHER_FILE = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-  Vintages = ['NECB2011']
 
-
-  def < % = test_name %>()
+  def <%=test_name %>()
     weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-    template_osm_file = '/home/osdev/openstudio-standards/test/necb/models/5ZoneNoHVAC.osm'
+    template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = '<%=system[:name] %>'
-    vintage = ' NECB2011 '
-    boiler_fueltype = ' < %=boiler_fueltype %>'
+    vintage = 'NECB2011'
+    boiler_fueltype = '<%=boiler_fueltype %>'
     baseboard_type = '<%=baseboard_type %>'
     heating_coil_type_sys3 = '<%=heating_coil_type_sys3 %>'
 
@@ -44,10 +41,10 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
     standard = Standard.build(vintage)
-    name = "sys3_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil_type_sys3}_BaseboardType-#{baseboard_type}"
+    name = "sys3_Boiler-#{boiler_fueltype}_HeatingCoilType-#{heating_coil_type_sys3}_BaseboardType-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+    model = BTAP::FileIO::load_osm(template_osm_file)
+    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
     hw_loop = nil
     if (baseboard_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)

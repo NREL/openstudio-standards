@@ -34,11 +34,13 @@ class GeneratorNECBRegressionTests
   end
 
   def generate_system_test_files()
-    generate_hvac_system_1_test_files
-    generate_hvac_system_2_and_5_test_files
-    generate_hvac_system_3_test_files
-    generate_hvac_system_4_test_files
-    generate_hvac_system_6_test_files
+    filenames = []
+    filenames.concat( generate_hvac_system_1_test_files)
+    filenames.concat(generate_hvac_system_2_and_5_test_files)
+    filenames.concat(generate_hvac_system_3_test_files)
+    filenames.concat(generate_hvac_system_4_test_files)
+    filenames.concat(generate_hvac_system_6_test_files)
+    puts filenames
   end
 
   # This method is used to generate NECB HVAC system 1 test
@@ -54,6 +56,7 @@ class GeneratorNECBRegressionTests
         }
     ]
     # iterate through variables
+    filenames = []
     systems.each do |system|
       system[:boiler_fuel_types].each do |boiler_fueltype|
         system[:mau_types].each do |mau_type|
@@ -65,11 +68,13 @@ class GeneratorNECBRegressionTests
               file_string = ERB.new(necb_system_template, 0, "", "@html").result(binding)
               # write file
               File.write(filename, file_string)
+              filenames << filename
             end
           end
         end
       end
     end
+
   end
 
 
@@ -83,16 +88,19 @@ class GeneratorNECBRegressionTests
             chiller_types: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
             mua_cooling_types: ["Hydronic", "DX"],
             fan_coil_type: ['FPFC']
-        },
-        {
-            name: 'system_5',
-            boiler_fuel_types: ["NaturalGas", "Electricity", "FuelOil#2"],
-            chiller_types: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-            mua_cooling_types: ["Hydronic", "DX"],
-            fan_coil_type: ['TPFC']
         }
+        #System 5 not operational right now
+        #,
+        # {
+        #     name: 'system_5',
+        #     boiler_fuel_types: ["NaturalGas", "Electricity", "FuelOil#2"],
+        #     chiller_types: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+        #     mua_cooling_types: ["Hydronic", "DX"],
+        #     fan_coil_type: ['TPFC']
+        # }
     ]
     # iterate through variables
+    filenames = []
     systems.each do |system|
       system[:boiler_fuel_types].each do |boiler_fueltype|
         system[:chiller_types].each do |chiller_type|
@@ -104,11 +112,13 @@ class GeneratorNECBRegressionTests
               file_string = ERB.new(necb_system_template, 0, "", "@html").result(binding)
               # write file
               File.open(filename, 'w') {|file| file.write(file_string)}
+              filenames << filename
             end
           end
         end
       end
     end
+    return filenames
   end
 
   # This method is used to generate NECB HVAC system 3 test
@@ -122,6 +132,7 @@ class GeneratorNECBRegressionTests
             baseboard_types: ["Hot Water", "Electric"]
         }
     ]
+    filenames = []
     # iterate through variables
     systems.each do |system|
       system[:boiler_fuel_types].each do |boiler_fueltype|
@@ -133,10 +144,12 @@ class GeneratorNECBRegressionTests
             file_string = ERB.new(necb_system_template, 0, "", "@html").result(binding)
             # write file
             File.open(filename, 'w') {|file| file.write(file_string)}
+            filenames << filename
           end
         end
       end
     end
+    return filenames
   end
 
 
@@ -152,6 +165,7 @@ class GeneratorNECBRegressionTests
         }
     ]
     # iterate through variables
+     filenames = []
     systems.each do |system|
       system[:boiler_fuel_types].each do |boiler_fueltype|
         system[:heating_coil_types_sys4].each do |heating_coil_type_sys4|
@@ -162,10 +176,12 @@ class GeneratorNECBRegressionTests
             file_string = ERB.new(necb_system_template, 0, "", "@html").result(binding)
             # write file
             File.open(filename, 'w') {|file| file.write(file_string)}
+            filenames << filename
           end
         end
       end
     end
+    return filenames
   end
 
   # This method is used to generate NECB HVAC system 3 test
@@ -184,6 +200,7 @@ class GeneratorNECBRegressionTests
 
 
     # iterate through variables
+    filenames = []
     systems.each do |system|
       system[:boiler_fuel_types].each do |boiler_fueltype|
         system[:heating_coil_types_sys6].each do |heating_coil_type_sys6|
@@ -196,14 +213,16 @@ class GeneratorNECBRegressionTests
                 file_string = ERB.new(necb_system_template, 0, "", "@html").result(binding)
                 # write file
                 File.open(filename, 'w') {|file| file.write(file_string)}
+                filenames << filename
               end
             end
           end
         end
       end
     end
+    return filenames
   end
 end
-GeneratorNECBRegressionTests.new.generate_hvac_system_1_test_files
+GeneratorNECBRegressionTests.new.generate_system_test_files
 
 

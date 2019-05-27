@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_SHW_Tests < MiniTest::Test
@@ -10,10 +10,10 @@ class NECB_SHW_Tests < MiniTest::Test
 
   # Test to validate part-load performance curve of gas fired shw heater
   def test_NECB2011_shw_curves
-    output_folder = "#{File.dirname(__FILE__)}/output/shw_curves"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    shw_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_expected_results.csv')
+    shw_expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
     shw_curve_names = []
     CSV.foreach(shw_expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
@@ -22,7 +22,7 @@ class NECB_SHW_Tests < MiniTest::Test
  
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -72,10 +72,10 @@ class NECB_SHW_Tests < MiniTest::Test
         "#{'%.5E' % shw_plfvsplr_curve.coefficient3xPOW2},#{'%.5E' % shw_plfvsplr_curve.coefficient4xPOW3},#{'%.5E' % shw_plfvsplr_curve.minimumValueofx}," +
         "#{'%.5E' % shw_plfvsplr_curve.maximumValueofx}\n"
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_test_results.csv')
+    test_result_file = File.join(@test_results_folder, 'compliance_shw_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(shw_res_file_output_text.chomp) }
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_shw_curves_expected_results.csv')
+    expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
     "SHW performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -83,7 +83,7 @@ class NECB_SHW_Tests < MiniTest::Test
 
   # Test to validate efficiency and standby losses of electric shw heater
   def test_NECB2011_shw_elec_efficiency_standby_losses
-    output_folder = "#{File.dirname(__FILE__)}/output/shw_elec_eff_losses"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     standard = Standard.build('NECB2011')
@@ -92,7 +92,7 @@ class NECB_SHW_Tests < MiniTest::Test
     test_caps = [10.0,20.0]
     test_vols = [200.0,300.0]
     # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -100,7 +100,7 @@ class NECB_SHW_Tests < MiniTest::Test
       test_vols.each do |ivol|
         name = "shw_cap~#{icap}kW~vol~#{ivol}liters"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         # add shw loop
         prototype_input = {}

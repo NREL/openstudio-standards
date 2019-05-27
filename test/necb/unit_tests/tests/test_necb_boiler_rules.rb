@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the standards in the test.
@@ -7,10 +7,20 @@ class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate the boiler thermal efficiency generated against expected values stored in the file:
   # 'compliance_boiler_efficiencies_expected_results.csv
   def test_NECB2011_boiler_efficiency
-    output_folder = "#{File.dirname(__FILE__)}/output/boiler_efficiency"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
 
@@ -19,14 +29,12 @@ class NECB_HVAC_Tests < MiniTest::Test
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     templates = ['NECB2011', 'NECB2015']
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     templates.each do |template|
       standard = Standard.build(template)
-      boiler_expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
+      boiler_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
 
       # Initialize hashes for storing expected boiler efficiency data from file
       fuel_type_min_cap = {}
@@ -83,7 +91,7 @@ class NECB_HVAC_Tests < MiniTest::Test
         fuel_type_cap[boiler_fueltype].each do |boiler_cap|
           name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
           puts "***************************************#{name}*******************************************************\n"
-          model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+          model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
           BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
@@ -136,10 +144,10 @@ class NECB_HVAC_Tests < MiniTest::Test
       end
 
       # Write actual results file
-      test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_efficiencies_test_results.csv")
+      test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_test_results.csv")
       File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
       # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
+      expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
       b_result = FileUtils.compare_file(expected_result_file, test_result_file)
       assert(b_result,
              "test_boiler_efficiency: Boiler efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -152,11 +160,12 @@ class NECB_HVAC_Tests < MiniTest::Test
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
   def test_NECB2011_number_of_boilers
-    output_folder = "#{File.dirname(__FILE__)}/output/num_of_boilers"
+    setup()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
 
+    standard = Standard.build('NECB2011')
     first_cutoff_blr_cap = 176000.0
     second_cutoff_blr_cap = 352000.0
     tol = 1.0e-3
@@ -165,7 +174,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     baseboard_type = 'Hot Water'
     heating_coil_type = 'Electric'
     test_boiler_cap = [100000.0, 200000.0, 400000.0]
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -173,7 +182,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     test_boiler_cap.each do |boiler_cap|
       name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -241,7 +250,10 @@ class NECB_HVAC_Tests < MiniTest::Test
 
   # Test to validate the boiler part load performance curve
   def test_NECB2011_boiler_plf_vs_plr_curve
-    output_folder = "#{File.dirname(__FILE__)}/output/boiler_plf_vs_plr_curve"
+    setup()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     standard = Standard.build('NECB2011')
@@ -253,7 +265,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
     template = 'NECB2011'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -281,10 +293,10 @@ class NECB_HVAC_Tests < MiniTest::Test
         "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
+    test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
+    expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
            "test_boiler_plf_vs_plr_curve: Boiler plf vs plr curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -321,7 +333,6 @@ class NECB_HVAC_Tests < MiniTest::Test
       # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
 
       # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
       return true
     end
   end

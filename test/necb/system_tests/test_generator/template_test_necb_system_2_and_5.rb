@@ -1,5 +1,5 @@
-require_relative '../helpers/minitest_helper'
-require_relative '../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
@@ -29,13 +29,13 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
 
   #System #2
   #Sizing Convergence Errors when mua_cooling_types = DX
-  def < % = test_name %>()
+  def <%=test_name %>()
     weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-    template_osm_file = '/home/osdev/openstudio-standards/test/necb/models/5ZoneNoHVAC.osm'
+    template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = '<%=system[:name] %>'
-    vintage = ' NECB2011 '
-    boiler_fueltype = ' < %=boiler_fueltype %>'
-    chiller_type = < %=chiller_type %>
+    vintage = 'NECB2011'
+    boiler_fueltype = ' <%=boiler_fueltype %>'
+    chiller_type = '<%=chiller_type %>'
     mua_cooling_type = '<%=mua_cooling_type %>'
     fan_coil_type = '<%=fan_coil_type %>'
     output_folder = "#{File.dirname(__FILE__)}/output/test_necb_<%=system[:name] %>"
@@ -45,9 +45,9 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
     standard = Standard.build(vintage)
-    name = "sys2_Boiler-#{boiler_fueltype}_Chiller#-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
+    name = "sys2_Boiler-#{boiler_fueltype}_Chiller-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO::load_osm(template_osm_file)
     BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)

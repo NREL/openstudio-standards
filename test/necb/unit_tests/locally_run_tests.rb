@@ -1,6 +1,7 @@
 require_relative '../../helpers/parallel_tests'
 TestListFile = Dir.entries("#{__dir__}/tests")
 
+
 class RunNECBTests < Minitest::Test
   def test_all()
     full_file_list = nil
@@ -9,7 +10,8 @@ class RunNECBTests < Minitest::Test
       # Select only .rb files that exist
       full_file_list.select! {|item| item.end_with?(".rb") and File.exist?(File.absolute_path(File.join(__dir__,'tests',"#{item.strip}")))}
       full_file_list = full_file_list.map! {|item| File.absolute_path(File.join(__dir__,'tests',"#{item.strip}")) }
-
+      puts full_file_list
+    raise()
     puts "Starting System Tests"
     assert(ParallelTests.new.run(full_file_list, File.join(__dir__, 'test_output')), "Some tests failed please ensure all test pass and tests have been updated to reflect the changes you expect before issuing a pull request")
   end

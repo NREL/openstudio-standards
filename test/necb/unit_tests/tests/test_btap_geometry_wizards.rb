@@ -1,11 +1,26 @@
-require_relative '../../helpers/minitest_helper.rb'
+require_relative '../../../helpers/minitest_helper.rb'
 
 #Test Geometry Wizards
 class TestBTAPGeometryWizards < MiniTest::Test
 
+  def set_up_folders()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = File.join(@test_folder, 'test_results')
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Loop through a range of geometry options and check floor areas and boundary conditions sucessfully set
 
   def test_geometry_rectangle
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
+
     [25, 100].each do |length|
       [20, 80].each do |width|
         [1, 5].each do |storys|
@@ -89,6 +104,10 @@ class TestBTAPGeometryWizards < MiniTest::Test
   end
 
   def test_geometry_courtyard
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     [50, 100].each do |length|
       [200, 80].each do |width|
         [1, 5].each do |storys|
@@ -171,6 +190,10 @@ class TestBTAPGeometryWizards < MiniTest::Test
 
   # Test the L shape
   def test_geometry_Lshape
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     [50, 100].each do |length|
       [200, 80].each do |width|
         [1, 5].each do |storys|
@@ -252,6 +275,10 @@ class TestBTAPGeometryWizards < MiniTest::Test
 
   # Loop through a range of geometry options and check floor areas and boundary conditions sucessfully set
   def test_geometry_Tshape
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     [25, 100].each do |length|
       [20, 80].each do |width|
         [1, 5].each do |storys|
@@ -336,6 +363,10 @@ class TestBTAPGeometryWizards < MiniTest::Test
 
   # Loop through a range of geometry options and check floor areas and boundary conditions sucessfully set
   def test_geometry_Hshape
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     [25, 100].each do |length|
       [20, 80].each do |width|
         [1, 5].each do |storys|
@@ -423,6 +454,10 @@ class TestBTAPGeometryWizards < MiniTest::Test
 
   # Loop through a range of geometry options and check floor areas and boundary conditions sucessfully set
   def test_geometry_Ushape
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     [25, 100].each do |length|
       [20, 80].each do |width|
         [1, 5].each do |storys|
@@ -505,6 +540,5 @@ class TestBTAPGeometryWizards < MiniTest::Test
       end
     end
   end
-
 end
 

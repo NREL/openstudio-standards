@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB2015PumpPowerTest < MiniTest::Test
@@ -19,7 +19,7 @@ class NECB2015PumpPowerTest < MiniTest::Test
   # Until further testing is done test_necb_coolingtower_rules.rb should not be used with models containing headered pumps
   # or water source heat pumps.
   def test_NECB2015_pumppower
-    output_folder = "#{File.dirname(__FILE__)}/output/pumppower"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     tol = 1.0e-3
@@ -30,7 +30,7 @@ class NECB2015PumpPowerTest < MiniTest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     chiller_cap = 1000000.0
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -40,7 +40,7 @@ class NECB2015PumpPowerTest < MiniTest::Test
     chiller_types.each do |chiller_type|
       name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule	

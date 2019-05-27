@@ -34,7 +34,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
 
   def <%=test_name %>()
     weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-    template_osm_file = '/home/osdev/openstudio-standards/test/necb/models/5ZoneNoHVAC.osm'
+    template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = '<%=system[:name] %>'
     vintage = 'NECB2011'
     boiler_fueltype = ' <%=boiler_fueltype %>'

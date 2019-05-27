@@ -1,10 +1,10 @@
-require_relative './helpers/minitest_helper'
-require_relative './helpers/create_doe_prototype_helper'
+require_relative './minitest_helper'
+require_relative './create_doe_prototype_helper'
 require 'fileutils'
 require 'parallel'
 require 'open3'
 
-TestOutputFolder = File.join(File.dirname(__FILE__), 'local_test_output')
+
 ProcessorsUsed = (Parallel.processor_count * 1 / 2).floor
 
 class String
@@ -40,7 +40,7 @@ end
 
 
 def write_results(result, test_file)
-  test_file_output = File.join(TestOutputFolder, "#{File.basename(test_file)}_test_output.json")
+  test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
   test_result = false
   if result[2].success?
@@ -67,14 +67,12 @@ end
 
 class ParallelTests
 
-  def run(file_list)
+  def run(file_list, test_output_folder)
     did_all_tests_pass = true
-    require_relative './helpers/ci_test_generator'
-    CITestGenerator::generate(true)
-
+    @test_output_folder = test_output_folder
     @full_file_list = nil
-    FileUtils.rm_rf(TestOutputFolder)
-    FileUtils.mkpath(TestOutputFolder)
+    FileUtils.rm_rf(@test_output_folder)
+    FileUtils.mkpath(@test_output_folder)
 
     # load test files from file.
     @full_file_list = file_list.shuffle
@@ -110,7 +108,7 @@ class ParallelTests
         timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
       end
     end
-    File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
+    #File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
     return did_all_tests_pass
   end
 end

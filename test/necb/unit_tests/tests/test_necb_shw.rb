@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 # This class will perform tests to ensure that the NECB SHW tank and pump are being sized correctly and that the water
@@ -10,6 +10,16 @@ class SHW_test < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015', 'NECB2017']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
+
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
 
   # @return [Bool] true if successful. 
   def test_shw_test()
@@ -30,7 +40,7 @@ class SHW_test < Minitest::Test
           model = nil
           standard = nil
           # Open the Outpatient model.
-          model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/models/NECB2011Outpatient.osm")
+          model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
           # Set the weather file.
           BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
           # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a

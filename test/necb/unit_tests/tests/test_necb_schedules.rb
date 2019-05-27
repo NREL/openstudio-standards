@@ -1,4 +1,4 @@
-require_relative '../../helpers/minitest_helper'
+require_relative '../../../helpers/minitest_helper'
 
 
 
@@ -8,6 +8,15 @@ class NECB2011ScheduleTests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015']#,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development. 
@@ -223,11 +232,11 @@ class NECB2011ScheduleTests < Minitest::Test
       end #loop spacetypes
     end #loop Template
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'data','schedule_test_results.json')
+    test_result_file = File.join(@test_results_folder,'schedule_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'data','schedule_expected_results.json')
+    expected_result_file = File.join(@expected_results_folder,'schedule_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
       "Schedule test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"

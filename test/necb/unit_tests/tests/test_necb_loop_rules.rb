@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_Tests < MiniTest::Test
@@ -8,9 +8,19 @@ class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate hot water loop rules
-  def test_NECB2011_hw_loop_rules
-    output_folder = "#{File.dirname(__FILE__)}/output/hw_loop_rules"
+  def test_hw_loop_rules
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     template = 'NECB2011'
@@ -22,7 +32,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     chiller_type = 'Scroll'
     heating_coil_type = 'Electric'
     fan_type = 'AF_or_BI_rdg_fancurve'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -81,8 +91,8 @@ class NECB_HVAC_Tests < MiniTest::Test
   end
 
   # Test to validate chilled water loop rules
-  def test_NECB2011_chw_loop_rules
-    output_folder = "#{File.dirname(__FILE__)}/output/chw_loop_rules"
+  def test_chw_loop_rules
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     template = 'NECB2011'
@@ -92,7 +102,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -164,7 +174,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

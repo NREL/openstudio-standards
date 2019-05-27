@@ -35,7 +35,7 @@ class NECBRegressionHelper < Minitest::Test
         puts "Creation of Model for #{osm_model_path} failed. Please check output for errors."
       end
       #Save osm file.
-      filename = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_test_result.osm"
+      filename = "#{File.dirname(__FILE__)}/../expected_results/#{model_name}_test_result.osm"
       FileUtils.mkdir_p(File.dirname(filename))
       File.delete(filename) if File.exist?(filename)
       puts "Saving osm file to : #{filename}"
@@ -43,7 +43,7 @@ class NECBRegressionHelper < Minitest::Test
 
       #old models
       # Load the geometry .osm
-      osm_file = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_expected_result.osm"
+      osm_file = "#{File.dirname(__FILE__)}/../expected_results/#{model_name}_expected_result.osm"
       unless File.exist?(osm_file)
         raise("The initial osm path: #{osm_file} does not exist.")
       end
@@ -63,7 +63,7 @@ class NECBRegressionHelper < Minitest::Test
 
     end
     #Write out diff or error message
-    diff_file = "#{File.dirname(__FILE__)}/regression_models/#{model_name}_diffs.json"
+    diff_file = "#{File.dirname(__FILE__)}/../expected_results/#{model_name}_diffs.json"
     FileUtils.rm(diff_file) if File.exists?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))

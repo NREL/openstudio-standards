@@ -1,14 +1,24 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
 
 class TestRemoveDuplicateModelObjects < CreateDOEPrototypeBuildingTest
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '../../../')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   def test_remove_duplicate_model_objects
     # read a sample model called fsr model present within the test/necb/models/fsr.osm
     translator = OpenStudio::OSVersion::VersionTranslator.new
-    osm_path = File.join(File.dirname(__FILE__), 'resources', 'fsr.osm')
+    osm_path = File.join(@resources_folder, 'fsr.osm')
     path = OpenStudio::Path.new(osm_path)
     model = translator.loadModel(path)
     model = model.get

@@ -1,5 +1,5 @@
-require_relative '../helpers/minitest_helper'
-require_relative '../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 #This will run all the combinations possible with the inputs for each system.  The test will.
@@ -25,18 +25,14 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_System_4_Test < MiniTest::Test
-  weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-  vintage = ['NECB2011']
 
-
-  def < % = test_name %>()
-  weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-  vintage = ['NECB2011']
+  def <%=test_name %>()
+    vintage = ['NECB2011']
     weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-    template_osm_file = '/home/osdev/openstudio-standards/test/necb/models/5ZoneNoHVAC.osm'
+    template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = '<%=system[:name] %>'
-    vintage = ' NECB2011 '
-    boiler_fueltype = ' < %=boiler_fueltype %>'
+    vintage = 'NECB2011'
+    boiler_fueltype = '<%=boiler_fueltype %>'
     heating_coil = '<%=heating_coil_type_sys4 %>'
     baseboard_type = '<%=baseboard_type %>'
     output_folder = "#{File.dirname(__FILE__)}/output/test_necb_<%=system[:name] %>"
@@ -47,7 +43,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     standard = Standard.build(vintage)
     name = "<%=system[:name] %>_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO::load_osm(template_osm_file)
     BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
     hw_loop = nil
     if (baseboard_type == "Hot Water")

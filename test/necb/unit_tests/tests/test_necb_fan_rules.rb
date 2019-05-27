@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_Tests < MiniTest::Test
@@ -8,14 +8,25 @@ class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
+
   # Test to validate variable volume fan performance curves and pressure rise
   def test_NECB2011_vav_fan_rules
     template = "NECB2011"
     standard_NECB2011 = Standard.build(template)
-    output_folder = "#{File.dirname(__FILE__)}/output/vavfan_rules"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
-    vavfan_expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_expected_results.csv')
+    vavfan_expected_result_file = File.join(@expected_results_folder, 'compliance_vavfan_curves_expected_results.csv')
     vavfan_curve_names = []
     CSV.foreach(vavfan_expected_result_file, headers: true) do |data|
       vavfan_curve_names << data['Curve Name']
@@ -28,7 +39,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     heating_coil_type = 'Electric'
     vavfan_type = 'AF_or_BI_rdg_fancurve'
     vavfan_caps = [5000.0, 10000.0, 30000.0]
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -37,7 +48,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     vavfan_caps.each do |cap|
       name = "sys6_vavfancap~#{cap}watts"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO::load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -110,10 +121,10 @@ class NECB_HVAC_Tests < MiniTest::Test
     end
 
     # Write actual results file
-    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_test_results.csv')
+    test_result_file = File.join(@test_results_folder, 'compliance_vavfan_curves_test_results.csv')
     File.open(test_result_file, 'w') {|f| f.write(vavfan_res_file_output_text.chomp)}
     # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_vavfan_curves_expected_results.csv')
+    expected_result_file = File.join(@expected_results_folder, 'compliance_vavfan_curves_expected_results.csv')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
     assert(b_result,
            "Variable volume fan performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
@@ -123,14 +134,14 @@ class NECB_HVAC_Tests < MiniTest::Test
   def test_NECB2011_const_vol_fan_rules
     template = "NECB2011"
     standard_NECB2011 = Standard.build(template)
-    output_folder = "#{File.dirname(__FILE__)}/output/const_vol_fan_rules"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     boiler_fueltype = 'NaturalGas'
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

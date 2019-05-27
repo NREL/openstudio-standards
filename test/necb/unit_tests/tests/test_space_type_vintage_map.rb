@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 # This class will perform tests that are HDD driven, A Test model will be created
 # that will have all of OpenStudios surface types with different contructions. All

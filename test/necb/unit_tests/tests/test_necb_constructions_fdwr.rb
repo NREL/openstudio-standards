@@ -1,4 +1,4 @@
-require_relative '../../helpers/minitest_helper'
+require_relative '../../../helpers/minitest_helper'
 
 
 # This class will perform tests that are HDD driven, A Test model will be created
@@ -22,6 +22,14 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
   def setup()
+
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
 
     #Create new model for testing. 
     @model = OpenStudio::Model::Model.new
@@ -86,7 +94,6 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     standard.model_clear_and_set_example_constructions(@model)
     #Ensure that building is Conditioned add spacetype to each space. 
 
-
   end
 
   #setup()
@@ -104,6 +111,9 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     # Todo - Define an adiabatic surface (See if it handle the bug)
     # Todo - Roughly 1 day of work (phylroy) 
 
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
+    FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     #Create report string. 
 
     @json_test_output = {}
@@ -233,16 +243,16 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     end # Template vintage loop
 
     #Write test report file.
-    test_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_test_results.json')
+    test_result_file = File.join(@test_results_folder, 'compliance_envelope_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(@json_test_output))}
 
 
 
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__), 'data', 'compliance_envelope_expected_results.json')
+    expected_result_file = File.join(@expected_results_folder, 'compliance_envelope_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    BTAP::FileIO::save_osm(@model, File.join(File.dirname(__FILE__), 'envelope_test.osm'))
+    BTAP::FileIO::save_osm(@model, File.join(output_folder, 'envelope_test.osm'))
     assert(b_result,
            "Envelope test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
     )

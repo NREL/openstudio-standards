@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_Tests < MiniTest::Test
@@ -8,15 +8,26 @@ class NECB_HVAC_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate the effectiveness of the hrv
   def test_NECB2011_hrv_eff
-    output_folder = "#{File.dirname(__FILE__)}/output/hrv_eff"
+    output_folder = "#{File.dirname(__FILE__)}/output/coolingtower"
     FileUtils.rm_rf(output_folder)
+    FileUtils.mkdir_p(output_folder)
     template = 'NECB2011'
     standard = Standard.build(template)
  
     # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class HVACEfficienciesTest < MiniTest::Test
@@ -8,26 +8,38 @@ class HVACEfficienciesTest < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 begin
+  def set_up_folders()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_vav
-    standard = Standard.build("NECB2011")
-    output_folder = "#{File.dirname(__FILE__)}/output/airloop_sizing_rules"
+    set_up_folders()
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
+    standard = Standard.build("NECB2011")
+
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     chiller_type = 'Reciprocating'
     heating_coil_type = 'Electric'
     vavfan_type = 'AF_or_BI_rdg_fancurve'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+
     # save baseline
+    model = BTAP::FileIO.load_osm(@resources_folder, "5ZoneNoHVAC.osm")
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     tol = 1.0e-3
     name = 'sys6'
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -107,14 +119,14 @@ begin
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     tol = 1.0e-3
     name = 'sys3'
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
     BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	

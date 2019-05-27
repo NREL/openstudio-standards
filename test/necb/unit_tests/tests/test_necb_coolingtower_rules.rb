@@ -1,5 +1,5 @@
-require_relative '../../helpers/minitest_helper'
-require_relative '../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/minitest_helper'
+require_relative '../../../helpers/create_doe_prototype_helper'
 
 
 class NECB_HVAC_Tests < MiniTest::Test
@@ -8,12 +8,22 @@ class NECB_HVAC_Tests < MiniTest::Test
   #set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '..')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
   # Test to validate NECB2011 rules for cooling tower:
   # "if capacity <= 1750 kW ---> one cell
   # if capacity > 1750 kW ---> number of cells = capacity/1750 rounded up"
   # power = 0.015 x capacity in kW
   def test_NECB2011_coolingtower
-    output_folder = "#{File.dirname(__FILE__)}/output/coolingtower"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     standard = Standard.build('NECB2011')
@@ -27,7 +37,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 4000000.0]
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -39,7 +49,7 @@ class NECB_HVAC_Tests < MiniTest::Test
       test_chiller_cap.each do |chiller_cap|
         name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
         puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
@@ -104,7 +114,7 @@ class NECB_HVAC_Tests < MiniTest::Test
   # NECB2015 rules for cooling tower
   # power = 0.013 x capacity in kW
   def test_NECB2015_coolingtower
-    output_folder = "#{File.dirname(__FILE__)}/output/coolingtower"
+    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
     standard = Standard.build('NECB2015')
@@ -117,7 +127,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     chiller_cap = 1000000.0
-    model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -126,7 +136,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     chiller_types.each do |chiller_type|
       name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
       puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm("#{File.dirname(__FILE__)}/resources/5ZoneNoHVAC.osm")
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
