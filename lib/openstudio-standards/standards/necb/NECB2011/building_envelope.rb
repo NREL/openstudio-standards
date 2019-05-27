@@ -339,24 +339,26 @@ class NECB2011
 
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
+    # Get appropriate standards table
+    standards_table = @standards_data['surface_thermal_transmittance']
 
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                           search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                                         search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                                       search_criteria: {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                         search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval(self.standards_lookup_table_many(table_name: 'surface_thermal_transmittance',
-                                                                             search_criteria: {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
+    wall_rsi = 1.0 / (scale_wall * eval(self.model_find_objects(standards_table,
+                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
+    floor_rsi = 1.0 / (scale_floor * eval(self.model_find_objects(standards_table,
+                                                                           {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
+    roof_rsi = 1.0 / (scale_roof * eval(self.model_find_objects(standards_table,
+                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
+    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.model_find_objects(standards_table,
+                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
+    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.model_find_objects(standards_table,
+                                                                                         {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
+    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.model_find_objects(standards_table,
+                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
+    door_rsi = 1.0 / (scale_door * eval(self.model_find_objects(standards_table,
+                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
+    window_rsi = 1.0 / (scale_window * eval(self.model_find_objects(standards_table,
+                                                                             {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 wall_rsi, floor_rsi, roof_rsi,
                                                                                                 ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,

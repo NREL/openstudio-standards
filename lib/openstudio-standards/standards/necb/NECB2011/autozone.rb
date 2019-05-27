@@ -27,9 +27,11 @@ class NECB2011
         space_system_index = nil
       else
         # gets row information from standards spreadsheet.
-        space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => self.class.name,
-                                                                                                    'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                                                    'building_type' => space.spaceType.get.standardsBuildingType.get})
+        space_types_table = @standards_data['space_types']
+        search_criteria = {'template' => self.class.name,
+                           'space_type' => space.spaceType.get.standardsSpaceType.get,
+                           'building_type' => space.spaceType.get.standardsBuildingType.get}
+        space_type_data = model_find_object(space_types_table, search_criteria)
         raise("Could not find spacetype information in #{self.class.name} for space_type => #{space.spaceType.get.standardsSpaceType.get} - #{space.spaceType.get.standardsBuildingType.get}") if space_type_data.nil?
       end
 
@@ -42,7 +44,7 @@ class NECB2011
       heating_design_load = space.spaceType.get.standardsSpaceType.get == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get * space.floorArea * space.multiplier / 1000.0
 
       # identify space-system_index and assign the right NECB system type 1-7.
-      necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+      necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']
       necb_hvac_system_select = necb_hvac_system_selection_table.select do |necb_hvac_system_select|
         necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
             necb_hvac_system_select['min_stories'] <= model.getBuilding.standardsNumberOfAboveGroundStories.get &&
@@ -853,8 +855,9 @@ class NECB2011
 
   #Check to see if this is a wildcard space that the NECB does not have a specified schedule or system for.
   def is_an_necb_wildcard_space?(space)
-    space_type_data = standards_lookup_table_first(table_name: 'space_types',
-                                                   search_criteria: {'template' => self.class.name,
+    space_type_table = @standards_data['space_types']
+    space_type_data = model_find_object(space_type_table,
+                                                   {'template' => self.class.name,
                                                                      'space_type' => space.spaceType.get.standardsSpaceType.get,
                                                                      'building_type' => space.spaceType.get.standardsBuildingType.get})
     raise("#{space}") if space_type_data.nil?
@@ -878,12 +881,13 @@ class NECB2011
 
   # Check if the space spactype is a dwelling unit as per NECB.
   def is_a_necb_dwelling_unit?(space)
-    space_type_data = standards_lookup_table_first(table_name: 'space_types',
-                                                   search_criteria: {'template' => self.class.name,
+    space_type_table = @standards_data['space_types']
+    space_type_data = model_find_object(space_type_table,
+                                                   {'template' => self.class.name,
                                                                      'space_type' => space.spaceType.get.standardsSpaceType.get,
                                                                      'building_type' => space.spaceType.get.standardsBuildingType.get})
 
-    necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+    necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']
     necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
       necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
           necb_hvac_system_select['min_stories'] <= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
@@ -894,12 +898,13 @@ class NECB2011
 
   # Determines what system index number is required for the space's spacetype by NECB rules.
   def get_necb_spacetype_system_selection(space)
-    space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => self.class.name,
+    space_type_table = @standards_data['space_types']
+    space_type_data = model_find_object(space_type_table, {'template' => self.class.name,
                                                                                                 'space_type' => space.spaceType.get.standardsSpaceType.get,
                                                                                                 'building_type' => space.spaceType.get.standardsBuildingType.get})
 
     # identify space-system_index and assign the right NECB system type 1-7.
-    necb_hvac_system_selection_table = standards_lookup_table_many(table_name: 'necb_hvac_system_selection_type')
+    necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']
     necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
       necb_hvac_system_select['necb_hvac_system_selection_type'] == space_type_data['necb_hvac_system_selection_type'] &&
           necb_hvac_system_select['min_stories'] <= space.model.getBuilding.standardsNumberOfAboveGroundStories.get &&
@@ -971,7 +976,7 @@ class NECB2011
 
   def determine_dominant_schedule(spaces)
     # lookup necb space type properties
-    space_type_properties = standards_lookup_table_many(table_name: 'space_types')
+    space_type_properties = @standards_data['space_types']
     # Here is a hash to keep track of the m2 running total of spacetypes for each
     # sched type.
     # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
@@ -1020,7 +1025,7 @@ class NECB2011
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
-    spacetype_data = standards_lookup_table_many(table_name: 'space_types')
+    spacetype_data = @standards_data['space_types']
     raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}

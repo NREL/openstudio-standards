@@ -20,7 +20,8 @@ class NECB2011SpaceTypesDefaultConstructionsTest < Minitest::Test
           "template" => template,
       }
       # lookup space type properties
-      standard.standards_lookup_table_many(table: "space_types", search_criteria: search_criteria).each do |space_type_properties|
+      standards_table = standard.standards_data['space_types']
+      standard.model_find_objects(standards_table, search_criteria).each do |space_type_properties|
         [1, 2, 3, 5].each do |stories|
           header_output = ""
           # Create a space type
