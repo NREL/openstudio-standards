@@ -8,7 +8,7 @@ class HVACEfficienciesTest < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 begin
-  def set_up_folders()
+  def setup()
     @file_folder = __dir__
     @test_folder = File.join(@file_folder, '..')
     @root_folder = File.join(@test_folder, '..')
@@ -20,7 +20,6 @@ begin
 
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_vav
-    set_up_folders()
     output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
@@ -33,7 +32,7 @@ begin
     vavfan_type = 'AF_or_BI_rdg_fancurve'
 
     # save baseline
-    model = BTAP::FileIO.load_osm(@resources_folder, "5ZoneNoHVAC.osm")
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     tol = 1.0e-3

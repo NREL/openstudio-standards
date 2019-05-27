@@ -8,6 +8,15 @@ class NECB2015PumpPowerTest < MiniTest::Test
   #set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '../../../')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
   # NECB2015 rules for cooling tower
   # power = 0.013 x capacity in kW
   # Note that most of the code was copied from 2015 part of test_necb_coolingtower_rules.rb because it creates a building

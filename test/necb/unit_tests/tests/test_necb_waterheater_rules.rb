@@ -8,6 +8,17 @@ class NECB_SHW_Tests < MiniTest::Test
   # set to true to run the simulations.
   FULL_SIMULATIONS = false
 
+  def setup()
+    @file_folder = __dir__
+    @test_folder = File.join(@file_folder, '..')
+    @root_folder = File.join(@test_folder, '../../../')
+    @resources_folder = File.join(@test_folder, 'resources')
+    @expected_results_folder = File.join(@test_folder, 'expected_results')
+    @test_results_folder = @expected_results_folder
+    @top_output_folder = "#{@test_folder}/output/"
+  end
+
+
   # Test to validate part-load performance curve of gas fired shw heater
   def test_NECB2011_shw_curves
     output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
