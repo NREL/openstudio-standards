@@ -170,11 +170,11 @@ class SHW_test < Minitest::Test
       end #loop to the next epw_file
     end #loop to the next Template
     #Write test report file. 
-    test_result_file = File.join(File.dirname(__FILE__),'data','shw_test_results.json')
+    test_result_file = File.join(@test_results_folder,'shw_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
     #Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(File.dirname(__FILE__),'data','shw_expected_results.json')
+    expected_result_file = File.join(@expected_results_folder,'shw_expected_results.json')
     b_result = FileUtils.compare_file(expected_result_file , test_result_file )
     assert( b_result, 
       "shw test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
