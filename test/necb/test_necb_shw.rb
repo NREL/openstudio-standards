@@ -41,8 +41,8 @@ class SHW_test < Minitest::Test
               "template" => template,
               "building_type" => "Space Function"
           }
-          space_type_data = standard.standards_lookup_table_many(table_name: "space_types",
-                                                                 search_criteria: search_criteria)
+          standards_table = standard.standards_data['space_types']
+          space_type_data = standard.model_find_objects(standards_table, search_criteria)
           # Get the space types in the model.
           space_types = model.getSpaceTypes
           # Determine the total number of space types retrieved from the JSON file.
