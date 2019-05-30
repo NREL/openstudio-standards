@@ -174,7 +174,6 @@ necb/system_tests/tests/test_necb_hvac_system_6_fuel_oil2_hot_water_electric__sc
 necb/unit_tests/tests/test_necb_waterheater_rules.rb
 necb/unit_tests/tests/test_necb_boiler_rules.rb
 necb/unit_tests/tests/test_necb_unitary_rules.rb
-necb/unit_tests/tests/test_space_type_vintage_map.rb
 necb/unit_tests/tests/test_necb_hrv_rules.rb
 necb/unit_tests/tests/test_necb_heatpump_rules.rb
 necb/unit_tests/tests/test_necb_airloop_sizing_parameters.rb
