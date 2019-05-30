@@ -32,7 +32,7 @@ if ENV['CI'] == 'true'
 end
 require 'minitest/reporters'
 
-require '/usr/local/openstudio-2.8.0/Ruby/openstudio'
+require 'openstudio'
 require 'openstudio/measure/ShowRunnerOutput'
 require 'json'
 require 'fileutils'
