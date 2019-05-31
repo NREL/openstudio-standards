@@ -81,7 +81,7 @@ class GeneratorNECBRegressionTests
     return filenames
   end
 end
-
+puts GeneratorNECBRegressionTests.new().generate_necb_bldg_test_files
 
 
 
