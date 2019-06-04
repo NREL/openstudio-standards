@@ -54,6 +54,46 @@ module RetailStandalone
       infiltration_entry.setVelocitySquaredTermCoefficient(0.0)
     end
 
+    case template
+    when '90.1-2013'  
+      # Add EMS for controlling the system serving the front entry zone
+      oa_sens = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Site Outdoor Air Drybulb Temperature')
+      oa_sens.setName('OAT_F')
+      oa_sens.setKeyName('Environment')
+      
+      model.getFanConstantVolumes.each do |fan|
+        if fan.name.to_s.include? 'Front' and fan.name.to_s.include? 'Entry'
+          frt_entry_avail_fan_sch = fan.availabilitySchedule
+          frt_entry_fan = OpenStudio::Model::EnergyManagementSystemActuator.new(frt_entry_avail_fan_sch, 'Schedule:Year', 'Schedule Value')
+          frt_entry_fan.setName('FrontEntry_Fan')
+        end
+      end
+
+      model.getCoilHeatingGass.each do |coil|
+        if coil.name.to_s.include? 'Front' and coil.name.to_s.include? 'Entry'
+          frt_entry_avail_coil_sch = coil.availabilitySchedule
+          frt_entry_coil = OpenStudio::Model::EnergyManagementSystemActuator.new(frt_entry_avail_coil_sch, 'Schedule:Year', 'Schedule Value')
+          frt_entry_coil.setName('FrontEntry_Coil')
+        end
+      end
+
+      frt_entry_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      frt_entry_prg.setName('FrontEntry_HeaterControl')
+      frt_entry_prg_body = <<-EMS
+      SET OAT_F = (OAT_F*1.8)+32
+      IF OAT_F > 45
+        SET FrontEntry_Coil = 0
+        SET FrontEntry_Fan = 0
+      ENDIF
+      EMS
+      frt_entry_prg.setBody(frt_entry_prg_body)
+      
+      prg_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      prg_mgr.setName('FrontEntry_HeaterManager')
+      prg_mgr.setCallingPoint('BeginTimestepBeforePredictor')
+      prg_mgr.addProgram(frt_entry_prg)
+    end
+    
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
     return true
