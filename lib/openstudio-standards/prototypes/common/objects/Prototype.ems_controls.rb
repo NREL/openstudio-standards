@@ -543,6 +543,11 @@ class Standard
           IF (#{zone_name}_daily_cool_sum_one > 0) || ((#{zone_name}_daily_heat_sum_one <= 0) && (#{zone_name}_CMD_CSP_ERROR < 0)),
               SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP + (#{zone_name}_CMD_CSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
           ENDIF,
+          IF (#{zone_name}_CMD_SLAB_CSP < #{zone_name}_Lower_Comfort_Limit),
+            SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_Lower_Comfort_Limit,
+          ELSEIF (#{zone_name}_CMD_SLAB_CSP > #{zone_name}_Upper_Comfort_Limit),
+            SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_Upper_Comfort_Limit,
+          ENDIF,
       ENDIF
     EMS
     calculate_cool_ctrl_setpoint_prg.setBody(calculate_cool_ctrl_setpoint_prg_body)
@@ -554,6 +559,11 @@ class Standard
       IF (unoccupied == 1) && (weekend == 0),
           IF (#{zone_name}_daily_heat_sum_one > 0) || ((#{zone_name}_daily_cool_sum_one <= 0) && (#{zone_name}_CMD_HSP_ERROR > 0)),
               SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
+          ENDIF,
+          IF (#{zone_name}_CMD_SLAB_HSP < #{zone_name}_Lower_Comfort_Limit),
+            SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_Lower_Comfort_Limit,
+          ELSEIF (#{zone_name}_CMD_SLAB_HSP > #{zone_name}_Upper_Comfort_Limit),
+            SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_Upper_Comfort_Limit,
           ENDIF,
       ENDIF
     EMS
