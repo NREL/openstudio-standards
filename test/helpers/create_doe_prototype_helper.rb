@@ -50,7 +50,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       create_models = true,
       run_models = true,
       compare_results = true,
-      debug = false)
+      debug = false,
+      run_type = 'annual',
+      compare_results_object_by_object = true )
 
     building_types.each do |building_type|
       templates.each do |template|
@@ -58,12 +60,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
-              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
+              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
             end 
           else
             #otherwise it will go as normal with the american method and wipe the epw_file variable. 
             epw_file = ""
-            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug )
+            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
           end
         end
       end
@@ -77,7 +79,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       create_models,
       run_models,
       compare_results,
-      debug )
+      debug,
+      run_type,
+      compare_results_object_by_object )
 
     method_name = nil
     case template
@@ -157,6 +161,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           ]
           # BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
 
+          if run_type == 'dd-only'
+            # Get summer and winter design days days/month
+            sim_ctrl = model.getSimulationControl
+            sim_ctrl.setRunSimulationforSizingPeriods(true)
+            sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+		  end
+
           # Save the model
           model.save(osm_path, true)
 
@@ -180,8 +191,34 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           model = prototype_creator.safe_load_model(osm_path_string)
         end
 
-        # Run the annual simulation
-        prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        if run_type == 'dd-only'
+          # Get summer and winter design days days/month
+          sim_ctrl = model.getSimulationControl
+          sim_ctrl.setRunSimulationforSizingPeriods(true)
+          sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+          
+          # Remove all meters
+          model.getOutputMeters.each(&:remove)
+
+          # EnergyPlus I/O Reference Manual, Table 5.3
+          end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
+
+          # EnergyPLus I/O Reference Manual, Table 5.1
+          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          
+          # Creating individual meters
+          meters = end_uses.product fuels
+          meters.each do |end_use, fuel|
+            mtr = OpenStudio::Model::OutputMeter.new(model)
+            mtr.setName(end_use + ":" + fuel)
+            mtr.setReportingFrequency("Monthly")
+          end
+
+          prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        else
+          # Run the annual simulation
+          prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
+        end
 
       end           
 
@@ -199,10 +236,14 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
         ### Compare simulation results ###
 
-        acceptable_error_percentage = 0.0
+        acceptable_error_percentage = 0.001
 
         # Get the legacy simulation results
-        legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+        if run_type == 'dd-only'
+          legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+        else
+          legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+        end
         if legacy_values.nil?
           result_diffs << "Could not find legacy simulation results for #{building_type} #{template} #{climate_zone}, cannot compare results."
         else
@@ -211,7 +252,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           results_comparison << ['Building Type', 'Template', 'Climate Zone', 'Fuel Type', 'End Use', 'Legacy Value', 'Current Value', 'Percent Error', 'Difference']
 
           # Get the current simulation results
-          current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+          if run_type == 'dd-only'
+            current_values = prototype_creator.model_dd_results_by_end_use_and_fuel_type(model)
+          else         
+            current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+          end
 
           # Get the osm values for all fuel type/end use pairs
           # and compare to the legacy simulation results
@@ -268,7 +313,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if total_current_energy > 0 && total_legacy_energy > 0
             # If both
             total_energy_percent_error = ((total_current_energy - total_legacy_energy)/total_legacy_energy) * 100
-            result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+            if total_energy_percent_error.abs > acceptable_error_percentage
+              result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+            end
           elsif total_current_energy > 0 && total_legacy_energy == 0
             # The osm has a fuel/end use that the legacy idf does not
             total_energy_percent_error = 1000
@@ -297,29 +344,31 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           end
         end
 
-        ### Compare models object by object ###
+        if compare_results_object_by_object
+          ### Compare models object by object ###
 
-        # Load the model from disk if not already in memory
-        if model.nil?
-          model = prototype_creator.safe_load_model(osm_path_string)
-        end
+          # Load the model from disk if not already in memory
+          if model.nil?
+            model = prototype_creator.safe_load_model(osm_path_string)
+          end
 
-        # Load the truth model from disk and compare to the newly-created model
-        if File.exist?(truth_osm_path_string)
-          truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
-          # Remove unused resources to make comparison cleaner
-          prototype_creator.model_remove_unused_resource_objects(truth_model)
-          model_diffs = compare_osm_files(truth_model, model)
-        else
-          model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
-        end
+          # Load the truth model from disk and compare to the newly-created model
+          if File.exist?(truth_osm_path_string)
+            truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
+            # Remove unused resources to make comparison cleaner
+            prototype_creator.model_remove_unused_resource_objects(truth_model)
+            model_diffs = compare_osm_files(truth_model, model)
+          else
+            model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
+          end
 
-        # Write the model diffs to a file
-        if model_diffs.size > 0
-          diff_file_path = "#{run_dir}/compare_models.log"
-          File.open(diff_file_path, 'w') do |file|
-            model_diffs.each do |d|
-              file.puts d
+          # Write the model diffs to a file
+          if model_diffs.size > 0
+            diff_file_path = "#{run_dir}/compare_models.log"
+            File.open(diff_file_path, 'w') do |file|
+              model_diffs.each do |d|
+                file.puts d
+              end
             end
           end
         end
@@ -344,6 +393,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Assert if there were any errors
       assert(errors.size == 0, errors.reverse.join("\n"))
+	  
+      # Assert if there is no difference in results
+      assert(result_diffs.size == 0)
+
+      if result_diffs.size > 0
+        puts result_diffs
+      end
 
     end
   end

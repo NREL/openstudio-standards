@@ -2621,7 +2621,7 @@ class Standard
   # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
   # values of 0.0 if none of this end use/fuel type combo was used by the simulation.  Returns nil
   # if the legacy results couldn't be found.
-  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
     # Load the legacy idf results CSV file into a ruby hash
     top_dir = File.expand_path('../../..', File.dirname(__FILE__))
     standards_data_dir = "#{top_dir}/data/standards"
@@ -2629,10 +2629,18 @@ class Standard
     # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
     if __dir__[0] == ':' # Running from OpenStudio CLI
       # load file from embedded files
-      temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
+      if run_type == 'dd-only'
+        temp = load_resource_relative('../../../data/standards/legacy_dd_results.csv', 'r:UTF-8')
+      else
+        temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
+      end
     else
       # loaded gem from system path
-      temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
+      if run_type == 'dd-only'
+        temp = File.read("#{standards_data_dir}/legacy_dd_results.csv")
+      else
+        temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
+      end
     end
     legacy_idf_csv = CSV.new(temp, :headers => true, :converters => :all)
     legacy_idf_results = legacy_idf_csv.to_a.map {|row| row.to_hash }
@@ -2665,8 +2673,8 @@ class Standard
     legacy_results_hash['total_energy_by_fuel'] = {}
     legacy_results_hash['total_energy_by_end_use'] = {}
 
-    # Get the lecay simulation results
-    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type)
+    # Get the legacy simulation results
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual')
     if legacy_values.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
       return legacy_results_hash
