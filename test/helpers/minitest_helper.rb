@@ -46,5 +46,12 @@ rescue LoadError
   puts 'Using installed openstudio-standards gem.' 
 end
 
-# Add more detail to test output
-Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+# Set the output reporting format based on the run environment
+if ENV['RM_INFO'] # RubyMine
+  ENV.delete('RM_INFO') # Delete this environment variable because it forces use of only RubyMineReporter
+  Minitest::Reporters.use! [Minitest::Reporters::RubyMineReporter.new]
+elsif ENV['JENKINS_HOME'] # Jenkins
+  Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new, Minitest::Reporters::JUnitReporter.new(reports_dir = "test/reports", empty = false)]
+else # Terminal or other
+  Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+end
