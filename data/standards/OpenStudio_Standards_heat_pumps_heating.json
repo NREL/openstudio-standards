@@ -903,7 +903,7 @@
     {
       "template": "DEER 1985",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -923,7 +923,7 @@
     {
       "template": "DEER 1996",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -943,7 +943,7 @@
     {
       "template": "DEER 2003",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -963,7 +963,7 @@
     {
       "template": "DEER 2007",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -983,7 +983,7 @@
     {
       "template": "DEER 2011",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1003,7 +1003,7 @@
     {
       "template": "DEER 2014",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1023,7 +1023,7 @@
     {
       "template": "DEER 2015",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1043,7 +1043,7 @@
     {
       "template": "DEER 2020",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1063,7 +1063,7 @@
     {
       "template": "DEER 2025",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1803,7 +1803,7 @@
     {
       "template": "DEER 2030",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1823,7 +1823,7 @@
     {
       "template": "DEER 2035",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1843,7 +1843,7 @@
     {
       "template": "DEER 2040",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1863,7 +1863,7 @@
     {
       "template": "DEER 2045",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1883,7 +1883,7 @@
     {
       "template": "DEER 2050",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1903,7 +1903,7 @@
     {
       "template": "DEER 2055",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1923,7 +1923,7 @@
     {
       "template": "DEER 2060",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1943,7 +1943,7 @@
     {
       "template": "DEER 2065",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1963,7 +1963,7 @@
     {
       "template": "DEER 2070",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -1983,7 +1983,7 @@
     {
       "template": "DEER 2075",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -2083,7 +2083,7 @@
     {
       "template": "DEER Pre-1975",
       "cooling_type": "AirCooled",
-      "subcategory": "Single Package",
+      "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
       "start_date": "1919-09-09T00:00:00+00:00",
