@@ -1,0 +1,3211 @@
+{
+  "tables": {
+    "space_compliance": {
+      "data_type": "table",
+      "refs": {
+        "lighting_per_area_w_per_m2": "Table 4.2.1.6",
+        "occupancy_per_area_people_per_m2": "Table A-8.4.3.3.1",
+        "occupancy_schedule": "Table A-8.4.3.3.1",
+        "electric_equipment_per_area_w_per_m2": "Table A-8.4.3.3.1"
+      },
+      "tolerance": {
+        "lighting_per_area_w_per_m2": 1,
+        "occupancy_per_area_people_per_m2": 3,
+        "occupancy_schedule": null,
+        "electric_equipment_per_area_w_per_m2": 1
+      },
+      "table": [
+        {
+          "template": "NECB2015",
+          "building_type": "Automotive facility",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 8.60312913012721,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Convention centre",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.90396599051007,
+          "occupancy_per_area_people_per_m2": 0.12504548154254666,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.01894158423301723
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Courthouse",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.90396599051007,
+          "occupancy_per_area_people_per_m2": 0.0666909234893582,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.020204352927246698
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Dining - bar lounge/leisure",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.90396599051007,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.05808751062936611
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Dining - cafeteria/fast food",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.70352936770162,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.05808751062936611
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Dining - family",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.203711293871807,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.05808751062936611
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Dormitory",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 6.102219499276277,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.08418480565751374
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Exercise centre",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.003274671063359,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Fire station",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 7.2026197368506875,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.08081741170898679
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Gymnasium",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.10367490863777,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Health care clinic",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.70352936770162,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Hospital",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 11.304111531446217,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Hotel/Motel",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.403420211999508,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Library",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 12.804657309956777,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Long-term care - dwelling units",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 5.502001187872053,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Long-term care - other",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 5.502001187872053,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Manufacturing facility",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 12.604584539488702,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Motion picture theatre",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 8.20298358919106,
+          "occupancy_per_area_people_per_m2": 0.12504548154254666,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.01894158423301723
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Multi-unit residential building",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 5.502001187872053,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Museum",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 11.004002375744106,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Office",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 8.803201900595285,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.0181839122525645
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Penitentiary",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 8.703165515361247,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.06734784667879401
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Performing arts theatre",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 14.90542139987156,
+          "occupancy_per_area_people_per_m2": 0.12504548154254666,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.01894158423301723
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Police station",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.403420211999508,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.0181839122525645
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Post office",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.403420211999508,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.0181839122525645
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Religious building",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 10.803929605276032,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Retail area",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 13.50491200659504,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.006734787897053916
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "School/university",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.403420211999508,
+          "occupancy_per_area_people_per_m2": 0.12504548154254666,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.03788315770211941
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Sports arena",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.803565752935658,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Storage garage",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 2.3008368603828586,
+          "occupancy_per_area_people_per_m2": 0.0010003638523403732,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Town hall",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 9.603492982467584,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.0181839122525645
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Transportation facility",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 7.502728892552799,
+          "occupancy_per_area_people_per_m2": 0.0666909234893582,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02188804451955265
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Warehouse",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.0006669092348935823,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.0010102171081665823
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Workshop",
+          "space_type": "WholeBuilding",
+          "lighting_per_area_w_per_m2": 12.804657309956777,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-A",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-B",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-C",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-D",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-E",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-F",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-G",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-H",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-I",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-J",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height < 6m)-sch-K",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-A",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-B",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-C",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-D",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-E",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-F",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-G",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-H",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-I",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-J",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (6 =< height <= 12m)-sch-K",
+          "lighting_per_area_w_per_m2": 1.0603856834807959,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-A",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-B",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-C",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-D",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-E",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-F",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-G",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-H",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-I",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-J",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Atrium (height > 12m)-sch-K",
+          "lighting_per_area_w_per_m2": 5.01182290022527,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - auditorium",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - convention centre",
+          "lighting_per_area_w_per_m2": 8.903238285829323,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - gymnasium",
+          "lighting_per_area_w_per_m2": 7.002546966382613,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - motion picture theatre",
+          "lighting_per_area_w_per_m2": 12.304475383786594,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - penitentiary",
+          "lighting_per_area_w_per_m2": 3.0010915570211196,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - performing arts theatre",
+          "lighting_per_area_w_per_m2": 26.209532931317778,
+          "occupancy_per_area_people_per_m2": 0.1333818469787164,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - religious building",
+          "lighting_per_area_w_per_m2": 16.506003563616158,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - sports arena",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-A",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-B",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-C",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-D",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-E",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-F",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-G",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-H",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-I",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-J",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Audience seating area permanent - other-sch-K",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Banking activity area and offices",
+          "lighting_per_area_w_per_m2": 10.90396599051007,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.012122611756348019
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Classroom/Lecture hall/Training room - Penitentary",
+          "lighting_per_area_w_per_m2": 14.505275858935413,
+          "occupancy_per_area_people_per_m2": 0.1333818469787164,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.04377609980302036
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Classroom/Lecture hall/Training room other",
+          "lighting_per_area_w_per_m2": 13.404875621361002,
+          "occupancy_per_area_people_per_m2": 0.1333818469787164,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.04377609980302036
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-A",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-B",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-C",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-D",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-E",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-F",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-G",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-H",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-I",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-J",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Computer/Server room-sch-K",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 200.07277046807468,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Conference/Meeting/Multi-purpose room",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Confinement cell",
+          "lighting_per_area_w_per_m2": 8.803201900595285,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.065664144322573
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Copy/Print room",
+          "lighting_per_area_w_per_m2": 7.802838048254912,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 60.02183114042239,
+          "service_water_heating_peak_flow_per_area": 0.004545978063141125
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-A",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-B",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-C",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-D",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-E",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-F",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-G",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-H",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-I",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-J",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - hospital-sch-K",
+          "lighting_per_area_w_per_m2": 10.703893220041993,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-A",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-B",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-C",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-D",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-E",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-F",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-G",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-H",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-I",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-J",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - manufacturing facility-sch-K",
+          "lighting_per_area_w_per_m2": 4.4016009502976425,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-A",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-B",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-C",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-D",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-E",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-F",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-G",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-H",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-I",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-J",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area - space designed to ANSI/IES RP-28 (and used primarily by residents)-sch-K",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-A",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-B",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-C",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-D",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-E",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-F",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-G",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-H",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-I",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-J",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Corridor/Transition area other-sch-K",
+          "lighting_per_area_w_per_m2": 7.10258335161665,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Courtroom",
+          "lighting_per_area_w_per_m2": 18.606767653530945,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - bar lounge/leisure dining",
+          "lighting_per_area_w_per_m2": 11.604220687148329,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - cafeteria/fast food dining",
+          "lighting_per_area_w_per_m2": 7.002546966382613,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - family dining",
+          "lighting_per_area_w_per_m2": 9.603492982467584,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - penitentiary",
+          "lighting_per_area_w_per_m2": 10.303747679105847,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - space designed to ANSI/IES RP-28 (used primarily by residents)",
+          "lighting_per_area_w_per_m2": 28.510369791700636,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dining area - other",
+          "lighting_per_area_w_per_m2": 7.002546966382613,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dressing/Fitting room - performing arts theatre",
+          "lighting_per_area_w_per_m2": 6.602401425446463,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.006734787897053916
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-A",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-B",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-C",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-D",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-E",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-F",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-G",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-H",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-I",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-J",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Electrical/Mechanical room-sch-K",
+          "lighting_per_area_w_per_m2": 4.601673720765717,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Emergency vehicle garage",
+          "lighting_per_area_w_per_m2": 6.102219499276277,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.065664144322573
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Food preparation area",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Guest room",
+          "lighting_per_area_w_per_m2": 5.1018556469359035,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.12122611756348019
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Laboratory - classrooms",
+          "lighting_per_area_w_per_m2": 15.505639711275785,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Laboratory - other",
+          "lighting_per_area_w_per_m2": 19.50709512063728,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Laundry/Washing area",
+          "lighting_per_area_w_per_m2": 6.5023650402124265,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 20.007277046807467,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Loading dock interior",
+          "lighting_per_area_w_per_m2": 5.1018556469359035,
+          "occupancy_per_area_people_per_m2": 0.0020007277046807464,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - elevator",
+          "lighting_per_area_w_per_m2": 7.002546966382613,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - hotel",
+          "lighting_per_area_w_per_m2": 11.504184301914291,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - motion picture theatre",
+          "lighting_per_area_w_per_m2": 6.402328654978389,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - performing arts theatre",
+          "lighting_per_area_w_per_m2": 21.607859210552064,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - space designed to ANSI/IES RP-28 (used primarily by residents)",
+          "lighting_per_area_w_per_m2": 19.40705873540324,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lobby - other",
+          "lighting_per_area_w_per_m2": 9.70352936770162,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-A",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-B",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-C",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-D",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-E",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-F",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-G",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-H",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-I",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-J",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Locker room-sch-K",
+          "lighting_per_area_w_per_m2": 8.102947203957024,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lounge/Break room - health care facility",
+          "lighting_per_area_w_per_m2": 10.003638523403733,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Lounge/Break room - other",
+          "lighting_per_area_w_per_m2": 7.902874433488949,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.030306524008912525
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Office enclosed <= 25 m2",
+          "lighting_per_area_w_per_m2": 12.004366228084479,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Office enclosed > 25 m2",
+          "lighting_per_area_w_per_m2": 12.004366228084479,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Office open plan",
+          "lighting_per_area_w_per_m2": 10.603856834807956,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Pharmacy area",
+          "lighting_per_area_w_per_m2": 18.10658572736076,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.01136495053981034
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Sales area",
+          "lighting_per_area_w_per_m2": 15.505639711275785,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.006734787897053916
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-A",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-B",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-C",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-D",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-E",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-F",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-G",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-H",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-I",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-J",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Seating area general-sch-K",
+          "lighting_per_area_w_per_m2": 5.902146728808202,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-A",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-B",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-C",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-D",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-E",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-F",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-G",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-H",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-I",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-J",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Stairway/Stairwell-sch-K",
+          "lighting_per_area_w_per_m2": 7.402692507318762,
+          "occupancy_per_area_people_per_m2": 0.005001819261701867,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage garage interior",
+          "lighting_per_area_w_per_m2": 2.100764089914784,
+          "occupancy_per_area_people_per_m2": 0.0010003638523403732,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-A",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-B",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-C",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-D",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-E",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-F",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-G",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-H",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-I",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-J",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room < 5 m2-sch-K",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-A",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-B",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-C",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-D",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-E",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-F",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-G",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-H",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-I",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-J",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room <= 5 m2 <= 100 m2-sch-K",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-A",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-B",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-C",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-D",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-E",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-F",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-G",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-H",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-I",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-J",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Storage room > 100 m2-sch-K",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Vehicle maintenance area",
+          "lighting_per_area_w_per_m2": 6.802474195914538,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-A",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-B",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-C",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-D",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-E",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-F",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-G",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-H",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-I",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-J",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - space designed to ANSI/IES RP-28 (used primarily by residents)-sch-K",
+          "lighting_per_area_w_per_m2": 13.104766465658889,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-A",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-B",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-C",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-D",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-D-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-E",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-E-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-F",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-F-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-G",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-H",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-I",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom - other-sch-J",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Washroom other-sch-K",
+          "lighting_per_area_w_per_m2": 10.503820449573919,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-K-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Workshop",
+          "lighting_per_area_w_per_m2": 17.20625826025442,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Convention centre exhibit space",
+          "lighting_per_area_w_per_m2": 15.70571248174386,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dormitory living quarters",
+          "lighting_per_area_w_per_m2": 4.201528179829568,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dwelling units general",
+          "lighting_per_area_w_per_m2": 5.001819261701867,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Dwelling units long-term",
+          "lighting_per_area_w_per_m2": 5.001819261701867,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-J-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Fire station sleeping quarters",
+          "lighting_per_area_w_per_m2": 2.400873245616896,
+          "occupancy_per_area_people_per_m2": 0.040014554093614936,
+          "occupancy_schedule": "NECB-G-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.1010217646362335
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Gymnasium/Fitness centre exercise area",
+          "lighting_per_area_w_per_m2": 7.802838048254912,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Gymnasium/Fitness centre playing area",
+          "lighting_per_area_w_per_m2": 13.004730080424853,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility exam/treatment room",
+          "lighting_per_area_w_per_m2": 18.006549342126718,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility imaging room",
+          "lighting_per_area_w_per_m2": 16.305930793148086,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility medical supply room",
+          "lighting_per_area_w_per_m2": 8.002910818722986,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility nursery",
+          "lighting_per_area_w_per_m2": 9.503456597233546,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility nurses station",
+          "lighting_per_area_w_per_m2": 7.602765277786836,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.01136495053981034
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility operating room",
+          "lighting_per_area_w_per_m2": 26.809751242722005,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.07576632616815389
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility patient room",
+          "lighting_per_area_w_per_m2": 6.702437810680501,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility physical therapy room",
+          "lighting_per_area_w_per_m2": 9.903602138169695,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.01136495053981034
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Health care facility recovery room",
+          "lighting_per_area_w_per_m2": 12.40451176902063,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Library reading area",
+          "lighting_per_area_w_per_m2": 11.504184301914291,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Library stacks",
+          "lighting_per_area_w_per_m2": 18.40669488306287,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Manufacturing facility detailed manufacturing area",
+          "lighting_per_area_w_per_m2": 13.905057547531188,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Manufacturing facility equipment room",
+          "lighting_per_area_w_per_m2": 8.002910818722986,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Manufacturing facility extra high bay area (> 15 m floor-to-ceiling height)",
+          "lighting_per_area_w_per_m2": 11.304111531446217,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Manufacturing facility high bay area (7.5 to 15 m floor-to-ceiling height)",
+          "lighting_per_area_w_per_m2": 13.304839236126966,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Manufacturing facility low bay area (< 7.5 m floor-to-ceiling height)",
+          "lighting_per_area_w_per_m2": 12.904693695190815,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 10.003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Museum general exhibition area",
+          "lighting_per_area_w_per_m2": 11.404147916680255,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.060613058781740094
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Museum restoration room",
+          "lighting_per_area_w_per_m2": 11.004002375744106,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 5.001819261701867,
+          "service_water_heating_peak_flow_per_area": 0.012627719234039804
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Post office sorting area",
+          "lighting_per_area_w_per_m2": 10.203711293871807,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 7.502728892552799,
+          "service_water_heating_peak_flow_per_area": 0.02272990107962068
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Religious building fellowship hall",
+          "lighting_per_area_w_per_m2": 6.902510581148576,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.04545979139532631
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Religious building worship/pulpit/choir area",
+          "lighting_per_area_w_per_m2": 16.506003563616158,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Retail facility dressing/fitting room",
+          "lighting_per_area_w_per_m2": 7.702801663020875,
+          "occupancy_per_area_people_per_m2": 0.0333454617446791,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.006734787897053916
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Retail facility mall concourse",
+          "lighting_per_area_w_per_m2": 11.904329842850442,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-C-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.007576633693206893
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Space designed to ANSI/IES RP-28 chapel (used primarily by residents)",
+          "lighting_per_area_w_per_m2": 23.90869607093492,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-I-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.007576633693206893
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Space designed to ANSI/IES RP-28 recreation room (used primarily by residents)",
+          "lighting_per_area_w_per_m2": 25.909423775615664,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.015153267386413786
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Sports arena playing area class I facility(4)",
+          "lighting_per_area_w_per_m2": 39.71444493791282,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Sports arena playing area class II facility(4)",
+          "lighting_per_area_w_per_m2": 25.909423775615664,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Sports arena playing area class III facility(4)",
+          "lighting_per_area_w_per_m2": 19.40705873540324,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Sports arena playing area class IV facility(4)",
+          "lighting_per_area_w_per_m2": 13.004730080424853,
+          "occupancy_per_area_people_per_m2": 0.20007277046807467,
+          "occupancy_schedule": "NECB-B-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.5005457785105598,
+          "service_water_heating_peak_flow_per_area": 0.09091958279065263
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Transportation facility airport concourse",
+          "lighting_per_area_w_per_m2": 3.901419024127456,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0.01641603608064325
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Transportation facility baggage/carousel area",
+          "lighting_per_area_w_per_m2": 5.702073958340128,
+          "occupancy_per_area_people_per_m2": 0.05001819261701867,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.01641603608064325
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Transportation facility terminal ticket counter",
+          "lighting_per_area_w_per_m2": 8.703165515361247,
+          "occupancy_per_area_people_per_m2": 0.10003638523403734,
+          "occupancy_schedule": "NECB-H-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 2.5009096308509333,
+          "service_water_heating_peak_flow_per_area": 0.0328320721612865
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Warehouse storage area medium to bulky palletized items",
+          "lighting_per_area_w_per_m2": 6.202255884510315,
+          "occupancy_per_area_people_per_m2": 0.010003638523403734,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.0032832093689116604
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "Warehouse storage area small hand-carried items(4)",
+          "lighting_per_area_w_per_m2": 10.203711293871807,
+          "occupancy_per_area_people_per_m2": 0.020007277046807468,
+          "occupancy_schedule": "NECB-A-Occupancy",
+          "electric_equipment_per_area_w_per_m2": 1.0003638523403733,
+          "service_water_heating_peak_flow_per_area": 0.006566418737823321
+        },
+        {
+          "template": "NECB2015",
+          "building_type": "Space Function",
+          "space_type": "- undefined -",
+          "lighting_per_area_w_per_m2": 0,
+          "occupancy_per_area_people_per_m2": 0,
+          "occupancy_schedule": 0,
+          "electric_equipment_per_area_w_per_m2": 0,
+          "service_water_heating_peak_flow_per_area": 0
+        }
+      ]
+    }
+  }
+}

@@ -159,6 +159,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             "Cooling Tower Fan Electric Power",
             "Cooling Tower Fan Electric Energy"
           ]
+          BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
           # BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
 
           if run_type == 'dd-only'
@@ -656,7 +657,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       end
     end
 
-    csv_file_total.close 
+    csv_file_total.close
 
     # Create a CSV to store the results
     csv_file = File.open("#{Dir.pwd}/output/comparison#{file_ext}.csv", 'w')

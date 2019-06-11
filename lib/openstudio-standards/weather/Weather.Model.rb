@@ -175,7 +175,7 @@ class Standard
   end
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
-    ground_temp_vals = model_find_object(standards_data['ground_temperatures'], 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type)
+    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = model.getSiteGroundTemperatureBuildingSurface
       ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])

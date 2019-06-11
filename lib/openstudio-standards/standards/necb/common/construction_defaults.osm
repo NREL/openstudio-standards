@@ -1,0 +1,2887 @@
+
+OS:Version,
+  {d73e95ec-9748-4651-afdc-0dfc71438ed2}, !- Handle
+  2.4.3;                                  !- Version Identifier
+
+OS:Site,
+  {780cebd4-d970-49f6-8a67-996a6b51b6bf}, !- Handle
+  Calgary Intl AP_AB_CAN,                 !- Name
+  51.114,                                 !- Latitude {deg}
+  -114.02,                                !- Longitude {deg}
+  -7,                                     !- Time Zone {hr}
+  1084.1,                                 !- Elevation {m}
+  City;                                   !- Terrain
+
+OS:SimulationControl,
+  {8e6d581c-8bc1-4ad1-93a1-3671638d2d44}, !- Handle
+  Yes,                                    !- Do Zone Sizing Calculation
+  Yes,                                    !- Do System Sizing Calculation
+  Yes,                                    !- Do Plant Sizing Calculation
+  No,                                     !- Run Simulation for Sizing Periods
+  Yes,                                    !- Run Simulation for Weather File Run Periods
+  0.04,                                   !- Loads Convergence Tolerance Value
+  0.2,                                    !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExterior,                !- Solar Distribution
+  25,                                     !- Maximum Number of Warmup Days
+  6;                                      !- Minimum Number of Warmup Days
+
+OS:Output:Meter,
+  {2c504f0f-1677-4791-a625-c9fdceff2175}, !- Handle
+  ElectricityNet:Facility,                !- Name
+  Hourly,                                 !- Reporting Frequency
+  True,                                   !- Meter File Only
+  False;                                  !- Cumulative
+
+OS:Timestep,
+  {79cc9340-93d4-4f72-a5ca-b64451a57564}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
+OS:ShadowCalculation,
+  {137b265b-7d90-4b85-83d6-6f49d95bdf56}, !- Handle
+  7,                                      !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:RunPeriod,
+  {3c4ccfb1-e715-4662-9c52-be1b0a138576}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  No,                                     !- Use Weather File Holidays and Special Days
+  No,                                     !- Use Weather File Daylight Saving Period
+  No,                                     !- Apply Weekend Holiday Rule
+  Yes,                                    !- Use Weather File Rain Indicators
+  Yes,                                    !- Use Weather File Snow Indicators
+  1;                                      !- Number of Times Runperiod to be Repeated
+
+OS:YearDescription,
+  {7190988a-56b7-49e4-be5c-e6199b78fff0}, !- Handle
+  ,                                       !- Calendar Year
+  Sunday;                                 !- Day of Week for Start Day
+
+OS:HeatBalanceAlgorithm,
+  {64382367-5719-4453-8c29-e1a70cef6d9c}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:Output:Meter,
+  {691ea4a2-e815-4852-aa14-ac1ce9bfcf5c}, !- Handle
+  Gas:Facility,                           !- Name
+  Hourly,                                 !- Reporting Frequency
+  True,                                   !- Meter File Only
+  False;                                  !- Cumulative
+
+OS:ConvergenceLimits,
+  {a71a34c7-4772-4b25-9024-f2d758143793}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
+OS:Output:Meter,
+  {ceae7f14-5ab7-4a91-9729-89b3f9655715}, !- Handle
+  Electricity:Facility,                   !- Name
+  Hourly,                                 !- Reporting Frequency
+  True,                                   !- Meter File Only
+  False;                                  !- Cumulative
+
+OS:Building,
+  {57a0612b-80fa-4a4f-8704-b192e6d39f92}, !- Handle
+  -FullServiceRestaurant-NECB HDD Method-CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw created: 2018-07-31 13:22:41 +0000, !- Name
+  ,                                       !- Building Sector Type
+  0,                                      !- North Axis {deg}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Space Type Name
+  {0eab7c15-637b-4a09-b881-ed33215144b3}, !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  1,                                      !- Standards Number of Stories
+  1,                                      !- Standards Number of Above Ground Stories
+  FullServiceRestaurant;                  !- Standards Building Type
+
+OS:Facility,
+  {8630d1c8-2694-4622-ac46-ec75f253c7ea}; !- Handle
+
+OS:Site:WaterMainsTemperature,
+  {d4488da0-43af-4769-8758-7b0d3a753888}, !- Handle
+  Correlation,                            !- Calculation Method
+  ,                                       !- Temperature Schedule Name
+  5,                                      !- Annual Average Outdoor Air Temperature {C}
+  23.3;                                   !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
+
+OS:Site:GroundTemperature:BuildingSurface,
+  {e1936907-687d-474b-be93-754a3a0b3ae4}, !- Handle
+  19.527,                                 !- January Ground Temperature {C}
+  19.502,                                 !- February Ground Temperature {C}
+  19.536,                                 !- March Ground Temperature {C}
+  19.598,                                 !- April Ground Temperature {C}
+  20.002,                                 !- May Ground Temperature {C}
+  21.64,                                  !- June Ground Temperature {C}
+  22.225,                                 !- July Ground Temperature {C}
+  22.375,                                 !- August Ground Temperature {C}
+  21.449,                                 !- September Ground Temperature {C}
+  20.121,                                 !- October Ground Temperature {C}
+  19.802,                                 !- November Ground Temperature {C}
+  19.633;                                 !- December Ground Temperature {C}
+
+OS:Rendering:Color,
+  {2d245aba-2197-4e89-8d94-0ab8b7d48165}, !- Handle
+  Space Function - undefined -,           !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7a9e8539-9cb5-4ca2-908b-238e9d319c5c}, !- Handle
+  Space Function Dining - family space,   !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {03141d71-f229-4289-b14b-a6ad922f5827}, !- Handle
+  Space Function Food preparation,        !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:SizingPeriod:DesignDay,
+  {385d7fe3-cbe0-4896-96a7-dccbe718103a}, !- Handle
+  Calgary Intl AP Ann Htg 99.6% Condns DB, !- Name
+  -28.5,                                  !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  -28.5,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  88961,                                  !- Barometric Pressure {Pa}
+  2.9,                                    !- Wind Speed {m/s}
+  200,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  1,                                      !- Month
+  WinterDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:SizingPeriod:DesignDay,
+  {d4490035-def4-4a20-8054-6f8f71eeb6bf}, !- Handle
+  Calgary Intl AP Ann Clg .4% Condns DB=>MWB, !- Name
+  28.5,                                   !- Maximum Dry-Bulb Temperature {C}
+  12.1,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
+  16.1,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
+  88961,                                  !- Barometric Pressure {Pa}
+  4.5,                                    !- Wind Speed {m/s}
+  160,                                    !- Wind Direction {deg}
+  0,                                      !- Sky Clearness
+  0,                                      !- Rain Indicator
+  0,                                      !- Snow Indicator
+  21,                                     !- Day of Month
+  7,                                      !- Month
+  SummerDesignDay,                        !- Day Type
+  0,                                      !- Daylight Saving Time Indicator
+  Wetbulb,                                !- Humidity Indicating Type
+  ,                                       !- Humidity Indicating Day Schedule Name
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
+  ASHRAETau,                              !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  0.339,                                  !- ASHRAE Taub {dimensionless}
+  2.421;                                  !- ASHRAE Taud {dimensionless}
+
+OS:Rendering:Color,
+  {3a565ae7-54b8-4e24-b606-88d2799ecc25}, !- Handle
+  Space Function - undefined - 1,         !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:DesignSpecification:OutdoorAir,
+  {4557bd54-a96a-41e1-84ee-c7d0ab9d32ce}, !- Handle
+  Space Function - undefined - Ventilation, !- Name
+  ,                                       !- Outdoor Air Method
+  0,                                      !- Outdoor Air Flow per Person {m3/s-person}
+  0,                                      !- Outdoor Air Flow per Floor Area {m3/s-m2}
+  ,                                       !- Outdoor Air Flow Rate {m3/s}
+  0,                                      !- Outdoor Air Flow Air Changes per Hour {1/hr}
+  ;                                       !- Outdoor Air Flow Rate Fraction Schedule Name
+
+OS:Schedule:Ruleset,
+  {d9825174-fb58-46d1-abeb-33ec490cac20}, !- Handle
+  Always On,                              !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {eda2fc08-5c2a-46b2-ac19-5f0afdc43c2b}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {eda2fc08-5c2a-46b2-ac19-5f0afdc43c2b}, !- Handle
+  Always On Default,                      !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:ScheduleTypeLimits,
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Handle
+  Fractional,                             !- Name
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
+  Continuous;                             !- Numeric Type
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {5de9068e-e03a-421b-b1a0-2e562bcf8d2c}, !- Handle
+  Space Function - undefined - Thermostat; !- Name
+
+OS:Rendering:Color,
+  {837fc74c-449a-41ce-8809-3e4482533e6b}, !- Handle
+  Space Function Dining - family space 1, !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Schedule:Ruleset,
+  {c66acc45-9a78-4406-9a2f-646949d2d8c7}, !- Handle
+  Clothing Schedule,                      !- Name
+  {76120406-5482-4676-b4bb-d830046299b2}, !- Schedule Type Limits Name
+  {2e9676b5-bec4-429a-a500-54be8182e06e}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {2e9676b5-bec4-429a-a500-54be8182e06e}, !- Handle
+  Clothing Schedule Default Winter Clothes, !- Name
+  {76120406-5482-4676-b4bb-d830046299b2}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {8cb300dd-2b44-40d7-b84d-b0564e73e171}, !- Handle
+  Schedule Rule 1,                        !- Name
+  {c66acc45-9a78-4406-9a2f-646949d2d8c7}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {515ca5be-3249-4947-9d07-9790e4854308}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  5,                                      !- Start Month
+  1,                                      !- Start Day
+  9,                                      !- End Month
+  30;                                     !- End Day
+
+OS:Schedule:Day,
+  {515ca5be-3249-4947-9d07-9790e4854308}, !- Handle
+  Clothing Schedule Summer Clothes,       !- Name
+  {76120406-5482-4676-b4bb-d830046299b2}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.5;                                    !- Value Until Time 1
+
+OS:ScheduleTypeLimits,
+  {76120406-5482-4676-b4bb-d830046299b2}, !- Handle
+  ClothingInsulation,                     !- Name
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  ClothingInsulation;                     !- Unit Type
+
+OS:Schedule:Ruleset,
+  {de9fc2dc-6ea8-4008-8bec-3eac154470f5}, !- Handle
+  Air Velocity Schedule,                  !- Name
+  {bfd35a70-3a9f-47f8-bd56-c84fd04aaa32}, !- Schedule Type Limits Name
+  {a8743680-16ae-41ea-870b-b6f106b10f9a}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {a8743680-16ae-41ea-870b-b6f106b10f9a}, !- Handle
+  Air Velocity Schedule Default,          !- Name
+  {bfd35a70-3a9f-47f8-bd56-c84fd04aaa32}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.2;                                    !- Value Until Time 1
+
+OS:ScheduleTypeLimits,
+  {bfd35a70-3a9f-47f8-bd56-c84fd04aaa32}, !- Handle
+  Velocity,                               !- Name
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  Velocity;                               !- Unit Type
+
+OS:Schedule:Ruleset,
+  {31dcd824-03f1-4a4c-b410-ff5102a1ee82}, !- Handle
+  Work Efficiency Schedule,               !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {f5e0785b-c8ef-4082-909f-cdfdb6b8297b}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {f5e0785b-c8ef-4082-909f-cdfdb6b8297b}, !- Handle
+  Work Efficiency Schedule Default,       !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:DesignSpecification:OutdoorAir,
+  {15081a8b-db99-4260-bdf5-cd147bd9fb26}, !- Handle
+  Space Function Dining - family space Ventilation, !- Name
+  Sum,                                    !- Outdoor Air Method
+  0,                                      !- Outdoor Air Flow per Person {m3/s-person}
+  0.0035814,                              !- Outdoor Air Flow per Floor Area {m3/s-m2}
+  0,                                      !- Outdoor Air Flow Rate {m3/s}
+  0,                                      !- Outdoor Air Flow Air Changes per Hour {1/hr}
+  ;                                       !- Outdoor Air Flow Rate Fraction Schedule Name
+
+OS:Schedule:Ruleset,
+  {0d75970a-a696-49d9-849f-21f19be2429b}, !- Handle
+  NECB-B-Occupancy,                       !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {0c97ab2f-f90e-469a-9ce2-e4675850aeed}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {0c97ab2f-f90e-469a-9ce2-e4675850aeed}, !- Handle
+  NECB-B-Occupancy Default,               !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.3,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.1,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0,                                      !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.1,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.2,                                    !- Value Until Time 5
+  12,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  13,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.9,                                    !- Value Until Time 7
+  14,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.8,                                    !- Value Until Time 8
+  15,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.5,                                    !- Value Until Time 9
+  17,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.2,                                    !- Value Until Time 10
+  18,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.3,                                    !- Value Until Time 11
+  19,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.6,                                    !- Value Until Time 12
+  22,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9,                                    !- Value Until Time 13
+  23,                                     !- Hour 14
+  0,                                      !- Minute 14
+  0.6,                                    !- Value Until Time 14
+  24,                                     !- Hour 15
+  0,                                      !- Minute 15
+  0.4;                                    !- Value Until Time 15
+
+OS:Schedule:Rule,
+  {02bcb1fe-dd99-48fd-8f6e-63512f260f04}, !- Handle
+  Schedule Rule 2,                        !- Name
+  {0d75970a-a696-49d9-849f-21f19be2429b}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {3580d8fb-924d-4e22-a045-21866a81512e}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {3580d8fb-924d-4e22-a045-21866a81512e}, !- Handle
+  NECB-B-Occupancy Default|Wkdy Day,      !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.3,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.1,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0,                                      !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.1,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.2,                                    !- Value Until Time 5
+  12,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  13,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.9,                                    !- Value Until Time 7
+  14,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.8,                                    !- Value Until Time 8
+  15,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.5,                                    !- Value Until Time 9
+  17,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.2,                                    !- Value Until Time 10
+  18,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.3,                                    !- Value Until Time 11
+  19,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.6,                                    !- Value Until Time 12
+  22,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9,                                    !- Value Until Time 13
+  23,                                     !- Hour 14
+  0,                                      !- Minute 14
+  0.6,                                    !- Value Until Time 14
+  24,                                     !- Hour 15
+  0,                                      !- Minute 15
+  0.4;                                    !- Value Until Time 15
+
+OS:Schedule:Rule,
+  {413a349b-be1f-4f06-afd9-f589211eccab}, !- Handle
+  Schedule Rule 3,                        !- Name
+  {0d75970a-a696-49d9-849f-21f19be2429b}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {f26f9866-5ce8-4133-9eb2-bcc0a09ac834}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {f26f9866-5ce8-4133-9eb2-bcc0a09ac834}, !- Handle
+  NECB-B-Occupancy Sat Day,               !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.5,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.3,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0,                                      !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.1,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.2,                                    !- Value Until Time 5
+  12,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  13,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.9,                                    !- Value Until Time 7
+  14,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.8,                                    !- Value Until Time 8
+  15,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.5,                                    !- Value Until Time 9
+  17,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.2,                                    !- Value Until Time 10
+  18,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.3,                                    !- Value Until Time 11
+  19,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.6,                                    !- Value Until Time 12
+  22,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9,                                    !- Value Until Time 13
+  24,                                     !- Hour 14
+  0,                                      !- Minute 14
+  0.6;                                    !- Value Until Time 14
+
+OS:Schedule:Rule,
+  {5205b1dc-6b21-4ea1-9136-6b03e5f10fed}, !- Handle
+  Schedule Rule 4,                        !- Name
+  {0d75970a-a696-49d9-849f-21f19be2429b}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {b330fb1a-251d-47bf-a59a-afaaa4dc861b}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {b330fb1a-251d-47bf-a59a-afaaa4dc861b}, !- Handle
+  NECB-B-Occupancy Sun|Hol Day,           !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.3,                                    !- Value Until Time 2
+  10,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0,                                      !- Value Until Time 3
+  11,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.1,                                    !- Value Until Time 4
+  12,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.4,                                    !- Value Until Time 5
+  14,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  15,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.4,                                    !- Value Until Time 7
+  18,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.2,                                    !- Value Until Time 8
+  19,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.5,                                    !- Value Until Time 9
+  21,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.7,                                    !- Value Until Time 10
+  22,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.5,                                    !- Value Until Time 11
+  23,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.3,                                    !- Value Until Time 12
+  24,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.1;                                    !- Value Until Time 13
+
+OS:Schedule:Ruleset,
+  {cb1d3d21-d545-4157-acf7-d88e41ae7efa}, !- Handle
+  NECB-Activity,                          !- Name
+  {f7b86302-ec7a-4277-acfd-3104b2833936}, !- Schedule Type Limits Name
+  {fa579f2b-73a1-43a2-8743-d4114582f680}, !- Default Day Schedule Name
+  {f7feb450-55fd-464b-b55e-513f1b973a34}, !- Summer Design Day Schedule Name
+  {e921966a-11c1-4355-8b5c-6b81aa61969b}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {fa579f2b-73a1-43a2-8743-d4114582f680}, !- Handle
+  NECB-Activity Default,                  !- Name
+  {f7b86302-ec7a-4277-acfd-3104b2833936}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  130;                                    !- Value Until Time 1
+
+OS:Schedule:Day,
+  {6e33cb74-93a0-45d8-a621-12732e9158c1}, !- Handle
+  Schedule Day 1,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {e921966a-11c1-4355-8b5c-6b81aa61969b}, !- Handle
+  NECB-Activity Winter Design Day,        !- Name
+  {f7b86302-ec7a-4277-acfd-3104b2833936}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  130;                                    !- Value Until Time 1
+
+OS:Schedule:Day,
+  {6b6d7000-37c1-4895-a062-cdb3b5225edc}, !- Handle
+  Schedule Day 2,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {f7feb450-55fd-464b-b55e-513f1b973a34}, !- Handle
+  NECB-Activity Summer Design Day,        !- Name
+  {f7b86302-ec7a-4277-acfd-3104b2833936}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  130;                                    !- Value Until Time 1
+
+OS:ScheduleTypeLimits,
+  {f7b86302-ec7a-4277-acfd-3104b2833936}, !- Handle
+  ActivityLevel,                          !- Name
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  ActivityLevel;                          !- Unit Type
+
+OS:Schedule:Ruleset,
+  {dfc83a9b-5c22-4ccc-9343-e0858ae3c779}, !- Handle
+  NECB-B-Lighting,                        !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {a35323d9-970f-425f-a16c-490cdb35d1b2}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {a35323d9-970f-425f-a16c-490cdb35d1b2}, !- Handle
+  NECB-B-Lighting Default,                !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {9909ab14-effc-4242-8840-5ed64fc13aaf}, !- Handle
+  Schedule Rule 5,                        !- Name
+  {dfc83a9b-5c22-4ccc-9343-e0858ae3c779}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {b1e5377b-0c5d-4856-95e8-46c89b574635}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {b1e5377b-0c5d-4856-95e8-46c89b574635}, !- Handle
+  NECB-B-Lighting Default|Wkdy Day,       !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {87fcf72b-334b-4e8b-bf22-53eeccb0d0e0}, !- Handle
+  Schedule Rule 6,                        !- Name
+  {dfc83a9b-5c22-4ccc-9343-e0858ae3c779}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {0e3111a3-f3b0-42d6-a5ac-7db1bd685873}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {0e3111a3-f3b0-42d6-a5ac-7db1bd685873}, !- Handle
+  NECB-B-Lighting Sat Day,                !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {7b8a8c0d-ee1d-49d7-8369-5e2baf9e5fd8}, !- Handle
+  Schedule Rule 7,                        !- Name
+  {dfc83a9b-5c22-4ccc-9343-e0858ae3c779}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {7fd02668-d331-456e-a554-5983a88468de}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {7fd02668-d331-456e-a554-5983a88468de}, !- Handle
+  NECB-B-Lighting Sun|Hol Day,            !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.5,                                    !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.1,                                    !- Value Until Time 2
+  11,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.5,                                    !- Value Until Time 3
+  23,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.9,                                    !- Value Until Time 4
+  24,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.5;                                    !- Value Until Time 5
+
+OS:Schedule:Ruleset,
+  {8daba8ac-6a32-492c-951a-0227d3c627c1}, !- Handle
+  NECB-B-Electric-Equipment,              !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {51532362-e6cb-4243-a2d1-861c0e05ffed}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {51532362-e6cb-4243-a2d1-861c0e05ffed}, !- Handle
+  NECB-B-Electric-Equipment Default,      !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {c1f2d1e7-4a7c-411f-a394-f44c80c5a52f}, !- Handle
+  Schedule Rule 8,                        !- Name
+  {8daba8ac-6a32-492c-951a-0227d3c627c1}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {3fac0a8d-3a0c-4cc6-8fe7-ff465cc6479f}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {3fac0a8d-3a0c-4cc6-8fe7-ff465cc6479f}, !- Handle
+  NECB-B-Electric-Equipment Default|Wkdy Day, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {5f035bc0-cc40-4064-9b22-a7c84099bcf5}, !- Handle
+  Schedule Rule 9,                        !- Name
+  {8daba8ac-6a32-492c-951a-0227d3c627c1}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {9f228ee4-a15f-4c28-8b29-c115dfa74c35}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {9f228ee4-a15f-4c28-8b29-c115dfa74c35}, !- Handle
+  NECB-B-Electric-Equipment Sat Day,      !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.9,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.1,                                    !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.5,                                    !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.7,                                    !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.9;                                    !- Value Until Time 6
+
+OS:Schedule:Rule,
+  {5a19e99a-7b5b-49ff-a8d6-fdeacc3b7acb}, !- Handle
+  Schedule Rule 10,                       !- Name
+  {8daba8ac-6a32-492c-951a-0227d3c627c1}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {36ca3d2e-2f00-4606-817f-0554dff9bd1e}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {36ca3d2e-2f00-4606-817f-0554dff9bd1e}, !- Handle
+  NECB-B-Electric-Equipment Sun|Hol Day,  !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.5,                                    !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.1,                                    !- Value Until Time 2
+  11,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.5,                                    !- Value Until Time 3
+  23,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.9,                                    !- Value Until Time 4
+  24,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.5;                                    !- Value Until Time 5
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {e6d83c71-203a-480a-8aa0-8063dee6d157}, !- Handle
+  Space Function Dining - family space Thermostat, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:Schedule:Ruleset,
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Handle
+  NECB-B-Thermostat Setpoint-Heating,     !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  {87c0fa8d-a02a-4184-a66b-aad23f6aead4}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {87c0fa8d-a02a-4184-a66b-aad23f6aead4}, !- Handle
+  NECB-B-Thermostat Setpoint-Heating Default, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  22,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  18,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  20,                                     !- Value Until Time 3
+  24,                                     !- Hour 4
+  0,                                      !- Minute 4
+  22;                                     !- Value Until Time 4
+
+OS:Schedule:Rule,
+  {a4b639de-38e9-4490-848e-3b49442f0645}, !- Handle
+  Schedule Rule 11,                       !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {35d24653-55dd-40b2-98a7-94f16fc089dd}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {35d24653-55dd-40b2-98a7-94f16fc089dd}, !- Handle
+  NECB-B-Thermostat Setpoint-Heating Default|Wkdy Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  22,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  18,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  20,                                     !- Value Until Time 3
+  24,                                     !- Hour 4
+  0,                                      !- Minute 4
+  22;                                     !- Value Until Time 4
+
+OS:Schedule:Rule,
+  {c7985ded-56a3-46a5-b587-70e5bd686f53}, !- Handle
+  Schedule Rule 12,                       !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {3be5ec51-08d8-4df8-90f5-fb8a366f5b26}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {3be5ec51-08d8-4df8-90f5-fb8a366f5b26}, !- Handle
+  NECB-B-Thermostat Setpoint-Heating Sat Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  22,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  18,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  20,                                     !- Value Until Time 3
+  24,                                     !- Hour 4
+  0,                                      !- Minute 4
+  22;                                     !- Value Until Time 4
+
+OS:Schedule:Rule,
+  {5fe9d1ed-345d-491f-9c89-a0d38d398c1b}, !- Handle
+  Schedule Rule 13,                       !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {7aec0b34-52f0-444d-bf35-5085f6f782a2}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {7aec0b34-52f0-444d-bf35-5085f6f782a2}, !- Handle
+  NECB-B-Thermostat Setpoint-Heating Sun|Hol Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  18,                                     !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  22,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  18,                                     !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  20,                                     !- Value Until Time 4
+  23,                                     !- Hour 5
+  0,                                      !- Minute 5
+  22,                                     !- Value Until Time 5
+  24,                                     !- Hour 6
+  0,                                      !- Minute 6
+  18;                                     !- Value Until Time 6
+
+OS:ScheduleTypeLimits,
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Handle
+  Temperature,                            !- Name
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  Temperature;                            !- Unit Type
+
+OS:Schedule:Ruleset,
+  {c1399aff-3a4b-4318-85b0-44472bae241a}, !- Handle
+  NECB-B-Thermostat Setpoint-Cooling,     !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  {ff052b72-8d79-4965-84df-8f3519cab12e}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {ff052b72-8d79-4965-84df-8f3519cab12e}, !- Handle
+  NECB-B-Thermostat Setpoint-Cooling Default, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  24,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  35,                                     !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  24;                                     !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {af65e8d5-d710-4fe2-b055-6091517f119f}, !- Handle
+  Schedule Rule 14,                       !- Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {31a12810-5060-42ea-a826-074d5ec874b8}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {31a12810-5060-42ea-a826-074d5ec874b8}, !- Handle
+  NECB-B-Thermostat Setpoint-Cooling Default|Wkdy Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  24,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  35,                                     !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  24;                                     !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {40875d73-6e51-40a9-9de0-0b994480f0fc}, !- Handle
+  Schedule Rule 15,                       !- Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {55b9e428-ecd0-4eb9-a887-27b4195e192d}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {55b9e428-ecd0-4eb9-a887-27b4195e192d}, !- Handle
+  NECB-B-Thermostat Setpoint-Cooling Sat Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  24,                                     !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  35,                                     !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  24;                                     !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {83349186-a528-4a86-a9a5-52eeed7ade06}, !- Handle
+  Schedule Rule 16,                       !- Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {f7229405-832c-456c-9328-6fcb9e12c93c}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {f7229405-832c-456c-9328-6fcb9e12c93c}, !- Handle
+  NECB-B-Thermostat Setpoint-Cooling Sun|Hol Day, !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  9,                                      !- Hour 1
+  0,                                      !- Minute 1
+  35,                                     !- Value Until Time 1
+  23,                                     !- Hour 2
+  0,                                      !- Minute 2
+  24,                                     !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  35;                                     !- Value Until Time 3
+
+OS:Rendering:Color,
+  {2834b42a-5064-4966-96af-4eb1577be75b}, !- Handle
+  Space Function Food preparation 1,      !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:DesignSpecification:OutdoorAir,
+  {bed47c0a-b5f5-4b2a-bed1-56a134c25005}, !- Handle
+  Space Function Food preparation Ventilation, !- Name
+  Sum,                                    !- Outdoor Air Method
+  0,                                      !- Outdoor Air Flow per Person {m3/s-person}
+  0.0013716,                              !- Outdoor Air Flow per Floor Area {m3/s-m2}
+  0,                                      !- Outdoor Air Flow Rate {m3/s}
+  0,                                      !- Outdoor Air Flow Air Changes per Hour {1/hr}
+  ;                                       !- Outdoor Air Flow Rate Fraction Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {728f14f6-6bb9-4951-b08c-a5373a2597f4}, !- Handle
+  Space Function Food preparation Thermostat, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:Schedule:Constant,
+  {46e38898-67b8-46f3-8b58-99d15bed2d30}, !- Handle
+  Always On Discrete,                     !- Name
+  {d1c87ab7-3b0b-466b-88f5-bc96a19342b2}, !- Schedule Type Limits Name
+  1;                                      !- Value
+
+OS:ScheduleTypeLimits,
+  {d1c87ab7-3b0b-466b-88f5-bc96a19342b2}, !- Handle
+  OnOff,                                  !- Name
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
+  Discrete,                               !- Numeric Type
+  Availability;                           !- Unit Type
+
+OS:SurfaceConvectionAlgorithm:Inside,
+  {05c87940-171f-4b54-8421-d46ee5273b6f}, !- Handle
+  TARP;                                   !- Algorithm
+
+OS:SurfaceConvectionAlgorithm:Outside,
+  {1bcb0fd4-ea39-469e-8cfa-9fb4e24f04f2}, !- Handle
+  TARP;                                   !- Algorithm
+
+OS:Material,
+  {a200863d-ffb2-4e22-b5de-e01048f89c71}, !- Handle
+  100mm Normalweight concrete floor,      !- Name
+  MediumSmooth,                           !- Roughness
+  0.1016,                                 !- Thickness {m}
+  2.31,                                   !- Conductivity {W/m-K}
+  2322,                                   !- Density {kg/m3}
+  832;                                    !- Specific Heat {J/kg-K}
+
+OS:Material,
+  {74301b65-1ab9-4b0c-81bb-f7fcf6486b6b}, !- Handle
+  G01 13mm gypsum board,                  !- Name
+  Smooth,                                 !- Roughness
+  0.0127,                                 !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  800,                                    !- Density {kg/m3}
+  1090,                                   !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.5;                                    !- Visible Absorptance
+
+OS:DefaultConstructionSet,
+  {0eab7c15-637b-4a09-b881-ed33215144b3}, !- Handle
+  BTAP-Mass,                              !- Name
+  {978e7800-aa70-4101-8bf0-23885c2c1a70}, !- Default Exterior Surface Constructions Name
+  {7f09ebd9-9a8d-4828-b385-a5e73bbaa84d}, !- Default Interior Surface Constructions Name
+  {650c49fe-fb54-41a2-a901-b6a0cc4521b1}, !- Default Ground Contact Surface Constructions Name
+  {d1034057-7403-4a4f-820f-2fb5483a76d7}, !- Default Exterior SubSurface Constructions Name
+  {647fdd06-2422-4da3-9ca0-c53d0d91b4e8}, !- Default Interior SubSurface Constructions Name
+  {019aada5-996e-4632-a900-ce8fa73daea4}, !- Interior Partition Construction Name
+  ,                                       !- Space Shading Construction Name
+  ,                                       !- Building Shading Construction Name
+  ;                                       !- Site Shading Construction Name
+
+OS:Material:NoMass,
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}, !- Handle
+  Typical Carpet Pad,                     !- Name
+  Smooth,                                 !- Roughness
+  0.216479986995276,                      !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.8;                                    !- Visible Absorptance
+
+OS:DefaultSurfaceConstructions,
+  {7f09ebd9-9a8d-4828-b385-a5e73bbaa84d}, !- Handle
+  Default Surface Constructions 2,        !- Name
+  {64033892-104e-4b60-9a00-9ab9964c7a01}, !- Floor Construction Name
+  {9e997073-9d7c-49f8-986b-b14b1e6ec715}, !- Wall Construction Name
+  {800fdc51-6972-453e-a2b4-26f7e0bf1d63}; !- Roof Ceiling Construction Name
+
+OS:Construction,
+  {64033892-104e-4b60-9a00-9ab9964c7a01}, !- Handle
+  BTAP-Int-Floor,                         !- Name
+  ,                                       !- Surface Rendering Name
+  {a200863d-ffb2-4e22-b5de-e01048f89c71}, !- Layer 1
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {e91c0acc-6b03-47e7-8d87-19f51c5f833f}, !- Handle
+  {64033892-104e-4b60-9a00-9ab9964c7a01}, !- Construction Name
+  InteriorFloor,                          !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:Construction,
+  {9e997073-9d7c-49f8-986b-b14b1e6ec715}, !- Handle
+  BTAP-Int-Wall,                          !- Name
+  ,                                       !- Surface Rendering Name
+  {74301b65-1ab9-4b0c-81bb-f7fcf6486b6b}, !- Layer 1
+  {74301b65-1ab9-4b0c-81bb-f7fcf6486b6b}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {7f2eb63d-0b20-475c-835e-9e8988c1d732}, !- Handle
+  {9e997073-9d7c-49f8-986b-b14b1e6ec715}, !- Construction Name
+  InteriorWall,                           !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:Construction,
+  {800fdc51-6972-453e-a2b4-26f7e0bf1d63}, !- Handle
+  BTAP-Int-Ceiling,                       !- Name
+  ,                                       !- Surface Rendering Name
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}, !- Layer 1
+  {a200863d-ffb2-4e22-b5de-e01048f89c71}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {7939d3e1-6dcf-4494-a956-414f0d7fc8dd}, !- Handle
+  {800fdc51-6972-453e-a2b4-26f7e0bf1d63}, !- Construction Name
+  InteriorCeiling,                        !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:Material:NoMass,
+  {02547311-2903-4271-85c6-5ef37f49a4de}, !- Handle
+  Typical Insulation,                     !- Name
+  Smooth,                                 !- Roughness
+  0.101874652714525,                      !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:Construction,
+  {7eef1932-bb04-42cc-8383-cabc7ddd827e}, !- Handle
+  BTAP-Int-Window,                        !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:StandardsInformation:Construction,
+  {4d626419-2737-422f-bc54-5e27f92d0c0d}, !- Handle
+  {7eef1932-bb04-42cc-8383-cabc7ddd827e}, !- Construction Name
+  InteriorWindow,                         !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:DefaultSubSurfaceConstructions,
+  {647fdd06-2422-4da3-9ca0-c53d0d91b4e8}, !- Handle
+  Default Sub Surface Constructions 2,    !- Name
+  {7eef1932-bb04-42cc-8383-cabc7ddd827e}, !- Fixed Window Construction Name
+  {7eef1932-bb04-42cc-8383-cabc7ddd827e}, !- Operable Window Construction Name
+  {9cdbe7b2-d59b-434e-b027-9e5195e3f498}, !- Door Construction Name
+  ,                                       !- Glass Door Construction Name
+  ,                                       !- Overhead Door Construction Name
+  ,                                       !- Skylight Construction Name
+  ,                                       !- Tubular Daylight Dome Construction Name
+  ;                                       !- Tubular Daylight Diffuser Construction Name
+
+OS:Construction,
+  {9cdbe7b2-d59b-434e-b027-9e5195e3f498}, !- Handle
+  BTAP-Int-Door,                          !- Name
+  ,                                       !- Surface Rendering Name
+  {4b4f8fbe-fb5b-4085-9af4-ecf9eb5ce292}; !- Layer 1
+
+OS:StandardsInformation:Construction,
+  {e1322ee0-8c34-4452-bdc2-6f2359298874}, !- Handle
+  {9cdbe7b2-d59b-434e-b027-9e5195e3f498}, !- Construction Name
+  InteriorDoor,                           !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:Material,
+  {4b4f8fbe-fb5b-4085-9af4-ecf9eb5ce292}, !- Handle
+  G05 25mm wood,                          !- Name
+  MediumSmooth,                           !- Roughness
+  0.0254,                                 !- Thickness {m}
+  0.15,                                   !- Conductivity {W/m-K}
+  608,                                    !- Density {kg/m3}
+  1630,                                   !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.5,                                    !- Solar Absorptance
+  0.5;                                    !- Visible Absorptance
+
+OS:Construction,
+  {019aada5-996e-4632-a900-ce8fa73daea4}, !- Handle
+  BTAP-Int-Partition,                     !- Name
+  ,                                       !- Surface Rendering Name
+  {4b4f8fbe-fb5b-4085-9af4-ecf9eb5ce292}; !- Layer 1
+
+OS:StandardsInformation:Construction,
+  {5dadf048-f3e4-41d7-a1b0-f270f36b8f23}, !- Handle
+  {019aada5-996e-4632-a900-ce8fa73daea4}, !- Construction Name
+  InteriorPartition,                      !- Intended Surface Type
+  ;                                       !- Standards Construction Type
+
+OS:DefaultSurfaceConstructions,
+  {978e7800-aa70-4101-8bf0-23885c2c1a70}, !- Handle
+  NECB2011 - FullSrvRest - WholeBuilding - NECB HDD Method at hdd = 5000.0, !- Name
+  {5476be44-20cc-4b25-a6e6-f240ac3fbc55}, !- Floor Construction Name
+  {e80bdf73-efdb-4dc0-9376-98f5cfc4d154}, !- Wall Construction Name
+  {8c24be16-d5be-4475-a24e-9d2bf80312b3}; !- Roof Ceiling Construction Name
+
+OS:Construction,
+  {5476be44-20cc-4b25-a6e6-f240ac3fbc55}, !- Handle
+  BTAP-Ext-Floor-Mass,                    !- Name
+  ,                                       !- Surface Rendering Name
+  {02547311-2903-4271-85c6-5ef37f49a4de}, !- Layer 1
+  {7b59089f-9201-452a-9fc4-e83a9443cc37}, !- Layer 2
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Layer 3
+
+OS:StandardsInformation:Construction,
+  {54d1658c-297b-40bf-9d48-82b8ec5f2f80}, !- Handle
+  {5476be44-20cc-4b25-a6e6-f240ac3fbc55}, !- Construction Name
+  ExteriorFloor,                          !- Intended Surface Type
+  Mass,                                   !- Standards Construction Type
+  0,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Material,
+  {7b59089f-9201-452a-9fc4-e83a9443cc37}, !- Handle
+  4 in. Normalweight Concrete Floor,      !- Name
+  MediumRough,                            !- Roughness
+  0.1016,                                 !- Thickness {m}
+  2.31,                                   !- Conductivity {W/m-K}
+  2321.99999999999,                       !- Density {kg/m3}
+  831.999999999997,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:Construction,
+  {e80bdf73-efdb-4dc0-9376-98f5cfc4d154}, !- Handle
+  BTAP-Ext-Wall-Mass,                     !- Name
+  ,                                       !- Surface Rendering Name
+  {2691a965-4ad3-4458-87d7-5ee60237f192}, !- Layer 1
+  {5fa8877b-d7c9-4ae1-a464-f5c75238dd2d}, !- Layer 2
+  {02547311-2903-4271-85c6-5ef37f49a4de}, !- Layer 3
+  {0b70ccc4-7bc3-432b-a8e6-6cb2bf719bb8}; !- Layer 4
+
+OS:StandardsInformation:Construction,
+  {fc81a8b5-4412-439d-b710-0ac7cf7f4ceb}, !- Handle
+  {e80bdf73-efdb-4dc0-9376-98f5cfc4d154}, !- Construction Name
+  ExteriorWall,                           !- Intended Surface Type
+  Mass,                                   !- Standards Construction Type
+  2,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Material,
+  {2691a965-4ad3-4458-87d7-5ee60237f192}, !- Handle
+  1IN Stucco,                             !- Name
+  Smooth,                                 !- Roughness
+  0.0253,                                 !- Thickness {m}
+  0.691799999999999,                      !- Conductivity {W/m-K}
+  1858,                                   !- Density {kg/m3}
+  836.999999999999,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.92;                                   !- Visible Absorptance
+
+OS:Material,
+  {5fa8877b-d7c9-4ae1-a464-f5c75238dd2d}, !- Handle
+  8IN CONCRETE HW RefBldg,                !- Name
+  Rough,                                  !- Roughness
+  0.2032,                                 !- Thickness {m}
+  1.311,                                  !- Conductivity {W/m-K}
+  2240,                                   !- Density {kg/m3}
+  836.800000000001,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:Material,
+  {0b70ccc4-7bc3-432b-a8e6-6cb2bf719bb8}, !- Handle
+  1/2IN Gypsum,                           !- Name
+  Smooth,                                 !- Roughness
+  0.0127,                                 !- Thickness {m}
+  0.16,                                   !- Conductivity {W/m-K}
+  784.9,                                  !- Density {kg/m3}
+  830.000000000001,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.4,                                    !- Solar Absorptance
+  0.4;                                    !- Visible Absorptance
+
+OS:Construction,
+  {8c24be16-d5be-4475-a24e-9d2bf80312b3}, !- Handle
+  BTAP-Ext-Roof-Metal,                    !- Name
+  ,                                       !- Surface Rendering Name
+  {84ec1358-f35e-428a-bdc3-2f9de02f5086}, !- Layer 1
+  {02547311-2903-4271-85c6-5ef37f49a4de}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {347f20e4-0f70-4227-a466-cff9cc91d970}, !- Handle
+  {8c24be16-d5be-4475-a24e-9d2bf80312b3}, !- Construction Name
+  ExteriorRoof,                           !- Intended Surface Type
+  Metal,                                  !- Standards Construction Type
+  1,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Material,
+  {84ec1358-f35e-428a-bdc3-2f9de02f5086}, !- Handle
+  Metal Roof Surface,                     !- Name
+  Smooth,                                 !- Roughness
+  0.000799999999999998,                   !- Thickness {m}
+  45.2799999999999,                       !- Conductivity {W/m-K}
+  7823.99999999999,                       !- Density {kg/m3}
+  499.999999999996,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:DefaultSurfaceConstructions,
+  {650c49fe-fb54-41a2-a901-b6a0cc4521b1}, !- Handle
+  NECB2011 - FullSrvRest - WholeBuilding - NECB HDD Method at hdd = 5000.0 1, !- Name
+  {3e58be77-6753-48fe-be03-218f2f4bbd8f}, !- Floor Construction Name
+  {ffa027ce-d886-4c2a-87d6-222f2e890027}, !- Wall Construction Name
+  {e27ce4ce-96ee-4132-8c2e-3dad27cb510e}; !- Roof Ceiling Construction Name
+
+OS:Construction,
+  {3e58be77-6753-48fe-be03-218f2f4bbd8f}, !- Handle
+  BTAP-Grnd-Floor-Mass,                   !- Name
+  ,                                       !- Surface Rendering Name
+  {27b2b6e4-2bd3-4b08-880b-070277b0f971}, !- Layer 1
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {648a2f25-3799-4ae8-bc33-964e71c0ccc0}, !- Handle
+  {3e58be77-6753-48fe-be03-218f2f4bbd8f}, !- Construction Name
+  GroundContactFloor,                     !- Intended Surface Type
+  Mass,                                   !- Standards Construction Type
+  1,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Material,
+  {27b2b6e4-2bd3-4b08-880b-070277b0f971}, !- Handle
+  6 in. Normalweight Concrete Floor,      !- Name
+  MediumRough,                            !- Roughness
+  0.1524,                                 !- Thickness {m}
+  2.31,                                   !- Conductivity {W/m-K}
+  2321.99999999999,                       !- Density {kg/m3}
+  831.999999999997,                       !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:Construction,
+  {ffa027ce-d886-4c2a-87d6-222f2e890027}, !- Handle
+  BTAP-Grnd-Wall-Mass,                    !- Name
+  ,                                       !- Surface Rendering Name
+  {27b2b6e4-2bd3-4b08-880b-070277b0f971}, !- Layer 1
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {c31acddc-b99a-426d-be8b-262e760c314d}, !- Handle
+  {ffa027ce-d886-4c2a-87d6-222f2e890027}, !- Construction Name
+  GroundContactWall,                      !- Intended Surface Type
+  Mass,                                   !- Standards Construction Type
+  1,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:DefaultSubSurfaceConstructions,
+  {d1034057-7403-4a4f-820f-2fb5483a76d7}, !- Handle
+  NECB2011 - FullSrvRest - WholeBuilding - NECB HDD Method at hdd = 5000.0, !- Name
+  {bbcae55f-dc0b-4568-94c2-da52915c6e64}, !- Fixed Window Construction Name
+  {bbcae55f-dc0b-4568-94c2-da52915c6e64}, !- Operable Window Construction Name
+  {17209de5-2cca-4145-a116-18359c2e7ee8}, !- Door Construction Name
+  {1942e15a-1248-48d4-a9d6-7d9312daa09d}, !- Glass Door Construction Name
+  {c779c8c8-6944-4dd6-8ddf-1d2d9d961282}, !- Overhead Door Construction Name
+  {6756f3c6-efaf-4fbf-a232-f7a7f5f8d450}, !- Skylight Construction Name
+  {a3b8523b-d5a6-4163-a372-56f8554bedb9}, !- Tubular Daylight Dome Construction Name
+  {d4b34403-d9d4-474a-a8a3-1691980f870a}; !- Tubular Daylight Diffuser Construction Name
+
+OS:WindowMaterial:SimpleGlazingSystem,
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}, !- Handle
+  SimpleGlazing,                          !- Name
+  2.2,                                    !- U-Factor {W/m2-K}
+  0.6,                                    !- Solar Heat Gain Coefficient
+  0.21;                                   !- Visible Transmittance
+
+OS:Construction,
+  {bbcae55f-dc0b-4568-94c2-da52915c6e64}, !- Handle
+  BTAP-Ext-FixedWindow,                   !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:Construction,
+  {17209de5-2cca-4145-a116-18359c2e7ee8}, !- Handle
+  BTAP-Ext-Door,                          !- Name
+  ,                                       !- Surface Rendering Name
+  {acde36ef-d67e-428b-8d67-7ff3a5db3395}, !- Layer 1
+  {02547311-2903-4271-85c6-5ef37f49a4de}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {0b5f442d-f874-461e-ae2e-da91012cc8d5}, !- Handle
+  {17209de5-2cca-4145-a116-18359c2e7ee8}, !- Construction Name
+  ExteriorDoor,                           !- Intended Surface Type
+  ,                                       !- Standards Construction Type
+  1,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Material,
+  {acde36ef-d67e-428b-8d67-7ff3a5db3395}, !- Handle
+  F08 Metal surface,                      !- Name
+  Smooth,                                 !- Roughness
+  0.0008,                                 !- Thickness {m}
+  45.2800000000001,                       !- Conductivity {W/m-K}
+  7823.99999999999,                       !- Density {kg/m3}
+  500,                                    !- Specific Heat {J/kg-K}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+OS:Construction,
+  {1942e15a-1248-48d4-a9d6-7d9312daa09d}, !- Handle
+  BTAP-Ext-GlassDoors,                    !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:Construction,
+  {c779c8c8-6944-4dd6-8ddf-1d2d9d961282}, !- Handle
+  BTAP-Ext-OverHeadDoor,                  !- Name
+  ,                                       !- Surface Rendering Name
+  {02547311-2903-4271-85c6-5ef37f49a4de}; !- Layer 1
+
+OS:StandardsInformation:Construction,
+  {66e8d159-6e0c-428b-b242-ef18ebb182a3}, !- Handle
+  {c779c8c8-6944-4dd6-8ddf-1d2d9d961282}, !- Construction Name
+  ExteriorDoor,                           !- Intended Surface Type
+  RollUp,                                 !- Standards Construction Type
+  0,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:Construction,
+  {6756f3c6-efaf-4fbf-a232-f7a7f5f8d450}, !- Handle
+  BTAP-Ext-Skylights,                     !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:Construction,
+  {a3b8523b-d5a6-4163-a372-56f8554bedb9}, !- Handle
+  BTAP-Ext-DaylightDomes,                 !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {f6ccc375-08a5-4e50-a23a-5c9119bc2ede}, !- Handle
+  Space Function - undefined - Thermostat 1; !- Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {c94cf1b4-a431-4704-9188-6831a0a5018a}, !- Handle
+  Space Function Dining - family space Thermostat 1, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {4da91ef0-ad7e-436a-8ca3-96b862d034c4}, !- Handle
+  Space Function Food preparation Thermostat 1, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {24609691-4106-4ace-850c-6476ff96e736}, !- Handle
+  Space Function - undefined - Thermostat 2; !- Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {ea0e8de4-4c0e-4aed-ab99-6f82b1e391a9}, !- Handle
+  Space Function Food preparation Thermostat 2, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:ThermostatSetpoint:DualSetpoint,
+  {dfcc70ba-163b-4c83-9387-fefbd42e62ef}, !- Handle
+  Space Function Dining - family space Thermostat 2, !- Name
+  {2467c4be-e281-4ed7-b184-0d7d241b7c70}, !- Heating Setpoint Temperature Schedule Name
+  {c1399aff-3a4b-4318-85b0-44472bae241a}; !- Cooling Setpoint Temperature Schedule Name
+
+OS:Curve:Biquadratic,
+  {c3a2220e-9d70-4f72-8664-14540e826521}, !- Handle
+  Curve Biquadratic 1,                    !- Name
+  0.942587793,                            !- Coefficient1 Constant
+  0.009543347,                            !- Coefficient2 x
+  0.00068377,                             !- Coefficient3 x**2
+  -0.011042676,                           !- Coefficient4 y
+  5.249e-06,                              !- Coefficient5 y**2
+  -9.72e-06,                              !- Coefficient6 x*y
+  17,                                     !- Minimum Value of x
+  22,                                     !- Maximum Value of x
+  13,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {c36f282b-931d-4f6e-90c2-11dde94a461b}, !- Handle
+  Curve Quadratic 1,                      !- Name
+  0.8,                                    !- Coefficient1 Constant
+  0.2,                                    !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0.5,                                    !- Minimum Value of x
+  1.5;                                    !- Maximum Value of x
+
+OS:Curve:Biquadratic,
+  {4daa98de-207c-4280-bd92-414f164cc2b8}, !- Handle
+  Curve Biquadratic 2,                    !- Name
+  0.342414409,                            !- Coefficient1 Constant
+  0.034885008,                            !- Coefficient2 x
+  -0.0006237,                             !- Coefficient3 x**2
+  0.004977216,                            !- Coefficient4 y
+  0.000437951,                            !- Coefficient5 y**2
+  -0.000728028,                           !- Coefficient6 x*y
+  17,                                     !- Minimum Value of x
+  22,                                     !- Maximum Value of x
+  13,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {1ceb0266-b903-42c8-9b10-10286ade1cef}, !- Handle
+  Curve Quadratic 2,                      !- Name
+  1.1552,                                 !- Coefficient1 Constant
+  -0.1808,                                !- Coefficient2 x
+  0.0256,                                 !- Coefficient3 x**2
+  0.5,                                    !- Minimum Value of x
+  1.5;                                    !- Maximum Value of x
+
+OS:Curve:Quadratic,
+  {eb9ad5b2-44f0-4998-8f81-ecc80e18e117}, !- Handle
+  Curve Quadratic 3,                      !- Name
+  0.85,                                   !- Coefficient1 Constant
+  0.15,                                   !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:Curve:Biquadratic,
+  {324af7f9-84e9-49d5-80f5-de49e76be4b2}, !- Handle
+  Curve Biquadratic 3,                    !- Name
+  0.942587793,                            !- Coefficient1 Constant
+  0.009543347,                            !- Coefficient2 x
+  0.00068377,                             !- Coefficient3 x**2
+  -0.011042676,                           !- Coefficient4 y
+  5.249e-06,                              !- Coefficient5 y**2
+  -9.72e-06,                              !- Coefficient6 x*y
+  17,                                     !- Minimum Value of x
+  22,                                     !- Maximum Value of x
+  13,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {346e5fb0-c143-46b9-b59f-9f0705da7503}, !- Handle
+  Curve Quadratic 4,                      !- Name
+  0.8,                                    !- Coefficient1 Constant
+  0.2,                                    !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0.5,                                    !- Minimum Value of x
+  1.5;                                    !- Maximum Value of x
+
+OS:Curve:Biquadratic,
+  {37e8c708-ce75-42df-aeb4-adfeefb04572}, !- Handle
+  Curve Biquadratic 4,                    !- Name
+  0.342414409,                            !- Coefficient1 Constant
+  0.034885008,                            !- Coefficient2 x
+  -0.0006237,                             !- Coefficient3 x**2
+  0.004977216,                            !- Coefficient4 y
+  0.000437951,                            !- Coefficient5 y**2
+  -0.000728028,                           !- Coefficient6 x*y
+  17,                                     !- Minimum Value of x
+  22,                                     !- Maximum Value of x
+  13,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {0946f4fe-fce7-46a4-a702-776989729150}, !- Handle
+  Curve Quadratic 5,                      !- Name
+  1.1552,                                 !- Coefficient1 Constant
+  -0.1808,                                !- Coefficient2 x
+  0.0256,                                 !- Coefficient3 x**2
+  0.5,                                    !- Minimum Value of x
+  1.5;                                    !- Maximum Value of x
+
+OS:Curve:Quadratic,
+  {5ff71161-2289-4be7-8d69-9b4ae71b0ce9}, !- Handle
+  Curve Quadratic 6,                      !- Name
+  0.85,                                   !- Coefficient1 Constant
+  0.15,                                   !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:ScheduleTypeLimits,
+  {798aab5e-11f8-4ace-9bdb-395afcc2435b}, !- Handle
+  Temperature Schedule Type Limits,       !- Name
+  0,                                      !- Lower Limit Value
+  100,                                    !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  Temperature;                            !- Unit Type
+
+OS:Schedule:Ruleset,
+  {5f0df52f-fae7-46c4-9c9a-e209127f0cb6}, !- Handle
+  Service Water Loop Temp - 140F,         !- Name
+  {798aab5e-11f8-4ace-9bdb-395afcc2435b}, !- Schedule Type Limits Name
+  {4e043d8a-03b9-4b91-bbd1-c87e833e2299}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {4e043d8a-03b9-4b91-bbd1-c87e833e2299}, !- Handle
+  Service Water Loop Temp - 140F Default, !- Name
+  {798aab5e-11f8-4ace-9bdb-395afcc2435b}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  60;                                     !- Value Until Time 1
+
+OS:ScheduleTypeLimits,
+  {7b49cd38-34d6-4fe8-8f95-f7546eac6e94}, !- Handle
+  Temperature Schedule Type Limits 1,     !- Name
+  0,                                      !- Lower Limit Value
+  100,                                    !- Upper Limit Value
+  Continuous,                             !- Numeric Type
+  Temperature;                            !- Unit Type
+
+OS:Schedule:Ruleset,
+  {b037a491-e895-4f23-bcd8-b892c89c2336}, !- Handle
+  Schedule Ruleset 1,                     !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  {211a3fd8-8fbd-4f0f-b1b6-e428e839ee27}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {211a3fd8-8fbd-4f0f-b1b6-e428e839ee27}, !- Handle
+  Schedule Day 3,                         !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  22;                                     !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {ce6dee05-62c6-4886-80fd-33251ca7d53f}, !- Handle
+  Schedule Ruleset 2,                     !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  {1241243d-629a-4c88-a239-e95025f45715}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {1241243d-629a-4c88-a239-e95025f45715}, !- Handle
+  Schedule Day 4,                         !- Name
+  {e5ca4b13-a382-46c2-acd4-a8bd2f9fa0f7}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  60;                                     !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {402721ef-5979-4bdf-8041-e590c3fe0060}, !- Handle
+  Water Heater Ambient Temp Schedule - 70F, !- Name
+  {7b49cd38-34d6-4fe8-8f95-f7546eac6e94}, !- Schedule Type Limits Name
+  {5d1da6bc-bb9e-4fd7-930d-a079c77f9584}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {5d1da6bc-bb9e-4fd7-930d-a079c77f9584}, !- Handle
+  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  {7b49cd38-34d6-4fe8-8f95-f7546eac6e94}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  21.1111111111111;                       !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {994e4358-a5e5-4105-b3d9-0541744b475c}, !- Handle
+  Schedule Ruleset 3,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {d8af5ea9-5c00-4c53-9840-d2111b919155}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {d8af5ea9-5c00-4c53-9840-d2111b919155}, !- Handle
+  Schedule Day 5,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.2;                                    !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {03ef9a0d-e396-4d95-b9a9-2c5bf0959aa2}, !- Handle
+  Schedule Ruleset 4,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {480e77ab-c394-4920-a09e-7121ceeb6f7b}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {480e77ab-c394-4920-a09e-7121ceeb6f7b}, !- Handle
+  Schedule Day 6,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.05;                                   !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {66f77d2e-2560-494b-badb-05d4b8b95f8f}, !- Handle
+  Schedule Ruleset 5,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {750a4871-35ff-45f3-a03a-0f64e32b424d}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {750a4871-35ff-45f3-a03a-0f64e32b424d}, !- Handle
+  Schedule Day 7,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  60;                                     !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {1ba98bda-dbd1-4539-b4f2-0da110704b60}, !- Handle
+  NECB-B-Service Water Heating,           !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {28e8cee7-9d1b-48b0-82ff-504232799abf}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {28e8cee7-9d1b-48b0-82ff-504232799abf}, !- Handle
+  NECB-B-Service Water Heating Default,   !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.6,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.05,                                   !- Value Until Time 3
+  11,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.7,                                    !- Value Until Time 4
+  12,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.4,                                    !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  15,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.6,                                    !- Value Until Time 7
+  16,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.4,                                    !- Value Until Time 8
+  18,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.3,                                    !- Value Until Time 9
+  19,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.4,                                    !- Value Until Time 10
+  20,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.5,                                    !- Value Until Time 11
+  22,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.8,                                    !- Value Until Time 12
+  24,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9;                                    !- Value Until Time 13
+
+OS:Schedule:Rule,
+  {1e23050a-a13e-49a5-80c4-2467af1b82dd}, !- Handle
+  Schedule Rule 17,                       !- Name
+  {1ba98bda-dbd1-4539-b4f2-0da110704b60}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {4d357ddc-a94c-47df-8351-410b39182fa1}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {4d357ddc-a94c-47df-8351-410b39182fa1}, !- Handle
+  NECB-B-Service Water Heating Default|Wkdy Day, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.6,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.5,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.05,                                   !- Value Until Time 3
+  11,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.7,                                    !- Value Until Time 4
+  12,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.4,                                    !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  15,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.6,                                    !- Value Until Time 7
+  16,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.4,                                    !- Value Until Time 8
+  18,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.3,                                    !- Value Until Time 9
+  19,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.4,                                    !- Value Until Time 10
+  20,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.5,                                    !- Value Until Time 11
+  22,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.8,                                    !- Value Until Time 12
+  24,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9;                                    !- Value Until Time 13
+
+OS:Schedule:Rule,
+  {e51dbf87-cbdf-4f01-82ab-04cddfec9e99}, !- Handle
+  Schedule Rule 18,                       !- Name
+  {1ba98bda-dbd1-4539-b4f2-0da110704b60}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {5b9c1cab-0740-4de7-8744-54e68ca9e221}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {5b9c1cab-0740-4de7-8744-54e68ca9e221}, !- Handle
+  NECB-B-Service Water Heating Sat Day,   !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.7,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.6,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.05,                                   !- Value Until Time 3
+  11,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.7,                                    !- Value Until Time 4
+  12,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.4,                                    !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  15,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.6,                                    !- Value Until Time 7
+  16,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.4,                                    !- Value Until Time 8
+  18,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.3,                                    !- Value Until Time 9
+  19,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.4,                                    !- Value Until Time 10
+  20,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.5,                                    !- Value Until Time 11
+  22,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.8,                                    !- Value Until Time 12
+  24,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.9;                                    !- Value Until Time 13
+
+OS:Schedule:Rule,
+  {dfd94c38-03ea-430c-8420-51927fda6c79}, !- Handle
+  Schedule Rule 19,                       !- Name
+  {1ba98bda-dbd1-4539-b4f2-0da110704b60}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {04227160-660a-4eaa-9797-3b2675668eb6}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {04227160-660a-4eaa-9797-3b2675668eb6}, !- Handle
+  NECB-B-Service Water Heating Sun|Hol Day, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.5,                                    !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.6,                                    !- Value Until Time 2
+  9,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.05,                                   !- Value Until Time 3
+  11,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.7,                                    !- Value Until Time 4
+  12,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.4,                                    !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.5,                                    !- Value Until Time 6
+  15,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.6,                                    !- Value Until Time 7
+  16,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.4,                                    !- Value Until Time 8
+  18,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.3,                                    !- Value Until Time 9
+  19,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.4,                                    !- Value Until Time 10
+  20,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.5,                                    !- Value Until Time 11
+  22,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.8,                                    !- Value Until Time 12
+  24,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.5;                                    !- Value Until Time 13
+
+OS:Schedule:Ruleset,
+  {9de65230-d742-45b7-9d14-bc159714fdc3}, !- Handle
+  Schedule Ruleset 6,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {d239e0da-6786-4579-a22b-a173de0ab476}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {d239e0da-6786-4579-a22b-a173de0ab476}, !- Handle
+  Schedule Day 8,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.2;                                    !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {9e0d9a78-d348-4b8c-81df-a192f34bb2cd}, !- Handle
+  Schedule Ruleset 7,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {fa363929-19f4-48e6-bb10-b03bad607311}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {fa363929-19f4-48e6-bb10-b03bad607311}, !- Handle
+  Schedule Day 9,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.05;                                   !- Value Until Time 1
+
+OS:Schedule:Ruleset,
+  {4087ed05-e5ee-49f4-b905-c4f6d2aad297}, !- Handle
+  Schedule Ruleset 8,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {fdfcd00a-df68-4c5b-9caf-c5184c4bbd74}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {fdfcd00a-df68-4c5b-9caf-c5184c4bbd74}, !- Handle
+  Schedule Day 10,                        !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  60;                                     !- Value Until Time 1
+
+OS:Sizing:Parameters,
+  {29c73a46-3104-4145-9124-debc2e6197af}, !- Handle
+  1.3,                                    !- Heating Sizing Factor
+  1.1;                                    !- Cooling Sizing Factor
+
+OS:OutputControl:ReportingTolerances,
+  {08c4fe40-2f65-4706-b74c-7c89ce27c8e7}, !- Handle
+  1,                                      !- Tolerance for Time Heating Setpoint Not Met {deltaC}
+  1;                                      !- Tolerance for Time Cooling Setpoint Not Met {deltaC}
+
+OS:Schedule:Ruleset,
+  {47188bd9-bd4e-43c0-a1d4-30ec8c55b006}, !- Handle
+  Economizer Max OA Fraction 100 pct,     !- Name
+  ,                                       !- Schedule Type Limits Name
+  {3ac04d44-0083-4936-bbc5-f1c7f8f8cbf7}; !- Default Day Schedule Name
+
+OS:Schedule:Day,
+  {3ac04d44-0083-4936-bbc5-f1c7f8f8cbf7}, !- Handle
+  Economizer Max OA Fraction 100 pct Default, !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:AvailabilityManager:NightCycle,
+  {c1b869dd-ae25-4097-845f-8300f0cd1c25}, !- Handle
+  Availability Manager Night Cycle 1,     !- Name
+  ,                                       !- Applicability Schedule
+  ,                                       !- Fan Schedule
+  CycleOnAny,                             !- Control Type
+  1,                                      !- Thermostat Tolerance {deltaC}
+  ,                                       !- Cycling Run Time Control Type
+  3600,                                   !- Cycling Run Time {s}
+  {4c1d4eeb-7f47-4fc6-95fa-87c9786e9ff2}, !- Control Zone or Zone List Name
+  {ae60de23-12e6-4bdc-be5e-01e1341b1553}, !- Cooling Control Zone or Zone List Name
+  {fa414677-20b9-4899-87e7-35aa5dcde58a}, !- Heating Control Zone or Zone List Name
+  {75ed8625-2412-4aa4-aead-3f4caaddbc44}; !- Heating Zone Fans Only Zone or Zone List Name
+
+OS:ModelObjectList,
+  {4c1d4eeb-7f47-4fc6-95fa-87c9786e9ff2}, !- Handle
+  Availability Manager Night Cycle 1 Heating Zone Fans Only Zone List; !- Name
+
+OS:ModelObjectList,
+  {ae60de23-12e6-4bdc-be5e-01e1341b1553}, !- Handle
+  {adcb8f4f-7f4b-4036-8b67-3784b60cdf6e}; !- Name
+
+OS:ModelObjectList,
+  {fa414677-20b9-4899-87e7-35aa5dcde58a}, !- Handle
+  {2d68f7e5-7b49-4a5a-9de9-992a0f67b62c}; !- Name
+
+OS:ModelObjectList,
+  {75ed8625-2412-4aa4-aead-3f4caaddbc44}, !- Handle
+  {671e8a03-503d-4a57-b102-c2461849ae8c}; !- Name
+
+OS:Schedule:Ruleset,
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  {c67e48f4-cf89-478d-a5de-c2c0d24346de}, !- Default Day Schedule Name
+  {2369e118-ef30-4561-8e12-f17ebe7dfdd6}, !- Summer Design Day Schedule Name
+  {f0e9d55d-3246-4d3a-8a44-fc9952037f13}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {c67e48f4-cf89-478d-a5de-c2c0d24346de}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Default, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {a25dd254-76f3-4858-acd5-4c6a37127c83}, !- Handle
+  Schedule Day 11,                        !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {f0e9d55d-3246-4d3a-8a44-fc9952037f13}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Winter Design Day, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {0c3fbc0f-0047-4e53-8aca-74a53444e684}, !- Handle
+  Schedule Day 12,                        !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {2369e118-ef30-4561-8e12-f17ebe7dfdd6}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Summer Design Day, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {5770a5ae-6975-4aef-b335-94d3cbd22b3b}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Monday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  6,                                      !- Rule Order
+  {82533f02-0d3c-47f4-9f2d-1508259e9faa}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  25;                                     !- End Day
+
+OS:Schedule:Day,
+  {82533f02-0d3c-47f4-9f2d-1508259e9faa}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Monday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {a4930970-550e-4442-9d71-8a60185b8650}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Tuesday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  5,                                      !- Rule Order
+  {a0a22e53-4b5b-4424-a598-c1dadee34b5c}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  26;                                     !- End Day
+
+OS:Schedule:Day,
+  {a0a22e53-4b5b-4424-a598-c1dadee34b5c}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Tuesday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {b8912b3f-7332-4242-8dbd-9d0cd17688df}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Wednesday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  4,                                      !- Rule Order
+  {baa7050c-b1ec-4008-bd5d-41ade9ef383a}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  27;                                     !- End Day
+
+OS:Schedule:Day,
+  {baa7050c-b1ec-4008-bd5d-41ade9ef383a}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Wednesday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {d181f777-1592-436a-adc2-dd5c662bfd7a}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Thursday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  3,                                      !- Rule Order
+  {2c10d5ff-53c9-4b69-96ce-e9d8078e065f}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  28;                                     !- End Day
+
+OS:Schedule:Day,
+  {2c10d5ff-53c9-4b69-96ce-e9d8078e065f}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Thursday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {43c2c074-a599-401a-86a3-8d7a74ddd031}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Friday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {1c8c9942-f626-43f0-a071-1515c23dc9be}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  29;                                     !- End Day
+
+OS:Schedule:Day,
+  {1c8c9942-f626-43f0-a071-1515c23dc9be}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Friday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {c310d2f0-d9fa-48c8-862f-e3180578190a}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Saturday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {47953b37-73fe-4a60-971e-e33e3147a1c4}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  30;                                     !- End Day
+
+OS:Schedule:Day,
+  {47953b37-73fe-4a60-971e-e33e3147a1c4}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Saturday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  1,                                      !- Value Until Time 1
+  10,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0,                                      !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  1;                                      !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {6ebfcc00-01dd-416a-8e9f-332d76b164b8}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Sunday Rule, !- Name
+  {8608104c-bbb6-49c8-9479-783733a4f35f}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {5e3d6ed6-c2b5-4654-9e94-7383f95316ae}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {5e3d6ed6-c2b5-4654-9e94-7383f95316ae}, !- Handle
+  Sp-Dining Sys-3 Flr-1 Sch-B HPlcmt-south ZN NECB System 3 PSZ Occ Sch Sunday, !- Name
+  {5329984e-8852-4ece-978f-d4dfacb99b3e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0,                                      !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  1,                                      !- Value Until Time 2
+  11,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0,                                      !- Value Until Time 3
+  23,                                     !- Hour 4
+  0,                                      !- Minute 4
+  1,                                      !- Value Until Time 4
+  24,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0;                                      !- Value Until Time 5
+
+OS:Curve:Biquadratic,
+  {a6e89290-9947-48f5-89a3-3c6b1d6bfe32}, !- Handle
+  DXCOOL-NECB2011-REF-CAPFT,              !- Name
+  0.867905,                               !- Coefficient1 Constant
+  0.0142459,                              !- Coefficient2 x
+  0.00055436,                             !- Coefficient3 x**2
+  -0.0075575,                             !- Coefficient4 y
+  3.3e-05,                                !- Coefficient5 y**2
+  -0.0001918,                             !- Coefficient6 x*y
+  13,                                     !- Minimum Value of x
+  24,                                     !- Maximum Value of x
+  24,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {639c5fc1-aae7-4d08-8564-7b6ba1492e93}, !- Handle
+  DXCOOL-NECB2011-REF-CAPFFLOW,           !- Name
+  1,                                      !- Coefficient1 Constant
+  0,                                      !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:Curve:Biquadratic,
+  {adc03227-22d3-4d0e-b386-dd3aa42564fc}, !- Handle
+  DXCOOL-NECB2011-REF-COOLEIRFT,          !- Name
+  0.116936,                               !- Coefficient1 Constant
+  0.0284933,                              !- Coefficient2 x
+  -0.0004112,                             !- Coefficient3 x**2
+  0.0214108,                              !- Coefficient4 y
+  0.00016103,                             !- Coefficient5 y**2
+  -0.0006791,                             !- Coefficient6 x*y
+  13,                                     !- Minimum Value of x
+  24,                                     !- Maximum Value of x
+  24,                                     !- Minimum Value of y
+  46;                                     !- Maximum Value of y
+
+OS:Curve:Quadratic,
+  {3d744fb6-1cab-4bfc-856b-546c95f327dc}, !- Handle
+  DXCOOL-NECB2011-REF-COOLEIRFFLOW,       !- Name
+  1,                                      !- Coefficient1 Constant
+  0,                                      !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:Curve:Cubic,
+  {ed1aa20a-7845-4393-910c-0ea64b11e753}, !- Handle
+  DXCOOL-NECB2011-REF-COOLPLFFPLR,        !- Name
+  0.0277,                                 !- Coefficient1 Constant
+  4.9151,                                 !- Coefficient2 x
+  -8.184,                                 !- Coefficient3 x**2
+  4.2702,                                 !- Coefficient4 x**3
+  0.7,                                    !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:Curve:Cubic,
+  {0e443682-f788-4faa-b5f3-bd752207669b}, !- Handle
+  BOILER-EFFFPLR-NECB2011,                !- Name
+  0.2901,                                 !- Coefficient1 Constant
+  2.6664,                                 !- Coefficient2 x
+  -3.764,                                 !- Coefficient3 x**2
+  1.82,                                   !- Coefficient4 x**3
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:Curve:Cubic,
+  {3adca56f-2e67-4036-b386-9236b506ddb6}, !- Handle
+  SWH-EFFFPLR-NECB2011,                   !- Name
+  0.7576,                                 !- Coefficient1 Constant
+  1.0071,                                 !- Coefficient2 x
+  -1.4443,                                !- Coefficient3 x**2
+  0.6844,                                 !- Coefficient4 x**3
+  0,                                      !- Minimum Value of x
+  1;                                      !- Maximum Value of x
+
+OS:ClimateZones,
+  {985c0650-0d49-4078-b7cf-a92e9513b392}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:LifeCycleCost:Parameters,
+  {256d99e0-8cd1-4c80-9c2a-2d5715269f79}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
+
+OS:StandardsInformation:Construction,
+  {2c4f546f-934e-4371-b7f2-28bd5c4be968}, !- Handle
+  {a3b8523b-d5a6-4163-a372-56f8554bedb9}, !- Construction Name
+  TubularDaylightDome;                    !- Intended Surface Type
+
+OS:StandardsInformation:Construction,
+  {6afec956-82da-4154-8062-f8444e4578c8}, !- Handle
+  {6756f3c6-efaf-4fbf-a232-f7a7f5f8d450}, !- Construction Name
+  Skylight;                               !- Intended Surface Type
+
+OS:StandardsInformation:Construction,
+  {f4366819-b640-496e-bb9d-289086d09ac7}, !- Handle
+  {1942e15a-1248-48d4-a9d6-7d9312daa09d}, !- Construction Name
+  GlassDoor;                              !- Intended Surface Type
+
+OS:StandardsInformation:Material,
+  {c43ff3cd-559e-41ac-8e88-7d4db9fffef1}, !- Handle
+  {acde36ef-d67e-428b-8d67-7ff3a5db3395}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a457a7f1-f334-474e-a345-70a6734727ee}, !- Handle
+  {bbcae55f-dc0b-4568-94c2-da52915c6e64}, !- Construction Name
+  ExteriorWindow;                         !- Intended Surface Type
+
+OS:StandardsInformation:Material,
+  {8d3665e8-0d95-4781-8809-7f2084faa8d7}, !- Handle
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {64749cf0-c503-42b2-9811-1a14a13ff7b3}, !- Handle
+  {27b2b6e4-2bd3-4b08-880b-070277b0f971}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {4040dc0c-7579-402e-9539-b7755cb077b5}, !- Handle
+  {84ec1358-f35e-428a-bdc3-2f9de02f5086}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e225a442-7eb9-4d90-8e67-3e152fc64ed1}, !- Handle
+  {0b70ccc4-7bc3-432b-a8e6-6cb2bf719bb8}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {ab63771a-cc87-4d24-8da9-cf899f6a7df6}, !- Handle
+  {5fa8877b-d7c9-4ae1-a464-f5c75238dd2d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6411a133-e4d8-4757-8ca3-7d024ca94161}, !- Handle
+  {2691a965-4ad3-4458-87d7-5ee60237f192}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d1b1fa11-bbb9-4de0-8e05-98ec408c652d}, !- Handle
+  {7b59089f-9201-452a-9fc4-e83a9443cc37}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c664a4ff-b964-4d61-a26d-3075047f0a80}, !- Handle
+  {4b4f8fbe-fb5b-4085-9af4-ecf9eb5ce292}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {bb6920cc-550d-4579-bfee-f64ccb090054}, !- Handle
+  {02547311-2903-4271-85c6-5ef37f49a4de}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {f7686ca6-983e-4b4b-a382-14db2740d64e}, !- Handle
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a1c92742-87ed-4203-a043-9332e9b9867c}, !- Handle
+  {74301b65-1ab9-4b0c-81bb-f7fcf6486b6b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {e9101879-efce-48a2-9a85-0bcee5a94fab}, !- Handle
+  {a200863d-ffb2-4e22-b5de-e01048f89c71}; !- Material Name
+
+OS:Construction,
+  {e27ce4ce-96ee-4132-8c2e-3dad27cb510e}, !- Handle
+  BTAP-Grnd-Roof-Mass,                    !- Name
+  ,                                       !- Surface Rendering Name
+  {27b2b6e4-2bd3-4b08-880b-070277b0f971}, !- Layer 1
+  {8123ea19-659f-408b-9bbf-9d3d1a8354b5}; !- Layer 2
+
+OS:StandardsInformation:Construction,
+  {4a261e3a-1173-4a16-9335-13cab406fa2a}, !- Handle
+  {e27ce4ce-96ee-4132-8c2e-3dad27cb510e}, !- Construction Name
+  GroundContactRoof,                      !- Intended Surface Type
+  Mass,                                   !- Standards Construction Type
+  1,                                      !- Perturbable Layer
+  Insulation,                             !- Perturbable Layer Type
+  ;                                       !- Other Perturbable Layer Type
+
+OS:RadianceParameters,
+  {de49a0b9-ca1d-409f-a3e1-96bb6d04ab43}, !- Handle
+  1,                                      !- Accumulated Rays per Record
+  0,                                      !- Direct Threshold
+  1,                                      !- Direct Certainty
+  1,                                      !- Direct Jitter
+  1,                                      !- Direct Pretest
+  6,                                      !- Ambient Bounces VMX
+  2,                                      !- Ambient Bounces DMX
+  4050,                                   !- Ambient Divisions VMX
+  512,                                    !- Ambient Divisions DMX
+  256,                                    !- Ambient Supersamples
+  0.001,                                  !- Limit Weight VMX
+  0.001,                                  !- Limit Weight DMX
+  500,                                    !- Klems Sampling Density
+  146;                                    !- Sky Discretization Resolution
+
+OS:ProgramControl,
+  {aeb19c40-90fa-463c-848b-b020b0c22917}; !- Handle
+
+OS:ZoneAirHeatBalanceAlgorithm,
+  {dbc3aaa1-c3c3-4b10-bd44-defa9a80b44a}, !- Handle
+  ThirdOrderBackwardDifference;           !- Algorithm
+
+OS:ZoneAirContaminantBalance,
+  {0d36ab25-10c4-44e5-8b74-55e9a4b3b2f1}; !- Handle
+
+OS:ZoneCapacitanceMultiplier:ResearchSpecial,
+  {db9a46c4-04d8-4431-9368-1731a9a0eb23}, !- Handle
+  ,                                       !- Temperature Capacity Multiplier
+  ,                                       !- Humidity Capacity Multiplier
+  ;                                       !- Carbon Dioxide Capacity Multiplier
+
+OS:Construction,
+  {d4b34403-d9d4-474a-a8a3-1691980f870a}, !- Handle
+  BTAP-Ext-DaylightDiffuser,              !- Name
+  ,                                       !- Surface Rendering Name
+  {98536b5b-ec03-43a0-8867-65eac1e2a74f}; !- Layer 1
+
+OS:StandardsInformation:Construction,
+  {50ad895b-74a8-42c2-a89a-adeafa5f16bd}, !- Handle
+  {d4b34403-d9d4-474a-a8a3-1691980f870a}, !- Construction Name
+  TubularDaylightDiffuser;                !- Intended Surface Type
+
+OS:Rendering:Color,
+  {1867518d-6de3-4059-a23c-d3ba1b71b832}, !- Handle
+  Rendering Color 1,                      !- Name
+  127,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {de948639-d1dc-4c58-b2dd-18559436c17c}, !- Handle
+  Rendering Color 2,                      !- Name
+  255,                                    !- Rendering Red Value
+  140,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+

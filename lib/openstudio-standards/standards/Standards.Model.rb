@@ -4,6 +4,7 @@ require 'csv'
 
 class Standard
   attr_accessor :space_multiplier_map
+  attr_accessor :standards_data
 
   def define_space_multiplier
     return @space_multiplier_map
@@ -1528,6 +1529,9 @@ class Standard
     # ERVs
     model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
 
+    # Gas Heaters
+    model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_efficiency_and_curves(obj)}
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
 
@@ -1566,7 +1570,8 @@ class Standard
     return true
   end
 
-  # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
+
+   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
   # @param hash_of_objects [Hash] hash of objects to search through
@@ -1594,6 +1599,7 @@ class Standard
     end
 
     # Compare each of the objects against the search criteria
+    raise("This is not a table #{hash_of_objects}") unless hash_of_objects.respond_to?(:each)
     hash_of_objects.each do |object|
       meets_all_search_criteria = true
       search_criteria.each do |key, value|
@@ -1715,6 +1721,184 @@ class Standard
     else
       desired_object = matching_objects[0]
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n #{matching_objects.join("\n")}")
+    end
+
+    return desired_object
+  end
+
+
+
+
+
+  # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
+  # Returns an Array (empty if nothing found) of matching objects.
+  #
+  # @param table_name [Hash] name of table in standards database.
+  # @param search_criteria [Hash] hash of search criteria
+  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
+  # @example Find all the schedule rules that match the name
+  #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
+  #   if rules.size.zero?
+  #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+  #     return false
+  #   end
+  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil, date: nil, area: nil, num_floors: nil)
+    desired_object = nil
+    search_criteria_matching_objects = []
+    matching_objects = []
+    hash_of_objects= @standards_data[table_name]
+
+    #needed for NRCan data structure compatibility. We keep all tables in a 'tables' hash in @standards_data and the table
+    # itself is in the 'table' hash index.
+    if hash_of_objects.nil?
+      table = @standards_data['tables'][table_name]['table']
+      hash_of_objects = table
+    end
+
+    # Compare each of the objects against the search criteria
+    hash_of_objects.each do |object|
+      meets_all_search_criteria = true
+      search_criteria.each do |key, value|
+        # Don't check non-existent search criteria
+        next unless object.key?(key)
+        # Stop as soon as one of the search criteria is not met
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
+          meets_all_search_criteria = false
+          break
+        end
+      end
+      # Skip objects that don't meet all search criteria
+      next unless meets_all_search_criteria
+      # If made it here, object matches all search criteria
+      matching_objects << object
+    end
+
+    # If capacity was specified, narrow down the matching objects
+    unless capacity.nil?
+      # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity') || !object.key?('maximum_capacity') }
+
+      # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
+
+      # Round up if capacity is an integer
+      if capacity == capacity.round
+        capacity += (capacity * 0.01)
+      end
+      # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
+      matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+
+      # If no object was found, round the capacity down in case the number fell between the limits in the json file.
+      if matching_capacity_objects.size.zero?
+        capacity *= 0.99
+        search_criteria_matching_objects.each do |object|
+          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+          next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
+          # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+          next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
+          # Skip objects whose the minimum capacity is below the specified capacity
+          next if capacity <= object['minimum_capacity'].to_f
+          # Skip objects whose max
+          next if capacity > object['maximum_capacity'].to_f
+          # Found a matching object
+          matching_objects << object
+        end
+      end
+      # If date was specified, narrow down the matching objects
+      unless date.nil?
+        date_matching_objects = []
+        matching_objects.each do |object|
+          # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+          next if !object.key?('start_date') || !object.key?('end_date')
+          # Skip objects whose the start date is earlier than the specified date
+          next if date <= Date.parse(object['start_date'])
+          # Skip objects whose end date is beyond the specified date
+          next if date > Date.parse(object['end_date'])
+          # Found a matching object
+          date_matching_objects << object
+        end
+        matching_objects = date_matching_objects
+      end
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless area.nil?
+      # Skip objects that don't have fields for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_area') || !object.key?('maximum_area') }
+
+      # Skip objects that don't have values specified for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| object['minimum_area'].nil? || object['maximum_area'].nil? }
+
+      # Skip objects whose minimum area is below or maximum area is above area
+      matching_objects = matching_objects.reject { |object| area.to_f <= object['minimum_area'].to_f || area.to_f > object['maximum_area'].to_f }
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless num_floors.nil?
+      # Skip objects that don't have fields for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_floors') || !object.key?('maximum_floors') }
+
+      # Skip objects that don't have values specified for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| object['minimum_floors'].nil? || object['maximum_floors'].nil? }
+
+      # Skip objects whose minimum floors is below or maximum floors is above num_floors
+      matching_objects = matching_objects.reject { |object| num_floors.to_f < object['minimum_floors'].to_f || num_floors.to_f > object['maximum_floors'].to_f }
+    end
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
+    end
+
+    return matching_objects
+  end
+
+  # Method to search through a hash for an object that meets the desired search criteria, as passed via a hash.
+  # If capacity is supplied, the object will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  #
+  # @param table_name [String] name of table
+  # @param search_criteria [Hash] hash of search criteria
+  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @example Find the motor that meets these size criteria
+  #   search_criteria = {
+  #   'template' => template,
+  #   'number_of_poles' => 4.0,
+  #   'type' => 'Enclosed',
+  #   }
+  #   motor_properties = self.model.find_object(motors, search_criteria, 2.5)
+  def standards_lookup_table_first(table_name:, search_criteria: {}, capacity: nil, date: nil)
+    #run the many version of the look up code...DRY.
+    matching_objects = standards_lookup_table_many(table_name: table_name,
+                                search_criteria: search_criteria,
+                                capacity: capacity,
+                                date: date)
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
+      desired_object = nil
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
+    elsif matching_objects.size == 1
+      desired_object = matching_objects[0]
+    else
+      desired_object = matching_objects[0]
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n#{matching_objects.join("\n")}")
     end
 
     return desired_object
@@ -2752,7 +2936,7 @@ class Standard
 	elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
       result = 46_320
     elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
-      result = 4982  
+      result = 4982
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
@@ -3235,6 +3419,7 @@ class Standard
 
     # switch to use this but update test in standards and measures to load this outside of the method
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+
 
     return construction_properties
   end
@@ -4230,23 +4415,29 @@ class Standard
   end
 
   def validate_initial_model(model)
+    is_valid = true
     if model.getBuildingStorys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys the geometry model.")
+      is_valid = false
     end
     if model.getThermalZones.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories the geometry model.")
+      is_valid = false
     end
     if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model.")
+      is_valid = false
     end
 
     if @space_type_map.nil? || @space_type_map.empty?
       @space_type_map = get_space_type_maps_from_model(model)
       if @space_type_map.nil? || @space_type_map.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model or in standards database #{@space_type_map}.")
+        is_valid = false
       else
         @space_type_map = @space_type_map.sort.to_h
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from model")
@@ -4264,6 +4455,19 @@ class Standard
     unless @space_multiplier_map.empty?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
     end
+    return is_valid
+  end
+
+
+  # Determines how ventilation for the standard is specified.
+  # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
+  # When 'Maximum', only the biggest OA flow rate.  Used by T24.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [String] the ventilation method, either Sum or Maximum
+  def model_ventilation_method(model)
+    ventilation_method = 'Sum'
+    return ventilation_method
   end
 
 
@@ -4413,6 +4617,50 @@ class Standard
 
     return true
   end
+
+
+
+  def load_user_geometry_osm(osm_model_path:)
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(osm_model_path)
+
+    # Check that the model loaded successfully
+    if model.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Version translation failed for #{osm_model_path}")
+      return false
+    end
+    model = model.get
+
+    # Check for expected characteristics of geometry model
+    if model.getBuildingStorys.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to BuildingStorys in the geometry model: #{osm_model_path}.")
+    end
+    if model.getThermalZones.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign Spaces to ThermalZones in the geometry model: #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfStories in the geometry model #{osm_model_path}.")
+    end
+    if model.getBuilding.standardsNumberOfAboveGroundStories.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please define Building.standardsNumberOfAboveStories in the geometry model#{osm_model_path}.")
+    end
+
+    if @space_type_map.nil? || @space_type_map.empty?
+      @space_type_map = get_space_type_maps_from_model(model)
+      if @space_type_map.nil? || @space_type_map.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Please assign SpaceTypes in the geometry model: #{osm_model_path} or in standards database #{@space_type_map}.")
+      else
+        @space_type_map = @space_type_map.sort.to_h
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Loaded space type map from osm file: #{osm_model_path}")
+      end
+    end
+    return model
+  end
+
+
+
+
+
 
   # Loads a osm as a starting point.
   #
