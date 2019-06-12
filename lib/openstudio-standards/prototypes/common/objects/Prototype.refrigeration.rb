@@ -296,8 +296,9 @@ class Standard
 
     # Add doorway protection
     if props['doorway_protection_type']
-    ref_walkin.zoneBoundaries.each do |zb|
-      zb.setStockingDoorOpeningProtectionTypeFacingZone == props['doorway_protection_type']
+      ref_walkin.zoneBoundaries.each do |zb|
+        zb.setStockingDoorOpeningProtectionTypeFacingZone == props['doorway_protection_type']
+      end
     end
 
 
