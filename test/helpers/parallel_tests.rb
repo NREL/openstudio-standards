@@ -44,7 +44,7 @@ def write_results(result, test_file, test_name)
   File.delete(test_file_output) if File.exist?(test_file_output)
   test_result = false
   if result[2].success?
-    puts "PASSED: #{test_name} IN FILE #{test_file}".green
+    puts "PASSED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".green
     return true
   else
     #store output for failed run.
@@ -61,7 +61,7 @@ def write_results(result, test_file, test_name)
 
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
-    puts "FAILED: #{test_name} IN FILE #{test_file}".red
+    puts "FAILED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".red
     return false
   end
 end
