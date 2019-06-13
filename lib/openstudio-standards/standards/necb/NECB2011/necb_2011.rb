@@ -16,8 +16,8 @@ class NECB2011 < Standard
     @standards_data["tables"][table_name]
   end
 
-  def get_standard_constant_value(constant_name: )
-     puts "do nothing"
+  def get_standard_constant_value(constant_name:)
+    puts "do nothing"
   end
 
 
@@ -179,12 +179,15 @@ class NECB2011 < Standard
                                    x_scale: 1.0,
                                    y_scale: 1.0,
                                    z_scale: 1.0,
-                                   fdwr_set: 'MAXIMIZE',
-                                   ssr_set: 'MAXIMIZE'
+                                   fdwr_set: 1.1,
+                                   srr_set: 1.1,
+                                   new_auto_zoner: false
+
   )
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
+
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 x_scale: x_scale,
@@ -192,7 +195,8 @@ class NECB2011 < Standard
                                 z_scale: z_scale,
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
-                                ssr_set: ssr_set)
+                                srr_set: srr_set,
+                                new_auto_zoner: new_auto_zoner)
   end
 
 
@@ -205,19 +209,22 @@ class NECB2011 < Standard
                            x_scale: 1.0,
                            y_scale: 1.0,
                            z_scale: 1.0,
-                           fdwr_set: 'MAXIMIZE',
-                           ssr_set: 'MAXIMIZE'
-  )
+                           fdwr_set: 1.1,
+                           srr_set: 1.1,
+                           new_auto_zoner: false
 
+  )
+    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
+    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
     #validate that model has information required.
-    puts 'Old SPace types'
-    model.getSpaceTypes.each do |spacetype|
-      puts spacetype.name
-    end
+    #puts 'Old SPace types'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
 
     return false unless validate_initial_model(model)
 
@@ -225,16 +232,16 @@ class NECB2011 < Standard
     return false unless validate_space_types(model)
 
     #puts Old SPace types
-    puts 'new spacetypes'
-    model.getSpaceTypes.each do |spacetype|
-      puts spacetype.name
-    end
+    # puts 'new spacetypes'
+    # model.getSpaceTypes.each do |spacetype|
+    #   puts spacetype.name
+    # end
 
     #Get rid of any existing Thermostats. We will only use the code schedules.
     model.getThermostatSetpointDualSetpoints(&:remove)
 
     #Set simulation start day to be consistent.
-    model.yearDescription.get.setDayofWeekforStartDay('Sunday')
+    model.getYearDescription.setDayofWeekforStartDay('Sunday')
 
     #Set climate data.
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
@@ -245,6 +252,7 @@ class NECB2011 < Standard
 
     #Set Loads/Schedules
     model_add_loads(model)
+
 
     #Add Infiltration
     model_apply_infiltration_standard(model)
@@ -262,8 +270,8 @@ class NECB2011 < Standard
 
     # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
     # are adjacent to conditioned spaces.
-    apply_standard_window_to_wall_ratio(model, fdwr_set: fdwr_set)
-    apply_standard_skylight_to_roof_ratio(model, ssr_set: ssr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
 
     #Do a sizing run for HVAC now that all the loads have been defined.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR0") == false
@@ -271,7 +279,26 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+    if new_auto_zoner
+      auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
+      auto_system(model: model,
+                  boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
+                  baseboard_type: system_fuel_defaults['baseboard_type'],
+                  mau_type: system_fuel_defaults['mau_type'],
+                  mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
+                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                  chiller_type: system_fuel_defaults['chiller_type'],
+                  heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
+                  heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
+                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
+      )
+      random = Random.new(1234)
+      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
+      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+    else
+      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+    end
     model_add_swh(model)
     model_apply_sizing_parameters(model)
 
@@ -306,6 +333,9 @@ class NECB2011 < Standard
     # Commented out because it consumes a significant portion of the btap run time (30% - 50%).  The line below should
     # be uncommented when the flie clarity it affords is desired.
     # model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+
+    #set space_type colors
+    # model.getSpaceTypes.sort.each { |space_type| space_type.setRenderingColor(standard.set_random_rendering_color(space_type)) }
     return model
   end
 

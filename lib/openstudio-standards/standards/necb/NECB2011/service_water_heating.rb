@@ -5,13 +5,16 @@ class NECB2011
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
     if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      shw_pump_head = auto_size_shw_pump_head(model, default: true)
+      # Only add a shw_loop if at least one space calls for shw.  If no space calls for shw put out a warning but do not
+      # add a shw loop.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
+      return true
     else
       shw_pump_head = auto_size_shw_pump_head(model, default: false)
     end
-    shw_pump_motor_eff = 0.9
 
     # Add the main service water heating loop
+    shw_pump_motor_eff = 0.9
 
     swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
 
@@ -27,15 +30,12 @@ class NECB2011
                                        shw_sizing['parasitic_loss'],
                                        nil)
 
-    if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
-    else
-      # Note that when water use equipment is assigned to spaces then the water used
-      # by the equipment is multiplied by the space (ultimately thermal zone) multiplier.  Note that there is a separate
-      # water use equipment multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
-    end
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by
+    # the space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier
+    # as well which is different than the space (ultimately thermal zone) multiplier.
+    shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
+
     return true
   end
 
@@ -75,7 +75,7 @@ class NECB2011
 
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
-    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
+    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOil#2'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
@@ -108,7 +108,7 @@ class NECB2011
         end
         # Calculate the skin loss coefficient (UA)
         ua_btu_per_hr_per_f = sl_btu_per_hr / 70
-      when 'NaturalGas'
+      when 'NaturalGas', 'FuelOil#2'
         if capacity_btu_per_hr <= 75_000
           # Fixed water heater thermal efficiency per PNNL
           water_heater_eff = 0.82
@@ -161,7 +161,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOil#2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end

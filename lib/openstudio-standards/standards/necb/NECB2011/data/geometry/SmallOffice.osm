@@ -1204,7 +1204,7 @@ OS:SubSurface,
 
 OS:Building,
   {6b25c3c7-39e4-4be7-84a9-17e80feecaf5}, !- Handle
-  NECB_2011SmallOffice,                   !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

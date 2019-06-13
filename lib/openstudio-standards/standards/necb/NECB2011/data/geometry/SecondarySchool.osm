@@ -4718,7 +4718,7 @@ OS:SubSurface,
 
 OS:Building,
   {27c6b628-dd0b-4338-bf65-2883ce7ce3a0}, !- Handle
-  NECB_2011SecondarySchool,               !- Name
+  ,                                       !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -13405,17 +13405,17 @@ OS:Rendering:Color,
 
 OS:SpaceType,
   {5ecc516a-7467-4781-858b-5720f2a9c694}, !- Handle
-  Space Function Lobby - elevator,        !- Name
+  Space Function Lobby - other,        !- Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   {a98351fa-0543-4e79-aecb-8918acfbf6ed}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Space Function,                         !- Standards Building Type
-  Lobby - elevator;                       !- Standards Space Type
+  Lobby - other;                       !- Standards Space Type
 
 OS:Rendering:Color,
   {a98351fa-0543-4e79-aecb-8918acfbf6ed}, !- Handle
-  Space Function Lobby - elevator,        !- Name
+  Space Function Lobby - other,        !- Name
   255,                                    !- Rendering Red Value
   255,                                    !- Rendering Green Value
   255;                                    !- Rendering Blue Value

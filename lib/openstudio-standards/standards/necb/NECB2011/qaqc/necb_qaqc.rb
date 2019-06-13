@@ -2,6 +2,112 @@ class NECB2011
 
   attr_accessor :qaqc_data
 
+  def get_sql_table_to_json( model, report_name, report_for_string, table_name )
+    table = []
+    query_row_names = "
+     SELECT DISTINCT
+        RowName
+     FROM
+        tabulardatawithstrings
+      WHERE
+        ReportName='#{report_name}'
+      AND
+        ReportForString='#{report_for_string}'
+      AND
+        TableName='#{table_name}'"
+    row_names = model.sqlFile.get.execAndReturnVectorOfString(query_row_names).get
+
+    #get Columns
+    query_col_names = "
+     SELECT DISTINCT
+        ColumnName
+     FROM tabulardatawithstrings
+      WHERE ReportName='#{report_name}'
+      AND ReportForString='#{report_for_string}'
+      AND TableName='#{table_name}'"
+    col_names = model.sqlFile.get.execAndReturnVectorOfString(query_col_names).get
+
+    #get units
+    query_unit_names = "
+     SELECT DISTINCT
+        Units
+     FROM tabulardatawithstrings
+      WHERE ReportName='#{report_name}'
+      AND ReportForString='#{report_for_string}'
+      AND TableName='#{table_name}'"
+    unit_names = model.sqlFile.get.execAndReturnVectorOfString(query_unit_names).get
+
+    row_names.each do |row|
+      next if row.nil? || row == ''
+      row_hash = {}
+      row_hash[:name] = row
+      col_names.each do |col|
+        unit_names.each do |unit|
+          query = "
+        SELECT
+          Value
+        FROM
+          tabulardatawithstrings
+        WHERE
+          ReportName='#{report_name}'
+        AND
+          ReportForString='#{report_for_string}'
+        AND
+          TableName='#{table_name}'
+        AND
+          RowName='#{row}'
+        AND
+          ColumnName='#{col}'
+        AND
+          Units='#{unit}'
+"
+          column_name = "#{col}".gsub(/\s+/, "_").downcase
+          column_name = column_name + "_#{unit}" if unit != ''
+          value = model.sqlFile.get.execAndReturnFirstString(query)
+          next if value.empty? || value.get.nil?
+          value = value.get.strip
+          #check is value is a number
+          if (!!Float(value) rescue false) && value.to_f != 0
+            row_hash[column_name] = value.to_f
+            #Check if value is a date
+          elsif  unit == '' && value =~ /\d\d-\D\D\D-\d\d:\d\d/
+            row_hash[column_name] = DateTime.parse(value)
+            #skip if value in an empty string or a zero value
+          elsif value != '' && value != '0.00'
+            row_hash[column_name] = value
+          end
+        end
+      end
+      if row_hash.size > 1
+        table << row_hash
+      end
+    end
+    result = { report_name: report_name, report_for_string: report_for_string, table_name: table_name, table: table }
+    return result
+  end
+
+  def merge_recursively(a, b)
+    a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
+  end
+
+
+  def get_sql_tables_to_json(model)
+    sql_data = []
+    sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "End Uses")
+    sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "Site and Source Energy")
+    # sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "On-Site Thermal Sources")
+    # sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "Comfort and Setpoint Not Met Summary")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Window-Wall Ratio")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Conditioned Window-Wall Ratio")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Skylight-Roof Ratio")
+    # sql_data << get_sql_table_to_json(model, "DemandEndUseComponentsSummary", "Entire Facility", "End Uses")
+    # sql_data << get_sql_table_to_json(model, "ComponentSizingSummary", "Entire Facility", "AirLoopHVAC")
+    return sql_data
+  end
+
+
+
+
   def load_qaqc_database_new()
     # Combine the data from the JSON files into a single hash
     files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
@@ -41,7 +147,8 @@ class NECB2011
   # generates full qaqc.json
   def init_qaqc(model)
     # load the qaqc.json files
-    @qaqc_data = self.load_qaqc_database_new()
+    # This is currently disabled as most tests are now done using regression and unit tests.. but we may bring this back.
+    # @qaqc_data = self.load_qaqc_database_new()
 
     # generate base qaqc hash
     qaqc = create_base_data(model)
@@ -109,9 +216,14 @@ class NECB2011
                                                                           " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Gas' AND RowName='Gas:Facility'" +
                                                                           " AND ColumnName='Gas Maximum Value' AND Units='W'")
 
+
+    get_sql_tables_to_json(model)
+
+
     # Create hash to store all the collected data.
     qaqc = {}
-    error_warning=[]
+    qaqc[:sql_data] = get_sql_tables_to_json(model)
+    error_warning = []
     qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     qaqc[:openstudio_version] = os_version.strip

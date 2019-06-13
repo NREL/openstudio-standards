@@ -146,8 +146,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
 
         standard.apply_standard_construction_properties(@model) # standards candidate
-        standard.apply_standard_window_to_wall_ratio(@model) # standards candidate
-        standard.apply_standard_skylight_to_roof_ratio(@model) # standards candidate
+        standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
+        standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
 
 
         #Add Infiltration rates to the space objects themselves. 
@@ -185,27 +185,30 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
 
+        srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
+        fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(@model)
 
         #Output conductances
+        def roundOrNA(data, figs=4)
+			if data == 'NA'
+				return data
+			end
+			return data.round(figs)
+		end
         @json_test_output[template][@hdd] = {}
-        @json_test_output[template][@hdd]['fdwr'] = BTAP::Geometry::get_fwdr(@model).round(4)
-        @json_test_output[template][@hdd]['srr'] = BTAP::Geometry::get_srr(@model).round(4)
-        @json_test_output[template][@hdd]['outdoor_roofs_average_conductances'] = outdoor_roofs_average_conductance.round(4)
-        @json_test_output[template][@hdd]['outdoor_walls_average_conductances'] = outdoor_walls_average_conductance.round(4)
-        @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = outdoor_floors_average_conductance.round(4)
-        @json_test_output[template][@hdd]['ground_roofs_average_conductances'] = ground_roofs_average_conductances.round(4)
-        @json_test_output[template][@hdd]['ground_walls_average_conductances'] = ground_walls_average_conductances.round(4)
-        @json_test_output[template][@hdd]['ground_floors_average_conductances'] = ground_floors_average_conductances.round(4)
-        @json_test_output[template][@hdd]['windows_average_conductance'] = windows_average_conductance.round(4)
-        @json_test_output[template][@hdd]['skylights_average_conductance'] = skylights_average_conductance.round(4)
-        if doors_average_conductance == 'NA'
-          @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance
-        else
-          @json_test_output[template][@hdd]['doors_average_conductance'] = doors_average_conductance.round(4)
-        end
+        @json_test_output[template][@hdd]['fdwr'] = roundOrNA(fdwr_info["fdwr"])
+        @json_test_output[template][@hdd]['srr'] = roundOrNA(srr_info["srr"])
+        @json_test_output[template][@hdd]['outdoor_roofs_average_conductances'] = roundOrNA(outdoor_roofs_average_conductance)
+        @json_test_output[template][@hdd]['outdoor_walls_average_conductances'] = roundOrNA(outdoor_walls_average_conductance)
+        @json_test_output[template][@hdd]['outdoor_floors_average_conductances'] = roundOrNA(outdoor_floors_average_conductance)
+        @json_test_output[template][@hdd]['ground_roofs_average_conductances'] = roundOrNA(ground_roofs_average_conductances)
+        @json_test_output[template][@hdd]['ground_walls_average_conductances'] = roundOrNA(ground_walls_average_conductances)
+        @json_test_output[template][@hdd]['ground_floors_average_conductances'] = roundOrNA(ground_floors_average_conductances)
+        @json_test_output[template][@hdd]['windows_average_conductance'] = roundOrNA(windows_average_conductance)
+        @json_test_output[template][@hdd]['skylights_average_conductance'] = roundOrNA(skylights_average_conductance)
+        @json_test_output[template][@hdd]['doors_average_conductance'] = roundOrNA(doors_average_conductance)
 
         
-
         #infiltration test
         # Get the effective infiltration rate through the walls and roof only.
         sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by {|space| space.name.get}
