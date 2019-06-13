@@ -26,10 +26,6 @@ end
 
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
-if ENV['CI'] == 'true'
-  require 'minitest/ci'
-  puts "Saving test results to #{Minitest::Ci.report_dir}"
-end
 require 'minitest/reporters'
 
 require 'openstudio'
