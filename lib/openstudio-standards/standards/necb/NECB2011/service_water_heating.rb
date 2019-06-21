@@ -75,7 +75,7 @@ class NECB2011
 
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
-    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
+    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOil#2'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
@@ -161,7 +161,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOil#2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
