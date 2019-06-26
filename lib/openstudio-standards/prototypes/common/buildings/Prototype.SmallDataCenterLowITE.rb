@@ -15,7 +15,6 @@ module SmallDataCenterLowITE
   end
 
   # add IT equipment (ITE object) for data center building types
-  # This should be in model_custom_hvac_tweaks as ITE object need inputs (supply node) from HVAC system
   # Normal electric equipment has been added in model_add_load prior to this
   # will replace with ITE object here
   def add_data_center_load(model)
@@ -38,9 +37,9 @@ module SmallDataCenterLowITE
           it_equipment_def.setDesignFanPowerInputFraction(0.4)
           it_equipment_def.setDesignEnteringAirTemperature(22.5)    # recommended SAT 18-27C, use the middle T as design
           it_equipment_def.setAirFlowCalculationMethod("FlowControlWithApproachTemperatures")
-
-          # TODO
-          # Set the approach temperatures based on CFD simulation results
+          # TODO Set the approach temperatures based on CFD simulation results
+          it_equipment_def.setSupplyTemperatureDifference(10)   # This is under fully open configuration assumption
+          it_equipment_def.setReturnTemperatureDifference(-2.5)   # This is under fully open configuration assumption
 
           it_equipment = OpenStudio::Model::ElectricEquipmentITEAirCooled.new(it_equipment_def)
           it_equipment.setSpaceType(space_type)
