@@ -1214,7 +1214,7 @@ class Standard
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
     # data center keeps positive pressure all the time, so no infiltration
-    if space.spaceType.get.standardsSpaceType.is_initialized
+    if space.spaceType.is_initialized && space.spaceType.get.standardsSpaceType.is_initialized
       std_space_type = space.spaceType.get.standardsSpaceType.get
       if std_space_type.downcase.include?('data') || std_space_type.downcase.include?('computer')
         return true
