@@ -186,40 +186,16 @@
       "Bathrooms_ZN_1_FLR_2"
     ]
   },
-  {
-    "type": "Refrigeration",
-    "case_type": "Walkin Freezer",
-    "cooling_capacity_per_length": 734.0,
-    "length": 7.32,
-    "evaporator_fan_pwr_per_length": 68.3,
-    "lighting_per_length": 33.0,
-    "defrost_pwr_per_length": 410.0,
-    "cop": 1.5,
-    "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
-    "condenser_fan_pwr": 750.0,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
-    "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
-    "space_names": [
-      "Kitchen_ZN_1_FLR_1"
-    ]
-  },
-  {
-    "type": "Refrigeration",
-    "case_type": "Display Case",
-    "cooling_capacity_per_length": 734.0,
-    "length": 7.32,
-    "evaporator_fan_pwr_per_length": 55.0,
-    "lighting_per_length": 33.0,
-    "defrost_pwr_per_length": 0.0,
-    "cop": 3.0,
-    "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
-    "condenser_fan_pwr": 750.0,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
-    "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
-    "space_names": [
-      "Kitchen_ZN_1_FLR_1"
-    ]
-  }
+    {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Secondary School",
+      "space_names": ["Kitchen_ZN_1_FLR_1"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Secondary School",
+      "space_names": ["Kitchen_ZN_1_FLR_1"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Secondary School",
+    "space_names": ["Kitchen_ZN_1_FLR_1"]}
 ]

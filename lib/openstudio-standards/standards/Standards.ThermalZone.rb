@@ -131,23 +131,73 @@ class Standard
     return true
   end
 
-  # This method creates a schedule where the value is zero when
-  # the overall occupancy for 1 zone is below
-  # the specified threshold, and one when the overall occupancy is
-  # greater than or equal to the threshold.  This method is designed
-  # to use the total number of people in the zone.
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
   #
+  # @param thermal_zone [<OpenStudio::Model::ThermalZone>] thermal_zone to create occupancy schedule
+  # @param sch_name [String] the name of the generated occupancy schedule
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  # @return [ScheduleRuleset] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
-  # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-  def thermal_zone_get_occupancy_schedule(thermal_zone, occupied_percentage_threshold = 0.05)
-    # Get all the occupancy schedules in every space in the zone
-    # Include people added via the SpaceType
-    # in addition to people hard-assigned to the Space itself.
-    occ_schedules_num_occ = {}
-    max_occ_on_thermal_zone = 0
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
+  def thermal_zone_get_occupancy_schedule(thermal_zone, sch_name: nil, occupied_percentage_threshold: nil)
+    if sch_name.nil?
+      sch_name = "#{thermal_zone.name} Occ Sch"
+    end
+    # Get the occupancy schedule for all spaces in thermal_zone
+    sch_ruleset = spaces_get_occupancy_schedule(thermal_zone.spaces,
+                                                sch_name: sch_name,
+                                                occupied_percentage_threshold: occupied_percentage_threshold)
+    return sch_ruleset
+  end
 
-    # Get the people objects
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of thermal_zones to create occupancy schedule
+  # @param sch_name [String] the name of the generated occupancy schedule
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
+  def thermal_zones_get_occupancy_schedule(thermal_zones, sch_name: nil, occupied_percentage_threshold: nil)
+    if sch_name.nil?
+      sch_name = "#{thermal_zones.size} zone Occ Sch"
+    end
+    # Get the occupancy schedule for all spaces in thermal_zones
+    spaces = []
+    thermal_zones.each do |thermal_zone|
+      thermal_zone.spaces.each do |space|
+        spaces << space
+      end
+    end
+    sch_ruleset = spaces_get_occupancy_schedule(spaces,
+                                                sch_name: sch_name,
+                                                occupied_percentage_threshold: occupied_percentage_threshold)
+    return sch_ruleset
+  end
+
+  # This method creates a new fractional schedule ruleset.
+  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
+  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
+  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
+  #
+  # @param spaces [Array<OpenStudio::Model::Space>] array of spaces to generate occupancy schedule from
+  # @param sch_name [String] the name of the generated occupancy schedule
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
+  # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
+  def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil)
+    # Get all the occupancy schedules in spaces.
+    # Include people added via the SpaceType and hard-assigned to the Space itself.
+    occ_schedules_num_occ = {}
+    max_occ_in_spaces = 0
     spaces.each do |space|
       # From the space type
       if space.spaceType.is_initialized
@@ -164,7 +214,7 @@ class Standard
             else
               occ_schedules_num_occ[num_ppl_sch] += num_ppl
             end
-            max_occ_on_thermal_zone += num_ppl
+            max_occ_in_spaces += num_ppl
           end
         end
       end
@@ -182,14 +232,22 @@ class Standard
           else
             occ_schedules_num_occ[num_ppl_sch] += num_ppl
           end
-          max_occ_on_thermal_zone += num_ppl
+          max_occ_in_spaces += num_ppl
         end
       end
     end
 
-    # For each day of the year, determine
-    # time_value_pairs = []
-    year = thermal_zone.model.getYearDescription
+    unless sch_name.nil?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Finding space schedules for #{sch_name}.")
+    end
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
+    occ_schedules_num_occ.each do |occ_sch, num_occ|
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "...#{occ_sch.name} - #{num_occ.round} people")
+    end
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
+
+    # For each day of the year, determine time_value_pairs = []
+    year = spaces[0].model.getYearDescription
     yearly_data = []
     yearly_times = OpenStudio::DateTimeVector.new
     yearly_values = []
@@ -205,13 +263,14 @@ class Standard
         # Get the day schedules for this day
         # (there should only be one)
         day_schs = occ_sch.getDaySchedules(os_date, os_date)
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Schedule #{occ_sch.name} has #{day_schs.size} day schs") unless day_schs.size == 1
         day_schs[0].times.each do |time|
           times_on_this_day << time.toString
         end
         day_sch_num_occ[day_schs[0]] = num_occ
       end
 
-      # Determine the total fraction for the airloop at each time
+      # Determine the total fraction for the spaces at each time
       daily_times = []
       daily_os_times = []
       daily_values = []
@@ -226,22 +285,28 @@ class Standard
           tot_occ_at_time += occ_frac * num_occ
         end
 
-        # Total fraction for the airloop at each time
-        thermal_zone_occ_frac = tot_occ_at_time / max_occ_on_thermal_zone
-        occ_status = 0 # unoccupied
-        if thermal_zone_occ_frac >= occupied_percentage_threshold
-          occ_status = 1
+        # Total fraction for the spaces at each time
+        spaces_occ_frac = tot_occ_at_time / max_occ_in_spaces
+
+        # If occupied_percentage_threshold is specified, schedule values are boolean
+        # Otherwise use the actual spaces_occ_frac
+        if occupied_percentage_threshold.nil?
+          occ_status = spaces_occ_frac
+        else
+          occ_status = 0 # unoccupied
+          if spaces_occ_frac >= occupied_percentage_threshold
+            occ_status = 1
+          end
         end
 
         # Add this data to the daily arrays
         daily_times << time
         daily_os_times << os_time
         daily_values << occ_status
-        daily_occs << thermal_zone_occ_frac.round(2)
+        daily_occs << spaces_occ_frac.round(2)
       end
 
-      # Simplify the daily times to eliminate intermediate
-      # points with the same value as the following point.
+      # Simplify the daily times to eliminate intermediate points with the same value as the following point
       simple_daily_times = []
       simple_daily_os_times = []
       simple_daily_values = []
@@ -262,8 +327,10 @@ class Standard
     # time_series = OpenStudio::TimeSeries.new(times, values, 'unitless')
 
     # Make a schedule ruleset
-    sch_name = "#{thermal_zone.name} Occ Sch"
-    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
+    if sch_name.nil?
+      sch_name = "#{spaces.size} space(s) Occ Sch"
+    end
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
     sch_ruleset.setName(sch_name.to_s)
 
     # Default - All Occupied
@@ -272,21 +339,20 @@ class Standard
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
     # Winter Design Day - All Occupied
-    day_sch = OpenStudio::Model::ScheduleDay.new(thermal_zone.model)
+    day_sch = OpenStudio::Model::ScheduleDay.new(spaces[0].model)
     sch_ruleset.setWinterDesignDaySchedule(day_sch)
     day_sch = sch_ruleset.winterDesignDaySchedule
     day_sch.setName("#{sch_name} Winter Design Day")
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
     # Summer Design Day - All Occupied
-    day_sch = OpenStudio::Model::ScheduleDay.new(thermal_zone.model)
+    day_sch = OpenStudio::Model::ScheduleDay.new(spaces[0].model)
     sch_ruleset.setSummerDesignDaySchedule(day_sch)
     day_sch = sch_ruleset.summerDesignDaySchedule
     day_sch.setName("#{sch_name} Summer Design Day")
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
-    # Create ruleset schedules, attempting to create
-    # the minimum number of unique rules.
+    # Create ruleset schedules, attempting to create the minimum number of unique rules
     ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
       end_of_prev_rule = yearly_data[0]['date']
       yearly_data.each_with_index do |daily_data, k|
@@ -299,11 +365,8 @@ class Standard
         values = daily_data['values']
         daily_occs = daily_data['daily_occs']
 
-        # If the next (Monday, Tuesday, etc.)
-        # is the same as today, keep going.
-        # If the next is different, or if
-        # we've reached the end of the year,
-        # create a new rule
+        # If the next (Monday, Tuesday, etc.) is the same as today, keep going
+        # If the next is different, or if we've reached the end of the year, create a new rule
         unless yearly_data[k + 7].nil?
           next_day_times = yearly_data[k + 7]['times']
           next_day_values = yearly_data[k + 7]['values']
@@ -313,16 +376,15 @@ class Standard
         daily_os_times = daily_data['daily_os_times']
         daily_occs = daily_data['daily_occs']
 
-        # If here, we need to make a rule to cover from the previous
-        # rule to today
-
+        # If here, we need to make a rule to cover from the previous rule to today
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
         sch_rule.setName("#{sch_name} #{weekday} Rule")
         day_sch = sch_rule.daySchedule
         day_sch.setName("#{sch_name} #{weekday}")
-        daily_os_times.each_with_index do |time, l|
-          value = values[l]
-          next if value == values[l + 1] # Don't add breaks if same value
+        daily_os_times.each_with_index do |time, t|
+          value = values[t]
+          next if value == values[t + 1] # Don't add breaks if same value
           day_sch.addValue(time, value)
         end
 

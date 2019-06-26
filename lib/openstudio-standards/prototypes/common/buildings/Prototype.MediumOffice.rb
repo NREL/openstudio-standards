@@ -66,7 +66,14 @@ module MediumOffice
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
       elsif template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
-          when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2B'
+          when 'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-1B',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-1B',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B'
             infiltration_per_zone_entrydoor = 1.04300287
             infiltration_entrydoor.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_Door_Opening_SCH'))
           else
@@ -137,18 +144,12 @@ module MediumOffice
     return true
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
-        end
-    end
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+
+    return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end

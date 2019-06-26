@@ -102,18 +102,13 @@ module LargeOffice
     return true
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(11.25413987)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(11.25413987)
-        end
-    end
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+
+    return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
     return true
   end
 end

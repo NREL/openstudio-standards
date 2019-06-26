@@ -57,40 +57,19 @@
       "Room_3_Mult9_Flr_6"
     ]
   },
-  {
-    "type": "Refrigeration",
-    "case_type": "Walkin Freezer",
-    "cooling_capacity_per_length": 367.0,
-    "length": 7.32,
-    "evaporator_fan_pwr_per_length": 34.0,
-    "lighting_per_length": 16.4,
-    "defrost_pwr_per_length": 273.0,
-    "cop": 1.5,
-    "cop_f_of_t_curve_name": "RACK1_RackCOPfTCurve",
-    "condenser_fan_pwr": 350.0,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "HotelLarge BLDG_LIGHT_SCH",
-    "restocking_schedule": "HotelLarge Kitchen_Flr_6_Case:1_WALKINFREEZER_WalkInStockingSched",
-    "space_names": [
-      "Kitchen_Flr_6"
-    ]
-  },
-  {
-    "type": "Refrigeration",
-    "case_type": "Display Case",
-    "cooling_capacity_per_length": 734.0,
-    "length": 3.66,
-    "evaporator_fan_pwr_per_length": 55.0,
-    "lighting_per_length": 33.0,
-    "defrost_pwr_per_length": 0.0,
-    "cop": 3.0,
-    "cop_f_of_t_curve_name": "RACK2_RackCOPfTCurve",
-    "condenser_fan_pwr": 750.0,
-    "condenser_fan_pwr_curve_name": "RACK1_RackCondFanCurve2",
-    "lighting_schedule": "HotelLarge BLDG_LIGHT_SCH",
-    "restocking_schedule": "HotelLarge Kitchen_Flr_6_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched",
-    "space_names": [
-      "Kitchen_Flr_6"
-    ]
-  }
+    {
+    "type": "Refrigeration_system",
+    "compressor_type": "Low Temp",
+    "cases": [{
+      "case_type": "Case Large Hotel",
+      "space_names": ["Kitchen_Flr_6"]}],
+    "walkins": [{
+      "walkin_type": "Walk-In Large Hotel",
+      "space_names": ["Kitchen_Flr_6"],
+      "number_of_walkins": 1 }],
+    "name": "RefrSystem - Large Hotel",
+    "space_names": ["Kitchen_Flr_6"]}
 ]
+
+
+
