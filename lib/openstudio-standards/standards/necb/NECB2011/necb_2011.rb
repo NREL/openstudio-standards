@@ -181,7 +181,7 @@ class NECB2011 < Standard
                                    z_scale: 1.0,
                                    fdwr_set: 1.1,
                                    srr_set: 1.1,
-                                   new_auto_zoner: false
+                                   new_auto_zoner: true
 
   )
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
@@ -211,7 +211,7 @@ class NECB2011 < Standard
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: false
+                           new_auto_zoner: true
 
   )
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get

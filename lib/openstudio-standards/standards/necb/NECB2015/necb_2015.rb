@@ -65,7 +65,7 @@ class NECB2015 < NECB2011
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: false)
+                           new_auto_zoner: true)
 
     #Run everything like parent NECB2011 'model_apply_standard' method.
     model = super(model: model,

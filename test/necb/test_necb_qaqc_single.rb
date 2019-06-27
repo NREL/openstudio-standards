@@ -32,19 +32,19 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
   def test_single_qaqc()
     building_types = [
-    #    "FullServiceRestaurant"
-    # "LargeHotel",
-    # "LargeOffice",
-    # "MediumOffice",
-     "MidriseApartment"#,
-    # "Outpatient",
-    # "PrimarySchool",
-    # "QuickServiceRestaurant",
-    # "RetailStandalone",
-    # "RetailStripmall",
-    # "SmallHotel",
-    # "SmallOffice",
-    # "Warehouse"
+    "FullServiceRestaurant",
+    "LargeHotel",
+    "LargeOffice",
+    "MediumOffice",
+    "MidriseApartment",
+    #"Outpatient",
+    "PrimarySchool",
+    "QuickServiceRestaurant",
+    "RetailStandalone",
+    "RetailStripmall",
+    "SmallHotel",
+    "SmallOffice",
+    "Warehouse"
     ]
 
     templates = ['NECB2011',
@@ -67,7 +67,7 @@ class TestNECBQAQC < CreateDOEPrototypeBuildingTest
 
     processess = (Parallel::processor_count * 2.0 / 3.0).round
     puts "processess #{processess}"
-    Parallel.map(run_argument_array, in_processes: 1) do |info|
+    Parallel.map(run_argument_array, in_processes: processess) do |info|
       test_name = "#{info['building']}_#{info['epw']}"
       puts info
       puts "creating #{test_name}"
