@@ -234,10 +234,13 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterHighITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterHighITE"
   require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
-
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
