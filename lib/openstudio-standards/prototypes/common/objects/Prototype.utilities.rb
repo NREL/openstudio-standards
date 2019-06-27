@@ -742,7 +742,7 @@ class Standard
   def rename_air_loop_nodes(model)
 
     # rename all hvac components on air loops
-    model.getHVACComponents.each do |component|
+    model.getHVACComponents.sort.each do |component|
       next if component.to_Node.is_initialized # skip nodes
       unless component.airLoopHVAC.empty?
         # rename water to air component outlet nodes
@@ -797,7 +797,7 @@ class Standard
     end
 
     # rename supply side nodes
-    model.getAirLoopHVACs.each do |air_loop|
+    model.getAirLoopHVACs.sort.each do |air_loop|
       air_loop_name = air_loop.name.to_s
       air_loop.demandInletNode.setName("#{air_loop_name} Demand Inlet Node")
       air_loop.demandOutletNode.setName("#{air_loop_name} Demand Outlet Node")
@@ -825,7 +825,7 @@ class Standard
     end
 
     # rename zone air and terminal nodes
-    model.getThermalZones.each do |zone|
+    model.getThermalZones.sort.each do |zone|
       zone.zoneAirNode.setName("#{zone.name.to_s} Zone Air Node")
 
       unless zone.returnAirModelObject.empty?
@@ -842,7 +842,7 @@ class Standard
     end
 
     # rename zone equipment list objects
-    model.getZoneHVACEquipmentLists.each do |obj|
+    model.getZoneHVACEquipmentLists.sort.each do |obj|
       begin
         zone = obj.thermalZone
         obj.setName("#{zone.name.to_s} Zone HVAC Equipment List")
@@ -859,7 +859,7 @@ class Standard
   def rename_plant_loop_nodes(model)
 
     # rename all hvac components on plant loops
-    model.getHVACComponents.each do |component|
+    model.getHVACComponents.sort.each do |component|
       next if component.to_Node.is_initialized # skip nodes
       unless component.plantLoop.empty?
         # rename straight component nodes
@@ -920,7 +920,7 @@ class Standard
     end
 
     # rename plant nodes
-    model.getPlantLoops.each do |plant_loop|
+    model.getPlantLoops.sort.each do |plant_loop|
       plant_loop_name = plant_loop.name.to_s
       plant_loop.demandInletNode.setName("#{plant_loop_name} Demand Inlet Node")
       plant_loop.demandOutletNode.setName("#{plant_loop_name} Demand Outlet Node")

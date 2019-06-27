@@ -29,19 +29,31 @@ module OpenstudioStandards
   ### Standards ###
   # Standards classes
   require_relative "#{stds}/standard"
-  require_relative "#{stds}/necb/necb_2011/necb_2011"
-  require_relative "#{stds}/necb/necb_2015/necb_2015"
-  require_relative "#{stds}/necb/necb_2011/building_envelope"
-  require_relative "#{stds}/necb/necb_2011/lighting"
-  require_relative "#{stds}/necb/necb_2011/hvac_systems"
-  require_relative "#{stds}/necb/necb_2015/hvac_systems"
-  require_relative "#{stds}/necb/necb_2011/service_water_heating"
-  require_relative "#{stds}/necb/necb_2011/electrical_power_systems_and_motors"
-  require_relative "#{stds}/necb/necb_2011/beps_compliance_path"
+  # NECB2011 Code
+  require_relative "#{stds}/necb/NECB2011/necb_2011"
+  require_relative "#{stds}/necb/NECB2011/building_envelope"
+  require_relative "#{stds}/necb/NECB2011/lighting"
+  require_relative "#{stds}/necb/NECB2011/hvac_systems"
+  require_relative "#{stds}/necb/NECB2011/autozone"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_1_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_2_and_5"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_4"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_6"
+  require_relative "#{stds}/necb/NECB2011/service_water_heating"
+  require_relative "#{stds}/necb/NECB2011/electrical_power_systems_and_motors"
+  require_relative "#{stds}/necb/NECB2011/beps_compliance_path"
+  # NECB2015 Code
+  require_relative "#{stds}/necb/NECB2015/necb_2015"
+  require_relative "#{stds}/necb/NECB2015/lighting"
+  require_relative "#{stds}/necb/NECB2015/hvac_systems"
+  # NECB2017 Code
+  require_relative "#{stds}/necb/NECB2017/necb_2017"
+  require_relative "#{stds}/necb/NECB2017/hvac_systems"
 
   # NECB QAQC
-  require_relative "#{stds}/necb/necb_2011/qaqc/necb_qaqc.rb"
-  require_relative "#{stds}/necb/necb_2015/qaqc/necb_2015_qaqc.rb"
+  require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
+  require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
   
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
@@ -99,6 +111,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilHeatingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilHeatingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
+  require_relative "#{stds}/Standards.CoilHeatingGas"
   require_relative "#{stds}/Standards.Construction"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
@@ -221,10 +234,13 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterHighITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterHighITE"
   require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
-  
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -309,7 +325,7 @@ module OpenstudioStandards
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanConstantVolume"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanOnOff"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
-  
+
   # DLM: not sure where this code should go
   def self.get_run_env()
     # blank out bundler and gem path modifications, will be re-setup by new call
@@ -320,26 +336,26 @@ module OpenstudioStandards
     new_env["BUNDLE_BIN_PATH"] = nil
     new_env["RUBYLIB"] = nil
     new_env["RUBYOPT"] = nil
-    
+
     # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
     # requires to ruby gems will work, will fail if we require a native gem
     #new_env["GEM_PATH"] = nil
     #new_env["GEM_HOME"] = nil
-    
+
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
     #bundle_gemfile = ENV['BUNDLE_GEMFILE']
-    #bundle_path = ENV['BUNDLE_PATH']    
+    #bundle_path = ENV['BUNDLE_PATH']
     #if bundle_gemfile.nil? || bundle_path.nil?
       new_env['BUNDLE_GEMFILE'] = nil
       new_env['BUNDLE_PATH'] = nil
     #else
     #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
-    #  new_env['BUNDLE_PATH'] = bundle_path    
-    #end  
-    
+    #  new_env['BUNDLE_PATH'] = bundle_path
+    #end
+
     return new_env
   end
-  
+
   def self.run_command(command)
     stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
     if status.success?
@@ -351,8 +367,8 @@ module OpenstudioStandards
       puts "Error running command: '#{command}'"
       puts "stdout: #{stdout_str}"
       puts "stderr: #{stderr_str}"
-      return false 
+      return false
     end
   end
-  
+
 end

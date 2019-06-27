@@ -4,7 +4,7 @@ class Standard
 
   # find search criteria
   #
-  # @return [Hash] used for model_find_object(model)
+  # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
     # in the hvac standards data set.

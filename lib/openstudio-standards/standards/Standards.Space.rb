@@ -1215,6 +1215,14 @@ class Standard
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
+    # data center keeps positive pressure all the time, so no infiltration
+    if space.spaceType.is_initialized && space.spaceType.get.standardsSpaceType.is_initialized
+      std_space_type = space.spaceType.get.standardsSpaceType.get
+      if std_space_type.downcase.include?('data') || std_space_type.downcase.include?('computer')
+        return true
+      end
+    end
+
     # Determine the total building baseline infiltration rate in cfm per ft2 of exterior above grade wall area at 75 Pa
     # exterior above grade envelope area includes any surface with boundary condition 'Outdoors' in OpenStudio/EnergyPlus
     basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa(space)

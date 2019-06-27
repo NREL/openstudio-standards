@@ -20,7 +20,9 @@ module LargeHotel
     end
 
     exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = model_find_object(standards_data['space_types'], 'template' => template, 'building_type' => building_type, 'space_type' => space_type_name)
+      space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria:{'template' => template,
+                                                                                                 'building_type' => building_type,
+                                                                                                 'space_type' => space_type_name})
       if space_type_data.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
         return false

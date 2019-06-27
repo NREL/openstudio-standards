@@ -60,7 +60,7 @@ class OpenStudio::Model::Construction
     if self.isOpaque
 
     minimum_resistance = 0
-    name_prefix = "Customized opaque construction #{construction.handle()} to conductance of #{conductance}"
+    name_prefix = "#{construction.handle()} U- #{conductance}"
 
     #Check to see if we already made one like this.
     existing_construction = OpenStudio::Model::getConstructionByName(self.model,name_prefix)
@@ -100,7 +100,7 @@ class OpenStudio::Model::Construction
     elsif self.isFenestration()
 
         #get equivilant values for tsol, tvis, and conductances.
-        solarTransmittanceatNormalIncidence = self.get_tsol(model, construction) if solarTransmittanceatNormalIncidence == nil
+        solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence == nil
         visibleTransmittance = self.get_tvis(model,construction) if visibleTransmittance == nil
         conductance = self.get_conductance(construction) if conductance == nil
         frontSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
