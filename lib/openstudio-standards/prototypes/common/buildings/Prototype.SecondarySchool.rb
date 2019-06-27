@@ -433,8 +433,8 @@ module SecondarySchool
     # Adjust daylight sensors in each space
     model.getSpaces.each do |space|
       if adjustments[0].keys.include? (template)
-        if adjustments[0][template].keys.include? (space.name.to_s)
-          adj = adjustments[0][template][space.name.to_s]
+        if adjustments[0][template].keys.include? (space.name.to_s + " ZN")
+          adj = adjustments[0][template][space.name.to_s + " ZN"]
           next if space.thermalZone.empty?
           zone = space.thermalZone.get
           next if space.spaceType.empty?
