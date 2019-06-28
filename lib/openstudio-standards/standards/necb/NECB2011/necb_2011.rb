@@ -327,7 +327,7 @@ class NECB2011 < Standard
     # Add daylighting controls per standard
     # only four zones in large hotel have daylighting controls
     # todo: YXC to merge to the main function
-    model_add_daylighting_controls(model) # to be removed after refactor.
+    model_add_daylighting_controls(model, climate_zone) # to be removed after refactor.
     # Add output variables for debugging
     model_request_timeseries_outputs(model) if debug
     # Remove duplicate materials and constructions (currently commented out).
