@@ -117,21 +117,23 @@ class Standard
       # all individual zones that require DCV preserve
       # both per-area and per-person OA requirements.
       # Other zones have OA requirements converted
-      # to per-area values only so DCV performance is only
-      # based on the subset of zones that required DCV.
+      # to per-zone values and the outdoor air method
+      # to Flow/Zone so that DCV performance is only based on
+      # the subset of zones that require DCV,
+      # while retaining per-area and per-person values for future DCV.
       air_loop_hvac.thermalZones.sort.each do |zone|
-        if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-          thermal_zone_convert_oa_req_to_per_area(zone)
+        unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
+          thermal_zone_convert_oa_req_to_per_zone(zone)
         end
       end
     else
       # For systems that do not require DCV,
-      # convert OA requirements to per-area values
+      # convert OA requirements to per-zones values
       # so that other features such as
       # multizone VAV optimization do not
       # incorrectly take variable occupancy into account.
       air_loop_hvac.thermalZones.sort.each do |zone|
-        thermal_zone_convert_oa_req_to_per_area(zone)
+        thermal_zone_convert_oa_req_to_per_zone(zone)
       end
     end
 
@@ -158,13 +160,17 @@ class Standard
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     end
 
-    # Zones that require DCV preserve
-    # both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted
-    # to per-area values only so that DCV
+    # For systems that require DCV,
+    # all individual zones that require DCV preserve
+    # both per-area and per-person OA requirements.
+    # Other zones have OA requirements converted
+    # to per-zone values and the outdoor air method
+    # to Flow/Zone so that DCV performance is only based on
+    # the subset of zones that require DCV,
+    # while retaining per-area and per-person values for future DCV.
     air_loop_hvac.thermalZones.sort.each do |zone|
-      if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-        thermal_zone_convert_oa_req_to_per_area(zone)
+      unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
+        thermal_zone_convert_oa_req_to_per_zone(zone)
       end
     end
 

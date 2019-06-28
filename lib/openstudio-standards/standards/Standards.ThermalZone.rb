@@ -3,7 +3,7 @@ class Standard
   # @!group ThermalZone
 
   # Calculates the zone outdoor airflow requirement (Voz)
-  # based on the inputs in the DesignSpecification:OutdoorAir obects
+  # based on the inputs in the DesignSpecification:OutdoorAir objects
   # in all spaces in the zone.
   #
   # @return [Double] the zone outdoor air flow rate
@@ -53,6 +53,14 @@ class Standard
         sum_oa_for_floor_area += oa_for_floor_area
         sum_oa_rate += oa_rate
         sum_oa_for_volume += oa_for_volume
+      elsif dsn_oa.outdoorAirMethod == 'Flow/Zone'
+        sum_oa_rate += oa_rate
+      elsif dsn_oa.outdoorAirMethod == 'Flow/Person'
+        sum_oa_for_people += oa_for_people
+      elsif dsn_oa.outdoorAirMethod == 'Flow/Area'
+        sum_oa_for_floor_area += oa_for_floor_area
+      elsif dsn_oa.outdoorAirMethod == 'AirChanges/Hour'
+        sum_oa_for_volume += oa_for_volume
       end
     end
 
@@ -69,8 +77,7 @@ class Standard
     return tot_oa_flow_rate
   end
 
-  # Calculates the zone outdoor airflow requirement and
-  # divides by the zone area.
+  # Calculates the zone outdoor airflow requirement and divides by the zone area.
   #
   # @return [Double] the zone outdoor air flow rate per area
   #   @units cubic meters per second (m^3/s)
@@ -98,8 +105,7 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
-    # For each space in the zone, convert
-    # all design OA to per-area
+    # For each space in the zone, convert all design OA to per-area
     thermal_zone.spaces.each do |space|
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
@@ -126,6 +132,38 @@ class Standard
       dsn_oa.setOutdoorAirFlowperPerson(0.0)
       dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
       dsn_oa.setOutdoorAirFlowRate(0.0)
+    end
+
+    return true
+  end
+
+  # Convert total minimum OA requirement to a per-zone value.
+  # Retain per area, per person, and per air change rate fields
+  # This allows using those fields if DCV is applied in a following measure
+  #
+  # @return [Bool] true if successful, false if not
+  def thermal_zone_convert_oa_req_to_per_zone(thermal_zone)
+    # For each space in the zone, convert all design OA to per-zone
+    thermal_zone.spaces.each do |space|
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+      dsn_oa = dsn_oa.get
+
+      # Get the space properties
+      floor_area = space.floorArea
+      number_of_people = space.numberOfPeople
+      volume = space.volume
+
+      # Sum up the total OA from all sources
+      oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
+      oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
+      oa_rate = dsn_oa.outdoorAirFlowRate
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
+      tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
+
+      # Set the outdoor air method to per-zone and zone air flow rate
+      dsn_oa.setOutdoorAirMethod('Flow/Zone')
+      dsn_oa.setOutdoorAirFlowRate(oa_rate)
     end
 
     return true
