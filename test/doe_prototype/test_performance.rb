@@ -68,7 +68,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 
     all_comp =  @building_types.product @epw_files, @templates, @climate_zones
     all_comp.each do |building_type, epw_file, template, climate_zone|
-	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, false, false, 'dd-only', false)
+	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, true, false, 'dd-only', false)
     end
 end
 
