@@ -1,5 +1,6 @@
 require_relative './helpers/parallel_tests'
-TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
+TestListFile = File.join(__dir__, 'circleci_tests.txt')
+RelativeOutputFolder = File.join( __dir__,'output')
 
 class RunAllTests < Minitest::Test
   def test_all()
@@ -14,6 +15,6 @@ class RunAllTests < Minitest::Test
       puts "Could not find list of files to test at #{TestListFile}"
       return false
     end
-    assert(ParallelTests.new.run(full_file_list, "#{__dir__}/output"), "Some tests failed please ensure all test pass and tests have been updated to reflect the changes you expect before issuing a pull request")
+    assert(ParallelTests.new.run(full_file_list, RelativeOutputFolder), "Some tests failed please ensure all test pass and tests have been updated to reflect the changes you expect before issuing a pull request")
   end
 end
