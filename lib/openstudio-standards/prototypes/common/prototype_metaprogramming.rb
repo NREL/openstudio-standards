@@ -22,9 +22,13 @@ def create_class_array
       'RetailStripmall',
       'Warehouse',
       'SuperMarket',
-	  'SmallOfficeDetailed',
-	  'MediumOfficeDetailed',
-	  'LargeOfficeDetailed'
+      'SmallDataCenterLowITE',
+      'SmallDataCenterHighITE',
+      'LargeDataCenterLowITE',
+      'LargeDataCenterHighITE',
+      'SmallOfficeDetailed',
+      'MediumOfficeDetailed',
+      'LargeOfficeDetailed'
   ]
 
   templates = ['ASHRAE9012004',
