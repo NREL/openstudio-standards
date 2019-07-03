@@ -8,7 +8,7 @@ class Test_Outpatient_NECB2017_electric < NECBRegressionHelper
     super()
   end
   def test_NECB2017_Outpatient_regression_electric()
-    result, diff = create_model_and_regression_test(building_type: 'Outpatient',epw_file: @electric_location,template: 'NECB2017')
+    result, diff = create_model_and_regression_test(building_type: 'Outpatient',epw_file: @electric_location,template: 'NECB2017', run_simulation: @run_simulation)
     if result == false
       puts "JSON terse listing of diff-errors."
       puts diff

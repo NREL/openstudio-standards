@@ -8,7 +8,7 @@ class Test_LargeOffice_NECB2011_gas < NECBRegressionHelper
     super()
   end
   def test_NECB2011_LargeOffice_regression_gas()
-    result, diff = create_model_and_regression_test(building_type: 'LargeOffice',epw_file: @gas_location,template: 'NECB2011')
+    result, diff = create_model_and_regression_test(building_type: 'LargeOffice',epw_file: @gas_location,template: 'NECB2011', run_simulation: @run_simulation)
     if result == false
       puts "JSON terse listing of diff-errors."
       puts diff

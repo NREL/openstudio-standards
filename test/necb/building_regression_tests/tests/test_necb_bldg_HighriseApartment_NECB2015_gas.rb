@@ -8,7 +8,7 @@ class Test_HighriseApartment_NECB2015_gas < NECBRegressionHelper
     super()
   end
   def test_NECB2015_HighriseApartment_regression_gas()
-    result, diff = create_model_and_regression_test(building_type: 'HighriseApartment',epw_file: @gas_location,template: 'NECB2015')
+    result, diff = create_model_and_regression_test(building_type: 'HighriseApartment',epw_file: @gas_location,template: 'NECB2015', run_simulation: @run_simulation)
     if result == false
       puts "JSON terse listing of diff-errors."
       puts diff

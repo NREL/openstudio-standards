@@ -8,7 +8,7 @@ class Test_QuickServiceRestaurant_NECB2011_electric < NECBRegressionHelper
     super()
   end
   def test_NECB2011_QuickServiceRestaurant_regression_electric()
-    result, diff = create_model_and_regression_test(building_type: 'QuickServiceRestaurant',epw_file: @electric_location,template: 'NECB2011')
+    result, diff = create_model_and_regression_test(building_type: 'QuickServiceRestaurant',epw_file: @electric_location,template: 'NECB2011', run_simulation: @run_simulation)
     if result == false
       puts "JSON terse listing of diff-errors."
       puts diff

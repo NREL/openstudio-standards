@@ -8,7 +8,7 @@ class Test_<%=building_type%>_<%=template%>_<%=fuel_type%> < NECBRegressionHelpe
     super()
   end
   def test_<%=template%>_<%=building_type%>_regression_<%=fuel_type%>()
-    result, diff = create_model_and_regression_test(building_type: '<%=building_type%>',epw_file: @<%=fuel_type%>_location,template: '<%=template%>')
+    result, diff = create_model_and_regression_test(building_type: '<%=building_type%>',epw_file: @<%=fuel_type%>_location,template: '<%=template%>', run_simulation: @run_simulation)
     if result == false
       puts "JSON terse listing of diff-errors."
       puts diff

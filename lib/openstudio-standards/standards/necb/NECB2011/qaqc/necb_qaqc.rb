@@ -226,7 +226,6 @@ class NECB2011
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     qaqc[:openstudio_version] = os_version.strip
     qaqc[:energyplus_version] = eplus_version.strip
-    qaqc[:date] = Time.now
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
