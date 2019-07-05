@@ -52,8 +52,15 @@ class Standard
     end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       minimum_anti_sweat_heater_power_per_unit_length = OpenStudio.convert(props['minimum_anti_sweat_heater_power_per_unit_length'], 'W/ft', 'W/m').get
-      anti_sweat_heater_control = props['anti_sweat_heater_control']
     end
+    if props['anti_sweat_heater_control']
+      if props['anti_sweat_heater_control'] == 'RelativeHumidity'
+        anti_sweat_heater_control = 'Linear'
+      else
+        anti_sweat_heater_control = props['anti_sweat_heater_control']
+      end
+    end
+
     restocking_sch_name = 'Always Off'
     fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
 
