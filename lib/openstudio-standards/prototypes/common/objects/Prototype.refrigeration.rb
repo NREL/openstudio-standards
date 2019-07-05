@@ -52,8 +52,15 @@ class Standard
     end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       minimum_anti_sweat_heater_power_per_unit_length = OpenStudio.convert(props['minimum_anti_sweat_heater_power_per_unit_length'], 'W/ft', 'W/m').get
-      anti_sweat_heater_control = props['anti_sweat_heater_control']
     end
+    if props['anti_sweat_heater_control']
+      if props['anti_sweat_heater_control'] == 'RelativeHumidity'
+        anti_sweat_heater_control = 'Linear'
+      else
+        anti_sweat_heater_control = props['anti_sweat_heater_control']
+      end
+    end
+
     restocking_sch_name = 'Always Off'
     fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
 
@@ -294,6 +301,12 @@ class Standard
     ref_walkin_addprops = ref_walkin.additionalProperties
     ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
 
+    # Add doorway protection
+    if props['doorway_protection_type']
+      ref_walkin.zoneBoundaries.each do |zb|
+        zb.setStockingDoorOpeningProtectionTypeFacingZone(props['doorway_protection_type'])
+      end
+    end
 
     insulated_floor_area_ft2 = OpenStudio.convert(floor_surface_area, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 walkin called #{walkin_type} with a capacity of #{rated_cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
