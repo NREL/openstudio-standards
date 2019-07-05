@@ -892,7 +892,7 @@ class Standard
         'building_type' => building_type,
         'space_type' => stds_spc_type
     }
-    data = model_find_object(standards_data['space_types'], search_criteria)
+    data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
     if data.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find space type for: #{search_criteria}.")
       return nil

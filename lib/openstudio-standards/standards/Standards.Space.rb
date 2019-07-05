@@ -1014,7 +1014,7 @@ class Standard
     # Get the zone that the space is in
     zone = space.thermalZone
     if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{name.get} has no thermal zone")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Space #{space.name} has no thermal zone")
     else
       zone = zone.get
     end
@@ -1213,7 +1213,16 @@ class Standard
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
-    # Determine the total building baseline infiltration rate
+    # data center keeps positive pressure all the time, so no infiltration
+    if space.spaceType.is_initialized && space.spaceType.get.standardsSpaceType.is_initialized
+      std_space_type = space.spaceType.get.standardsSpaceType.get
+      if std_space_type.downcase.include?('data') || std_space_type.downcase.include?('computer')
+        return true
+      end
+    end
+
+    # Determine the total building baseline infiltration rate in cfm per ft2 of exterior above grade wall area at 75 Pa
+    # exterior above grade envelope area includes any surface with boundary condition 'Outdoors' in OpenStudio/EnergyPlus
     basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa(space)
 
     # Do nothing if no infiltration
@@ -1223,8 +1232,7 @@ class Standard
     # 1 m^3/s*m^2 = 196.85 cfm/ft2
     conv_fact = 196.85
 
-    # Adjust the infiltration rate to the average pressure
-    # for the prototype buildings.
+    # Adjust the infiltration rate to the average pressure for the prototype buildings.
     adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
     # Get the exterior wall area
@@ -1287,12 +1295,11 @@ class Standard
     return true
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Baseline infiltration rate
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2
-  # defaults to no infiltration.
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
   def space_infiltration_rate_75_pa(space)
-    basic_infil_rate_cfm_per_ft2 = 0
+    basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
 
@@ -1538,7 +1545,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
       end
 
-      num_ppl = people.getNumberOfPeople(floorArea)
+      num_ppl = people.getNumberOfPeople(space.floorArea)
 
       ppl_w = num_ppl * w_per_person
 

@@ -516,6 +516,7 @@ class Standard
 
         # Add the basic case
         ref_case = model_add_refrigeration_case(model, thermal_zone_case, case_type, size_category)
+        return false if ref_case.nil?
 
         # Scale based on floor area
         ref_case.setCaseLength(ref_case.caseLength * floor_area_scaling_factor)
@@ -588,6 +589,7 @@ class Standard
 
         # Add the basic walkin
         ref_walkin = model_add_refrigeration_walkin(model, thermal_zone_walkin, size_category, walkin_type)
+        return false if ref_walkin.nil?
 
         # Scale based on floor area
         ref_walkin.setRatedTotalLightingPower(ref_walkin.ratedTotalLightingPower * floor_area_scaling_factor)
@@ -822,6 +824,7 @@ class Standard
     cases.each do |case_|
       zone = model_get_zones_from_spaces_on_system(model, case_)[0]
       ref_case = model_add_refrigeration_case(model, zone, case_['case_type'], size_category)
+      return false if ref_case.nil?
       ########################################
       # Defrost schedule
       defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -858,6 +861,7 @@ class Standard
 
         zone = model_get_zones_from_spaces_on_system(model, walkin)[0]
         ref_walkin = model_add_refrigeration_walkin(model, zone, size_category, walkin['walkin_type'])
+        return false if ref_walkin.nil?
         ########################################
         # Defrost schedule
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)

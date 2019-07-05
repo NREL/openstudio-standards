@@ -38910,10 +38910,14 @@
     {
       "template": "90.1-2007",
       "size_category": "Any",
+<<<<<<< HEAD
       "case_type": "LT ReachIn Ice Cream",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
+=======
+      "case_type": "Ice Cream Reach-Ins",
+>>>>>>> master
       "latent_heat_ratio": 0.1,
       "rated_runtime_fraction": 0.85,
       "case_length": 143.7008,
@@ -39438,10 +39442,14 @@
     {
       "template": "90.1-2010",
       "size_category": "Any",
+<<<<<<< HEAD
       "case_type": "LT ReachIn Ice Cream",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
+=======
+      "case_type": "Ice Cream Reach-Ins",
+>>>>>>> master
       "latent_heat_ratio": 0.1,
       "rated_runtime_fraction": 0.85,
       "case_length": 143.7008,
@@ -39966,10 +39974,14 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
+<<<<<<< HEAD
       "case_type": "LT ReachIn Ice Cream",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
+=======
+      "case_type": "Ice Cream Reach-Ins",
+>>>>>>> master
       "latent_heat_ratio": 0.1,
       "rated_runtime_fraction": 0.85,
       "case_length": 143.7008,

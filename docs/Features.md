@@ -91,6 +91,7 @@ Where a method needs to operate **very differently** in two different situations
     - **`cooling_tower_two_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
     - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.  
   - **`model_custom_swh_tweaks()`** Some building types have even more unique SWH characteristics.  This approach keeps them isolated, which makes the already-complex methods `model_add_swh()` as simple as possible.
+  - **`model_custom_geometry_tweaks()`** Some building types have even more unique geometry characteristics.  This approach keeps them isolated.
   - **`model_add_daylighting_controls()`** Adds daylighting controls to the model.  **NOTE: This should probably be moved before the first sizing run.**
 
 ### `model_create_prm_baseline_building()`**

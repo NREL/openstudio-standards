@@ -349,7 +349,7 @@ class Standard
           end
         else
           occ_status = 0 # unoccupied
-          if spaces_occ_frac > occupied_percentage_threshold
+          if spaces_occ_frac >= occupied_percentage_threshold
             occ_status = 1
           end
         end
@@ -412,6 +412,7 @@ class Standard
     day_sch = sch_ruleset.summerDesignDaySchedule
     day_sch.setName("#{sch_name} Summer Design Day")
     day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
+
     # Create ruleset schedules, attempting to create the minimum number of unique rules
     ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
       end_of_prev_rule = yearly_data[0]['date']

@@ -227,4 +227,9 @@ module FullServiceRestaurant
 
     return true
   end
+
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
 end
