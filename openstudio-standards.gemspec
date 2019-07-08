@@ -6,7 +6,7 @@ require 'openstudio-standards/version'
 Gem::Specification.new do |spec|
   spec.name          = 'openstudio-standards'
   spec.version       = OpenstudioStandards::VERSION
-  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber']
+  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen']
   spec.email         = ['andrew.parker@nrel.gov']
   spec.homepage = 'http://openstudio.net'
   spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
@@ -37,6 +37,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'codecov' # to perform code coverage checking
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
-  spec.add_development_dependency 'roo'
+  spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'openstudio-api-stubs'
 end
