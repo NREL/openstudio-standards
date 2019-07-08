@@ -2805,6 +2805,368 @@ class Standard
     return air_loops
   end
 
+
+  # Creates a CRAC system for data center and adds it to the model.
+  #
+  # @param system_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param hvac_op_sch [String] name of the HVAC operation schedule
+  # or nil in which case will be defaulted to always on
+  # @param oa_damper_sch [Double] name of the oa damper schedule,
+  # or nil in which case will be defaulted to always open
+  # @param fan_location [Double] valid choices are BlowThrough, DrawThrough
+  # @param fan_type [Double] valid choices are ConstantVolume, Cycling, VariableVolume
+  # no heating
+  # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting CRAC air loops
+  def model_add_crac(model,
+                     thermal_zones,
+                     climate_zone,
+                     system_name: nil,
+                     hvac_op_sch: nil,
+                     oa_damper_sch: nil,
+                     fan_location: 'DrawThrough',
+                     fan_type: 'ConstantVolume',
+                     cooling_type: 'Single Speed DX AC')
+
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
+
+    # oa damper schedule
+    if oa_damper_sch.nil?
+      oa_damper_sch = model.alwaysOnDiscreteSchedule
+    else
+      oa_damper_sch = model_add_schedule(model, oa_damper_sch)
+    end
+
+    # Make a CRAC for each data center zone
+    air_loops = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CRAC for #{zone.name}.")
+
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+      if system_name.nil?
+        air_loop.setName("#{zone.name} CRAC")
+      else
+        air_loop.setName("#{zone.name} #{system_name}")
+      end
+
+      # default design temperatures across all air loops
+      dsgn_temps = standard_design_sizing_temperatures
+
+      # adjusted zone design heating temperature for data center psz_ac
+      dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
+      dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['preclg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['preclg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['clg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+      dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_clg_dsgn_sup_air_temp_f'], 'F', 'C').get
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 0.05)
+
+      # Zone sizing
+      sizing_zone = zone.sizingZone
+      # per ASHRAE 90.4, recommended range of data center supply air temperature is 18-27C, pick the mean value 22.5C as prototype
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+
+      # create fan
+      # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
+      # Cycling: Unitary System
+      # CyclingHeatPump: Unitary Heat Pump system
+      if fan_type == 'VariableVolume'
+        fan = create_fan_by_name(model,
+                                 'CRAC_VAV_fan',
+                                 fan_name: "#{air_loop.name} Fan")
+        fan.setAvailabilitySchedule(hvac_op_sch)
+      elsif fan_type == 'ConstantVolume'
+        fan = create_fan_by_name(model,
+                                 'CRAC_CAV_fan',
+                                 fan_name: "#{air_loop.name} Fan")
+        fan.setAvailabilitySchedule(hvac_op_sch)
+      elsif fan_type == 'Cycling'
+        fan = create_fan_by_name(model,
+                                 'CRAC_Cycling_fan',
+                                 fan_name: "#{air_loop.name} Fan")
+        fan.setAvailabilitySchedule(hvac_op_sch)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add CRAC.")
+        return []
+      end
+
+      # create cooling coil
+      case cooling_type
+      when 'Two Speed DX AC'
+        clg_coil = create_coil_cooling_dx_two_speed(model,
+                                                    name: "#{air_loop.name} 2spd DX AC Clg Coil")
+      when 'Single Speed DX AC'
+        clg_coil = create_coil_cooling_dx_single_speed(model,
+                                                       name: "#{air_loop.name} 1spd DX AC Clg Coil",
+                                                       type: 'PSZ-AC')
+      else
+        clg_coil = nil
+      end
+
+      oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+      oa_controller.setName("#{air_loop.name} OA System Controller")
+      oa_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+      oa_system = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_controller)
+      oa_system.setName("#{air_loop.name} OA System")
+
+      # CRAC can't operate properly at very low ambient temperature (E+ limit: -25C)
+      # As a result, the room temperature will rise to HUGE
+      # Adding economizer can solve the issue, but economizer is not added until first sizing done, which causes severe error during sizing
+      # To solve the issue, add economizer here for cold climates
+      # select the climate zones with winter design temperature lower than -20C (for safer)
+      cold_climates = ['ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
+                         'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B' ]
+      if cold_climates.include? climate_zone
+        # Determine the economizer type in the prototype buildings, which depends on climate zone.
+        economizer_type = model_economizer_type(model, climate_zone)
+        oa_controller.setEconomizerControlType(economizer_type)
+
+        # Check that the economizer type set by the prototypes
+        # is not prohibited by code.  If it is, change to no economizer.
+        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for , climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+          oa_controller.setEconomizerControlType('NoEconomizer')
+        end
+      end
+
+      # add humidifier to control minimum RH
+      humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
+      humidifier.autosizeRatedCapacity
+      humidifier.autosizeRatedPower
+      humidifier.setName("#{air_loop.name} Electric Steam Humidifier")
+
+      # Add the components to the air loop
+      # in order from closest to zone to furthest from zone
+      supply_inlet_node = air_loop.supplyInletNode
+
+      if fan_location == 'DrawThrough'
+        # Add the fan
+        fan.addToNode(supply_inlet_node) unless fan.nil?
+        # Add the humidifier
+        humidifier.addToNode(supply_inlet_node) unless humidifier.nil?
+        # Add the cooling coil
+        clg_coil.addToNode(supply_inlet_node) unless clg_coil.nil?
+
+      elsif fan_location == 'BlowThrough'
+        # Add the humidifier
+        humidifier.addToNode(supply_inlet_node) unless humidifier.nil?
+        # Add the cooling coil
+        clg_coil.addToNode(supply_inlet_node) unless clg_coil.nil?
+        # Add the fan
+        fan.addToNode(supply_inlet_node) unless fan.nil?
+
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Invalid fan location')
+        return false
+      end
+
+      # add humidifying setpoint
+      humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
+      humidity_spm.setControlZone(zone)
+      humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
+
+      humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
+      humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model_add_schedule(model, 'DataCenter Humidity Setpoint Schedule'))
+      zone.setZoneControlHumidistat(humidistat)
+
+      # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
+      # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
+      setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
+      setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
+      setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+
+      # Add the OA system
+      oa_system.addToNode(supply_inlet_node)
+
+      # Attach the setpoint manager to the supply outlet node
+      setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
+
+      # set air loop availability controls
+      air_loop.setAvailabilitySchedule(hvac_op_sch)
+
+      # Create a diffuser and attach the zone/diffuser pair to the air loop
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
+      diffuser.setName("#{air_loop.name} Diffuser")
+      diffuser.setZoneMinimumAirFlowInputMethod('Constant')
+      diffuser.setConstantMinimumAirFlowFraction(0.1)
+      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+
+      air_loops << air_loop
+    end
+
+    return air_loops
+  end
+
+  # Creates a CRAH system for larger size data center and adds it to the model.
+  #
+  # @param chilled_water_loop [string]
+  # @param system_name [String] the name of the system, or nil in which case it will be defaulted
+  # @param thermal_zones [String] zones to connect to this system
+  # @param hvac_op_sch [String] name of the HVAC operation schedule
+  # or nil in which case will be defaulted to always on
+  # @param oa_damper_sch [Double] name of the oa damper schedule,
+  # or nil in which case will be defaulted to always open
+  # no heating
+  # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting CRAH air loops
+  def model_add_crah(model,
+                     thermal_zones,
+                     system_name: nil,
+                     chilled_water_loop: nil,
+                     hvac_op_sch: nil,
+                     oa_damper_sch: nil,
+                     return_plenum: nil)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CRAH system for #{thermal_zones.size} zones data center.")
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name}")
+    end
+
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
+
+    # oa damper schedule
+    if oa_damper_sch.nil?
+      oa_damper_sch = model.alwaysOnDiscreteSchedule
+    else
+      oa_damper_sch = model_add_schedule(model, oa_damper_sch)
+    end
+
+    # air handler
+    air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+    if system_name.nil?
+      air_loop.setName("Data Center CRAH")
+    else
+      air_loop.setName(system_name)
+    end
+
+    # default design temperatures across all air loops
+    dsgn_temps = standard_design_sizing_temperatures
+
+    # adjusted zone design heating temperature for data center psz_ac
+    dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
+    dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
+    dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = dsgn_temps['htg_dsgn_sup_air_temp_f']
+    dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = dsgn_temps['clg_dsgn_sup_air_temp_f']
+    dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['preclg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['preclg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['clg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['clg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = dsgn_temps['htg_dsgn_sup_air_temp_c']
+    dsgn_temps['zn_clg_dsgn_sup_air_temp_c'] = dsgn_temps['clg_dsgn_sup_air_temp_c']
+
+    # default design settings used across all air loops
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 0.3)
+
+    # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
+    # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
+    setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
+    setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
+    setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+    setpoint_mgr_cooling.setName("CRAH supply air setpoint manager")
+    setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
+
+    # create fan
+    # ConstantVolume: Packaged Rooftop Single Zone Air conditioner
+    # Cycling: Unitary System
+    # CyclingHeatPump: Unitary Heat Pump system
+    fan = create_fan_by_name(model,
+                             'VAV_System_Fan',
+                             fan_name: "#{air_loop.name} Fan")
+    fan.setAvailabilitySchedule(hvac_op_sch)
+    fan.addToNode(air_loop.supplyInletNode)
+
+    # add humidifier to control minimum RH
+    humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
+    humidifier.autosizeRatedCapacity
+    humidifier.autosizeRatedPower
+    humidifier.setName("#{air_loop.name} Electric Steam Humidifier")
+    humidifier.addToNode(air_loop.supplyInletNode)
+
+    # cooling coil
+    if chilled_water_loop.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No chilled water plant loop supplied for CRAH system')
+      return false
+    else
+      create_coil_cooling_water(model,
+                                chilled_water_loop,
+                                air_loop_node: air_loop.supplyInletNode,
+                                name: "#{air_loop.name} Water Clg Coil",
+                                schedule: hvac_op_sch,
+                                design_outlet_air_temperature: dsgn_temps['clg_dsgn_sup_air_temp_c'])
+    end
+
+    # outdoor air intake system
+    oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_intake_controller.setName("#{air_loop.name} OA Controller")
+    oa_intake_controller.setMinimumLimitType('FixedMinimum')
+    oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
+
+    controller_mv = oa_intake_controller.controllerMechanicalVentilation
+    controller_mv.setName("#{air_loop.name} Vent Controller")
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
+
+    oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
+    oa_intake.setName("#{air_loop.name} OA System")
+    oa_intake.addToNode(air_loop.supplyInletNode)
+
+    # set air loop availability controls
+    air_loop.setAvailabilitySchedule(hvac_op_sch)
+
+    # hook the CRAH system to each zone
+    thermal_zones.each do |zone|
+
+      # Create a diffuser and attach the zone/diffuser pair to the air loop
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
+      diffuser.setName("#{zone.name} VAV terminal")
+      diffuser.setZoneMinimumAirFlowInputMethod('Constant')
+      diffuser.setConstantMinimumAirFlowFraction(0.1)
+      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+
+      # Zone sizing
+      sizing_zone = zone.sizingZone
+      # per ASHRAE 90.4, recommended range of data center supply air temperature is 18-27C, pick the mean value 22.5C as prototype
+      sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+      sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+
+      humidity_spm = OpenStudio::Model::SetpointManagerSingleZoneHumidityMinimum.new(model)
+      humidity_spm.setControlZone(zone)
+      humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
+
+      humidistat = OpenStudio::Model::ZoneControlHumidistat.new(model)
+      humidistat.setHumidifyingRelativeHumiditySetpointSchedule(model_add_schedule(model, 'DataCenter Humidity Setpoint Schedule'))
+      zone.setZoneControlHumidistat(humidistat)
+
+      unless return_plenum.nil?
+        zone.setReturnPlenum(return_plenum)
+      end
+    end
+
+    return air_loop
+  end
+
+
   # Creates a split DX AC system for each zone and adds it to the model.
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
@@ -5531,5 +5893,50 @@ class Standard
     # rename air loop and plant loop nodes for readability
     rename_air_loop_nodes(model)
     rename_plant_loop_nodes(model)
+  end
+
+  # This method will add an swh water fixture to the model for the space.
+  # if the it will return a water fixture object, or NIL if there is no water load at all.
+  def model_add_swh_end_uses_by_spaceonly(model, space, swh_loop)
+    # Water use connection
+    swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
+
+    # Water fixture definition
+    water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
+
+    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_sensible_frac_sch.setValue(0.2)
+    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
+    # water_use_latent_frac_sch.setValue(0.05)
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by the
+    # space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier as well
+    # which is different than the space (ultimately thermal zone) multiplier.
+    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_ind_SI'], 'm^3/s', 'gal/min').get
+    water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
+    water_use_latent_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
+    water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
+    water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
+    water_fixture_def.setPeakFlowRate(space['shw_peakflow_ind_SI'])
+    water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    # Target mixed water temperature
+    mixed_water_temp_c = space['shw_temp_SI']
+    mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), mixed_water_temp_c)
+    water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
+
+    # Water use equipment
+    water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
+    schedule = model_add_schedule(model, space['shw_sched'])
+    water_fixture.setFlowRateFractionSchedule(schedule)
+    water_fixture.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
+    swh_connection.addWaterUseEquipment(water_fixture)
+    # Assign water fixture to a space
+    water_fixture.setSpace(space['shw_spaces']) if model_attach_water_fixtures_to_spaces?(model)
+
+    # Connect the water use connection to the SWH loop
+    swh_loop.addDemandBranchForComponent(swh_connection)
+    return water_fixture
   end
 end
