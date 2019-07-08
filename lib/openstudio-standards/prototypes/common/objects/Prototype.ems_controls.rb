@@ -590,11 +590,15 @@ class Standard
     EMS
     implement_setback_prg.setBody(implement_setback_prg_body)
 
+    # Get design day size
+    num_design_days = model.getDesignDays.size
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "EMS code for radiant system operation depends on the number of design days being fixed. The model has #{num_design_days}.  Do not change design days now that the model has EMS code dependent on them. ")
+
     # Turn radiant system ON/OFF for cooling or heating based on calculated setpoints and building mode.
     determine_radiant_operation_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     determine_radiant_operation_prg.setName("#{zone_name}_Determine_Radiant_Operation")
     determine_radiant_operation_prg_body = <<-EMS
-      IF (WarmupFlag) == 1 ! Operation during warmupdays
+      IF (CurrentEnvironment) <= #{num_design_days} ! Operation during design days
           SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
           SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
       ELSE,                ! Operation during annual simulation
