@@ -3665,24 +3665,74 @@ class Standard
     # determine insulation thickness by climate zone
     climate_zone = model_standards_climate_zone(model)
     if climate_zone.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to R-20.')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to climate zone 5, R-20 insulation, 110F heating design supply water temperature.')
       cz_mult = 4
+      radiant_htg_dsgn_sup_wtr_temp_f = 110
     else
       climate_zone_set = model_find_climate_zone_set(model, climate_zone)
       case climate_zone_set.gsub('ClimateZone ', '')
-      when '1', '2', '2A', '2B', 'CEC15'
+      when '1'
         cz_mult = 2
+        radiant_htg_dsgn_sup_wtr_temp_f = 90
+      when '2', '2A', '2B', 'CEC15'
+        cz_mult = 2
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
       when '3', '3A', '3B', '3C', 'CEC3', 'CEC4', 'CEC5', 'CEC6', 'CEC7', 'CEC8', 'CEC9', 'CEC10', 'CEC11', 'CEC12', 'CEC13', 'CEC14'
         cz_mult = 3
-      when '4', '4A', '4B', '4C', '5', '5A', '5B', '5C', '6', '6A', '6B', 'CEC1', 'CEC2', 'CEC16'
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      when '4', '4A', '4B', '4C', 'CEC1', 'CEC2'
         cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      when '5', '5A', '5B', '5C', 'CEC16'
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 110
+      when '6', '6A', '6B'
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 120
       when '7', '8'
         cz_mult = 5
+        radiant_htg_dsgn_sup_wtr_temp_f = 120
       else # default to 4
         cz_mult = 4
       end
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation and R-#{((cz_mult + 1) * 5).to_i} exterior insulation.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation and R-#{((cz_mult + 1) * 5).to_i} exterior insulation, and #{radiant_htg_dsgn_sup_wtr_temp_f}F heating design supply water temperature.")
     end
+
+    # Adjust hot and chilled water loop temperatures and set new setpoint schedules
+    radiant_htg_dsgn_sup_wtr_temp_delt_r = 10
+    radiant_htg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_f, 'F', 'C').get
+    radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
+    hot_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_htg_dsgn_sup_wtr_temp_c)
+    hot_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_htg_dsgn_sup_wtr_temp_delt_k)
+    hw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                      radiant_htg_dsgn_sup_wtr_temp_c,
+                                                      name = "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F")
+    hot_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        spm.setSchedule(hw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing hot water loop setpoint for '#{hot_water_loop.name}' to '#{hw_temp_sch.name}' to account for the radiant system.")
+      end
+    end
+
+    radiant_clg_dsgn_sup_wtr_temp_f = 55.0
+    radiant_clg_dsgn_sup_wtr_temp_delt_r = 5.0
+    radiant_clg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_f, 'F', 'C').get
+    radiant_clg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
+    chilled_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_clg_dsgn_sup_wtr_temp_c)
+    chilled_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_clg_dsgn_sup_wtr_temp_delt_k)
+    chw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                       radiant_clg_dsgn_sup_wtr_temp_c,
+                                                       name = "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F")
+    chilled_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        spm.setSchedule(chw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing chilled water loop setpoint for '#{chilled_water_loop.name}' to '#{chw_temp_sch.name}' to account for the radiant system.")
+      end
+    end
+
+    # set slab thickness and make new radiant constructions
     slab_thickness_m = 0.0254 * cz_mult
     mat_slab_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', slab_thickness_m, 0.02, 56.06, 1210)
     mat_slab_insulation.setName("Radiant Ground Slab Insulation - #{cz_mult} in.")
@@ -4859,6 +4909,31 @@ class Standard
                                    hot_water_loop: hot_water_loop,
                                    ventilation: fan_coil_ventilation)
 
+    when 'Radiant Slab'
+      case main_heat_fuel
+      when 'NaturalGas', 'DistrictHeating', 'Electricity'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
+      else
+        hot_water_loop = nil
+      end
+
+      case cool_fuel
+      when 'Electricity', 'DistrictCooling'
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
+
+      model_add_low_temp_radiant(model,
+                                 zones,
+                                 hot_water_loop,
+                                 chilled_water_loop)
+
     when 'Baseboards'
       case main_heat_fuel
       when 'NaturalGas', 'DistrictHeating'
@@ -5122,6 +5197,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5146,6 +5222,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5172,6 +5249,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5421,6 +5499,27 @@ class Standard
                             zone_heat_fuel,
                             cool_fuel,
                             zones)
+
+    when 'Radiant Slab with DOAS'
+      model_add_hvac_system(model,
+                            system_type = 'Radiant Slab',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+
+      model_add_hvac_system(model,
+                            system_type = 'DOAS',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: 'Water',
+                            air_loop_cooling_type: 'Water')
 
     else
 
