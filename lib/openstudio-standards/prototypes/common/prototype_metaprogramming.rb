@@ -58,7 +58,7 @@ end
   # This class represents a prototypical #{template} #{name}.
   class #{template}#{name} < #{template}
   @@building_type = \"#{name}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"\#{@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -517,7 +517,7 @@ end
   class #{template}#{building_type}#{hvac_system} < #{template}
   @@building_type = \"#{building_type}\"
   @@hvac_system = \"#{hvac_system}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}_\#{@@hvac_system}\")
+  register_standard (\"\#{@template}_\#{@@building_type}_\#{@@hvac_system}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -674,7 +674,7 @@ end
   # This class represents a prototypical #{template} #{building_type}.
   class #{template}#{building_type} < #{template}
   @@building_type = \"#{building_type}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"\#{@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -830,7 +830,7 @@ end
   # This class represents a prototypical #{template} #{building_type}.
   class #{template}#{building_type} < #{template}
   @@building_type = \"#{building_type}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"\#{@template}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
