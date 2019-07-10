@@ -34,3 +34,4 @@ coverage/
 /test/refactor/
 /data/costing/rs_means_auth
 /tmp/
+*.xlsx
