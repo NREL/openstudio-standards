@@ -65,23 +65,14 @@ class Standard
     end
     sch_radiant_htgsetp.setScheduleTypeLimits(hot_water_schedule_type_limits)
 
-    # Calculated active slab cooling temperature setpoint. Default temperature is taken at the slab surface.
-    sch_slab_csp = model_add_constant_schedule_ruleset(model,
-                                                       25.0,
-                                                       name = "#{zone_name}_Sch_Slab_CSP")
-    cmd_slab_csp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_csp,
-                                                                         'Schedule:Year',
-                                                                         'Schedule Value')
-    cmd_slab_csp.setName("#{zone_name}_CMD_SLAB_CSP")
-
-    # Calculated active slab heating temperature setpoint. Default temperature is taken at the slab surface.
-    sch_slab_hsp = model_add_constant_schedule_ruleset(model,
+    # Calculated active slab heating and cooling temperature setpoint. Default temperature is taken at the slab surface.
+    sch_slab_sp = model_add_constant_schedule_ruleset(model,
                                                        21.0,
-                                                       name = "#{zone_name}_Sch_Slab_HSP")
-    cmd_slab_hsp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_hsp,
+                                                       name = "#{zone_name}_Sch_Slab_SP")
+    cmd_slab_sp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_sp,
                                                                          'Schedule:Year',
                                                                          'Schedule Value')
-    cmd_slab_hsp.setName("#{zone_name}_CMD_SLAB_HSP")
+    cmd_slab_sp.setName("#{zone_name}_CMD_SLAB_SP")
 
     # Calculated cooling setpoint error. Calculated from upper comfort limit minus setpoint offset and 'measured' controlled zone temperature.
     sch_csp_error = model_add_constant_schedule_ruleset(model,
@@ -446,8 +437,7 @@ class Standard
       SET #{zone_name}_switch_over_time   = 24,
       SET #{zone_name}_CMD_CSP_ERROR      = 0,
       SET #{zone_name}_CMD_HSP_ERROR      = 0,
-      SET #{zone_name}_CMD_SLAB_CSP       = 26,
-      SET #{zone_name}_CMD_SLAB_HSP       = 22.3,
+      SET #{zone_name}_CMD_SLAB_SP        = #{zone_name}_Lower_Comfort_Limit,
       SET #{zone_name}_cont_rad_oper      = 0,
       SET #{zone_name}_daily_cool_sum     = 0,
       SET #{zone_name}_daily_heat_sum     = 0,
@@ -535,39 +525,26 @@ class Standard
     EMS
     calculate_cumulative_sum_prg.setBody(calculate_cumulative_sum_prg_body)
 
-    # Calculate the new active slab temperature cooling setpoint.
-    calculate_cool_ctrl_setpoint_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    calculate_cool_ctrl_setpoint_prg.setName("#{zone_name}_Calculate_Cool_Ctrl_Setpoint")
-    calculate_cool_ctrl_setpoint_prg_body = <<-EMS
-      IF (unoccupied == 1) && (weekend == 0),
-          IF (#{zone_name}_daily_cool_sum_one > 0) || ((#{zone_name}_daily_heat_sum_one <= 0) && (#{zone_name}_CMD_CSP_ERROR < 0)),
-              SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP + (#{zone_name}_CMD_CSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
-          ENDIF,
-          IF (#{zone_name}_CMD_SLAB_CSP < #{zone_name}_Lower_Comfort_Limit),
-            SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_Lower_Comfort_Limit,
-          ELSEIF (#{zone_name}_CMD_SLAB_CSP > #{zone_name}_Upper_Comfort_Limit),
-            SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_Upper_Comfort_Limit,
-          ENDIF,
-      ENDIF
+    # Calculate the new active slab temperature setpoint for heating and cooling
+    calculate_slab_ctrl_setpoint_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    calculate_slab_ctrl_setpoint_prg.setName("#{zone_name}_Calculate_Slab_Ctrl_Setpoint")
+    calculate_slab_ctrl_setpoint_prg_body = <<-EMS
+      IF (#{zone_name}_zone_mode >= 0),
+        IF (#{zone_name}_daily_cool_sum_one > 0) || ((#{zone_name}_daily_heat_sum_one <= 0) && (#{zone_name}_CMD_CSP_ERROR < 0)),
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_CSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
+        ENDIF,
+      ELSEIF (#{zone_name}_zone_mode <= 0),
+        IF (#{zone_name}_daily_heat_sum_one > 0) || ((#{zone_name}_daily_cool_sum_one <= 0) && (#{zone_name}_CMD_HSP_ERROR > 0)),
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
+        ENDIF,
+      ENDIF,
+      IF (#{zone_name}_CMD_SLAB_SP < #{zone_name}_Lower_Comfort_Limit),
+        SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_Lower_Comfort_Limit,
+      ELSEIF (#{zone_name}_CMD_SLAB_SP > #{zone_name}_Upper_Comfort_Limit),
+        SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_Upper_Comfort_Limit,
+      ENDIF,
     EMS
-    calculate_cool_ctrl_setpoint_prg.setBody(calculate_cool_ctrl_setpoint_prg_body)
-
-    # Calculate the new active slab temperature heating setpoint.
-    calculate_heat_ctrl_setpoint_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    calculate_heat_ctrl_setpoint_prg.setName("#{zone_name}_Calculate_Heat_Ctrl_Setpoint")
-    calculate_heat_ctrl_setpoint_prg_body = <<-EMS
-      IF (unoccupied == 1) && (weekend == 0),
-          IF (#{zone_name}_daily_heat_sum_one > 0) || ((#{zone_name}_daily_cool_sum_one <= 0) && (#{zone_name}_CMD_HSP_ERROR > 0)),
-              SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
-          ENDIF,
-          IF (#{zone_name}_CMD_SLAB_HSP < #{zone_name}_Lower_Comfort_Limit),
-            SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_Lower_Comfort_Limit,
-          ELSEIF (#{zone_name}_CMD_SLAB_HSP > #{zone_name}_Upper_Comfort_Limit),
-            SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_Upper_Comfort_Limit,
-          ENDIF,
-      ENDIF
-    EMS
-    calculate_heat_ctrl_setpoint_prg.setBody(calculate_heat_ctrl_setpoint_prg_body)
+    calculate_slab_ctrl_setpoint_prg.setBody(calculate_slab_ctrl_setpoint_prg_body)
 
     # Apply a weekend setback at the start of a weekend and remove the reset at the defined time.
     implement_setback_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
@@ -581,11 +558,9 @@ class Standard
           SET turn_on_hour = occ_hr_start - early_reset_out,
       ENDIF,
       IF (CurrentTime == occ_hr_end) && (DayOfWeek == 6),
-          SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP + wkend_temp_reset,
-          SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP - wkend_temp_reset,
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP,
       ELSEIF (CurrentTime == turn_on_hour) && (DayOfWeek == turn_on_day),
-          SET #{zone_name}_CMD_SLAB_CSP = #{zone_name}_CMD_SLAB_CSP - wkend_temp_reset,
-          SET #{zone_name}_CMD_SLAB_HSP = #{zone_name}_CMD_SLAB_HSP + wkend_temp_reset,
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP,
       ENDIF
     EMS
     implement_setback_prg.setBody(implement_setback_prg_body)
@@ -602,16 +577,16 @@ class Standard
           SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
           SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
       ELSE,                ! Operation during annual simulation
-          IF (#{zone_name}_zone_mode >= 0) && (#{zone_name}_Srf_Temp > #{zone_name}_CMD_SLAB_CSP),
+          IF (#{zone_name}_zone_mode >= 0) && (#{zone_name}_Srf_Temp > #{zone_name}_CMD_SLAB_SP),
               SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
               SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
-          ELSEIF (#{zone_name}_zone_mode >= 0) && (#{zone_name}_Srf_Temp < #{zone_name}_CMD_SLAB_CSP) && (min_oper > #{zone_name}_cont_rad_oper) && (#{zone_name}_cont_rad_oper <> 0),
+          ELSEIF (#{zone_name}_zone_mode >= 0) && (#{zone_name}_Srf_Temp < #{zone_name}_CMD_SLAB_SP) && (min_oper > #{zone_name}_cont_rad_oper) && (#{zone_name}_cont_rad_oper <> 0),
               SET #{zone_name}_CMD_COLD_WATER_CTRL = 0,
               SET #{zone_name}_CMD_HOT_WATER_CTRL = -60,
-          ELSEIF (#{zone_name}_zone_mode <= 0) && (#{zone_name}_Srf_Temp < #{zone_name}_CMD_SLAB_HSP),
+          ELSEIF (#{zone_name}_zone_mode <= 0) && (#{zone_name}_Srf_Temp < #{zone_name}_CMD_SLAB_SP),
               SET #{zone_name}_CMD_COLD_WATER_CTRL = 100,
               SET #{zone_name}_CMD_HOT_WATER_CTRL = 60,
-          ELSEIF (#{zone_name}_zone_mode <= 0) && (#{zone_name}_Srf_Temp > #{zone_name}_CMD_SLAB_HSP) && (min_oper > #{zone_name}_cont_rad_oper) && (#{zone_name}_cont_rad_oper <> 0),
+          ELSEIF (#{zone_name}_zone_mode <= 0) && (#{zone_name}_Srf_Temp > #{zone_name}_CMD_SLAB_SP) && (min_oper > #{zone_name}_cont_rad_oper) && (#{zone_name}_cont_rad_oper <> 0),
               SET #{zone_name}_CMD_COLD_WATER_CTRL = 100,
               SET #{zone_name}_CMD_HOT_WATER_CTRL = 60,
           ELSE,
@@ -672,8 +647,7 @@ class Standard
     programs_at_beginning_of_timestep.addProgram(determine_unoccupied_prg)
     programs_at_beginning_of_timestep.addProgram(determine_zone_mode_prg)
     programs_at_beginning_of_timestep.addProgram(implement_setback_prg)
-    programs_at_beginning_of_timestep.addProgram(calculate_cool_ctrl_setpoint_prg)
-    programs_at_beginning_of_timestep.addProgram(calculate_heat_ctrl_setpoint_prg)
+    programs_at_beginning_of_timestep.addProgram(calculate_slab_ctrl_setpoint_prg)
     programs_at_beginning_of_timestep.addProgram(determine_radiant_operation_prg)
 
     #####
