@@ -3999,6 +3999,14 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param control_strategy [String] name of control strategy
+  # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Proportional gain constant (recommended 0.3 or less).
+  # @param minimum_operation [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Minimum number of hours of operation for radiant system before it shuts off.
+  # @param weekend_temperature_reset [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Weekend temperature reset for slab temperature setpoint in degree Celsius.
+  # @param early_reset_out_arg [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Time at which the weekend temperature reset is removed.
   # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
   # TODO - Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
   def model_add_low_temp_radiant(model,
@@ -4006,7 +4014,11 @@ class Standard
                                  hot_water_loop,
                                  chilled_water_loop,
                                  include_carpet: true,
-                                 control_strategy: 'proportional_control')
+                                 control_strategy: 'proportional_control',
+                                 proportional_gain: 0.3,
+                                 minimum_operation: 1,
+                                 weekend_temperature_reset: 2,
+                                 early_reset_out_arg: 20)
 
     # create internal source constructions for surfaces
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Replacing floor constructions with new radiant slab constructions.')
@@ -4216,7 +4228,11 @@ class Standard
       if control_strategy == 'proportional_control'
         # rename nodes before adding EMS code
         rename_plant_loop_nodes(model)
-        ems_radiant_proportional_controls(model, zone, radiant_loop)
+        ems_radiant_proportional_controls(model, zone, radiant_loop,
+                                          proportional_gain: proportional_gain,
+                                          minimum_operation: minimum_operation,
+                                          weekend_temperature_reset: weekend_temperature_reset,
+                                          early_reset_out_arg: early_reset_out_arg)
       end
     end
 
