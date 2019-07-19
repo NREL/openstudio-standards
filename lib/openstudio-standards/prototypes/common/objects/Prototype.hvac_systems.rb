@@ -3250,11 +3250,11 @@ class Standard
     if supplemental_heating_type == 'Electric'
       create_coil_heating_electric(model,
                                    air_loop_node: air_loop.supplyInletNode,
-                                   name: "#{air_loop.name} PSZ-AC Electric Backup Htg Coil")
+                                   name: "#{air_loop.name} SAC Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
       create_coil_heating_gas(model,
                               air_loop_node: air_loop.supplyInletNode,
-                              name: "#{air_loop.name} PSZ-AC Gas Backup Htg Coil")
+                              name: "#{air_loop.name} SAC Gas Backup Htg Coil")
     end
 
     # create heating coil
@@ -3322,6 +3322,104 @@ class Standard
     end
 
     return air_loop
+  end
+
+  # Creates a minisplit heatpump system for each zone and adds it to the model.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
+  # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
+  # @param heating_type [String] valid choices are Gas, Single Speed Heat Pump
+  # @param supplemental_heating_type [String] valid choices are Electric, Gas
+  # @param fan_type [String] valid choices are ConstantVolume, Cycling
+  # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
+  # @param oa_damper_sch [String] name of the oa damper schedule, or nil in which case will be defaulted to always open
+  # @param econ_max_oa_frac_sch [String] name of the economizer maximum outdoor air fraction schedule
+  # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop
+  def model_add_minisplit_hp(model,
+                             thermal_zones,
+                             cooling_type: 'Two Speed DX AC',
+                             hvac_op_sch: nil)
+
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
+
+    thermal_zones.each do |zone|
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+      air_loop.setName("#{zone.name} Minisplit Heatpump")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding minisplit HP for #{zone.name}.")
+
+      # defaults
+      hspf = 7.7
+
+      # create heating coil
+      htg_coil = create_coil_heating_dx_single_speed(model,
+                                                     name: "#{air_loop.name} Heating Coil",
+                                                     type: 'Residential Central Air Source HP',
+                                                     cop: hspf_to_cop_heating_no_fan(hspf))
+      htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio.convert(-30.0, 'F', 'C').get)
+      htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+      htg_coil.setCrankcaseHeaterCapacity(0)
+      htg_coil.setDefrostStrategy('ReverseCycle')
+      htg_coil.setDefrostControl('OnDemand')
+      htg_coil.resetDefrostTimePeriodFraction
+
+      # create cooling coil
+      if cooling_type == 'Two Speed DX AC'
+        create_coil_cooling_dx_two_speed(model,
+                                         air_loop_node: air_loop.supplyInletNode,
+                                         name: "#{air_loop.name} 2spd DX AC Clg Coil")
+      elsif cooling_type == 'Single Speed DX AC'
+        create_coil_cooling_dx_single_speed(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
+      elsif cooling_type == 'Single Speed Heat Pump'
+        create_coil_cooling_dx_single_speed(model,
+                                            air_loop_node: air_loop.supplyInletNode,
+                                            name: "#{air_loop.name} 1spd DX HP Clg Coil", type: 'Heat Pump')
+      end
+
+      # create fan
+      fan = create_fan_by_name(model,
+                               'Residential_HVAC_Fan',
+                               fan_name: "#{air_loop.name} Fan",
+                               end_use_subcategory: 'Supply Fans')
+      fan.setAvailabilitySchedule(hvac_op_sch)
+
+      supplemental_htg_coil = create_coil_heating_electric(model,
+                                                           name: "#{air_loop.name} Electric Backup Htg Coil")
+
+      # create unitary system (holds the coils and fan)
+      unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
+      unitary.setName("#{air_loop.name} Unitary System")
+      unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+      unitary.setMaximumSupplyAirTemperature(OpenStudio.convert(200.0, 'F', 'C').get)
+      unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+      unitary.setControllingZoneorThermostatLocation(zone)
+      unitary.addToNode(air_loop.supplyInletNode)
+      unitary.setControllingZoneorThermostatLocation(zone)
+
+      # set flow rates during different conditions
+      unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0.0)
+
+      # attach the coils and fan
+      unitary.setHeatingCoil(htg_coil) if htg_coil
+      unitary.setCoolingCoil(clg_coil) if clg_coil
+      unitary.setSupplementalHeatingCoil(supplemental_htg_coil) if supplemental_htg_coil
+      unitary.setSupplyFan(fan)
+      unitary.setFanPlacement('BlowThrough')
+      unitary.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+
+      # create a diffuser
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+      diffuser.setName(" #{zone.name} Direct Air")
+      air_loop.addBranchForZone(zone, diffuser)
+    end
+
+    return true
   end
 
   # Creates a PTAC system for each zone and adds it to the model.
