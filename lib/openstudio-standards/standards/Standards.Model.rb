@@ -1755,12 +1755,17 @@ class Standard
     search_criteria_matching_objects = []
     matching_objects = []
     hash_of_objects= @standards_data[table_name]
-
+    
     #needed for NRCan data structure compatibility. We keep all tables in a 'tables' hash in @standards_data and the table
     # itself is in the 'table' hash index.
     if hash_of_objects.nil?
-      table = @standards_data['tables'][table_name]['table']
-      hash_of_objects = table
+      if @standards_data['tables'].nil?
+        # Format of @standards_data is not NRCan-style and table simply doesn't exist.
+        return matching_objects
+      else
+        table = @standards_data['tables'][table_name]['table']
+        hash_of_objects = table
+      end
     end
 
     # Compare each of the objects against the search criteria
