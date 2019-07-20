@@ -90,6 +90,12 @@ class Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.standard', 'OpenStudio Standards JSON data loading not yet implemented within CLI.')
           # TODO Figure out relative paths for loading JSON directories from OpenStudio CLI
           # data.each_pair do |key, objs|
+          #   # Override the template in inherited files to match the instantiated template
+          #   objs.each do |obj|
+          #     if obj.has_key?('template')
+          #       obj['template'] = template
+          #     end
+          #   end
           #   if @standards_data[key].nil?
           #     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Adding #{key} from #{File.basename(file)}")
           #   else
@@ -104,6 +110,12 @@ class Standard
         files.each do |file|
           data = JSON.parse(File.read(file))
           data.each_pair do |key, objs|
+            # Override the template in inherited files to match the instantiated template
+            objs.each do |obj|
+              if obj.has_key?('template')
+                obj['template'] = template
+              end
+            end
             if @standards_data[key].nil?
               OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Adding #{key} from #{File.basename(file)}")
             else
