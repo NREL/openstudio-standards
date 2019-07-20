@@ -1,0 +1,40 @@
+{
+  "heat_rejection": [
+    {
+      "template": "DEER 2015",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Centrifugal",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 20.0,
+      "notes": "From CA Title 24 2013 Table 110.2-G"
+    },
+    {
+      "template": "DEER 2015",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 42.1,
+      "notes": "From CA Title 24 2013 Table 110.2-G"
+    },
+    {
+      "template": "DEER 2015",
+      "equipment_type": "Closed Cooling Tower",
+      "fan_type": "Centrifugal",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 7.0,
+      "notes": "From CA Title 24 2013 Table 110.2-G"
+    },
+    {
+      "template": "DEER 2015",
+      "equipment_type": "Closed Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 14.0,
+      "notes": "From CA Title 24 2013 Table 110.2-G"
+    }
+  ]
+}

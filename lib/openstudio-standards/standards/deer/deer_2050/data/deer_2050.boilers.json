@@ -1,0 +1,52 @@
+{
+  "boilers": [
+    {
+      "template": "DEER 2050",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 300.0,
+      "maximum_capacity": 2499.999,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.96,
+      "efffplr": null,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2050",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 2500.0,
+      "maximum_capacity": "9.999999999E9",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.96,
+      "efffplr": null,
+      "notes": "Forecast for LA100 project"
+    },
+    {
+      "template": "DEER 2050",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 299.999,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": 0.96,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "efffplr": null,
+      "notes": "Forecast for LA100 project"
+    }
+  ]
+}

@@ -194,6 +194,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     worksheets_to_skip << 'lookups'
     worksheets_to_skip << 'sheetmap'
     worksheets_to_skip << 'deer_lighting_fractions'
+    worksheets_to_skip << 'window_types_and_weights'
 
     # List of columns to skip
     cols_to_skip = []
