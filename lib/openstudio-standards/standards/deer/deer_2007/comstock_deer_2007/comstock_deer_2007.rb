@@ -2,13 +2,15 @@
 # to a given model.
 # @ref [References::DEERMASControl]
 class ComStockDEER2007 < DEER2007
-  @@template = 'ComStock DEER 2007' # rubocop:disable Style/ClassVars
-  register_standard @@template
+  register_standard 'ComStock DEER 2007'
   attr_reader :template
 
   def initialize
-    super()
-    @template = @@template
+    @template = 'ComStock DEER 2007'
     load_standards_database
+  end
+
+  def load_standards_database(data_directories = [])
+    super([__dir__] + data_directories)
   end
 end
