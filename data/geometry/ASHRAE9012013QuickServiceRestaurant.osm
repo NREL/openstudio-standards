@@ -827,3 +827,19 @@ OS:Rendering:Color,
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
+OS:SubSurface,
+  {f212a244-25ab-44d6-e133-b63dc5ff3c13}, !- Handle
+  Kitchen_Wall_East_Door,                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {e6173982-c332-4cd4-8e85-d9c6d4cb0930}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  15.2428, 10.148690892281, 2.1336,       !- X,Y,Z Vertex 1 {m}
+  15.2428, 10.148690892281, 0,            !- X,Y,Z Vertex 2 {m}
+  15.2428, 11.063090892281, 0,            !- X,Y,Z Vertex 3 {m}
+  15.2428, 11.063090892281, 2.1336;       !- X,Y,Z Vertex 4 {m}
