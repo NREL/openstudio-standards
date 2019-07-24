@@ -182,6 +182,12 @@ def export_spreadsheet_to_json(spreadsheet_titles)
 
     # Path to the xlsx file
     xlsx_path = "#{__dir__}/#{spreadsheet_title}.xlsx"
+
+    unless File.exist?(xlsx_path)
+      warnings << "could not find spreadsheet called #{spreadsheet_title}"
+      next
+    end
+
     puts "Parsing #{xlsx_path}"
 
     # List of worksheets to skip
