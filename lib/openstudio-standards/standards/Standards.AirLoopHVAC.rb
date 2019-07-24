@@ -144,7 +144,8 @@ class Standard
 
     # Unoccupied shutdown
     if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
-      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+      occ_threshold = air_loop_hvac_unoccupied_threshold
+      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = occ_threshold)
     else
       air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
     end
@@ -2799,6 +2800,11 @@ class Standard
     shutoff_required = true
 
     return shutoff_required
+  end
+
+  # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
+  def air_loop_hvac_unoccupied_threshold
+    return 0.15
   end
 
   # Shut off the system during unoccupied periods.
