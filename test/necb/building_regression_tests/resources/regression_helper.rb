@@ -79,6 +79,7 @@ class NECBRegressionHelper < Minitest::Test
       #old models
       # Load the expected osm
       expected_osm_file = "#{expected_results_folder}#{@model_name}_expected_result.osm"
+      test_osm_file = "#{expected_results_folder}#{@model_name}_test_result.osm"
       unless File.exist?(expected_osm_file)
         raise("The initial osm path: #{expected_osm_file} does not exist.")
       end
@@ -86,6 +87,10 @@ class NECBRegressionHelper < Minitest::Test
       # Upgrade version if required.
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       expected_model = version_translator.loadModel(expected_osm_model_path).get
+      #save test results by default
+      BTAP::FileIO.save_osm(@model,test_osm_file)
+      puts "saved test result osm file to #{test_osm_file}"
+
 
       # Compare the two models.
       diffs = compare_osm_files(expected_model, @model)
