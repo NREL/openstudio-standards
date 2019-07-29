@@ -80,6 +80,7 @@ class NECBRegressionHelper < Minitest::Test
       # Load the expected osm
       expected_osm_file = "#{expected_results_folder}#{@model_name}_expected_result.osm"
       test_osm_file = "#{expected_results_folder}#{@model_name}_test_result.osm"
+      test_idf_file = "#{expected_results_folder}#{@model_name}_test_result.idf"
       unless File.exist?(expected_osm_file)
         raise("The initial osm path: #{expected_osm_file} does not exist.")
       end
@@ -90,6 +91,8 @@ class NECBRegressionHelper < Minitest::Test
       #save test results by default
       BTAP::FileIO.save_osm(@model,test_osm_file)
       puts "saved test result osm file to #{test_osm_file}"
+      BTAP::FileIO.save_idf(@model,test_idf_file)
+      puts "saved test result osm file to #{test_idf_file}"
 
 
       # Compare the two models.
