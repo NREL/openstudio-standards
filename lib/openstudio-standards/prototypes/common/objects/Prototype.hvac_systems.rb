@@ -3999,6 +3999,8 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param control_strategy [String] name of control strategy
+  # @param rad_lock_str [double] decimal hour of when radiant lockout starts
+  # @param rad_lock_end [double] decimal hour of when radiant lockout ends
   # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
   # TODO - Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
   def model_add_low_temp_radiant(model,
@@ -4006,7 +4008,10 @@ class Standard
                                  hot_water_loop,
                                  chilled_water_loop,
                                  include_carpet: true,
-                                 control_strategy: 'proportional_control')
+                                 control_strategy: 'proportional_control',
+                                 rad_lock_str: 12.0,
+                                 rad_lock_end: 20.0
+                                 )
 
     # create internal source constructions for surfaces
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Replacing floor constructions with new radiant slab constructions.')
@@ -4175,8 +4180,35 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Radiant loops require a chilled water loop, but none was provided.')
       end
 
+      # create availability schedule for radiant loop
+      str_minute = ((rad_lock_str % 1) * 60).to_i
+      end_minute = ((rad_lock_end % 1) * 60).to_i
+      time_struct = []
+
+      if rad_lock_end > rad_lock_str
+          time_struct << ["%02d:%02d" % [rad_lock_str, str_minute], 1] if rad_lock_str != 0
+          time_struct << ["%02d:%02d" % [rad_lock_end, end_minute], 0]
+          time_struct << ["%02d:%02d" % [24, 0], 1] if rad_lock_end != 24
+      elsif rad_lock_str > rad_lock_end
+          time_struct << ["%02d:%02d" % [rad_lock_end, end_minute], 0]
+          time_struct << ["%02d:%02d" % [rad_lock_str, str_minute], 1]
+          time_struct << ["%02d:%02d" % [24, 0], 0] if rad_lock_str != 24
+      else
+        time_struct << ["%02d:%02d" % [24, 0], 1]
+      end
+
+      schedule_struct = [
+          [
+              ["Jan-01", "Dec-31"],
+              ["All"],
+              time_struct
+          ]
+      ]
+
+      rad_schedule = BTAP::Resources::Schedules::create_annual_ruleset_schedule_detailed(model, "Radiant System Availability", "FRACTION", schedule_struct)
+
       radiant_loop = OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow.new(model,
-                                                                          model.alwaysOnDiscreteSchedule,
+                                                                          rad_schedule,
                                                                           radiant_loop_htg_coil,
                                                                           radiant_loop_clg_coil)
 
@@ -5127,6 +5159,10 @@ class Standard
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param fan_coil_ventilation [Bool] toggle whether to include outdoor air ventilation on zone fan coil units
   #   only used if HVAC system has four pipe fan coil units
+  # @param rad_lock_str [double] decimal hour of when radiant lockout starts
+  #   only used if HVAC system is a radiant system
+  # @param rad_lock_end [double] decimal hour of when radiant lockout ends
+  #   only used if HVAC system is a radiant system
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -5138,7 +5174,9 @@ class Standard
                             chilled_water_loop_cooling_type: 'WaterCooled',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
-                            fan_coil_ventilation: true)
+                            fan_coil_ventilation: true,
+                            rad_lock_str: 12.0,
+                            rad_lock_end: 20.0)
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -5870,7 +5908,9 @@ class Standard
                             cool_fuel,
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            rad_lock_str: 12.0,
+                            rad_lock_end: 20.0)
 
       model_add_hvac_system(model,
                             system_type = 'DOAS',
