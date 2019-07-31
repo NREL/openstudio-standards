@@ -285,7 +285,7 @@ class Standard
     # end
 
     # Controlled zone temperature for the zone.
-    zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Mean Air Temperature')
+    zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
     zone_ctrl_temperature.setName("#{zone_name}_Ctrl_Temperature")
     zone_ctrl_temperature.setKeyName(zone.name.get)
 
@@ -345,11 +345,6 @@ class Standard
     zone_srf_temp_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_srf_temp)
     zone_srf_temp_trend.setName("#{zone_name}_Srf_Temp_Trend")
     zone_srf_temp_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
-
-    # Last 24 hours trend for the zone controlled temperature.
-    zone_ctrl_temperature_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_ctrl_temperature)
-    zone_ctrl_temperature_trend.setName("#{zone_name}_Ctrl_Temperature_Trend")
-    zone_ctrl_temperature_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 24)
 
     # Last 24 hours trend for radiant system in cooling mode.
     zone_rad_cool_operation_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_rad_cool_operation)
@@ -430,8 +425,8 @@ class Standard
     set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg_body = <<-EMS
-      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_Upper_Comfort_Limit,
-      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_Lower_Comfort_Limit,
+      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_Lower_Comfort_Limit,
+      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_Upper_Comfort_Limit,
       SET #{zone_name}_cont_neutral_oper  = 0,
       SET #{zone_name}_zone_mode          = 0,
       SET #{zone_name}_switch_over_time   = 24,
@@ -457,14 +452,30 @@ class Standard
     EMS
     calculate_trends_prg.setBody(calculate_trends_prg_body)
 
+    # Calculate maximum and minimum 'measured' controlled temperature in the zone
+    calculate_minmax_ctrl_temp_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    calculate_minmax_ctrl_temp_prg.setName("#{zone_name}_Calculate_Extremes_In_Zone")
+    calculate_minmax_ctrl_temp_prg_body = <<-EMS
+      IF ((CurrentTime >= occ_hr_start) && (CurrentTime <= occ_hr_end)),
+          IF #{zone_name}_Ctrl_Temperature > #{zone_name}_max_ctrl_temp,
+              SET #{zone_name}_max_ctrl_temp = #{zone_name}_Ctrl_Temperature,
+          ENDIF,
+          IF #{zone_name}_Ctrl_Temperature < #{zone_name}_min_ctrl_temp,
+              SET #{zone_name}_min_ctrl_temp = #{zone_name}_Ctrl_Temperature,
+          ENDIF,
+      ELSE,
+        SET #{zone_name}_max_ctrl_temp = #{zone_name}_Lower_Comfort_Limit,
+        SET #{zone_name}_min_ctrl_temp = #{zone_name}_Upper_Comfort_Limit,
+      ENDIF
+    EMS
+    calculate_minmax_ctrl_temp_prg.setBody(calculate_minmax_ctrl_temp_prg_body)
+
     # Calculate errors from comfort zone limits and 'measured' controlled temperature in the zone.
     calculate_errors_from_comfort_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
       IF CurrentTime == occ_hr_end,
-          SET #{zone_name}_max_ctrl_temp = @TrendMax #{zone_name}_Ctrl_Temperature_Trend occ_duration/ZoneTimeStep,
           SET #{zone_name}_CMD_CSP_ERROR = (#{zone_name}_Upper_Comfort_Limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
-          SET #{zone_name}_min_ctrl_temp = @TrendMin #{zone_name}_Ctrl_Temperature_Trend occ_duration/ZoneTimeStep,
           SET #{zone_name}_CMD_HSP_ERROR = (#{zone_name}_Lower_Comfort_Limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
     EMS
@@ -633,6 +644,7 @@ class Standard
     average_building_temperature = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
     average_building_temperature.setName("#{zone_name}_Average_Building_Temperature")
     average_building_temperature.setCallingPoint('EndOfZoneTimestepAfterZoneReporting')
+    average_building_temperature.addProgram(calculate_minmax_ctrl_temp_prg)
     average_building_temperature.addProgram(calculate_errors_from_comfort_prg)
     average_building_temperature.addProgram(calculate_neutral_time_prg)
     average_building_temperature.addProgram(determine_zone_mode_prg)
