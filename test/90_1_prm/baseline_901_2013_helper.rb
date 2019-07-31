@@ -429,7 +429,7 @@ module Baseline9012013
     prm_maj_sec = 'G3.1.1 Baseline HVAC System Type' 
     
     # get model objects
-    climate_zone = climate_zone.gsub('ASHRAE 169-2006-', '')
+    climate_zone = climate_zone.gsub('ASHRAE 169-2013-', '')
     model_area_si = prop_model.getBuilding.floorArea
     model_area_ip = OpenStudio.convert(model_area_si, 'm^2', 'ft^2').get
     building_storys = prop_model.getBuildingStorys.size

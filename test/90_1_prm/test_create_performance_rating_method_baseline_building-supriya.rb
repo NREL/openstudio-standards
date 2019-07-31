@@ -11,7 +11,7 @@ class Baseline9012013Test < Minitest::Test
   
    def test_midrise_prm
 
-    base_model = create_baseline_model('MidRiseApt_2010_5A', '90.1-2013', 'ASHRAE 169-2006-5A', 'MidriseApartment', false, true)
+    base_model = create_baseline_model('MidRiseApt_2010_5A', '90.1-2013', 'ASHRAE 169-2013--5A', 'MidriseApartment', false, true)
 
   end
   

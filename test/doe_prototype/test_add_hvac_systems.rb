@@ -130,7 +130,7 @@ class TestAddHVACSystems < Minitest::Test
         model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        climate_zone = 'ASHRAE 169-2006-7A'
+        climate_zone = 'ASHRAE 169-2013-7A'
         standard.model_add_design_days_and_weather_file(model, climate_zone, '')
         standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
 
