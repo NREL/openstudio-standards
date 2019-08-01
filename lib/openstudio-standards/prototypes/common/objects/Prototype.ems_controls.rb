@@ -559,12 +559,14 @@ class Standard
     calculate_slab_ctrl_setpoint_prg.setName("#{zone_name}_Calculate_Slab_Ctrl_Setpoint")
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
       IF (#{zone_name}_zone_mode >= 0),
-        IF (#{zone_name}_daily_cool_sum_one > 0) || ((#{zone_name}_daily_heat_sum_one <= 0) && (#{zone_name}_CMD_CSP_ERROR < 0)),
-          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_CSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
+        SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_Rad_Cool_Operation_Trend 24/ZoneTimeStep,
+        IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == occ_hr_end),
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_CSP_ERROR*prp_k),
         ENDIF,
       ELSEIF (#{zone_name}_zone_mode <= 0),
-        IF (#{zone_name}_daily_heat_sum_one > 0) || ((#{zone_name}_daily_cool_sum_one <= 0) && (#{zone_name}_CMD_HSP_ERROR > 0)),
-          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
+        SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_Rad_Heat_Operation_Trend 24/ZoneTimeStep,
+        IF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == occ_hr_end),
+          SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_HSP_ERROR*prp_k),
         ENDIF,
       ENDIF,
       IF (#{zone_name}_CMD_SLAB_SP < lower_slab_sp_lim),
@@ -691,6 +693,8 @@ class Standard
     zone_zone_mode_output.setName("#{zone_name} Zone Mode of Operation")
     zone_cont_neutral_oper_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_cont_neutral_oper)
     zone_cont_neutral_oper_output.setName("#{zone_name} Number of Hours in Neutral Operation")
+    zone_cont_rad_oper_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_cont_rad_oper)
+    zone_cont_rad_oper_output.setName("#{zone_name} Number of Hours in Continuous Operation")
     zone_daily_cool_sum_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_cool_sum)
     zone_daily_cool_sum_output.setName("#{zone_name} Daily Building Cool Operation")
     zone_daily_heat_sum_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_daily_heat_sum)
