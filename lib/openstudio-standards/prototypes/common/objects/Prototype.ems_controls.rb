@@ -213,6 +213,22 @@ class Standard
       early_reset_out = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'early_reset_out')
     end
 
+    # Upper slab temperature setpoint limit
+    upper_slab_sp_lim = model.getEnergyManagementSystemGlobalVariableByName('upper_slab_sp_lim')
+    if upper_slab_sp_lim.is_initialized
+      upper_slab_sp_lim = upper_slab_sp_lim.get
+    else
+      upper_slab_sp_lim = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'upper_slab_sp_lim')
+    end
+
+    # Lower slab temperature setpoint limit
+    lower_slab_sp_lim = model.getEnergyManagementSystemGlobalVariableByName('lower_slab_sp_lim')
+    if lower_slab_sp_lim.is_initialized
+      lower_slab_sp_lim = lower_slab_sp_lim.get
+    else
+      lower_slab_sp_lim = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'lower_slab_sp_lim')
+    end
+
     # Temperature offset used to modify.
     ctrl_temp_offset = model.getEnergyManagementSystemGlobalVariableByName('ctrl_temp_offset')
     if ctrl_temp_offset.is_initialized
@@ -374,7 +390,9 @@ class Standard
         SET min_oper           = #{minimum_operation},
         SET ctrl_temp_offset   = 0.5,
         SET wkend_temp_reset   = #{weekend_temperature_reset},
-        SET early_reset_out    = #{early_reset_out_arg}
+        SET early_reset_out    = #{early_reset_out_arg},
+        SET upper_slab_sp_lim  = 29,
+        SET lower_slab_sp_lim  = 19
       EMS
       set_constant_values_prg.setBody(set_constant_values_prg_body)
     end
@@ -474,7 +492,7 @@ class Standard
     calculate_errors_from_comfort_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
-      IF CurrentTime == occ_hr_end,
+      IF (CurrentTime >= (occ_hr_end - ZoneTimeStep)) && (CurrentTime <= (occ_hr_end)),
           SET #{zone_name}_CMD_CSP_ERROR = (#{zone_name}_Upper_Comfort_Limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
           SET #{zone_name}_CMD_HSP_ERROR = (#{zone_name}_Lower_Comfort_Limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
@@ -549,10 +567,10 @@ class Standard
           SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_CMD_SLAB_SP + (#{zone_name}_CMD_HSP_ERROR*prp_k)/(unocc_duration/ZoneTimeStep),
         ENDIF,
       ENDIF,
-      IF (#{zone_name}_CMD_SLAB_SP < #{zone_name}_Lower_Comfort_Limit),
-        SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_Lower_Comfort_Limit,
-      ELSEIF (#{zone_name}_CMD_SLAB_SP > #{zone_name}_Upper_Comfort_Limit),
-        SET #{zone_name}_CMD_SLAB_SP = #{zone_name}_Upper_Comfort_Limit,
+      IF (#{zone_name}_CMD_SLAB_SP < lower_slab_sp_lim),
+        SET #{zone_name}_CMD_SLAB_SP = lower_slab_sp_lim,
+      ELSEIF (#{zone_name}_CMD_SLAB_SP > upper_slab_sp_lim),
+        SET #{zone_name}_CMD_SLAB_SP = upper_slab_sp_lim,
       ENDIF,
     EMS
     calculate_slab_ctrl_setpoint_prg.setBody(calculate_slab_ctrl_setpoint_prg_body)
