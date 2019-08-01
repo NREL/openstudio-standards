@@ -5332,7 +5332,10 @@ class Standard
       model_add_low_temp_radiant(model,
                                  zones,
                                  hot_water_loop,
-                                 chilled_water_loop)
+                                 chilled_water_loop,
+                                 rad_lock_str: rad_lock_str,
+                                 rad_lock_end: rad_lock_end
+                                 )
 
     when 'Baseboards'
       case main_heat_fuel
@@ -5909,8 +5912,8 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            rad_lock_str: 12.0,
-                            rad_lock_end: 20.0)
+                            rad_lock_str: rad_lock_str,
+                            rad_lock_end: rad_lock_str)
 
       model_add_hvac_system(model,
                             system_type = 'DOAS',
