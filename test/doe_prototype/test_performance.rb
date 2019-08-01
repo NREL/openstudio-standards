@@ -43,17 +43,17 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 #    'ASHRAE 169-2013-8B']
   @templates = [
     '90.1-2004',
-    '90.1-2007',
-    '90.1-2010',
+    # '90.1-2007',
+    # '90.1-2010',
     '90.1-2013']
-  @epw_files = ['USA_HI_Honolulu.Intl.AP.911820_TMY3.epw']#,
+  @epw_files = [#'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
 #              'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2.epw',
 #              'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
 #              'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
 #              'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
 #              'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
 #              'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
-#              'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
+               'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw']#,
 #              'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
 #              'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
 #              'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
@@ -68,7 +68,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 
     all_comp =  @building_types.product @epw_files, @templates, @climate_zones
     all_comp.each do |building_type, epw_file, template, climate_zone|
-	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, false, false, 'dd-only', false)
+	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, true, false, 'dd-only', true)
     end
 end
 

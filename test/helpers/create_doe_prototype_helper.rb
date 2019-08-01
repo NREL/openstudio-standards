@@ -124,7 +124,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       osm_path = OpenStudio::Path.new(osm_path_string)
       sql_path_string = "#{full_sim_dir}/run/eplusout.sql"
       sql_path = OpenStudio::Path.new(sql_path_string)
-      truth_osm_path_string = "#{Dir.pwd}/regression_models/#{model_name}.osm"
+      truth_osm_path_string = "#{Dir.pwd}/regression_models/#{model_name}_expected_result.osm"
       truth_osm_path = OpenStudio::Path.new(truth_osm_path_string)
 
       model = nil
