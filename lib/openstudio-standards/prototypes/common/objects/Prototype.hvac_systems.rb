@@ -4127,7 +4127,7 @@ class Standard
     radiant_ground_slab_construction.setName('Radiant Ground Slab Construction')
     radiant_ground_slab_construction.setSourcePresentAfterLayerNumber(2)
     radiant_ground_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
-    radiant_ground_slab_construction.setTubeSpacing(0.02286) # 9 inches
+    radiant_ground_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_ext_insulation
@@ -4139,7 +4139,7 @@ class Standard
     radiant_exterior_slab_construction.setName('Radiant Exterior Slab Construction')
     radiant_exterior_slab_construction.setSourcePresentAfterLayerNumber(3)
     radiant_exterior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(4)
-    radiant_exterior_slab_construction.setTubeSpacing(0.02286) # 9 inches
+    radiant_exterior_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_metal_deck
@@ -4150,7 +4150,7 @@ class Standard
     radiant_interior_slab_construction.setName('Radiant Interior Slab Construction')
     radiant_interior_slab_construction.setSourcePresentAfterLayerNumber(2)
     radiant_interior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
-    radiant_interior_slab_construction.setTubeSpacing(0.02286) # 9 inches
+    radiant_interior_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     # default temperature controls for radiant system
     zn_radiant_htg_dsgn_temp_f = 68.0
