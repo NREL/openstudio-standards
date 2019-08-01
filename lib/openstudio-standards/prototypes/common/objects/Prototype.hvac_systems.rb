@@ -5928,7 +5928,7 @@ class Standard
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
                             rad_lock_str: rad_lock_str,
-                            rad_lock_end: rad_lock_str)
+                            rad_lock_end: rad_lock_end)
 
       model_add_hvac_system(model,
                             system_type = 'DOAS',
