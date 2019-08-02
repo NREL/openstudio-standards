@@ -35,7 +35,10 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
     'OS:StandardsInformation:Material',
-    'OS:StandardsInformation:Construction'
+    'OS:StandardsInformation:Construction',
+    'OS:SimulationControl', # Sizing run and weather run may be different
+    'OS:AdditionalProperties', # Does not impact simulation results
+    'OS:Output:Variable' # Does not impact simulation results
   ]
 
   # Fill model object lists with all object types to be compared
