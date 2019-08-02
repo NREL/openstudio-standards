@@ -3,7 +3,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "LT Coffin IceCream",
+      "case_type": "Ice Cream Coffins",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 3.775,
@@ -36,7 +36,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "LT ReachIn Frozen Food",
+      "case_type": "Frozen Food Reach-Ins",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
@@ -69,7 +69,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "LT ReachIn Deli Cases",
+      "case_type": "Deli Cases",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
@@ -102,7 +102,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "LT ReachIn IceCream",
+      "case_type": "Ice Cream Reach-Ins",
       "case_category": null,
       "case_model": "reachin",
       "ft_tube_per_ft_case": 3.775,
@@ -135,7 +135,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Coffin Produce",
+      "case_type": "Produce Cases Med",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -168,7 +168,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Coffin Produce Island",
+      "case_type": "Produce Islands",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -201,7 +201,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Dairy",
+      "case_type": "Dairy Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -234,7 +234,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Dairy_Meat",
+      "case_type": "Meat Cases Low",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -267,7 +267,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Meat",
+      "case_type": "Meat Cases Med",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -300,7 +300,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Beverage",
+      "case_type": "Beverage Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -333,7 +333,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Service Meat",
+      "case_type": "Service Meat Cases",
       "case_category": null,
       "case_model": "servicecase",
       "ft_tube_per_ft_case": 2.7625,
@@ -366,7 +366,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Service Deli",
+      "case_type": "Service Deli Cases",
       "case_category": null,
       "case_model": "servicecase",
       "ft_tube_per_ft_case": 2.7625,
@@ -399,7 +399,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Salad_Produce",
+      "case_type": "Salad Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -432,7 +432,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Floral",
+      "case_type": "Floral Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
@@ -465,7 +465,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Service Bakery",
+      "case_type": "Service Bakery Cases",
       "case_category": null,
       "case_model": "servicecase",
       "ft_tube_per_ft_case": 2.7625,
@@ -498,7 +498,7 @@
     {
       "template": "DOE Ref 1980-2004",
       "size_category": "Any",
-      "case_type": "MT Vertical Open Prepared Food",
+      "case_type": "Prepared Foods Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
