@@ -126,7 +126,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Grocery Freezer",
+      "walkin_type": "Grocery Freezer",
       "rated_cooling_capacity": 28674.87088286086,
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -167,7 +167,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Bakery Freezer",
+      "walkin_type": "Bakery Freezer",
       "rated_cooling_capacity": 9881.370610715216,
       "cooling_capacity_c2": -0.3087,
       "cooling_capacity_c1": 152.9,
@@ -208,7 +208,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Dairy Cooler",
+      "walkin_type": "Dairy Cooler",
       "rated_cooling_capacity": 41526.8344233879,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -249,7 +249,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Beer Cooler",
+      "walkin_type": "Beer Cooler",
       "rated_cooling_capacity": 30403.029992520445,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -290,7 +290,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Meat Cooler",
+      "walkin_type": "Meat Cooler",
       "rated_cooling_capacity": 26695.095182231293,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -331,7 +331,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In MeatPrep Cooler",
+      "walkin_type": "Meat Prep",
       "rated_cooling_capacity": 37818.89961309875,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -372,7 +372,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In BloomBox Cooler",
+      "walkin_type": "Bloom Box",
       "rated_cooling_capacity": 6919.4428606891515,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -413,7 +413,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Deli Cooler",
+      "walkin_type": "Deli Cooler",
       "rated_cooling_capacity": 10009.388535930111,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -454,7 +454,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Produce Cooler",
+      "walkin_type": "Produce Cooler",
       "rated_cooling_capacity": 26077.1060471831,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,
@@ -495,7 +495,7 @@
     {
       "template": "90.1-2013",
       "size_category": "Any",
-      "walkin_type": "Walk-In Fish Cooler",
+      "walkin_type": "Fish Cooler",
       "rated_cooling_capacity": 7537.431995737344,
       "cooling_capacity_c2": -0.3387,
       "cooling_capacity_c1": 181.0,

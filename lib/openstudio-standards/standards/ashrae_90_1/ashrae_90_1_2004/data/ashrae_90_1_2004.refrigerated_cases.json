@@ -234,7 +234,7 @@
     {
       "template": "90.1-2004",
       "size_category": "Any",
-      "case_type": "Meat Cases Low",
+      "case_type": "Dairy_Meat Cases",
       "case_category": null,
       "case_model": "othercase",
       "ft_tube_per_ft_case": 2.7625,
