@@ -21,7 +21,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
     'MidriseApartment',
     'HighriseApartment',
     'Warehouse']
-	 @climate_zones = [
+   @climate_zones = [
 #    'ASHRAE 169-2013-1A',
 #    'ASHRAE 169-2013-1B',
 #    'ASHRAE 169-2013-2A',
@@ -68,7 +68,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
 
     all_comp =  @building_types.product @epw_files, @templates, @climate_zones
     all_comp.each do |building_type, epw_file, template, climate_zone|
-	  result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, true, false, 'dd-only', true)
+    result, msg = TestDOEPrototypesPerformance.create_building(building_type, template, climate_zone, epw_file, true, true, true, false, 'dd-only', true)
     end
 end
 

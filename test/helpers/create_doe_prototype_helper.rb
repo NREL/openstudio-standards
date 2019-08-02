@@ -23,12 +23,20 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
-    # Make a file to store the model comparisons
+    # Make a file to store the model energy comparisons
     @results_csv_file = "#{@test_dir}/prototype_buildings_results.csv"
     # Add a header row on file creation
     if !File.exist?(@results_csv_file)
       File.open(@results_csv_file, 'a') do |file|
-        file.puts "building_type,template,climate_zone,fuel_type,end_use,legacy_val,osm_val,percent_error,difference,absolute_percent_error"
+        file.puts 'building_type,template,climate_zone,fuel_type,end_use,legacy_val,osm_val,percent_error,difference'
+      end
+    end
+    # Make a file to store the model comparisons
+    @compare_models_file = "#{@test_dir}/prototype_buildings_compare.log"
+    # Add a header row on file creation
+    if !File.exist?(@compare_models_file)
+      File.open(@compare_models_file, 'a') do |file|
+        file.puts 'Prototype Building Comparison Log'
       end
     end
     # Make a file that combines all the run logs
@@ -167,7 +175,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             sim_ctrl = model.getSimulationControl
             sim_ctrl.setRunSimulationforSizingPeriods(true)
             sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
-		  end
+          end
 
           # Save the model
           model.save(osm_path, true)
@@ -237,7 +245,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
         ### Compare simulation results ###
 
-        acceptable_error_percentage = 0.001
+        acceptable_error_percentage = 0.1
 
         # Get the legacy simulation results
         if run_type == 'dd-only'
@@ -338,9 +346,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         # Write the results diffs to a file
         if results_comparison.size > 0
           diff_file_path = "#{run_dir}/compare_results.csv"
-          CSV.open(diff_file_path, 'w') do |csv|
-            results_comparison.each do |d|
-              csv << d
+          CSV.open(diff_file_path, 'w') do |file|
+            results_comparison.each do |line|
+              file << line
             end
           end
         end
@@ -367,8 +375,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if model_diffs.size > 0
             diff_file_path = "#{run_dir}/compare_models.log"
             File.open(diff_file_path, 'w') do |file|
-              model_diffs.each do |d|
-                file.puts d
+              model_diffs.each do |diff|
+                file.puts diff
               end
             end
           end
@@ -386,22 +394,46 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Copy errors to combined log file
       File.open(@combined_results_log, 'a') do |file|
+        file.puts "\n"
+        file.puts "************************************************************************"
         file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
         messages.each do |message|
           file.puts message
         end
       end
 
-      # Assert if there were any errors
-      assert(errors.size == 0, errors.reverse.join("\n"))
-	  
-      # Assert if there is no difference in results
-      assert(result_diffs.size == 0)
-
-      if result_diffs.size > 0
-        puts result_diffs
+      # Copy comparison log to file
+      if compare_results_object_by_object
+        if model_diffs.size > 0
+          File.open(@compare_models_file, 'a') do |file|
+            file.puts "\n"
+            file.puts "************************************************************************"
+            file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
+            model_diffs.each do |diff|
+              file.puts diff
+            end
+          end
+          puts model_diffs
+        end
       end
 
+      # Copy energy result difference to file
+      if compare_results
+        if result_diffs.size > 0
+          CSV.open(@results_csv_file, 'a') do |file|
+            results_comparison.drop(1).each do |line|
+              file << line
+            end
+          end
+          puts result_diffs
+        end
+      end
+
+      # Assert if there were any errors
+      assert(errors.size == 0, errors.reverse.join("\n"))
+
+      # Assert if there is no difference in results
+      assert(result_diffs.size == 0)
     end
   end
 
