@@ -89,21 +89,18 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       compare_results,
       debug,
       run_type,
-      compare_results_object_by_object )
+      compare_results_object_by_object)
 
     method_name = nil
     case template
     when 'NECB2011'
-
       method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{File.basename(epw_file.to_s,'.epw')}".gsub(' ','_').gsub('.','_')
-
     else
       method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
     end
 
 
     define_method(method_name) do
-
       # Start time
       start_time = Time.new
 
@@ -112,14 +109,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Paths for this test run
 
-    model_name = nil
-    case template
-    when 'NECB2011'
-      model_name = "#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
-    else
-      model_name = "#{building_type}-#{template}-#{climate_zone}"
-    end
-
+      model_name = nil
+      case template
+      when 'NECB2011'
+        model_name = "#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
+      else
+        model_name = "#{building_type}-#{template}-#{climate_zone}"
+      end
 
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
@@ -191,7 +187,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Run the simulation, if requested
       if run_models
-
         # Delete previous run directories if they exist
         FileUtils.rm_rf(full_sim_dir)
 
@@ -229,7 +224,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           prototype_creator.model_run_simulation_and_log_errors(model, full_sim_dir)
         end
 
-      end           
+      end
 
       # Compare the model and model results, if requested
       model_diffs = []
@@ -296,7 +291,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               # If both
               percent_error = ((current_val - legacy_val)/legacy_val) * 100
               if percent_error.abs > acceptable_error_percentage
-                result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{current_val}, #{legacy_val})"
+                result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round(2)}% (#{current_val}, #{legacy_val})"
               end
             elsif current_val > 0 && legacy_val.abs < 1e-6
               # The current model has a fuel/end use that the legacy model does not
@@ -323,7 +318,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             # If both
             total_energy_percent_error = ((total_current_energy - total_legacy_energy)/total_legacy_energy) * 100
             if total_energy_percent_error.abs > acceptable_error_percentage
-              result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round}% ***"
+              result_diffs << "#{building_type}-#{template}-#{climate_zone} *** Total Energy Error = #{total_energy_percent_error.round(2)}% ***"
             end
           elsif total_current_energy > 0 && total_legacy_energy == 0
             # The osm has a fuel/end use that the legacy idf does not
@@ -366,6 +361,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
             # Remove unused resources to make comparison cleaner
             prototype_creator.model_remove_unused_resource_objects(truth_model)
+            prototype_creator.model_remove_unused_resource_objects(model)
             model_diffs = compare_osm_files(truth_model, model)
           else
             model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
@@ -565,7 +561,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
                 # If both
                 percent_error = ((osm_val - legacy_val)/legacy_val) * 100
                 if percent_error.abs > acceptable_error_percentage
-                  failures << "#{building_type}-#{building_vintage}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round}% (#{osm_val}, #{legacy_val})"
+                  failures << "#{building_type}-#{building_vintage}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round(2)}% (#{osm_val}, #{legacy_val})"
                 end
               elsif osm_val > 0 && legacy_val.abs < 1e-6
                 # The osm has a fuel/end use that the legacy idf does not
@@ -601,7 +597,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if total_osm_energy_val > 0 && total_legacy_energy_val > 0
             # If both
             total_percent_error = ((total_osm_energy_val - total_legacy_energy_val)/total_legacy_energy_val) * 100
-            failures << "#{building_type}-#{building_vintage}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round}% ***"
+            failures << "#{building_type}-#{building_vintage}-#{climate_zone} *** Total Energy Error = #{total_percent_error.round(2)}% ***"
           elsif total_osm_energy_val > 0 && total_legacy_energy_val == 0
             # The osm has a fuel/end use that the legacy idf does not
             total_percent_error = 1000

@@ -1216,8 +1216,15 @@ class Standard
     # data center keeps positive pressure all the time, so no infiltration
     if space.spaceType.is_initialized && space.spaceType.get.standardsSpaceType.is_initialized
       std_space_type = space.spaceType.get.standardsSpaceType.get
-      if std_space_type.downcase.include?('data') || std_space_type.downcase.include?('computer')
+      if std_space_type.downcase.include?('data center') || std_space_type.downcase.include?('datacenter')
         return true
+      end
+
+      if space.spaceType.get.standardsBuildingType.is_initialized
+        std_bldg_type = space.spaceType.get.standardsBuildingType.get
+        if std_bldg_type.downcase.include?('datacenter') && std_space_type.downcase.include?('computerroom')
+          return true
+        end
       end
     end
 
@@ -1240,7 +1247,7 @@ class Standard
 
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_window_area_m2 <= 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, no exterior wall area was found, no infiltration will be added.")
       return true
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, set infiltration rate to #{adj_infil_rate_cfm_per_ft2.round(3)} cfm/ft2 exterior wall area (aka #{basic_infil_rate_cfm_per_ft2} cfm/ft2 @75Pa).")
