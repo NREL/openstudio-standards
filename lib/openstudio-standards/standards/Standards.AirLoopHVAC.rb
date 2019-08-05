@@ -3214,8 +3214,13 @@ class Standard
         next if space_type.standardsSpaceType.empty?
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
-        next unless standards_space_type.downcase.include?('data') || standards_space_type.downcase.include?('computer')
-        dc_area_m2 += space.floorArea
+        if standards_space_type.downcase.include?('data center') || standards_space_type.downcase.include?('datacenter')
+          dc_area_m2 += space.floorArea
+        end
+        std_bldg_type = space.spaceType.get.standardsBuildingType.get
+        if std_bldg_type.downcase.include?('datacenter') && standards_space_type.downcase.include?('computerroom')
+          dc_area_m2 += space.floorArea
+        end
       end
     end
 
