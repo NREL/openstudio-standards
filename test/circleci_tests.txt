@@ -42,6 +42,7 @@ doe_prototype/test_space_type_hash.rb
 doe_prototype/test_add_hvac_systems.rb
 doe_prototype/test_swh.rb
 doe_prototype/test_performance.rb
+doe_prototype/test_regression.rb
 
 cbes_prototype/test_small_office.rb
 cbes_prototype/test_medium_office.rb
@@ -66,8 +67,6 @@ necb/test_necb_weather.rb
 necb/test_necb_qaqc_single.rb
 necb/test_necb_schedules.rb
 necb/test_space_type_vintage_map.rb
-
-
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb
