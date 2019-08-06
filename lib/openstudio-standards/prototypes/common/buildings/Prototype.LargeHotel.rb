@@ -28,7 +28,7 @@ module LargeHotel
         return false
       end
 
-      exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_availability_schedule'])
+      exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_schedule'])
       unless exhaust_schedule
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
@@ -160,7 +160,23 @@ module LargeHotel
     end
   end
 
+  def update_waterheater_ambient_parameters(model)
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('300gal')
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Basement ZN').get)
+      elsif water_heater.name.to_s.include?('6.0gal')
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_Flr_6 ZN').get)
+      end
+    end
+  end
+
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    update_waterheater_ambient_parameters(model)
+
     return true
   end
 
