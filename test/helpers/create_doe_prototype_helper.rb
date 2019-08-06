@@ -240,7 +240,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
         ### Compare simulation results ###
 
-        acceptable_error_percentage = 0.1
+        acceptable_error_percentage = 0.001
 
         # Get the legacy simulation results
         if run_type == 'dd-only'
