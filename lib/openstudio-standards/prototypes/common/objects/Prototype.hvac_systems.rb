@@ -4174,6 +4174,8 @@ class Standard
     # create availability schedule for radiant loop
     if radiant_lockout
       radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+      radiant_avail_sch.setName('Radiant System Availability Schedule')
+
       start_minute = ((radiant_lockout_start_time % 1) * 60).to_i
       end_minute = ((radiant_lockout_end_time % 1) * 60).to_i
 
