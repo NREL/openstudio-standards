@@ -56,11 +56,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       climate_zones, 
       epw_files,
       create_models = true,
-      run_models = true,
-      compare_results = true,
+      run_models = false,
+      compare_results = false,
       debug = false,
       run_type = 'annual',
-      compare_results_object_by_object = true )
+      compare_results_object_by_object = false)
 
     building_types.each do |building_type|
       templates.each do |template|
@@ -68,12 +68,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
-              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
+              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
             end 
           else
             #otherwise it will go as normal with the american method and wipe the epw_file variable. 
             epw_file = ""
-            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object )
+            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
           end
         end
       end
@@ -84,19 +84,20 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       template, 
       climate_zone, 
       epw_file,
-      create_models,
-      run_models,
-      compare_results,
-      debug,
-      run_type,
-      compare_results_object_by_object)
+      create_models = true,
+      run_models = false,
+      compare_results = false,
+      debug = false,
+      run_type = 'annual',
+      compare_results_object_by_object = false,
+      test_name_prefix = '')
 
     method_name = nil
     case template
     when 'NECB2011'
-      method_name = "test_#{building_type}-#{template}-#{climate_zone}-#{File.basename(epw_file.to_s,'.epw')}".gsub(' ','_').gsub('.','_')
+      method_name = "test_#{test_name_prefix}#{building_type}-#{template}-#{climate_zone}-#{File.basename(epw_file.to_s,'.epw')}".gsub(' ','_').gsub('.','_')
     else
-      method_name = "test_#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
+      method_name = "test_#{test_name_prefix}#{building_type}-#{template}-#{climate_zone}".gsub(' ','_')
     end
 
 
@@ -117,7 +118,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         model_name = "#{building_type}-#{template}-#{climate_zone}"
       end
 
-      run_dir = "#{@test_dir}/#{model_name}"
+      run_dir = "#{@test_dir}/#{test_name_prefix}#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
       end
@@ -129,7 +130,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       sql_path_string = "#{full_sim_dir}/run/eplusout.sql"
       sql_path = OpenStudio::Path.new(sql_path_string)
       truth_osm_path_string = "#{Dir.pwd}/regression_models/#{model_name}_expected_result.osm"
-      truth_osm_path = OpenStudio::Path.new(truth_osm_path_string)
 
       model = nil
 
@@ -183,8 +183,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         end
       end
 
-      # TO DO: call add_output routine (btap)
-
       # Run the simulation, if requested
       if run_models
         # Delete previous run directories if they exist
@@ -226,19 +224,15 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       end
 
-      # Compare the model and model results, if requested
-      model_diffs = []
+      # Compare simulation results, if requested
       result_diffs = []
       if compare_results
-
         # Load the model and sql file from disk if not already in memory
         if model.nil?
           model = prototype_creator.safe_load_model(osm_path_string)
           sql_file = OpenStudio::SqlFile.new(sql_path)
           model.setSqlFile(sql_file)
         end
-
-        ### Compare simulation results ###
 
         acceptable_error_percentage = 0.001
 
@@ -331,7 +325,6 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           end
 
           results_comparison << [building_type, template, climate_zone, 'Total Energy', 'Total', total_legacy_energy.round(2), total_current_energy.round(2), total_energy_percent_error.round(2), (total_legacy_energy-total_current_energy).abs.round(2)]
-
         end
 
         # Write the results diffs to a file
@@ -343,37 +336,36 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             end
           end
         end
+      end
 
-        if compare_results_object_by_object
-          ### Compare models object by object ###
+      # Compare model object by object to regression model results, if requested
+      model_diffs = []
+      if compare_results_object_by_object
+        # Load the model from disk if not already in memory
+        if model.nil?
+          model = prototype_creator.safe_load_model(osm_path_string)
+        end
 
-          # Load the model from disk if not already in memory
-          if model.nil?
-            model = prototype_creator.safe_load_model(osm_path_string)
-          end
+        # Load the truth model from disk and compare to the newly-created model
+        if File.exist?(truth_osm_path_string)
+          truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
+          # Remove unused resources to make comparison cleaner
+          prototype_creator.model_remove_unused_resource_objects(truth_model)
+          prototype_creator.model_remove_unused_resource_objects(model)
+          model_diffs = compare_osm_files(truth_model, model)
+        else
+          model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
+        end
 
-          # Load the truth model from disk and compare to the newly-created model
-          if File.exist?(truth_osm_path_string)
-            truth_model = prototype_creator.safe_load_model(truth_osm_path_string)
-            # Remove unused resources to make comparison cleaner
-            prototype_creator.model_remove_unused_resource_objects(truth_model)
-            prototype_creator.model_remove_unused_resource_objects(model)
-            model_diffs = compare_osm_files(truth_model, model)
-          else
-            model_diffs << "ERROR: could not find regression model at #{truth_osm_path_string}, did not compare models."
-          end
-
-          # Write the model diffs to a file
-          if model_diffs.size > 0
-            diff_file_path = "#{run_dir}/compare_models.log"
-            File.open(diff_file_path, 'w') do |file|
-              model_diffs.each do |diff|
-                file.puts diff
-              end
+        # Write the model diffs to a file
+        if model_diffs.size > 0
+          diff_file_path = "#{run_dir}/compare_models.log"
+          File.open(diff_file_path, 'w') do |file|
+            model_diffs.each do |diff|
+              file.puts diff
             end
           end
         end
-
       end
 
       # Calculate run time
@@ -424,8 +416,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       # Assert if there were any errors
       assert(errors.size == 0, errors.reverse.join("\n"))
 
-      # Assert if there is no difference in results
-      assert(result_diffs.size == 0)
+      # Assert if there were any differences in results
+      assert(result_diffs.size == 0, result_diffs.join("\n"))
+
+      # Assert if there were any differences in the models
+      assert(model_diffs.size == 0, model_diffs.join("\n"))
     end
   end
 end
