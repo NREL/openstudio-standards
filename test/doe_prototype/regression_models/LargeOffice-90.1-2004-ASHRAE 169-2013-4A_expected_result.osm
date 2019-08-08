@@ -9051,7 +9051,7 @@ OS:Pipe:Adiabatic,
 
 OS:Node,
   {0f1c95ba-e9fe-43ed-be49-0d848b77b07d}, !- Handle
-  Chilled Water Loop Demand Inlet Outlet Water Node, !- Name
+  Chilled Water Loop Secondary Pump Inlet Water Node, !- Name
   {fe591b52-bbc2-4466-a11f-b114c2529c73}, !- Inlet Port
   {d628c2a2-fd46-457a-b2d8-f545ba01bb12}; !- Outlet Port
 

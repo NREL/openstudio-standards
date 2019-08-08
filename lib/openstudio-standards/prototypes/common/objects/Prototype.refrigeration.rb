@@ -60,9 +60,18 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
-
-    restocking_sch_name = 'Always Off'
-    fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
+    if props['restocking_schedule']
+      if props['restocking_schedule'].downcase == 'always off'
+        restocking_sch = model.alwaysOffDiscreteSchedule
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+      end
+    else
+      restocking_sch = model.alwaysOffDiscreteSchedule
+    end
+    if props['fractionofantisweatheaterenergytocase']
+      fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
+    end
 
     # Case
     ref_case = OpenStudio::Model::RefrigerationCase.new(model, model.alwaysOnDiscreteSchedule)
@@ -110,7 +119,7 @@ class Standard
     end
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
     ref_case.setUnderCaseHVACReturnAirFraction(0)
-    ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
+    ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
 
     if props['case_category']
       ref_case_addprops = ref_case.additionalProperties
