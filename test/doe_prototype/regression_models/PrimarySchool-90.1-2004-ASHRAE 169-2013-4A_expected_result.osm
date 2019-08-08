@@ -20289,7 +20289,7 @@ OS:Refrigeration:Case,
   None,                                   !- Defrost Energy Correction Curve Type
   ,                                       !- Defrost Energy Correction Curve Name
   0,                                      !- Under Case HVAC Return Air Fraction
-  {6311b074-fd8b-49fe-a173-0beefaab5ac9}, !- Refrigerated Case Restocking Schedule Name
+  {5926e83c-4b61-46d9-8177-d5e07b2834b6}, !- Refrigerated Case Restocking Schedule Name
   {f1c0318e-7381-4772-8be3-8dd485a4d355}, !- Case Credit Fraction Schedule Name
   -5.56;                                  !- Design Evaporator Temperature or Brine Inlet Temperature {C}
 
@@ -20304,132 +20304,123 @@ OS:Curve:Cubic,
   20;                                     !- Maximum Value of x
 
 OS:Schedule:Ruleset,
-  {6311b074-fd8b-49fe-a173-0beefaab5ac9}, !- Handle
-  Always Off,                             !- Name
-  {cfad4b61-4dcd-4e16-b355-484415943e74}, !- Schedule Type Limits Name
-  {99297302-ea1a-4275-9434-6df1a8629fb7}, !- Default Day Schedule Name
-  {6a06dec6-3e94-452d-a224-0fefd758290c}, !- Summer Design Day Schedule Name
-  {0078a89d-9f2c-47b0-bf3c-ac53f3b9bc60}; !- Winter Design Day Schedule Name
+  {5926e83c-4b61-46d9-8177-d5e07b2834b6}, !- Handle
+  SchoolPrimary Kitchen_ZN_1_FLR_1_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched, !- Name
+  {f4145f1b-431e-48c9-b14c-faa610916ad4}, !- Schedule Type Limits Name
+  {8695363a-8502-4e5f-b3be-f2b85bf58659}, !- Default Day Schedule Name
+  {94298854-9f8d-4d1e-b401-1dd21cc31b1c}, !- Summer Design Day Schedule Name
+  {2807996b-8798-4e41-835f-407de5d5cbc0}; !- Winter Design Day Schedule Name
 
 OS:Schedule:Day,
-  {99297302-ea1a-4275-9434-6df1a8629fb7}, !- Handle
-  Always Off Default,                     !- Name
-  {cfad4b61-4dcd-4e16-b355-484415943e74}, !- Schedule Type Limits Name
+  {8695363a-8502-4e5f-b3be-f2b85bf58659}, !- Handle
+  SchoolPrimary Kitchen_ZN_1_FLR_1_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched Default, !- Name
+  {f4145f1b-431e-48c9-b14c-faa610916ad4}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
-  1,                                      !- Hour 1
+  6,                                      !- Hour 1
   0,                                      !- Minute 1
-  0.08,                                   !- Value Until Time 1
-  2,                                      !- Hour 2
+  0,                                      !- Value Until Time 1
+  7,                                      !- Hour 2
   0,                                      !- Minute 2
-  0.04,                                   !- Value Until Time 2
-  4,                                      !- Hour 3
+  50,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
   0,                                      !- Minute 3
-  0.01,                                   !- Value Until Time 3
-  5,                                      !- Hour 4
+  70,                                     !- Value Until Time 3
+  10,                                     !- Hour 4
   0,                                      !- Minute 4
-  0.04,                                   !- Value Until Time 4
-  6,                                      !- Hour 5
+  80,                                     !- Value Until Time 4
+  11,                                     !- Hour 5
   0,                                      !- Minute 5
-  0.27,                                   !- Value Until Time 5
-  7,                                      !- Hour 6
+  70,                                     !- Value Until Time 5
+  13,                                     !- Hour 6
   0,                                      !- Minute 6
-  0.94,                                   !- Value Until Time 6
-  8,                                      !- Hour 7
+  50,                                     !- Value Until Time 6
+  14,                                     !- Hour 7
   0,                                      !- Minute 7
-  1,                                      !- Value Until Time 7
-  9,                                      !- Hour 8
+  80,                                     !- Value Until Time 7
+  15,                                     !- Hour 8
   0,                                      !- Minute 8
-  0.96,                                   !- Value Until Time 8
-  10,                                     !- Hour 9
+  90,                                     !- Value Until Time 8
+  16,                                     !- Hour 9
   0,                                      !- Minute 9
-  0.84,                                   !- Value Until Time 9
-  11,                                     !- Hour 10
+  80,                                     !- Value Until Time 9
+  24,                                     !- Hour 10
   0,                                      !- Minute 10
-  0.76,                                   !- Value Until Time 10
-  12,                                     !- Hour 11
-  0,                                      !- Minute 11
-  0.61,                                   !- Value Until Time 11
-  13,                                     !- Hour 12
-  0,                                      !- Minute 12
-  0.53,                                   !- Value Until Time 12
-  14,                                     !- Hour 13
-  0,                                      !- Minute 13
-  0.47,                                   !- Value Until Time 13
-  15,                                     !- Hour 14
-  0,                                      !- Minute 14
-  0.41,                                   !- Value Until Time 14
-  16,                                     !- Hour 15
-  0,                                      !- Minute 15
-  0.47,                                   !- Value Until Time 15
-  17,                                     !- Hour 16
-  0,                                      !- Minute 16
-  0.55,                                   !- Value Until Time 16
-  18,                                     !- Hour 17
-  0,                                      !- Minute 17
-  0.73,                                   !- Value Until Time 17
-  19,                                     !- Hour 18
-  0,                                      !- Minute 18
-  0.86,                                   !- Value Until Time 18
-  20,                                     !- Hour 19
-  0,                                      !- Minute 19
-  0.82,                                   !- Value Until Time 19
-  21,                                     !- Hour 20
-  0,                                      !- Minute 20
-  0.75,                                   !- Value Until Time 20
-  22,                                     !- Hour 21
-  0,                                      !- Minute 21
-  0.61,                                   !- Value Until Time 21
-  23,                                     !- Hour 22
-  0,                                      !- Minute 22
-  0.53,                                   !- Value Until Time 22
-  24,                                     !- Hour 23
-  0,                                      !- Minute 23
-  1;                                      !- Value Until Time 23
+  0;                                      !- Value Until Time 10
 
 OS:Schedule:Day,
-  {0078a89d-9f2c-47b0-bf3c-ac53f3b9bc60}, !- Handle
-  Always Off Winter Design Day 16,        !- Name
-  {cfad4b61-4dcd-4e16-b355-484415943e74}, !- Schedule Type Limits Name
+  {2807996b-8798-4e41-835f-407de5d5cbc0}, !- Handle
+  SchoolPrimary Kitchen_ZN_1_FLR_1_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched Winter Design Day, !- Name
+  {f4145f1b-431e-48c9-b14c-faa610916ad4}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
-  7,                                      !- Hour 1
+  6,                                      !- Hour 1
   0,                                      !- Minute 1
-  29.4,                                   !- Value Until Time 1
-  8,                                      !- Hour 2
+  0,                                      !- Value Until Time 1
+  7,                                      !- Hour 2
   0,                                      !- Minute 2
-  26.7,                                   !- Value Until Time 2
-  17,                                     !- Hour 3
+  50,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
   0,                                      !- Minute 3
-  23.9,                                   !- Value Until Time 3
-  18,                                     !- Hour 4
+  70,                                     !- Value Until Time 3
+  10,                                     !- Hour 4
   0,                                      !- Minute 4
-  26.7,                                   !- Value Until Time 4
-  24,                                     !- Hour 5
+  80,                                     !- Value Until Time 4
+  11,                                     !- Hour 5
   0,                                      !- Minute 5
-  29.4;                                   !- Value Until Time 5
+  70,                                     !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  50,                                     !- Value Until Time 6
+  14,                                     !- Hour 7
+  0,                                      !- Minute 7
+  80,                                     !- Value Until Time 7
+  15,                                     !- Hour 8
+  0,                                      !- Minute 8
+  90,                                     !- Value Until Time 8
+  16,                                     !- Hour 9
+  0,                                      !- Minute 9
+  80,                                     !- Value Until Time 9
+  24,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0;                                      !- Value Until Time 10
 
 OS:Schedule:Day,
-  {6a06dec6-3e94-452d-a224-0fefd758290c}, !- Handle
-  Always Off Summer Design Day 16,        !- Name
-  {cfad4b61-4dcd-4e16-b355-484415943e74}, !- Schedule Type Limits Name
+  {94298854-9f8d-4d1e-b401-1dd21cc31b1c}, !- Handle
+  SchoolPrimary Kitchen_ZN_1_FLR_1_Case:2_SELFCONTAINEDDISPLAYCASE_CaseStockingSched Summer Design Day, !- Name
+  {f4145f1b-431e-48c9-b14c-faa610916ad4}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
-  7,                                      !- Hour 1
+  6,                                      !- Hour 1
   0,                                      !- Minute 1
-  29.4,                                   !- Value Until Time 1
-  8,                                      !- Hour 2
+  0,                                      !- Value Until Time 1
+  7,                                      !- Hour 2
   0,                                      !- Minute 2
-  26.7,                                   !- Value Until Time 2
-  17,                                     !- Hour 3
+  50,                                     !- Value Until Time 2
+  9,                                      !- Hour 3
   0,                                      !- Minute 3
-  23.9,                                   !- Value Until Time 3
-  18,                                     !- Hour 4
+  70,                                     !- Value Until Time 3
+  10,                                     !- Hour 4
   0,                                      !- Minute 4
-  26.7,                                   !- Value Until Time 4
-  24,                                     !- Hour 5
+  80,                                     !- Value Until Time 4
+  11,                                     !- Hour 5
   0,                                      !- Minute 5
-  29.4;                                   !- Value Until Time 5
+  70,                                     !- Value Until Time 5
+  13,                                     !- Hour 6
+  0,                                      !- Minute 6
+  50,                                     !- Value Until Time 6
+  14,                                     !- Hour 7
+  0,                                      !- Minute 7
+  80,                                     !- Value Until Time 7
+  15,                                     !- Hour 8
+  0,                                      !- Minute 8
+  90,                                     !- Value Until Time 8
+  16,                                     !- Hour 9
+  0,                                      !- Minute 9
+  80,                                     !- Value Until Time 9
+  24,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0;                                      !- Value Until Time 10
 
 OS:ScheduleTypeLimits,
-  {cfad4b61-4dcd-4e16-b355-484415943e74}, !- Handle
+  {f4145f1b-431e-48c9-b14c-faa610916ad4}, !- Handle
   LinearPowerDensity,                     !- Name
   0,                                      !- Lower Limit Value
   ,                                       !- Upper Limit Value
