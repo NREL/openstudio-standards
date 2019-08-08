@@ -19,7 +19,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{Dir.pwd}/output"
+    @test_dir =  File.expand_path("#{__dir__}/../doe_prototype/output")
     if !Dir.exists?(@test_dir)
       Dir.mkdir(@test_dir)
     end
@@ -129,7 +129,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       osm_path = OpenStudio::Path.new(osm_path_string)
       sql_path_string = "#{full_sim_dir}/run/eplusout.sql"
       sql_path = OpenStudio::Path.new(sql_path_string)
-      truth_osm_path_string = "#{Dir.pwd}/regression_models/#{model_name}_expected_result.osm"
+      truth_osm_path_string = File.expand_path("#{__dir__}/../doe_prototype/regression_models/#{model_name}_expected_result.osm")
 
       model = nil
 
