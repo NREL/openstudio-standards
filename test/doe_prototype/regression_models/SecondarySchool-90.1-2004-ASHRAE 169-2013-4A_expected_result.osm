@@ -20980,7 +20980,7 @@ OS:Pipe:Adiabatic,
 
 OS:Node,
   {e64cfd42-e218-47d6-8b3c-6506f61f420a}, !- Handle
-  Chilled Water Loop Demand Inlet Outlet Water Node, !- Name
+  Chilled Water Loop Secondary Pump Inlet Water Node, !- Name
   {5393a090-4434-419a-96b1-1ff68a672d2e}, !- Inlet Port
   {cc055200-48f5-4aa6-8ee5-ec0960ebef3e}; !- Outlet Port
 
@@ -36747,7 +36747,7 @@ OS:HeatExchanger:FluidToFluid,
 
 OS:Node,
   {97297df1-d82d-4712-b84a-3b8ac1ee0af1}, !- Handle
-  HX for Booster Water Heating Supply Outlet Water Node, !- Name
+  Booster Water Loop Pump Inlet Water Node, !- Name
   {69900cb3-d006-48fd-a21a-32b96b9eb767}, !- Inlet Port
   {c74c3c85-a9f4-4288-aa52-43dec9c17d13}; !- Outlet Port
 

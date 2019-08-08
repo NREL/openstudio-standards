@@ -7460,7 +7460,7 @@ OS:HeatExchanger:FluidToFluid,
 
 OS:Node,
   {1d27b601-b2d4-401a-ac70-d47f5cc6441e}, !- Handle
-  HX for Booster Water Heating Supply Outlet Water Node, !- Name
+  Booster Water Loop Pump Inlet Water Node, !- Name
   {5c8117a6-742b-4add-819f-de2474fd8223}, !- Inlet Port
   {c2c03ca2-ab7a-45ff-9efd-8e2699a682f4}; !- Outlet Port
 
