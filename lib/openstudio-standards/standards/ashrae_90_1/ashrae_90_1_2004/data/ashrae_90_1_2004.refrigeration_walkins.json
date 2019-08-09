@@ -572,7 +572,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
@@ -613,7 +613,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
@@ -654,7 +654,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
@@ -695,7 +695,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
@@ -736,7 +736,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
@@ -777,7 +777,7 @@
       "defrost_per_day": null,
       "minutes_dripdown": null,
       "dripdown_per_day": null,
-      "doorway_protection_type": "None"
+      "doorway_protection_type": "StripCurtain"
     },
     {
       "template": "90.1-2004",
