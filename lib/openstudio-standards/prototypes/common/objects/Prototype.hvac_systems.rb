@@ -4176,16 +4176,18 @@ class Standard
       radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
       radiant_avail_sch.setName('Radiant System Availability Schedule')
 
+      start_hour = radiant_lockout_start_time.to_i
       start_minute = ((radiant_lockout_start_time % 1) * 60).to_i
+      end_hour = radiant_lockout_end_time.to_i
       end_minute = ((radiant_lockout_end_time % 1) * 60).to_i
 
       if radiant_lockout_end_time > radiant_lockout_start_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, radiant_lockout_start_time, start_minute, 0), 1.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, radiant_lockout_end_time, end_minute, 0), 0.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
         radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if radiant_lockout_end_time < 24
       elsif radiant_lockout_start_time > radiant_lockout_end_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, radiant_lockout_end_time, end_minute, 0), 0.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, radiant_lockout_start_time, start_minute, 0), 1.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
         radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if radiant_lockout_start_time < 24
       else
         radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
