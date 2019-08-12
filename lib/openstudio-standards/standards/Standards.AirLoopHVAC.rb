@@ -3086,6 +3086,11 @@ class Standard
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = true
 
+    # Determine if the airloop serves any computer rooms or data centers, which default to always on.
+    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
+      shutoff_required = false
+    end
+
     return shutoff_required
   end
 
