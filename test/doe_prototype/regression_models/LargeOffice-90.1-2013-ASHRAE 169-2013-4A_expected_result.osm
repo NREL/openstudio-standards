@@ -14980,7 +14980,7 @@ OS:AirLoopHVAC,
   {57bc1f85-824f-4fe2-a4a9-3b1609ac8808}, !- Handle
   DataCenter_basement_ZN_6 ZN PSZ-AC Data Center, !- Name
   ,                                       !- Controller List Name
-  {49ddd131-97a7-4b63-9c68-300a4536d1cd}, !- Availability Schedule
+  {2b3b5d0a-af61-4865-a0d5-e31d338d1a1f}, !- Availability Schedule
   {8a0d9b66-dd44-45a8-963c-0e6befba468a}, !- Availability Manager List Name
   AutoSize,                               !- Design Supply Air Flow Rate {m3/s}
   ,                                       !- Branch List Name
@@ -15589,7 +15589,7 @@ OS:AirLoopHVAC,
   {7a9ca5ff-7773-4aeb-a648-ee4afefa4308}, !- Handle
   DataCenter_bot_ZN_6 ZN PSZ-AC Data Center, !- Name
   ,                                       !- Controller List Name
-  {94401d4e-dfad-4529-b798-ef94c524cb32}, !- Availability Schedule
+  {2b3b5d0a-af61-4865-a0d5-e31d338d1a1f}, !- Availability Schedule
   {392af1e2-9fec-4c8a-b204-e535a0ec7ffb}, !- Availability Manager List Name
   AutoSize,                               !- Design Supply Air Flow Rate {m3/s}
   ,                                       !- Branch List Name
@@ -16198,7 +16198,7 @@ OS:AirLoopHVAC,
   {7aaf4240-3dc9-4535-bb7d-a8afe452f9a6}, !- Handle
   DataCenter_mid_ZN_6 ZN PSZ-AC Data Center, !- Name
   ,                                       !- Controller List Name
-  {cccb138e-47f4-4aba-80e7-975b2d0dc253}, !- Availability Schedule
+  {2b3b5d0a-af61-4865-a0d5-e31d338d1a1f}, !- Availability Schedule
   {b1915347-a28c-40d0-b7b3-e419a4d383d8}, !- Availability Manager List Name
   AutoSize,                               !- Design Supply Air Flow Rate {m3/s}
   ,                                       !- Branch List Name
@@ -16807,7 +16807,7 @@ OS:AirLoopHVAC,
   {b06e8cf3-f110-4d02-b698-9d8e9c71ae6e}, !- Handle
   DataCenter_top_ZN_6 ZN PSZ-AC Data Center, !- Name
   ,                                       !- Controller List Name
-  {a63c79e7-8816-4e6f-bea6-363e42421398}, !- Availability Schedule
+  {2b3b5d0a-af61-4865-a0d5-e31d338d1a1f}, !- Availability Schedule
   {5c054393-d040-4806-bf47-5320ab4c895f}, !- Availability Manager List Name
   AutoSize,                               !- Design Supply Air Flow Rate {m3/s}
   ,                                       !- Branch List Name
