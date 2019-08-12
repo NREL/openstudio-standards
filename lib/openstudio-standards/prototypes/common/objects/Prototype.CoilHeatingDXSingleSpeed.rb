@@ -181,4 +181,12 @@ class Standard
 
     return htg_coil
   end
+
+  def coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(htg_coil)
+    def_eir_f_of_temp = htg_coil.defrostEnergyInputRatioFunctionofTemperatureCurve.get.to_CurveBiquadratic.get
+    def_eir_f_of_temp.setMinimumValueofx(12.77778)
+    def_eir_f_of_temp.setMaximumValueofx(23.88889)
+    def_eir_f_of_temp.setMinimumValueofy(21.11111)
+    def_eir_f_of_temp.setMaximumValueofy(46.11111)
+  end
 end
