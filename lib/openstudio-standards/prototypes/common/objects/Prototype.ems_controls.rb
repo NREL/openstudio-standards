@@ -8,6 +8,7 @@ class Standard
   # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
   # @param early_reset_out_arg [Double] Time at which the weekend temperature reset is removed.
   def ems_radiant_proportional_controls(model, zone, radiant_loop,
+                                        radiant_type: 'floor',
                                         proportional_gain: 0.3,
                                         minimum_operation: 1,
                                         weekend_temperature_reset: 2,
@@ -306,10 +307,11 @@ class Standard
     zone_ctrl_temperature.setKeyName(zone.name.get)
 
     # Active surface slab temperature. # Use largest surface in zone.
+    surface_type = radiant_type == 'floor' ? 'Floor' : 'RoofCeiling'
     surfaces = []
     zone.spaces.each do |space|
       space.surfaces.each do |surface|
-        surfaces << surface if surface.surfaceType == 'Floor'
+        surfaces << surface if surface.surfaceType == surface_type
       end
     end
     zone_floor = surfaces.sort_by { |s| s.grossArea }[-1]
