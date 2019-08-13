@@ -281,7 +281,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
               # If both
               percent_error = ((current_val - legacy_val)/legacy_val) * 100
               if percent_error.abs > acceptable_error_percentage
-                result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round(2)}% (#{current_val}, #{legacy_val})"
+                result_diffs << "#{building_type}-#{template}-#{climate_zone}-#{fuel_type}-#{end_use} Error = #{percent_error.round(4)}% (#{current_val}, #{legacy_val})"
               end
             elsif current_val > 0 && legacy_val.abs < 1e-6
               # The current model has a fuel/end use that the legacy model does not
@@ -298,7 +298,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             end
 
             if add_to_results_comparison
-              results_comparison << [building_type, template, climate_zone, fuel_type, end_use, legacy_val.round(2), current_val.round(2), percent_error.round(2), (legacy_val-current_val).abs.round(2)]
+              results_comparison << [building_type, template, climate_zone, fuel_type, end_use, legacy_val.round(4), current_val.round(4), percent_error.round(4), (legacy_val-current_val).abs.round(4)]
             end
           end
 

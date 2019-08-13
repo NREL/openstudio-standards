@@ -248,8 +248,8 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     # Round long numeric fields
     true_value = '0.0' if true_value == '0'
     compare_value = '0.0' if compare_value == '0'
-    true_value = true_value.to_f.round(4) unless true_value.to_f.zero?
-    compare_value = compare_value.to_f.round(4) unless compare_value.to_f.zero?
+    true_value = true_value.to_f.round(5) unless true_value.to_f.zero?
+    compare_value = compare_value.to_f.round(5) unless compare_value.to_f.zero?
 
     # Check true value directly against compare value
     next if compare_value == true_value
@@ -258,8 +258,8 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)
       diff = true_value.to_f - compare_value.to_f
       unless true_value.zero?
-        # next if less than a tenth of a percent difference
-        next if (diff / true_value.to_f) < 0.001
+        # next if absolute value is less than a tenth of a percent difference
+        next if (diff / true_value.to_f).abs < 0.001
       end
     end
 
