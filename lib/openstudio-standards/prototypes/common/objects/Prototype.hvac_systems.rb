@@ -4127,13 +4127,13 @@ class Standard
     mat_refl_roof_membrane.setThermalAbsorptance(0.75)
     mat_refl_roof_membrane.setSolarAbsorptance(0.45)
     mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
-    mat_refl_roof_membrane.setName("Roof Membrane - Highly Reflective")
+    mat_refl_roof_membrane.setName('Roof Membrane - Highly Reflective')
     # TODO: modify to account for roof insulation based on climate zone
     mat_roof_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 4.3189)
     mat_refl_roof_membrane.setThermalAbsorptance(0.9)
     mat_refl_roof_membrane.setSolarAbsorptance(0.7)
     mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
-    mat_roof_insulation.setName("Typical Insulation R-24.52")
+    mat_roof_insulation.setName('Typical Insulation R-24.52')
 
     layers = []
     layers << mat_slab_insulation
@@ -4274,20 +4274,12 @@ class Standard
               else # interior floor
                 surface.setConstruction(radiant_interior_floor_slab_construction)
               end
-            elsif surface.surfaceType == 'Ceiling'
-              if surface.outsideBoundaryCondition == 'Surface'
-                surface.setConstruction(radiant_interior_floor_slab_construction)
-              end
             end
           elsif radiant_type == 'ceiling'
             if surface.surfaceType == 'RoofCeiling'
               if surface.outsideBoundaryCondition == 'Outdoors'
                 surface.setConstruction(radiant_ceiling_slab_construction)
               else # interior ceiling
-                surface.setConstruction(radiant_interior_ceiling_slab_construction)
-              end
-            elsif surface.surfaceType == 'Floor'
-              if surface.outsideBoundaryCondition == 'Surface'
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
               end
             end
