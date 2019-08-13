@@ -33578,7 +33578,7 @@ OS:Refrigeration:Case,
   {6d606e58-be28-41dd-b396-b65b5eb862f4}, !- Zone Name
   23.8888888888889,                       !- Rated Ambient Temperature {C}
   55,                                     !- Rated Ambient Relative Humidity {percent}
-  705.755136175889,                       !- Rated Total Cooling Capacity per Unit Length {W/m}
+  734,                                    !- Rated Total Cooling Capacity per Unit Length {W/m}
   0.3,                                    !- Rated Latent Heat Ratio
   0.850000000000001,                      !- Rated Runtime Fraction
   7.3152,                                 !- Case Length {m}

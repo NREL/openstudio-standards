@@ -29,7 +29,7 @@ class Standard
     # Capacity, defrost, anti-sweat
     case_length = OpenStudio.convert(props['case_length'], 'ft', 'm').get
     case_temp = OpenStudio.convert(props['case_temp'], 'F', 'C').get
-    cooling_capacity_per_length = OpenStudio.convert(OpenStudio.convert(props['cooling_capacity_per_length'], 'Btu/h', 'W').get, 'W/ft', 'W/m').get
+    cooling_capacity_per_length = OpenStudio.convert(props['cooling_capacity_per_length'], 'Btu/hr*ft', 'W/m').get
     evap_fan_power_per_length = OpenStudio.convert(props['evap_fan_power_per_length'], 'W/ft', 'W/m').get
     if props['evap_temp']
       evap_temp_c = OpenStudio.convert(props['evap_temp'], 'F', 'C').get
