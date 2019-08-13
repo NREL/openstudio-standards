@@ -4039,7 +4039,7 @@ class Standard
     mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.003175, 45.006, 7680, 418.4)
     mat_metal_deck.setName('Radiant Slab Metal Deck')
     if include_carpet
-      mat_thin_carpet_tile = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'VeryRough', 0.10567) # R-0.6
+      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.00634, 0.06, 288, 1380) # R-0.6
       mat_thin_carpet_tile.setThermalAbsorptance(0.9)
       mat_thin_carpet_tile.setSolarAbsorptance(0.7)
       mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
