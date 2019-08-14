@@ -112,7 +112,11 @@ class Standard
       ref_case.setAntiSweatHeaterControlType(anti_sweat_heater_control)
     end
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
-    ref_case.setUnderCaseHVACReturnAirFraction(0)
+    if props['under_case_hvac_return_air_fraction']
+      ref_case.setUnderCaseHVACReturnAirFraction(props['under_case_hvac_return_air_fraction'])
+    else
+      ref_case.setUnderCaseHVACReturnAirFraction(0)
+    end
     ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
 
     length_ft = OpenStudio.convert(case_length, 'm', 'ft').get
