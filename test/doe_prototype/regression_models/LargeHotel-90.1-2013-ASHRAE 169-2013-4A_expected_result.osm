@@ -18624,7 +18624,7 @@ OS:Refrigeration:Case,
   15.71428571,                            !- Operating Case Fan Power per Unit Length {W/m}
   33,                                     !- Standard Case Lighting Power per Unit Length {W/m}
   33,                                     !- Installed Case Lighting Power per Unit Length {W/m}
-  {a0da258e-c0e3-4b1c-bcf4-08c5cc1345da}, !- Case Lighting Schedule Name
+  {8ff6d296-d944-4581-9701-6829c4e7ffc7}, !- Case Lighting Schedule Name
   1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
@@ -18633,7 +18633,7 @@ OS:Refrigeration:Case,
   1.5,                                    !- Case Height {m}
   0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  ,                                       !- Case Defrost Type
+  None,                                   !- Case Defrost Type
   {2c547776-80f7-48fa-aec9-c63bee9990da}, !- Case Defrost Schedule Name
   {a10c6109-85d0-4f4a-b8d6-af09bd222ad0}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
@@ -18648,7 +18648,7 @@ OS:Curve:Cubic,
   Refrigeration Case Latent Credit Curve, !- Name
   0.026526281,                            !- Coefficient1 Constant
   0.001078032,                            !- Coefficient2 x
-  6.02558e-005,                          !- Coefficient3 x**2
+  6.02558e-005,                           !- Coefficient3 x**2
   1.23732e-006,                           !- Coefficient4 x**3
   -35,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
@@ -25120,4 +25120,214 @@ OS:Daylighting:Control,
   1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
   ,                                       !- Number of Daylighting Views
   22;                                     !- Maximum Allowable Discomfort Glare Index
+
+OS:Schedule:Ruleset,
+  {8ff6d296-d944-4581-9701-6829c4e7ffc7}, !- Handle
+  HotelLarge walkin_occ_lght_SCH,         !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  {d082862d-adbc-4338-b3e0-db3608c3996b}, !- Default Day Schedule Name
+  {b2cdc925-f803-4b7f-8091-45d824ca028b}, !- Summer Design Day Schedule Name
+  {fd8ce1b0-25a3-4fa1-94b7-36b72ba1e8c3}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {d082862d-adbc-4338-b3e0-db3608c3996b}, !- Handle
+  HotelLarge walkin_occ_lght_SCH Default, !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.156,                                  !- Value Until Time 1
+  6,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.104,                                  !- Value Until Time 2
+  7,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.156,                                  !- Value Until Time 3
+  9,                                      !- Hour 4
+  0,                                      !- Minute 4
+  0.208,                                  !- Value Until Time 4
+  13,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.156,                                  !- Value Until Time 5
+  18,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.104,                                  !- Value Until Time 6
+  19,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.26,                                   !- Value Until Time 7
+  20,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.364,                                  !- Value Until Time 8
+  21,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.416,                                  !- Value Until Time 9
+  22,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.312,                                  !- Value Until Time 10
+  23,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.26,                                   !- Value Until Time 11
+  24,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.156;                                  !- Value Until Time 12
+
+OS:Schedule:Rule,
+  {8bd5d2ef-eb1b-48e1-afc4-e902c248dc8d}, !- Handle
+  Schedule Rule 29,                       !- Name
+  {8ff6d296-d944-4581-9701-6829c4e7ffc7}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {fbaaada3-9e27-4ac6-b847-4989f424b17d}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {fbaaada3-9e27-4ac6-b847-4989f424b17d}, !- Handle
+  HotelLarge walkin_occ_lght_SCH Sat Day, !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  2,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.104,                                  !- Value Until Time 1
+  6,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.052,                                  !- Value Until Time 2
+  8,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.156,                                  !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.208,                                  !- Value Until Time 4
+  11,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.156,                                  !- Value Until Time 5
+  18,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.13,                                   !- Value Until Time 6
+  19,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.312,                                  !- Value Until Time 7
+  22,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.364,                                  !- Value Until Time 8
+  23,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.312,                                  !- Value Until Time 9
+  24,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.156;                                  !- Value Until Time 10
+
+OS:Schedule:Day,
+  {6a4fa3fc-6fbd-4927-951c-c64b9dbeee38}, !- Handle
+  Schedule Day 1,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {b2cdc925-f803-4b7f-8091-45d824ca028b}, !- Handle
+  HotelLarge walkin_occ_lght_SCH Summer Design Day, !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {437328b8-8ab1-45f6-9252-3a85af88bd55}, !- Handle
+  Schedule Rule 30,                       !- Name
+  {8ff6d296-d944-4581-9701-6829c4e7ffc7}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {4ae837da-1f26-476e-b9b5-cfe6cc1bbb7c}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {4ae837da-1f26-476e-b9b5-cfe6cc1bbb7c}, !- Handle
+  HotelLarge walkin_occ_lght_SCH Wkdy Day, !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.104,                                  !- Value Until Time 1
+  2,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.078,                                  !- Value Until Time 2
+  5,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.052,                                  !- Value Until Time 3
+  6,                                      !- Hour 4
+  0,                                      !- Minute 4
+  0.104,                                  !- Value Until Time 4
+  7,                                      !- Hour 5
+  0,                                      !- Minute 5
+  0.208,                                  !- Value Until Time 5
+  8,                                      !- Hour 6
+  0,                                      !- Minute 6
+  0.26,                                   !- Value Until Time 6
+  10,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.208,                                  !- Value Until Time 7
+  18,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.13,                                   !- Value Until Time 8
+  19,                                     !- Hour 9
+  0,                                      !- Minute 9
+  0.312,                                  !- Value Until Time 9
+  20,                                     !- Hour 10
+  0,                                      !- Minute 10
+  0.416,                                  !- Value Until Time 10
+  21,                                     !- Hour 11
+  0,                                      !- Minute 11
+  0.468,                                  !- Value Until Time 11
+  22,                                     !- Hour 12
+  0,                                      !- Minute 12
+  0.416,                                  !- Value Until Time 12
+  23,                                     !- Hour 13
+  0,                                      !- Minute 13
+  0.312,                                  !- Value Until Time 13
+  24,                                     !- Hour 14
+  0,                                      !- Minute 14
+  0.156;                                  !- Value Until Time 14
+
+OS:Schedule:Day,
+  {7d0a26f5-fa7f-4865-b0e2-4c2ba4cf578d}, !- Handle
+  Schedule Day 2,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {fd8ce1b0-25a3-4fa1-94b7-36b72ba1e8c3}, !- Handle
+  HotelLarge walkin_occ_lght_SCH Winter Design Day, !- Name
+  {c0619e07-298c-45ba-9f28-da61293496de}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
 
