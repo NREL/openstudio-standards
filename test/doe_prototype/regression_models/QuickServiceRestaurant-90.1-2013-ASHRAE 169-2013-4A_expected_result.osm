@@ -4411,31 +4411,31 @@ OS:Refrigeration:Case,
   23.8888888888889,                       !- Rated Ambient Temperature {C}
   55,                                     !- Rated Ambient Relative Humidity {percent}
   734,                                    !- Rated Total Cooling Capacity per Unit Length {W/m}
-  0.3,                                    !- Rated Latent Heat Ratio
+  0.08,                                   !- Rated Latent Heat Ratio
   0.850000000000001,                      !- Rated Runtime Fraction
-  3.048,                                  !- Case Length {m}
+  3.05,                                   !- Case Length {m}
   2.00000000000006,                       !- Case Operating Temperature {C}
   CaseTemperatureMethod,                  !- Latent Case Credit Curve Type
   {d6d7b657-3cfa-4897-ae0c-f278a0334c10}, !- Latent Case Credit Curve Name
-  61.8667979002625,                       !- Standard Case Fan Power per Unit Length {W/m}
-  61.8667979002625,                       !- Operating Case Fan Power per Unit Length {W/m}
-  108.267716535433,                       !- Standard Case Lighting Power per Unit Length {W/m}
-  108.267716535433,                       !- Installed Case Lighting Power per Unit Length {W/m}
+  18.85714286,                            !- Standard Case Fan Power per Unit Length {W/m}
+  18.85714286,                            !- Operating Case Fan Power per Unit Length {W/m}
+  33,                                     !- Standard Case Lighting Power per Unit Length {W/m}
+  33,                                     !- Installed Case Lighting Power per Unit Length {W/m}
   {de399a71-d0ee-4253-bf11-dc52ff98f312}, !- Case Lighting Schedule Name
-  0.5,                                    !- Fraction of Lighting Energy to Case
+  1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
   None,                                   !- Anti-Sweat Heater Control Type
   0,                                      !- Humidity at Zero Anti-Sweat Heater Energy {percent}
   1.5,                                    !- Case Height {m}
-  0.7,                                    !- Fraction of Anti-Sweat Heater Energy to Case
+  0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  OffCycle,                               !- Case Defrost Type
+  ,                                       !- Case Defrost Type
   {6d464ed6-10af-4fd9-aafb-ee6a96af08cd}, !- Case Defrost Schedule Name
   {eed2efaa-b781-4abe-8c1d-d0cb411ce00c}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
   ,                                       !- Defrost Energy Correction Curve Name
-  0,                                      !- Under Case HVAC Return Air Fraction
+  0.05,                                   !- Under Case HVAC Return Air Fraction
   {85a8b013-d175-4572-9a4b-1c7664d1e1bc}, !- Refrigerated Case Restocking Schedule Name
   {2c660196-e573-468e-811b-f68cc8e12e56}, !- Case Credit Fraction Schedule Name
   -5.56;                                  !- Design Evaporator Temperature or Brine Inlet Temperature {C}
