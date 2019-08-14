@@ -4045,7 +4045,7 @@ OS:Refrigeration:Case,
   66,                                     !- Operating Case Fan Power per Unit Length {W/m}
   33,                                     !- Standard Case Lighting Power per Unit Length {W/m}
   33,                                     !- Installed Case Lighting Power per Unit Length {W/m}
-  {de42b999-ce22-47bb-bdaa-d0189cbb0287}, !- Case Lighting Schedule Name
+  {6f9bf96c-2b83-4135-a750-e41fffe1c107}, !- Case Lighting Schedule Name
   1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
@@ -4054,7 +4054,7 @@ OS:Refrigeration:Case,
   1.5,                                    !- Case Height {m}
   0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  ,                                       !- Case Defrost Type
+  None,                                   !- Case Defrost Type
   {babed836-da9b-48cb-b550-27941aba938e}, !- Case Defrost Schedule Name
   {25a6b5c6-3920-4980-b75d-7f6e51202a17}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
@@ -4069,7 +4069,7 @@ OS:Curve:Cubic,
   Refrigeration Case Latent Credit Curve, !- Name
   0.026526281,                            !- Coefficient1 Constant
   0.001078032,                            !- Coefficient2 x
-  6.02558e-005,                          !- Coefficient3 x**2
+  6.02558e-005,                           !- Coefficient3 x**2
   1.23732e-006,                           !- Coefficient4 x**3
   -35,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x

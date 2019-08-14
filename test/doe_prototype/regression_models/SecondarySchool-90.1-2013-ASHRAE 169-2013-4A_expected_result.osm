@@ -33762,7 +33762,7 @@ OS:Refrigeration:Case,
   15.71428571,                            !- Operating Case Fan Power per Unit Length {W/m}
   33,                                     !- Standard Case Lighting Power per Unit Length {W/m}
   33,                                     !- Installed Case Lighting Power per Unit Length {W/m}
-  {b3fdd371-eab4-4768-aca0-b1f6071a7e3e}, !- Case Lighting Schedule Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Case Lighting Schedule Name
   1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
@@ -33771,7 +33771,7 @@ OS:Refrigeration:Case,
   1.5,                                    !- Case Height {m}
   0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  ,                                       !- Case Defrost Type
+  None,                                   !- Case Defrost Type
   {544a0065-e99c-4933-b43f-c2aefda4905d}, !- Case Defrost Schedule Name
   {5ccbd6dc-2547-4db4-b2bb-7b2d46c21f19}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
@@ -33786,7 +33786,7 @@ OS:Curve:Cubic,
   Refrigeration Case Latent Credit Curve, !- Name
   0.026526281,                            !- Coefficient1 Constant
   0.001078032,                            !- Coefficient2 x
-  6.02558e-005,                          !- Coefficient3 x**2
+  6.02558e-005,                           !- Coefficient3 x**2
   1.23732e-006,                           !- Coefficient4 x**3
   -35,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
@@ -41079,4 +41079,220 @@ OS:Daylighting:Control,
   1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
   ,                                       !- Number of Daylighting Views
   22;                                     !- Maximum Allowable Discomfort Glare Index
+
+OS:Schedule:Ruleset,
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH,    !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  {1e2136bf-44b4-49e5-b953-40115d2c06a2}, !- Default Day Schedule Name
+  {399b1fed-d069-45f8-80c9-6a43835681d6}, !- Summer Design Day Schedule Name
+  {41aea28b-1e41-4387-b520-d6279634810d}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {1e2136bf-44b4-49e5-b953-40115d2c06a2}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Default, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.1773;                                 !- Value Until Time 1
+
+OS:Schedule:Day,
+  {a5fffd26-7217-4859-9264-6dae87e4f646}, !- Handle
+  Schedule Day 1,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {399b1fed-d069-45f8-80c9-6a43835681d6}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Summer Design Day, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {5e917248-186f-4116-9090-267ee4058635}, !- Handle
+  Schedule Rule 140,                      !- Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Schedule Ruleset Name
+  4,                                      !- Rule Order
+  {cf596ca8-5eb4-4a70-be21-c1ea6e239c6c}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  6,                                      !- End Month
+  30;                                     !- End Day
+
+OS:Schedule:Day,
+  {cf596ca8-5eb4-4a70-be21-c1ea6e239c6c}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Wkdy Day, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  7,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1773,                                 !- Value Until Time 1
+  21,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.468,                                  !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.1773;                                 !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {ca673a37-c352-4015-86c9-c7ef6525db23}, !- Handle
+  Schedule Rule 141,                      !- Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Schedule Ruleset Name
+  3,                                      !- Rule Order
+  {9cb6c750-3944-401f-b455-f3ac8ed99624}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  6,                                      !- End Month
+  30;                                     !- End Day
+
+OS:Schedule:Day,
+  {9cb6c750-3944-401f-b455-f3ac8ed99624}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Wknd Day, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.1773;                                 !- Value Until Time 1
+
+OS:Schedule:Day,
+  {0ed63ed0-959c-4234-b39f-4413f44e61a3}, !- Handle
+  Schedule Day 2,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {41aea28b-1e41-4387-b520-d6279634810d}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Winter Design Day, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {66267ed9-61cc-49be-89be-f50d6b1a4214}, !- Handle
+  Schedule Rule 142,                      !- Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Schedule Ruleset Name
+  2,                                      !- Rule Order
+  {27150364-3676-46d5-985f-b1a4fdbdd7b8}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  7,                                      !- Start Month
+  1,                                      !- Start Day
+  9,                                      !- End Month
+  1;                                      !- End Day
+
+OS:Schedule:Day,
+  {27150364-3676-46d5-985f-b1a4fdbdd7b8}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Wkdy Day 1, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  8,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1773,                                 !- Value Until Time 1
+  20,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.26,                                   !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.1773;                                 !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {df2e9d0f-5021-4935-9e4f-b9a74af244e7}, !- Handle
+  Schedule Rule 143,                      !- Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {366ee98d-33d0-4cee-b871-91809ae6a7d7}, !- Day Schedule Name
+  Yes,                                    !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  7,                                      !- Start Month
+  1,                                      !- Start Day
+  9,                                      !- End Month
+  1;                                      !- End Day
+
+OS:Schedule:Day,
+  {366ee98d-33d0-4cee-b871-91809ae6a7d7}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Wknd Day 1, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0.1773;                                 !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {b26a3a66-c938-478d-94cb-9f88aac09130}, !- Handle
+  Schedule Rule 144,                      !- Name
+  {bdff7893-9346-424a-b646-b598bae16bba}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {04109678-3f09-44a5-85be-a8dbd811f589}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  9,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {04109678-3f09-44a5-85be-a8dbd811f589}, !- Handle
+  SchoolSecondary walkin_occ_lght_SCH Wkdy Day 2, !- Name
+  {4444d014-7396-4397-8037-a21ba5e4c39a}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  7,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1773,                                 !- Value Until Time 1
+  21,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.468,                                  !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.1773;                                 !- Value Until Time 3
 

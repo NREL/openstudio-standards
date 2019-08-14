@@ -4421,7 +4421,7 @@ OS:Refrigeration:Case,
   18.85714286,                            !- Operating Case Fan Power per Unit Length {W/m}
   33,                                     !- Standard Case Lighting Power per Unit Length {W/m}
   33,                                     !- Installed Case Lighting Power per Unit Length {W/m}
-  {de399a71-d0ee-4253-bf11-dc52ff98f312}, !- Case Lighting Schedule Name
+  {7627fb5a-55da-41d9-aeda-752e7ed20466}, !- Case Lighting Schedule Name
   1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
@@ -4430,7 +4430,7 @@ OS:Refrigeration:Case,
   1.5,                                    !- Case Height {m}
   0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  ,                                       !- Case Defrost Type
+  None,                                   !- Case Defrost Type
   {6d464ed6-10af-4fd9-aafb-ee6a96af08cd}, !- Case Defrost Schedule Name
   {eed2efaa-b781-4abe-8c1d-d0cb411ce00c}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
@@ -4445,7 +4445,7 @@ OS:Curve:Cubic,
   Refrigeration Case Latent Credit Curve, !- Name
   0.026526281,                            !- Coefficient1 Constant
   0.001078032,                            !- Coefficient2 x
-  6.02558e-005,                          !- Coefficient3 x**2
+  6.02558e-005,                           !- Coefficient3 x**2
   1.23732e-006,                           !- Coefficient4 x**3
   -35,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
@@ -7516,4 +7516,175 @@ OS:Daylighting:Control,
   1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
   ,                                       !- Number of Daylighting Views
   22;                                     !- Maximum Allowable Discomfort Glare Index
+
+OS:Schedule:Ruleset,
+  {7627fb5a-55da-41d9-aeda-752e7ed20466}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  {ea304e26-c290-4034-858f-5d5e53a1bd88}, !- Default Day Schedule Name
+  {c44ba447-be7b-490b-893d-9049feb5f25b}, !- Summer Design Day Schedule Name
+  {b17eebeb-a42d-46b4-b253-3e898d68fdd3}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {ea304e26-c290-4034-858f-5d5e53a1bd88}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH Default, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.2,                                    !- Value Until Time 1
+  6,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.15,                                   !- Value Until Time 2
+  8,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.156,                                  !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.26,                                   !- Value Until Time 4
+  16,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.364,                                  !- Value Until Time 5
+  22,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.312,                                  !- Value Until Time 6
+  23,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.26,                                   !- Value Until Time 7
+  24,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.156;                                  !- Value Until Time 8
+
+OS:Schedule:Rule,
+  {f3756a5d-2c8a-4718-941f-830ef05942e1}, !- Handle
+  Schedule Rule 25,                       !- Name
+  {7627fb5a-55da-41d9-aeda-752e7ed20466}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {f6ded6bf-c4f2-4ddd-b0d0-70a86b4f81bf}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {f6ded6bf-c4f2-4ddd-b0d0-70a86b4f81bf}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH Sat Day, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  1,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.2,                                    !- Value Until Time 1
+  6,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.15,                                   !- Value Until Time 2
+  8,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.156,                                  !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.312,                                  !- Value Until Time 4
+  17,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.416,                                  !- Value Until Time 5
+  22,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.468,                                  !- Value Until Time 6
+  23,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.26,                                   !- Value Until Time 7
+  24,                                     !- Hour 8
+  0,                                      !- Minute 8
+  0.156;                                  !- Value Until Time 8
+
+OS:Schedule:Day,
+  {5b64bcbb-2d3a-43d9-8692-80a037b52a82}, !- Handle
+  Schedule Day 1,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {c44ba447-be7b-490b-893d-9049feb5f25b}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH Summer Design Day, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {c66663d4-12c7-4339-8ed2-e89fb254ae32}, !- Handle
+  Schedule Rule 26,                       !- Name
+  {7627fb5a-55da-41d9-aeda-752e7ed20466}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {0ecf0640-b734-49b8-9382-0b7e647c001c}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {0ecf0640-b734-49b8-9382-0b7e647c001c}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH Wkdy Day, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  5,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.15,                                   !- Value Until Time 1
+  6,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.104,                                  !- Value Until Time 2
+  8,                                      !- Hour 3
+  0,                                      !- Minute 3
+  0.208,                                  !- Value Until Time 3
+  10,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.312,                                  !- Value Until Time 4
+  22,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.468,                                  !- Value Until Time 5
+  23,                                     !- Hour 6
+  0,                                      !- Minute 6
+  0.26,                                   !- Value Until Time 6
+  24,                                     !- Hour 7
+  0,                                      !- Minute 7
+  0.156;                                  !- Value Until Time 7
+
+OS:Schedule:Day,
+  {56ac6d09-0e14-4671-bc27-5f2617cd86dd}, !- Handle
+  Schedule Day 2,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {b17eebeb-a42d-46b4-b253-3e898d68fdd3}, !- Handle
+  RestaurantFastFood walkin_occ_lght_SCH Winter Design Day, !- Name
+  {27a76b26-a400-452a-8f79-52fb1eedd63e}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
 

@@ -37285,7 +37285,7 @@ OS:Refrigeration:Case,
   19.14285714,                            !- Operating Case Fan Power per Unit Length {W/m}
   40,                                     !- Standard Case Lighting Power per Unit Length {W/m}
   40,                                     !- Installed Case Lighting Power per Unit Length {W/m}
-  {b4c85da1-18da-451d-bea9-038f0c698efb}, !- Case Lighting Schedule Name
+  {a584e5f3-7893-4d61-b922-371f062a4e7f}, !- Case Lighting Schedule Name
   1.0,                                    !- Fraction of Lighting Energy to Case
   ,                                       !- Case Anti-Sweat Heater Power per Unit Length {W/m}
   ,                                       !- Minimum Anti-Sweat Heater Power per Unit Length {W/m}
@@ -37294,7 +37294,7 @@ OS:Refrigeration:Case,
   1.5,                                    !- Case Height {m}
   0.2,                                    !- Fraction of Anti-Sweat Heater Energy to Case
   0,                                      !- Case Defrost Power per Unit Length {W/m}
-  ,                                       !- Case Defrost Type
+  None,                                   !- Case Defrost Type
   {8a66cb3c-fc47-4762-871c-aa3dce70f23f}, !- Case Defrost Schedule Name
   {de4d9f6e-e3d1-4a82-8daa-5452249b661a}, !- Case Defrost Drip-Down Schedule Name
   None,                                   !- Defrost Energy Correction Curve Type
@@ -37309,7 +37309,7 @@ OS:Curve:Cubic,
   Refrigeration Case Latent Credit Curve, !- Name
   0.026526281,                            !- Coefficient1 Constant
   0.001078032,                            !- Coefficient2 x
-  6.02558e-005,                          !- Coefficient3 x**2
+  6.02558e-005,                           !- Coefficient3 x**2
   1.23732e-006,                           !- Coefficient4 x**3
   -35,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
@@ -44154,4 +44154,142 @@ OS:Daylighting:Control,
   1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
   ,                                       !- Number of Daylighting Views
   22;                                     !- Maximum Allowable Discomfort Glare Index
+
+OS:Schedule:Ruleset,
+  {a584e5f3-7893-4d61-b922-371f062a4e7f}, !- Handle
+  Hospital walkin_occ_lght_SCH,           !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  {25c1814b-9746-44ea-b7cf-20e5cbde1d8f}, !- Default Day Schedule Name
+  {905c8f0d-f38e-4469-9167-bd6a0518142e}, !- Summer Design Day Schedule Name
+  {046719b7-7752-403e-bd4c-cd191d645dc8}; !- Winter Design Day Schedule Name
+
+OS:Schedule:Day,
+  {25c1814b-9746-44ea-b7cf-20e5cbde1d8f}, !- Handle
+  Hospital walkin_occ_lght_SCH Default,   !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  8,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.05,                                   !- Value Until Time 1
+  16,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.052,                                  !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.05;                                   !- Value Until Time 3
+
+OS:Schedule:Rule,
+  {d40107c9-820e-4f48-8d33-e44504776bb8}, !- Handle
+  Schedule Rule 39,                       !- Name
+  {a584e5f3-7893-4d61-b922-371f062a4e7f}, !- Schedule Ruleset Name
+  1,                                      !- Rule Order
+  {d19cea87-7dd0-43e0-8c36-432d7e32f551}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  ,                                       !- Apply Monday
+  ,                                       !- Apply Tuesday
+  ,                                       !- Apply Wednesday
+  ,                                       !- Apply Thursday
+  ,                                       !- Apply Friday
+  Yes,                                    !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {d19cea87-7dd0-43e0-8c36-432d7e32f551}, !- Handle
+  Hospital walkin_occ_lght_SCH Sat Day,   !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  7,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1,                                    !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.104,                                  !- Value Until Time 2
+  18,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.208,                                  !- Value Until Time 3
+  24,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.1;                                    !- Value Until Time 4
+
+OS:Schedule:Day,
+  {5737f6fd-f04d-46bc-ba74-bbc888d398e9}, !- Handle
+  Schedule Day 1,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {905c8f0d-f38e-4469-9167-bd6a0518142e}, !- Handle
+  Hospital walkin_occ_lght_SCH Summer Design Day, !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  1;                                      !- Value Until Time 1
+
+OS:Schedule:Rule,
+  {24f86bd2-7265-42d3-b6bf-24dbb4226b59}, !- Handle
+  Schedule Rule 40,                       !- Name
+  {a584e5f3-7893-4d61-b922-371f062a4e7f}, !- Schedule Ruleset Name
+  0,                                      !- Rule Order
+  {768ff1d8-e2ed-43fd-b5c7-cf3412d0ea15}, !- Day Schedule Name
+  ,                                       !- Apply Sunday
+  Yes,                                    !- Apply Monday
+  Yes,                                    !- Apply Tuesday
+  Yes,                                    !- Apply Wednesday
+  Yes,                                    !- Apply Thursday
+  Yes,                                    !- Apply Friday
+  ,                                       !- Apply Saturday
+  ,                                       !- Apply Holiday
+  DateRange,                              !- Date Specification Type
+  1,                                      !- Start Month
+  1,                                      !- Start Day
+  12,                                     !- End Month
+  31;                                     !- End Day
+
+OS:Schedule:Day,
+  {768ff1d8-e2ed-43fd-b5c7-cf3412d0ea15}, !- Handle
+  Hospital walkin_occ_lght_SCH Wkdy Day,  !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  7,                                      !- Hour 1
+  0,                                      !- Minute 1
+  0.1,                                    !- Value Until Time 1
+  8,                                      !- Hour 2
+  0,                                      !- Minute 2
+  0.26,                                   !- Value Until Time 2
+  16,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.468,                                  !- Value Until Time 3
+  23,                                     !- Hour 4
+  0,                                      !- Minute 4
+  0.156,                                  !- Value Until Time 4
+  24,                                     !- Hour 5
+  0,                                      !- Minute 5
+  0.1;                                    !- Value Until Time 5
+
+OS:Schedule:Day,
+  {ef530157-5d9b-44e7-bf6f-4f346fa1d45d}, !- Handle
+  Schedule Day 2,                         !- Name
+  ,                                       !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
+
+OS:Schedule:Day,
+  {046719b7-7752-403e-bd4c-cd191d645dc8}, !- Handle
+  Hospital walkin_occ_lght_SCH Winter Design Day, !- Name
+  {15621288-79ac-4633-b271-4c3d794c20b5}, !- Schedule Type Limits Name
+  ,                                       !- Interpolate to Timestep
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  0;                                      !- Value Until Time 1
 

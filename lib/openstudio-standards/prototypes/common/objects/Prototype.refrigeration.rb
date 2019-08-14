@@ -35,6 +35,11 @@ class Standard
       evap_temp_c = OpenStudio.convert(props['evap_temp'], 'F', 'C').get
     end
     lighting_w_per_m = OpenStudio.convert(props['lighting_per_ft'], 'W/ft', 'W/m').get
+    if props['lighting_schedule']
+      case_lighting_schedule = model_add_schedule(model, props['lighting_schedule'])
+    else
+      case_lighting_schedule = model.alwaysOnDiscreteSchedule
+    end
     fraction_of_lighting_energy_to_case = props['fraction_of_lighting_energy_to_case']
     if props['latent_case_credit_curve_name']
       latent_case_credit_curve = model_add_curve(model, props['latent_case_credit_curve_name'])
@@ -93,7 +98,7 @@ class Standard
     end
     ref_case.setStandardCaseLightingPowerperUnitLength(lighting_w_per_m)
     ref_case.setInstalledCaseLightingPowerperUnitLength(lighting_w_per_m)
-    ref_case.setCaseLightingSchedule(model.alwaysOnDiscreteSchedule)
+    ref_case.setCaseLightingSchedule(case_lighting_schedule)
 
     if props['latent_case_credit_curve_name']
       ref_case.setLatentCaseCreditCurve(latent_case_credit_curve)
