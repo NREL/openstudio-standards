@@ -2094,22 +2094,22 @@ OS:Schedule:Day,
   0.18,                                   !- Value Until Time 1
   7,                                      !- Hour 2
   0,                                      !- Minute 2
-  0.196742,                               !- Value Until Time 2
+  0.23,                                   !- Value Until Time 2
   8,                                      !- Hour 3
   0,                                      !- Minute 3
-  0.359268,                               !- Value Until Time 3
+  0.42,                                   !- Value Until Time 3
   12,                                     !- Hour 4
   0,                                      !- Minute 4
-  0.658658,                               !- Value Until Time 4
+  0.77,                                   !- Value Until Time 4
   13,                                     !- Hour 5
   0,                                      !- Minute 5
-  0.581672,                               !- Value Until Time 5
+  0.61,                                   !- Value Until Time 5
   17,                                     !- Hour 6
   0,                                      !- Minute 6
-  0.658658,                               !- Value Until Time 6
+  0.77,                                   !- Value Until Time 6
   18,                                     !- Hour 7
   0,                                      !- Minute 7
-  0.521794,                               !- Value Until Time 7
+  0.61,                                   !- Value Until Time 7
   24,                                     !- Hour 8
   0,                                      !- Minute 8
   0.18;                                   !- Value Until Time 8
