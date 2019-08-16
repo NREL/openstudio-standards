@@ -3999,6 +3999,7 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
+  # @param carpet_thickness_in [Double] thickness of carpet in inches
   # @param control_strategy [String] name of control strategy
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
@@ -4021,6 +4022,7 @@ class Standard
                                  chilled_water_loop,
                                  radiant_type: 'floor',
                                  include_carpet: true,
+                                 carpet_thickness_in: 0.25,
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  minimum_operation: 1,
@@ -4038,12 +4040,17 @@ class Standard
     mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
     mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.003175, 45.006, 7680, 418.4)
     mat_metal_deck.setName('Radiant Slab Metal Deck')
+
     if include_carpet
-      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.00634, 0.06, 288, 1380) # R-0.6
+      carpet_thickness_m = OpenStudio.convert(carpet_thickness_in / 12.0, 'ft', 'm').get
+      conductivity_si = 0.06
+      conductivity_ip = OpenStudio.convert(conductivity_si, 'W/m*K', 'Btu*in/hr*ft^2*R').get
+      r_value_ip = carpet_thickness_in * (1 / conductivity_ip)
+      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', carpet_thickness_m, conductivity_si, 288, 1380)
       mat_thin_carpet_tile.setThermalAbsorptance(0.9)
       mat_thin_carpet_tile.setSolarAbsorptance(0.7)
       mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
-      mat_thin_carpet_tile.setName('Radiant Slab Thin Carpet Tile R-0.5')
+      mat_thin_carpet_tile.setName("Radiant Slab Thin Carpet Tile R-#{r_value_ip.round(2)}")
     end
 
     # determine insulation thickness by climate zone
