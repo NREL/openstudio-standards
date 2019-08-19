@@ -197,6 +197,8 @@ class Standard
   # @param num_chillers [Integer] the number of chillers
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop for water-cooled chillers.
   #   If this is not passed in, the chillers will be air cooled.
+  # @param add_waterside_economizer [Bool] If true, will add an ideal heat exchanger between the condenser loop
+  #   and plant loop to enable waterside economizer when wet bulb temperatures allow
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
   def model_add_chw_loop(model,
                          system_name: 'Chilled Water Loop',
@@ -208,7 +210,8 @@ class Standard
                          chiller_condenser_type: nil,
                          chiller_compressor_type: nil,
                          num_chillers: 1,
-                         condenser_water_loop: nil)
+                         condenser_water_loop: nil,
+                         add_waterside_economizer: false)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding chilled water loop.')
 
     # create chilled water loop
@@ -333,6 +336,28 @@ class Standard
           chiller.setCondenserType('WaterCooled')
         end
       end
+    end
+
+    # enable waterside economizer if requested
+    if add_waterside_economizer && !condenser_water_loop.nil?
+      # make new heat exchanger
+      heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
+      heat_exchanger.setName('Waterside Economizer Heat Exchanger')
+      heat_exchanger.setHeatExchangeModelType('Ideal')
+      heat_exchanger.setControlType('CoolingSetpointOnOff')
+      heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(4.0, 'R', 'K').get)
+      heat_exchanger.setHeatTransferMeteringEndUseType('FreeCooling')
+      heat_exchanger.setOperationMinimumTemperatureLimit(OpenStudio.convert(35.0, 'F', 'C').get)
+      heat_exchanger.setOperationMaximumTemperatureLimit(OpenStudio.convert(72.0, 'F', 'C').get)
+
+      # add heat exchanger to condenser water loop
+      condenser_water_loop.addDemandBranchForComponent(heat_exchanger)
+
+      # add heat exchanger to chilled water loop
+      chilled_water_loop_supply_inlet_node = chilled_water_loop.supplyInletNode
+      heat_exchanger.addToNode(chilled_water_loop_supply_inlet_node)
+
+      OpenStudio.logFree(OpenStudio::Info, "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name.to_s} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
     end
 
     # chilled water loop pipes
@@ -4009,6 +4034,7 @@ class Standard
   #   Weekend temperature reset for slab temperature setpoint in degree Celsius.
   # @param early_reset_out_arg [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Time at which the weekend temperature reset is removed.
+  # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   # @param radiant_lockout [Bool] True if system contains a radiant lockout
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
   #   Only used if radiant_lockout is true
@@ -4028,6 +4054,7 @@ class Standard
                                  minimum_operation: 1,
                                  weekend_temperature_reset: 2,
                                  early_reset_out_arg: 20,
+                                 switch_over_time: 24.0,
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
                                  radiant_lockout_end_time: 20.0)
@@ -4085,6 +4112,7 @@ class Standard
         radiant_htg_dsgn_sup_wtr_temp_f = 120
       else # default to 4
         cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
       end
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation and R-#{((cz_mult + 1) * 5).to_i} exterior insulation, and #{radiant_htg_dsgn_sup_wtr_temp_f}F heating design supply water temperature.")
     end
@@ -4324,7 +4352,8 @@ class Standard
                                           proportional_gain: proportional_gain,
                                           minimum_operation: minimum_operation,
                                           weekend_temperature_reset: weekend_temperature_reset,
-                                          early_reset_out_arg: early_reset_out_arg)
+                                          early_reset_out_arg: early_reset_out_arg,
+                                          switch_over_time: switch_over_time)
       end
     end
 

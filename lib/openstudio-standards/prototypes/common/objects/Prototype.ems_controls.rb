@@ -7,12 +7,14 @@ class Standard
   # @param minimum_operation [Double] Minimum number of hours of operation for radiant system before it shuts off.
   # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
   # @param early_reset_out_arg [Double] Time at which the weekend temperature reset is removed.
+  # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def ems_radiant_proportional_controls(model, zone, radiant_loop,
                                         radiant_type: 'floor',
                                         proportional_gain: 0.3,
                                         minimum_operation: 1,
                                         weekend_temperature_reset: 2,
-                                        early_reset_out_arg: 20)
+                                        early_reset_out_arg: 20,
+                                        switch_over_time: 24.0)
 
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
@@ -68,12 +70,17 @@ class Standard
 
     # Calculated active slab heating and cooling temperature setpoint. Default temperature is taken at the slab surface.
     sch_slab_sp = model_add_constant_schedule_ruleset(model,
-                                                       21.0,
-                                                       name = "#{zone_name}_Sch_Slab_SP")
+                                                      21.0,
+                                                      name = "#{zone_name}_Sch_Slab_SP")
     cmd_slab_sp = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_slab_sp,
-                                                                         'Schedule:Year',
-                                                                         'Schedule Value')
+                                                                        'Schedule:Year',
+                                                                        'Schedule Value')
     cmd_slab_sp.setName("#{zone_name}_CMD_SLAB_SP")
+
+    # add output variable for slab setpoint temperature
+    var = OpenStudio::Model::OutputVariable.new('Schedule Value', model)
+    var.setKeyValue("#{zone_name}_Sch_Slab_SP")
+    var.setReportingFrequency('Timestep')
 
     # Calculated cooling setpoint error. Calculated from upper comfort limit minus setpoint offset and 'measured' controlled zone temperature.
     sch_csp_error = model_add_constant_schedule_ruleset(model,
@@ -449,7 +456,7 @@ class Standard
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_Upper_Comfort_Limit,
       SET #{zone_name}_cont_neutral_oper  = 0,
       SET #{zone_name}_zone_mode          = 0,
-      SET #{zone_name}_switch_over_time   = 24,
+      SET #{zone_name}_switch_over_time   = #{switch_over_time},
       SET #{zone_name}_CMD_CSP_ERROR      = 0,
       SET #{zone_name}_CMD_HSP_ERROR      = 0,
       SET #{zone_name}_CMD_SLAB_SP        = #{zone_name}_Lower_Comfort_Limit,
