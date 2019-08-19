@@ -214,7 +214,7 @@ class Standard
                                      hot_water_loop: hot_water_loop,
                                      ventilation: false)
 
-      when 'DC' # Data Center
+      when 'DC' # Data Center in Large Office building
         # Retrieve the existing hot water loop
         # or add a new one if necessary.
         hot_water_loop = nil
@@ -237,6 +237,50 @@ class Standard
                                    hvac_op_sch: system['flow_fraction_schedule'],
                                    oa_damper_sch: system['flow_fraction_schedule'],
                                    main_data_center: system['main_data_center'])
+
+      when 'CRAC' # Small Data Center
+        model_add_crac(model,
+                       thermal_zones,
+                       climate_zone,
+                       system_name: system['name'],
+                       hvac_op_sch: system['CRAC_operation_schedule'],
+                       oa_damper_sch: system['CRAC_oa_damper_schedule'],
+                       fan_location: 'DrawThrough',
+                       fan_type: system['CRAC_fan_type'],
+                       cooling_type: system['CRAC_cooling_type'])
+
+      when 'CRAH' # Large Data Center (standalone)
+        # Retrieve the existing chilled water loop or add a new one if necessary.
+        chilled_water_loop = nil
+        if model.getPlantLoopByName('Chilled Water Loop').is_initialized
+          chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
+        else
+          condenser_water_loop = nil
+          if system['chiller_cooling_type'] == 'WaterCooled'
+            condenser_water_loop = model_add_cw_loop(model,
+                                                     cooling_tower_type: 'Open Cooling Tower',
+                                                     cooling_tower_fan_type: 'Centrifugal',
+                                                     cooling_tower_capacity_control: 'Fan Cycling',
+                                                     number_of_cells_per_tower: 2,
+                                                     number_cooling_towers: 1)
+          end
+          chilled_water_loop = model_add_chw_loop(model,
+                                                  cooling_fuel: 'Electricity',
+                                                  dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
+                                                  dsgn_sup_wtr_temp_delt: system['chilled_water_design_supply_water_temperature_delta'],
+                                                  chw_pumping_type: system['chw_pumping_type'],
+                                                  chiller_cooling_type: system['chiller_cooling_type'],
+                                                  chiller_condenser_type: system['chiller_condenser_type'],
+                                                  chiller_compressor_type: system['chiller_compressor_type'],
+                                                  condenser_water_loop: condenser_water_loop)
+        end
+        model_add_crah(model,
+                       thermal_zones,
+                       system_name: system['name'],
+                       chilled_water_loop: chilled_water_loop,
+                       hvac_op_sch: system['operation_schedule'],
+                       oa_damper_sch: system['oa_damper_schedule'],
+                       return_plenum: nil)
 
       when 'SAC'
         model_add_split_ac(model,
