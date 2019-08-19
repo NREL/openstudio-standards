@@ -2,9 +2,4 @@
 
 @Library('cbci_shared_libs@master') _
 
-// Build for PR to master branch only.
-if ((env.CHANGE_ID) && (env.CHANGE_TARGET) ) { // check if set
-
-  openstudio_standards()
-
-}
+openstudio_standards()
