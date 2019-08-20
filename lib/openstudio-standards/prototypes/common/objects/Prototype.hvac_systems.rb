@@ -4060,27 +4060,9 @@ class Standard
                                  radiant_lockout_end_time: 20.0)
 
     # create internal source constructions for surfaces
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Replacing floor constructions with new radiant slab constructions.')
-    mat_concrete_3_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
-    mat_concrete_3_5in.setName('Radiant Slab Concrete - 3.5 in.')
-    mat_concrete_1_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0381, 2.31, 2322, 832)
-    mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
-    mat_metal_deck = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.003175, 45.006, 7680, 418.4)
-    mat_metal_deck.setName('Radiant Slab Metal Deck')
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Replacing #{radiant_type} constructions with new radiant slab constructions.")
 
-    if include_carpet
-      carpet_thickness_m = OpenStudio.convert(carpet_thickness_in / 12.0, 'ft', 'm').get
-      conductivity_si = 0.06
-      conductivity_ip = OpenStudio.convert(conductivity_si, 'W/m*K', 'Btu*in/hr*ft^2*R').get
-      r_value_ip = carpet_thickness_in * (1 / conductivity_ip)
-      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', carpet_thickness_m, conductivity_si, 288, 1380)
-      mat_thin_carpet_tile.setThermalAbsorptance(0.9)
-      mat_thin_carpet_tile.setSolarAbsorptance(0.7)
-      mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
-      mat_thin_carpet_tile.setName("Radiant Slab Thin Carpet Tile R-#{r_value_ip.round(2)}")
-    end
-
-    # determine insulation thickness by climate zone
+    # determine construction insulation thickness by climate zone
     climate_zone = model_standards_climate_zone(model)
     if climate_zone.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to climate zone 5, R-20 insulation, 110F heating design supply water temperature.')
@@ -4114,10 +4096,110 @@ class Standard
         cz_mult = 4
         radiant_htg_dsgn_sup_wtr_temp_f = 100
       end
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation and R-#{((cz_mult + 1) * 5).to_i} exterior insulation, and #{radiant_htg_dsgn_sup_wtr_temp_f}F heating design supply water temperature.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation, R-#{((cz_mult + 1) * 5).to_i} exterior floor insulation, R-#{((cz_mult + 1) * 2 * 5).to_i} exterior roof insulation, and #{radiant_htg_dsgn_sup_wtr_temp_f}F heating design supply water temperature.")
     end
 
-    # Adjust hot and chilled water loop temperatures and set new setpoint schedules
+    # create materials
+    mat_concrete_3_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
+    mat_concrete_3_5in.setName('Radiant Slab Concrete - 3.5 in.')
+
+    mat_concrete_1_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0381, 2.31, 2322, 832)
+    mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
+
+    mat_refl_roof_membrane = model.getStandardOpaqueMaterialByName('Roof Membrane - Highly Reflective')
+    if mat_refl_roof_membrane.is_initialized
+      mat_refl_roof_membrane = model.getStandardOpaqueMaterialByName('Roof Membrane - Highly Reflective').get
+    else
+      mat_refl_roof_membrane = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'VeryRough', 0.0095, 0.16, 1121.29, 1460)
+      mat_refl_roof_membrane.setThermalAbsorptance(0.75)
+      mat_refl_roof_membrane.setSolarAbsorptance(0.45)
+      mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
+      mat_refl_roof_membrane.setName('Roof Membrane - Highly Reflective')
+    end
+
+    if include_carpet
+      carpet_thickness_m = OpenStudio.convert(carpet_thickness_in / 12.0, 'ft', 'm').get
+      conductivity_si = 0.06
+      conductivity_ip = OpenStudio.convert(conductivity_si, 'W/m*K', 'Btu*in/hr*ft^2*R').get
+      r_value_ip = carpet_thickness_in * (1 / conductivity_ip)
+      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', carpet_thickness_m, conductivity_si, 288, 1380)
+      mat_thin_carpet_tile.setThermalAbsorptance(0.9)
+      mat_thin_carpet_tile.setSolarAbsorptance(0.7)
+      mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
+      mat_thin_carpet_tile.setName("Radiant Slab Thin Carpet Tile R-#{r_value_ip.round(2)}")
+    end
+
+    # set exterior slab insulation thickness based on climate zone
+    slab_insulation_thickness_m = 0.0254 * cz_mult
+    mat_slab_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', slab_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_slab_insulation.setName("Radiant Ground Slab Insulation - #{cz_mult} in.")
+
+    ext_insulation_thickness_m = 0.0254 * (cz_mult + 1)
+    mat_ext_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', ext_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_ext_insulation.setName("Radiant Exterior Slab Insulation - #{cz_mult + 1} in.")
+
+    roof_insulation_thickness_m = 0.0254 * (cz_mult + 1) * 2
+    mat_roof_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', roof_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_roof_insulation.setName("Radiant Exterior Ceiling Insulation - #{(cz_mult + 1) * 2} in.")
+
+    # create radiant internal source constructions
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'New constructions exclude the metal deck, as high thermal diffusivity materials cause errors in EnergyPlus internal source construction calculations.')
+
+    layers = []
+    layers << mat_slab_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_ground_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_ground_slab_construction.setName('Radiant Ground Slab Construction')
+    radiant_ground_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_ground_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_ground_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_ext_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_exterior_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_exterior_slab_construction.setName('Radiant Exterior Slab Construction')
+    radiant_exterior_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_exterior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_exterior_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction')
+    radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(1)
+    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(2)
+    radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_thin_carpet_tile if include_carpet
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction')
+    slab_src_loc = include_carpet ? 2 : 1
+    radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(slab_src_loc)
+    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc + 1)
+    radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_refl_roof_membrane
+    layers << mat_roof_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    radiant_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_ceiling_slab_construction.setName('Radiant Exterior Ceiling Slab Construction')
+    radiant_ceiling_slab_construction.setSourcePresentAfterLayerNumber(3)
+    radiant_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(4)
+    radiant_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # adjust hot and chilled water loop temperatures and set new setpoint schedules
     radiant_htg_dsgn_sup_wtr_temp_delt_r = 10
     radiant_htg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_f, 'F', 'C').get
     radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
@@ -4150,83 +4232,6 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing chilled water loop setpoint for '#{chilled_water_loop.name}' to '#{chw_temp_sch.name}' to account for the radiant system.")
       end
     end
-
-    # set slab thickness and make new radiant constructions
-    slab_thickness_m = 0.0254 * cz_mult
-    mat_slab_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', slab_thickness_m, 0.02, 56.06, 1210)
-    mat_slab_insulation.setName("Radiant Ground Slab Insulation - #{cz_mult} in.")
-    ext_thickness_m = 0.0254 * (cz_mult + 1)
-    mat_ext_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', ext_thickness_m, 0.02, 56.06, 1210)
-    mat_ext_insulation.setName("Radiant Exterior Slab Insulation - #{cz_mult} in.")
-    mat_refl_roof_membrane = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'VeryRough', 0.0095, 0.16, 1121.29, 1460)
-    mat_refl_roof_membrane.setThermalAbsorptance(0.75)
-    mat_refl_roof_membrane.setSolarAbsorptance(0.45)
-    mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
-    mat_refl_roof_membrane.setName('Roof Membrane - Highly Reflective')
-    # TODO: modify to account for roof insulation based on climate zone
-    mat_roof_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 4.3189)
-    mat_refl_roof_membrane.setThermalAbsorptance(0.9)
-    mat_refl_roof_membrane.setSolarAbsorptance(0.7)
-    mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
-    mat_roof_insulation.setName('Typical Insulation R-24.52')
-
-    layers = []
-    layers << mat_slab_insulation
-    layers << mat_concrete_3_5in
-    layers << mat_concrete_1_5in
-    layers << mat_thin_carpet_tile if include_carpet
-    radiant_ground_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
-    radiant_ground_slab_construction.setName('Radiant Ground Slab Construction')
-    radiant_ground_slab_construction.setSourcePresentAfterLayerNumber(2)
-    radiant_ground_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
-    radiant_ground_slab_construction.setTubeSpacing(0.2286) # 9 inches
-
-    layers = []
-    layers << mat_ext_insulation
-    layers << mat_metal_deck
-    layers << mat_concrete_3_5in
-    layers << mat_concrete_1_5in
-    layers << mat_thin_carpet_tile if include_carpet
-    radiant_exterior_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
-    radiant_exterior_slab_construction.setName('Radiant Exterior Slab Construction')
-    radiant_exterior_slab_construction.setSourcePresentAfterLayerNumber(3)
-    radiant_exterior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(4)
-    radiant_exterior_slab_construction.setTubeSpacing(0.2286) # 9 inches
-
-    layers = []
-    layers << mat_metal_deck
-    layers << mat_concrete_3_5in
-    layers << mat_concrete_1_5in
-    layers << mat_thin_carpet_tile if include_carpet
-    radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
-    radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction')
-    radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(2)
-    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
-    radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
-
-    layers = []
-    layers << mat_thin_carpet_tile if include_carpet
-    layers << mat_concrete_3_5in
-    layers << mat_concrete_1_5in
-    layers << mat_metal_deck
-    radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
-    radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction')
-    slab_src_loc = include_carpet ? 2 : 1
-    radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(slab_src_loc)
-    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc + 1)
-    radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
-
-    layers = []
-    layers << mat_refl_roof_membrane
-    layers << mat_roof_insulation
-    layers << mat_concrete_3_5in
-    layers << mat_concrete_1_5in
-    layers << mat_metal_deck
-    radiant_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
-    radiant_ceiling_slab_construction.setName('Radiant Ceiling Slab Construction')
-    radiant_ceiling_slab_construction.setSourcePresentAfterLayerNumber(3)
-    radiant_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(5)
-    radiant_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     # default temperature controls for radiant system
     zn_radiant_htg_dsgn_temp_f = 68.0
@@ -4332,7 +4337,7 @@ class Standard
 
       # radiant loop layout details
       radiant_loop.setHydronicTubingInsideDiameter(0.015875) # 5/8 in. ID, 3/4 in. OD
-      # TODO include a method to determine tubing length in the zone
+      # @TODO include a method to determine tubing length in the zone
       # loop_length = 7*zone.floorArea
       # radiant_loop.setHydronicTubingLength()
       radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
