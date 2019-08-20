@@ -51,9 +51,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
   # Dynamically create a test for each building type/template/climate zone
   # so that if one combo fails the others still run
-  def CreateDOEPrototypeBuildingTest.create_run_model_tests(building_types, 
-      templates, 
-      climate_zones, 
+  def CreateDOEPrototypeBuildingTest.create_run_model_tests(building_types,
+      templates,
+      climate_zones,
       epw_files,
       create_models = true,
       run_models = false,
@@ -69,9 +69,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
               create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
-            end 
+            end
           else
-            #otherwise it will go as normal with the american method and wipe the epw_file variable. 
+            #otherwise it will go as normal with the american method and wipe the epw_file variable.
             epw_file = ""
             create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
           end
@@ -80,9 +80,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
     end
   end
 
-  def CreateDOEPrototypeBuildingTest.create_building(building_type, 
-      template, 
-      climate_zone, 
+  def CreateDOEPrototypeBuildingTest.create_building(building_type,
+      template,
+      climate_zone,
       epw_file,
       create_models = true,
       run_models = false,
@@ -129,7 +129,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
                        "#{run_dir}/AnnualRun"
                      end
       idf_path_string = "#{run_dir}/#{model_name}.idf"
-      idf_path = OpenStudio::Path.new(idf_path_string)            
+      idf_path = OpenStudio::Path.new(idf_path_string)
       osm_path_string = "#{run_dir}/#{model_name}.osm"
       osm_path = OpenStudio::Path.new(osm_path_string)
       sql_path_string = "#{full_sim_dir}/run/eplusout.sql"
@@ -149,25 +149,25 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Model for #{template}_#{building_type} was not created successfully.")
         else
           output_variable_array =
-            [
-            "Facility Total Electric Demand Power",
-            "Water Heater Gas Rate",
-            "Plant Supply Side Heating Demand Rate",
-            "Heating Coil Gas Rate",
-            "Cooling Coil Electric Power",
-            "Boiler Gas Rate",
-            "Heating Coil Air Heating Rate",
-            "Heating Coil Electric Power",
-            "Cooling Coil Total Cooling Rate",
-            "Water Heater Heating Rate",
-            "Zone Air Temperature",
-            "Water Heater Electric Power",
-            "Chiller Electric Power",
-            "Chiller Electric Energy",
-            "Cooling Tower Heat Transfer Rate",
-            "Cooling Tower Fan Electric Power",
-            "Cooling Tower Fan Electric Energy"
-          ]
+              [
+                  "Facility Total Electric Demand Power",
+                  "Water Heater Gas Rate",
+                  "Plant Supply Side Heating Demand Rate",
+                  "Heating Coil Gas Rate",
+                  "Cooling Coil Electric Power",
+                  "Boiler Gas Rate",
+                  "Heating Coil Air Heating Rate",
+                  "Heating Coil Electric Power",
+                  "Cooling Coil Total Cooling Rate",
+                  "Water Heater Heating Rate",
+                  "Zone Air Temperature",
+                  "Water Heater Electric Power",
+                  "Chiller Electric Power",
+                  "Chiller Electric Energy",
+                  "Cooling Tower Heat Transfer Rate",
+                  "Cooling Tower Fan Electric Power",
+                  "Cooling Tower Fan Electric Energy"
+              ]
           BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
           # BTAP::Reports::set_output_variables(model,"Hourly", output_variable_array)
 
@@ -203,7 +203,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           sim_ctrl = model.getSimulationControl
           sim_ctrl.setRunSimulationforSizingPeriods(true)
           sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
-          
+
           # Remove all meters
           model.getOutputMeters.each(&:remove)
 
@@ -212,7 +212,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
           # EnergyPLus I/O Reference Manual, Table 5.1
           fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
-          
+
           # Creating individual meters
           meters = end_uses.product fuels
           meters.each do |end_use, fuel|
@@ -240,6 +240,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
         end
 
         acceptable_error_percentage = 0.001
+        rounding_tolerance = 3
 
         # Get the legacy simulation results
         legacy_values = prototype_creator.model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
@@ -253,7 +254,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           # Get the current simulation results
           if run_type == 'dd-only'
             current_values = prototype_creator.model_dd_results_by_end_use_and_fuel_type(model)
-          else         
+          else
             current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
           end
 
@@ -269,6 +270,10 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
             legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
             current_val = current_values["#{end_use}|#{fuel_type}"]
+
+            # round to nearest decimal place per the rounding tolerance
+            legacy_val = legacy_val.round(rounding_tolerance)
+            current_val = current_val.round(rounding_tolerance)
 
             # Add the energy to the total
             if fuel_type == 'Water'
