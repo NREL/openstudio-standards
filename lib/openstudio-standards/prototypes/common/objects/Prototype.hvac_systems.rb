@@ -357,7 +357,7 @@ class Standard
       chilled_water_loop_supply_inlet_node = chilled_water_loop.supplyInletNode
       heat_exchanger.addToNode(chilled_water_loop_supply_inlet_node)
 
-      OpenStudio.logFree(OpenStudio::Info, "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name.to_s} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name.to_s} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
     end
 
     # chilled water loop pipes
