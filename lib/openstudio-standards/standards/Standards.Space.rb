@@ -1290,7 +1290,7 @@ class Standard
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
     infiltration.setName("#{space.name} Infiltration")
     # infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2)
-    infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
+    infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2.round(13))
     infiltration.setSchedule(infil_sch)
     infiltration.setConstantTermCoefficient(0.0)
     infiltration.setTemperatureTermCoefficient 0.0
