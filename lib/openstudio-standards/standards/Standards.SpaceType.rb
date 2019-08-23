@@ -452,7 +452,7 @@ class Standard
       # Modify each instance
       space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
         unless infiltration_per_area_ext.zero?
-          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get.round(13))
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
         end
         unless infiltration_per_area_ext_wall.zero?
