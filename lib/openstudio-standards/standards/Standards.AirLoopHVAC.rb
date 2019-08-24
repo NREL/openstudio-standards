@@ -1801,6 +1801,10 @@ class Standard
         # Store the ventilation effectiveness
         e_vzs_adj << e_vz_adj
 
+        # Round the minimum damper position to avoid nondeterministic results
+        # at the ~13th decimal place, which can cause regression errors
+        mdp_adj = mdp_adj.round(11)
+
         # Set the adjusted minimum damper position
         zone.equipment.each do |equip|
           if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
