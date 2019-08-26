@@ -246,7 +246,7 @@ OS:Connection,
 
 OS:Timestep,
   {4e7f6c04-4299-410d-be7b-be7dcfccb23b}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
 
 OS:ShadowCalculation,
   {880846cf-e6b0-4d18-9240-972f6fdbf885}, !- Handle

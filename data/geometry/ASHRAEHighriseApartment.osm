@@ -9842,7 +9842,7 @@ OS:SubSurface,
 
 OS:Timestep,
   {8462daba-5cd9-46fb-90b9-de8f334c4c05}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
 
 OS:SubSurface,
   {4e0aa653-6fff-4ed1-b5d0-3cef6a5c1aa8}, !- Handle

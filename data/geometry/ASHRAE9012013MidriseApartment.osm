@@ -1517,7 +1517,7 @@ OS:Surface,
 
 OS:Timestep,
   {edfa6676-4fa1-4f8d-b586-211f30877da9}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
 
 OS:Surface,
   {b22ddd3a-c80b-4104-aba6-2c3c2faedf30}, !- Handle

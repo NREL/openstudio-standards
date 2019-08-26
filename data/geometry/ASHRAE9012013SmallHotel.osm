@@ -9046,7 +9046,7 @@ OS:Output:Meter,
 
 OS:Timestep,
   {cec60208-b3d4-4d85-b12c-7b41277446e1}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
 
 OS:Surface,
   {a63b16a1-85aa-4795-aa03-2fea9ce92650}, !- Handle
