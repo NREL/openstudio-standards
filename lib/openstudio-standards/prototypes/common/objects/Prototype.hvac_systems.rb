@@ -4348,10 +4348,11 @@ class Standard
       radiant_loop.addToThermalZone(zone)
       radiant_loops << radiant_loop
 
+      # rename nodes before adding EMS code
+      rename_plant_loop_nodes(model)
+
       # set radiant loop controls
       if control_strategy == 'proportional_control'
-        # rename nodes before adding EMS code
-        rename_plant_loop_nodes(model)
         ems_radiant_proportional_controls(model, zone, radiant_loop,
                                           radiant_type: radiant_type,
                                           proportional_gain: proportional_gain,
