@@ -1800,6 +1800,10 @@ class Standard
         # Store the ventilation effectiveness
         e_vzs_adj << e_vz_adj
 
+        # Round the minimum damper position to avoid nondeterministic results
+        # at the ~13th decimal place, which can cause regression errors
+        mdp_adj = mdp_adj.round(11)
+
         # Set the adjusted minimum damper position
         zone.equipment.each do |equip|
           if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
@@ -3086,6 +3090,11 @@ class Standard
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = true
 
+    # Determine if the airloop serves any computer rooms or data centers, which default to always on.
+    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
+      shutoff_required = false
+    end
+
     return shutoff_required
   end
 
@@ -3214,8 +3223,13 @@ class Standard
         next if space_type.standardsSpaceType.empty?
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
-        next unless standards_space_type.downcase.include?('data') || standards_space_type.downcase.include?('computer')
-        dc_area_m2 += space.floorArea
+        if standards_space_type.downcase.include?('data center') || standards_space_type.downcase.include?('datacenter')
+          dc_area_m2 += space.floorArea
+        end
+        std_bldg_type = space.spaceType.get.standardsBuildingType.get
+        if std_bldg_type.downcase.include?('datacenter') && standards_space_type.downcase.include?('computerroom')
+          dc_area_m2 += space.floorArea
+        end
       end
     end
 

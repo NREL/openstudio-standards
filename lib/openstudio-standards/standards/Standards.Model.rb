@@ -4489,13 +4489,15 @@ class Standard
   #
   # @return [Bool] returns true if successful, false if not
   def model_remove_unused_resource_objects(model)
+    start_size = model.objects.size
     model.getResourceObjects.sort.each do |obj|
       if obj.directUseCount.zero?
         OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{obj.name} is unused; it will be removed.")
         model.removeObject(obj.handle)
       end
     end
-
+    end_size = model.objects.size
+    OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "The model started with #{start_size} objects and finished with #{end_size} objects after removing unused resource objects.")
     return true
   end
 
