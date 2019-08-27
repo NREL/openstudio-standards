@@ -46,6 +46,17 @@ OS:Timestep,
   {31824a36-2f0f-4919-a534-cdb00e20d2e0}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {3b85f569-db01-475d-a216-731c7f502630}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {7372ab30-1e57-48fe-ac40-f4c89dd4a2a4}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
 OS:Building,
   {e0ce3521-4e53-4eca-8017-2f1c8dec2b50}, !- Handle
   90.1-2010-SuperMarket,                  !- Name

@@ -248,6 +248,11 @@ OS:Timestep,
   {4e7f6c04-4299-410d-be7b-be7dcfccb23b}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:ConvergenceLimits,
+  {1482805c-8946-49e3-af2f-cf33555bef91}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
 OS:ShadowCalculation,
   {880846cf-e6b0-4d18-9240-972f6fdbf885}, !- Handle
   30,                                     !- Calculation Frequency
@@ -28189,8 +28194,9 @@ OS:Rendering:Color,
 
 OS:Sizing:Parameters,
   {56960239-eefd-4444-9f86-140d78fedc39}, !- Handle
-  1.25,                                   !- Heating Sizing Factor
-  1.15;                                   !- Cooling Sizing Factor
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
 
 OS:BuildingStory,
   {a180734a-4560-4f26-89f7-f51a27ba85ac}, !- Handle

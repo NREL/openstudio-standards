@@ -273,12 +273,18 @@ OS:SimulationControl,
 
 OS:Sizing:Parameters,
   {b651b82f-b912-4033-b9aa-b98ee20c4e0d}, !- Handle
-  1.25,                                   !- Heating Sizing Factor
-  1.15;                                   !- Cooling Sizing Factor
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
 
 OS:Timestep,
   {c6307274-525d-4af7-a926-b947d75413fd}, !- Handle
   6;                                      !- Number of Timesteps per Hour
+
+OS:ConvergenceLimits,
+  {22bf519e-7766-4341-8680-14e2c384b06e}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:ShadowCalculation,
   {9b44f841-a574-4e0e-a3ae-bf9723cd349e}, !- Handle

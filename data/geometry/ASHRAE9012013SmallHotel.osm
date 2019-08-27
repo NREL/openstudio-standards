@@ -9048,6 +9048,17 @@ OS:Timestep,
   {cec60208-b3d4-4d85-b12c-7b41277446e1}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {f25e9b86-193f-4fb1-9f2c-e34c00c95591}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {195a4baf-33e3-4bf4-be08-6982484dbc1f}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
 OS:Surface,
   {a63b16a1-85aa-4795-aa03-2fea9ce92650}, !- Handle
   P_ElevatorCoreFlr4_10294_0_10156,       !- Name
