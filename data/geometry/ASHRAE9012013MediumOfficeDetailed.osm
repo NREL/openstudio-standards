@@ -13104,14 +13104,8 @@ OS:ClimateZones,
 
 OS:Sizing:Parameters,
   {a7378d36-c394-42c1-81b4-de286cbc4f47}, !- Handle
-  1.0,                                    !- Heating Sizing Factor
-  1.0,                                    !- Cooling Sizing Factor
-  6;                                      !- Timesteps in Averaging Window
-
-OS:ConvergenceLimits,
-  {6dd525db-1777-47de-812e-f09b9d404852}, !- Handle
-  1,                                      !- Minimum System Timestep {minutes}
-  20;                                     !- Maximum HVAC Iterations
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
 
 OS:ShadowCalculation,
   {aa22ca1b-7e24-46ac-a27d-3d58bcb58088}, !- Handle
