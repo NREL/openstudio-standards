@@ -57,7 +57,13 @@ class Standard
     end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       minimum_anti_sweat_heater_power_per_unit_length = OpenStudio.convert(props['minimum_anti_sweat_heater_power_per_unit_length'], 'W/ft', 'W/m').get
-      anti_sweat_heater_control = props['anti_sweat_heater_control']
+    end
+    if props['anti_sweat_heater_control']
+      if props['anti_sweat_heater_control'] == 'RelativeHumidity'
+        anti_sweat_heater_control = 'Linear'
+      else
+        anti_sweat_heater_control = props['anti_sweat_heater_control']
+      end
     end
     if props['restocking_schedule']
       if props['restocking_schedule'].downcase == 'always off'
@@ -123,6 +129,11 @@ class Standard
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
     ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+
+    if props['case_category']
+      ref_case_addprops = ref_case.additionalProperties
+      ref_case_addprops.setFeature('case_category', props['case_category'])
+    end
 
     length_ft = OpenStudio.convert(case_length, 'm', 'ft').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
@@ -305,6 +316,16 @@ class Standard
     end
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
+
+    ref_walkin_addprops = ref_walkin.additionalProperties
+    ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
+
+    # Add doorway protection
+    if props['doorway_protection_type']
+      ref_walkin.zoneBoundaries.each do |zb|
+        zb.setStockingDoorOpeningProtectionTypeFacingZone(props['doorway_protection_type'])
+      end
+    end
 
     insulated_floor_area_ft2 = OpenStudio.convert(floor_surface_area, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 walkin called #{walkin_type} with a capacity of #{rated_cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")

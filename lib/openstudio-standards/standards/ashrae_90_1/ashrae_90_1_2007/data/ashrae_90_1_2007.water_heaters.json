@@ -1,0 +1,72 @@
+{
+  "water_heaters": [
+    {
+      "template": "90.1-2007",
+      "fuel_type": "Electricity",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 40945.99,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "energy_factor_base": 0.93,
+      "energy_factor_volume_derate": 0.00132,
+      "standby_loss_base": null,
+      "standby_loss_capacity_allowance": null,
+      "standby_loss_volume_allowance": null,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": null,
+      "notes": "From 90.1-2007 Table 7.8"
+    },
+    {
+      "template": "90.1-2007",
+      "fuel_type": "Electricity",
+      "minimum_capacity": 40946.0,
+      "maximum_capacity": "9.9999999E7",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "energy_factor_base": null,
+      "energy_factor_volume_derate": null,
+      "standby_loss_base": 20.0,
+      "standby_loss_capacity_allowance": null,
+      "standby_loss_volume_allowance": 35.0,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": null,
+      "notes": "From 90.1-2007 Table 7.8"
+    },
+    {
+      "template": "90.1-2007",
+      "fuel_type": "NaturalGas",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 74999.99,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "energy_factor_base": 0.62,
+      "energy_factor_volume_derate": 0.0019,
+      "standby_loss_base": null,
+      "standby_loss_capacity_allowance": null,
+      "standby_loss_volume_allowance": null,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": null,
+      "notes": "From 90.1-2007 Table 7.8"
+    },
+    {
+      "template": "90.1-2007",
+      "fuel_type": "NaturalGas",
+      "minimum_capacity": 75000.0,
+      "maximum_capacity": "9.9999999E7",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "energy_factor_base": null,
+      "energy_factor_volume_derate": null,
+      "standby_loss_base": null,
+      "standby_loss_capacity_allowance": 800.0,
+      "standby_loss_volume_allowance": 110.0,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": 0.8,
+      "notes": "From 90.1-2007 Table 7.8"
+    }
+  ]
+}

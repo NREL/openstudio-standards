@@ -57,26 +57,65 @@ module OpenstudioStandards
   
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
+  require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/comstock_doe_ref_pre_1980/comstock_doe_ref_pre_1980"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004"
+  require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/comstock_doe_ref_1980_2004/comstock_doe_ref_1980_2004"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/comstock_ashrae_90_1_2004/comstock_ashrae_90_1_2004"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/comstock_ashrae_90_1_2007/comstock_ashrae_90_1_2007"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/comstock_ashrae_90_1_2010/comstock_ashrae_90_1_2010"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/comstock_ashrae_90_1_2013/comstock_ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
 
   require_relative "#{stds}/deer/deer"
   require_relative "#{stds}/deer/deer_pre_1975/deer_pre_1975"
+  require_relative "#{stds}/deer/deer_pre_1975/comstock_deer_pre_1975/comstock_deer_pre_1975"
   require_relative "#{stds}/deer/deer_1985/deer_1985"
+  require_relative "#{stds}/deer/deer_1985/comstock_deer_1985/comstock_deer_1985"
   require_relative "#{stds}/deer/deer_1996/deer_1996"
+  require_relative "#{stds}/deer/deer_1996/comstock_deer_1996/comstock_deer_1996"
   require_relative "#{stds}/deer/deer_2003/deer_2003"
+  require_relative "#{stds}/deer/deer_2003/comstock_deer_2003/comstock_deer_2003"
   require_relative "#{stds}/deer/deer_2007/deer_2007"
+  require_relative "#{stds}/deer/deer_2007/comstock_deer_2007/comstock_deer_2007"
   require_relative "#{stds}/deer/deer_2011/deer_2011"
+  require_relative "#{stds}/deer/deer_2011/comstock_deer_2011/comstock_deer_2011"
   require_relative "#{stds}/deer/deer_2014/deer_2014"
+  require_relative "#{stds}/deer/deer_2014/comstock_deer_2014/comstock_deer_2014"
   require_relative "#{stds}/deer/deer_2015/deer_2015"
+  require_relative "#{stds}/deer/deer_2015/comstock_deer_2015/comstock_deer_2015"
   require_relative "#{stds}/deer/deer_2017/deer_2017"
+  require_relative "#{stds}/deer/deer_2017/comstock_deer_2017/comstock_deer_2017"
+  require_relative "#{stds}/deer/deer_2020/deer_2020"
+  require_relative "#{stds}/deer/deer_2020/comstock_deer_2020/comstock_deer_2020"
+  require_relative "#{stds}/deer/deer_2025/deer_2025"
+  require_relative "#{stds}/deer/deer_2025/comstock_deer_2025/comstock_deer_2025"
+  require_relative "#{stds}/deer/deer_2030/deer_2030"
+  require_relative "#{stds}/deer/deer_2030/comstock_deer_2030/comstock_deer_2030"
+  require_relative "#{stds}/deer/deer_2035/deer_2035"
+  require_relative "#{stds}/deer/deer_2035/comstock_deer_2035/comstock_deer_2035"
+  require_relative "#{stds}/deer/deer_2040/deer_2040"
+  require_relative "#{stds}/deer/deer_2040/comstock_deer_2040/comstock_deer_2040"
+  require_relative "#{stds}/deer/deer_2045/deer_2045"
+  require_relative "#{stds}/deer/deer_2045/comstock_deer_2045/comstock_deer_2045"
+  require_relative "#{stds}/deer/deer_2050/deer_2050"
+  require_relative "#{stds}/deer/deer_2050/comstock_deer_2050/comstock_deer_2050"
+  require_relative "#{stds}/deer/deer_2055/deer_2055"
+  require_relative "#{stds}/deer/deer_2055/comstock_deer_2055/comstock_deer_2055"
+  require_relative "#{stds}/deer/deer_2060/deer_2060"
+  require_relative "#{stds}/deer/deer_2060/comstock_deer_2060/comstock_deer_2060"
+  require_relative "#{stds}/deer/deer_2065/deer_2065"
+  require_relative "#{stds}/deer/deer_2065/comstock_deer_2065/comstock_deer_2065"
+  require_relative "#{stds}/deer/deer_2070/deer_2070"
+  require_relative "#{stds}/deer/deer_2070/comstock_deer_2070/comstock_deer_2070"
+  require_relative "#{stds}/deer/deer_2075/deer_2075"
+  require_relative "#{stds}/deer/deer_2075/comstock_deer_2075/comstock_deer_2075"
 
   require_relative "#{stds}/oeesc/oeesc"
-  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"  
+  require_relative "#{stds}/oeesc/oeesc_2014/oeesc_2014"
 
   require_relative "#{stds}/icc_iecc/icc_iecc"
   require_relative "#{stds}/icc_iecc/icc_iecc_2015/icc_iecc_2015"
@@ -205,6 +244,7 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
+  require_relative "#{stds}/deer/deer.PlanarSurface"
   # CBES Common
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
@@ -359,14 +399,30 @@ module OpenstudioStandards
   def self.run_command(command)
     stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
     if status.success?
-      puts "Command completed successfully"
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.command', "Successfully ran command: '#{command}'")
       #puts "stdout: #{stdout_str}"
       #puts "stderr: #{stderr_str}"
       return true
     else
-      puts "Error running command: '#{command}'"
-      puts "stdout: #{stdout_str}"
-      puts "stderr: #{stderr_str}"
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stdout: #{stdout_str}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "stderr: #{stderr_str}")
+
+      # Print the ENV for debugging
+      final_env = []
+      env_changes = get_run_env()
+      ENV.each do |env_var, val|
+        next if env_changes.key?(env_var) && env_changes[env_var].nil?
+        final_env << "#{env_var} = #{val}"
+      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: \n #{final_env.join("\n")}")
+
+      # List the gems available to openstudio at this point
+      cli_path = OpenStudio.getOpenStudioCLI
+      cmd = "\"#{cli_path}\" gem_list"
+      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env(), cmd)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Gems available to openstudio cli according to (openstudio gem_list): \n #{stdout_str_2}")
+
       return false
     end
   end
