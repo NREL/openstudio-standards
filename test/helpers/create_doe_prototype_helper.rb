@@ -122,7 +122,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
       end
-      full_sim_dir = "#{run_dir}/AnnualRun"
+
+      full_sim_dir = if run_type == 'dd-only'
+                       "#{run_dir}/DsnDayRun"
+                     else
+                       "#{run_dir}/AnnualRun"
+                     end
       idf_path_string = "#{run_dir}/#{model_name}.idf"
       idf_path = OpenStudio::Path.new(idf_path_string)
       osm_path_string = "#{run_dir}/#{model_name}.osm"
