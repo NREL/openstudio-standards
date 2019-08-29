@@ -35,7 +35,10 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
     'OS:StandardsInformation:Material',
-    'OS:StandardsInformation:Construction'
+    'OS:StandardsInformation:Construction',
+    'OS:SimulationControl', # Sizing run and weather run may be different
+    'OS:AdditionalProperties', # Does not impact simulation results
+    'OS:Output:Variable' # Does not impact simulation results
   ]
 
   # Fill model object lists with all object types to be compared
@@ -245,8 +248,8 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     # Round long numeric fields
     true_value = '0.0' if true_value == '0'
     compare_value = '0.0' if compare_value == '0'
-    true_value = true_value.to_f.round(4) unless true_value.to_f.zero?
-    compare_value = compare_value.to_f.round(4) unless compare_value.to_f.zero?
+    true_value = true_value.to_f.round(5) unless true_value.to_f.zero?
+    compare_value = compare_value.to_f.round(5) unless compare_value.to_f.zero?
 
     # Check true value directly against compare value
     next if compare_value == true_value
@@ -255,8 +258,8 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
     if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)
       diff = true_value.to_f - compare_value.to_f
       unless true_value.zero?
-        # next if less than a tenth of a percent difference
-        next if (diff / true_value.to_f) < 0.001
+        # next if absolute value is less than a tenth of a percent difference
+        next if (diff / true_value.to_f).abs < 0.001
       end
     end
 

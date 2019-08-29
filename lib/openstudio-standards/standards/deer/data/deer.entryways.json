@@ -1,0 +1,268 @@
+{
+  "entryways": [
+    {
+      "building_type": "Asm",
+      "rollup_doors_per_10,000": 0.1,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 2.45,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "ECC",
+      "rollup_doors_per_10,000": 0.1,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 2.45,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "EPr",
+      "rollup_doors_per_10,000": 0.07,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 3.3,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "ERC",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 0.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Relocatable classrooms typically have 1 door based on engineering judgement"
+    },
+    {
+      "building_type": "ESe",
+      "rollup_doors_per_10,000": 0.1,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 2.45,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "EUn",
+      "rollup_doors_per_10,000": 0.1,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 2.45,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "Gro",
+      "rollup_doors_per_10,000": 1.84,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 2.93,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "SuperMarket not in table 4.18, using values from RetailStandAlone. Consistant with SuperMarket parking area used in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock report."
+    },
+    {
+      "building_type": "Hsp",
+      "rollup_doors_per_10,000": 0.03,
+      "entrance_doors_per_10,000": 0.67,
+      "others_doors_per_10,000": 3.8,
+      "entrance_canopies": null,
+      "emergency_canopies": 1.0,
+      "canopy_size": 720,
+      "floor_area_per_drive_through_window": null,
+      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+    },
+    {
+      "building_type": "Htl",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 0.67,
+      "others_doors_per_10,000": 2.27,
+      "entrance_canopies": 1.0,
+      "emergency_canopies": null,
+      "canopy_size": 1620,
+      "floor_area_per_drive_through_window": null,
+      "notes": "No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+    },
+    {
+      "building_type": "MBT",
+      "rollup_doors_per_10,000": 3.67,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 2.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "MFm",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 1.13,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Midrise not in table 4.18, using half of values from LargeHotel."
+    },
+    {
+      "building_type": "MLI",
+      "rollup_doors_per_10,000": 3.67,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 2.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "Mtl",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 28.91,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Assuming no canopy; this is different from the DOE SmallHotel prototype.  The DOE SmallHotel appears to have exterior entries for all units, No source for canopy size, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate canopy lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+    },
+    {
+      "building_type": "Nrs",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 1.13,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Nursing home not in table 4.18, using half of values from LargeHotel."
+    },
+    {
+      "building_type": "OfL",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 3.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "OfS",
+      "rollup_doors_per_10,000": 0.47,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 2.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "RFF",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 2.0,
+      "others_doors_per_10,000": 1.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": 2500.0,
+      "notes": "No source for drive through count, Table 5.41. Exterior Lighting Savings Summary for Addendum 90.1-07i  doesn't indicate drive through lighting. Section 5.4.2 Exterior Lights in U.S. Department of Energy Commercial Reference Building Models of the National Building Stock shows their use."
+    },
+    {
+      "building_type": "RSD",
+      "rollup_doors_per_10,000": 0.0,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 3.0,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "Rt3",
+      "rollup_doors_per_10,000": 1.84,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 2.93,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "RtL",
+      "rollup_doors_per_10,000": 1.84,
+      "entrance_doors_per_10,000": 1.0,
+      "others_doors_per_10,000": 2.93,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "RtS",
+      "rollup_doors_per_10,000": 0.05,
+      "entrance_doors_per_10,000": 6.0,
+      "others_doors_per_10,000": 6.6,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "SCn",
+      "rollup_doors_per_10,000": 3.67,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "SUn",
+      "rollup_doors_per_10,000": 3.67,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    },
+    {
+      "building_type": "WRf",
+      "rollup_doors_per_10,000": 3.67,
+      "entrance_doors_per_10,000": 0.2,
+      "others_doors_per_10,000": 0.2,
+      "entrance_canopies": null,
+      "emergency_canopies": null,
+      "canopy_size": null,
+      "floor_area_per_drive_through_window": null,
+      "notes": "Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010"
+    }
+  ]
+}

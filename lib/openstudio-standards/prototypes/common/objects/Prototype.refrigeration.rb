@@ -29,12 +29,17 @@ class Standard
     # Capacity, defrost, anti-sweat
     case_length = OpenStudio.convert(props['case_length'], 'ft', 'm').get
     case_temp = OpenStudio.convert(props['case_temp'], 'F', 'C').get
-    cooling_capacity_per_length = OpenStudio.convert(OpenStudio.convert(props['cooling_capacity_per_length'], 'Btu/h', 'W').get, 'W/ft', 'W/m').get
+    cooling_capacity_per_length = OpenStudio.convert(props['cooling_capacity_per_length'], 'Btu/hr*ft', 'W/m').get
     evap_fan_power_per_length = OpenStudio.convert(props['evap_fan_power_per_length'], 'W/ft', 'W/m').get
     if props['evap_temp']
       evap_temp_c = OpenStudio.convert(props['evap_temp'], 'F', 'C').get
     end
     lighting_w_per_m = OpenStudio.convert(props['lighting_per_ft'], 'W/ft', 'W/m').get
+    if props['lighting_schedule']
+      case_lighting_schedule = model_add_schedule(model, props['lighting_schedule'])
+    else
+      case_lighting_schedule = model.alwaysOnDiscreteSchedule
+    end
     fraction_of_lighting_energy_to_case = props['fraction_of_lighting_energy_to_case']
     if props['latent_case_credit_curve_name']
       latent_case_credit_curve = model_add_curve(model, props['latent_case_credit_curve_name'])
@@ -52,10 +57,26 @@ class Standard
     end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       minimum_anti_sweat_heater_power_per_unit_length = OpenStudio.convert(props['minimum_anti_sweat_heater_power_per_unit_length'], 'W/ft', 'W/m').get
-      anti_sweat_heater_control = props['anti_sweat_heater_control']
     end
-    restocking_sch_name = 'Always Off'
-    fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
+    if props['anti_sweat_heater_control']
+      if props['anti_sweat_heater_control'] == 'RelativeHumidity'
+        anti_sweat_heater_control = 'Linear'
+      else
+        anti_sweat_heater_control = props['anti_sweat_heater_control']
+      end
+    end
+    if props['restocking_schedule']
+      if props['restocking_schedule'].downcase == 'always off'
+        restocking_sch = model.alwaysOffDiscreteSchedule
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+      end
+    else
+      restocking_sch = model.alwaysOffDiscreteSchedule
+    end
+    if props['fractionofantisweatheaterenergytocase']
+      fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
+    end
 
     # Case
     ref_case = OpenStudio::Model::RefrigerationCase.new(model, model.alwaysOnDiscreteSchedule)
@@ -77,7 +98,7 @@ class Standard
     end
     ref_case.setStandardCaseLightingPowerperUnitLength(lighting_w_per_m)
     ref_case.setInstalledCaseLightingPowerperUnitLength(lighting_w_per_m)
-    ref_case.setCaseLightingSchedule(model.alwaysOnDiscreteSchedule)
+    ref_case.setCaseLightingSchedule(case_lighting_schedule)
 
     if props['latent_case_credit_curve_name']
       ref_case.setLatentCaseCreditCurve(latent_case_credit_curve)
@@ -102,8 +123,17 @@ class Standard
       ref_case.setAntiSweatHeaterControlType(anti_sweat_heater_control)
     end
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
-    ref_case.setUnderCaseHVACReturnAirFraction(0)
-    ref_case.setRefrigeratedCaseRestockingSchedule(model_add_schedule(model, restocking_sch_name))
+    if props['under_case_hvac_return_air_fraction']
+      ref_case.setUnderCaseHVACReturnAirFraction(props['under_case_hvac_return_air_fraction'])
+    else
+      ref_case.setUnderCaseHVACReturnAirFraction(0)
+    end
+    ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+
+    if props['case_category']
+      ref_case_addprops = ref_case.additionalProperties
+      ref_case_addprops.setFeature('case_category', props['case_category'])
+    end
 
     length_ft = OpenStudio.convert(case_length, 'm', 'ft').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")
@@ -286,6 +316,16 @@ class Standard
     end
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
+
+    ref_walkin_addprops = ref_walkin.additionalProperties
+    ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
+
+    # Add doorway protection
+    if props['doorway_protection_type']
+      ref_walkin.zoneBoundaries.each do |zb|
+        zb.setStockingDoorOpeningProtectionTypeFacingZone(props['doorway_protection_type'])
+      end
+    end
 
     insulated_floor_area_ft2 = OpenStudio.convert(floor_surface_area, 'm^2', 'ft^2').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{insulated_floor_area_ft2.round} ft2 walkin called #{walkin_type} with a capacity of #{rated_cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone.name}.")

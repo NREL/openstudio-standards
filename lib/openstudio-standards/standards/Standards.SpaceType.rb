@@ -187,6 +187,11 @@ class Standard
     lights_frac_radiant = space_type_properties['lighting_fraction_radiant'].to_f
     lights_frac_visible = space_type_properties['lighting_fraction_visible'].to_f
     lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
+    lights_frac_linear_fluorescent = space_type_properties['lpd_fraction_linear_fluorescent'].to_f
+    lights_frac_compact_fluorescent = space_type_properties['lpd_fraction_compact_fluorescent'].to_f
+    lights_frac_high_bay = space_type_properties['lpd_fraction_high_bay'].to_f
+    lights_frac_specialty_lighting = space_type_properties['lpd_fraction_specialty_lighting'].to_f
+    lights_frac_exit_lighting = space_type_properties['lpd_fraction_exit_lighting'].to_f
     lights_have_info = true unless lighting_per_area.zero?
     lights_have_info = true unless lighting_per_person.zero?
 
@@ -236,6 +241,21 @@ class Standard
         # unless lights_frac_replaceable.zero?
         #  definition.setFractionReplaceable(lights_frac_replaceable)
         # end
+        unless lights_frac_linear_fluorescent.zero?
+          definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', lights_frac_linear_fluorescent)
+        end
+        unless lights_frac_compact_fluorescent.zero?
+          definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', lights_frac_compact_fluorescent)
+        end
+        unless lights_frac_high_bay.zero?
+          definition.additionalProperties.setFeature('lpd_fraction_high_bay', lights_frac_high_bay)
+        end
+        unless lights_frac_specialty_lighting.zero?
+          definition.additionalProperties.setFeature('lpd_fraction_specialty_lighting', lights_frac_specialty_lighting)
+        end
+        unless lights_frac_exit_lighting.zero?
+          definition.additionalProperties.setFeature('lpd_fraction_exit_lighting', lights_frac_exit_lighting)
+        end
       end
 
       # If additional lights are specified, add those too
@@ -432,7 +452,7 @@ class Standard
       # Modify each instance
       space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
         unless infiltration_per_area_ext.zero?
-          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get.round(13))
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
         end
         unless infiltration_per_area_ext_wall.zero?

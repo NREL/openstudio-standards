@@ -1,0 +1,52 @@
+{
+  "boilers": [
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 299999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": 0.8,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": null,
+      "efffplr": "Boiler with No Minimum Turndown",
+      "notes": "From 90.1-2004"
+    },
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 300000.0,
+      "maximum_capacity": "2.49999999E8",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": 0.75,
+      "minimum_combustion_efficiency": null,
+      "efffplr": "Boiler with No Minimum Turndown",
+      "notes": "From 90.1-2004"
+    },
+    {
+      "template": "90.1-2004",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": "2.5E8",
+      "maximum_capacity": "9.999999999E9",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.8,
+      "efffplr": "Boiler with No Minimum Turndown",
+      "notes": "From 90.1-2004"
+    }
+  ]
+}
