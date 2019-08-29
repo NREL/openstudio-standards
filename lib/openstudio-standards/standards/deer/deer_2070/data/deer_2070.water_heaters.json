@@ -1,0 +1,38 @@
+{
+  "water_heaters": [
+    {
+      "template": "DEER 2070",
+      "fuel_type": "NaturalGas",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 99999.99,
+      "start_date": "1919-09-18T00:00:00+00:00",
+      "end_date": "2999-09-18T00:00:00+00:00",
+      "energy_factor_base": null,
+      "energy_factor_volume_derate": null,
+      "standby_loss_base": null,
+      "standby_loss_capacity_allowance": 398.0,
+      "standby_loss_volume_allowance": 50.0,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": 0.99,
+      "notes": "(projected) EnergyStar Commercial Water Heater from Energy Savings Potential and RD&D Opportunities for Commercial Building Appliances (2015 Update) June 2016"
+    },
+    {
+      "template": "DEER 2070",
+      "fuel_type": "NaturalGas",
+      "minimum_capacity": 100000.0,
+      "maximum_capacity": "9.9999999E7",
+      "start_date": "1919-09-27T00:00:00+00:00",
+      "end_date": "2999-09-27T00:00:00+00:00",
+      "energy_factor_base": null,
+      "energy_factor_volume_derate": null,
+      "standby_loss_base": null,
+      "standby_loss_capacity_allowance": 398.0,
+      "standby_loss_volume_allowance": 50.0,
+      "hourly_loss_base": null,
+      "hourly_loss_volume_allowance": null,
+      "thermal_efficiency": 0.99,
+      "notes": "(projected) EnergyStar Commercial Water Heater from Energy Savings Potential and RD&D Opportunities for Commercial Building Appliances (2015 Update) June 2016"
+    }
+  ]
+}

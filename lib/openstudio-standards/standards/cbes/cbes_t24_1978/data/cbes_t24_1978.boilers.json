@@ -1,0 +1,20 @@
+{
+  "boilers": [
+    {
+      "template": "CBES T24 1978",
+      "fluid_type": "Hot Water",
+      "fuel_type": "Gas",
+      "condensing": null,
+      "condensing_control": null,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": "9.999999999E9",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": 0.8,
+      "minimum_combustion_efficiency": null,
+      "efffplr": "Boiler Constant Efficiency Curve",
+      "notes": "From Commercial Building Energy Saver (CBES) Prototype Models: cbes.lbl.gov"
+    }
+  ]
+}

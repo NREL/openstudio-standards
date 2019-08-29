@@ -1,0 +1,11 @@
+{
+  "economizers": [
+    {
+      "template": "CBES T24 2005",
+      "climate_zone": "Any",
+      "data_center": false,
+      "capacity_limit": 65000.0,
+      "notes": "Same as 90.1-2004"
+    }
+  ]
+}

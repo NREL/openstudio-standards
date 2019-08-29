@@ -1,0 +1,50 @@
+{
+  "unitary_acs": [
+    {
+      "template": "DEER Pre-1975",
+      "cooling_type": "AirCooled",
+      "heating_type": "Any",
+      "subcategory": "Single Package",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "start_date": "2016-01-01T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_seasonal_energy_efficiency_ratio": 9.7,
+      "minimum_energy_efficiency_ratio": null,
+      "minimum_integrated_part_load_value": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "ptac_eer_coefficient_1": null,
+      "ptac_eer_coefficient_2": null,
+      "minimum_scop": null,
+      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
+    },
+    {
+      "template": "DEER Pre-1975",
+      "cooling_type": "AirCooled",
+      "heating_type": "Any",
+      "subcategory": "Split System",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "start_date": "2016-01-01T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_seasonal_energy_efficiency_ratio": 10.0,
+      "minimum_energy_efficiency_ratio": null,
+      "minimum_integrated_part_load_value": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "ptac_eer_coefficient_1": null,
+      "ptac_eer_coefficient_2": null,
+      "minimum_scop": null,
+      "cool_cap_ft": "SpltAC1Sp_ClCap_fT",
+      "cool_cap_fflow": "DXCOOL-NECB2011-REF-CAPFFLOW",
+      "cool_eir_ft": "SpltAC1Sp_EIR_fT",
+      "cool_eir_fflow": "DXCOOL-NECB2011-REF-COOLEIRFFLOW",
+      "cool_plf_fplr": "DXCOOL-NECB2011-REF-COOLPLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = AC; extracted from MASControl2"
+    }
+  ]
+}

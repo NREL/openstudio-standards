@@ -1,3 +1,4 @@
 /build/
 /coverage/
 **/reports/
+/circleci_tests.json

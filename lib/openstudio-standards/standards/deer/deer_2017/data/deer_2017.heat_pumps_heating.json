@@ -1,0 +1,24 @@
+{
+  "heat_pumps_heating": [
+    {
+      "template": "DEER 2017",
+      "cooling_type": "AirCooled",
+      "subcategory": "Split System",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 34895.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_heating_seasonal_performance_factor": null,
+      "minimum_coefficient_of_performance_heating": 3.48,
+      "minimum_energy_efficiency_ratio": 11.92957747,
+      "pthp_cop_coefficient_1": null,
+      "pthp_cop_coefficient_2": null,
+      "heat_cap_ft": "SpltHP1SpCom_HtCap_fT",
+      "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+      "heat_eir_ft": "SpltAC1Sp_EIR_fT",
+      "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+      "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+      "notes": "From DEER PkgAC.csv Subtype = HP; extracted from MASControl2"
+    }
+  ]
+}

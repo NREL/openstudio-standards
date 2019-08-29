@@ -1124,6 +1124,9 @@ Standard.class_eval do
     # hot water coil convergence tolerances?
     model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
 
+    # adjust defrost curve limits for coil heating dx single speed
+    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj)}
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end
 
