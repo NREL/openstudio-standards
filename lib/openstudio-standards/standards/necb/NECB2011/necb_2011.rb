@@ -542,7 +542,7 @@ class NECB2011 < Standard
     exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_roof_and_subsurface_area <= 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, no exterior wall area was found, no infiltration will be added.")
       return true
     end
     # Calculate the total infiltration, assuming
