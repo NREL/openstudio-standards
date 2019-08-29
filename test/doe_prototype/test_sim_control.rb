@@ -73,7 +73,7 @@ class TestSimControl < CreateDOEPrototypeBuildingTest
             'ConvergenceLimits Maximum HVAC Iterations' => [max_hvac_iter, 20]
         }
         asserts.each do |assert_key, assert_content|
-          assert(assert_content[0] == assert_content[1], "#{building_type} #{template} - #{assert_key}")
+          assert(assert_content[0].to_s.to_f == assert_content[1].to_s.to_f, "#{building_type} #{template} - #{assert_key} - #{assert_content[0]}:#{assert_content[1]}")
         end
       end
     end
