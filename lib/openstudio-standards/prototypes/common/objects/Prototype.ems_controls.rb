@@ -3,6 +3,11 @@ class Standard
   # @ref [References::CBERadiantSystems]
   # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
+  # @param radiant_type [String] determines the surface of the radiant system for surface temperature output reporting
+  #   options are 'floor' and 'ceiling'
+  # @param model_occ_hr_start [Double] Starting hour of building occupancy
+  # @param model_occ_hr_end [Double] Ending hour of building occupancy
+  # @TODO model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
   # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
   # @param minimum_operation [Double] Minimum number of hours of operation for radiant system before it shuts off.
   # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
@@ -10,6 +15,8 @@ class Standard
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def ems_radiant_proportional_controls(model, zone, radiant_loop,
                                         radiant_type: 'floor',
+                                        model_occ_hr_start: 6.0,
+                                        model_occ_hr_end: 18.0,
                                         proportional_gain: 0.3,
                                         minimum_operation: 1,
                                         weekend_temperature_reset: 2,
@@ -20,11 +27,6 @@ class Standard
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
     coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
     coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
-
-    # zone occupancy hours
-    # @TODO harvest from schedules
-    model_occ_hr_start = 6
-    model_occ_hr_end = 18
 
     #####
     # List of schedule objects used to hold calculation results
