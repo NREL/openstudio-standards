@@ -151,22 +151,6 @@ class Standard
       occ_hr_end = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_hr_end')
     end
 
-    # Duration of the occupied time in hours. Calculated from start start and end of occupied time.
-    occ_duration = model.getEnergyManagementSystemGlobalVariableByName('occ_duration')
-    if occ_duration.is_initialized
-      occ_duration = occ_duration.get
-    else
-      occ_duration = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_duration')
-    end
-
-    # Duration of the unoccupied time in hours.
-    unocc_duration = model.getEnergyManagementSystemGlobalVariableByName('unocc_duration')
-    if unocc_duration.is_initialized
-      unocc_duration = unocc_duration.get
-    else
-      unocc_duration = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'unocc_duration')
-    end
-
     # Proportional  gain constant (recommended 0.3 or less).
     prp_k = model.getEnergyManagementSystemGlobalVariableByName('prp_k')
     if prp_k.is_initialized
@@ -395,8 +379,6 @@ class Standard
       set_constant_values_prg_body = <<-EMS
         SET occ_hr_start       = #{model_occ_hr_start},
         SET occ_hr_end         = #{model_occ_hr_end},
-        SET occ_duration       = occ_hr_end - occ_hr_start,
-        SET unocc_duration     = 24 - occ_duration,
         SET prp_k              = #{proportional_gain},
         SET min_oper           = #{minimum_operation},
         SET ctrl_temp_offset   = 0.5,
