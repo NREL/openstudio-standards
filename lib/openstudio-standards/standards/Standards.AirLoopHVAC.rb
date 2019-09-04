@@ -100,16 +100,6 @@ class Standard
       ## end
     end
 
-    # Single zone systems
-    if air_loop_hvac.thermalZones.size == 1
-      air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-        if fan.to_FanVariableVolume.is_initialized
-          fan_variable_volume_set_control_type(fan, 'Single Zone VAV Fan')
-        end
-      end
-      air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
-    end
-
     # DCV
     if air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
@@ -170,8 +160,16 @@ class Standard
     end
 
     # Optimum Start
-    if air_loop_hvac_optimum_start_required?(air_loop_hvac)
-      air_loop_hvac_enable_optimum_start(air_loop_hvac)
+    air_loop_hvac_enable_optimum_start(air_loop_hvac) if air_loop_hvac_optimum_start_required?(air_loop_hvac)
+
+    # Single zone systems
+    if air_loop_hvac.thermalZones.size == 1
+      air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
+        if fan.to_FanVariableVolume.is_initialized
+          fan_variable_volume_set_control_type(fan, 'Single Zone VAV Fan')
+        end
+      end
+      air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     end
   end
 
