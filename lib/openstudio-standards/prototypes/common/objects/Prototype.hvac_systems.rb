@@ -197,8 +197,11 @@ class Standard
   # @param num_chillers [Integer] the number of chillers
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop for water-cooled chillers.
   #   If this is not passed in, the chillers will be air cooled.
-  # @param add_waterside_economizer [Bool] If true, will add an ideal heat exchanger between the condenser loop
-  #   and plant loop to enable waterside economizer when wet bulb temperatures allow
+  # @param waterside_economizer [String] Options are 'none', 'integrated', 'non-integrated'.
+  #   If 'integrated' will add a heat exchanger to the supply inlet of the chilled water loop
+  #     to provide waterside economizing whenever wet bulb temperatures allow
+  #   If 'non-integrated' will add a heat exchanger in parallel with the chiller that will operate
+  #     only when it can meet cooling demand exclusively with the waterside economizing.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
   def model_add_chw_loop(model,
                          system_name: 'Chilled Water Loop',
@@ -211,7 +214,7 @@ class Standard
                          chiller_compressor_type: nil,
                          num_chillers: 1,
                          condenser_water_loop: nil,
-                         add_waterside_economizer: false)
+                         waterside_economizer: 'none')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding chilled water loop.')
 
     # create chilled water loop
@@ -339,25 +342,15 @@ class Standard
     end
 
     # enable waterside economizer if requested
-    if add_waterside_economizer && !condenser_water_loop.nil?
-      # make new heat exchanger
-      heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
-      heat_exchanger.setName('Waterside Economizer Heat Exchanger')
-      heat_exchanger.setHeatExchangeModelType('Ideal')
-      heat_exchanger.setControlType('CoolingSetpointOnOff')
-      heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(4.0, 'R', 'K').get)
-      heat_exchanger.setHeatTransferMeteringEndUseType('FreeCooling')
-      heat_exchanger.setOperationMinimumTemperatureLimit(OpenStudio.convert(35.0, 'F', 'C').get)
-      heat_exchanger.setOperationMaximumTemperatureLimit(OpenStudio.convert(72.0, 'F', 'C').get)
-
-      # add heat exchanger to condenser water loop
-      condenser_water_loop.addDemandBranchForComponent(heat_exchanger)
-
-      # add heat exchanger to chilled water loop
-      chilled_water_loop_supply_inlet_node = chilled_water_loop.supplyInletNode
-      heat_exchanger.addToNode(chilled_water_loop_supply_inlet_node)
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name.to_s} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
+    unless condenser_water_loop.nil?
+      case waterside_economizer
+      when 'integrated'
+        model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                       integrated: true)
+      when 'non-integrated'
+        model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                       integrated: false)
+      end
     end
 
     # chilled water loop pipes
@@ -5178,6 +5171,114 @@ class Standard
   def model_cw_loop_cooling_tower_fan_type(model)
     fan_type = 'TwoSpeed Fan'
     return fan_type
+  end
+
+  # Adds a waterside economizer to the chilled water and condenser loop
+  #
+  # @param integrated [Bool] when set to true, models an integrated waterside economizer
+  #   Integrated: in series with chillers, can run simultaneously with chillers
+  #   Non-Integrated: in parallel with chillers, chillers locked out during operation
+  def model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                     integrated: true)
+
+    # make a new heat exchanger
+    heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
+    heat_exchanger.setHeatExchangeModelType('CounterFlow')
+    heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(4.0, 'R', 'K').get)
+    heat_exchanger.setHeatTransferMeteringEndUseType('FreeCooling')
+    heat_exchanger.setOperationMinimumTemperatureLimit(OpenStudio.convert(35.0, 'F', 'C').get)
+    heat_exchanger.setOperationMaximumTemperatureLimit(OpenStudio.convert(72.0, 'F', 'C').get)
+    heat_exchanger.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+
+    if integrated
+      heat_exchanger.setName('Integrated Waterside Economizer Heat Exchanger')
+      heat_exchanger.setControlType('CoolingDifferentialOnOff')
+
+      # add the heat exchanger to the chilled water loop upstream of the chiller
+      heat_exchanger.addToNode(chilled_water_loop.supplyInletNode)
+    else
+      heat_exchanger.setName('Non-Integrated Waterside Economizer Heat Exchanger')
+      heat_exchanger.setControlType('CoolingSetpointOnOffWithComponentOverride')
+
+      # add the heat exchanger to a supply side branch of the chilled water loop parallel with the chiller(s)
+      chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
+
+      # get the chiller to use with the interlock.
+      # if the heat exchanger can meet the entire load, the heat exchanger will run and the chiller is disabled.
+      # In E+, only one chiller can be tied to a given heat exchanger, so if you have multiple chillers,
+      # they will cannot be tied to a single heat exchanger without EMS.
+      chiller = nil
+      chillers = chilled_water_loop.supplyComponents('OS:Chiller:Electric:EIR'.to_IddObjectType)
+      if chillers.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; cannot add a non-integrated waterside economizer.")
+        heat_exchanger.setControlType('CoolingSetpointOnOff')
+      elsif chillers.size > 1
+        chiller = chillers.sort[0]
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "More than one chiller was found on #{chilled_water_loop.name}.  EnergyPlus only allows a single chiller to be interlocked with the HX.  Chiller #{chiller.name} was selected.  Additional chillers will not be locked out during HX operation.")
+      else # 1 chiller
+        chiller = chillers[0]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Chiller '#{chiller.name}' will be locked out during HX operation.")
+      end
+      chiller = chiller.to_ChillerElectricEIR.get
+
+      # Copy the setpoint managers from the plant's supply outlet node to the chillers and HX outlets.
+      # This is necessary so that the correct type of operation scheme will be created.
+      # Without this, OS will create an uncontrolled operation scheme and the chillers will never run.
+      chw_spms = chilled_water_loop.supplyOutletNode.setpointManagers
+      objs = []
+      chillers.each do |obj|
+        objs << obj.to_ChillerElectricEIR.get
+      end
+      objs << heat_exchanger
+      objs.each do |obj|
+        outlet = obj.supplyOutletModelObject.get.to_Node.get
+        chw_spms.each do |spm|
+          new_spm = spm.clone.to_SetpointManager.get
+          new_spm.addToNode(outlet)
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Copied SPM #{spm.name} to the outlet of #{obj.name}.")
+        end
+      end
+
+      # set the supply and demand inlet fields to interlock the heat exchanger with the chiller
+      chiller_supply_inlet = chiller.supplyInletModelObject.get.to_Node.get
+      heat_exchanger.setComponentOverrideLoopSupplySideInletNode(chiller_supply_inlet)
+      chiller_demand_inlet = chiller.demandInletModelObject.get.to_Node.get
+      heat_exchanger.setComponentOverrideLoopDemandSideInletNode(chiller_demand_inlet)
+
+      # check if the chilled water pump is on a branch with the chiller.
+      # if it is, move this pump before the splitter so that it can push water through either the chiller or the heat exchanger.
+      pumps_on_branches = []
+      # search for constant and variable speed pumps  between supply splitter and supply mixer.
+      chilled_water_loop.supplyComponents(chilled_water_loop.supplySplitter, chilled_water_loop.supplyMixer).each do |supply_comp|
+        if supply_comp.to_PumpConstantSpeed.is_initialized
+          pumps_on_branches << supply_comp.to_PumpConstantSpeed.get
+        elsif supply_comp.to_PumpVariableSpeed.is_initialized
+          pumps_on_branches << supply_comp.to_PumpVariableSpeed.get
+        end
+      end
+      # If only one pump is found, clone it, put the clone on the supply inlet node, and delete the original pump.
+      # If multiple branch pumps, clone the first pump found, add it to the inlet of the heat exchanger, and warn user.
+      if pumps_on_branches.size == 1
+        pump = pumps_on_branches[0]
+        pump_clone = pump.clone(model).to_StraightComponent.get
+        pump_clone.addToNode(chilled_water_loop.supplyInletNode)
+        pump.remove
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Since you need a pump to move water through the HX, the pump serving the chiller was moved so that it can also serve the HX depending on the desired control sequence.')
+      elsif pumps_on_branches.size > 1
+        hx_inlet_node = heat_exchanger.inletModelObject.get.to_Node.get
+        pump = pumps_on_branches[0]
+        pump_clone = pump.clone(model).to_StraightComponent.get
+        pump_clone.addToNode(hx_inlet_node)
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Found 2 or more pumps on branches.  Since you need a pump to move water through the HX, the first pump encountered was copied and placed in series with the HX.  This pump might not be reasonable for this duty, please check.')
+      end
+    end
+
+    # add heat exchanger to condenser water loop
+    condenser_water_loop.addDemandBranchForComponent(heat_exchanger)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
+
+    return heat_exchanger
   end
 
   # Get the existing hot water loop in the model or add a new one if there isn't one already.
