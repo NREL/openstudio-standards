@@ -4353,13 +4353,13 @@ class Standard
 
       # set radiant loop controls
       if control_strategy == 'proportional_control'
-        ems_radiant_proportional_controls(model, zone, radiant_loop,
-                                          radiant_type: radiant_type,
-                                          proportional_gain: proportional_gain,
-                                          minimum_operation: minimum_operation,
-                                          weekend_temperature_reset: weekend_temperature_reset,
-                                          early_reset_out_arg: early_reset_out_arg,
-                                          switch_over_time: switch_over_time)
+        model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                                radiant_type: radiant_type,
+                                                proportional_gain: proportional_gain,
+                                                minimum_operation: minimum_operation,
+                                                weekend_temperature_reset: weekend_temperature_reset,
+                                                early_reset_out_arg: early_reset_out_arg,
+                                                switch_over_time: switch_over_time)
       end
     end
 

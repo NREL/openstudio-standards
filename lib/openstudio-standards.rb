@@ -261,7 +261,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
-  require_relative "#{proto}/common/objects/Prototype.ems_controls"
+  require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
   require_relative "#{proto}/common/objects/Prototype.FanOnOff"

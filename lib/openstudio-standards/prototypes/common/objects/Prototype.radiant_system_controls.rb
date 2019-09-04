@@ -13,15 +13,15 @@ class Standard
   # @param weekend_temperature_reset [Double] Weekend temperature reset for slab temperature setpoint in degree Celsius.
   # @param early_reset_out_arg [Double] Time at which the weekend temperature reset is removed.
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
-  def ems_radiant_proportional_controls(model, zone, radiant_loop,
-                                        radiant_type: 'floor',
-                                        model_occ_hr_start: 6.0,
-                                        model_occ_hr_end: 18.0,
-                                        proportional_gain: 0.3,
-                                        minimum_operation: 1,
-                                        weekend_temperature_reset: 2,
-                                        early_reset_out_arg: 20,
-                                        switch_over_time: 24.0)
+  def model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                              radiant_type: 'floor',
+                                              model_occ_hr_start: 6.0,
+                                              model_occ_hr_end: 18.0,
+                                              proportional_gain: 0.3,
+                                              minimum_operation: 1,
+                                              weekend_temperature_reset: 2,
+                                              early_reset_out_arg: 20,
+                                              switch_over_time: 24.0)
 
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
