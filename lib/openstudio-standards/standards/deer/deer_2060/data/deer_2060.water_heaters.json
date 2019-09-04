@@ -21,7 +21,7 @@
       "template": "DEER 2060",
       "fuel_type": "NaturalGas",
       "minimum_capacity": 100000.0,
-      "maximum_capacity": "9.9999999E7",
+      "maximum_capacity": 99999999.0,
       "start_date": "1919-09-27T00:00:00+00:00",
       "end_date": "2999-09-27T00:00:00+00:00",
       "energy_factor_base": null,

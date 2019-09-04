@@ -2,7 +2,7 @@
   "heat_rejection": [
     {
       "template": "90.1-2004",
-      "equipment_type": "Open Cooling Tower",
+      "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
@@ -11,7 +11,7 @@
     },
     {
       "template": "90.1-2004",
-      "equipment_type": "Open Cooling Tower",
+      "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
@@ -20,7 +20,7 @@
     },
     {
       "template": "90.1-2004",
-      "equipment_type": "Closed Cooling Tower",
+      "equipment_type": "Open Cooling Tower",
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
@@ -29,7 +29,7 @@
     },
     {
       "template": "90.1-2004",
-      "equipment_type": "Closed Cooling Tower",
+      "equipment_type": "Open Cooling Tower",
       "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
