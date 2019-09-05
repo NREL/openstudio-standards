@@ -5276,6 +5276,25 @@ class Standard
     # add heat exchanger to condenser water loop
     condenser_water_loop.addDemandBranchForComponent(heat_exchanger)
 
+    # change setpoint manager on condenser water loop to allow waterside economizing
+    dsgn_sup_wtr_temp_f = 42.0
+    dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp_f, 'F', 'C').get
+    condenser_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
+        spm = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
+        spm.setMinimumSetpointTemperature(dsgn_sup_wtr_temp_c)
+      elsif spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        cw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                          dsgn_sup_wtr_temp_c,
+                                                          name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F")
+        spm.setSchedule(cw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing condenser water loop setpoint for '#{condenser_water_loop.name}' to '#{cw_temp_sch.name}' to account for the waterside economizer.")
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Condenser water loop '#{condenser_water_loop.name}' setpoint manager '#{spm.name}' is not a recognized setpoint manager type.  Cannot change to account for the waterside economizer.")
+      end
+    end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
 
     return heat_exchanger
