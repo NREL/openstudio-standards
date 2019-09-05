@@ -214,6 +214,56 @@ class Standard
                                      hot_water_loop: hot_water_loop,
                                      ventilation: false)
 
+      when 'Packaged DOAS'
+        # Retrieve the existing hot water loop or add a new one if necessary.
+        hot_water_loop = nil
+        hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
+                           model.getPlantLoopByName('Hot Water Loop').get
+                         else
+                           model_add_hw_loop(model, 'NaturalGas')
+                         end
+        # check inputs
+        doas_type = system['doas_type'] ? system['doas_type'] : 'DOASCV'
+        econo_ctrl_mthd = system['economizer_control_method'] ? system['economizer_control_method'] : 'NoEconomizer'
+        doas_control_strategy = system['doas_control_strategy'] ? system['doas_control_strategy'] : 'NeutralSupplyAir'
+        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] ? system['cooling_design_supply_air_temperature'] : 60.0
+        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] ? system['heating_design_supply_air_temperature'] : 70.0
+
+        # for boolean input, this makes sure we get the correct input translation
+        if system['include_exhaust_fan'].nil? || true?(system['include_exhaust_fan'])
+          include_exhaust_fan = true
+        else
+          include_exhaust_fan = false
+        end
+        if system['energy_recovery'].nil? || true?(system['energy_recovery'])
+          energy_recovery = true
+        else
+          energy_recovery = false
+        end
+        if true?(system['demand_control_ventilation'])
+          demand_control_ventilation = true
+        else
+          demand_control_ventilation = false
+        end
+
+        model_add_doas(model,
+                       thermal_zones,
+                       system_name: system['name'],
+                       doas_type: doas_type,
+                       hot_water_loop: hot_water_loop,
+                       chilled_water_loop: nil,
+                       hvac_op_sch: system['operation_schedule'],
+                       min_oa_sch: system['oa_damper_schedule'],
+                       min_frac_oa_sch: system['minimum_fraction_of_outdoor_air_schedule'],
+                       fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
+                       econo_ctrl_mthd: econo_ctrl_mthd,
+                       include_exhaust_fan: include_exhaust_fan,
+                       energy_recovery: energy_recovery,
+                       demand_control_ventilation: demand_control_ventilation,
+                       doas_control_strategy: doas_control_strategy,
+                       clg_dsgn_sup_air_temp: clg_dsgn_sup_air_temp,
+                       htg_dsgn_sup_air_temp: htg_dsgn_sup_air_temp)
+
       when 'DC' # Data Center in Large Office building
         # Retrieve the existing hot water loop
         # or add a new one if necessary.

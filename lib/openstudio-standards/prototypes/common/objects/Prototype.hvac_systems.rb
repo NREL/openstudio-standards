@@ -1268,7 +1268,7 @@ class Standard
     sat_oa_reset.setName("#{air_loop.name} SAT Reset")
     sat_oa_reset.setControlVariable('Temperature')
     sat_oa_reset.setSetpointatOutdoorLowTemperature(htg_dsgn_sup_air_temp_c)
-    sat_oa_reset.setOutdoorLowTemperature(OpenStudio.convert(60.0, 'F', 'C').get)
+    sat_oa_reset.setOutdoorLowTemperature(OpenStudio.convert(55.0, 'F', 'C').get)
     sat_oa_reset.setSetpointatOutdoorHighTemperature(clg_dsgn_sup_air_temp_c)
     sat_oa_reset.setOutdoorHighTemperature(OpenStudio.convert(70.0, 'F', 'C').get)
     sat_oa_reset.addToNode(air_loop.supplyOutletNode)
@@ -1324,7 +1324,18 @@ class Standard
       # make an air terminal for the zone
       if doas_type == 'DOASCV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      else # 'DOASVAV'
+      elsif doas_type == 'DOASVAVReheat'
+        # Reheat coil
+        if hot_water_loop.nil?
+          rht_coil = create_coil_heating_electric(model, name: "#{zone.name} Electric Reheat Coil")
+        else
+          rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Reheat Coil")
+        end
+        # VAV reheat terminal
+        air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
+        air_terminal.setZoneMinimumAirFlowMethod('Constant')
+        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation # may not be necessary
+      else  # 'DOASVAV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
         air_terminal.setConstantMinimumAirFlowFraction(0.1)
