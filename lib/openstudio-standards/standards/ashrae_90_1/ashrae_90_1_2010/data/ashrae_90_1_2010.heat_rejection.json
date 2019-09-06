@@ -2,24 +2,6 @@
   "heat_rejection": [
     {
       "template": "90.1-2010",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Centrifugal",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
-      "notes": "From 90.1-2010 Table 6.8.1 G"
-    },
-    {
-      "template": "90.1-2010",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Propeller or Axial",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 38.2,
-      "notes": "From 90.1-2010 Table 6.8.1 G"
-    },
-    {
-      "template": "90.1-2010",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
@@ -34,6 +16,24 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 14.0,
+      "notes": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+      "template": "90.1-2010",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Centrifugal",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 20.0,
+      "notes": "From 90.1-2010 Table 6.8.1 G"
+    },
+    {
+      "template": "90.1-2010",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance": 38.2,
       "notes": "From 90.1-2010 Table 6.8.1 G"
     }
   ]

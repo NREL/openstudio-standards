@@ -2,24 +2,6 @@
   "chillers": [
     {
       "template": "NREL ZNE Ready 2017",
-      "cooling_type": "WaterCooled",
-      "condenser_type": null,
-      "compressor_type": "Rotary Screw",
-      "absorption_type": null,
-      "variable_speed_drive": null,
-      "minimum_capacity": 0.0,
-      "maximum_capacity": 9999.0,
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_full_load_efficiency": 0.62,
-      "minimum_integrated_part_load_value": 0.54,
-      "capft": "ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI",
-      "eirft": "ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI",
-      "eirfplr": "ChlrWtrPosDispPathAAllEIRRatio_fQRatio",
-      "notes": "Same as large water cooled screw chillers from 90.1-2013"
-    },
-    {
-      "template": "NREL ZNE Ready 2017",
       "cooling_type": "AirCooled",
       "condenser_type": null,
       "compressor_type": "Rotary Screw",
@@ -53,6 +35,24 @@
       "eirft": "AirCooled_Chiller_2010_PathA_EIRFT",
       "eirfplr": "AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR",
       "notes": "from ASHRAE 189.1-2018"
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "cooling_type": "WaterCooled",
+      "condenser_type": null,
+      "compressor_type": "Rotary Screw",
+      "absorption_type": null,
+      "variable_speed_drive": null,
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_full_load_efficiency": 0.62,
+      "minimum_integrated_part_load_value": 0.54,
+      "capft": "ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI",
+      "eirft": "ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI",
+      "eirfplr": "ChlrWtrPosDispPathAAllEIRRatio_fQRatio",
+      "notes": "Same as large water cooled screw chillers from 90.1-2013"
     }
   ]
 }

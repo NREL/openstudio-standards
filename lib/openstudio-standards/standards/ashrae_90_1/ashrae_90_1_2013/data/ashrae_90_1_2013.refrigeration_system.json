@@ -2,71 +2,7 @@
   "refrigeration_system": [
     {
       "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": "<35k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R22",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": "35k - 50k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R507a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": ">50k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": "<35k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R22",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": "35k - 50k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R507a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "SuperMarket",
-      "size_category": ">50k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Primary School",
-      "size_category": "Any",
-      "system_type": "Low Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Secondary School",
-      "size_category": "Any",
-      "system_type": "Low Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "90.1-2013",
-      "building_type": "Quick Service Restaurant",
+      "building_type": "Full Service Restaurant",
       "size_category": "Any",
       "system_type": "Low Temperature",
       "refrigerant": "R404a",
@@ -76,7 +12,23 @@
       "template": "90.1-2013",
       "building_type": "Full Service Restaurant",
       "size_category": "Any",
+      "system_type": "Medium temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "Hospital",
+      "size_category": "Any",
       "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "Hospital",
+      "size_category": "Any",
+      "system_type": "Medium temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -90,7 +42,15 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "Hospital",
+      "building_type": "Large Hotel",
+      "size_category": "Any",
+      "system_type": "Medium temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "Primary School",
       "size_category": "Any",
       "system_type": "Low Temperature",
       "refrigerant": "R404a",
@@ -106,9 +66,9 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "Secondary School",
+      "building_type": "Quick Service Restaurant",
       "size_category": "Any",
-      "system_type": "Medium temperature",
+      "system_type": "Low Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
@@ -122,7 +82,15 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "Full Service Restaurant",
+      "building_type": "Secondary School",
+      "size_category": "Any",
+      "system_type": "Low Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "Secondary School",
       "size_category": "Any",
       "system_type": "Medium temperature",
       "refrigerant": "R404a",
@@ -130,17 +98,49 @@
     },
     {
       "template": "90.1-2013",
-      "building_type": "Large Hotel",
-      "size_category": "Any",
-      "system_type": "Medium temperature",
+      "building_type": "SuperMarket",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "SuperMarket",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "SuperMarket",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "SuperMarket",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "90.1-2013",
+      "building_type": "SuperMarket",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
     {
       "template": "90.1-2013",
-      "building_type": "Hospital",
-      "size_category": "Any",
-      "system_type": "Medium temperature",
+      "building_type": "SuperMarket",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     }

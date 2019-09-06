@@ -2,54 +2,6 @@
   "refrigeration_system": [
     {
       "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": "<35k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R22",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": "35k - 50k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R507a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": ">50k ft2",
-      "system_type": "Medium Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": "<35k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R22",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": "35k - 50k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R507a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
-      "building_type": "Gro",
-      "size_category": ">50k ft2",
-      "system_type": "Low Temperature",
-      "refrigerant": "R404a",
-      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
-    },
-    {
-      "template": "DEER 2055",
       "building_type": "EPr",
       "size_category": "Any",
       "system_type": "Medium temperature",
@@ -66,15 +18,55 @@
     },
     {
       "template": "DEER 2055",
-      "building_type": "RFF",
-      "size_category": "Any",
-      "system_type": "Medium temperature",
+      "building_type": "Gro",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "Gro",
+      "size_category": "35k - 50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R507a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "Gro",
+      "size_category": "<35k ft2",
+      "system_type": "Low Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "Gro",
+      "size_category": "<35k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R22",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "Gro",
+      "size_category": ">50k ft2",
+      "system_type": "Low Temperature",
       "refrigerant": "R404a",
       "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
     },
     {
       "template": "DEER 2055",
-      "building_type": "RSD",
+      "building_type": "Gro",
+      "size_category": ">50k ft2",
+      "system_type": "Medium Temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "Hsp",
       "size_category": "Any",
       "system_type": "Medium temperature",
       "refrigerant": "R404a",
@@ -90,7 +82,15 @@
     },
     {
       "template": "DEER 2055",
-      "building_type": "Hsp",
+      "building_type": "RFF",
+      "size_category": "Any",
+      "system_type": "Medium temperature",
+      "refrigerant": "R404a",
+      "suctiontemperaturecontroltype": "ConstantSuctionTemperature"
+    },
+    {
+      "template": "DEER 2055",
+      "building_type": "RSD",
       "size_category": "Any",
       "system_type": "Medium temperature",
       "refrigerant": "R404a",

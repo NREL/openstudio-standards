@@ -23,32 +23,51 @@ class Hash
       if recursive && seed[key].is_a?(Hash)
         seed[key] = seed[key].sort_by_key(true, &block)
       elsif recursive && seed[key].is_a?(Array) && seed[key][0].is_a?(Hash)
-        # Sort logic depends on the tab
-        frst = seed[key][0]
-        if key == 'space_types' # Don't have names
-          seed[key] = seed[key].sort_by {|hsh| [hsh['template'], hsh['climate_zone_set'], hsh['building_type'], hsh['space_type']]}
-        elsif key == 'schedules' # Names are not unique, sort by name then day types
-          seed[key] = seed[key].sort_by {|hsh| [hsh['name'], hsh['start_date'], hsh['day_types']]}
-        elsif key == 'construction_sets'
-          # Replace nil values with 'zzzz' temorarily for sorting
+        # Sort by the set of unique properties
+        uniq_props = unique_properties(key)
+        if uniq_props.size > 0
+          # Temporarily replace real values with placeholders for sorting
+          nil_placeholder = 'zzzz'
+          true_placeholder = 'TRUETRUETRUE'
+          false_placeholder = 'FALSEFALSEFALSE'
           seed[key].each do |item|
             item.keys.each do |key2|
               if item[key2].nil?
-                item[key2] = 'zzzz'
+                item[key2] = nil_placeholder
+              elsif [true].include?(item[key2])
+                item[key2] = true_placeholder
+              elsif [false].include?(item[key2])
+                item[key2] = false_placeholder
+              elsif item[key2].is_a?(String) && /(\d|\.)+E\d/.match(item[key2])
+                # Replace scientific notation strings with floats
+                item[key2] = item[key2].to_f
               end
             end
           end
-          seed[key] = seed[key].sort_by {|hsh| [hsh['template'], hsh['building_type'], hsh['climate_zone_set'], hsh['space_type'], hsh['exterior_walls'], hsh['exterior_roofs'], hsh['exterior_floors']]}
-          # Replace 'zzzz' back to nil
+
+          # Sort
+          seed[key] = seed[key].sort_by do |hsh|
+            sort_order = []
+            uniq_props.each do |prop|
+              if hsh.has_key?(prop)
+                sort_order << hsh[prop]
+              end
+            end
+            sort_order
+          end
+
+          # Replace placeholders with real values
           seed[key].each do |item|
             item.keys.each do |key2|
-              if item[key2] == 'zzzz'
+              if item[key2] == nil_placeholder
                 item[key2] = nil
+              elsif item[key2] == true_placeholder
+                item[key2] = true
+              elsif item[key2] == false_placeholder
+                item[key2] = false
               end
             end
           end
-        elsif frst.has_key?('name') # For all other tabs, names should be unique
-          seed[key] = seed[key].sort_by {|hsh| hsh['name']}
         else
           seed[key] = seed[key]
         end
@@ -57,6 +76,71 @@ class Hash
     end
   end
 
+end
+
+# Defines the set of properties that should be unique across all objects of the same type.
+# This set is used for checking for duplicate objects and for sorting objects in the JSON files.
+def unique_properties(sheet_name)
+  return case sheet_name
+         when 'templates', 'standards', 'climate_zone_sets', 'constructions', 'curves', 'fans'
+           ['name']
+         when 'materials'
+           ['name', 'code_category']
+         when 'space_types', 'space_types_lighting', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
+           ['template', 'building_type', 'space_type']
+         when 'exterior_lighting'
+           ['exterior_lighting_zone_number', 'template']
+         when 'schedules'
+           ['name', 'day_types', 'start_date', 'end_date']
+         when 'construction_properties'
+           ['template', 'climate_zone_set', 'operation_type', 'intended_surface_type', 'standards_construction_type', 'building_category', 'orientation', 'minimum_percent_of_surface', 'maximum_percent_of_surface']
+         when 'boilers'
+           ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'chillers'
+           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'heat_rejection'
+           ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
+         when 'heat_pumps'
+           ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'heat_pumps_heating'
+           ['template', 'cooling_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'unitary_acs'
+           ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'water_heaters'
+           ['template', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'elevators'
+           ['template', 'building_type']
+         when 'refrigeration_system_lineup', 'refrigeration_system'
+           ['template', 'building_type', 'size_category', 'system_type']
+         when 'refrigerated_cases'
+           ['template', 'size_category', 'case_type', 'case_category']
+         when 'refrigeration_condenser'
+           ['template', 'building_type', 'system_type', 'size_category']
+         when 'refrigeration_walkins'
+           ['template', 'size_category', 'walkin_type']
+         when 'refrigeration_compressors'
+           ['template', 'compressor_name', 'compressor_type']
+         when 'economizers'
+           ['template', 'climate_zone', 'data_center']
+         when 'motors'
+           ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
+         when 'ground_temperatures'
+           ['building_type', 'template', 'climate_zone']
+         when 'hvac_inference'
+           ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
+         when 'size_category'
+           ['template', 'building_category', 'minimum_floors', 'maximum_floors', 'minimum_area', 'maximum_area']
+         when 'construction_sets'
+           ['template', 'building_type', 'space_type', 'is_residential']
+         when 'parking', 'entryways'
+           ['building_type']
+         when 'prototype_inputs'
+           ['template', 'building_type', 'hvac_system']
+         when 'climate_zones'
+           ['name', 'standard']
+         else
+           []
+         end
 end
 
 # Determine the directory of the data based on the spreadsheet name
@@ -422,66 +506,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
       next if skip_duplicate_check.include?(sheet_name)
 
       # Defines the set of properties that should be unique across all objects of the same type
-      unique_props = case sheet_name
-                     when 'templates', 'standards', 'climate_zone_sets', 'constructions', 'curves', 'fans'
-                       ['name']
-                     when 'materials'
-                       ['name', 'code_category']
-                     when 'space_types_lighting', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
-                       ['template', 'building_type', 'space_type']
-                     when 'exterior_lighting'
-                       ['exterior_lighting_zone_number', 'template']
-                     when 'schedules'
-                       ['name', 'day_types', 'start_date', 'end_date']
-                     when 'construction_properties'
-                       ['template', 'climate_zone_set', 'operation_type', 'intended_surface_type', 'standards_construction_type', 'building_category', 'orientation', 'minimum_percent_of_surface', 'maximum_percent_of_surface']
-                     when 'boilers'
-                       ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'chillers'
-                       ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'heat_rejection'
-                       ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
-                     when 'heat_pumps'
-                       ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'heat_pumps_heating'
-                       ['template', 'cooling_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'unitary_acs'
-                       ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'water_heaters'
-                       ['template', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
-                     when 'elevators'
-                       ['template', 'building_type']
-                     when 'refrigeration_system_lineup', 'refrigeration_system'
-                       ['template', 'building_type', 'size_category', 'system_type']
-                     when 'refrigerated_cases'
-                       ['template', 'size_category', 'case_type', 'case_category']
-                     when 'refrigeration_condenser'
-                       ['template', 'building_type', 'system_type', 'size_category']
-                     when 'refrigeration_walkins'
-                       ['template', 'size_category', 'walkin_type']
-                     when 'refrigeration_compressors'
-                       ['template', 'compressor_name', 'compressor_type']
-                     when 'economizers'
-                       ['template', 'climate_zone', 'data_center']
-                     when 'motors'
-                       ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
-                     when 'ground_temperatures'
-                       ['building_type', 'template', 'climate_zone']
-                     when 'hvac_inference'
-                       ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
-                     when 'size_category'
-                       ['template', 'building_category', 'minimum_floors', 'maximum_floors', 'minimum_area', 'maximum_area']
-                     when 'construction_sets'
-                       ['template', 'building_type', 'space_type', 'is_residential']
-                     when 'parking', 'entryways'
-                       ['building_type']
-                     when 'prototype_inputs'
-                       ['template', 'building_type', 'hvac_system']
-                     when 'climate_zones'
-                       ['name', 'standard']
-                     else
-                       []
-                     end
+      unique_props = unique_properties(sheet_name)
       # Ensure that a set of properties was defined
       if unique_props.empty?
         puts "--ERROR no unique set of properties was defined for #{sheet_name}, cannot check for duplicates"
