@@ -38,7 +38,7 @@ class Hash
                 item[key2] = true_placeholder
               elsif [false].include?(item[key2])
                 item[key2] = false_placeholder
-              elsif item[key2].is_a?(String) && /(\d|\.)*E\d/.match(item[key2])
+              elsif item[key2].is_a?(String) && /(\d|\.)+E\d/.match(item[key2])
                 # Replace scientific notation strings with floats
                 item[key2] = item[key2].to_f
               end
