@@ -2182,9 +2182,9 @@ class Standard
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param cooling_type [String] valid choices are Water, Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump, Water To Air Heat Pump
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coil to, or nil
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to, or nil
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, Single Speed Heat Pump, Water To Air Heat Pump, or nil (no heat)
   # @param supplemental_heating_type [String] valid choices are Electricity, NaturalGas,  nil (no heat)
-  # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to, or nil
   # @param fan_location [String] valid choices are BlowThrough, DrawThrough
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
@@ -2195,9 +2195,9 @@ class Standard
                        system_name: nil,
                        cooling_type: 'Single Speed DX AC',
                        chilled_water_loop: nil,
+                       hot_water_loop: nil,
                        heating_type: nil,
                        supplemental_heating_type: nil,
-                       hot_water_loop: nil,
                        fan_location: 'DrawThrough',
                        fan_type: 'ConstantVolume',
                        hvac_op_sch: nil,
@@ -4943,16 +4943,21 @@ class Standard
 
     when 'PSZ-AC'
       case main_heat_fuel
-      when 'NaturalGas'
+      when 'NaturalGas', 'Gas'
         heating_type = main_heat_fuel
         supplemental_heating_type = 'Electricity'
-        hot_water_loop = nil
+        if air_loop_heating_type == 'Water'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        else
+          hot_water_loop = nil
+        end
       when 'DistrictHeating'
         heating_type = 'Water'
         supplemental_heating_type = 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
-      when 'AirSourceHeatPump'
+      when 'AirSourceHeatPump', 'ASHP'
         heating_type = 'Water'
         supplemental_heating_type = 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
@@ -4961,7 +4966,7 @@ class Standard
         heating_type = main_heat_fuel
         supplemental_heating_type = 'Electricity'
       else
-        heating_type = nil
+        heating_type = zone_heat_fuel
         supplemental_heating_type = nil
         hot_water_loop = nil
       end
@@ -4979,9 +4984,9 @@ class Standard
                        zones,
                        cooling_type: cooling_type,
                        chilled_water_loop: chilled_water_loop,
+                       hot_water_loop: hot_water_loop,
                        heating_type: heating_type,
                        supplemental_heating_type: supplemental_heating_type,
-                       hot_water_loop: hot_water_loop,
                        fan_location: 'DrawThrough',
                        fan_type: 'ConstantVolume')
 
@@ -5008,6 +5013,7 @@ class Standard
                         supplemental_heating_type: supplemental_heating_type,
                         hvac_op_sch: nil,
                         oa_damper_sch: nil)
+
     when 'VRF'
       model_add_vrf(model,
                     zones)
