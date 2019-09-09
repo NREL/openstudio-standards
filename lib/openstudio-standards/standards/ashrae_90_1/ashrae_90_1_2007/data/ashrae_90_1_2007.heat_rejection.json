@@ -6,7 +6,7 @@
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20,
+      "minimum_performance": 20.0,
       "notes": "From 90.1-2007 Table 6.8.1G"
     },
     {
@@ -24,7 +24,7 @@
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20,
+      "minimum_performance": 20.0,
       "notes": "From 90.1-2007 Table 6.8.1G"
     },
     {
