@@ -2195,10 +2195,10 @@
       "elevator_schedule": null,
       "elevator_fan_schedule": null,
       "nonmetal_framing": null,
-      "crac_cooling_type": null,
-      "crac_fan_type": null,
-      "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_cooling_type": "Single Speed DX AC",
+      "crac_fan_type": "ConstantVolume",
+      "crac_operation_schedule": "DataCenter HVACOperationSchd",
+      "crac_oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched"
     },
     {
       "template": "90.1-2004",
@@ -2491,7 +2491,7 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": null,
-      "number_of_elevators": null,
+      "number_of_elevators": 0.0,
       "elevator_schedule": null,
       "elevator_fan_schedule": null,
       "nonmetal_framing": null,
@@ -2691,7 +2691,7 @@
       "doas_oa_damper_schedule": null,
       "doas_economizer_control_type": null,
       "elevator_type": null,
-      "number_of_elevators": null,
+      "number_of_elevators": 0.0,
       "elevator_schedule": null,
       "elevator_fan_schedule": null,
       "nonmetal_framing": null,

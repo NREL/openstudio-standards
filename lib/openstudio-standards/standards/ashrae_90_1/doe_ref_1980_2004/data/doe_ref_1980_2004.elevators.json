@@ -194,22 +194,6 @@
     },
     {
       "template": "DOE Ref 1980-2004",
-      "building_type": "StripMall",
-      "elevator_type": null,
-      "number_of_elevators": 0.0,
-      "elevator_schedule": null,
-      "elevator_fan_schedule": null,
-      "area_per_passenger_elevator": 45000.0,
-      "units_per_passenger_elevator": null,
-      "beds_per_passenger_elevator": null,
-      "area_per_freight_elevator": null,
-      "units_per_freight_elevator": null,
-      "beds_per_freight_elevator": null,
-      "additional_passenger_elevators": null,
-      "notes": "Assuming 45000 ft^2 per elevator as default for building types not in original code"
-    },
-    {
-      "template": "DOE Ref 1980-2004",
       "building_type": "SecondarySchool",
       "elevator_type": "Hydraulic",
       "number_of_elevators": 2.0,
@@ -271,6 +255,22 @@
       "beds_per_freight_elevator": null,
       "additional_passenger_elevators": null,
       "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "DOE Ref 1980-2004",
+      "building_type": "StripMall",
+      "elevator_type": null,
+      "number_of_elevators": 0.0,
+      "elevator_schedule": null,
+      "elevator_fan_schedule": null,
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": null,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "Assuming 45000 ft^2 per elevator as default for building types not in original code"
     },
     {
       "template": "DOE Ref 1980-2004",
