@@ -5184,42 +5184,28 @@ class Standard
     # make a new heat exchanger
     heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
     heat_exchanger.setHeatExchangeModelType('CounterFlow')
-    heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(4.0, 'R', 'K').get)
+    # zero degree minimum necessary to allow both economizer and heat exchanger to operate in both integrated and non-integrated archetypes
+    # possibly results from an EnergyPlus issue that didn't get resolved correctly https://github.com/NREL/EnergyPlus/issues/5626
+    heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(0.0, 'R', 'K').get)
     heat_exchanger.setHeatTransferMeteringEndUseType('FreeCooling')
     heat_exchanger.setOperationMinimumTemperatureLimit(OpenStudio.convert(35.0, 'F', 'C').get)
     heat_exchanger.setOperationMaximumTemperatureLimit(OpenStudio.convert(72.0, 'F', 'C').get)
     heat_exchanger.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
 
+    # get the chillers on the chilled water loop
+    chillers = chilled_water_loop.supplyComponents('OS:Chiller:Electric:EIR'.to_IddObjectType)
+
     if integrated
+      if chillers.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; only modeling waterside economizer")
+      end
+
+      # set methods for integrated heat exchanger
       heat_exchanger.setName('Integrated Waterside Economizer Heat Exchanger')
       heat_exchanger.setControlType('CoolingDifferentialOnOff')
 
       # add the heat exchanger to the chilled water loop upstream of the chiller
       heat_exchanger.addToNode(chilled_water_loop.supplyInletNode)
-    else
-      heat_exchanger.setName('Non-Integrated Waterside Economizer Heat Exchanger')
-      heat_exchanger.setControlType('CoolingSetpointOnOffWithComponentOverride')
-
-      # add the heat exchanger to a supply side branch of the chilled water loop parallel with the chiller(s)
-      chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
-
-      # get the chiller to use with the interlock.
-      # if the heat exchanger can meet the entire load, the heat exchanger will run and the chiller is disabled.
-      # In E+, only one chiller can be tied to a given heat exchanger, so if you have multiple chillers,
-      # they will cannot be tied to a single heat exchanger without EMS.
-      chiller = nil
-      chillers = chilled_water_loop.supplyComponents('OS:Chiller:Electric:EIR'.to_IddObjectType)
-      if chillers.empty?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; cannot add a non-integrated waterside economizer.")
-        heat_exchanger.setControlType('CoolingSetpointOnOff')
-      elsif chillers.size > 1
-        chiller = chillers.sort[0]
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "More than one chiller was found on #{chilled_water_loop.name}.  EnergyPlus only allows a single chiller to be interlocked with the HX.  Chiller #{chiller.name} was selected.  Additional chillers will not be locked out during HX operation.")
-      else # 1 chiller
-        chiller = chillers[0]
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Chiller '#{chiller.name}' will be locked out during HX operation.")
-      end
-      chiller = chiller.to_ChillerElectricEIR.get
 
       # Copy the setpoint managers from the plant's supply outlet node to the chillers and HX outlets.
       # This is necessary so that the correct type of operation scheme will be created.
@@ -5237,6 +5223,41 @@ class Standard
           new_spm.addToNode(outlet)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Copied SPM #{spm.name} to the outlet of #{obj.name}.")
         end
+      end
+    else
+      # non-integrated
+      # if the heat exchanger can meet the entire load, the heat exchanger will run and the chiller is disabled.
+      # In E+, only one chiller can be tied to a given heat exchanger, so if you have multiple chillers,
+      # they will cannot be tied to a single heat exchanger without EMS.
+      chiller = nil
+      if chillers.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; cannot add a non-integrated waterside economizer.")
+        heat_exchanger.setControlType('CoolingSetpointOnOff')
+      elsif chillers.size > 1
+        chiller = chillers.sort[0]
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "More than one chiller was found on #{chilled_water_loop.name}.  EnergyPlus only allows a single chiller to be interlocked with the HX.  Chiller #{chiller.name} was selected.  Additional chillers will not be locked out during HX operation.")
+      else # 1 chiller
+        chiller = chillers[0]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Chiller '#{chiller.name}' will be locked out during HX operation.")
+      end
+      chiller = chiller.to_ChillerElectricEIR.get
+
+      # set methods for non-integrated heat exchanger
+      heat_exchanger.setName('Non-Integrated Waterside Economizer Heat Exchanger')
+      heat_exchanger.setControlType('CoolingSetpointOnOffWithComponentOverride')
+
+      # add the heat exchanger to a supply side branch of the chilled water loop parallel with the chiller(s)
+      chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
+
+      # Copy the setpoint managers from the plant's supply outlet node to the HX outlet.
+      # This is necessary so that the correct type of operation scheme will be created.
+      # Without this, the HX will never run
+      chw_spms = chilled_water_loop.supplyOutletNode.setpointManagers
+      outlet = heat_exchanger.supplyOutletModelObject.get.to_Node.get
+      chw_spms.each do |spm|
+        new_spm = spm.clone.to_SetpointManager.get
+        new_spm.addToNode(outlet)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Copied SPM #{spm.name} to the outlet of #{heat_exchanger.name}.")
       end
 
       # set the supply and demand inlet fields to interlock the heat exchanger with the chiller
