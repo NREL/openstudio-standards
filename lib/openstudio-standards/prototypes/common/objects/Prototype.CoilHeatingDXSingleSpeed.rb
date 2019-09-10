@@ -141,10 +141,10 @@ class Standard
         def_eir_f_of_temp.setCoefficient4y(0.00597727)
         def_eir_f_of_temp.setCoefficient5yPOW2(0.000482112)
         def_eir_f_of_temp.setCoefficient6xTIMESY(-0.000956448)
-        def_eir_f_of_temp.setMinimumValueofx(12.77778)
-        def_eir_f_of_temp.setMaximumValueofx(23.88889)
-        def_eir_f_of_temp.setMinimumValueofy(21.11111)
-        def_eir_f_of_temp.setMaximumValueofy(46.11111)
+        def_eir_f_of_temp.setMinimumValueofx(-23.33333)
+        def_eir_f_of_temp.setMaximumValueofx(29.44444)
+        def_eir_f_of_temp.setMinimumValueofy(-23.33333)
+        def_eir_f_of_temp.setMaximumValueofy(29.44444)
       end
 
     end
@@ -164,10 +164,10 @@ class Standard
       def_eir_f_of_temp.setCoefficient4y(0.00597727)
       def_eir_f_of_temp.setCoefficient5yPOW2(0.000482112)
       def_eir_f_of_temp.setCoefficient6xTIMESY(-0.000956448)
-      def_eir_f_of_temp.setMinimumValueofx(12.77778)
-      def_eir_f_of_temp.setMaximumValueofx(23.88889)
-      def_eir_f_of_temp.setMinimumValueofy(21.11111)
-      def_eir_f_of_temp.setMaximumValueofy(46.11111)
+      def_eir_f_of_temp.setMinimumValueofx(-23.33333)
+      def_eir_f_of_temp.setMaximumValueofx(29.44444)
+      def_eir_f_of_temp.setMinimumValueofy(-23.33333)
+      def_eir_f_of_temp.setMaximumValueofy(29.44444)
     end
 
     htg_coil.setTotalHeatingCapacityFunctionofTemperatureCurve(htg_cap_f_of_temp) unless htg_cap_f_of_temp.nil?
@@ -180,5 +180,15 @@ class Standard
     htg_coil.setDefrostControl('OnDemand')
 
     return htg_coil
+  end
+
+  def coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(htg_coil)
+    return false unless htg_coil.defrostEnergyInputRatioFunctionofTemperatureCurve.is_initialized
+
+    def_eir_f_of_temp = htg_coil.defrostEnergyInputRatioFunctionofTemperatureCurve.get.to_CurveBiquadratic.get
+    def_eir_f_of_temp.setMinimumValueofx(12.77778)
+    def_eir_f_of_temp.setMaximumValueofx(23.88889)
+    def_eir_f_of_temp.setMinimumValueofy(21.11111)
+    def_eir_f_of_temp.setMaximumValueofy(46.11111)
   end
 end

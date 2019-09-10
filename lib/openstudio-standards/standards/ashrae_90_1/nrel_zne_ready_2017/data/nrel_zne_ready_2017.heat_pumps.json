@@ -1,0 +1,48 @@
+{
+  "heat_pumps": [
+    {
+      "template": "NREL ZNE Ready 2017",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "Single Package",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": 16.0,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From Pena Station design guidelines assumptions"
+    },
+    {
+      "template": "NREL ZNE Ready 2017",
+      "cooling_type": "AirCooled",
+      "heating_type": "Electric Resistance or None",
+      "subcategory": "Split System",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_seasonal_efficiency": null,
+      "minimum_full_load_efficiency": 16.0,
+      "minimum_iplv": null,
+      "minimum_integrated_energy_efficiency_ratio": null,
+      "pthp_eer_coefficient_1": null,
+      "pthp_eer_coefficient_2": null,
+      "cool_cap_ft": "HPACCoolCapFT",
+      "cool_cap_fflow": "HPACCoolCapFFF",
+      "cool_eir_ft": "HPACCOOLEIRFT",
+      "cool_eir_fflow": "HPACCOOLEIRFFF",
+      "cool_plf_fplr": "HPACCOOLPLFFPLR",
+      "notes": "From Pena Station design guidelines assumptions"
+    }
+  ]
+}
