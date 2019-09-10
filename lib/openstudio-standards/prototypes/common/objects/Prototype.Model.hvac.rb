@@ -356,14 +356,17 @@ class Standard
       when 'WSHP'
         condenser_loop = case system['heating_type']
                          when 'Gas'
-                           model_get_or_add_heat_pump_loop(model)
+                           model_get_or_add_heat_pump_loop(model,
+                                                           system['heating_type'],
+                                                           system['cooling_type'],
+                                                           heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
                          else
                            model_get_or_add_ambient_water_loop(model)
                          end
         model_add_water_source_hp(model,
                                   thermal_zones,
                                   condenser_loop,
-                                  ventilation:true)
+                                  ventilation: true)
 
       when 'Fan Coil'
         case system['heating_type']

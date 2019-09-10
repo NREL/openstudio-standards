@@ -18184,36 +18184,6 @@ OS:DefaultSubSurfaceConstructions,
   ,                                       !- Tubular Daylight Dome Construction Name
   ;                                       !- Tubular Daylight Diffuser Construction Name
 
-OS:Schedule:Ruleset,
-  {36c76e4e-8c4f-422b-aac5-63c3b260b6f8}, !- Handle
-  Heat Pump Loop High Temp - 65F 1,       !- Name
-  {0298433c-5fcd-49ea-add8-6d00a30d53bc}, !- Schedule Type Limits Name
-  {5c279302-e6c9-4ef9-89df-8036bffe9880}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {5c279302-e6c9-4ef9-89df-8036bffe9880}, !- Handle
-  Heat Pump Loop High Temp - 65F Default 1, !- Name
-  {0298433c-5fcd-49ea-add8-6d00a30d53bc}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  18.3333333333334;                       !- Value Until Time 1
-
-OS:Schedule:Ruleset,
-  {78d2358b-1bbf-4a79-89b7-698f0ce6fda8}, !- Handle
-  Heat Pump Loop Low Temp - 41F 1,        !- Name
-  {0298433c-5fcd-49ea-add8-6d00a30d53bc}, !- Schedule Type Limits Name
-  {c7ba490d-254b-43a3-a00f-a53d7cb9fb77}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {c7ba490d-254b-43a3-a00f-a53d7cb9fb77}, !- Handle
-  Heat Pump Loop Low Temp - 41F Default 1, !- Name
-  {0298433c-5fcd-49ea-add8-6d00a30d53bc}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  5.00000000000006;                       !- Value Until Time 1
-
 OS:CoolingTower:TwoSpeed,
   {ddced6d0-1ea7-43d9-9929-2a8bdde44cae}, !- Handle
   Heat Pump Loop Central Tower 20.0 gpm/hp, !- Name
@@ -18292,10 +18262,10 @@ OS:Connection,
 
 OS:SetpointManager:Scheduled:DualSetpoint,
   {f3aab028-f83e-41bf-92c6-4c0367f63e22}, !- Handle
-  Heat Pump Loop Fluid Cooler Scheduled Dual Setpoint, !- Name
+  Heat Pump Loop CoolingTowerTwoSpeed Scheduled Dual Setpoint, !- Name
   ,                                       !- Control Variable
-  {36c76e4e-8c4f-422b-aac5-63c3b260b6f8}, !- High Setpoint Schedule Name
-  {78d2358b-1bbf-4a79-89b7-698f0ce6fda8}, !- Low Setpoint Schedule Name
+  {0eac2281-8975-4f0d-8f5d-6ad81d54ec27}, !- High Setpoint Schedule Name
+  {c6504d2b-5c42-4853-9510-614f8e459319}, !- Low Setpoint Schedule Name
   {f585bb48-50a1-4a2b-8576-b0b1d34c24eb}; !- Setpoint Node or NodeList Name
 
 OS:Connection,
