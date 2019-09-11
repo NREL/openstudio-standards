@@ -539,7 +539,7 @@ class Standard
   def model_add_hp_loop(model,
                         heating_fuel: 'NaturalGas',
                         cooling_fuel: 'Electricity',
-                        cooling_type: 'CoolingTowerTwoSpeed',
+                        cooling_type: 'FluidCooler',
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,

@@ -228,7 +228,7 @@ class Standard
         heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                            model.getPlantLoopByName('Heat Pump Loop').get
                          else
-                           model_add_hp_loop(model)
+                           model_add_hp_loop(model, cooling_type: 'CoolingTowerTwoSpeed')
                          end
         model_add_data_center_hvac(model,
                                    thermal_zones,
