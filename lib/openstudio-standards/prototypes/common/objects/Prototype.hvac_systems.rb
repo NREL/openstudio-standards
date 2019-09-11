@@ -5323,6 +5323,8 @@ class Standard
     when 'Water Source Heat Pumps'
       if main_heat_fuel == 'DistrictHeating' && cool_fuel == 'DistrictCooling'
         condenser_loop = model_get_or_add_ambient_water_loop(model)
+      elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
+        condenser_loop = model_get_or_add_ambient_water_loop(model)
       else
         condenser_loop = model_get_or_add_heat_pump_loop(model, main_heat_fuel, cool_fuel,
                                                          heat_pump_loop_cooling_type: heat_pump_loop_cooling_type)
