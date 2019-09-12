@@ -20,7 +20,7 @@ class TestAddElevators < Minitest::Test
     puts elevators
 
     # check recommendation
-    expected_elev = 2.0
+    expected_elev = 3.0
     assert_in_delta(expected_elev, elevators.multiplier, 0.5, "Expected ~#{expected_elev} elevators, but got #{elevators.multiplier}.}")
     model.save("output/Office.osm", true)
   end

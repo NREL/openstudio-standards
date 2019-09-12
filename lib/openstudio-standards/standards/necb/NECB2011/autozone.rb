@@ -102,7 +102,7 @@ class NECB2011
             break
           end
         end
-        raise "Could not determine adj space system to space #{space_zone_data.space.name.get}" if space_zone_data[:system_number].nil?
+        raise "Could not determine adj space system to space #{space_zone_data[:space].name.get}" if space_zone_data[:system_number].nil?
       end
     end
 
