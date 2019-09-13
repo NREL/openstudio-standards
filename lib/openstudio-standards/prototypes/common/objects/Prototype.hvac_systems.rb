@@ -3328,16 +3328,13 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
-  # @param heating_type [String] valid choices are Gas, Single Speed Heat Pump
-  # @param supplemental_heating_type [String] valid choices are Electric, Gas
-  # @param fan_type [String] valid choices are ConstantVolume, Cycling
+  # @param heating_type [String] valid choices are Single Speed DX
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
-  # @param oa_damper_sch [String] name of the oa damper schedule, or nil in which case will be defaulted to always open
-  # @param econ_max_oa_frac_sch [String] name of the economizer maximum outdoor air fraction schedule
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop
   def model_add_minisplit_hp(model,
                              thermal_zones,
                              cooling_type: 'Two Speed DX AC',
+                             heating_type: 'Single Speed DX',
                              hvac_op_sch: nil)
 
     # hvac operation schedule
@@ -3349,46 +3346,50 @@ class Standard
 
     thermal_zones.each do |zone|
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-      air_loop.setName("#{zone.name} Minisplit Heatpump")
+      air_loop.setName("#{zone.name} Minisplit Heat Pump")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding minisplit HP for #{zone.name}.")
 
-      # defaults
-      hspf = 7.7
-
       # create heating coil
-      htg_coil = create_coil_heating_dx_single_speed(model,
-                                                     name: "#{air_loop.name} Heating Coil",
-                                                     type: 'Residential Central Air Source HP',
-                                                     cop: hspf_to_cop_heating_no_fan(hspf))
-      htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio.convert(-30.0, 'F', 'C').get)
-      htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio.convert(40.0, 'F', 'C').get)
-      htg_coil.setCrankcaseHeaterCapacity(0)
-      htg_coil.setDefrostStrategy('ReverseCycle')
-      htg_coil.setDefrostControl('OnDemand')
-      htg_coil.resetDefrostTimePeriodFraction
+      case heating_type
+      when 'Single Speed DX'
+        htg_coil = create_coil_heating_dx_single_speed(model,
+                                                       name: "#{air_loop.name} Heating Coil",
+                                                       type: 'Residential Minisplit HP')
+        htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio.convert(-30.0, 'F', 'C').get)
+        htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+        htg_coil.setCrankcaseHeaterCapacity(0)
+        htg_coil.setDefrostStrategy('ReverseCycle')
+        htg_coil.setDefrostControl('OnDemand')
+        htg_coil.resetDefrostTimePeriodFraction
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No cooling coil type selected for minisplit HP for #{zone.name}.")
+        htg_coil = nil
+      end
 
       # create cooling coil
-      if cooling_type == 'Two Speed DX AC'
-        create_coil_cooling_dx_two_speed(model,
-                                         air_loop_node: air_loop.supplyInletNode,
-                                         name: "#{air_loop.name} 2spd DX AC Clg Coil")
-      elsif cooling_type == 'Single Speed DX AC'
-        create_coil_cooling_dx_single_speed(model,
-                                            air_loop_node: air_loop.supplyInletNode,
-                                            name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
-      elsif cooling_type == 'Single Speed Heat Pump'
-        create_coil_cooling_dx_single_speed(model,
-                                            air_loop_node: air_loop.supplyInletNode,
-                                            name: "#{air_loop.name} 1spd DX HP Clg Coil", type: 'Heat Pump')
+      case cooling_type
+      when 'Two Speed DX AC'
+        clg_coil = create_coil_cooling_dx_two_speed(model,
+                                                    name: "#{air_loop.name} 2spd DX AC Clg Coil")
+      when 'Single Speed DX AC'
+        clg_coil = create_coil_cooling_dx_single_speed(model,
+                                                       name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
+      when 'Single Speed Heat Pump'
+        clg_coil = create_coil_cooling_dx_single_speed(model,
+                                                       name: "#{air_loop.name} 1spd DX HP Clg Coil", type: 'Heat Pump')
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No cooling coil type selected for minisplit HP for #{zone.name}.")
+        clg_coil = nil
       end
 
       # create fan
       fan = create_fan_by_name(model,
-                               'Residential_HVAC_Fan',
+                               'Minisplit_HP_Fan',
                                fan_name: "#{air_loop.name} Fan",
                                end_use_subcategory: 'Supply Fans')
       fan.setAvailabilitySchedule(hvac_op_sch)
 
+      # create backup heating coil
       supplemental_htg_coil = create_coil_heating_electric(model,
                                                            name: "#{air_loop.name} Electric Backup Htg Coil")
 
@@ -3401,8 +3402,6 @@ class Standard
       unitary.setControllingZoneorThermostatLocation(zone)
       unitary.addToNode(air_loop.supplyInletNode)
       unitary.setControllingZoneorThermostatLocation(zone)
-
-      # set flow rates during different conditions
       unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0.0)
 
       # attach the coils and fan
@@ -5208,6 +5207,10 @@ class Standard
                                              heating: heating,
                                              cooling: cooling,
                                              ventilation: false)
+
+    when 'Residential Minisplit Heat Pumps'
+      model_add_minisplit_hp(model,
+                             zones)
 
     when 'VAV Reheat'
       case main_heat_fuel

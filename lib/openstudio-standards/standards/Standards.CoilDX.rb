@@ -18,6 +18,8 @@ module CoilDX
       sub_category = 'Single Package'
     elsif coil_dx.name.get.to_s.include?('Split System')
       sub_category = 'Split System'
+    elsif coil_dx.name.get.to_s.include?('Minisplit')
+      sub_category = 'Split System'
     elsif coil_dx.name.get.to_s.include?('CRAC')
       sub_category = 'CRAC'
     end
@@ -100,6 +102,10 @@ module CoilDX
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:MultiSpeed'.to_IddObjectType).empty?
+                   'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
                    'All Other'
