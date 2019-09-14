@@ -97,4 +97,18 @@ module References
   # @see http://cbes.lbl.gov/
   class CBES; end
 
+  # University of California Berkeley Center for the Built Environment
+  # These EnergyPlus objects implement a proportional control for a single
+  # thermal zone with a radiant system. The full details of the control
+  # strategy are described in the paper Raftery et al. (2017), "A new control
+  # strategy for high thermal mass radiant systems". The work was supported
+  # by the California Energy Commission (CEC) Electric Program Investment
+  # Charge (EPIC) (EPC-14-009) "Optimizing Radiant Systems for Energy Efficiency
+  # and Comfort", and the Center for the Built Environment, UC Berkeley, California.
+  # For more information please contact the following:
+  # Paul Raftery p.raftery@berkeley.edu
+  # Carlos Duarte cduarte@berkeley.edu
+  # @see https://cbe.berkeley.edu/project/optimizing-radiant-systems-energy-efficiency-comfort/
+  class CBERadiantSystems; end
+
 end
