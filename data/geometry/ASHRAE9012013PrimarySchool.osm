@@ -1196,6 +1196,12 @@ OS:Timestep,
   {6eeba8ef-4ceb-4c92-9265-613fd95aa568}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {ecd8570c-2bb0-477b-88d2-00b5abf5481c}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {f86390bd-b96d-403d-b20e-c5b50c239a8c}, !- Handle
   Corridor_Pod_1_ZN_1_FLR_1_Wall_2,       !- Name
@@ -4052,8 +4058,8 @@ OS:Surface,
 
 OS:ConvergenceLimits,
   {b98251ea-845f-4246-817b-06d40660e0a6}, !- Handle
-  2,                                      !- Minimum System Timestep {minutes}
-  25;                                     !- Maximum HVAC Iterations
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:Surface,
   {7994b6e2-4a7a-48fb-9085-e85eb0791001}, !- Handle

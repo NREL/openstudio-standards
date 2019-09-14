@@ -2819,14 +2819,14 @@ class Standard
     if __dir__[0] == ':' # Running from OpenStudio CLI
       # load file from embedded files
       if run_type == 'dd-only'
-        temp = load_resource_relative('../../../data/standards/legacy_dd_results.csv', 'r:UTF-8')
+        temp = load_resource_relative('../../../data/standards/test_performance_expected_dd_results.csv', 'r:UTF-8')
       else
         temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
       end
     else
       # loaded gem from system path
       if run_type == 'dd-only'
-        temp = File.read("#{standards_data_dir}/legacy_dd_results.csv")
+        temp = File.read("#{standards_data_dir}/test_performance_expected_dd_results.csv")
       else
         temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
       end

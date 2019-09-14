@@ -1074,7 +1074,10 @@ Standard.class_eval do
             clg = 1.33
             htg = 1.33
         end
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        # exit if is one of the 90.1 templates as their sizing paramters are explicitly specified in geometry osms
+        return
+      when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
           when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed','LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
             clg = 1.0
