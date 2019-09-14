@@ -37,8 +37,6 @@ class Standard
                          number_of_stories = 1,
                          pipe_insulation_thickness = 0.0127, # 1/2in
                          number_water_heaters = 1)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_swh_loop, number_water_heaters = #{number_water_heaters}")
-
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
     service_water_loop.setMinimumLoopTemperature(10.0)
@@ -172,7 +170,6 @@ class Standard
                              flowrate_schedule,
                              water_heater_thermal_zone,
                              number_water_heaters)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_water_heater, number_water_heaters = #{number_water_heaters}")
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
