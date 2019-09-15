@@ -546,6 +546,9 @@ class Standard
 
   # Creates a heat pump loop which has a boiler and fluid cooler for supplemental heating/cooling and adds it to the model.
   #
+  # @param heating_fuel [String]
+  # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
+  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: FluidCoolerSingleSpeed, CoolingTowerTwoSpeed
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param sup_wtr_high_temp [Double] target supply water temperature to enable cooling in degrees Fahrenheit, default 65.0F
   # @param sup_wtr_low_temp [Double] target supply water temperature to enable heating in degrees Fahrenheit, default 41.0F
@@ -554,6 +557,9 @@ class Standard
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
   # TODO: replace cooling tower with fluid cooler after fixing sizing inputs
   def model_add_hp_loop(model,
+                        heating_fuel: 'NaturalGas',
+                        cooling_fuel: 'Electricity',
+                        cooling_type: 'FluidCooler',
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,
@@ -617,34 +623,75 @@ class Standard
     hp_pump.setPumpControlType('Intermittent')
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
-    # create cooling towers or fluid coolers
-    # TODO: replace this system with a FluidCoolor:TwoSpeed once the simulation failures are resolved
-    # This logic is overridden Prototype.LargeOffice.rb to use a CoolingTowerTwoSpeed object instead change this
-    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
-    fluid_cooler.setName("#{heat_pump_water_loop.name} Fluid Cooler")
-    fluid_cooler.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
-    fluid_cooler.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
-    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
+    # add setpoint manager schedule to cooling equipment outlet so correct plant operation scheme is generated
+    cooling_equipment_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
+    cooling_equipment_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
+    cooling_equipment_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
 
-    # create boiler
-    boiler = create_boiler_hot_water(model,
-                                     hot_water_loop: heat_pump_water_loop,
-                                     name: "#{heat_pump_water_loop.name} Supplemental Boiler",
-                                     fuel_type: 'NaturalGas',
-                                     flow_mode: 'ConstantFlow',
-                                     lvg_temp_dsgn: 86.0,
-                                     min_plr: 0.0,
-                                     max_plr: 1.2,
-                                     opt_plr: 1.0)
-    # add setpoint manager schedule to boiler outlet so correct plant operation scheme is generated
-    boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
-    boiler_stpt_manager.setName("#{heat_pump_water_loop.name} Boiler Scheduled Dual Setpoint")
-    boiler_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
-    boiler_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
-    boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
+    # create cooling equipment and add to the loop
+    case cooling_fuel
+    when 'DistrictCooling'
+      cooling_equipment = OpenStudio::Model::DistrictCooling.new(model)
+      cooling_equipment.setName("#{heat_pump_water_loop.name} District Cooling")
+      cooling_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+      cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Cooling Scheduled Dual Setpoint")
+    else
+      case cooling_type
+      when 'FluidCooler', 'FluidCoolerSingleSpeed'
+        cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} Fluid Cooler")
+        cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
+        cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+      when 'CoolingTower', 'CoolingTowerTwoSpeed'
+        cooling_equipment = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} Central Tower")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} CoolingTowerTwoSpeed Scheduled Dual Setpoint")
+      when 'FluidCoolerTwoSpeed', 'CoolingTowerSingleSpeed', 'CoolingTowerVariableSpeed'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not yet supported, no cooling equipment will be added.")
+        return false
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not valid, no cooling equipment will be added.")
+        return false
+      end
+    end
+    cooling_equipment_stpt_manager.addToNode(cooling_equipment.outletModelObject.get.to_Node.get)
+
+    # add setpoint manager schedule to heating equipment outlet so correct plant operation scheme is generated
+    heating_equipment_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
+    heating_equipment_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
+    heating_equipment_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
+
+    # create heating equipment and add to the loop
+    case heating_fuel
+    when 'DistrictHeating'
+      heating_equipment = OpenStudio::Model::DistrictHeating.new(model)
+      heating_equipment.setName("#{heat_pump_water_loop.name} District Heating")
+      heating_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Heating Scheduled Dual Setpoint")
+    when 'AirSourceHeatPump', 'ASHP'
+      heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
+    when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+      heating_equipment = create_boiler_hot_water(model,
+                                                  hot_water_loop: heat_pump_water_loop,
+                                                  name: "#{heat_pump_water_loop.name} Supplemental Boiler",
+                                                  fuel_type: heating_fuel,
+                                                  flow_mode: 'ConstantFlow',
+                                                  lvg_temp_dsgn: 86.0,
+                                                  min_plr: 0.0,
+                                                  max_plr: 1.2,
+                                                  opt_plr: 1.0)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Boiler Scheduled Dual Setpoint")
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{heating_fuel} is not valid, no heating equipment will be added.")
+      return false
+    end
+    heating_equipment_stpt_manager.addToNode(heating_equipment.outletModelObject.get.to_Node.get)
 
     # add heat pump water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -3888,9 +3935,12 @@ class Standard
   # Adds Variable Refrigerant Flow system and terminal units for each zone
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
+  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow>] array of vrf units.
   def model_add_vrf(model,
-                    thermal_zones)
+                    thermal_zones,
+                    ventilation: false)
 
     # create vrf outdoor unit
     master_zone = thermal_zones[0]
@@ -3916,10 +3966,11 @@ class Standard
       vrf_terminal_unit.addToThermalZone(zone)
       vrf_terminal_unit.setTerminalUnitAvailabilityschedule(model.alwaysOnDiscreteSchedule)
 
-      # no outdoor air assumed
-      vrf_terminal_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
-      vrf_terminal_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
-      vrf_terminal_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+      unless ventilation
+        vrf_terminal_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        vrf_terminal_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        vrf_terminal_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+      end
 
       # set fan variables
       # always off denotes cycling fan
@@ -4719,9 +4770,9 @@ class Standard
                                                                                  supplemental_htg_coil)
       water_to_air_hp_system.setName("#{zone.name} WSHP")
       unless ventilation
-        water_to_air_hp_system.setOutdoorAirFlowRateDuringHeatingOperation(OpenStudio::OptionalDouble.new(0.0))
-        water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(OpenStudio::OptionalDouble.new(0.0))
-        water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(OpenStudio::OptionalDouble.new(0.0))
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
       end
       water_to_air_hp_system.addToThermalZone(zone)
 
@@ -5384,12 +5435,18 @@ class Standard
   end
 
   # Get the existing heat pump loop in the model or add a new one if there isn't one already.
-  def model_get_or_add_heat_pump_loop(model)
+  #
+  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
+  # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity and DistrictCooling.
+  # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
+  #   Valid choices are: FluidCooler, CoolingTower
+  def model_get_or_add_heat_pump_loop(model, heat_fuel, cool_fuel,
+                                      heat_pump_loop_cooling_type: 'FluidCooler')
     # retrieve the existing heat pump loop or add a new one if necessary
     heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                        model.getPlantLoopByName('Heat Pump Loop').get
                      else
-                       model_add_hp_loop(model)
+                       model_add_hp_loop(model, heating_fuel: heat_fuel, cooling_fuel: cool_fuel, cooling_type: heat_pump_loop_cooling_type)
                      end
     return heat_pump_loop
   end
@@ -5407,10 +5464,12 @@ class Standard
   #   only used if HVAC system has a hot water loop
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
+  # @param heat_pump_loop_cooling_type [String] the type of cooling equipment for heat pump loops if not DistrictCooling.
+  #   Valid choices are: FluidCooler, CoolingTower
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
-  # @param fan_coil_ventilation [Bool] toggle whether to include outdoor air ventilation on zone fan coil units
-  #   only used if HVAC system has four pipe fan coil units
+  # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
+  #   including as fan coil units, VRF terminals, or water source heat pumps.
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -5420,9 +5479,10 @@ class Standard
                             zones,
                             hot_water_loop_type: 'HighTemperature',
                             chilled_water_loop_cooling_type: 'WaterCooled',
+                            heat_pump_loop_cooling_type: 'FluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
-                            fan_coil_ventilation: true)
+                            zone_equipment_ventilation: true)
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -5533,7 +5593,8 @@ class Standard
 
     when 'VRF'
       model_add_vrf(model,
-                    zones)
+                    zones,
+                    ventilation: zone_equipment_ventilation)
 
     when 'Fan Coil'
       case main_heat_fuel
@@ -5559,7 +5620,7 @@ class Standard
                                    zones,
                                    chilled_water_loop,
                                    hot_water_loop: hot_water_loop,
-                                   ventilation: fan_coil_ventilation)
+                                   ventilation: zone_equipment_ventilation)
 
     when 'Radiant Slab'
       case main_heat_fuel
@@ -5802,23 +5863,25 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      condenser_loop = case main_heat_fuel
-                       when 'NaturalGas'
-                         model_get_or_add_heat_pump_loop(model)
-                       else
-                         model_get_or_add_ambient_water_loop(model)
-                       end
+      if main_heat_fuel == 'DistrictHeating' && cool_fuel == 'DistrictCooling'
+        condenser_loop = model_get_or_add_ambient_water_loop(model)
+      elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
+        condenser_loop = model_get_or_add_ambient_water_loop(model)
+      else
+        condenser_loop = model_get_or_add_heat_pump_loop(model, main_heat_fuel, cool_fuel,
+                                                         heat_pump_loop_cooling_type: heat_pump_loop_cooling_type)
+      end
       model_add_water_source_hp(model,
                                 zones,
                                 condenser_loop,
-                                ventilation: false)
+                                ventilation: zone_equipment_ventilation)
 
     when 'Ground Source Heat Pumps'
       condenser_loop = model_get_or_add_ground_hx_loop(model)
       model_add_water_source_hp(model,
                                 zones,
                                 condenser_loop,
-                                ventilation: false)
+                                ventilation: zone_equipment_ventilation)
 
     when 'DOAS Cold Supply'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
@@ -5959,7 +6022,9 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Water Source Heat Pumps with DOAS'
       model_add_hvac_system(model,
@@ -5978,7 +6043,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Water Source Heat Pumps with DOAS with DCV'
       model_add_hvac_system(model,
@@ -5989,6 +6058,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                             air_loop_heating_type: air_loop_heating_type,
                             air_loop_cooling_type: air_loop_cooling_type)
 
@@ -5997,7 +6067,10 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with ERVs'
       model_add_hvac_system(model,
@@ -6012,7 +6085,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with DOAS'
       model_add_hvac_system(model,
@@ -6031,7 +6105,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with DOAS with DCV'
       model_add_hvac_system(model,
@@ -6050,7 +6125,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with DOAS'
       model_add_hvac_system(model,
@@ -6072,7 +6148,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with DOAS with DCV'
       model_add_hvac_system(model,
@@ -6094,7 +6170,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with ERVs'
       model_add_hvac_system(model,
@@ -6112,7 +6188,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when  'VRF with DOAS'
       model_add_hvac_system(model,
@@ -6131,7 +6207,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when  'VRF with DOAS with DCV'
       model_add_hvac_system(model,
@@ -6150,7 +6227,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Radiant Slab with DOAS'
       model_add_hvac_system(model,

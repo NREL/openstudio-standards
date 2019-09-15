@@ -116,7 +116,7 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = model_get_or_add_heat_pump_loop(model)
+          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'FluidCooler')
         end
 
         model_add_psz_ac(model,
@@ -218,7 +218,7 @@ class Standard
         # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = model_get_or_add_hot_water_loop(model, 'NaturalGas')
         # Retrieve the existing heat pump loop or add a new one if necessary.
-        heat_pump_loop = model_get_or_add_heat_pump_loop(model)
+        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
         model_add_data_center_hvac(model,
                                    thermal_zones,
                                    hot_water_loop,
@@ -345,14 +345,17 @@ class Standard
       when 'WSHP'
         condenser_loop = case system['heating_type']
                          when 'Gas'
-                           model_get_or_add_heat_pump_loop(model)
+                           model_get_or_add_heat_pump_loop(model,
+                                                           system['heating_type'],
+                                                           system['cooling_type'],
+                                                           heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
                          else
                            model_get_or_add_ambient_water_loop(model)
                          end
         model_add_water_source_hp(model,
                                   thermal_zones,
                                   condenser_loop,
-                                  ventilation:true)
+                                  ventilation: true)
 
       when 'Fan Coil'
         case system['heating_type']
