@@ -51,24 +51,24 @@ class Standard
   def model_get_lookup_name(building_type)
     lookup_name = building_type
     case building_type
-      when 'SmallOffice'
-        lookup_name = 'Office'
-      when 'SmallOfficeDetailed'
-        lookup_name = 'Office'
-      when 'MediumOffice'
-        lookup_name = 'Office'
-      when 'MediumOfficeDetailed'
-        lookup_name = 'Office'
-      when 'LargeOffice'
-        lookup_name = 'Office'
-      when 'LargeOfficeDetailed'
-        lookup_name = 'Office'
-      when 'RetailStandalone'
-        lookup_name = 'Retail'
-      when 'RetailStripmall'
-        lookup_name = 'StripMall'
-      when 'Office'
-        lookup_name = 'Office'
+    when 'SmallOffice'
+      lookup_name = 'Office'
+    when 'SmallOfficeDetailed'
+      lookup_name = 'Office'
+    when 'MediumOffice'
+      lookup_name = 'Office'
+    when 'MediumOfficeDetailed'
+      lookup_name = 'Office'
+    when 'LargeOffice'
+      lookup_name = 'Office'
+    when 'LargeOfficeDetailed'
+      lookup_name = 'Office'
+    when 'RetailStandalone'
+      lookup_name = 'Retail'
+    when 'RetailStripmall'
+      lookup_name = 'StripMall'
+    when 'Office'
+      lookup_name = 'Office'
     end
     return lookup_name
   end
@@ -82,31 +82,36 @@ class Standard
   #
   # @return [Hash] a hash of standards data
   def load_standards_database(data_directories = [])
-    puts "Loading standards_data for #{template}"
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Loading OpenStudio Standards data for #{template}")
     @standards_data = {}
 
     # Load the JSON files from each directory
     data_directories.each do |data_dir|
       if __dir__[0] == ':' # Running from OpenStudio CLI
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.standard', "Loading JSON files from #{data_dir}")
-        embedded_files_relative("#{data_dir}/data/", /.*\.json/).each do |file|
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Loading JSON files from OpenStudio CLI embedded directory #{data_dir}")
+        EmbeddedScripting.allFileNamesAsString.split(';').each do |file|
+          # Skip files outside of the specified directory
+          next unless file.start_with?("#{data_dir}/data")
+
+          # Skip files that are not JSON
+          next unless File.basename(file).match(/.*\.json/)
+
+          # Read the JSON file
           data = JSON.parse(EmbeddedScripting.getFileAsString(file))
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.standard', 'OpenStudio Standards JSON data loading not yet implemented within CLI.')
-          # TODO Figure out relative paths for loading JSON directories from OpenStudio CLI
-          # data.each_pair do |key, objs|
-          #   # Override the template in inherited files to match the instantiated template
-          #   objs.each do |obj|
-          #     if obj.has_key?('template')
-          #       obj['template'] = template
-          #     end
-          #   end
-          #   if @standards_data[key].nil?
-          #     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Adding #{key} from #{File.basename(file)}")
-          #   else
-          #     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Overriding #{key} with #{File.basename(file)}")
-          #   end
-          #   @standards_data[key] = objs
-          # end
+          data.each_pair do |key, objs|
+            # Override the template in inherited files to match the instantiated template
+            objs.each do |obj|
+              if obj.has_key?('template')
+                obj['template'] = template
+              end
+            end
+            if @standards_data[key].nil?
+              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Adding #{key} from #{File.basename(file)}")
+            else
+              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Overriding #{key} with #{File.basename(file)}")
+            end
+            @standards_data[key] = objs
+          end
         end
       else
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Loading JSON files from #{data_dir}")
