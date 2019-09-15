@@ -245,7 +245,7 @@ class Standard
       elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
       if elevator_data_lookup.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
-        return area_length_count_hash
+        next
       end
 
       # determine number of additional passenger elevators
@@ -253,7 +253,6 @@ class Standard
         add_pass_elevs += elevator_data_lookup['additional_passenger_elevators']
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Adding #{elevator_data_lookup['additional_passenger_elevators']} additional passenger elevators.")
       else
-        add_pass_elevs += 0.0
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'No additional passenger elevators added to model.')
       end
     end
@@ -418,5 +417,5 @@ class Standard
     end
 
     return elevator
-    end
   end
+end
