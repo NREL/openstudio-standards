@@ -2532,6 +2532,12 @@ OS:Timestep,
   {fb34382d-9d62-4fda-b64b-7a5499640568}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {fc482689-e081-409e-a085-1fabf7cb2e4f}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {f0003483-b099-4d2b-a8e5-ad976413ff83}, !- Handle
   Basement_Ceiling_3,                     !- Name

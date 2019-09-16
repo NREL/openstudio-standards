@@ -5960,6 +5960,12 @@ OS:Timestep,
   {4df5d7c9-490b-4641-ac53-b860496dcb2e}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {91bba200-25e8-491f-a91b-d3705abfa59b}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {523f5e83-a556-4654-9ec6-7cfc51e3f986}, !- Handle
   Corridor_Pod_3_ZN_1_FLR_2_Wall_2,       !- Name
