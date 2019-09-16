@@ -197,6 +197,11 @@ class Standard
   # @param num_chillers [Integer] the number of chillers
   # @param condenser_water_loop [OpenStudio::Model::PlantLoop] optional condenser water loop for water-cooled chillers.
   #   If this is not passed in, the chillers will be air cooled.
+  # @param waterside_economizer [String] Options are 'none', 'integrated', 'non-integrated'.
+  #   If 'integrated' will add a heat exchanger to the supply inlet of the chilled water loop
+  #     to provide waterside economizing whenever wet bulb temperatures allow
+  #   If 'non-integrated' will add a heat exchanger in parallel with the chiller that will operate
+  #     only when it can meet cooling demand exclusively with the waterside economizing.
   # @return [OpenStudio::Model::PlantLoop] the resulting chilled water loop
   def model_add_chw_loop(model,
                          system_name: 'Chilled Water Loop',
@@ -208,7 +213,8 @@ class Standard
                          chiller_condenser_type: nil,
                          chiller_compressor_type: nil,
                          num_chillers: 1,
-                         condenser_water_loop: nil)
+                         condenser_water_loop: nil,
+                         waterside_economizer: 'none')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding chilled water loop.')
 
     # create chilled water loop
@@ -284,6 +290,8 @@ class Standard
       sec_chw_pump.addToNode(chilled_water_loop.demandInletNode)
       # Change the chilled water loop to have a two-way common pipes
       chilled_water_loop.setCommonPipeSimulation('CommonPipe')
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'No pumping type specified for the chilled water loop.')
     end
 
     # check for existence of condenser_water_loop if WaterCooled
@@ -330,6 +338,18 @@ class Standard
           condenser_water_loop.addDemandBranchForComponent(chiller)
           chiller.setCondenserType('WaterCooled')
         end
+      end
+    end
+
+    # enable waterside economizer if requested
+    unless condenser_water_loop.nil?
+      case waterside_economizer
+      when 'integrated'
+        model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                       integrated: true)
+      when 'non-integrated'
+        model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                       integrated: false)
       end
     end
 
@@ -526,6 +546,9 @@ class Standard
 
   # Creates a heat pump loop which has a boiler and fluid cooler for supplemental heating/cooling and adds it to the model.
   #
+  # @param heating_fuel [String]
+  # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
+  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: FluidCoolerSingleSpeed, CoolingTowerTwoSpeed
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param sup_wtr_high_temp [Double] target supply water temperature to enable cooling in degrees Fahrenheit, default 65.0F
   # @param sup_wtr_low_temp [Double] target supply water temperature to enable heating in degrees Fahrenheit, default 41.0F
@@ -534,6 +557,9 @@ class Standard
   # @return [OpenStudio::Model::PlantLoop] the resulting plant loop
   # TODO: replace cooling tower with fluid cooler after fixing sizing inputs
   def model_add_hp_loop(model,
+                        heating_fuel: 'NaturalGas',
+                        cooling_fuel: 'Electricity',
+                        cooling_type: 'FluidCooler',
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,
@@ -597,34 +623,75 @@ class Standard
     hp_pump.setPumpControlType('Intermittent')
     hp_pump.addToNode(heat_pump_water_loop.supplyInletNode)
 
-    # create cooling towers or fluid coolers
-    # TODO: replace this system with a FluidCoolor:TwoSpeed once the simulation failures are resolved
-    # This logic is overridden Prototype.LargeOffice.rb to use a CoolingTowerTwoSpeed object instead change this
-    # cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(self)
-    # cooling_tower.setName("#{heat_pump_water_loop.name} Sup Cooling Tower")
-    # heat_pump_water_loop.addSupplyBranchForComponent(cooling_tower)
-    fluid_cooler = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
-    fluid_cooler.setName("#{heat_pump_water_loop.name} Fluid Cooler")
-    fluid_cooler.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
-    fluid_cooler.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
-    heat_pump_water_loop.addSupplyBranchForComponent(fluid_cooler)
+    # add setpoint manager schedule to cooling equipment outlet so correct plant operation scheme is generated
+    cooling_equipment_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
+    cooling_equipment_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
+    cooling_equipment_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
 
-    # create boiler
-    boiler = create_boiler_hot_water(model,
-                                     hot_water_loop: heat_pump_water_loop,
-                                     name: "#{heat_pump_water_loop.name} Supplemental Boiler",
-                                     fuel_type: 'NaturalGas',
-                                     flow_mode: 'ConstantFlow',
-                                     lvg_temp_dsgn: 86.0,
-                                     min_plr: 0.0,
-                                     max_plr: 1.2,
-                                     opt_plr: 1.0)
-    # add setpoint manager schedule to boiler outlet so correct plant operation scheme is generated
-    boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
-    boiler_stpt_manager.setName("#{heat_pump_water_loop.name} Boiler Scheduled Dual Setpoint")
-    boiler_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
-    boiler_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
-    boiler_stpt_manager.addToNode(boiler.outletModelObject.get.to_Node.get)
+    # create cooling equipment and add to the loop
+    case cooling_fuel
+    when 'DistrictCooling'
+      cooling_equipment = OpenStudio::Model::DistrictCooling.new(model)
+      cooling_equipment.setName("#{heat_pump_water_loop.name} District Cooling")
+      cooling_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+      cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Cooling Scheduled Dual Setpoint")
+    else
+      case cooling_type
+      when 'FluidCooler', 'FluidCoolerSingleSpeed'
+        cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} Fluid Cooler")
+        cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
+        cooling_equipment.setPerformanceInputMethod('UFactorTimesAreaAndDesignWaterFlowRate')
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Fluid Cooler Scheduled Dual Setpoint")
+      when 'CoolingTower', 'CoolingTowerTwoSpeed'
+        cooling_equipment = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
+        cooling_equipment.setName("#{heat_pump_water_loop.name} Central Tower")
+        heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
+        cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} CoolingTowerTwoSpeed Scheduled Dual Setpoint")
+      when 'FluidCoolerTwoSpeed', 'CoolingTowerSingleSpeed', 'CoolingTowerVariableSpeed'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not yet supported, no cooling equipment will be added.")
+        return false
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not valid, no cooling equipment will be added.")
+        return false
+      end
+    end
+    cooling_equipment_stpt_manager.addToNode(cooling_equipment.outletModelObject.get.to_Node.get)
+
+    # add setpoint manager schedule to heating equipment outlet so correct plant operation scheme is generated
+    heating_equipment_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
+    heating_equipment_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
+    heating_equipment_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
+
+    # create heating equipment and add to the loop
+    case heating_fuel
+    when 'DistrictHeating'
+      heating_equipment = OpenStudio::Model::DistrictHeating.new(model)
+      heating_equipment.setName("#{heat_pump_water_loop.name} District Heating")
+      heating_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Heating Scheduled Dual Setpoint")
+    when 'AirSourceHeatPump', 'ASHP'
+      heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
+    when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+      heating_equipment = create_boiler_hot_water(model,
+                                                  hot_water_loop: heat_pump_water_loop,
+                                                  name: "#{heat_pump_water_loop.name} Supplemental Boiler",
+                                                  fuel_type: heating_fuel,
+                                                  flow_mode: 'ConstantFlow',
+                                                  lvg_temp_dsgn: 86.0,
+                                                  min_plr: 0.0,
+                                                  max_plr: 1.2,
+                                                  opt_plr: 1.0)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Boiler Scheduled Dual Setpoint")
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{heating_fuel} is not valid, no heating equipment will be added.")
+      return false
+    end
+    heating_equipment_stpt_manager.addToNode(heating_equipment.outletModelObject.get.to_Node.get)
 
     # add heat pump water loop pipes
     supply_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -1268,7 +1335,7 @@ class Standard
     sat_oa_reset.setName("#{air_loop.name} SAT Reset")
     sat_oa_reset.setControlVariable('Temperature')
     sat_oa_reset.setSetpointatOutdoorLowTemperature(htg_dsgn_sup_air_temp_c)
-    sat_oa_reset.setOutdoorLowTemperature(OpenStudio.convert(60.0, 'F', 'C').get)
+    sat_oa_reset.setOutdoorLowTemperature(OpenStudio.convert(55.0, 'F', 'C').get)
     sat_oa_reset.setSetpointatOutdoorHighTemperature(clg_dsgn_sup_air_temp_c)
     sat_oa_reset.setOutdoorHighTemperature(OpenStudio.convert(70.0, 'F', 'C').get)
     sat_oa_reset.addToNode(air_loop.supplyOutletNode)
@@ -1324,7 +1391,18 @@ class Standard
       # make an air terminal for the zone
       if doas_type == 'DOASCV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-      else # 'DOASVAV'
+      elsif doas_type == 'DOASVAVReheat'
+        # Reheat coil
+        if hot_water_loop.nil?
+          rht_coil = create_coil_heating_electric(model, name: "#{zone.name} Electric Reheat Coil")
+        else
+          rht_coil = create_coil_heating_water(model, hot_water_loop, name: "#{zone.name} Reheat Coil")
+        end
+        # VAV reheat terminal
+        air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
+        air_terminal.setZoneMinimumAirFlowMethod('Constant')
+        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation # may not be necessary
+      else  # 'DOASVAV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
         air_terminal.setConstantMinimumAirFlowFraction(0.1)
@@ -3965,9 +4043,12 @@ class Standard
   # Adds Variable Refrigerant Flow system and terminal units for each zone
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
+  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow>] array of vrf units.
   def model_add_vrf(model,
-                    thermal_zones)
+                    thermal_zones,
+                    ventilation: false)
 
     # create vrf outdoor unit
     master_zone = thermal_zones[0]
@@ -3993,10 +4074,11 @@ class Standard
       vrf_terminal_unit.addToThermalZone(zone)
       vrf_terminal_unit.setTerminalUnitAvailabilityschedule(model.alwaysOnDiscreteSchedule)
 
-      # no outdoor air assumed
-      vrf_terminal_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
-      vrf_terminal_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
-      vrf_terminal_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+      unless ventilation
+        vrf_terminal_unit.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        vrf_terminal_unit.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        vrf_terminal_unit.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+      end
 
       # set fan variables
       # always off denotes cycling fan
@@ -4085,6 +4167,355 @@ class Standard
     end
 
     return fcus
+  end
+
+  # Adds low temperature radiant loop systems to each zone.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
+  # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
+  # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
+  # @param carpet_thickness_in [Double] thickness of carpet in inches
+  # @param control_strategy [String] name of control strategy
+  # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Proportional gain constant (recommended 0.3 or less).
+  # @param minimum_operation [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Minimum number of hours of operation for radiant system before it shuts off.
+  # @param weekend_temperature_reset [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Weekend temperature reset for slab temperature setpoint in degree Celsius.
+  # @param early_reset_out_arg [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Time at which the weekend temperature reset is removed.
+  # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
+  # @param radiant_lockout [Bool] True if system contains a radiant lockout
+  # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
+  #   Only used if radiant_lockout is true
+  # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
+  #   Only used if radiant_lockout is true
+  # @return [Array<OpenStudio::Model::ZoneHVACLowTemperatureRadiantVariableFlow>] array of radiant objects.
+  # TODO - Once the OpenStudio API supports it, make chilled water loops optional for heating only systems
+  def model_add_low_temp_radiant(model,
+                                 thermal_zones,
+                                 hot_water_loop,
+                                 chilled_water_loop,
+                                 radiant_type: 'floor',
+                                 include_carpet: true,
+                                 carpet_thickness_in: 0.25,
+                                 control_strategy: 'proportional_control',
+                                 proportional_gain: 0.3,
+                                 minimum_operation: 1,
+                                 weekend_temperature_reset: 2,
+                                 early_reset_out_arg: 20,
+                                 switch_over_time: 24.0,
+                                 radiant_lockout: false,
+                                 radiant_lockout_start_time: 12.0,
+                                 radiant_lockout_end_time: 20.0)
+
+    # create internal source constructions for surfaces
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Replacing #{radiant_type} constructions with new radiant slab constructions.")
+
+    # determine construction insulation thickness by climate zone
+    climate_zone = model_standards_climate_zone(model)
+    if climate_zone.empty?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to climate zone 5, R-20 insulation, 110F heating design supply water temperature.')
+      cz_mult = 4
+      radiant_htg_dsgn_sup_wtr_temp_f = 110
+    else
+      climate_zone_set = model_find_climate_zone_set(model, climate_zone)
+      case climate_zone_set.gsub('ClimateZone ', '')
+      when '1'
+        cz_mult = 2
+        radiant_htg_dsgn_sup_wtr_temp_f = 90
+      when '2', '2A', '2B', 'CEC15'
+        cz_mult = 2
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      when '3', '3A', '3B', '3C', 'CEC3', 'CEC4', 'CEC5', 'CEC6', 'CEC7', 'CEC8', 'CEC9', 'CEC10', 'CEC11', 'CEC12', 'CEC13', 'CEC14'
+        cz_mult = 3
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      when '4', '4A', '4B', '4C', 'CEC1', 'CEC2'
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      when '5', '5A', '5B', '5C', 'CEC16'
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 110
+      when '6', '6A', '6B'
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 120
+      when '7', '8'
+        cz_mult = 5
+        radiant_htg_dsgn_sup_wtr_temp_f = 120
+      else # default to 4
+        cz_mult = 4
+        radiant_htg_dsgn_sup_wtr_temp_f = 100
+      end
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Based on model climate zone #{climate_zone} using R-#{(cz_mult * 5).to_i} slab insulation, R-#{((cz_mult + 1) * 5).to_i} exterior floor insulation, R-#{((cz_mult + 1) * 2 * 5).to_i} exterior roof insulation, and #{radiant_htg_dsgn_sup_wtr_temp_f}F heating design supply water temperature.")
+    end
+
+    # create materials
+    mat_concrete_3_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
+    mat_concrete_3_5in.setName('Radiant Slab Concrete - 3.5 in.')
+
+    mat_concrete_1_5in = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0381, 2.31, 2322, 832)
+    mat_concrete_1_5in.setName('Radiant Slab Concrete - 1.5 in')
+
+    mat_refl_roof_membrane = model.getStandardOpaqueMaterialByName('Roof Membrane - Highly Reflective')
+    if mat_refl_roof_membrane.is_initialized
+      mat_refl_roof_membrane = model.getStandardOpaqueMaterialByName('Roof Membrane - Highly Reflective').get
+    else
+      mat_refl_roof_membrane = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'VeryRough', 0.0095, 0.16, 1121.29, 1460)
+      mat_refl_roof_membrane.setThermalAbsorptance(0.75)
+      mat_refl_roof_membrane.setSolarAbsorptance(0.45)
+      mat_refl_roof_membrane.setVisibleAbsorptance(0.7)
+      mat_refl_roof_membrane.setName('Roof Membrane - Highly Reflective')
+    end
+
+    if include_carpet
+      carpet_thickness_m = OpenStudio.convert(carpet_thickness_in / 12.0, 'ft', 'm').get
+      conductivity_si = 0.06
+      conductivity_ip = OpenStudio.convert(conductivity_si, 'W/m*K', 'Btu*in/hr*ft^2*R').get
+      r_value_ip = carpet_thickness_in * (1 / conductivity_ip)
+      mat_thin_carpet_tile = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', carpet_thickness_m, conductivity_si, 288, 1380)
+      mat_thin_carpet_tile.setThermalAbsorptance(0.9)
+      mat_thin_carpet_tile.setSolarAbsorptance(0.7)
+      mat_thin_carpet_tile.setVisibleAbsorptance(0.8)
+      mat_thin_carpet_tile.setName("Radiant Slab Thin Carpet Tile R-#{r_value_ip.round(2)}")
+    end
+
+    # set exterior slab insulation thickness based on climate zone
+    slab_insulation_thickness_m = 0.0254 * cz_mult
+    mat_slab_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', slab_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_slab_insulation.setName("Radiant Ground Slab Insulation - #{cz_mult} in.")
+
+    ext_insulation_thickness_m = 0.0254 * (cz_mult + 1)
+    mat_ext_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', ext_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_ext_insulation.setName("Radiant Exterior Slab Insulation - #{cz_mult + 1} in.")
+
+    roof_insulation_thickness_m = 0.0254 * (cz_mult + 1) * 2
+    mat_roof_insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Rough', roof_insulation_thickness_m, 0.02, 56.06, 1210)
+    mat_roof_insulation.setName("Radiant Exterior Ceiling Insulation - #{(cz_mult + 1) * 2} in.")
+
+    # create radiant internal source constructions
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'New constructions exclude the metal deck, as high thermal diffusivity materials cause errors in EnergyPlus internal source construction calculations.')
+
+    layers = []
+    layers << mat_slab_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_ground_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_ground_slab_construction.setName('Radiant Ground Slab Construction')
+    radiant_ground_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_ground_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_ground_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_ext_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_exterior_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_exterior_slab_construction.setName('Radiant Exterior Slab Construction')
+    radiant_exterior_slab_construction.setSourcePresentAfterLayerNumber(2)
+    radiant_exterior_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(3)
+    radiant_exterior_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    layers << mat_thin_carpet_tile if include_carpet
+    radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction')
+    radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(1)
+    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(2)
+    radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_thin_carpet_tile if include_carpet
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction')
+    slab_src_loc = include_carpet ? 2 : 1
+    radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(slab_src_loc)
+    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc + 1)
+    radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    layers = []
+    layers << mat_refl_roof_membrane
+    layers << mat_roof_insulation
+    layers << mat_concrete_3_5in
+    layers << mat_concrete_1_5in
+    radiant_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
+    radiant_ceiling_slab_construction.setName('Radiant Exterior Ceiling Slab Construction')
+    radiant_ceiling_slab_construction.setSourcePresentAfterLayerNumber(3)
+    radiant_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(4)
+    radiant_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # adjust hot and chilled water loop temperatures and set new setpoint schedules
+    radiant_htg_dsgn_sup_wtr_temp_delt_r = 10
+    radiant_htg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_f, 'F', 'C').get
+    radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
+    hot_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_htg_dsgn_sup_wtr_temp_c)
+    hot_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_htg_dsgn_sup_wtr_temp_delt_k)
+    hw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                      radiant_htg_dsgn_sup_wtr_temp_c,
+                                                      name = "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F")
+    hot_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        spm.setSchedule(hw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing hot water loop setpoint for '#{hot_water_loop.name}' to '#{hw_temp_sch.name}' to account for the radiant system.")
+      end
+    end
+
+    radiant_clg_dsgn_sup_wtr_temp_f = 55.0
+    radiant_clg_dsgn_sup_wtr_temp_delt_r = 5.0
+    radiant_clg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_f, 'F', 'C').get
+    radiant_clg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
+    chilled_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_clg_dsgn_sup_wtr_temp_c)
+    chilled_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_clg_dsgn_sup_wtr_temp_delt_k)
+    chw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                       radiant_clg_dsgn_sup_wtr_temp_c,
+                                                       name = "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F")
+    chilled_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        spm.setSchedule(chw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing chilled water loop setpoint for '#{chilled_water_loop.name}' to '#{chw_temp_sch.name}' to account for the radiant system.")
+      end
+    end
+
+    # default temperature controls for radiant system
+    zn_radiant_htg_dsgn_temp_f = 68.0
+    zn_radiant_htg_dsgn_temp_c = OpenStudio.convert(zn_radiant_htg_dsgn_temp_f, 'F', 'C').get
+    zn_radiant_clg_dsgn_temp_f = 74.0
+    zn_radiant_clg_dsgn_temp_c = OpenStudio.convert(zn_radiant_clg_dsgn_temp_f, 'F', 'C').get
+
+    htg_control_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                               zn_radiant_htg_dsgn_temp_c,
+                                                               name = "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F")
+    clg_control_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                               zn_radiant_clg_dsgn_temp_c,
+                                                               name = "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F")
+    throttling_range_f = 4.0 # 2 degF on either side of control temperature
+    throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
+
+    # create availability schedule for radiant loop
+    if radiant_lockout
+      radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+      radiant_avail_sch.setName('Radiant System Availability Schedule')
+
+      start_hour = radiant_lockout_start_time.to_i
+      start_minute = ((radiant_lockout_start_time % 1) * 60).to_i
+      end_hour = radiant_lockout_end_time.to_i
+      end_minute = ((radiant_lockout_end_time % 1) * 60).to_i
+
+      if radiant_lockout_end_time > radiant_lockout_start_time
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if radiant_lockout_end_time < 24
+      elsif radiant_lockout_start_time > radiant_lockout_end_time
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if radiant_lockout_start_time < 24
+      else
+        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+      end
+    else
+      radiant_avail_sch = model.alwaysOnDiscreteSchedule
+    end
+
+    # make a low temperature radiant loop for each zone
+    radiant_loops = []
+    thermal_zones.each do |zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding radiant loop for #{zone.name}.")
+
+      # create radiant coils
+      if hot_water_loop
+        radiant_loop_htg_coil = OpenStudio::Model::CoilHeatingLowTempRadiantVarFlow.new(model, htg_control_temp_sch)
+        radiant_loop_htg_coil.setName("#{zone.name} Radiant Loop Heating Coil")
+        radiant_loop_htg_coil.setHeatingControlThrottlingRange(throttling_range_c)
+        hot_water_loop.addDemandBranchForComponent(radiant_loop_htg_coil)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Radiant loops require a hot water loop, but none was provided.')
+      end
+
+      if chilled_water_loop
+        radiant_loop_clg_coil = OpenStudio::Model::CoilCoolingLowTempRadiantVarFlow.new(model, clg_control_temp_sch)
+        radiant_loop_clg_coil.setName("#{zone.name} Radiant Loop Cooling Coil")
+        radiant_loop_clg_coil.setCoolingControlThrottlingRange(throttling_range_c)
+        chilled_water_loop.addDemandBranchForComponent(radiant_loop_clg_coil)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Radiant loops require a chilled water loop, but none was provided.')
+      end
+
+      radiant_loop = OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow.new(model,
+                                                                          radiant_avail_sch,
+                                                                          radiant_loop_htg_coil,
+                                                                          radiant_loop_clg_coil)
+
+      # assign internal source construction to floors in zone
+      zone.spaces.each do |space|
+        space.surfaces.each do |surface|
+          if radiant_type == 'floor'
+            if surface.surfaceType == 'Floor'
+              if surface.outsideBoundaryCondition == 'Ground'
+                surface.setConstruction(radiant_ground_slab_construction)
+              elsif surface.outsideBoundaryCondition == 'Outdoors'
+                surface.setConstruction(radiant_exterior_slab_construction)
+              else # interior floor
+                surface.setConstruction(radiant_interior_floor_slab_construction)
+              end
+            end
+          elsif radiant_type == 'ceiling'
+            if surface.surfaceType == 'RoofCeiling'
+              if surface.outsideBoundaryCondition == 'Outdoors'
+                surface.setConstruction(radiant_ceiling_slab_construction)
+              else # interior ceiling
+                surface.setConstruction(radiant_interior_ceiling_slab_construction)
+              end
+            end
+          end
+        end
+      end
+
+      # radiant loop surfaces
+      radiant_loop.setName("#{zone.name} Radiant Loop")
+      if radiant_type == 'floor'
+        radiant_loop.setRadiantSurfaceType('Floors')
+      elsif radiant_type == 'ceiling'
+        radiant_loop.setRadiantSurfaceType('Ceilings')
+      end
+
+      # radiant loop layout details
+      radiant_loop.setHydronicTubingInsideDiameter(0.015875) # 5/8 in. ID, 3/4 in. OD
+      # @TODO include a method to determine tubing length in the zone
+      # loop_length = 7*zone.floorArea
+      # radiant_loop.setHydronicTubingLength()
+      radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
+      radiant_loop.setCircuitLength(106.7)
+
+      # radiant loop controls
+      radiant_loop.setTemperatureControlType('MeanAirTemperature')
+      radiant_loop.addToThermalZone(zone)
+      radiant_loops << radiant_loop
+
+      # rename nodes before adding EMS code
+      rename_plant_loop_nodes(model)
+
+      # set radiant loop controls
+      if control_strategy == 'proportional_control'
+        model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                                radiant_type: radiant_type,
+                                                proportional_gain: proportional_gain,
+                                                minimum_operation: minimum_operation,
+                                                weekend_temperature_reset: weekend_temperature_reset,
+                                                early_reset_out_arg: early_reset_out_arg,
+                                                switch_over_time: switch_over_time)
+      end
+    end
+
+    return radiant_loops
   end
 
   # Adds a window air conditioner to each zone.
@@ -4447,9 +4878,9 @@ class Standard
                                                                                  supplemental_htg_coil)
       water_to_air_hp_system.setName("#{zone.name} WSHP")
       unless ventilation
-        water_to_air_hp_system.setOutdoorAirFlowRateDuringHeatingOperation(OpenStudio::OptionalDouble.new(0.0))
-        water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(OpenStudio::OptionalDouble.new(0.0))
-        water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(OpenStudio::OptionalDouble.new(0.0))
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        water_to_air_hp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        water_to_air_hp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
       end
       water_to_air_hp_system.addToThermalZone(zone)
 
@@ -4901,6 +5332,154 @@ class Standard
     return fan_type
   end
 
+  # Adds a waterside economizer to the chilled water and condenser loop
+  #
+  # @param integrated [Bool] when set to true, models an integrated waterside economizer
+  #   Integrated: in series with chillers, can run simultaneously with chillers
+  #   Non-Integrated: in parallel with chillers, chillers locked out during operation
+  def model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
+                                     integrated: true)
+
+    # make a new heat exchanger
+    heat_exchanger = OpenStudio::Model::HeatExchangerFluidToFluid.new(model)
+    heat_exchanger.setHeatExchangeModelType('CounterFlow')
+    # zero degree minimum necessary to allow both economizer and heat exchanger to operate in both integrated and non-integrated archetypes
+    # possibly results from an EnergyPlus issue that didn't get resolved correctly https://github.com/NREL/EnergyPlus/issues/5626
+    heat_exchanger.setMinimumTemperatureDifferencetoActivateHeatExchanger(OpenStudio.convert(0.0, 'R', 'K').get)
+    heat_exchanger.setHeatTransferMeteringEndUseType('FreeCooling')
+    heat_exchanger.setOperationMinimumTemperatureLimit(OpenStudio.convert(35.0, 'F', 'C').get)
+    heat_exchanger.setOperationMaximumTemperatureLimit(OpenStudio.convert(72.0, 'F', 'C').get)
+    heat_exchanger.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+
+    # get the chillers on the chilled water loop
+    chillers = chilled_water_loop.supplyComponents('OS:Chiller:Electric:EIR'.to_IddObjectType)
+
+    if integrated
+      if chillers.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; only modeling waterside economizer")
+      end
+
+      # set methods for integrated heat exchanger
+      heat_exchanger.setName('Integrated Waterside Economizer Heat Exchanger')
+      heat_exchanger.setControlType('CoolingDifferentialOnOff')
+
+      # add the heat exchanger to the chilled water loop upstream of the chiller
+      heat_exchanger.addToNode(chilled_water_loop.supplyInletNode)
+
+      # Copy the setpoint managers from the plant's supply outlet node to the chillers and HX outlets.
+      # This is necessary so that the correct type of operation scheme will be created.
+      # Without this, OS will create an uncontrolled operation scheme and the chillers will never run.
+      chw_spms = chilled_water_loop.supplyOutletNode.setpointManagers
+      objs = []
+      chillers.each do |obj|
+        objs << obj.to_ChillerElectricEIR.get
+      end
+      objs << heat_exchanger
+      objs.each do |obj|
+        outlet = obj.supplyOutletModelObject.get.to_Node.get
+        chw_spms.each do |spm|
+          new_spm = spm.clone.to_SetpointManager.get
+          new_spm.addToNode(outlet)
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Copied SPM #{spm.name} to the outlet of #{obj.name}.")
+        end
+      end
+    else
+      # non-integrated
+      # if the heat exchanger can meet the entire load, the heat exchanger will run and the chiller is disabled.
+      # In E+, only one chiller can be tied to a given heat exchanger, so if you have multiple chillers,
+      # they will cannot be tied to a single heat exchanger without EMS.
+      chiller = nil
+      if chillers.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No chillers were found on #{chilled_water_loop.name}; cannot add a non-integrated waterside economizer.")
+        heat_exchanger.setControlType('CoolingSetpointOnOff')
+      elsif chillers.size > 1
+        chiller = chillers.sort[0]
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "More than one chiller was found on #{chilled_water_loop.name}.  EnergyPlus only allows a single chiller to be interlocked with the HX.  Chiller #{chiller.name} was selected.  Additional chillers will not be locked out during HX operation.")
+      else # 1 chiller
+        chiller = chillers[0]
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Chiller '#{chiller.name}' will be locked out during HX operation.")
+      end
+      chiller = chiller.to_ChillerElectricEIR.get
+
+      # set methods for non-integrated heat exchanger
+      heat_exchanger.setName('Non-Integrated Waterside Economizer Heat Exchanger')
+      heat_exchanger.setControlType('CoolingSetpointOnOffWithComponentOverride')
+
+      # add the heat exchanger to a supply side branch of the chilled water loop parallel with the chiller(s)
+      chilled_water_loop.addSupplyBranchForComponent(heat_exchanger)
+
+      # Copy the setpoint managers from the plant's supply outlet node to the HX outlet.
+      # This is necessary so that the correct type of operation scheme will be created.
+      # Without this, the HX will never run
+      chw_spms = chilled_water_loop.supplyOutletNode.setpointManagers
+      outlet = heat_exchanger.supplyOutletModelObject.get.to_Node.get
+      chw_spms.each do |spm|
+        new_spm = spm.clone.to_SetpointManager.get
+        new_spm.addToNode(outlet)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Copied SPM #{spm.name} to the outlet of #{heat_exchanger.name}.")
+      end
+
+      # set the supply and demand inlet fields to interlock the heat exchanger with the chiller
+      chiller_supply_inlet = chiller.supplyInletModelObject.get.to_Node.get
+      heat_exchanger.setComponentOverrideLoopSupplySideInletNode(chiller_supply_inlet)
+      chiller_demand_inlet = chiller.demandInletModelObject.get.to_Node.get
+      heat_exchanger.setComponentOverrideLoopDemandSideInletNode(chiller_demand_inlet)
+
+      # check if the chilled water pump is on a branch with the chiller.
+      # if it is, move this pump before the splitter so that it can push water through either the chiller or the heat exchanger.
+      pumps_on_branches = []
+      # search for constant and variable speed pumps  between supply splitter and supply mixer.
+      chilled_water_loop.supplyComponents(chilled_water_loop.supplySplitter, chilled_water_loop.supplyMixer).each do |supply_comp|
+        if supply_comp.to_PumpConstantSpeed.is_initialized
+          pumps_on_branches << supply_comp.to_PumpConstantSpeed.get
+        elsif supply_comp.to_PumpVariableSpeed.is_initialized
+          pumps_on_branches << supply_comp.to_PumpVariableSpeed.get
+        end
+      end
+      # If only one pump is found, clone it, put the clone on the supply inlet node, and delete the original pump.
+      # If multiple branch pumps, clone the first pump found, add it to the inlet of the heat exchanger, and warn user.
+      if pumps_on_branches.size == 1
+        pump = pumps_on_branches[0]
+        pump_clone = pump.clone(model).to_StraightComponent.get
+        pump_clone.addToNode(chilled_water_loop.supplyInletNode)
+        pump.remove
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Since you need a pump to move water through the HX, the pump serving the chiller was moved so that it can also serve the HX depending on the desired control sequence.')
+      elsif pumps_on_branches.size > 1
+        hx_inlet_node = heat_exchanger.inletModelObject.get.to_Node.get
+        pump = pumps_on_branches[0]
+        pump_clone = pump.clone(model).to_StraightComponent.get
+        pump_clone.addToNode(hx_inlet_node)
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Found 2 or more pumps on branches.  Since you need a pump to move water through the HX, the first pump encountered was copied and placed in series with the HX.  This pump might not be reasonable for this duty, please check.')
+      end
+    end
+
+    # add heat exchanger to condenser water loop
+    condenser_water_loop.addDemandBranchForComponent(heat_exchanger)
+
+    # change setpoint manager on condenser water loop to allow waterside economizing
+    dsgn_sup_wtr_temp_f = 42.0
+    dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp_f, 'F', 'C').get
+    condenser_water_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
+        spm = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
+        spm.setMinimumSetpointTemperature(dsgn_sup_wtr_temp_c)
+      elsif spm.to_SetpointManagerScheduled.is_initialized
+        spm = spm.to_SetpointManagerScheduled.get
+        cw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                          dsgn_sup_wtr_temp_c,
+                                                          name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F")
+        spm.setSchedule(cw_temp_sch)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing condenser water loop setpoint for '#{condenser_water_loop.name}' to '#{cw_temp_sch.name}' to account for the waterside economizer.")
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Condenser water loop '#{condenser_water_loop.name}' setpoint manager '#{spm.name}' is not a recognized setpoint manager type.  Cannot change to account for the waterside economizer.")
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added #{heat_exchanger.name} to condenser water loop #{condenser_water_loop.name} and chilled water loop #{chilled_water_loop.name} to enable waterside economizing.")
+
+    return heat_exchanger
+  end
+
   # Get the existing hot water loop in the model or add a new one if there isn't one already.
   #
   # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
@@ -4964,12 +5543,18 @@ class Standard
   end
 
   # Get the existing heat pump loop in the model or add a new one if there isn't one already.
-  def model_get_or_add_heat_pump_loop(model)
+  #
+  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
+  # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity and DistrictCooling.
+  # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
+  #   Valid choices are: FluidCooler, CoolingTower
+  def model_get_or_add_heat_pump_loop(model, heat_fuel, cool_fuel,
+                                      heat_pump_loop_cooling_type: 'FluidCooler')
     # retrieve the existing heat pump loop or add a new one if necessary
     heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                        model.getPlantLoopByName('Heat Pump Loop').get
                      else
-                       model_add_hp_loop(model)
+                       model_add_hp_loop(model, heating_fuel: heat_fuel, cooling_fuel: cool_fuel, cooling_type: heat_pump_loop_cooling_type)
                      end
     return heat_pump_loop
   end
@@ -4987,10 +5572,12 @@ class Standard
   #   only used if HVAC system has a hot water loop
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
+  # @param heat_pump_loop_cooling_type [String] the type of cooling equipment for heat pump loops if not DistrictCooling.
+  #   Valid choices are: FluidCooler, CoolingTower
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
-  # @param fan_coil_ventilation [Bool] toggle whether to include outdoor air ventilation on zone fan coil units
-  #   only used if HVAC system has four pipe fan coil units
+  # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
+  #   including as fan coil units, VRF terminals, or water source heat pumps.
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -5000,9 +5587,10 @@ class Standard
                             zones,
                             hot_water_loop_type: 'HighTemperature',
                             chilled_water_loop_cooling_type: 'WaterCooled',
+                            heat_pump_loop_cooling_type: 'FluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
-                            fan_coil_ventilation: true)
+                            zone_equipment_ventilation: true)
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -5113,7 +5701,8 @@ class Standard
 
     when 'VRF'
       model_add_vrf(model,
-                    zones)
+                    zones,
+                    ventilation: zone_equipment_ventilation)
 
     when 'Fan Coil'
       case main_heat_fuel
@@ -5139,7 +5728,32 @@ class Standard
                                    zones,
                                    chilled_water_loop,
                                    hot_water_loop: hot_water_loop,
-                                   ventilation: fan_coil_ventilation)
+                                   ventilation: zone_equipment_ventilation)
+
+    when 'Radiant Slab'
+      case main_heat_fuel
+      when 'NaturalGas', 'DistrictHeating', 'Electricity'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: hot_water_loop_type)
+      when 'AirSourceHeatPump'
+        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                         hot_water_loop_type: 'LowTemperature')
+      else
+        hot_water_loop = nil
+      end
+
+      case cool_fuel
+      when 'Electricity', 'DistrictCooling'
+        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
+                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
+      else
+        chilled_water_loop = nil
+      end
+
+      model_add_low_temp_radiant(model,
+                                 zones,
+                                 hot_water_loop,
+                                 chilled_water_loop)
 
     when 'Baseboards'
       case main_heat_fuel
@@ -5361,23 +5975,25 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      condenser_loop = case main_heat_fuel
-                       when 'NaturalGas'
-                         model_get_or_add_heat_pump_loop(model)
-                       else
-                         model_get_or_add_ambient_water_loop(model)
-                       end
+      if main_heat_fuel == 'DistrictHeating' && cool_fuel == 'DistrictCooling'
+        condenser_loop = model_get_or_add_ambient_water_loop(model)
+      elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
+        condenser_loop = model_get_or_add_ambient_water_loop(model)
+      else
+        condenser_loop = model_get_or_add_heat_pump_loop(model, main_heat_fuel, cool_fuel,
+                                                         heat_pump_loop_cooling_type: heat_pump_loop_cooling_type)
+      end
       model_add_water_source_hp(model,
                                 zones,
                                 condenser_loop,
-                                ventilation: false)
+                                ventilation: zone_equipment_ventilation)
 
     when 'Ground Source Heat Pumps'
       condenser_loop = model_get_or_add_ground_hx_loop(model)
       model_add_water_source_hp(model,
                                 zones,
                                 condenser_loop,
-                                ventilation: false)
+                                ventilation: zone_equipment_ventilation)
 
     when 'DOAS Cold Supply'
       hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
@@ -5408,6 +6024,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5432,6 +6049,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5458,6 +6076,7 @@ class Standard
       else
         chilled_water_loop = nil
       end
+
       model_add_doas(model,
                      zones,
                      hot_water_loop: hot_water_loop,
@@ -5515,7 +6134,9 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Water Source Heat Pumps with DOAS'
       model_add_hvac_system(model,
@@ -5534,7 +6155,11 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Water Source Heat Pumps with DOAS with DCV'
       model_add_hvac_system(model,
@@ -5545,6 +6170,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                             air_loop_heating_type: air_loop_heating_type,
                             air_loop_cooling_type: air_loop_cooling_type)
 
@@ -5553,7 +6179,10 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with ERVs'
       model_add_hvac_system(model,
@@ -5568,7 +6197,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with DOAS'
       model_add_hvac_system(model,
@@ -5587,7 +6217,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Ground Source Heat Pumps with DOAS with DCV'
       model_add_hvac_system(model,
@@ -5606,7 +6237,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with DOAS'
       model_add_hvac_system(model,
@@ -5628,7 +6260,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with DOAS with DCV'
       model_add_hvac_system(model,
@@ -5650,7 +6282,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when 'Fan Coil with ERVs'
       model_add_hvac_system(model,
@@ -5668,7 +6300,7 @@ class Standard
                             zones,
                             hot_water_loop_type: hot_water_loop_type,
                             chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            fan_coil_ventilation: false)
+                            zone_equipment_ventilation: false)
 
     when  'VRF with DOAS'
       model_add_hvac_system(model,
@@ -5687,7 +6319,8 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
 
     when  'VRF with DOAS with DCV'
       model_add_hvac_system(model,
@@ -5706,7 +6339,31 @@ class Standard
                             main_heat_fuel,
                             zone_heat_fuel,
                             cool_fuel,
-                            zones)
+                            zones,
+                            zone_equipment_ventilation: false)
+
+    when 'Radiant Slab with DOAS'
+      model_add_hvac_system(model,
+                            system_type = 'Radiant Slab',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            rad_lock_str: rad_lock_str,
+                            rad_lock_end: rad_lock_end)
+
+      model_add_hvac_system(model,
+                            system_type = 'DOAS',
+                            main_heat_fuel,
+                            zone_heat_fuel,
+                            cool_fuel,
+                            zones,
+                            hot_water_loop_type: hot_water_loop_type,
+                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
+                            air_loop_heating_type: 'Water',
+                            air_loop_cooling_type: 'Water')
 
     else
 

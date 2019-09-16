@@ -153,7 +153,7 @@ class Standard
     ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
     if File.exist? ddy_file
       ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
-      ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
+      ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).sort.each do |d|
         # Import the 99.6% Heating and 0.4% Cooling design days
         ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)|(Clg 0.4% Condns DB=>MCWB)/
         if d.name.get =~ ddy_list

@@ -220,6 +220,10 @@ class Standard
   def air_loop_hvac_optimum_start_required?(air_loop_hvac)
     opt_start_required = false
 
+    # data centers don't require optimum start as generally not occupied
+    return opt_start_required if air_loop_hvac.name.to_s.include?('CRAH') ||
+        air_loop_hvac.name.to_s.include?('CRAC')
+
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0

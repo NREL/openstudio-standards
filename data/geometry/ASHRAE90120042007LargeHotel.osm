@@ -1362,6 +1362,12 @@ OS:ConvergenceLimits,
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
 
+OS:Sizing:Parameters,
+  {1241cbc3-58cd-4548-80f8-9c0707654070}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {4876d0b2-160f-4cc0-a0ef-dda9c26cfe8e}, !- Handle
   Corridor_Flr_3_Wall_2_South,            !- Name

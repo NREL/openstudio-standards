@@ -2819,14 +2819,14 @@ class Standard
     if __dir__[0] == ':' # Running from OpenStudio CLI
       # load file from embedded files
       if run_type == 'dd-only'
-        temp = load_resource_relative('../../../data/standards/legacy_dd_results.csv', 'r:UTF-8')
+        temp = load_resource_relative('../../../data/standards/test_performance_expected_dd_results.csv', 'r:UTF-8')
       else
         temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
       end
     else
       # loaded gem from system path
       if run_type == 'dd-only'
-        temp = File.read("#{standards_data_dir}/legacy_dd_results.csv")
+        temp = File.read("#{standards_data_dir}/test_performance_expected_dd_results.csv")
       else
         temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
       end
@@ -2969,6 +2969,12 @@ class Standard
       result = 4181
     elsif building_type == 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
       result = 4595
+    elsif building_type == 'SmallDataCenterLowITE' or building_type == 'SmallDataCenterHighITE'  # 600 ft^2
+      result = 56
+    elsif building_type == 'LargeDataCenterLowITE' or building_type == 'LargeDataCenterHighITE'  # 6000 ft^2
+      result = 557
+    elsif building_type == 'Laboratory' # 90000 ft^2
+      result = 8361
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
       result = nil
@@ -3814,7 +3820,7 @@ class Standard
   end
 
   # Returns average daily hot water consumption by building type
-  # recommendations from 2011 ASHRAE Handbook - HVAC Applications Table 7 section 60.14
+  # recommendations from 2011 ASHRAE Handbook - HVAC Applications Table 7 section 50.14
   # Not all building types are included in lookup
   # some recommendations have multiple values based on number of units.
   # Will return an array of hashes. Many may have one array entry.
@@ -3862,7 +3868,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'Warehouse'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif ['SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE'].include? building_type
+    elsif ['SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE', 'Laboratory'].include? building_type
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine hot water demand recommendations")
@@ -3954,6 +3960,16 @@ class Standard
       building_type = 'SpMarket'
     elsif building_type == 'Warehouse'
       building_type = 'Warehouse'
+    elsif building_type == 'SmallDataCenterLowITE'
+      building_type = 'SmDCLowITE'
+    elsif building_type == 'SmallDataCenterHighITE'
+      building_type = 'SmDCHighITE'
+    elsif building_type == 'LargeDataCenterLowITE'
+      building_type = 'LrgDCLowITE'
+    elsif building_type == 'LargeDataCenterHighITE'
+      building_type = 'LrgDCHighITE'
+    elsif building_type == 'Laboratory'
+      building_type = 'Laboratory'
     end
 
     parts = [template]
@@ -4480,7 +4496,6 @@ class Standard
     return is_valid
   end
 
-
   # Determines how ventilation for the standard is specified.
   # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
   # When 'Maximum', only the biggest OA flow rate.  Used by T24.
@@ -4488,19 +4503,14 @@ class Standard
   # @param model [OpenStudio::Model::Model] the model
   # @return [String] the ventilation method, either Sum or Maximum
   def model_ventilation_method(model)
-    ventilation_method = 'Sum'
-    return ventilation_method
-  end
+    building_data = model_get_building_climate_zone_and_building_type(model)
+    building_type = building_data['building_type']
+    if building_type != 'Laboratory'    # Laboratory has multiple criteria on ventilation, pick the greatest
+      ventilation_method = 'Sum'
+    else
+      ventilation_method = 'Maximum'
+    end
 
-
-  # Determines how ventilation for the standard is specified.
-  # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
-  # When 'Maximum', only the biggest OA flow rate.  Used by T24.
-  #
-  # @param model [OpenStudio::Model::Model] the model
-  # @return [String] the ventilation method, either Sum or Maximum
-  def model_ventilation_method(model)
-    ventilation_method = 'Sum'
     return ventilation_method
   end
 
