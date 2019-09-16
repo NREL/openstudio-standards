@@ -100,10 +100,12 @@ class Standard
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
+    # unless the "Outdoor Air Method" is "Maximum"
     thermal_zone.spaces.each do |space|
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
       dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
 
       # Get the space properties
       floor_area = space.floorArea

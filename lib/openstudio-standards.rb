@@ -281,6 +281,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.Laboratory"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"

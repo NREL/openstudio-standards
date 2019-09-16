@@ -902,4 +902,9 @@ class Standard
       plant_loop.supplyOutletNode.setName("#{plant_loop_name} Supply Outlet Node")
     end
   end
+
+  def true?(obj)
+    obj.to_s.downcase == "true"
+  end
+
 end

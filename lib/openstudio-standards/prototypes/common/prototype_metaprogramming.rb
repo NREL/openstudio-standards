@@ -28,7 +28,8 @@ def create_class_array
       'LargeDataCenterHighITE',
       'SmallOfficeDetailed',
       'MediumOfficeDetailed',
-      'LargeOfficeDetailed'
+      'LargeOfficeDetailed',
+      'Laboratory'
   ]
 
   templates = {
