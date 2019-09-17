@@ -548,7 +548,7 @@ class Standard
   #
   # @param heating_fuel [String]
   # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
-  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: FluidCoolerSingleSpeed, CoolingTowerTwoSpeed
+  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: EvaporativeFluidCoolerSingleSpeed, CoolingTowerTwoSpeed
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param sup_wtr_high_temp [Double] target supply water temperature to enable cooling in degrees Fahrenheit, default 65.0F
   # @param sup_wtr_low_temp [Double] target supply water temperature to enable heating in degrees Fahrenheit, default 41.0F
@@ -559,7 +559,7 @@ class Standard
   def model_add_hp_loop(model,
                         heating_fuel: 'NaturalGas',
                         cooling_fuel: 'Electricity',
-                        cooling_type: 'FluidCooler',
+                        cooling_type: 'EvaporativeFluidCooler',
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,
@@ -638,7 +638,7 @@ class Standard
       cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Cooling Scheduled Dual Setpoint")
     else
       case cooling_type
-      when 'FluidCooler', 'FluidCoolerSingleSpeed'
+      when 'EvaporativeFluidCooler', 'EvaporativeFluidCoolerSingleSpeed'
         cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
         cooling_equipment.setName("#{heat_pump_water_loop.name} Fluid Cooler")
         cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
@@ -5549,7 +5549,7 @@ class Standard
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
   #   Valid choices are: FluidCooler, CoolingTower
   def model_get_or_add_heat_pump_loop(model, heat_fuel, cool_fuel,
-                                      heat_pump_loop_cooling_type: 'FluidCooler')
+                                      heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
     # retrieve the existing heat pump loop or add a new one if necessary
     heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                        model.getPlantLoopByName('Heat Pump Loop').get
@@ -5573,7 +5573,7 @@ class Standard
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment for heat pump loops if not DistrictCooling.
-  #   Valid choices are: FluidCooler, CoolingTower
+  #   Valid choices are: EvaporativeFluidCooler, FluidCooler, CoolingTower
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
@@ -5587,7 +5587,7 @@ class Standard
                             zones,
                             hot_water_loop_type: 'HighTemperature',
                             chilled_water_loop_cooling_type: 'WaterCooled',
-                            heat_pump_loop_cooling_type: 'FluidCooler',
+                            heat_pump_loop_cooling_type: 'EvaporativeFluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
                             zone_equipment_ventilation: true)
