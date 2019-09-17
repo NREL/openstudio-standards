@@ -3328,11 +3328,11 @@ class Standard
     if supplemental_heating_type == 'Electric'
       create_coil_heating_electric(model,
                                    air_loop_node: air_loop.supplyInletNode,
-                                   name: "#{air_loop.name} SAC Electric Backup Htg Coil")
+                                   name: "#{air_loop.name} Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
       create_coil_heating_gas(model,
                               air_loop_node: air_loop.supplyInletNode,
-                              name: "#{air_loop.name} SAC Gas Backup Htg Coil")
+                              name: "#{air_loop.name} Gas Backup Htg Coil")
     end
 
     # create heating coil
