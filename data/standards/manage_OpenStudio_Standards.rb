@@ -100,6 +100,10 @@ def unique_properties(sheet_name)
            ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
+         when 'water_source_heat_pumps'
+           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'water_source_heat_pumps_heating'
+           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'heat_pumps'
            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'heat_pumps_heating'
