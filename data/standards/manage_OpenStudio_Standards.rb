@@ -143,6 +143,18 @@ def unique_properties(sheet_name)
          end
 end
 
+# Shortens JSON file path names to avoid Windows build errors when
+# compiling the OpenStudio CLI
+def shorten_sheet_name(sheet_name)
+  short_sheet_name = sheet_name
+  short_sheet_name = short_sheet_name.gsub('refrigeration_system_lineup', 'ref_lnup') # 19 saved
+  short_sheet_name = short_sheet_name.gsub('refrigerated_cases', 'ref_cases') # 9 saved
+  short_sheet_name = short_sheet_name.gsub('exterior_lighting', 'ext_ltg') # 10 saved
+  short_sheet_name = short_sheet_name.gsub('space_types', 'spc_typ') # 10 saved
+
+  return short_sheet_name
+end
+
 # Determine the directory of the data based on the spreadsheet name
 def standard_parent_directory_from_spreadsheet_title(spreadsheet_title)
   data_directory = spreadsheet_title.downcase.gsub('openstudio_standards-', '').gsub(/\(\w*\)/, '').split('-').first
@@ -591,7 +603,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
             next unless last_dir == template_dir_name
             data_dir = "#{template_dir}/data"
             Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
-            json_path = "#{data_dir}/#{template_dir_name}.#{sheet_name}.json"
+            json_path = "#{data_dir}/#{template_dir_name}.#{shorten_sheet_name(sheet_name)}.json"
             if json_path.size > 256
               puts "--ERROR the JSON path is #{json_path.size - 256} characters longer than the Window 256 character limit, cannot write to #{json_path}"
               return false
@@ -620,7 +632,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         template_dirs.uniq.each do |template_dir|
           data_dir = "#{template_dir}/data"
           Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
-          json_path = "#{data_dir}/Any.#{sheet_name}.json"
+          json_path = "#{data_dir}/Any.#{shorten_sheet_name(sheet_name)}.json"
           if json_path.size > 256
             puts "--ERROR the JSON path is #{json_path.size - 256} characters longer than the Window 256 character limit, cannot write to #{json_path}"
             return false
@@ -646,7 +658,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         template_dirs.each do |template_dir|
           data_dir = "#{template_dir}/data"
           Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
-          json_path = "#{data_dir}/#{parent_dir}.#{sheet_name}.json"
+          json_path = "#{data_dir}/#{parent_dir}.#{shorten_sheet_name(sheet_name)}.json"
           if json_path.size > 256
             puts "--ERROR the JSON path is #{json_path.size - 256} characters longer than the Window 256 character limit, cannot write to #{json_path}"
             return false
