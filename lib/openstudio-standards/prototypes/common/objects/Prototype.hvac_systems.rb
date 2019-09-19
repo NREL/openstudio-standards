@@ -6011,6 +6011,9 @@ class Standard
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
+        when 'Electricity'
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "air_loop_heating_type '#{air_loop_heating_type}' is not supported with main_heat_fuel '#{main_heat_fuel}' for a 'DOAS' system type.")
+          return false
         else
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: hot_water_loop_type)
