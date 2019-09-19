@@ -1114,7 +1114,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.multiAddBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       # DOAS sizing
       sizing_zone = zone.sizingZone
@@ -1411,7 +1411,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.multiAddBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       # DOAS sizing
       sizing_zone = zone.sizingZone
@@ -1613,7 +1613,7 @@ class Standard
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-        air_loop.multiAddBranchForZone(zone, terminal.to_StraightComponent)
+        air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1628,7 +1628,7 @@ class Standard
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-        air_loop.multiAddBranchForZone(zone, terminal.to_StraightComponent)
+        air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1765,7 +1765,7 @@ class Standard
                                                                                    pfp_fan,
                                                                                    rht_coil)
       pfp_terminal.setName("#{zone.name} PFP Term")
-      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -1940,7 +1940,7 @@ class Standard
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-      air_loop.multiAddBranchForZone(zone, terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2083,7 +2083,7 @@ class Standard
                                                                                    pfp_fan,
                                                                                    rht_coil)
       pfp_terminal.setName("#{zone.name} PFP Term")
-      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_HVACComponent.get)
 
       # adjust zone sizing
       sizing_zone = zone.sizingZone
@@ -2238,7 +2238,7 @@ class Standard
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      air_loop.multiAddBranchForZone(zone, terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -2533,7 +2533,7 @@ class Standard
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop
     end
 
@@ -2695,7 +2695,7 @@ class Standard
       # create a VAV no reheat terminal and attach the zone/terminal pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop
     end
 
@@ -2873,7 +2873,7 @@ class Standard
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       air_loops << air_loop
     end
@@ -3080,7 +3080,7 @@ class Standard
       diffuser.setName("#{air_loop.name} Diffuser")
       diffuser.setZoneMinimumAirFlowInputMethod('Constant')
       diffuser.setConstantMinimumAirFlowFraction(0.1)
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       air_loops << air_loop
     end
@@ -3218,7 +3218,7 @@ class Standard
       diffuser.setName("#{zone.name} VAV terminal")
       diffuser.setZoneMinimumAirFlowInputMethod('Constant')
       diffuser.setConstantMinimumAirFlowFraction(0.1)
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       # Zone sizing
       sizing_zone = zone.sizingZone
@@ -3389,7 +3389,7 @@ class Standard
 
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} SAC Diffuser")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -3493,7 +3493,7 @@ class Standard
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} Direct Air")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
     end
 
     return true
@@ -3986,7 +3986,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.multiAddBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       sizing_zone = zone.sizingZone
       sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
@@ -4694,7 +4694,7 @@ class Standard
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} Direct Air")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       furnaces << air_loop
     end
@@ -4831,7 +4831,7 @@ class Standard
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} Direct Air")
-      air_loop.multiAddBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       hps << air_loop
     end
