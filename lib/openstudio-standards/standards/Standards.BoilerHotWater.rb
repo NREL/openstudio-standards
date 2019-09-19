@@ -130,7 +130,7 @@ class Standard
     # Get the boiler properties
     blr_props = model_find_object(standards_data['boilers'], search_criteria, capacity_btu_per_hr)
     unless blr_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties with search criteria #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
     end
