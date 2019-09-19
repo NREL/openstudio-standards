@@ -75,6 +75,10 @@ module CoilDX
         containing_comp = coil_dx.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           htg_type = 'Electric Resistance or None'
+        elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
+          if containing_comp.name.to_s.include? 'Minisplit'
+            htg_type = 'All Other'
+          end
         end # TODO: Add other unitary systems
       elsif coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
