@@ -116,7 +116,7 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'FluidCooler')
+          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
         end
 
         model_add_psz_ac(model,
