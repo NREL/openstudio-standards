@@ -548,7 +548,7 @@ class Standard
   #
   # @param heating_fuel [String]
   # @param cooling_fuel [String] cooling fuel. Valid options are: Electricity, DistrictCooling
-  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: FluidCoolerSingleSpeed, CoolingTowerTwoSpeed
+  # @param cooling_type [String] cooling type if not DistrictCooling.  Valid options are: EvaporativeFluidCoolerSingleSpeed, CoolingTowerTwoSpeed
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param sup_wtr_high_temp [Double] target supply water temperature to enable cooling in degrees Fahrenheit, default 65.0F
   # @param sup_wtr_low_temp [Double] target supply water temperature to enable heating in degrees Fahrenheit, default 41.0F
@@ -559,7 +559,7 @@ class Standard
   def model_add_hp_loop(model,
                         heating_fuel: 'NaturalGas',
                         cooling_fuel: 'Electricity',
-                        cooling_type: 'FluidCooler',
+                        cooling_type: 'EvaporativeFluidCooler',
                         system_name: 'Heat Pump Loop',
                         sup_wtr_high_temp: 65.0,
                         sup_wtr_low_temp: 41.0,
@@ -638,7 +638,7 @@ class Standard
       cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Cooling Scheduled Dual Setpoint")
     else
       case cooling_type
-      when 'FluidCooler', 'FluidCoolerSingleSpeed'
+      when 'EvaporativeFluidCooler', 'EvaporativeFluidCoolerSingleSpeed'
         cooling_equipment = OpenStudio::Model::EvaporativeFluidCoolerSingleSpeed.new(model)
         cooling_equipment.setName("#{heat_pump_water_loop.name} Fluid Cooler")
         cooling_equipment.setDesignSprayWaterFlowRate(0.002208) # Based on HighRiseApartment
@@ -650,7 +650,7 @@ class Standard
         cooling_equipment.setName("#{heat_pump_water_loop.name} Central Tower")
         heat_pump_water_loop.addSupplyBranchForComponent(cooling_equipment)
         cooling_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} CoolingTowerTwoSpeed Scheduled Dual Setpoint")
-      when 'FluidCoolerTwoSpeed', 'CoolingTowerSingleSpeed', 'CoolingTowerVariableSpeed'
+      when 'FluidCooler', 'FluidCoolerTwoSpeed', 'CoolingTowerSingleSpeed', 'CoolingTowerVariableSpeed'
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Cooling fuel type #{cooling_type} is not yet supported, no cooling equipment will be added.")
         return false
       else
@@ -1114,7 +1114,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       # DOAS sizing
       sizing_zone = zone.sizingZone
@@ -1411,7 +1411,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       # DOAS sizing
       sizing_zone = zone.sizingZone
@@ -1613,7 +1613,7 @@ class Standard
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-        air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+        air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1628,7 +1628,7 @@ class Standard
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-        air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+        air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1765,7 +1765,7 @@ class Standard
                                                                                    pfp_fan,
                                                                                    rht_coil)
       pfp_terminal.setName("#{zone.name} PFP Term")
-      air_loop.addBranchForZone(zone, pfp_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -1940,7 +1940,7 @@ class Standard
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
-      air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2083,7 +2083,7 @@ class Standard
                                                                                    pfp_fan,
                                                                                    rht_coil)
       pfp_terminal.setName("#{zone.name} PFP Term")
-      air_loop.addBranchForZone(zone, pfp_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, pfp_terminal.to_HVACComponent.get)
 
       # adjust zone sizing
       sizing_zone = zone.sizingZone
@@ -2238,7 +2238,7 @@ class Standard
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      air_loop.addBranchForZone(zone, terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -2533,7 +2533,7 @@ class Standard
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop
     end
 
@@ -2695,7 +2695,7 @@ class Standard
       # create a VAV no reheat terminal and attach the zone/terminal pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
       air_loops << air_loop
     end
 
@@ -2873,7 +2873,7 @@ class Standard
       # create a diffuser and attach the zone/diffuser pair to the air loop
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{air_loop.name} Diffuser")
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       air_loops << air_loop
     end
@@ -3080,7 +3080,7 @@ class Standard
       diffuser.setName("#{air_loop.name} Diffuser")
       diffuser.setZoneMinimumAirFlowInputMethod('Constant')
       diffuser.setConstantMinimumAirFlowFraction(0.1)
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       air_loops << air_loop
     end
@@ -3218,7 +3218,7 @@ class Standard
       diffuser.setName("#{zone.name} VAV terminal")
       diffuser.setZoneMinimumAirFlowInputMethod('Constant')
       diffuser.setConstantMinimumAirFlowFraction(0.1)
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       # Zone sizing
       sizing_zone = zone.sizingZone
@@ -3328,11 +3328,11 @@ class Standard
     if supplemental_heating_type == 'Electric'
       create_coil_heating_electric(model,
                                    air_loop_node: air_loop.supplyInletNode,
-                                   name: "#{air_loop.name} PSZ-AC Electric Backup Htg Coil")
+                                   name: "#{air_loop.name} Electric Backup Htg Coil")
     elsif supplemental_heating_type == 'Gas'
       create_coil_heating_gas(model,
                               air_loop_node: air_loop.supplyInletNode,
-                              name: "#{air_loop.name} PSZ-AC Gas Backup Htg Coil")
+                              name: "#{air_loop.name} Gas Backup Htg Coil")
     end
 
     # create heating coil
@@ -3389,7 +3389,7 @@ class Standard
 
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} SAC Diffuser")
-      air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -3400,6 +3400,103 @@ class Standard
     end
 
     return air_loop
+  end
+
+  # Creates a minisplit heatpump system for each zone and adds it to the model.
+  #
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
+  # @param cooling_type [String] valid choices are Two Speed DX AC, Single Speed DX AC, Single Speed Heat Pump
+  # @param heating_type [String] valid choices are Single Speed DX
+  # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
+  # @return [OpenStudio::Model::AirLoopHVAC] the resulting split AC air loop
+  def model_add_minisplit_hp(model,
+                             thermal_zones,
+                             cooling_type: 'Two Speed DX AC',
+                             heating_type: 'Single Speed DX',
+                             hvac_op_sch: nil)
+
+    # hvac operation schedule
+    if hvac_op_sch.nil?
+      hvac_op_sch = model.alwaysOnDiscreteSchedule
+    else
+      hvac_op_sch = model_add_schedule(model, hvac_op_sch)
+    end
+
+    thermal_zones.each do |zone|
+      air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
+      air_loop.setName("#{zone.name} Minisplit Heat Pump")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding minisplit HP for #{zone.name}.")
+
+      # create heating coil
+      case heating_type
+      when 'Single Speed DX'
+        htg_coil = create_coil_heating_dx_single_speed(model,
+                                                       name: "#{air_loop.name} Heating Coil",
+                                                       type: 'Residential Minisplit HP')
+        htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(OpenStudio.convert(-30.0, 'F', 'C').get)
+        htg_coil.setMaximumOutdoorDryBulbTemperatureforDefrostOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+        htg_coil.setCrankcaseHeaterCapacity(0)
+        htg_coil.setDefrostStrategy('ReverseCycle')
+        htg_coil.setDefrostControl('OnDemand')
+        htg_coil.resetDefrostTimePeriodFraction
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No cooling coil type selected for minisplit HP for #{zone.name}.")
+        htg_coil = nil
+      end
+
+      # create cooling coil
+      case cooling_type
+      when 'Two Speed DX AC'
+        clg_coil = create_coil_cooling_dx_two_speed(model,
+                                                    name: "#{air_loop.name} 2spd DX AC Clg Coil")
+      when 'Single Speed DX AC'
+        clg_coil = create_coil_cooling_dx_single_speed(model,
+                                                       name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
+      when 'Single Speed Heat Pump'
+        clg_coil = create_coil_cooling_dx_single_speed(model,
+                                                       name: "#{air_loop.name} 1spd DX HP Clg Coil", type: 'Heat Pump')
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No cooling coil type selected for minisplit HP for #{zone.name}.")
+        clg_coil = nil
+      end
+
+      # create fan
+      fan = create_fan_by_name(model,
+                               'Minisplit_HP_Fan',
+                               fan_name: "#{air_loop.name} Fan",
+                               end_use_subcategory: 'Supply Fans')
+      fan.setAvailabilitySchedule(hvac_op_sch)
+
+      # create backup heating coil
+      supplemental_htg_coil = create_coil_heating_electric(model,
+                                                           name: "#{air_loop.name} Electric Backup Htg Coil")
+
+      # create unitary system (holds the coils and fan)
+      unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
+      unitary.setName("#{air_loop.name} Unitary System")
+      unitary.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
+      unitary.setMaximumSupplyAirTemperature(OpenStudio.convert(200.0, 'F', 'C').get)
+      unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
+      unitary.setControllingZoneorThermostatLocation(zone)
+      unitary.addToNode(air_loop.supplyInletNode)
+      unitary.setControllingZoneorThermostatLocation(zone)
+      unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0.0)
+
+      # attach the coils and fan
+      unitary.setHeatingCoil(htg_coil) if htg_coil
+      unitary.setCoolingCoil(clg_coil) if clg_coil
+      unitary.setSupplementalHeatingCoil(supplemental_htg_coil) if supplemental_htg_coil
+      unitary.setSupplyFan(fan)
+      unitary.setFanPlacement('BlowThrough')
+      unitary.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+
+      # create a diffuser
+      diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
+      diffuser.setName(" #{zone.name} Direct Air")
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
+    end
+
+    return true
   end
 
   # Creates a PTAC system for each zone and adds it to the model.
@@ -3889,7 +3986,7 @@ class Standard
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
-      air_loop.addBranchForZone(zone, air_terminal.to_StraightComponent)
+      air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
 
       sizing_zone = zone.sizingZone
       sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
@@ -4597,7 +4694,7 @@ class Standard
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName("#{zone.name} Direct Air")
-      air_loop.addBranchForZone(zone, diffuser)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       furnaces << air_loop
     end
@@ -4734,7 +4831,7 @@ class Standard
       # create a diffuser
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} Direct Air")
-      air_loop.addBranchForZone(zone, diffuser)
+      air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
 
       hps << air_loop
     end
@@ -5452,7 +5549,7 @@ class Standard
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
   #   Valid choices are: FluidCooler, CoolingTower
   def model_get_or_add_heat_pump_loop(model, heat_fuel, cool_fuel,
-                                      heat_pump_loop_cooling_type: 'FluidCooler')
+                                      heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
     # retrieve the existing heat pump loop or add a new one if necessary
     heat_pump_loop = if model.getPlantLoopByName('Heat Pump Loop').is_initialized
                        model.getPlantLoopByName('Heat Pump Loop').get
@@ -5476,7 +5573,7 @@ class Standard
   # @param chilled_water_loop_cooling_type [String] Archetype for chilled water loops, AirCooled or WaterCooled
   #   only used if HVAC system has a chilled water loop and cool_fuel is Electricity
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment for heat pump loops if not DistrictCooling.
-  #   Valid choices are: FluidCooler, CoolingTower
+  #   Valid choices are: EvaporativeFluidCooler, FluidCooler, CoolingTower
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
@@ -5490,7 +5587,7 @@ class Standard
                             zones,
                             hot_water_loop_type: 'HighTemperature',
                             chilled_water_loop_cooling_type: 'WaterCooled',
-                            heat_pump_loop_cooling_type: 'FluidCooler',
+                            heat_pump_loop_cooling_type: 'EvaporativeFluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
                             zone_equipment_ventilation: true)
@@ -5725,6 +5822,10 @@ class Standard
                                              cooling: cooling,
                                              ventilation: false)
 
+    when 'Residential Minisplit Heat Pumps'
+      model_add_minisplit_hp(model,
+                             zones)
+
     when 'VAV Reheat'
       case main_heat_fuel
       when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
@@ -5910,6 +6011,9 @@ class Standard
         when 'AirSourceHeatPump'
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: 'LowTemperature')
+        when 'Electricity'
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "air_loop_heating_type '#{air_loop_heating_type}' is not supported with main_heat_fuel '#{main_heat_fuel}' for a 'DOAS' system type.")
+          return false
         else
           hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                            hot_water_loop_type: hot_water_loop_type)

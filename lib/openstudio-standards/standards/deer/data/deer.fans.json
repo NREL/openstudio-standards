@@ -109,6 +109,18 @@
       "notes": null
     },
     {
+      "name": "Minisplit_HP_Fan",
+      "type": "OnOff",
+      "pressure_rise": 0.1,
+      "fan_efficiency": 0.168,
+      "motor_efficiency": 1.0,
+      "motor_in_airstream_fraction": 1.0,
+      "fan_power_minimum_flow_rate_fraction": null,
+      "fan_power_minimum_flow_rate_input_method": null,
+      "fan_curve": null,
+      "notes": null
+    },
+    {
       "name": "PFP_Fan",
       "type": "ConstantVolume",
       "pressure_rise": 1.20439,
