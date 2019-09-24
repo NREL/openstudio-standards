@@ -13587,7 +13587,7 @@
       "ventilation_per_person": 7.5,
       "ventilation_air_changes": null,
       "minimum_total_air_changes": null,
-      "occupancy_per_area": 15.0,
+      "occupancy_per_area": 0.0,
       "occupancy_schedule": "RetailStandalone BLDG_OCC_SCH_2010",
       "occupancy_activity_schedule": "RetailStandalone ACTIVITY_SCH",
       "is_residential": null,
