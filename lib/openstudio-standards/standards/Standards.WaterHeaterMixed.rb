@@ -37,7 +37,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-	  volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
+    volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -82,7 +82,7 @@ class Standard
       # differently depending on the fuel type
       if fuel_type == 'Electricity'
         # Fixed water heater efficiency per PNNL
-        water_heater_eff = 1
+        water_heater_eff = 1.0
         ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
       elsif fuel_type == 'NaturalGas'
         # Fixed water heater thermal efficiency per PNNL
@@ -102,13 +102,13 @@ class Standard
         ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
       end
       # Two booster water heaters
-	  ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
+    ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     # Typically specified this way for large electric water heaters
     if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance']
       # Fixed water heater efficiency per PNNL
-      water_heater_eff = 1
+      water_heater_eff = 1.0
       # Calculate the max allowable standby loss (SL)
       sl_base = wh_props['standby_loss_base']
       sl_drt = wh_props['standby_loss_volume_allowance']
@@ -121,11 +121,11 @@ class Standard
     # Typically specified this way for newer large electric water heaters
     if wh_props['hourly_loss_base'] && wh_props['hourly_loss_volume_allowance']
       # Fixed water heater efficiency per PNNL
-      water_heater_eff = 1
+      water_heater_eff = 1.0
       # Calculate the percent loss per hr
       hr_loss_base = wh_props['hourly_loss_base']
       hr_loss_allow = wh_props['hourly_loss_volume_allowance']
-      hrly_loss_pct = hr_loss_base + (hr_loss_allow / volume_gal) / 100
+      hrly_loss_pct = hr_loss_base + (hr_loss_allow / volume_gal) / 100.0
       # Convert to Btu/hr, assuming:
       # Water at 120F, density = 8.25 lb/gal
       # 1 Btu to raise 1 lb of water 1 F
