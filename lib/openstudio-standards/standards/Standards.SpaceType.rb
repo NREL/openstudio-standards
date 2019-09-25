@@ -186,7 +186,7 @@ class Standard
     lights_frac_to_return_air = space_type_properties['lighting_fraction_to_return_air']
     lights_frac_radiant = space_type_properties['lighting_fraction_radiant']
     lights_frac_visible = space_type_properties['lighting_fraction_visible']
-    lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable']
+    lights_frac_replaceable = space_type_properties['lighting_fraction_replaceable'].to_f
     lights_frac_linear_fluorescent = space_type_properties['lpd_fraction_linear_fluorescent']
     lights_frac_compact_fluorescent = space_type_properties['lpd_fraction_compact_fluorescent']
     lights_frac_high_bay = space_type_properties['lpd_fraction_high_bay']
@@ -232,7 +232,7 @@ class Standard
         definition.setReturnAirFraction(lights_frac_to_return_air.to_f) if lights_frac_to_return_air
         definition.setFractionRadiant(lights_frac_radiant.to_f) if lights_frac_radiant
         definition.setFractionVisible(lights_frac_visible.to_f) if lights_frac_visible
-        # definition.setFractionReplaceable(lights_frac_replaceable.to_f) if lights_frac_replaceable
+        # definition.setFractionReplaceable(lights_frac_replaceable) if lights_frac_replaceable
         definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', lights_frac_linear_fluorescent.to_f) if lights_frac_linear_fluorescent
         definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', lights_frac_compact_fluorescent.to_f) if lights_frac_compact_fluorescent
         definition.additionalProperties.setFeature('lpd_fraction_high_bay', lights_frac_high_bay.to_f) if lights_frac_high_bay
