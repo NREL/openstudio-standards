@@ -28827,7 +28827,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {436926b9-9248-434c-aca7-a1f75ecd19ab}, !- Handle
-  ExerciseCenterFlr1 ZN - EmployeeLoungeFlr1 ZN - RestroomFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  ExerciseCenterFlr1 ZN - EmployeeLoungeFlr1 ZN - RestroomFlr1 ZN SAC Gas Backup Htg Coil, !- Name
   {61879a45-4fa0-4cbd-a03e-c6d5cbba3231}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -28840,7 +28840,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {d5fc1ecb-4db0-42fb-a15f-cfcf385f53f0}, !- Handle
-  ExerciseCenterFlr1 ZN - EmployeeLoungeFlr1 ZN - RestroomFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  ExerciseCenterFlr1 ZN - EmployeeLoungeFlr1 ZN - RestroomFlr1 ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {a1770045-0f94-4e18-9f58-5eebc521d753}, !- Inlet Port
   {1c9eb5d0-f4f3-43f9-9910-a8684f53f5a6}; !- Outlet Port
 
@@ -29468,7 +29468,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {e267397e-5d3c-4c7f-b2a1-3ac1adf400cf}, !- Handle
-  FrontLoungeFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  FrontLoungeFlr1 ZN SAC Gas Backup Htg Coil, !- Name
   {61879a45-4fa0-4cbd-a03e-c6d5cbba3231}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -29481,7 +29481,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {5ce054f5-eb0c-40a1-9bc2-6f2828109166}, !- Handle
-  FrontLoungeFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  FrontLoungeFlr1 ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {451a4f20-a999-4114-98bf-a58992c2955b}, !- Inlet Port
   {81f1e493-e028-4c37-9214-e844c6cbc3f4}; !- Outlet Port
 
@@ -29961,7 +29961,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {34a59557-f742-4ad4-926d-79f89d85f4a2}, !- Handle
-  FrontOfficeFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  FrontOfficeFlr1 ZN SAC Gas Backup Htg Coil, !- Name
   {61879a45-4fa0-4cbd-a03e-c6d5cbba3231}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -29974,7 +29974,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {4de6bca2-83af-4e4f-8977-34c4d5836c3c}, !- Handle
-  FrontOfficeFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  FrontOfficeFlr1 ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {840dd476-29fe-4eda-81d6-400f1d9372f3}, !- Inlet Port
   {872ec7e6-35fb-4602-ba53-5f26935bfbb2}; !- Outlet Port
 
@@ -30507,7 +30507,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {ea1087b6-8ed1-40fb-a259-52372ec8aed8}, !- Handle
-  MeetingRoomFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  MeetingRoomFlr1 ZN SAC Gas Backup Htg Coil, !- Name
   {61879a45-4fa0-4cbd-a03e-c6d5cbba3231}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -30520,7 +30520,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {06254016-872f-46b2-9291-765f9ee2f423}, !- Handle
-  MeetingRoomFlr1 ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  MeetingRoomFlr1 ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {12a1c0a9-c0d7-4449-ad8c-d840bc3e5295}, !- Inlet Port
   {9e50a6f6-62fa-4e3e-94aa-435684f4a37b}; !- Outlet Port
 

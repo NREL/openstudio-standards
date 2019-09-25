@@ -9582,7 +9582,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {47d3387a-633b-4156-9deb-fd431222f0b5}, !- Handle
-  G SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G SW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -9595,7 +9595,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {86413e8c-d458-4102-a36e-bef41c51776f}, !- Handle
-  G SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G SW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {8624db80-867e-4085-b0fc-adfbcb50bdae}, !- Inlet Port
   {c588a34c-cb26-4b9f-85f0-66722703d2b0}; !- Outlet Port
 
@@ -10059,7 +10059,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {f0fd816a-ed3a-4dd6-8e6e-2fd68c57504c}, !- Handle
-  G NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G NW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -10072,7 +10072,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {ce5d46e8-22c5-42ee-8c38-e9298ae72bf9}, !- Handle
-  G NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G NW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {455dd359-d094-40c8-bc09-573730172e5f}, !- Inlet Port
   {29afb287-906a-48d9-a70d-828b2bc4fbe4}; !- Outlet Port
 
@@ -10536,7 +10536,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {fd515bc5-576e-4761-b078-01eef47366f2}, !- Handle
-  G NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G NE Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -10549,7 +10549,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {e60550ca-9c6c-47a2-9361-bb63b49ce6a7}, !- Handle
-  G NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G NE Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {18f7bbb9-4b17-4605-9502-4cc0d190731b}, !- Inlet Port
   {e4f4cbdf-6828-4a29-aa6b-d55ae75e2b7f}; !- Outlet Port
 
@@ -11013,7 +11013,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {a29709f3-062a-4246-8b75-d38426d0adbb}, !- Handle
-  G N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G N1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -11026,7 +11026,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {4c23902e-8e20-46ec-ad65-8c4acb617dc5}, !- Handle
-  G N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G N1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {f45c07ca-1a91-4e2b-beaa-102876e75eb0}, !- Inlet Port
   {4c415f40-1b29-4181-a2ef-ef772dbc6d51}; !- Outlet Port
 
@@ -11490,7 +11490,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {693aeb5f-5a33-4eb7-9bf4-4e505dcd78d8}, !- Handle
-  G N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G N2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -11503,7 +11503,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {1b72312f-5d2d-4b2d-9488-c57158bdbff3}, !- Handle
-  G N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G N2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {aa67c475-17f6-4f0a-ad09-74cfd169ace8}, !- Inlet Port
   {d87cc766-3cc1-4fe5-9460-ab6c827ddd10}; !- Outlet Port
 
@@ -11967,7 +11967,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {ecdfd7a5-28d1-4bdd-9294-4e64f35aba8d}, !- Handle
-  G S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G S1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -11980,7 +11980,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {c8d05e90-b740-41e6-8b0d-dc15457a3413}, !- Handle
-  G S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G S1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {e5aff010-06a7-489c-aeef-954fbd13ad2b}, !- Inlet Port
   {f2b362df-d3cc-4c6d-96d0-15f27356e0d9}; !- Outlet Port
 
@@ -12444,7 +12444,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {426e42e0-4655-490e-8c67-b9ae6b7c9c46}, !- Handle
-  G S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  G S2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -12457,7 +12457,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {0b465c23-a4d2-4159-8fed-7be93a7591cd}, !- Handle
-  G S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  G S2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {73c7880f-0bf1-48d0-bf10-e876111a2133}, !- Inlet Port
   {6b6b4168-9376-404d-98d1-70526724afd9}; !- Outlet Port
 
@@ -12921,7 +12921,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {fee0c035-f3c6-408b-b1ac-d0ca652a6bc6}, !- Handle
-  M SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M SW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -12934,7 +12934,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {196e092c-aa1e-4b0c-ab47-a44f306ce78d}, !- Handle
-  M SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M SW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {c66a93a7-680a-4dbc-8d37-defc299e4fc6}, !- Inlet Port
   {a1986261-025a-4df0-94fb-222d79a83e2a}; !- Outlet Port
 
@@ -13398,7 +13398,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {9ecd2b62-b05a-4668-980b-b2bac5265a13}, !- Handle
-  M NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M NW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -13411,7 +13411,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {ef45fc11-2cc8-4926-b97a-fa1f521dc8a9}, !- Handle
-  M NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M NW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {fdbab602-c49f-4df9-88f7-b400adb3a955}, !- Inlet Port
   {4ea8a1d6-09a9-426c-94d6-9efb942897a3}; !- Outlet Port
 
@@ -13875,7 +13875,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {484815db-3efc-443e-be5d-e656a4c819bd}, !- Handle
-  M SE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M SE Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -13888,7 +13888,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {72dbb355-a1ef-46a6-8f41-495cc778b218}, !- Handle
-  M SE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M SE Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {4cd07edb-a347-4d7b-8f63-c4d586a86bf7}, !- Inlet Port
   {8790e74b-5264-42ae-889d-439ae95daa50}; !- Outlet Port
 
@@ -14352,7 +14352,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {4ae4f5b6-41f9-4195-9089-a184eae216d3}, !- Handle
-  M NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M NE Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -14365,7 +14365,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {d2dd0386-c9ed-4728-94de-932b3000d30d}, !- Handle
-  M NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M NE Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {a4fc062d-1fdf-409d-a5e7-f15f15b7d199}, !- Inlet Port
   {4e28bc0e-23f4-4131-98a3-0070ed15cd47}; !- Outlet Port
 
@@ -14829,7 +14829,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {25e25872-a827-4210-832a-acc9f1fb05f7}, !- Handle
-  M N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M N1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -14842,7 +14842,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {2c0a2870-2b28-42d8-b141-48399c9e8c6e}, !- Handle
-  M N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M N1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {bbe812f4-63f5-4c7b-b792-abaef27e897e}, !- Inlet Port
   {945e9a29-203f-42dc-83bd-8a7c55cdea5c}; !- Outlet Port
 
@@ -15306,7 +15306,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {54546159-1e34-4703-8c33-6d4905889ce3}, !- Handle
-  M N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M N2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -15319,7 +15319,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {69d92527-6df9-42a0-ad36-46861aaa78ca}, !- Handle
-  M N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M N2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {e0247b7f-b210-4e49-b722-a4ddf1019166}, !- Inlet Port
   {562fce37-1db1-4758-bcc0-ed65549505c3}; !- Outlet Port
 
@@ -15783,7 +15783,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {acf857c8-24af-47c1-a1d1-25372bb0c11d}, !- Handle
-  M S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M S1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -15796,7 +15796,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {cab61c7e-560b-4810-93df-1cb010337d75}, !- Handle
-  M S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M S1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {af2b3f6b-c978-47e6-a18d-d99cd049fc54}, !- Inlet Port
   {e9979621-918a-42a9-ab35-07d5823de536}; !- Outlet Port
 
@@ -16260,7 +16260,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {cbd6d3ce-e48a-4c19-903a-ec931275e735}, !- Handle
-  M S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  M S2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -16273,7 +16273,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {3001b6c9-b814-4002-b593-a5d8a24fac1a}, !- Handle
-  M S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  M S2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {68e219b2-56ea-4860-bcad-f815c73e6652}, !- Inlet Port
   {4ff6c691-4310-419b-bbbb-db218277d016}; !- Outlet Port
 
@@ -16737,7 +16737,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {9b804835-1417-4ddc-96bf-43d09ca5533a}, !- Handle
-  T SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T SW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -16750,7 +16750,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {2a514618-f9a1-4ebd-9b4f-808109aa52b7}, !- Handle
-  T SW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T SW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {e972aeee-85c8-4ef2-a75e-d6e0965382db}, !- Inlet Port
   {c5394b33-1226-4aa9-ba37-fb70f88bb677}; !- Outlet Port
 
@@ -17214,7 +17214,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {0510fa9e-ff75-41d9-a732-c5eeade773b3}, !- Handle
-  T NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T NW Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -17227,7 +17227,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {4f442cac-e7eb-448b-9c49-4ee4c8d811cb}, !- Handle
-  T NW Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T NW Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {9e57fd3e-e9a8-4719-ac0b-1d8c8fdeaa1b}, !- Inlet Port
   {28f20dc5-067f-4140-9ae2-2d60fb7723be}; !- Outlet Port
 
@@ -17691,7 +17691,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {b4c98cc4-7ac6-4119-a8e4-81952b01e766}, !- Handle
-  T SE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T SE Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -17704,7 +17704,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {212b755a-462c-4432-bae5-34448f1c17eb}, !- Handle
-  T SE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T SE Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {04b6e5b6-ea5b-4caa-9717-1cc4ee3cc54b}, !- Inlet Port
   {8b9a6032-87f2-4571-b852-d4af85d11c9d}; !- Outlet Port
 
@@ -18168,7 +18168,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {1ab427b3-50b5-49f3-a660-45cc1e0979a8}, !- Handle
-  T NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T NE Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -18181,7 +18181,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {3ea8cd2d-e5a7-44e3-a177-d74c932ce695}, !- Handle
-  T NE Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T NE Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {63d369c6-a87b-4974-a574-7dbae4e5094f}, !- Inlet Port
   {312727db-07fc-44a9-b917-7ee2644f6a47}; !- Outlet Port
 
@@ -18645,7 +18645,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {fe673bfc-1442-45f4-8084-bade03aacf91}, !- Handle
-  T N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T N1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -18658,7 +18658,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {399e1dc4-f556-477d-b338-9c531f25c1e9}, !- Handle
-  T N1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T N1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {1575c206-135d-4f87-a705-51dacd159c3f}, !- Inlet Port
   {ab570ffd-23a2-452e-835d-7de6f7cd2ead}; !- Outlet Port
 
@@ -19122,7 +19122,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {2aa9da35-8513-48fb-8aca-8fd3973947a9}, !- Handle
-  T N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T N2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -19135,7 +19135,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {021e6bf2-c9c4-41dd-9440-08886b4ca3a5}, !- Handle
-  T N2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T N2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {14bc044b-807a-4d00-9f1d-c62d7f935bb5}, !- Inlet Port
   {d17ad65f-0969-4f83-a808-f3a1b2ee5841}; !- Outlet Port
 
@@ -19599,7 +19599,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {b97be9d6-52dd-4160-835b-742d459e5f7d}, !- Handle
-  T S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T S1 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -19612,7 +19612,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {1acd7a7d-f44e-4b6c-91e7-57b2a48dd70a}, !- Handle
-  T S1 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T S1 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {eae0b307-631a-43fb-9bf4-9275eff9bbe0}, !- Inlet Port
   {7b912f0a-3305-4919-91d5-972153e93dc1}; !- Outlet Port
 
@@ -20076,7 +20076,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {8f7cd8a5-8322-49cf-8dc2-27c64fe3080f}, !- Handle
-  T S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  T S2 Apartment ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -20089,7 +20089,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {a02e283c-1c70-4261-9531-8b01796d32d8}, !- Handle
-  T S2 Apartment ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  T S2 Apartment ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {5baecff6-9c6f-4873-abc6-6e59476c4008}, !- Inlet Port
   {0ed957cf-fd22-434f-8586-c4a5ecf63d32}; !- Outlet Port
 
@@ -20553,7 +20553,7 @@ OS:Connection,
 
 OS:Coil:Heating:Gas,
   {8c5375d8-06f2-4669-a63f-2dd64a2d1743}, !- Handle
-  Office ZN SAC PSZ-AC Gas Backup Htg Coil, !- Name
+  Office ZN SAC Gas Backup Htg Coil, !- Name
   {62144342-b551-4bda-91ba-c51f005bbf1d}, !- Availability Schedule Name
   0.8,                                    !- Gas Burner Efficiency
   AutoSize,                               !- Nominal Capacity {W}
@@ -20566,7 +20566,7 @@ OS:Coil:Heating:Gas,
 
 OS:Node,
   {4a3fc06d-f4a8-4bea-a04d-0db4a55d439e}, !- Handle
-  Office ZN SAC PSZ-AC Gas Backup Htg Coil Outlet Air Node, !- Name
+  Office ZN SAC Gas Backup Htg Coil Outlet Air Node, !- Name
   {403f0b6c-aa6d-4d9f-9cbd-e4b8f41cbbe2}, !- Inlet Port
   {cbc45240-df43-4781-9f12-5a1bcd9738b9}; !- Outlet Port
 
