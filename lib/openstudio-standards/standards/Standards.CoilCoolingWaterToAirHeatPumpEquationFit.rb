@@ -45,7 +45,7 @@ class Standard
     # If specified as EER (heat pump)
     unless coil_props['minimum_full_load_efficiency'].nil?
       min_eer = coil_props['minimum_full_load_efficiency']
-      cop = min_eer / 3.4121416
+      cop = eer_to_cop(min_eer, capacity_w = nil)
       new_comp_name = "#{coil_cooling_water_to_air_heat_pump.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{template}: #{coil_cooling_water_to_air_heat_pump.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
