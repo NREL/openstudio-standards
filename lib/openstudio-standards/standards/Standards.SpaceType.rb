@@ -220,42 +220,26 @@ class Standard
       space_type.lights.sort.each do |inst|
         inst.setFractionReplaceable(lights_frac_replaceable)
         definition = inst.lightsDefinition
-        unless lighting_per_area.zero?
+        if lighting_per_area
           occ_sens_lpd_factor = 1.0
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f * occ_sens_lpd_factor, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
-        unless lighting_per_person.zero?
+        if lighting_per_person
           definition.setWattsperPerson(OpenStudio.convert(lighting_per_person.to_f, 'W/person', 'W/person').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set lighting to #{lighting_per_person} W/person.")
         end
-        unless lights_frac_to_return_air.zero?
-          definition.setReturnAirFraction(lights_frac_to_return_air)
-        end
-        unless lights_frac_radiant.zero?
-          definition.setFractionRadiant(lights_frac_radiant)
-        end
-        unless lights_frac_visible.zero?
-          definition.setFractionVisible(lights_frac_visible)
-        end
+        definition.setReturnAirFraction(lights_frac_to_return_air) if lights_frac_to_return_air
+        definition.setFractionRadiant(lights_frac_radiant) if lights_frac_radiant
+        definition.setFractionVisible(lights_frac_visible) if lights_frac_visible
         # unless lights_frac_replaceable.zero?
         #  definition.setFractionReplaceable(lights_frac_replaceable)
         # end
-        unless lights_frac_linear_fluorescent.zero?
-          definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', lights_frac_linear_fluorescent)
-        end
-        unless lights_frac_compact_fluorescent.zero?
-          definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', lights_frac_compact_fluorescent)
-        end
-        unless lights_frac_high_bay.zero?
-          definition.additionalProperties.setFeature('lpd_fraction_high_bay', lights_frac_high_bay)
-        end
-        unless lights_frac_specialty_lighting.zero?
-          definition.additionalProperties.setFeature('lpd_fraction_specialty_lighting', lights_frac_specialty_lighting)
-        end
-        unless lights_frac_exit_lighting.zero?
-          definition.additionalProperties.setFeature('lpd_fraction_exit_lighting', lights_frac_exit_lighting)
-        end
+        definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', lights_frac_linear_fluorescent) if lights_frac_linear_fluorescent
+        definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', lights_frac_compact_fluorescent) if lights_frac_compact_fluorescent
+        definition.additionalProperties.setFeature('lpd_fraction_high_bay', lights_frac_high_bay) if lights_frac_high_bay
+        definition.additionalProperties.setFeature('lpd_fraction_specialty_lighting', lights_frac_specialty_lighting) if lights_frac_specialty_lighting
+        definition.additionalProperties.setFeature('lpd_fraction_exit_lighting', lights_frac_exit_lighting) if lights_frac_exit_lighting
       end
 
       # If additional lights are specified, add those too
@@ -308,19 +292,13 @@ class Standard
       # Modify the definition of the instance
       space_type.electricEquipment.sort.each do |inst|
         definition = inst.electricEquipmentDefinition
-        unless elec_equip_per_area.zero?
+        if elec_equip_per_area
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
-        unless elec_equip_frac_latent.zero?
-          definition.setFractionLatent(elec_equip_frac_latent)
-        end
-        unless elec_equip_frac_radiant.zero?
-          definition.setFractionRadiant(elec_equip_frac_radiant)
-        end
-        unless elec_equip_frac_lost.zero?
-          definition.setFractionLost(elec_equip_frac_lost)
-        end
+        definition.setFractionLatent(elec_equip_frac_latent) if elec_equip_frac_latent
+        definition.setFractionRadiant(elec_equip_frac_radiant) if elec_equip_frac_radiant
+        definition.setFractionLost(elec_equip_frac_lost) if elec_equip_frac_lost
       end
 
     end
@@ -356,19 +334,13 @@ class Standard
       # Modify the definition of the instance
       space_type.gasEquipment.sort.each do |inst|
         definition = inst.gasEquipmentDefinition
-        unless gas_equip_per_area.zero?
+        if gas_equip_per_area
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{gas_equip_per_area} Btu/hr*ft^2.")
         end
-        unless gas_equip_frac_latent.zero?
-          definition.setFractionLatent(gas_equip_frac_latent)
-        end
-        unless gas_equip_frac_radiant.zero?
-          definition.setFractionRadiant(gas_equip_frac_radiant)
-        end
-        unless gas_equip_frac_lost.zero?
-          definition.setFractionLost(gas_equip_frac_lost)
-        end
+        definition.setFractionLatent(gas_equip_frac_latent) if gas_equip_frac_latent
+        definition.setFractionRadiant(gas_equip_frac_radiant) if gas_equip_frac_radiant
+        definition.setFractionLost(gas_equip_frac_lost) if gas_equip_frac_lost
       end
 
     end
