@@ -1232,7 +1232,7 @@ OS:ElectricEquipment:Definition,
   ,                                       !- Design Level {W}
   8.07293281253229,                       !- Watts per Space Floor Area {W/m2}
   ,                                       !- Watts per Person {W/person}
-  ,                                       !- Fraction Latent
+  0.0,                                    !- Fraction Latent
   0.5;                                    !- Fraction Radiant
 
 OS:ElectricEquipment,
@@ -2174,7 +2174,7 @@ OS:ElectricEquipment:Definition,
   ,                                       !- Design Level {W}
   3.22917312501292,                       !- Watts per Space Floor Area {W/m2}
   ,                                       !- Watts per Person {W/person}
-  ,                                       !- Fraction Latent
+  0.0,                                    !- Fraction Latent
   0.5;                                    !- Fraction Radiant
 
 OS:ElectricEquipment,
@@ -2460,7 +2460,7 @@ OS:ElectricEquipment:Definition,
   ,                                       !- Design Level {W}
   21.5278208334194,                       !- Watts per Space Floor Area {W/m2}
   ,                                       !- Watts per Person {W/person}
-  ,                                       !- Fraction Latent
+  0.0,                                    !- Fraction Latent
   0.5;                                    !- Fraction Radiant
 
 OS:ElectricEquipment,
@@ -2711,7 +2711,7 @@ OS:ElectricEquipment:Definition,
   ,                                       !- Design Level {W}
   3.22917312501292,                       !- Watts per Space Floor Area {W/m2}
   ,                                       !- Watts per Person {W/person}
-  ,                                       !- Fraction Latent
+  0.0,                                    !- Fraction Latent
   0.5;                                    !- Fraction Radiant
 
 OS:ElectricEquipment,
