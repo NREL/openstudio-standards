@@ -27388,7 +27388,7 @@ OS:GasEquipment:Definition,
   75.300081084655,                        !- Watts per Space Floor Area {W/m2}
   ,                                       !- Watts per Person {W/Person}
   0.0,                                    !- Fraction Latent
-  ,                                       !- Fraction Radiant
+  0.0,                                    !- Fraction Radiant
   0.5;                                    !- Fraction Lost
 
 OS:GasEquipment,
