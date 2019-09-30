@@ -515,12 +515,6 @@ class NRELZNEReady2017 < ASHRAE901
     return motorized_oa_damper_required
   end
 
-  # Determines if optimum start control is required.
-  def air_loop_hvac_optimum_start_required?(air_loop_hvac)
-    opt_start_required = true
-    return opt_start_required
-  end
-
   # Check if ERV is required on this airloop.
   #
   # @return [Bool] Returns true if required, false if not.
