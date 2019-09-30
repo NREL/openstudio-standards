@@ -1401,17 +1401,37 @@ class Standard
         # VAV reheat terminal
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         air_terminal.setZoneMinimumAirFlowMethod('Constant')
-        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation # may not be necessary
-      else  # 'DOASVAV'
+        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation
+      else # 'DOASVAV'
         air_terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         air_terminal.setZoneMinimumAirFlowInputMethod('Constant')
         air_terminal.setConstantMinimumAirFlowFraction(0.1)
-        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation # may not be necessary
+        air_terminal.setControlForOutdoorAir(true) if demand_control_ventilation
       end
       air_terminal.setName("#{zone.name} Air Terminal")
 
       # attach new terminal to the zone and to the airloop
       air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
+
+      # ensure the DOAS takes priority, so ventilation load is included when treated by other zonal systems
+      # From EnergyPlus I/O reference:
+      # "For situations where one or more equipment types has limited capacity or limited control capability, order the
+      #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
+      #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
+      #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
+      #  is added to the zone."
+      zone.setCoolingPriority(air_terminal.to_ModelObject.get, 1)
+      zone.setHeatingPriority(air_terminal.to_ModelObject.get, 1)
+
+      # set the cooling and heating fraction to zero so that if DCV is enabled,
+      # the system will lower the ventilation rate rather than trying to meet the heating or cooling load.
+      zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
+      zone.setSequentialHeatingFraction(air_terminal.to_ModelObject.get, 0.0)
+
+      # if economizing, override to meet cooling load first with doas supply
+      unless econo_ctrl_mthd == 'NoEconomizer'
+        zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 1.0)
+      end
 
       # DOAS sizing
       sizing_zone = zone.sizingZone
