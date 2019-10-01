@@ -137,14 +137,7 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  # this method returns the default system fuel types by epw_file.
-  def get_canadian_system_defaults_by_weatherfile_name(model)
-    #get models weather object to get the province. Then use that to look up the province.
-    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
-    return fuel_sources
-  end
+
 
   def get_necb_hdd18(model)
     max_distance_tolerance = 500000
@@ -182,9 +175,9 @@ class NECB2011 < Standard
                                    z_scale: 1.0,
                                    fdwr_set: 1.1,
                                    srr_set: 1.1,
-                                   new_auto_zoner: true
+                                   new_auto_zoner: true,
+                                   primary_heating_fuel: 'DefaultFuel')
 
-  )
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file}")
@@ -197,7 +190,8 @@ class NECB2011 < Standard
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                new_auto_zoner: new_auto_zoner)
+                                new_auto_zoner: new_auto_zoner,
+                                primary_heating_fuel: primary_heating_fuel)
   end
 
 
@@ -212,27 +206,27 @@ class NECB2011 < Standard
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: true
+                           new_auto_zoner: true,
+                           primary_heating_fuel: 'DefaultFuel')
 
-  )
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
-    #validate that model has information required.
-    #puts 'Old SPace types'
+    # validate that model has information required.
+    # puts 'Old SPace types'
     # model.getSpaceTypes.each do |spacetype|
     #   puts spacetype.name
     # end
 
     return false unless validate_initial_model(model)
 
-    #Ensure that the space types names match the space types names in the code.
+    # Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
 
-    #puts Old SPace types
+    # puts Old SPace types
     # puts 'new spacetypes'
     # model.getSpaceTypes.each do |spacetype|
     #   puts spacetype.name
@@ -282,7 +276,19 @@ class NECB2011 < Standard
     # Create Reference HVAC Systems.
     if new_auto_zoner
       auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
+      # Set the primary fuel set to default to to specific fuel type.
+      system_fuel_defaults = nil
+      case primary_heating_fuel
+      when 'DefaultFuel'
+        #get models weather object to get the province. Then use that to look up the province.
+        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        fueltype_set = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+        system_fuel_defaults = @standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == fueltype_set }
+        raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
+      when 'Electricty', 'NaturalGas', 'FuelOil#2'
+        system_fuel_defaults = @standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == primary_heating_fuel }
+      end
+
       auto_system(model: model,
                   boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
                   baseboard_type: system_fuel_defaults['baseboard_type'],
@@ -292,15 +298,14 @@ class NECB2011 < Standard
                   chiller_type: system_fuel_defaults['chiller_type'],
                   heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
                   heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
-                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
-      )
+                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6'])
       random = Random.new(1234)
-      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
-      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random)) }
+      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random)) }
     else
-      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+      raise('this code should never be reached.. will delete after testing')
     end
-    model_add_swh(model)
+    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
     model_apply_sizing_parameters(model)
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C

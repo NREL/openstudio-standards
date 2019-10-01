@@ -36,7 +36,7 @@ class NECB2017 < NECB2015
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?

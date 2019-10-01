@@ -9,38 +9,41 @@ class NECBRegressionHelper < Minitest::Test
 
   def setup()
     @building_type = 'FullServiceRestaurant'
-    @gas_location = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
-    @electric_location = 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw'
+    @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
     @template = 'NECB2011'
     @test_dir = "#{File.dirname(__FILE__)}/output"
     @expected_results_folder = "#{File.dirname(__FILE__)}/../expected_results/"
     @model = nil
     @model_name = nil
     @run_simulation = false
+    @primary_heating_fuel = "Electricity"
   end
 
 
   def create_model_and_regression_test(building_type: @building_type,
-                                       epw_file: @electric_location,
+                                       epw_file: @epw_file,
                                        template: @template,
                                        test_dir: @test_dir,
                                        expected_results_folder: @expected_results_folder,
-                                       run_simulation: @run_simulation
+                                       run_simulation: @run_simulation,
+                                       primary_heating_fuel: @primary_heating_fuel
   )
     @epw_file = epw_file
     @template = template
     @building_type = building_type
     @test_dir = test_dir
     @expected_results_folder = expected_results_folder
+    @primary_heating_fuel = primary_heating_fuel
     self.create_model(building_type: @building_type,
                       epw_file: @epw_file,
                       template: @template,
-                      test_dir: @test_dir)
+                      test_dir: @test_dir,
+                      primary_heating_fuel: @primary_heating_fuel)
 
     result, diff = self.osm_regression(expected_results_folder: @expected_results_folder)
     if run_simulation
       self.run_simulation()
-      self.qaqc_regression()
+      #self.qaqc_regression()
     end
     return result, diff
   end
@@ -49,10 +52,10 @@ class NECBRegressionHelper < Minitest::Test
   def create_model(epw_file: @epw_file,
                    template: @template,
                    building_type: @building_type,
-                   test_dir: @test_dir
-  )
+                   test_dir: @test_dir,
+                   primary_heating_fuel: @primary_heating_fuel)
     #set paths
-    @model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
+    @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}"
     @run_dir = "#{test_dir}/#{@model_name}"
     #create folders
     if !Dir.exists?(test_dir)
@@ -65,7 +68,8 @@ class NECBRegressionHelper < Minitest::Test
     @model = Standard.build("#{template}").model_create_prototype_model(epw_file: epw_file,
                                                                         sizing_run_dir: @run_dir,
                                                                         template: template,
-                                                                        building_type: building_type)
+                                                                        building_type: building_type,
+                                                                        primary_heating_fuel: primary_heating_fuel)
     unless @model.instance_of?(OpenStudio::Model::Model)
       puts "Creation of Model for #{@model_name} failed. Please check output for errors."
     end
@@ -76,11 +80,19 @@ class NECBRegressionHelper < Minitest::Test
   def osm_regression(expected_results_folder: @expected_results_folder)
     begin
       diffs = []
-      #old models
-      # Load the expected osm
+
+
       expected_osm_file = "#{expected_results_folder}#{@model_name}_expected_result.osm"
       test_osm_file = "#{expected_results_folder}#{@model_name}_test_result.osm"
       test_idf_file = "#{expected_results_folder}#{@model_name}_test_result.idf"
+
+      #save test results by default
+      BTAP::FileIO.save_osm(@model, test_osm_file)
+      puts "saved test result osm file to #{test_osm_file}"
+      BTAP::FileIO.save_idf(@model, test_idf_file)
+      puts "saved test result idf file to #{test_idf_file}"
+
+      # Load the expected osm
       unless File.exist?(expected_osm_file)
         raise("The initial osm path: #{expected_osm_file} does not exist.")
       end
@@ -88,12 +100,6 @@ class NECBRegressionHelper < Minitest::Test
       # Upgrade version if required.
       version_translator = OpenStudio::OSVersion::VersionTranslator.new
       expected_model = version_translator.loadModel(expected_osm_model_path).get
-      #save test results by default
-      BTAP::FileIO.save_osm(@model,test_osm_file)
-      puts "saved test result osm file to #{test_osm_file}"
-      BTAP::FileIO.save_idf(@model,test_idf_file)
-      puts "saved test result osm file to #{test_idf_file}"
-
 
       # Compare the two models.
       diffs = compare_osm_files(expected_model, @model)
@@ -131,24 +137,5 @@ class NECBRegressionHelper < Minitest::Test
     Standard.build("#{@template}").model_run_simulation_and_log_errors(@model, @run_dir)
   end
 
-  def qaqc_regression()
-    expected_qaqc_file = "#{@expected_results_folder}#{@model_name}_expected_result_qaqc.json"
-    test_qaqc_file = "#{@expected_results_folder}#{@model_name}_test_result_qaqc.json"
-    qaqc_diff_file = "#{@expected_results_folder}#{@model_name}_test_result_qaqc_diffs.json"
-    qaqc = Standard.build("#{@template}").init_qaqc(@model)
-    #write to json file.
-    File.open(test_qaqc_file, 'w') {|f| f.write(JSON.pretty_generate(qaqc, {:allow_nan => true}))}
-    test = File.new(test_qaqc_file, 'r')
-    expected = File.new(expected_qaqc_file, 'r')
-    diffs = JsonCompare.get_diff(Yajl::Parser.parse(expected), Yajl::Parser.parse(test))
-    if diffs.empty?
-      return true
-    else
-      puts "qaqc has differences."
-      puts JSON.pretty_generate(diffs)
-      puts "You can compare the files using diff #{expected_qaqc_file} #{test_qaqc_file}"
-      File.open(qaqc_diff_file, 'w') {|f| f.write(JSON.pretty_generate(diffs, {:allow_nan => true}))}
-      return false
-    end
-  end
+
 end

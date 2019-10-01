@@ -66,7 +66,9 @@ class NECB2015 < NECB2011
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: true)
+                           new_auto_zoner: true,
+                           primary_heating_fuel: 'DefaultFuel')
+
 
     #Run everything like parent NECB2011 'model_apply_standard' method.
     model = super(model: model,
@@ -77,7 +79,8 @@ class NECB2015 < NECB2011
                   y_scale: y_scale,
                   z_scale: z_scale,
                   fdwr_set: fdwr_set,
-                  srr_set: srr_set)
+                  srr_set: srr_set,
+                  primary_heating_fuel: 'DefaultFuel')
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then

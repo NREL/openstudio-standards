@@ -1,5 +1,5 @@
 class NECB2011
-  def model_add_swh(model)
+  def model_add_swh(model:, swh_fueltype:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
     # Calculate the tank size and service water pump information
@@ -16,7 +16,7 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
 
     main_swh_loop = model_add_swh_loop(model,
                                        'Main Service Water Loop',
