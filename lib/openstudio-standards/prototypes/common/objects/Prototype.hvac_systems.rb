@@ -4970,6 +4970,10 @@ class Standard
       zone.setCoolingPriority(zone_hvac.to_ModelObject.get, 1)
       zone.setHeatingPriority(zone_hvac.to_ModelObject.get, 1)
 
+      # set the cooling and heating fraction to zero so that the ERV does not try to meet the heating or cooling load.
+      zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
+      zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)
+
       # Calculate ERV SAT during sizing periods
       # Standard rating conditions based on AHRI Std 1060 - 2013
       # heating design
