@@ -138,7 +138,6 @@ class NECB2011 < Standard
   end
 
 
-
   def get_necb_hdd18(model)
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
@@ -277,16 +276,14 @@ class NECB2011 < Standard
     if new_auto_zoner
       auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
       # Set the primary fuel set to default to to specific fuel type.
-      system_fuel_defaults = nil
-      case primary_heating_fuel
-      when 'DefaultFuel'
-        #get models weather object to get the province. Then use that to look up the province.
+      if primary_heating_fuel == 'DefaultFuel'
         epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        fueltype_set = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-        system_fuel_defaults = @standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == fueltype_set }
-        raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
-      when 'Electricty', 'NaturalGas', 'FuelOil#2'
-        system_fuel_defaults = @standards_data['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == primary_heating_fuel }
+        primary_heating_fuel = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+      end
+      # Get fuelset.
+      system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
+      if system_fuel_defaults.nil?
+        raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")
       end
 
       auto_system(model: model,
@@ -300,8 +297,8 @@ class NECB2011 < Standard
                   heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
                   heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6'])
       random = Random.new(1234)
-      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random)) }
-      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random)) }
+      model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+      model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     else
       raise('this code should never be reached.. will delete after testing')
     end
