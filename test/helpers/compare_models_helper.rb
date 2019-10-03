@@ -33,7 +33,12 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:Schedule:Rule', # Names appear to be created non-deteministically
     'OS:Rendering:Color', # Rendering colors don't matter
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
-    'OS:ProgramControl' # Deprecated object no longer translated to EnergyPlus
+    'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
+    'OS:StandardsInformation:Material',
+    'OS:StandardsInformation:Construction',
+    'OS:SimulationControl', # Sizing run and weather run may be different
+    'OS:AdditionalProperties', # Does not impact simulation results
+    'OS:Output:Variable' # Does not impact simulation results
   ]
 
   # Fill model object lists with all object types to be compared
@@ -96,7 +101,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     end
   end
 
-  return diffs
+  return diffs.sort
 end
 
 # Gets the "Name" of the object.  For objects with a Name field,
@@ -248,6 +253,15 @@ def compare_objects_field_by_field(true_object, compare_object, alias_hash = Has
 
     # Check true value directly against compare value
     next if compare_value == true_value
+
+    # Check numeric values if numeric
+    if (compare_value.is_a? Numeric) && (true_value.is_a? Numeric)
+      diff = true_value.to_f - compare_value.to_f
+      unless true_value.zero?
+        # next if absolute value is less than a tenth of a percent difference
+        next if (diff / true_value.to_f).abs < 0.001
+      end
+    end
 
     # Check true value to aliases from compare model
     renamed_in_true = alias_hash[true_value].uniq

@@ -824,6 +824,12 @@ OS:Timestep,
   {eb583d9a-28e0-49c6-8519-cae0088b5073}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {532162e8-b44e-4d19-8f3f-148fea654320}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {1f023a99-6062-4e6b-a2ee-74cc9513d97f}, !- Handle
   Perimeter_ZN_1_floor,                   !- Name

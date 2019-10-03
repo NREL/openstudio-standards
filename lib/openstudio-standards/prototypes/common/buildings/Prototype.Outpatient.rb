@@ -330,7 +330,7 @@ module Outpatient
           'building_type' => building_type,
           'space_type' => space_type_name
       }
-      data = model_find_object(standards_data['space_types'], search_criteria)
+      data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
       if data.nil? ###
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")
@@ -360,6 +360,11 @@ module Outpatient
   end
 
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+
+    return true
+  end
+
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end

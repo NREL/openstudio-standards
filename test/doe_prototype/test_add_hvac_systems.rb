@@ -78,9 +78,8 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'AirSourceHeatPump', nil, 'Electricity'],
 
       # Ambient Loop, Ambient Loop, hydronic
-      ['Water Source Heat Pumps with ERVs', 'HeatPump', nil, 'HeatPump'],
-      ['Water Source Heat Pumps with DOAS', 'HeatPump', nil, 'HeatPump'],
-      ['Water Source Heat Pumps with DOAS', 'HeatPump', 'HeatPump', 'HeatPump'],
+      ['Water Source Heat Pumps with ERVs', 'AmbientLoop', nil, 'AmbientLoop'],
+      ['Water Source Heat Pumps with DOAS', 'AmbientLoop', nil, 'AmbientLoop'],
 
       # Gas, District Chilled Water, hydronic
       ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],

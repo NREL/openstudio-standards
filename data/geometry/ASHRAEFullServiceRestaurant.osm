@@ -180,6 +180,12 @@ OS:Timestep,
   {79cc9340-93d4-4f72-a5ca-b64451a57564}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {e669741c-7551-4941-8a74-865ceef7b932}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:SubSurface,
   {bf99c642-a6ea-4215-9205-bd72d66b667b}, !- Handle
   Dining_Wall_West_Window,                !- Name
