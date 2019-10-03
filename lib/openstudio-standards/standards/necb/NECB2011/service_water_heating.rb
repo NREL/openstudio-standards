@@ -1,6 +1,11 @@
 class NECB2011
-  def model_add_swh(model)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
+    #Get default fuel based on epw location province.
+    if swh_fueltype == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
@@ -16,7 +21,7 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
 
     main_swh_loop = model_add_swh_loop(model,
                                        'Main Service Water Loop',

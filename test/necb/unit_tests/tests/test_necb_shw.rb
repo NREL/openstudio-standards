@@ -11,6 +11,8 @@ class SHW_test < Minitest::Test
   Templates = ['NECB2011', 'NECB2015', 'NECB2017']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
 
+
+
   def setup()
     @file_folder = __dir__
     @test_folder = File.join(@file_folder, '..')
@@ -28,6 +30,7 @@ class SHW_test < Minitest::Test
     #Iterate through NECB2011 and NECB2015 as well as weather locations heated by gas and electricity.
     Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
+
         index = 0
         break_time = false
         # There are many more spacetypes in the spacetypes.json file than in Outpatient.osm.  The test takes the first
@@ -74,7 +77,8 @@ class SHW_test < Minitest::Test
           end
           # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
           # actually in it).
-          standard.model_add_swh(model)
+
+          standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel')
           # Go through the model and check what tank, pump, and water use connections were added.
           plantloops = model.getPlantLoops
 
