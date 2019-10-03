@@ -285,7 +285,6 @@ class NECB2011 < Standard
       if system_fuel_defaults.nil?
         raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")
       end
-
       auto_system(model: model,
                   boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
                   baseboard_type: system_fuel_defaults['baseboard_type'],
