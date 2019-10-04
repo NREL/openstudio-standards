@@ -58,47 +58,45 @@ class TestAddHVACSystems < Minitest::Test
       ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
       ## Hydronic ##
+      # Gas, Electric, hydronic
+      ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
+      ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
+      ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
 
-      # TODO: Enable these tests once the CI version is OpenStudio v2.8.0 or greater
-      # OS v2.8.0 added the setSequentialCoolingFraction method to ThermalZone
+      # Electric, Electric, hydronic
+      ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
+      ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
+      ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
 
-      # # Gas, Electric, hydronic
-      # ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
-      # ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
-      # ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'Electricity'],
-      #
-      # # Electric, Electric, hydronic
-      # ['Ground Source Heat Pumps with ERVs', 'Electricity', nil, 'Electricity'],
-      # ['Ground Source Heat Pumps with DOAS', 'Electricity', nil, 'Electricity'],
-      # ['Ground Source Heat Pumps with DOAS', 'Electricity', 'Electricity', 'Electricity'],
-      #
-      # # District Hot Water, Electric, hydronic
-      # ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
-      # ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
-      #
-      # # Central Air Source Heat Pump, hydronic
-      # ['Fan Coil with DOAS', 'AirSourceHeatPump', nil, 'Electricity'],
-      #
-      # # Ambient Loop, Ambient Loop, hydronic
-      # ['Water Source Heat Pumps with ERVs', 'AmbientLoop', nil, 'AmbientLoop'],
-      # ['Water Source Heat Pumps with DOAS', 'AmbientLoop', nil, 'AmbientLoop'],
-      #
-      # # Gas, District Chilled Water, hydronic
-      # ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
-      #
-      # # Electric, District Chilled Water, hydronic
-      # ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
-      #
-      # # District Hot Water, District Chilled Water, hydronic
-      # ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-      # ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
-      #
-      # # DOAS Variations
-      # ['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
+      # District Hot Water, Electric, hydronic
+      ['Fan Coil with DOAS', 'DistrictHeating', nil, 'Electricity'],
+      ['Water Source Heat Pumps with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'Electricity'],
+
+      # Central Air Source Heat Pump, hydronic
+      ['Fan Coil with DOAS', 'AirSourceHeatPump', nil, 'Electricity'],
+
+      # Ambient Loop, Ambient Loop, hydronic
+      ['Water Source Heat Pumps with ERVs', 'AmbientLoop', nil, 'AmbientLoop'],
+      ['Water Source Heat Pumps with DOAS', 'AmbientLoop', nil, 'AmbientLoop'],
+
+      # Gas, District Chilled Water, hydronic
+      ['Fan Coil with DOAS', 'NaturalGas', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
+
+      # Electric, District Chilled Water, hydronic
+      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
+
+      # District Hot Water, District Chilled Water, hydronic
+      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+
+      ## DOAS Variations
+      #  Enable this test once the CI version is OpenStudio v2.8.0 or greater
+      #  OS v2.8.0 added the setSequentialCoolingFraction method to ThermalZone
+      #['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
     ]
 
     template = '90.1-2013'

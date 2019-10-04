@@ -1425,12 +1425,20 @@ class Standard
 
       # set the cooling and heating fraction to zero so that if DCV is enabled,
       # the system will lower the ventilation rate rather than trying to meet the heating or cooling load.
-      zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
-      zone.setSequentialHeatingFraction(air_terminal.to_ModelObject.get, 0.0)
+      if self.model.version < OpenStudio::VersionString.new('2.8.0')
+        if demand_control_ventilation
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions < 2.8.0.')
+        else
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
+        end
+      else
+        zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
+        zone.setSequentialHeatingFraction(air_terminal.to_ModelObject.get, 0.0)
 
-      # if economizing, override to meet cooling load first with doas supply
-      unless econo_ctrl_mthd == 'NoEconomizer'
-        zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 1.0)
+        # if economizing, override to meet cooling load first with doas supply
+        unless econo_ctrl_mthd == 'NoEconomizer'
+          zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 1.0)
+        end
       end
 
       # DOAS sizing
@@ -4971,8 +4979,12 @@ class Standard
       zone.setHeatingPriority(zone_hvac.to_ModelObject.get, 1)
 
       # set the cooling and heating fraction to zero so that the ERV does not try to meet the heating or cooling load.
-      zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
-      zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)
+      if self.model.version < OpenStudio::VersionString.new('2.8.0')
+        OpenStudio.logFree(OpenStudio::Warning, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
+      else
+        zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
+        zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)
+      end
 
       # Calculate ERV SAT during sizing periods
       # Standard rating conditions based on AHRI Std 1060 - 2013
