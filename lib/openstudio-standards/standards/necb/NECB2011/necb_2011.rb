@@ -189,7 +189,7 @@ class NECB2011 < Standard
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                new_auto_zoner: new_auto_zoner,
+                                new_auto_zoner: true,
                                 primary_heating_fuel: primary_heating_fuel)
   end
 
