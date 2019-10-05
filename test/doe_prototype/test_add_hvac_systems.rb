@@ -58,7 +58,6 @@ class TestAddHVACSystems < Minitest::Test
       ['VAV Reheat', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
       ## Hydronic ##
-
       # Gas, Electric, hydronic
       ['Fan Coil with DOAS', 'NaturalGas', nil, 'Electricity'],
       ['Water Source Heat Pumps with DOAS', 'NaturalGas', nil, 'Electricity'],
@@ -86,16 +85,18 @@ class TestAddHVACSystems < Minitest::Test
       ['Fan Coil with DOAS', 'NaturalGas', 'NaturalGas', 'DistrictCooling'],
 
       # Electric, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
+      ['Fan Coil with ERVs', 'Electricity', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'Electricity', 'Electricity', 'DistrictCooling'],
 
       # District Hot Water, District Chilled Water, hydronic
-      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'], # Disable until this EnergyPlus issue is fixed: https://github.com/NREL/EnergyPlus/issues/6820
+      ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
 
-      # DOAS Variations
-      ['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
+      ## DOAS Variations
+      #  Enable this test once the CI version is OpenStudio v2.8.0 or greater
+      #  OS v2.8.0 added the setSequentialCoolingFraction method to ThermalZone
+      #['Fan Coil with DOAS with DCV', 'NaturalGas', nil, 'Electricity']
     ]
 
     template = '90.1-2013'
