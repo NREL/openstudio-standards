@@ -91,7 +91,7 @@ class TestAddHVACSystems < Minitest::Test
       # District Hot Water, District Chilled Water, hydronic
       ['Fan Coil with ERVs', 'DistrictHeating', nil, 'DistrictCooling'],
       ['Fan Coil with DOAS', 'DistrictHeating', nil, 'DistrictCooling'],
-      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling'],
+      ['Fan Coil with DOAS', 'DistrictHeating', 'DistrictHeating', 'DistrictCooling']
 
       ## DOAS Variations
       #  Enable this test once the CI version is OpenStudio v2.8.0 or greater
