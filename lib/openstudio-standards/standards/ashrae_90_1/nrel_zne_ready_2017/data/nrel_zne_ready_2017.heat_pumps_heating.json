@@ -11,14 +11,14 @@
       "minimum_heating_seasonal_performance_factor": null,
       "minimum_coefficient_of_performance_heating": null,
       "minimum_energy_efficiency_ratio": null,
-      "pthp_cop_coefficient_1": 3.7,
-      "pthp_cop_coefficient_2": 0.052,
+      "pthp_cop_coefficient_1": 4.07,
+      "pthp_cop_coefficient_2": 0.0572,
       "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
       "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
       "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
       "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
-      "notes": "From 90.1-2016 Table 6.8.1-4"
+      "notes": "10% better than 90.1-2016 Table 6.8.1-4"
     },
     {
       "template": "NREL ZNE Ready 2017",
