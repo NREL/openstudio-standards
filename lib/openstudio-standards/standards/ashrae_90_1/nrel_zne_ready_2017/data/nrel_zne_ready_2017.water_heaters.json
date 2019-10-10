@@ -15,7 +15,7 @@
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
       "thermal_efficiency": null,
-      "notes": "Same as 90.1-2013"
+      "notes": "Code of Federal Regulations 10 CFR Part 430."
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -26,13 +26,13 @@
       "end_date": "2999-09-09T00:00:00+00:00",
       "energy_factor_base": null,
       "energy_factor_volume_derate": null,
-      "standby_loss_base": 20,
+      "standby_loss_base": 20.0,
       "standby_loss_capacity_allowance": null,
-      "standby_loss_volume_allowance": 35,
+      "standby_loss_volume_allowance": 35.0,
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
       "thermal_efficiency": null,
-      "notes": "Same as 90.1-2013"
+      "notes": "From 90.1-2016 Table 7.8"
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -49,7 +49,7 @@
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
       "thermal_efficiency": null,
-      "notes": "Same as 90.1-2013"
+      "notes": "Code of Federal Regulations 10 CFR Part 430."
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -61,12 +61,12 @@
       "energy_factor_base": null,
       "energy_factor_volume_derate": null,
       "standby_loss_base": null,
-      "standby_loss_capacity_allowance": 800,
-      "standby_loss_volume_allowance": 110,
+      "standby_loss_capacity_allowance": 799.0,
+      "standby_loss_volume_allowance": 16.6,
       "hourly_loss_base": null,
       "hourly_loss_volume_allowance": null,
       "thermal_efficiency": 0.8,
-      "notes": "Same as 90.1-2013"
+      "notes": "From 90.1-2016 Table 7.8"
     }
   ]
 }
