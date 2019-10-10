@@ -5788,7 +5788,7 @@
       "lighting_fraction_to_return_air": 0.0,
       "lighting_fraction_radiant": 0.6,
       "lighting_fraction_visible": 0.2,
-      "lighting_fraction_replaceable": null,
+      "lighting_fraction_replaceable": 1.0,
       "lpd_fraction_linear_fluorescent": 1.0,
       "lpd_fraction_compact_fluorescent": null,
       "lpd_fraction_high_bay": null,
