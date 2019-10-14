@@ -1888,6 +1888,10 @@ class Standard
             rated_maximum_flow_rate = vav_terminal.autosizedMaximumAirFlowRate.get
             # compare the VAV autosized maximum airflow with the minimum airflow rate required by the accreditation standard
             ratio = minimum_airflow_per_zone / rated_maximum_flow_rate
+
+            # round to avoid results variances in sizing runs
+            ratio = ratio.round(11)
+
             if ratio >= 0.95
               vav_terminal.setConstantMinimumAirFlowFraction(1)
             elsif ratio < 0.95
