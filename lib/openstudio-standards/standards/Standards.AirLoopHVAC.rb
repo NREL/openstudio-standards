@@ -1,4 +1,3 @@
-
 class Standard
   # @!group AirLoopHVAC
 
@@ -159,10 +158,8 @@ class Standard
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     end
 
-    # Zones that require DCV preserve
-    # both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted
-    # to per-area values only so that DCV
+    # Zones that require DCV preserve both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted to per-area values only so that DCV
     air_loop_hvac.thermalZones.sort.each do |zone|
       if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
         thermal_zone_convert_oa_req_to_per_area(zone)
@@ -1374,7 +1371,7 @@ class Standard
          'ASHRAE 169-2006-6A',
          'ASHRAE 169-2013-5A',
          'ASHRAE 169-2013-6A'
-        prohibited_types = []
+      prohibited_types = []
     end
 
     # Check if the specified type is allowed
@@ -1429,11 +1426,7 @@ class Standard
       end
     end
 
-    # ERV Not Applicable for AHUs that have DCV
-    # or that have no OA intake.
-    controller_oa = nil
-    controller_mv = nil
-    oa_system = nil
+    # ERV Not Applicable for AHUs that have DCV or that have no OA intake.
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir

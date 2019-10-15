@@ -1,7 +1,5 @@
 require 'csv'
 
-
-
 class Standard
   attr_accessor :space_multiplier_map
   attr_accessor :standards_data
@@ -1473,7 +1471,7 @@ class Standard
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started applying HVAC efficiency standards for #{template} template.")
 
     # Air Loop Controls
     if apply_controls.nil? || apply_controls == true

@@ -1,132 +1,8 @@
 class NRELZNEReady2017 < ASHRAE901
   # @!group AirLoopHVAC
 
-  # Apply multizone vav outdoor air method and
-  # adjust multizone VAV damper positions
-  # to achieve a system minimum ventilation effectiveness
-  # of 0.6 per PNNL.  Hard-size the resulting min OA
-  # into the sizing:system object.
-  #
-  # return [Bool] returns true if successful, false if not
-  # @todo move building-type-specific code to Prototype classes
-  def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
-    # First time adjustment:
-    # Only applies to multi-zone vav systems
-    # exclusion: for Outpatient: (1) both AHU1 and AHU2 in 'DOE Ref Pre-1980' and 'DOE Ref 1980-2004'
-    # (2) AHU1 in 2004-2013
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && !(air_loop_hvac.name.to_s.include? 'Outpatient F1')
-      air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
-    end
-
-    # Second time adjustment:
-    # Only apply to 2010 and 2013 Outpatient (both AHU1 and AHU2)
-    # TODO maybe apply to hospital as well?
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac.name.to_s.include? 'Outpatient'
-      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac)
-    end
-
-    return true
-  end
-
-  # Apply all standard required controls to the airloop
-  #
-  # @param (see #economizer_required?)
-  # @return [Bool] returns true if successful, false if not
-  def air_loop_hvac_apply_standard_controls(air_loop_hvac, climate_zone)
-
-    # logic for multizone VAV Reheat systems
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && air_loop_hvac_terminal_reheat?(air_loop_hvac)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', 'Applying multizone VAV Reheat system controls.')
-
-      # Energy Recovery Ventilation
-      if air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
-        air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac)
-      end
-
-      # economizer controls
-      air_loop_hvac_apply_economizer_limits(air_loop_hvac, climate_zone)
-      air_loop_hvac_apply_economizer_integration(air_loop_hvac, climate_zone)
-
-      # VAV Reheat Control
-      air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
-
-      # # Multizone VAV Optimization
-      # if air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
-      #   air_loop_hvac_enable_multizone_vav_optimization(air_loop_hvac)
-      # else
-      air_loop_hvac_disable_multizone_vav_optimization(air_loop_hvac)
-      # end
-
-      # Static Pressure Reset
-      # Per 5.2.2.16 (Halverson et al 2014), all multiple zone VAV systems are assumed to have DDC for all years of DOE 90.1 prototypes
-      # air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-      #   if fan.to_FanVariableVolume.is_initialized
-      #     plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan)
-      #     # Part Load Fan Pressure Control
-      #     if plr_req
-      #       fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with VSD and SP Setpoint Reset')
-      #       # No Part Load Fan Pressure Control
-      #     else
-      #       fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with discharge dampers')
-      #     end
-      #   else
-      #     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan}: This is not a multizone VAV fan system.")
-      #   end
-      # end
-
-      # enable DCV
-      air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
-
-      # add warmest zone based SAT reset
-      if air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
-        air_loop_hvac_enable_supply_air_temperature_reset_warmest_zone(air_loop_hvac)
-      end
-    end
-
-    # Unoccupied shutdown
-    if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
-      occ_threshold = air_loop_hvac_unoccupied_threshold
-      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = occ_threshold)
-    else
-      air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
-    end
-
-    # Motorized OA damper
-    if air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)
-      # Assume that the availability schedule has already been
-      # set to reflect occupancy and use this for the OA damper.
-      air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, 0.15, air_loop_hvac.availabilitySchedule)
-    else
-      air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
-    end
-
-    # Optimum Start
-    if air_loop_hvac_optimum_start_required?(air_loop_hvac)
-      air_loop_hvac_enable_optimum_start(air_loop_hvac)
-    end
-
-  end
-
-  # Determine whether or not this system is required to have an economizer.
-  #
-  # @param climate_zone [String] valid choices: 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B',
-  # 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C', 'ASHRAE 169-2013-4A', 'ASHRAE 169-2013-4B', 'ASHRAE 169-2013-4C',
-  # 'ASHRAE 169-2013-5A', 'ASHRAE 169-2013-5B', 'ASHRAE 169-2013-5C', 'ASHRAE 169-2013-6A', 'ASHRAE 169-2013-6B', 'ASHRAE 169-2013-7A',
-  # 'ASHRAE 169-2013-7B', 'ASHRAE 169-2013-8A', 'ASHRAE 169-2013-8B'
-  # @return [Bool] returns true if an economizer is required, false if not
-  def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
-    economizer_required = false
-    # require economizer for multizone VAV Reheat systems
-    if air_loop_hvac_multizone_vav_system?(air_loop_hvac) && air_loop_hvac_terminal_reheat?(air_loop_hvac)
-      economizer_required = true
-    end
-    return economizer_required
-  end
-
-  # Determine the limits for the type of economizer present
-  # on the AirLoopHVAC, if any.
+  # Same as 90.1-2013
+  # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
     drybulb_limit_f = nil
@@ -197,6 +73,7 @@ class NRELZNEReady2017 < ASHRAE901
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
 
+  # Same as 90.1-2013
   # Determine if the system economizer must be integrated or not.
   # All economizers must be integrated in NREL ZNE Ready 2017
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
@@ -204,6 +81,7 @@ class NRELZNEReady2017 < ASHRAE901
     return integrated_economizer_required
   end
 
+  # Same as 90.1-2013
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.
   #
@@ -289,6 +167,7 @@ class NRELZNEReady2017 < ASHRAE901
     return economizer_type_allowed
   end
 
+  # Same as 90.1-2013
   # Determine if multizone vav optimization is required.
   #
   # @param (see #economizer_required?)
@@ -382,21 +261,20 @@ class NRELZNEReady2017 < ASHRAE901
   # are zero for both types.
   # @return [Array<Double>] [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   def air_loop_hvac_demand_control_ventilation_limits(air_loop_hvac)
-    min_oa_without_economizer_cfm = 1500 # half of 90.1-2013 req
-    min_oa_with_economizer_cfm = 375 # half of 90.1-2013 req
+    min_oa_without_economizer_cfm = 1500.0 # half the 90.1-2013 requirement
+    min_oa_with_economizer_cfm = 375.0 # half the 90.1-2013 requirement
     return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   end
 
-  # Determine if the standard has an exception for demand control ventilation
-  # when an energy recovery device is present.  For NREL ZNE Ready 2017,
+  # Determine if the standard has an exception for demand control ventilation when an energy recovery device is present.
   # DCV and an ERV may be used in conjunction.
   def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
     dcv_required_when_erv_present = true
     return dcv_required_when_erv_present
   end
 
-  # Determine the air flow and number of story limits
-  # for whether motorized OA damper is required.
+  # Same as 90.1-2013
+  # Determine the air flow and number of story limits for whether motorized OA damper is required.
   # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
@@ -424,9 +302,9 @@ class NRELZNEReady2017 < ASHRAE901
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
-  # Determine the number of stages that should be used as controls
-  # for single zone DX systems.  NREL ZNE Ready matches 90.1-2013,
-  # and depends on the cooling capacity of the system.
+  # Same as 90.1-2013
+  # Determine the number of stages that should be used as controls for single zone DX systems.
+  # 90.1-2013 depends on the cooling capacity of the system.
   #
   # @return [Integer] the number of stages: 0, 1, 2
   def air_loop_hvac_single_zone_controls_num_stages(air_loop_hvac, climate_zone)
@@ -443,9 +321,9 @@ class NRELZNEReady2017 < ASHRAE901
     return num_stages
   end
 
-  # Determine if the system required supply air temperature
-  # (SAT) reset. For NREL ZNE Ready 2017, SAT reset requirements are based
-  # the same climate zone requirements as 90.1-2013.
+  # Same as 90.1-2013
+  # Determine if the system required supply air temperature (SAT) reset.
+  # For 90.1-2013, SAT reset requirements are based on climate zone.
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
@@ -509,12 +387,7 @@ class NRELZNEReady2017 < ASHRAE901
     return 0.05
   end
 
-  # Determine if a motorized OA damper is required
-  def air_loop_hvac_motorized_oa_damper_required?(air_loop_hvac, climate_zone)
-    motorized_oa_damper_required = true
-    return motorized_oa_damper_required
-  end
-
+  # Same as Standards method but with no DCV exception
   # Check if ERV is required on this airloop.
   #
   # @return [Bool] Returns true if required, false if not.
@@ -574,11 +447,11 @@ class NRELZNEReady2017 < ASHRAE901
     return erv_required
   end
 
+  # Same as 90.1-2016
   # Determine the airflow limits that govern whether or not an ERV is required.
   # Based on climate zone and % OA, plus the number of operating hours the system has.
   # @return [Double] the flow rate above which an ERV is required.
   # if nil, ERV is never required.
-  # based on ASHRAE 90.1-2016
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
     # Calculate the number of system operating hours
     # based on the availability schedule.
