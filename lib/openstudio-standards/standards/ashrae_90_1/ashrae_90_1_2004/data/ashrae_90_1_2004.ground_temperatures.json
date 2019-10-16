@@ -547,7 +547,7 @@
     {
       "building_type": "FullServiceRestaurant",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.19,
       "feb": 19.23,
       "mar": 19.35,
@@ -581,7 +581,7 @@
     {
       "building_type": "FullServiceRestaurant",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.55,
       "feb": 19.52,
       "mar": 19.55,
@@ -1159,7 +1159,7 @@
     {
       "building_type": "HighriseApartment",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.74,
       "feb": 19.7,
       "mar": 19.74,
@@ -1193,7 +1193,7 @@
     {
       "building_type": "HighriseApartment",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.46,
       "feb": 19.43,
       "mar": 19.46,
@@ -1771,7 +1771,7 @@
     {
       "building_type": "Hospital",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 20.22,
       "feb": 20.22,
       "mar": 20.26,
@@ -1805,7 +1805,7 @@
     {
       "building_type": "Hospital",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.29,
       "feb": 20.27,
       "mar": 20.28,
@@ -2383,7 +2383,7 @@
     {
       "building_type": "LargeHotel",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.52,
       "feb": 19.54,
       "mar": 19.62,
@@ -2417,7 +2417,7 @@
     {
       "building_type": "LargeHotel",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.56,
       "feb": 19.55,
       "mar": 19.58,
@@ -2995,7 +2995,7 @@
     {
       "building_type": "LargeOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 20.19,
       "feb": 20.2,
       "mar": 20.24,
@@ -3029,7 +3029,7 @@
     {
       "building_type": "LargeOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.27,
       "feb": 20.25,
       "mar": 20.25,
@@ -3318,7 +3318,7 @@
     {
       "building_type": "LargeOfficeDetailed",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": null,
       "feb": null,
       "mar": null,
@@ -3335,7 +3335,7 @@
     {
       "building_type": "LargeOfficeDetailed",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": null,
       "feb": null,
       "mar": null,
@@ -3896,7 +3896,7 @@
     {
       "building_type": "MediumOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.84,
       "feb": 19.85,
       "mar": 19.92,
@@ -3930,7 +3930,7 @@
     {
       "building_type": "MediumOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.95,
       "feb": 19.93,
       "mar": 19.95,
@@ -4797,7 +4797,7 @@
     {
       "building_type": "MidriseApartment",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.74,
       "feb": 19.7,
       "mar": 19.74,
@@ -4831,7 +4831,7 @@
     {
       "building_type": "MidriseApartment",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.46,
       "feb": 19.43,
       "mar": 19.46,
@@ -5409,7 +5409,7 @@
     {
       "building_type": "Outpatient",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.45,
       "feb": 19.49,
       "mar": 19.59,
@@ -5443,7 +5443,7 @@
     {
       "building_type": "Outpatient",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.62,
       "feb": 19.61,
       "mar": 19.64,
@@ -6021,7 +6021,7 @@
     {
       "building_type": "PrimarySchool",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 20.07,
       "feb": 20.08,
       "mar": 20.13,
@@ -6055,7 +6055,7 @@
     {
       "building_type": "PrimarySchool",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.24,
       "feb": 20.21,
       "mar": 20.22,
@@ -6633,7 +6633,7 @@
     {
       "building_type": "QuickServiceRestaurant",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 18.38,
       "feb": 18.45,
       "mar": 18.64,
@@ -6667,7 +6667,7 @@
     {
       "building_type": "QuickServiceRestaurant",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 18.94,
       "feb": 18.91,
       "mar": 18.96,
@@ -7245,7 +7245,7 @@
     {
       "building_type": "RetailStandalone",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 20.11,
       "feb": 20.12,
       "mar": 20.17,
@@ -7279,7 +7279,7 @@
     {
       "building_type": "RetailStandalone",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.27,
       "feb": 20.25,
       "mar": 20.26,
@@ -7857,7 +7857,7 @@
     {
       "building_type": "RetailStripmall",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.86,
       "feb": 19.87,
       "mar": 19.94,
@@ -7891,7 +7891,7 @@
     {
       "building_type": "RetailStripmall",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.07,
       "feb": 20.05,
       "mar": 20.06,
@@ -8469,7 +8469,7 @@
     {
       "building_type": "SecondarySchool",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 20.33,
       "feb": 20.33,
       "mar": 20.37,
@@ -8503,7 +8503,7 @@
     {
       "building_type": "SecondarySchool",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 20.45,
       "feb": 20.43,
       "mar": 20.43,
@@ -9081,7 +9081,7 @@
     {
       "building_type": "SmallHotel",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 19.29,
       "feb": 19.34,
       "mar": 19.45,
@@ -9115,7 +9115,7 @@
     {
       "building_type": "SmallHotel",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 19.46,
       "feb": 19.46,
       "mar": 19.5,
@@ -9693,7 +9693,7 @@
     {
       "building_type": "SmallOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 18.46,
       "feb": 18.45,
       "mar": 18.58,
@@ -9727,7 +9727,7 @@
     {
       "building_type": "SmallOffice",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 18.75,
       "feb": 18.67,
       "mar": 18.69,
@@ -10016,7 +10016,7 @@
     {
       "building_type": "SmallOfficeDetailed",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 18.67,
       "feb": 18.5,
       "mar": 18.73,
@@ -10033,7 +10033,7 @@
     {
       "building_type": "SmallOfficeDetailed",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 18.59,
       "feb": 18.4,
       "mar": 18.47,
@@ -10594,7 +10594,7 @@
     {
       "building_type": "Warehouse",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-7A",
+      "climate_zone": "ASHRAE 169-2013-7A",
       "jan": 12.32,
       "feb": 12.32,
       "mar": 12.36,
@@ -10628,7 +10628,7 @@
     {
       "building_type": "Warehouse",
       "template": "90.1-2004",
-      "climate_zone": "ashrae 169-2013-8A",
+      "climate_zone": "ASHRAE 169-2013-8A",
       "jan": 12.14,
       "feb": 12.14,
       "mar": 12.18,
