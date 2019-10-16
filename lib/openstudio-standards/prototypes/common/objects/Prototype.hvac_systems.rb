@@ -5962,8 +5962,12 @@ class Standard
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: 'LowTemperature')
       else
-        hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                         hot_water_loop_type: hot_water_loop_type)
+        if air_loop_heating_type == 'Water'
+          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
+                                                           hot_water_loop_type: hot_water_loop_type)
+        else
+          heating_type = main_heat_fuel
+        end
       end
 
       case cool_fuel
@@ -5984,6 +5988,7 @@ class Standard
                      zones,
                      hot_water_loop: hot_water_loop,
                      chilled_water_loop: chilled_water_loop,
+                     heating_type: heating_type,
                      electric_reheat: electric_reheat)
 
     when 'PVAV PFP Boxes'
