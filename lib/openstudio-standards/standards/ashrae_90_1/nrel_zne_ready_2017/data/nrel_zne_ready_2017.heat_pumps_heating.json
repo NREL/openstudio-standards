@@ -38,7 +38,7 @@
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
       "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
       "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
-      "notes": "From ZNE Multifamily committee"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -98,7 +98,7 @@
       "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
       "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
       "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
-      "notes": "From ZNE Multifamily committee"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "NREL ZNE Ready 2017",
