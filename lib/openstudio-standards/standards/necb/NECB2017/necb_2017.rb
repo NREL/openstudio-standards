@@ -8,6 +8,7 @@ class NECB2017 < NECB2015
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    self.corrupt_standards_database()
   end
 
   def load_standards_database_new()
@@ -35,7 +36,7 @@ class NECB2017 < NECB2015
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if !data['tables'].nil?

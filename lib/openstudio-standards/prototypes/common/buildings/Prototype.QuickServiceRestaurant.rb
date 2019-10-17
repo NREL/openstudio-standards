@@ -39,8 +39,24 @@ module QuickServiceRestaurant
         infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
       elsif template == '90.1-2007'
         case climate_zone
-          when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B',
-              'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C'
+          when 'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2006-3A',
+               'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2006-3C',
+               'ASHRAE 169-2006-4A',
+               'ASHRAE 169-2006-4B',
+               'ASHRAE 169-2006-4C',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B',
+               'ASHRAE 169-2013-3A',
+               'ASHRAE 169-2013-3B',
+               'ASHRAE 169-2013-3C',
+               'ASHRAE 169-2013-4A',
+               'ASHRAE 169-2013-4B',
+               'ASHRAE 169-2013-4C'
             infiltration_per_zone_diningdoor = 0.902834611
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
           else
@@ -49,7 +65,18 @@ module QuickServiceRestaurant
         end
       elsif template == '90.1-2010' || template == '90.1-2013'
         case climate_zone
-          when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C'
+          when 'ASHRAE 169-2006-1A',
+               'ASHRAE 169-2006-2A',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2006-3A',
+               'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2006-3C',
+               'ASHRAE 169-2013-1A',
+               'ASHRAE 169-2013-2A',
+               'ASHRAE 169-2013-2B',
+               'ASHRAE 169-2013-3A',
+               'ASHRAE 169-2013-3B',
+               'ASHRAE 169-2013-3C',
             infiltration_per_zone_diningdoor = 0.902834611
             infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
           else
@@ -137,7 +164,13 @@ module QuickServiceRestaurant
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
-          if climate_zone == 'ASHRAE 169-2006-2B' || climate_zone == 'ASHRAE 169-2006-1B' || climate_zone == 'ASHRAE 169-2006-3B'
+          case climate_zone
+          when 'ASHRAE 169-2006-1B',
+               'ASHRAE 169-2006-2B',
+               'ASHRAE 169-2006-3B',
+               'ASHRAE 169-2013-1B',
+               'ASHRAE 169-2013-2B',
+               'ASHRAE 169-2013-3B'
             case space_name
               when 'Dining'
                 thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, 'RestaurantFastFood CLGSETP_SCH_NO_OPTIMUM'))
@@ -203,18 +236,12 @@ module QuickServiceRestaurant
     zone_mixing_kitchen.setDeltaTemperature(0)
   end
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(7.561562668)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(7.561562668)
-        end
-    end
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+
+    return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end

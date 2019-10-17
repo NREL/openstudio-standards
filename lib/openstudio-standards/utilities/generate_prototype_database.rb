@@ -10,6 +10,8 @@ nrel_building_types = [
   'LargeHotel',
   'LargeOffice',
   'MediumOffice',
+  'LargeOfficeDetailed',
+  'MediumOfficeDetailed',
   'MidriseApartment',
   'Outpatient',
   'PrimarySchool',
@@ -18,6 +20,7 @@ nrel_building_types = [
   'SecondarySchool',
   'SmallHotel',
   'SmallOffice',
+  'SmallOfficeDetailed',
   'RetailStripmall',
   'Warehouse'
 

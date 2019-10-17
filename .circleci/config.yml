@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/openstudio-standards
     docker:
-      - image: nrel/openstudio:2.6.0
+      - image: nrel/openstudio:2.8.1
     parallelism: 7
     steps:
       - checkout
@@ -12,15 +12,10 @@ jobs:
           command: |
             bundle install
       - run:
-          name: Generate test files
-          command: |
-            bundle exec rake test:gen-circ-files
-      - run:
           name: Parallelize Tests
           command: |
             >node_tests.txt
-            echo "cat test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt"
-            echo "cat test/helpers/ci_test_helper/$CIRCLE_NODE_INDEX.txt > node_tests.txt" | bash
+            circleci tests split --split-by=timings test/circleci_tests.txt > node_tests.txt
             cat node_tests.txt
       - run:
           name: Run tests
@@ -30,10 +25,6 @@ jobs:
           name: Summarize test times
           command: |
             bundle exec rake test:times
-      - run:
-          name: Copy test result Timings
-          command: |
-            cp -R test/reports timing/
       - store_test_results:
           path: test/reports/
       - store_artifacts:

@@ -118,5 +118,38 @@
       "EL4 NNE Perim Spc (T.NNE23)",
       "EL4 South Perim Spc (T.S24)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL2 South Perim Spc (G.S1) Exhaust Fan",
+    "flow_rate": 1.551196879,
+    "operation_schedule": "D_Htl_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Hotel Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL2 South Perim Spc (G.S1)"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL3 North Perim Spc (G.N1) Exhaust Fan",
+    "flow_rate": 0.035254475,
+    "operation_schedule": "D_Htl_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "EL3 North Perim Spc (G.N1)"
+    ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL1 West Perim Spc (G.W1) Exhaust Fan",
+    "flow_rate": 0.969828412,
+    "operation_schedule": "D_Htl_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": null,
+    "space_names": [
+      "EL1 West Perim Spc (G.W1)"
+    ]
   }
 ]

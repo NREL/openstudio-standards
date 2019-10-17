@@ -1,4 +1,5 @@
 require 'singleton'
+require 'open3'
 require_relative 'openstudio-standards/version'
 
 module OpenstudioStandards
@@ -195,8 +196,11 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Model"
+  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ZoneHVACComponent"
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
@@ -230,14 +234,32 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.SmallOffice"
   require_relative "#{proto}/common/buildings/Prototype.SuperMarket"
   require_relative "#{proto}/common/buildings/Prototype.Warehouse"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.SmallDataCenterHighITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterLowITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeDataCenterHighITE"
+  require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
   create_meta_classes
 
   # Model Objects
+  require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/common/objects/Prototype.BoilerHotWater"
+  require_relative "#{proto}/common/objects/Prototype.CentralAirSourceHeatPump"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"
+  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWaterToAirHeatPumpEquationFit"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingDXSingleSpeed"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingElectric"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingGas"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
+  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
@@ -245,13 +267,15 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.FanVariableVolume"
   require_relative "#{proto}/common/objects/Prototype.FanZoneExhaust"
   require_relative "#{proto}/common/objects/Prototype.HeatExchangerAirToAirSensibleAndLatent"
+  require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
   require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Model.swh"
-  require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
+  require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
+  require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
@@ -278,13 +302,11 @@ module OpenstudioStandards
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"
-  require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.refrigeration"
   # DOE Ref Pre-1980
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.CoilHeatingGas"
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.Model.elevators"
-  require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.refrigeration"
   # NREL ZNE Ready 2017
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.AirTerminalSingleDuctVAVReheat"
@@ -303,4 +325,50 @@ module OpenstudioStandards
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanConstantVolume"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanOnOff"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
+
+  # DLM: not sure where this code should go
+  def self.get_run_env()
+    # blank out bundler and gem path modifications, will be re-setup by new call
+    new_env = {}
+    new_env["BUNDLER_ORIG_MANPATH"] = nil
+    new_env["BUNDLER_ORIG_PATH"] = nil
+    new_env["BUNDLER_VERSION"] = nil
+    new_env["BUNDLE_BIN_PATH"] = nil
+    new_env["RUBYLIB"] = nil
+    new_env["RUBYOPT"] = nil
+
+    # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
+    # requires to ruby gems will work, will fail if we require a native gem
+    #new_env["GEM_PATH"] = nil
+    #new_env["GEM_HOME"] = nil
+
+    # DLM: for now, ignore current bundle in case it has binary dependencies in it
+    #bundle_gemfile = ENV['BUNDLE_GEMFILE']
+    #bundle_path = ENV['BUNDLE_PATH']
+    #if bundle_gemfile.nil? || bundle_path.nil?
+      new_env['BUNDLE_GEMFILE'] = nil
+      new_env['BUNDLE_PATH'] = nil
+    #else
+    #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
+    #  new_env['BUNDLE_PATH'] = bundle_path
+    #end
+
+    return new_env
+  end
+
+  def self.run_command(command)
+    stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
+    if status.success?
+      puts "Command completed successfully"
+      #puts "stdout: #{stdout_str}"
+      #puts "stderr: #{stderr_str}"
+      return true
+    else
+      puts "Error running command: '#{command}'"
+      puts "stdout: #{stdout_str}"
+      puts "stderr: #{stderr_str}"
+      return false
+    end
+  end
+
 end

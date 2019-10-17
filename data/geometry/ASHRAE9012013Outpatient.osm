@@ -2823,7 +2823,7 @@ OS:Surface,
 OS:Space,
   {e1bc1754-214a-474b-87ec-fa9d8b9bd1b7}, !- Handle
   Floor 2 Work,                           !- Name
-  {d0ffff36-32f4-4dd5-96b7-d18140381350}, !- Space Type Name
+  {3c82b6ab-e75e-4097-bc6e-a776df957d22}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -5141,7 +5141,7 @@ OS:Surface,
 
 OS:Building,
   {9e3e5eef-9590-4941-bdaa-4a05a47e12d6}, !- Handle
-  A90_1_2013Outpatient,                   !- Name
+  DOE Prototype Outpatient,               !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -33480,4 +33480,21 @@ OS:Rendering:Color,
   120,                                    !- Rendering Red Value
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
+
+OS:SpaceType,
+  {3c82b6ab-e75e-4097-bc6e-a776df957d22}, !- Handle
+  Outpatient OutpatientFloor2Work,        !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {57081206-eb39-4fc9-b1dd-afbb695f6756}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  Outpatient,                             !- Standards Building Type
+  OutpatientFloor2Work;                   !- Standards Space Type
+
+OS:Rendering:Color,
+  {57081206-eb39-4fc9-b1dd-afbb695f6756}, !- Handle
+  Outpatient OutpatientFloor2Work,        !- Name
+  120,                                    !- Rendering Red Value
+  230,                                    !- Rendering Green Value
+  199;                                    !- Rendering Blue Value
 

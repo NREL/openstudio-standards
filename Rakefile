@@ -20,66 +20,35 @@ namespace :test do
     File.open('test/circleci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
-
-
-    require_relative './test/helpers/ci_test_generator'
-    CITestGenerator::generate(true, false)
-    # load test files from file.
-    local_full_file_list = FileList.new(File.readlines('test/local_circleci_tests.txt'))
-    # Select only .rb files that exist
-    local_full_file_list.select! {|item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}"))}
-    local_full_file_list.map! {|item| File.absolute_path("test/#{item.strip}")}
-    File.open('test/local_circleci_tests.json', 'w') do |f|
-      f.write(JSON.pretty_generate(local_full_file_list.to_a))
-    end
   else
     puts 'Could not find list of files to test at test/circleci_tests.txt'
     return false
   end
 
 
-  desc 'Run All CircleCI tests locally'
-  Rake::TestTask.new('local-circ-all-tests') do |t|
-    file_list = FileList.new('test/test_run_all_test_locally.rb')
+  desc 'parallel_run_all_tests_locally'
+  Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
+    file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
   end
 
-  desc 'Run All NECB tests locally'
-  Rake::TestTask.new('local-circ-necb-tests') do |t|
-    file_list = FileList.new('test/test_run_necb_test_locally.rb')
+  desc 'parallel_run_necb_building_regression_tests'
+  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
+    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
   end
 
-
-  desc 'Generate CircleCI test files'
-  task :'gen-circ-files' do
-    require_relative './test/helpers/ci_test_generator'
-    CITestGenerator::generate(local_run: false)
-  end
-
-
-  desc 'Run NECB Building regression test'
-  Rake::TestTask.new(:necb_regression_test) do |t|
-    file_list = FileList.new('./test/test_run_necb_regression_locally.rb')
+  desc 'parallel_run_necb_system_tests_tests'
+  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
+    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
     t.libs << 'test'
     t.test_files = file_list
-    t.verbose = true
+    t.verbose = false
   end
-
-
-  desc 'Run BTAP.perform_qaqc() test'
-  Rake::TestTask.new(:btap_json_test) do |t|
-    file_list = FileList.new('test/necb/test_necb_qaqc.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = true
-  end
-
-
 
 
 # These tests only available in the CI environment
@@ -185,23 +154,7 @@ namespace :data do
     export_spreadsheet_to_json
   end
 
-=begin
-  desc 'Update RS-Means Database'
-  task 'update:costing' do
-    $LOAD_PATH.unshift File.expand_path('lib', __FILE__)
-    require 'openstudio'
-    require 'openstudio/ruleset/ShowRunnerOutput'
-    # Require local version instead of installed version for developers
-    begin
-      require_relative 'lib/openstudio-standards.rb'
-      puts 'DEVELOPERS OF OPENSTUDIO-STANDARDS: Requiring code directly instead of using installed gem.  This avoids having to run rake install every time you make a change.'
-    rescue LoadError
-      require 'openstudio-standards'
-      puts 'Using installed openstudio-standards gem.'
-    end
-    BTAPCosting.instance
-  end
-=end
+
 end
 
 # Tasks to export libraries packaged with

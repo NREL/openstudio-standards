@@ -35235,11 +35235,7 @@ OS:Surface,
   8.84078750000018, -14.1177316788422, 0, !- X,Y,Z Vertex 3 {m}
   8.84078750000018, -2.56515692179583, 0, !- X,Y,Z Vertex 4 {m}
   0, -2.56515692179583, 0,                !- X,Y,Z Vertex 5 {m}
-  0, -0.985375243952177, 0,               !- X,Y,Z Vertex 6 {m}
-  1.55257500000002, -0.985375243952177, 0, !- X,Y,Z Vertex 7 {m}
-  1.55257500000009, -1.04115692179624, 0, !- X,Y,Z Vertex 8 {m}
-  7.71842500000009, -1.04115692179624, 0, !- X,Y,Z Vertex 9 {m}
-  7.71842500000002, -0.985375243952177, 0; !- X,Y,Z Vertex 10 {m}
+  0, -0.985375243952177, 0;               !- X,Y,Z Vertex 6 {m}
 
 OS:Surface,
   {395d7866-8cea-433f-8cd3-da3b5e0c3099}, !- Handle
@@ -39674,9 +39670,10 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  -0.000793749999353167, -2.2512734375028, 3.2512, !- X,Y,Z Vertex 1 {m}
-  4.62023308500648e-014, -2.25127343750273, 3.2512, !- X,Y,Z Vertex 2 {m}
-  0, 0.847526562499007, 3.2512;           !- X,Y,Z Vertex 3 {m}
+  -1.52479374999926, -2.2512734375028, 3.2512, !- X,Y,Z Vertex 1 {m}
+  0, -2.25127343750273, 3.2512,           !- X,Y,Z Vertex 2 {m}
+  0, 0.847526562499007, 3.2512,           !- X,Y,Z Vertex 3 {m}
+  -1.52479374999926, 0.847526562499007, 3.2512; !- X,Y,Z Vertex 4 {m}
 
 OS:ElectricEquipment:Definition,
   {59aa1ceb-dc90-42a9-9218-8f94452322b0}, !- Handle
@@ -71276,7 +71273,7 @@ OS:StandardsInformation:Construction,
   Metal Framing,                          !- Fenestration Frame Type
   ,                                       !- Fenestration Divider Type
   ,                                       !- Fenestration Tint
-  ;                                       !- Fenestration Gas Fill  
+  ;                                       !- Fenestration Gas Fill
 
 OS:Construction,
   {e11e980d-fc5f-4e21-b92d-0d921837aa94}, !- Handle
@@ -73584,4 +73581,3 @@ OS:WeatherFile,
   1529,                                   !- Elevation {m}
   file:files/USA_CO_Fort.Collins.AWOS.724769_TMY3.epw, !- Url
   C2C10117;                               !- Checksum
-

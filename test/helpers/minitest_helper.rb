@@ -28,12 +28,12 @@ $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
 if ENV['CI'] == 'true'
   require 'minitest/ci'
-else
-  require 'minitest/reporters'
+  puts "Saving test results to #{Minitest::Ci.report_dir}"
 end
+require 'minitest/reporters'
 
 require 'openstudio'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require 'openstudio/measure/ShowRunnerOutput'
 require 'json'
 require 'fileutils'
 
@@ -46,15 +46,5 @@ rescue LoadError
   puts 'Using installed openstudio-standards gem.' 
 end
 
-# Format test output differently depending on whether running
-# on CircleCI, RubyMine, or terminal
-if ENV['CI'] == 'true'
-  puts "Saving test results to #{Minitest::Ci.report_dir}"
-else
-  if ENV["RM_INFO"]
-    Minitest::Reporters.use! [Minitest::Reporters::RubyMineReporter.new]
-  else
-    Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
-  end
-end
-
+# Add more detail to test output
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]

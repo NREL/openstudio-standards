@@ -85,5 +85,16 @@
     "space_names": [
       "EL4 Core Spc (T.C17)"
     ]
+  },
+  {
+    "type": "Exhaust Fan",
+    "name": "EL3 NE Perim Spc (G.NE2) Exhaust Fan",
+    "flow_rate": 1.592935911,
+    "operation_schedule": "D_ECC_All_Fan_Yr",
+    "flow_fraction_schedule": null,
+    "balanced_exhaust_fraction_schedule": "DEER Community College Kitchen Exhaust Fan Balance Exhaust Fraction Schedule",
+    "space_names": [
+      "EL3 NE Perim Spc (G.NE2)"
+    ]
   }
 ]

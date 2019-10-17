@@ -18,6 +18,8 @@ module CoilDX
       sub_category = 'Single Package'
     elsif coil_dx.name.get.to_s.include?('Split System')
       sub_category = 'Split System'
+    elsif coil_dx.name.get.to_s.include?('CRAC')
+      sub_category = 'CRAC'
     end
 
     if coil_dx.airLoopHVAC.empty?
@@ -93,9 +95,7 @@ module CoilDX
     # If on an AirLoop
     if coil_dx.airLoopHVAC.is_initialized
       air_loop = coil_dx.airLoopHVAC.get
-      htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
-                   'Electric Resistance or None'
-                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
+      htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
                    'All Other'
@@ -107,6 +107,8 @@ module CoilDX
                    'All Other'
                  elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
                    'All Other'
+                 elsif !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
+                   'Electric Resistance or None'
                  else
                    'Electric Resistance or None'
                  end

@@ -110,13 +110,14 @@ class NECB2011 < Standard
     super()
     @template = self.class.name
     @standards_data = self.load_standards_database_new()
+    self.corrupt_standards_database()
     #puts "loaded these tables..."
     #puts @standards_data.keys.size
     #raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
   end
 
   def get_all_spacetype_names
-    return standards_lookup_table_many(table_name: 'space_types').map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -136,14 +137,6 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  # this method returns the default system fuel types by epw_file.
-  def get_canadian_system_defaults_by_weatherfile_name(model)
-    #get models weather object to get the province. Then use that to look up the province.
-    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = standards_lookup_table_many(table_name: 'regional_fuel_use').detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
-    raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
-    return fuel_sources
-  end
 
   def get_necb_hdd18(model)
     max_distance_tolerance = 500000
@@ -181,12 +174,12 @@ class NECB2011 < Standard
                                    z_scale: 1.0,
                                    fdwr_set: 1.1,
                                    srr_set: 1.1,
-                                   new_auto_zoner: true
+                                   new_auto_zoner: true,
+                                   primary_heating_fuel: 'DefaultFuel')
 
-  )
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
-    model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file} created: #{Time.new}")
+    model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file}")
 
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
@@ -196,7 +189,8 @@ class NECB2011 < Standard
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                new_auto_zoner: new_auto_zoner)
+                                new_auto_zoner: true,
+                                primary_heating_fuel: primary_heating_fuel)
   end
 
 
@@ -211,27 +205,27 @@ class NECB2011 < Standard
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: true
+                           new_auto_zoner: true,
+                           primary_heating_fuel: 'DefaultFuel')
 
-  )
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     climate_zone = 'NECB HDD Method'
 
     # prototype generation.I'm current
     scale_model_geometry(model, x_scale, y_scale, z_scale) if x_scale != 1.0 || y_scale != 1.0 || z_scale != 1.0
-    #validate that model has information required.
-    #puts 'Old SPace types'
+    # validate that model has information required.
+    # puts 'Old SPace types'
     # model.getSpaceTypes.each do |spacetype|
     #   puts spacetype.name
     # end
 
     return false unless validate_initial_model(model)
 
-    #Ensure that the space types names match the space types names in the code.
+    # Ensure that the space types names match the space types names in the code.
     return false unless validate_space_types(model)
 
-    #puts Old SPace types
+    # puts Old SPace types
     # puts 'new spacetypes'
     # model.getSpaceTypes.each do |spacetype|
     #   puts spacetype.name
@@ -281,7 +275,16 @@ class NECB2011 < Standard
     # Create Reference HVAC Systems.
     if new_auto_zoner
       auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      system_fuel_defaults = get_canadian_system_defaults_by_weatherfile_name(model)
+      # Set the primary fuel set to default to to specific fuel type.
+      if primary_heating_fuel == 'DefaultFuel'
+        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+        primary_heating_fuel = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+      end
+      # Get fuelset.
+      system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
+      if system_fuel_defaults.nil?
+        raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")
+      end
       auto_system(model: model,
                   boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
                   baseboard_type: system_fuel_defaults['baseboard_type'],
@@ -291,15 +294,14 @@ class NECB2011 < Standard
                   chiller_type: system_fuel_defaults['chiller_type'],
                   heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
                   heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
-                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6']
-      )
+                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6'])
       random = Random.new(1234)
-      model.getThermalZones.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item,random))}
-      model.getSpaceTypes.sort.each { |item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+      model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+      model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     else
-      model_add_hvac(model: model) # standards for NECB Prototype for NREL candidate
+      raise('this code should never be reached.. will delete after testing')
     end
-    model_add_swh(model)
+    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
     model_apply_sizing_parameters(model)
 
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
@@ -308,7 +310,7 @@ class NECB2011 < Standard
 
     #Do a second sizing run for the plant and loops.
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-      raise("sizing run 1 failed!")
+      raise("sizing run 1 failed! check #{sizing_run_dir}")
     end
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
@@ -390,7 +392,7 @@ class NECB2011 < Standard
       bt_model_vintage_string = "#{space_type_vintage}_building_type"
       st_target_vintage_string = "#{self.class.name}_space_type"
       bt_target_vintage_string = "#{self.class.name}_building_type"
-      space_type_upgrade_map = standards_lookup_table_many(table_name: 'space_type_upgrade_map')
+      space_type_upgrade_map = @standards_data['space_type_upgrade_map']
       model.getSpaceTypes.sort.each do |st|
         space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
@@ -512,7 +514,7 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
-    spacetype_data = standards_lookup_table_many(table_name: 'space_types')
+    spacetype_data = @standards_data['space_types']
     raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
@@ -632,6 +634,22 @@ class NECB2011 < Standard
       end
     end
     return true
+  end
+
+  # 2019-05-23 ckirney  This is an ugly, disgusting, hack (hence the name) that I dreamed out so that we could quickly
+  # and easily finish the merge from the nrcan branch (using OS 2.6.0) to master (using OS 2.8.0).  This must be revised
+  # and a more elegant solution found.
+  #
+  # This method takes everything in the @standards_data['tables'] hash and adds it to the main @standards_data hash.
+  # This was done because other contributors insist on using the 'model_find_object' method which is passed a hash and
+  # some search criteria.  The 'model_find_objects' then looks through the hash to information matching the search
+  # criteria.  NECB standards assumes that the 'standards_lookup_table_first' method is used.  This does basically the
+  # some thing as 'model_find_objects' only it assumes that you are looking in the standards hash and you tell it which
+  # table in the standards hash to look for.
+  def corrupt_standards_database()
+    @standards_data['tables'].each do |table|
+      @standards_data[table[0]] = table[1]['table']
+    end
   end
 
 end

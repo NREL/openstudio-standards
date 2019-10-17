@@ -71,7 +71,7 @@ module CoolingTower
     end
 
     # Get the cooling tower properties
-    ct_props = standards_lookup_table_first(table_name: 'heat_rejection', search_criteria: search_criteria)
+    ct_props = model_find_object(heat_rejection, search_criteria)
     unless ct_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, cannot find heat rejection properties, cannot apply standard efficiencies or curves.")
       return false
@@ -99,9 +99,7 @@ module CoolingTower
       'type' => 'Enclosed'
     }
 
-    motor_properties = standards_lookup_table_first(table_name: 'motors',
-                                                    search_criteria: search_criteria,
-                                                    capacity: fan_motor_nameplate_hp)
+    motor_properties = model_find_object(motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
       return false

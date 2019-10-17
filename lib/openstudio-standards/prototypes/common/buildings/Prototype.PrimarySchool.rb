@@ -48,7 +48,24 @@ module PrimarySchool
     end
   end
 
+  def update_waterheater_ambient_parameters(model)
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      if water_heater.name.to_s.include?('Booster')
+        water_heater.resetAmbientTemperatureSchedule
+        water_heater.setAmbientTemperatureIndicator('ThermalZone')		
+        water_heater.setAmbientTemperatureThermalZone(model.getThermalZoneByName('Kitchen_ZN_1_FLR_1 ZN').get)
+      end
+    end
+  end
+
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+    update_waterheater_ambient_parameters(model)
+
+    return true
+  end
+
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
     return true
   end
 end

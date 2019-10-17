@@ -155,7 +155,7 @@ OS:Connection,
 OS:Space,
   {6d54358c-9390-42e5-bc44-ebe58628f22c}, !- Handle
   SMstore1,                               !- Name
-  {2584f38b-718e-4548-8157-0ad0320617f5}, !- Space Type Name
+  {9e0685e2-2747-4bb5-a7ce-310feea6e896}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -309,7 +309,7 @@ OS:Connection,
 OS:Space,
   {3cabba90-ed6b-4267-bb90-b1645c10f28e}, !- Handle
   LGstore1,                               !- Name
-  {2584f38b-718e-4548-8157-0ad0320617f5}, !- Space Type Name
+  {3cf2fb98-49ef-4fb1-8314-91536f4ceffb}, !- Space Type Name
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
   0,                                      !- Direction of Relative North {deg}
@@ -2107,7 +2107,7 @@ OS:YearDescription,
 
 OS:Building,
   {2b0bfd6c-8754-4347-b436-1d7c3e63c79e}, !- Handle
-  A90_1_2013RetailStripmall,              !- Name
+  DOE Prototype RetailStripmall,          !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -2997,6 +2997,40 @@ OS:SpaceType,
 OS:Rendering:Color,
   {99a89640-fa94-4223-86ac-5730ec03257d}, !- Handle
   StripMall Strip mall - type 3,          !- Name
+  171,                                    !- Rendering Red Value
+  222,                                    !- Rendering Green Value
+  78;                                     !- Rendering Blue Value
+
+OS:SpaceType,
+  {3cf2fb98-49ef-4fb1-8314-91536f4ceffb}, !- Handle
+  StripMall Strip mall - type 0A,         !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {30ec679e-7078-4fb1-b94f-7a27f7f642e2}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  StripMall,                              !- Standards Building Type
+  Strip mall - type 0A;                   !- Standards Space Type
+
+OS:Rendering:Color,
+  {30ec679e-7078-4fb1-b94f-7a27f7f642e2}, !- Handle
+  StripMall Strip mall - type 0A,         !- Name
+  171,                                    !- Rendering Red Value
+  222,                                    !- Rendering Green Value
+  78;                                     !- Rendering Blue Value
+
+OS:SpaceType,
+  {9e0685e2-2747-4bb5-a7ce-310feea6e896}, !- Handle
+  StripMall Strip mall - type 0B,         !- Name
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {e2981c56-9147-4559-aa23-deff62602e7d}, !- Group Rendering Name
+  ,                                       !- Design Specification Outdoor Air Object Name
+  StripMall,                              !- Standards Building Type
+  Strip mall - type 0B;                   !- Standards Space Type
+
+OS:Rendering:Color,
+  {e2981c56-9147-4559-aa23-deff62602e7d}, !- Handle
+  StripMall Strip mall - type 0B,         !- Name
   171,                                    !- Rendering Red Value
   222,                                    !- Rendering Green Value
   78;                                     !- Rendering Blue Value

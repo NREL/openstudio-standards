@@ -17,4 +17,47 @@ class Standard
 
     return true
   end
+
+  def create_fan_zone_exhaust_from_json(model,
+                                        fan_json,
+                                        fan_name: nil,
+                                        fan_efficiency: nil,
+                                        pressure_rise: nil,
+                                        system_availability_manager_coupling_mode: nil,
+                                        end_use_subcategory: nil)
+
+    # check values to use
+    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
+    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
+    system_availability_manager_coupling_mode = system_availability_manager_coupling_mode ? system_availability_manager_coupling_mode : fan_json['system_availability_manager_coupling_mode']
+
+    # convert values
+    pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil
+
+    # create fan
+    fan = create_fan_zone_exhaust(model,
+                                  fan_name: fan_name,
+                                  fan_efficiency: fan_efficiency,
+                                  pressure_rise: pressure_rise,
+                                  system_availability_manager_coupling_mode: system_availability_manager_coupling_mode,
+                                  end_use_subcategory: end_use_subcategory)
+    return fan
+  end
+
+  def create_fan_zone_exhaust(model,
+                              fan_name: nil,
+                              fan_efficiency: nil,
+                              pressure_rise: nil,
+                              system_availability_manager_coupling_mode: nil,
+                              end_use_subcategory: nil)
+    fan = OpenStudio::Model::FanZoneExhaust.new(model)
+    PrototypeFan.apply_base_fan_variables(fan,
+                                          fan_name: fan_name,
+                                          fan_efficiency: fan_efficiency,
+                                          pressure_rise: pressure_rise,
+                                          end_use_subcategory: end_use_subcategory)
+    fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) unless system_availability_manager_coupling_mode.nil?
+    return fan
+  end
+
 end

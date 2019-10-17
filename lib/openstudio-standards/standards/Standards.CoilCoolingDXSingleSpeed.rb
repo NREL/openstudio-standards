@@ -55,15 +55,9 @@ class Standard
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-                 standards_lookup_table_first(table_name: 'heat_pumps',
-                                              search_criteria: search_criteria,
-                                              capacity: capacity_btu_per_hr,
-                                              date: Date.today)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 standards_lookup_table_first(table_name: 'unitary_acs',
-                                              search_criteria: search_criteria,
-                                              capacity: capacity_btu_per_hr,
-                                              date: Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found
@@ -89,7 +83,7 @@ class Standard
       eer_calc_cap_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       eer_calc_cap_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       pthp_eer = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * eer_calc_cap_btu_per_hr / 1000.0)
-      cop = eer_to_cop(pthp_eer, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
+      cop = eer_to_cop(pthp_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{pthp_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{pthp_eer.round(1)}")
     end
@@ -107,15 +101,35 @@ class Standard
       eer_calc_cap_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
       eer_calc_cap_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
       ptac_eer = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * eer_calc_cap_btu_per_hr / 1000.0)
-      cop = eer_to_cop(ptac_eer, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
+      cop = eer_to_cop(ptac_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer.round(1)}")
+    end
+
+    # If CRAC, use equations if coefficients are specified
+    crac_minimum_scop = ac_props['minimum_scop']
+    if sub_category == 'CRAC' && !crac_minimum_scop.nil?
+      # TABLE 6.8.1K in 90.1-2010, TABLE 6.8.1-11 in 90.1-2013
+      # cop = scop/sensible heat ratio
+      if coil_cooling_dx_single_speed.ratedSensibleHeatRatio.is_initialized
+        crac_sensible_heat_ratio = coil_cooling_dx_single_speed.ratedSensibleHeatRatio.get
+      elsif coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.is_initialized
+        #Though actual inlet temperature is very high (thus basically no dehumidification),
+        #sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 °C drybulb/19.4 °C wetbulb.
+        crac_sensible_heat_ratio = coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model.autosizedRatedSensibleHeatRatio', "Failed to get autosized sensible heat ratio")
+      end
+      cop = crac_minimum_scop/crac_sensible_heat_ratio
+      cop = cop.round(2)
+      new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{crac_minimum_scop}SCOP #{cop}COP"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")
     end
 
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop_cooling_no_fan(min_seer)
+      cop = seer_to_cop_cooling_with_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -123,7 +137,7 @@ class Standard
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -131,7 +145,7 @@ class Standard
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop_cooling_no_fan(min_seer)
+      cop = seer_to_cop_cooling_with_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -139,7 +153,7 @@ class Standard
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = eer_to_cop(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -169,9 +183,9 @@ class Standard
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-                 standards_lookup_table_first(table_name: 'heat_pumps', search_criteria: search_criteria, capacity: capacity_btu_per_hr, date: Date.today)
+                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
-                 standards_lookup_table_first(table_name: 'unitary_acs', search_criteria: search_criteria, capacity: capacity_btu_per_hr, date: Date.today)
+                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
                end
 
     # Check to make sure properties were found

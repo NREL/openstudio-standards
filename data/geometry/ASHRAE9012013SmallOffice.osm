@@ -116,7 +116,7 @@ OS:Space,
   0,                                      !- X Origin {m}
   0,                                      !- Y Origin {m}
   0,                                      !- Z Origin {m}
-  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Building Story Name
+  ,                                       !- Building Story Name
   {761af5ec-0e7c-4fea-81cc-7d7860391e92}, !- Thermal Zone Name
   No;                                     !- Part of Total Floor Area
 
@@ -1204,7 +1204,7 @@ OS:SubSurface,
 
 OS:Building,
   {6b25c3c7-39e4-4be7-84a9-17e80feecaf5}, !- Handle
-  A90_1_2013SmallOffice,                  !- Name
+  DOE Prototype SmallOffice,              !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1303,7 +1303,7 @@ OS:SubSurface,
 OS:SubSurface,
   {53588f1b-5734-4f40-b8d3-73d92c10e021}, !- Handle
   Perimeter_ZN_1_wall_south_door,         !- Name
-  Door,                                   !- Sub Surface Type
+  GlassDoor,                              !- Sub Surface Type
   ,                                       !- Construction Name
   {67ca62ce-e572-4957-8e6a-efb74825f170}, !- Surface Name
   ,                                       !- Outside Boundary Condition Object
@@ -1324,15 +1324,6 @@ OS:BuildingStory,
   {2edc3034-10d9-48ff-9f1e-ff89d18bbb3f}, !- Handle
   Building Story 1,                       !- Name
   0,                                      !- Nominal Z Coordinate {m}
-  ,                                       !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  ;                                       !- Group Rendering Name
-
-OS:BuildingStory,
-  {314c62be-fce7-4e5a-bd05-c87c85e86c27}, !- Handle
-  Building Story 2,                       !- Name
-  3.05,                                   !- Nominal Z Coordinate {m}
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
