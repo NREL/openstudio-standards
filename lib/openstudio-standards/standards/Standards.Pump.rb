@@ -129,7 +129,7 @@ module Pump
     return [1.0, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
-    motors = standards_data['motors']
+    motors = standards_data["tables"]['motors']
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {

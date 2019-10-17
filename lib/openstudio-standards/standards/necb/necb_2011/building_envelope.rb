@@ -347,11 +347,11 @@ class NECB2011
 
       case surface.surfaceType.downcase
         when 'wall'
-          conductance_value = @standards_data['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['Wall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'floor'
-          conductance_value = @standards_data['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['Floor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'roofceiling'
-          conductance_value = @standards_data['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['Roof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -362,11 +362,11 @@ class NECB2011
     if surface.outsideBoundaryCondition.downcase =~ /ground/
       case surface.surfaceType.downcase
         when 'wall'
-          conductance_value = @standards_data['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['GroundWall'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'floor'
-          conductance_value = @standards_data['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['GroundFloor'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when 'roofceiling'
-          conductance_value = @standards_data['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['GroundRoof'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       if is_radiant
         conductance_value *= 0.80
@@ -385,9 +385,9 @@ class NECB2011
     if subsurface.outsideBoundaryCondition.downcase.match('outdoors')
       case subsurface.subSurfaceType.downcase
         when /window/
-          conductance_value = @standards_data['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['Window'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
         when /door/
-          conductance_value = @standards_data['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
+          conductance_value = @standards_data["tables"]['conductances']['Door'].find {|i| i['hdd'] > hdd}['thermal_transmittance'] * scaling_factor
       end
       subsurface.setRSI(1 / conductance_value)
     end
@@ -485,7 +485,7 @@ class NECB2011
     end
 
     # Get the object data
-    data = model_find_object(@standards_data['construction_sets'], 'template' => template, 'building_type' => building_type, 'space_type' => spc_type)
+    data = model_find_object(@standards_data["tables"]['construction_sets'], 'template' => template, 'building_type' => building_type, 'space_type' => spc_type)
     unless data
       # if nothing matches say that we could not find it.
       message = "Construction set for template =#{template}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']"
@@ -660,7 +660,7 @@ class NECB2011
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'], 'template' => template,
+    props = model_find_object(standards_data["tables"]['construction_properties'], 'template' => template,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,

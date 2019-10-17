@@ -224,7 +224,7 @@ module Fan
     return [fan_motor_eff, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
-    motors = standards_data['motors']
+    motors = standards_data["tables"]['motors']
 
     # Assuming all fan motors are 4-pole ODP
     search_criteria = {

@@ -73,7 +73,7 @@ class NECB2011
     if @standards_data['space_types'].is_a?(Hash) == true
       spacetype_data = @standards_data['space_types']['table']
     else
-      spacetype_data = @standards_data['space_types']
+      spacetype_data = @standards_data["tables"]['space_types']
     end
     standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil

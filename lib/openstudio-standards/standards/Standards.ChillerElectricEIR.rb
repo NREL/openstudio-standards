@@ -79,7 +79,7 @@ class Standard
       return nil
     end
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
-    chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
+    chlr_props = model_find_object(standards_data["tables"]['chillers'], search_criteria, capacity_tons, Date.today)
 
     if chlr_props.nil? || !chlr_props['minimum_full_load_efficiency']
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
@@ -97,7 +97,7 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = standards_data['chillers']
+    chillers = standards_data["tables"]['chillers']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
