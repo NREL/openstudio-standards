@@ -54,9 +54,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 13.1,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 15.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -64,7 +64,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "ZE AEDG Multifamily",
@@ -76,9 +76,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 14.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -86,7 +86,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "ZE AEDG Multifamily",
@@ -98,9 +98,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 14.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -108,7 +108,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "ZE AEDG Multifamily",
@@ -186,9 +186,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 13.1,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 15.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -196,7 +196,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "ZE AEDG Multifamily",
@@ -208,9 +208,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 14.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -218,7 +218,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     },
     {
       "template": "ZE AEDG Multifamily",
@@ -230,9 +230,9 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_seasonal_efficiency": null,
-      "minimum_full_load_efficiency": 16.0,
+      "minimum_full_load_efficiency": 11.0,
       "minimum_iplv": null,
-      "minimum_integrated_energy_efficiency_ratio": null,
+      "minimum_integrated_energy_efficiency_ratio": 14.0,
       "pthp_eer_coefficient_1": null,
       "pthp_eer_coefficient_2": null,
       "cool_cap_ft": "HPACCoolCapFT",
@@ -240,7 +240,7 @@
       "cool_eir_ft": "HPACCOOLEIRFT",
       "cool_eir_fflow": "HPACCOOLEIRFFF",
       "cool_plf_fplr": "HPACCOOLPLFFPLR",
-      "notes": "From Pena Station design guidelines assumptions"
+      "notes": "From ZE AEDG Multifamily Committee"
     }
   ]
 }
