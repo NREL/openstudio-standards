@@ -588,7 +588,7 @@ class Standard
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = model_find_object["tables"](standards_data['construction_properties'], search_criteria)
+    construction_properties = model_find_object(standards_data["tables"]['construction_properties'], search_criteria)
 
     return construction_properties
   end
