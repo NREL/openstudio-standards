@@ -1514,14 +1514,7 @@ class Standard
     # Create an ERV
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
     erv.setName("#{air_loop_hvac.name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
     erv.setSupplyAirOutletTemperatureControl(false)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
@@ -1582,6 +1575,22 @@ class Standard
     oa_system.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
 
     return true
+  end
+
+  # Apply efficiency values to the erv
+  #
+  # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
+    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    return erv
   end
 
   # Determine if multizone vav optimization is required.

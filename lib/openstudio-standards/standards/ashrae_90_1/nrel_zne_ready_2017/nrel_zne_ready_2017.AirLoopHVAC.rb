@@ -707,4 +707,20 @@ class NRELZNEReady2017 < ASHRAE901
 
     return erv_cfm
   end
+
+  # Apply efficiency values to the erv
+  #
+  # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
+    erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
+    erv.setLatentEffectivenessat100HeatingAirFlow(0.81)
+    erv.setSensibleEffectivenessat75HeatingAirFlow(0.68)
+    erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
+    erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
+    erv.setLatentEffectivenessat100CoolingAirFlow(0.81)
+    erv.setSensibleEffectivenessat75CoolingAirFlow(0.68)
+    erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
+    return erv
+  end
 end
