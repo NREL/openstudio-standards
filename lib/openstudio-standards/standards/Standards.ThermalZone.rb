@@ -1489,7 +1489,7 @@ class Standard
         floor_area_ip = OpenStudio.convert(floor_area, 'm^2', 'ft^2').get
       end
 
-      space_type_properties = space_type_get_standards_data["tables"](space_type)
+      space_type_properties = space_type_get_standards_data(space_type)
       exhaust_per_area = space_type_properties['exhaust_per_area']
       next if exhaust_per_area.nil?
       maximum_flow_rate_ip = exhaust_per_area * floor_area_ip
