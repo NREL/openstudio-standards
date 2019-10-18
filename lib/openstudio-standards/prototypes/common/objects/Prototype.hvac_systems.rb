@@ -1143,7 +1143,6 @@ class Standard
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
   #   If enabled, the DOAS will be sized for twice the ventilation minimum to allow economizing
   # @param include_exhaust_fan [Bool] if true, include an exhaust fan
-  # @param energy_recovery [Bool] if true, an ERV will be added to the system
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
@@ -1159,7 +1158,6 @@ class Standard
                      fan_maximum_flow_rate: nil,
                      econo_ctrl_mthd: 'NoEconomizer',
                      include_exhaust_fan: true,
-                     energy_recovery: true,
                      demand_control_ventilation: false,
                      doas_control_strategy: 'NeutralSupplyAir',
                      clg_dsgn_sup_air_temp: 60.0,
@@ -1343,40 +1341,6 @@ class Standard
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
     air_loop.setNightCycleControlType('CycleOnAnyZoneFansOnly')
-
-    # add energy recovery if requested
-    if energy_recovery
-      # Get the OA system and its outboard OA node
-      oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
-
-      # create the ERV and set its properties
-      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.setName("#{air_loop.name} Heat Exchanger")
-      erv.addToNode(oa_system.outboardOANode.get)
-      erv.setHeatExchangerType('Rotary')
-      erv.setSupplyAirOutletTemperatureControl(false)
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
-      erv.setEconomizerLockout(true)
-      # TODO: estimate ERV motor power which might require knowing airflow (like prototype buildings do)
-      # erv.setNominalElectricPower(value_new)
-      # TODO: set erv defrost control
-
-      # increase fan static pressure to account for ERV
-      erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
-      supply_fan_new_pressure_rise = supply_fan.pressureRise + erv_pressure_rise
-      supply_fan.setPressureRise(supply_fan_new_pressure_rise)
-      if include_exhaust_fan
-        exhaust_fan_new_pressure_rise = exhaust_fan.pressureRise + erv_pressure_rise
-        supply_fan.setPressureRise(exhaust_fan_new_pressure_rise)
-      end
-    end
 
     # add thermal zones to airloop
     thermal_zones.each do |zone|
@@ -6128,33 +6092,6 @@ class Standard
                      doas_type: 'DOASVAV',
                      econo_ctrl_mthd: 'FixedDryBulb')
 
-    when 'DOAS with DCV and Economizing'
-      if air_loop_heating_type == 'Water'
-        case main_heat_fuel
-        when 'AirSourceHeatPump'
-          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                           hot_water_loop_type: 'LowTemperature')
-        else
-          hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
-                                                           hot_water_loop_type: hot_water_loop_type)
-        end
-      else
-        hot_water_loop = nil
-      end
-      if air_loop_cooling_type == 'Water'
-        chilled_water_loop = model_get_or_add_chilled_water_loop(model, cool_fuel,
-                                                                 chilled_water_loop_cooling_type: chilled_water_loop_cooling_type)
-      else
-        chilled_water_loop = nil
-      end
-      model_add_doas(model,
-                     zones,
-                     hot_water_loop: hot_water_loop,
-                     chilled_water_loop: chilled_water_loop,
-                     doas_type: 'DOASVAV',
-                     demand_control_ventilation: true,
-                     econo_ctrl_mthd: 'FixedDryBulb')
-
     when 'ERVs'
       model_add_zone_erv(model, zones)
 
@@ -6163,251 +6100,6 @@ class Standard
 
     when 'Ideal Air Loads'
       model_add_ideal_air_loads(model, zones)
-
-    ### Combination Systems ###
-    when 'Water Source Heat Pumps with ERVs'
-      model_add_hvac_system(model,
-                            system_type = 'ERVs',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones)
-
-      model_add_hvac_system(model,
-                            system_type = 'Water Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when 'Water Source Heat Pumps with DOAS'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: air_loop_heating_type,
-                            air_loop_cooling_type: air_loop_cooling_type)
-
-      model_add_hvac_system(model,
-                            system_type = 'Water Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when 'Water Source Heat Pumps with DOAS with DCV'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS with DCV',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
-                            air_loop_heating_type: air_loop_heating_type,
-                            air_loop_cooling_type: air_loop_cooling_type)
-
-      model_add_hvac_system(model,
-                            system_type = 'Water Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when 'Ground Source Heat Pumps with ERVs'
-      model_add_hvac_system(model,
-                            system_type = 'ERVs',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones)
-
-      model_add_hvac_system(model,
-                            system_type = 'Ground Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            zone_equipment_ventilation: false)
-
-    when 'Ground Source Heat Pumps with DOAS'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: air_loop_heating_type,
-                            air_loop_cooling_type: air_loop_cooling_type)
-
-      model_add_hvac_system(model,
-                            system_type = 'Ground Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            zone_equipment_ventilation: false)
-
-    when 'Ground Source Heat Pumps with DOAS with DCV'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS with DCV',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: air_loop_heating_type,
-                            air_loop_cooling_type: air_loop_cooling_type)
-
-      model_add_hvac_system(model,
-                            system_type = 'Ground Source Heat Pumps',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            zone_equipment_ventilation: false)
-
-    when 'Fan Coil with DOAS'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: 'Water',
-                            air_loop_cooling_type: 'Water')
-
-      model_add_hvac_system(model,
-                            system_type = 'Fan Coil',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when 'Fan Coil with DOAS with DCV'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS with DCV',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: 'Water',
-                            air_loop_cooling_type: 'Water')
-
-      model_add_hvac_system(model,
-                            system_type = 'Fan Coil',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when 'Fan Coil with ERVs'
-      model_add_hvac_system(model,
-                            system_type = 'ERVs',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones)
-
-      model_add_hvac_system(model,
-                            system_type = 'Fan Coil',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            zone_equipment_ventilation: false)
-
-    when  'VRF with DOAS'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: 'DX',
-                            air_loop_cooling_type: 'DX')
-
-      model_add_hvac_system(model,
-                            system_type = 'VRF',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            zone_equipment_ventilation: false)
-
-    when  'VRF with DOAS with DCV'
-      model_add_hvac_system(model,
-                            system_type = 'DOAS with DCV',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: 'DX',
-                            air_loop_cooling_type: 'DX')
-
-      model_add_hvac_system(model,
-                            system_type = 'VRF',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            zone_equipment_ventilation: false)
-
-    when 'Radiant Slab with DOAS'
-      model_add_hvac_system(model,
-                            system_type = 'Radiant Slab',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            rad_lock_str: rad_lock_str,
-                            rad_lock_end: rad_lock_end)
-
-      model_add_hvac_system(model,
-                            system_type = 'DOAS',
-                            main_heat_fuel,
-                            zone_heat_fuel,
-                            cool_fuel,
-                            zones,
-                            hot_water_loop_type: hot_water_loop_type,
-                            chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
-                            air_loop_heating_type: 'Water',
-                            air_loop_cooling_type: 'Water')
 
     else
 
