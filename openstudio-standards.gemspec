@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'codecov' # to perform code coverage checking
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'faraday', '0.15.4' # fixing version of google-api-client dependency
+  spec.add_development_dependency 'signet', '0.11.0' # fixing version to ensure compatibility with Ruby 2.0.0
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'openstudio-api-stubs'
