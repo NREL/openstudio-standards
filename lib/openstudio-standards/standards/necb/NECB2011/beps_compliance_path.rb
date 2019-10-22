@@ -6,7 +6,7 @@ class NECB2011
     if @standards_data['space_types'].is_a?(Hash) == true
       spacetype_data = @standards_data['space_types']['table']
     else
-      spacetype_data = @standards_data['space_types']
+      spacetype_data = @standards_data["tables"]['space_types']['table']
     end
     spacetype_data.each do |spacedata|
       space_type = OpenStudio::Model::SpaceType.new(model)

@@ -4,7 +4,7 @@ class NECB2015
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = standards_data['chillers']
+    chillers = standards_data["tables"]['chillers']['table']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -35,7 +35,7 @@ class NECB2015
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_table = @standards_data['chillers']
+    chlr_table = @standards_data["tables"]['chillers']['table']
     chlr_props = model_find_object(chlr_table, search_criteria, capacity_tons, Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
@@ -116,7 +116,7 @@ class NECB2015
       # If a heat pump is present the pump power to total demand ratio is set to what NECB 2015 table 5.2.6.3. say it should be.
       # If a pump is present, this is a handy time to grab it for modification later.  Also, it adds the pump power consumption
       # to a total which will be used to determine how much to modify the pump power consumption later.
-      max_total_loop_pump_power_table = @standards_data['max_total_loop_pump_power']
+      max_total_loop_pump_power_table = @standards_data["tables"]['max_total_loop_pump_power']['table']
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
           when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit','OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData','OS_HeatPump_WaterToWater_EquationFit_Cooling','OS_HeatPump_WaterToWater_EquationFit_Heating'

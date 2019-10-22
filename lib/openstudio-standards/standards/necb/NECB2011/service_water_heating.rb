@@ -195,7 +195,7 @@ class NECB2011
     shw_spaces = []
     shw_sched_names = []
     # First go through all the spaces in the building and determine and determine their shw requirements
-    space_types_table = @standards_data['space_types']
+    space_types_table = @standards_data["tables"]['space_types']['table']
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
       data = nil
@@ -267,7 +267,7 @@ class NECB2011
             'name' => data['service_water_heating_schedule'],
             'day_types' => day_peak_sched[0]
         }
-        schedules_table = @standards_data['schedules']
+        schedules_table = @standards_data["tables"]['schedules']['table']
 
         day_sched = model_find_object(schedules_table, search_criteria)
         # Make sure the schedule is not empty and contains 24 hours.

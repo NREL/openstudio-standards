@@ -30,7 +30,7 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Look up the efficiency characteristics
-    coil_props = model_find_object(standards_data['water_source_heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    coil_props = model_find_object(standards_data["tables"]['water_source_heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if coil_props.nil?
@@ -71,7 +71,7 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Look up the efficiency characteristics
-    coil_props = model_find_object(standards_data['water_source_heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+    coil_props = model_find_object(standards_data["tables"]['water_source_heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if coil_props.nil?

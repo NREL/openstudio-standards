@@ -340,7 +340,7 @@ class NECB2011
     old_name = default_surface_construction_set.name.get.to_s
     new_name = "#{old_name} at hdd = #{hdd}"
     # Get appropriate standards table
-    standards_table = @standards_data['surface_thermal_transmittance']
+    standards_table = @standards_data["tables"]['surface_thermal_transmittance']['table']
 
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
     wall_rsi = 1.0 / (scale_wall * eval(self.model_find_objects(standards_table,

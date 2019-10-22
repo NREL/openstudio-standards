@@ -117,7 +117,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data["tables"]['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -141,7 +141,9 @@ class NECB2011 < Standard
   def get_canadian_system_defaults_by_weatherfile_name(model)
     #get models weather object to get the province. Then use that to look up the province.
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-    fuel_sources = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
+	fuel_sources = @standards_data["tables"]['regional_fuel_use']
+    fuel_sources = fuel_sources['table'].detect{|i| i["state_province_regions"].include?(epw.state_province_region) }
+    #fuel_sources = @standards_data["tables"]['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}
     raise("Could not find fuel sources for weather file, make sure it is a Canadian weather file.") if fuel_sources.nil? #this should never happen since we are using only canadian weather files.
     return fuel_sources
   end
@@ -391,7 +393,7 @@ class NECB2011 < Standard
       bt_model_vintage_string = "#{space_type_vintage}_building_type"
       st_target_vintage_string = "#{self.class.name}_space_type"
       bt_target_vintage_string = "#{self.class.name}_building_type"
-      space_type_upgrade_map = @standards_data['space_type_upgrade_map']
+      space_type_upgrade_map = @standards_data["tables"]['space_type_upgrade_map']['table']
       model.getSpaceTypes.sort.each do |st|
         space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
@@ -451,7 +453,7 @@ class NECB2011 < Standard
   # return s.each [String]
   def determine_dominant_necb_schedule_type(model)
     # lookup necb space type properties
-    space_type_properties = @standards_data['space_types']
+    space_type_properties = @standards_data["tables"]['space_types']['table']
 
     # Here is a hash to keep track of the m2 running total of spacetypes for each
     # sched type.
@@ -513,7 +515,7 @@ class NECB2011 < Standard
   # @param space [String]
   # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
   def determine_necb_schedule_type(space)
-    spacetype_data = @standards_data['space_types']
+    spacetype_data = @standards_data["tables"]['space_types']['table']
     raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
     raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
     space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
@@ -532,7 +534,7 @@ class NECB2011 < Standard
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
     # Remove infiltration rates set at the space type.
-    infiltration_data = @standards_data['infiltration']
+    infiltration_data = @standards_data["tables"]['infiltration']['table']
     unless space.spaceType.empty?
       space.spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
     end

@@ -28,7 +28,7 @@ class Standard
     design_water_flow_gpm = OpenStudio.convert(design_water_flow_m3_per_s, 'm^3/s', 'gal/min').get
 
     # Get the table of fluid cooler efficiencies
-    heat_rejection = standards_data['heat_rejection']
+    heat_rejection = standards_data["tables"]['heat_rejection']
 
     # Define the criteria to find the fluid cooler properties
     # in the hvac standards data set.
@@ -73,7 +73,7 @@ class Standard
     fan_bhp = 0.9 * fan_motor_nameplate_hp
 
     # Lookup the minimum motor efficiency
-    motors = standards_data['motors']
+    motors = standards_data["tables"]['motors']
 
     # Assuming all fan motors are 4-pole Enclosed
     search_criteria = {

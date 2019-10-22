@@ -12,7 +12,7 @@ class NECB2015
     occupancy_schedule =space_type_properties['occupancy_schedule'].to_s
     orig_lighting_sch = space_type_properties['lighting_schedule'].to_s
 
-    schedule_table = @standards_data['schedules']
+    schedule_table = @standards_data["tables"]['schedules']['table']
 
     #checks which rules to apply based on LPD
     if lighting_per_area <= 0.799256505 #8.6 W/m2

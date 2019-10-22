@@ -498,7 +498,7 @@ class NECB2011
     capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
 
     # Get the boiler properties
-    boiler_table = @standards_data['boilers']
+    boiler_table = @standards_data["tables"]['boilers']['table']
     blr_props = model_find_object(boiler_table, search_criteria, capacity_btu_per_hr)
     unless blr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
@@ -556,7 +556,7 @@ class NECB2011
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = standards_data['chillers']
+    chillers = standards_data['tables']['chillers']['table']
 
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -587,7 +587,7 @@ class NECB2011
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get the chiller properties
-    chlr_table = @standards_data['chillers']
+    chlr_table = @standards_data["tables"]['chillers']['table']
     chlr_props = model_find_object(chlr_table, search_criteria, capacity_tons, Date.today)
     unless chlr_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties, cannot apply standard efficiencies or curves.")
@@ -702,7 +702,7 @@ class NECB2011
     thermal_eff = nil
 
     # Get the coil properties
-    coil_table = @standards_data['furnaces']
+    coil_table = @standards_data["tables"]['furnaces']['table']
     coil_props = model_find_object(coil_table, search_criteria, [capacity_btu_per_hr, 0.001].max)
 
     unless coil_props
@@ -765,7 +765,7 @@ class NECB2011
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # lookup properties
-    coil_table = @standards_data['furnaces']
+    coil_table = @standards_data["tables"]['furnaces']['table']
     coil_props = model_find_object(coil_table, search_criteria, [capacity_btu_per_hr, 0.001].max, Date.today)
 
     # Check to make sure properties were found
@@ -904,8 +904,8 @@ class NECB2011
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    heat_pump_table = @standards_data['heat_pumps']
-    unitary_acs_table = @standards_data['unitary_acs']
+    heat_pump_table = @standards_data["tables"]['heat_pumps']['table']
+    unitary_acs_table = @standards_data["tables"]['unitary_acs']['table']
     ac_props = if heat_pump == true
                  model_find_object(heat_pump_table, search_criteria, capacity_btu_per_hr, Date.today)
                else
@@ -1136,7 +1136,7 @@ class NECB2011
     return [fan_motor_eff, 0] if motor_bhp == 0.0
 
     # Lookup the minimum motor efficiency
-    motors_table = @standards_data['motors']
+    motors_table = @standards_data["tables"]['motors']['table']
 
     # Assuming all fan motors are 4-pole ODP
     template_mod = @template
@@ -1566,7 +1566,7 @@ class NECB2011
       sp_type = spaceType_name[15..-1]
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
       # added to either the space type in the model or the space type reference file.
-      sp_type_info = @standards_data['space_types'].detect do |data|
+      sp_type_info = @standards_data["tables"]['space_types']['table'].detect do |data|
         ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase)) and
             data['building_type'].to_s == 'Space Function'
       end
