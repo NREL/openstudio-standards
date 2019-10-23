@@ -117,7 +117,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data["tables"]['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data["tables"]['space_types']['table'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -534,7 +534,8 @@ class NECB2011 < Standard
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
     # Remove infiltration rates set at the space type.
-    infiltration_data = @standards_data["tables"]['infiltration']['table']
+    # infiltration_data = @standards_data["tables"]['infiltration']['table']
+     infiltration_data = @standards_data["tables"]['infiltration']
     unless space.spaceType.empty?
       space.spaceType.get.spaceInfiltrationDesignFlowRates.each(&:remove)
     end
