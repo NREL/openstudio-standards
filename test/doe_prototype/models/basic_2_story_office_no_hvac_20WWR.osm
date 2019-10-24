@@ -1,7 +1,7 @@
 
 OS:Version,
-  {84b03e54-432b-43cc-bb44-fa92cb7bf6b2}, !- Handle
-  1.14.0;                                 !- Version Identifier
+  {2e685b27-aa0a-4f63-a36f-0ab3ec67ba5c}, !- Handle
+  2.9.0;                                  !- Version Identifier
 
 OS:ClimateZones,
   {8a3ac41c-57d4-48e4-a48e-1f232e262211}, !- Handle
@@ -10,7 +10,7 @@ OS:ClimateZones,
   ASHRAE,                                 !- Climate Zone Institution Name 1
   ANSI/ASHRAE Standard 169,               !- Climate Zone Document Name 1
   2006,                                   !- Climate Zone Document Year 1
-  2A,                                     !- Climate Zone Value 1
+  ,                                       !- Climate Zone Value 1
   CEC,                                    !- Climate Zone Institution Name 2
   California Climate Zone Descriptions,   !- Climate Zone Document Name 2
   1995,                                   !- Climate Zone Document Year 2
@@ -134,6 +134,7 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   ,                                       !- Standards Number of Stories
   ,                                       !- Standards Number of Above Ground Stories
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
@@ -757,13 +758,13 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
   0,                                      !- Minute 1
-  15.6,                                   !- Value Until Time 1
+  18.3,                                   !- Value Until Time 1
   22,                                     !- Hour 2
   0,                                      !- Minute 2
   21,                                     !- Value Until Time 2
   24,                                     !- Hour 3
   0,                                      !- Minute 3
-  15.6;                                   !- Value Until Time 3
+  18.3;                                   !- Value Until Time 3
 
 OS:Schedule:Day,
   {52253fba-a7fe-4341-ae8f-c5a0b5b473ec}, ! Handle
@@ -772,7 +773,7 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
   0,                                      ! Minute 1
-  15.6;                                   ! Value Until Time 1
+  18.3;                                   ! Value Until Time 1
 
 OS:Schedule:Day,
   {987bc735-aead-4693-8d00-c89322ddb7bb}, ! Handle
@@ -810,7 +811,7 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   24,                                     ! Hour 1
   0,                                      ! Minute 1
-  15.6;                                   ! Value Until Time 1
+  18.3;                                   ! Value Until Time 1
 
 OS:Schedule:Rule,
   {41b2ed2b-da36-437d-a77d-d83ec3abe82c}, ! Handle
@@ -839,13 +840,13 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   6,                                      ! Hour 1
   0,                                      ! Minute 1
-  15.6,                                   ! Value Until Time 1
+  18.3,                                   ! Value Until Time 1
   18,                                     ! Hour 2
   0,                                      ! Minute 2
   21,                                     ! Value Until Time 2
   24,                                     ! Hour 3
   0,                                      ! Minute 3
-  15.6;                                   ! Value Until Time 3
+  18.3;                                   ! Value Until Time 3
 
 OS:Schedule:Ruleset,
   {e078a21f-47b3-48b6-adc8-9f0ae1b7e5ef}, ! Handle
@@ -973,6 +974,7 @@ OS:SpaceType,
   {55aa99a6-e803-42be-a4b8-c0ed9711884e}, !- Default Schedule Set Name
   {e1baea93-3045-442c-928d-0be6253e78fe}, !- Group Rendering Name
   {f401d167-7b85-4b2f-99fb-0bcbe9f196b0}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   ClosedOffice;                           !- Standards Space Type
 
@@ -1078,6 +1080,7 @@ OS:SpaceType,
   {aca439d1-e41a-45d3-becb-ad554029c9ba}, !- Default Schedule Set Name
   {effac192-289c-489e-ae4d-b7d3b9457161}, !- Group Rendering Name
   {964504c6-4039-4386-9778-5089d7488d2c}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   Conference;                             !- Standards Space Type
 
@@ -1275,6 +1278,7 @@ OS:SpaceType,
   {bb800c2b-a1d0-4d7a-90cc-2895519a0e20}, !- Default Schedule Set Name
   {014ab6db-925b-4f7b-b017-330380de52ba}, !- Group Rendering Name
   {fd8fa6c4-c302-4d04-a305-4e09ee6a8d28}, !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   OpenOffice;                             !- Standards Space Type
 
@@ -1499,7 +1503,8 @@ OS:DefaultConstructionSet,
   {959397f6-6153-46bd-9bbe-6551585f93da}, !- Interior Partition Construction Name
   ,                                       !- Space Shading Construction Name
   ,                                       !- Building Shading Construction Name
-  ;                                       !- Site Shading Construction Name
+  ,                                       !- Site Shading Construction Name
+  ;                                       !- Adiabatic Surface Construction Name
 
 OS:DefaultSurfaceConstructions,
   {3d3c9504-90dd-4e2b-98df-f8dfa1f6931d}, !- Handle
@@ -3183,10 +3188,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  4.57, -4.5446, 3.04580594710565,        !- X,Y,Z Vertex 1 {m}
-  4.57, -4.5446, 0.76,                    !- X,Y,Z Vertex 2 {m}
-  4.57, 15.4046, 0.76,                    !- X,Y,Z Vertex 3 {m}
-  4.57, 15.4046, 3.04580594710565;        !- X,Y,Z Vertex 4 {m}
+  4.57, -0.328837995058842, 2.56275831299117, !- X,Y,Z Vertex 1 {m}
+  4.57, -0.328837995058842, 1.24304763411448, !- X,Y,Z Vertex 2 {m}
+  4.57, 11.1888379950588, 1.24304763411448, !- X,Y,Z Vertex 3 {m}
+  4.57, 11.1888379950588, 2.56275831299117; !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {16f5c300-2400-4b30-b5e2-4016adab4f18}, !- Handle
@@ -3200,10 +3205,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  35.4046, 4.57, 3.04289928208825,        !- X,Y,Z Vertex 1 {m}
-  35.4046, 4.57, 0.76,                    !- X,Y,Z Vertex 2 {m}
-  -4.5446, 4.57, 0.76,                    !- X,Y,Z Vertex 3 {m}
-  -4.5446, 4.57, 3.04289928208825;        !- X,Y,Z Vertex 4 {m}
+  26.9623406869551, 4.57, 2.56046589856735, !- X,Y,Z Vertex 1 {m}
+  26.9623406869551, 4.57, 1.2424333835209, !- X,Y,Z Vertex 2 {m}
+  3.8976593130449, 4.57, 1.2424333835209, !- X,Y,Z Vertex 3 {m}
+  3.8976593130449, 4.57, 2.56046589856735; !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {cba41ef3-7b77-4b76-8b34-49d0c425fc14}, !- Handle
@@ -3217,10 +3222,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  0.0254, 0, 3.04289928208825,            !- X,Y,Z Vertex 1 {m}
-  0.0254, 0, 0.76,                        !- X,Y,Z Vertex 2 {m}
-  39.9746, 0, 0.76,                       !- X,Y,Z Vertex 3 {m}
-  39.9746, 0, 3.04289928208825;           !- X,Y,Z Vertex 4 {m}
+  8.4676593130449, 0, 2.56046589856735,   !- X,Y,Z Vertex 1 {m}
+  8.4676593130449, 0, 1.2424333835209,    !- X,Y,Z Vertex 2 {m}
+  31.5323406869551, 0, 1.2424333835209,   !- X,Y,Z Vertex 3 {m}
+  31.5323406869551, 0, 2.56046589856735;  !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {b202c185-4eb0-4bc2-8024-48a5b1fe8a52}, !- Handle
@@ -3234,10 +3239,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  4.57, -4.5446, 3.04580594710565,        !- X,Y,Z Vertex 1 {m}
-  4.57, -4.5446, 0.76,                    !- X,Y,Z Vertex 2 {m}
-  4.57, 15.4046, 0.76,                    !- X,Y,Z Vertex 3 {m}
-  4.57, 15.4046, 3.04580594710565;        !- X,Y,Z Vertex 4 {m}
+  4.57, -0.328837995058842, 2.56275831299117, !- X,Y,Z Vertex 1 {m}
+  4.57, -0.328837995058842, 1.24304763411448, !- X,Y,Z Vertex 2 {m}
+  4.57, 11.1888379950588, 1.24304763411448, !- X,Y,Z Vertex 3 {m}
+  4.57, 11.1888379950588, 2.56275831299117; !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {af67905d-6182-4e03-bb54-09f3bb8b05f8}, !- Handle
@@ -3251,10 +3256,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  0, 19.9746, 3.04580594710565,           !- X,Y,Z Vertex 1 {m}
-  0, 19.9746, 0.76,                       !- X,Y,Z Vertex 2 {m}
-  0, 0.0253999999999976, 0.76,            !- X,Y,Z Vertex 3 {m}
-  0, 0.0253999999999976, 3.04580594710565; !- X,Y,Z Vertex 4 {m}
+  0, 15.7588379950588, 2.56275831299117,  !- X,Y,Z Vertex 1 {m}
+  0, 15.7588379950588, 1.24304763411448,  !- X,Y,Z Vertex 2 {m}
+  0, 4.24116200494116, 1.24304763411448,  !- X,Y,Z Vertex 3 {m}
+  0, 4.24116200494116, 2.56275831299117;  !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {0cd506bb-d5c1-4e60-9ef2-36358b8c3100}, !- Handle
@@ -3268,10 +3273,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  0, 19.9746, 3.04580594710565,           !- X,Y,Z Vertex 1 {m}
-  0, 19.9746, 0.76,                       !- X,Y,Z Vertex 2 {m}
-  0, 0.0253999999999976, 0.76,            !- X,Y,Z Vertex 3 {m}
-  0, 0.0253999999999976, 3.04580594710565; !- X,Y,Z Vertex 4 {m}
+  0, 15.7588379950588, 2.56275831299117,  !- X,Y,Z Vertex 1 {m}
+  0, 15.7588379950588, 1.24304763411448,  !- X,Y,Z Vertex 2 {m}
+  0, 4.24116200494116, 1.24304763411448,  !- X,Y,Z Vertex 3 {m}
+  0, 4.24116200494116, 2.56275831299117;  !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {c37d93c9-3d3a-4e9a-ad1e-cbce992dd071}, !- Handle
@@ -3285,10 +3290,10 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  35.4046, 4.57, 3.04289928208825,        !- X,Y,Z Vertex 1 {m}
-  35.4046, 4.57, 0.76,                    !- X,Y,Z Vertex 2 {m}
-  -4.5446, 4.57, 0.76,                    !- X,Y,Z Vertex 3 {m}
-  -4.5446, 4.57, 3.04289928208825;        !- X,Y,Z Vertex 4 {m}
+  26.9623406869551, 4.57, 2.56046589856735, !- X,Y,Z Vertex 1 {m}
+  26.9623406869551, 4.57, 1.2424333835209, !- X,Y,Z Vertex 2 {m}
+  3.8976593130449, 4.57, 1.2424333835209, !- X,Y,Z Vertex 3 {m}
+  3.8976593130449, 4.57, 2.56046589856735; !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {b92b9bc6-2487-44b1-9bff-1cb23d9fb6cf}, !- Handle
@@ -3302,60 +3307,14 @@ OS:SubSurface,
   ,                                       !- Frame and Divider Name
   ,                                       !- Multiplier
   ,                                       !- Number of Vertices
-  0.0254, 0, 3.04289928208825,            !- X,Y,Z Vertex 1 {m}
-  0.0254, 0, 0.76,                        !- X,Y,Z Vertex 2 {m}
-  39.9746, 0, 0.76,                       !- X,Y,Z Vertex 3 {m}
-  39.9746, 0, 3.04289928208825;           !- X,Y,Z Vertex 4 {m}
-
-OS:ShadingSurfaceGroup,
-  {90cff702-268f-4a5e-9055-a19e9703bccb}, !- Handle
-  Sub Surface 8 Shading Surfaces,         !- Name
-  Space,                                  !- Shading Surface Type
-  {98d6a246-ffcd-44e2-b6d1-a406e085742c}, !- Space Name
-  ,                                       !- Direction of Relative North {deg}
-  ,                                       !- X Origin {m}
-  ,                                       !- Y Origin {m}
-  ,                                       !- Z Origin {m}
-  {b92b9bc6-2487-44b1-9bff-1cb23d9fb6cf}; !- Shaded Object Name
-
-OS:ShadingSurface,
-  {24089aaa-029f-4866-8e8e-2ec4f22941ee}, !- Handle
-  Sub Surface 8 - Overhang,               !- Name
-  ,                                       !- Construction Name
-  {90cff702-268f-4a5e-9055-a19e9703bccb}, !- Shading Surface Group Name
-  ,                                       !- Transmittance Schedule Name
-  ,                                       !- Number of Vertices
-  39.9746, -1.14144964104413, 3.04289928208825, !- X,Y,Z Vertex 1 {m}
-  39.9746, 0, 3.04289928208825,           !- X,Y,Z Vertex 2 {m}
-  0.0254, 0, 3.04289928208825,            !- X,Y,Z Vertex 3 {m}
-  0.0254, -1.14144964104413, 3.04289928208825; !- X,Y,Z Vertex 4 {m}
-
-OS:ShadingSurfaceGroup,
-  {9800998c-dc12-442c-8a2f-4063805f146e}, !- Handle
-  Sub Surface 3 Shading Surfaces,         !- Name
-  Space,                                  !- Shading Surface Type
-  {1e59010b-982d-470b-a4bc-13132419f5c8}, !- Space Name
-  ,                                       !- Direction of Relative North {deg}
-  ,                                       !- X Origin {m}
-  ,                                       !- Y Origin {m}
-  ,                                       !- Z Origin {m}
-  {cba41ef3-7b77-4b76-8b34-49d0c425fc14}; !- Shaded Object Name
-
-OS:ShadingSurface,
-  {a86de508-f01d-4af9-8a30-6e047f291c04}, !- Handle
-  Sub Surface 3 - Overhang,               !- Name
-  ,                                       !- Construction Name
-  {9800998c-dc12-442c-8a2f-4063805f146e}, !- Shading Surface Group Name
-  ,                                       !- Transmittance Schedule Name
-  ,                                       !- Number of Vertices
-  39.9746, -1.14144964104413, 3.04289928208825, !- X,Y,Z Vertex 1 {m}
-  39.9746, 0, 3.04289928208825,           !- X,Y,Z Vertex 2 {m}
-  0.0254, 0, 3.04289928208825,            !- X,Y,Z Vertex 3 {m}
-  0.0254, -1.14144964104413, 3.04289928208825; !- X,Y,Z Vertex 4 {m}
+  8.4676593130449, 0, 2.56046589856735,   !- X,Y,Z Vertex 1 {m}
+  8.4676593130449, 0, 1.2424333835209,    !- X,Y,Z Vertex 2 {m}
+  31.5323406869551, 0, 1.2424333835209,   !- X,Y,Z Vertex 3 {m}
+  31.5323406869551, 0, 2.56046589856735;  !- X,Y,Z Vertex 4 {m}
 
 OS:ThermalZone,
   {c8ad0790-2519-484b-b1fd-b06609085362}, !- Handle
-  Thermal Zone: Story 1 West Perimeter Space, !- Name
+  Thermal Zone Story 1 West Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3366,7 +3325,7 @@ OS:ThermalZone,
   {06857800-2ef4-4f6c-a982-bef15ba588af}, !- Zone Air Inlet Port List
   {5007f6fc-1ce9-4aa5-9023-f9a77e6c10b0}, !- Zone Air Exhaust Port List
   {61534c7f-6ab3-4f03-a454-7860307e077e}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {b72963d6-6014-4493-ad01-358fea569610}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3375,6 +3334,12 @@ OS:ThermalZone,
   {3734463e-7766-422b-837a-448f683502ba}, !- Group Rendering Name
   {874ff0b8-cbba-499d-b749-1f1793d30bc0}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {b72963d6-6014-4493-ad01-358fea569610}, !- Handle
+  Port List 1,                            !- Name
+  {c8ad0790-2519-484b-b1fd-b06609085362}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {629bcf9d-9a5a-4fa6-a6be-2f5a0c5f7332}, !- Handle
@@ -3392,7 +3357,7 @@ OS:Connection,
 
 OS:PortList,
   {06857800-2ef4-4f6c-a982-bef15ba588af}, !- Handle
-  Port List 1,                            !- Name
+  Port List 21,                           !- Name
   {c8ad0790-2519-484b-b1fd-b06609085362}; !- HVAC Component
 
 OS:PortList,
@@ -3437,7 +3402,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {9b9bd3b9-b652-4639-bd8a-de17911423e4}, !- Handle
-  Thermal Zone: Story 1 Core Space,       !- Name
+  Thermal Zone Story 1 Core Space,       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3448,7 +3413,7 @@ OS:ThermalZone,
   {5adaff33-6b8a-4e95-96fd-c4150073e2b1}, !- Zone Air Inlet Port List
   {2c5ed060-e133-4d1a-b223-cb3383fb8fd2}, !- Zone Air Exhaust Port List
   {35a2b7f9-d696-4bc6-869d-fc1c47ef30a2}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {b63eb1f4-9c7f-49d3-8823-2685c46ad08e}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3457,6 +3422,12 @@ OS:ThermalZone,
   {20c070c0-7fc2-4c7f-97a1-fc626e11d327}, !- Group Rendering Name
   {9b1875f1-7e68-4650-881c-80afd0c8cfdb}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {b63eb1f4-9c7f-49d3-8823-2685c46ad08e}, !- Handle
+  Port List 22,                           !- Name
+  {9b9bd3b9-b652-4639-bd8a-de17911423e4}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {b38940b3-6db1-4500-bce1-7395e4202270}, !- Handle
@@ -3519,7 +3490,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f934735d-2cda-4cd1-90b2-6efc750ed8bb}, !- Handle
-  Thermal Zone: Story 1 North Perimeter Space, !- Name
+  Thermal Zone Story 1 North Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3530,7 +3501,7 @@ OS:ThermalZone,
   {25215cdc-19f8-46db-8141-57aa25fd4492}, !- Zone Air Inlet Port List
   {61dd255c-5d71-44a9-8cda-f48323587c37}, !- Zone Air Exhaust Port List
   {5192a0d4-9b85-4dca-9927-cda75bf087dc}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {5025812a-2a90-4635-a95b-7bc5ca0c9c93}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3539,6 +3510,12 @@ OS:ThermalZone,
   {3209278e-80fc-4c8d-b801-efea94cbef62}, !- Group Rendering Name
   {6ef3f4d4-78fb-4cb5-88f7-9e9a562236bc}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {5025812a-2a90-4635-a95b-7bc5ca0c9c93}, !- Handle
+  Port List 23,                           !- Name
+  {f934735d-2cda-4cd1-90b2-6efc750ed8bb}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {b2ae5172-38de-4edf-83b9-48de410edb51}, !- Handle
@@ -3601,7 +3578,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {8a2393fc-a413-4e34-9f7a-36d5eb32f4d2}, !- Handle
-  Thermal Zone: Story 1 South Perimeter Space, !- Name
+  Thermal Zone Story 1 South Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3612,7 +3589,7 @@ OS:ThermalZone,
   {b13e5385-3ff1-40d6-91a2-a916874e4ee7}, !- Zone Air Inlet Port List
   {e292527e-6b0f-4d44-84ef-ccb622f4332a}, !- Zone Air Exhaust Port List
   {32528eb6-d1fe-439e-ae55-ad5cd80449df}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {d4a11504-f5c7-4447-8a76-c9602f268da2}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3621,6 +3598,12 @@ OS:ThermalZone,
   {1b38d65f-d5dd-45e7-ab50-7444171a0f2e}, !- Group Rendering Name
   {3f3377e6-db5b-4045-b045-a2734941b7ac}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {d4a11504-f5c7-4447-8a76-c9602f268da2}, !- Handle
+  Port List 24,                           !- Name
+  {8a2393fc-a413-4e34-9f7a-36d5eb32f4d2}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {06b82600-3a19-474a-ad2e-e25c106fd952}, !- Handle
@@ -3683,7 +3666,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {e5cbbb8e-f53b-4c34-9974-7b88193df606}, !- Handle
-  Thermal Zone: Story 2 East Perimeter Space, !- Name
+  Thermal Zone Story 2 East Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3694,7 +3677,7 @@ OS:ThermalZone,
   {8403890a-f083-4bf8-9901-5ba594f6dba0}, !- Zone Air Inlet Port List
   {019823ad-7eb9-4418-8bc0-31b19d020745}, !- Zone Air Exhaust Port List
   {816a560b-7e34-474c-beea-588dbb0e10b2}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {766c491c-a6a1-416b-ab6a-1dc281abe1ae}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3703,6 +3686,12 @@ OS:ThermalZone,
   {925ffd9f-cdef-46c1-8f72-035a71f823c0}, !- Group Rendering Name
   {4d2d2c65-e131-42ba-8338-7ceb43df1be6}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {766c491c-a6a1-416b-ab6a-1dc281abe1ae}, !- Handle
+  Port List 25,                           !- Name
+  {e5cbbb8e-f53b-4c34-9974-7b88193df606}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {1219cf1a-3144-43da-a8da-e1d07349c24e}, !- Handle
@@ -3765,7 +3754,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {de2e25d5-5c00-4b0d-a4b1-02786fa65a1d}, !- Handle
-  Thermal Zone: Story 2 West Perimeter Space, !- Name
+  Thermal Zone Story 2 West Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3776,7 +3765,7 @@ OS:ThermalZone,
   {d4c4f9bf-655d-4c09-ab3c-b9b776d2854b}, !- Zone Air Inlet Port List
   {86ac9e72-b481-4cee-b727-c9a081a372ef}, !- Zone Air Exhaust Port List
   {31932f29-796c-4407-94d7-26ce903606a8}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {cd1933ad-2a1e-4837-98d2-83d3eedfa41f}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3785,6 +3774,12 @@ OS:ThermalZone,
   {8aa06712-2f42-4db2-8fb8-ca0bfe93e637}, !- Group Rendering Name
   {7ac18921-9d99-4ea2-9e01-5502bccfe1ef}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {cd1933ad-2a1e-4837-98d2-83d3eedfa41f}, !- Handle
+  Port List 26,                           !- Name
+  {de2e25d5-5c00-4b0d-a4b1-02786fa65a1d}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {d1415be4-f659-4099-8d25-8d9d920524e1}, !- Handle
@@ -3847,7 +3842,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {98d36e9a-613f-4699-9ebf-b9b4a0b850a8}, !- Handle
-  Thermal Zone: Story 2 Core Space,       !- Name
+  Thermal Zone Story 2 Core Space,       !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3858,7 +3853,7 @@ OS:ThermalZone,
   {6c9509ef-6a59-4a42-90f0-154db199d359}, !- Zone Air Inlet Port List
   {c7009808-5d3f-4a97-8a85-726a3943e8ad}, !- Zone Air Exhaust Port List
   {44ff5932-b89f-413e-badd-33adf8c2f1cb}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {96480ecf-62a4-4ac0-b051-a01dc4af1c0a}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3867,6 +3862,12 @@ OS:ThermalZone,
   {876a7ee5-2e6d-45b1-951d-1fac1616c758}, !- Group Rendering Name
   {9b0551dc-753f-4023-92d8-e884075e3dac}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {96480ecf-62a4-4ac0-b051-a01dc4af1c0a}, !- Handle
+  Port List 27,                           !- Name
+  {98d36e9a-613f-4699-9ebf-b9b4a0b850a8}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {9fdeefc5-31fb-4ff1-a82b-22a076c54db4}, !- Handle
@@ -3929,7 +3930,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {011f8eb4-bcfc-49f1-a53e-d835492e3b5f}, !- Handle
-  Thermal Zone: Story 1 East Perimeter Space, !- Name
+  Thermal Zone Story 1 East Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3940,7 +3941,7 @@ OS:ThermalZone,
   {190059b4-45b6-4409-8b2a-c1f4cc001b40}, !- Zone Air Inlet Port List
   {42bcbff6-89c6-48d8-abd9-d6205f3ff9a2}, !- Zone Air Exhaust Port List
   {69c740f5-232c-4626-880d-bda62135bb87}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {7fcc52a4-6b8a-4beb-95b3-1745bbb0c68f}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3949,6 +3950,12 @@ OS:ThermalZone,
   {be8b83c1-2723-4b4d-ab21-1f530de9ed61}, !- Group Rendering Name
   {232caf94-235c-489d-a2d7-e6b535325791}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {7fcc52a4-6b8a-4beb-95b3-1745bbb0c68f}, !- Handle
+  Port List 28,                           !- Name
+  {011f8eb4-bcfc-49f1-a53e-d835492e3b5f}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {59b6cf9c-e151-42fe-b34d-c89e833bb4a5}, !- Handle
@@ -4011,7 +4018,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {f64364c1-8af3-4d2a-b1af-958654165549}, !- Handle
-  Thermal Zone: Story 2 South Perimeter Space, !- Name
+  Thermal Zone Story 2 South Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -4022,7 +4029,7 @@ OS:ThermalZone,
   {b55cb602-46b5-4e92-b18e-5fc849372682}, !- Zone Air Inlet Port List
   {e407f1a2-d206-4d6e-a244-ef58ec51dc17}, !- Zone Air Exhaust Port List
   {59e0d3ff-17c7-4e0b-b8af-24f9ab645863}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {d0664192-c7f7-40de-b6be-ddec5f07a4ce}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -4031,6 +4038,12 @@ OS:ThermalZone,
   {36b7bc6e-4dbf-4f4a-ba9b-cbf3a874c384}, !- Group Rendering Name
   {07f01c56-c3a4-43b1-8598-dd2061877e27}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {d0664192-c7f7-40de-b6be-ddec5f07a4ce}, !- Handle
+  Port List 29,                           !- Name
+  {f64364c1-8af3-4d2a-b1af-958654165549}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {24d5a012-f2b7-45e2-98b7-2028122f7142}, !- Handle
@@ -4093,7 +4106,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {7d4c83f0-8dde-47d3-a7fe-6c0d70394c3c}, !- Handle
-  Thermal Zone: Story 2 North Perimeter Space, !- Name
+  Thermal Zone Story 2 North Perimeter Space, !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -4104,7 +4117,7 @@ OS:ThermalZone,
   {5c470115-4d71-4135-8fd4-e43d169501a4}, !- Zone Air Inlet Port List
   {20c0ae99-c073-42d7-a6d6-56dfa439b0f6}, !- Zone Air Exhaust Port List
   {5b7bd5bd-6354-4bcb-88ca-168c1f969318}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {3684a9c6-5a7e-41c9-bed6-1264d8c4b994}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -4113,6 +4126,12 @@ OS:ThermalZone,
   {7dbbad95-b5a9-46c4-8bdb-d37680192863}, !- Group Rendering Name
   {0d169cf0-c605-48d4-b46f-e35b0702ff10}, !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {3684a9c6-5a7e-41c9-bed6-1264d8c4b994}, !- Handle
+  Port List 30,                           !- Name
+  {7d4c83f0-8dde-47d3-a7fe-6c0d70394c3c}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {83d76529-ac46-47ad-8656-49a25d20a8bd}, !- Handle
@@ -5073,7 +5092,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {05712f7d-365d-449a-91e8-cb9a44fe243c}, !- Surface Rendering Name
   {f753129d-49a8-43a4-9dc3-bd8183e548a5}, !- Layer 1
   {f3457c7b-9382-480f-842a-e2a429b6ca78}, !- Layer 2
   {f3457c7b-9382-480f-842a-e2a429b6ca78}; !- Layer 3
@@ -5103,7 +5122,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {5e4174e1-13b6-44d6-a53d-44b8ce7ecfa4}, !- Surface Rendering Name
   {c6082477-f1fb-48bf-a723-18cc72bd903b}, !- Layer 1
   {0f694730-a379-468e-acf0-c4f23e98b71c}, !- Layer 2
   {0f694730-a379-468e-acf0-c4f23e98b71c}; !- Layer 3
@@ -5133,7 +5152,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {d854c5a0-029c-44ab-a6ff-6bc43970d7cc}, !- Surface Rendering Name
   {5bf4661f-3aca-4529-97d4-c92dfef9dc99}, !- Layer 1
   {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}, !- Layer 2
   {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}; !- Layer 3
@@ -5163,7 +5182,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {abc79065-86ba-40ca-aacf-dad749888f4c}, !- Surface Rendering Name
   {fd661dac-ba20-439f-b0a1-f2a1d845e691}, !- Layer 1
   {949231a9-bc1b-4886-a247-52904b2ced01}, !- Layer 2
   {949231a9-bc1b-4886-a247-52904b2ced01}; !- Layer 3
@@ -5193,7 +5212,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {952018d6-fef2-4197-9d6c-52a0381980a4}, !- Surface Rendering Name
   {b786f76a-f79c-4ef6-ba5f-6e0cb442a026}, !- Layer 1
   {074ae43a-bdc8-4651-99dc-b7eb852f7123}, !- Layer 2
   {074ae43a-bdc8-4651-99dc-b7eb852f7123}; !- Layer 3
@@ -5223,7 +5242,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {760e3374-33b4-4f84-aab4-1a2b363ddd57}, !- Surface Rendering Name
   {8c39945c-d85c-4c30-bdce-edf16dd252a6}, !- Layer 1
   {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}, !- Layer 2
   {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}; !- Layer 3
@@ -5253,7 +5272,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {c0b26e27-b8af-4925-8a24-8208f45ce08c}, !- Surface Rendering Name
   {0960bfb1-27c5-49a3-a7d2-304d94e0fae1}, !- Layer 1
   {2075ec93-11f5-4d6f-b148-8fe95fe98360}, !- Layer 2
   {2075ec93-11f5-4d6f-b148-8fe95fe98360}; !- Layer 3
@@ -5283,7 +5302,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {ec674398-21f7-4e98-bdb4-b1532692e2f2}, !- Surface Rendering Name
   {2f4e14f9-41f5-44da-b005-d20fae60a7ae}, !- Layer 1
   {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}, !- Layer 2
   {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}; !- Layer 3
@@ -5313,7 +5332,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {80de7ca9-4371-4499-a891-5102a3bcba6b}, !- Surface Rendering Name
   {d254436f-17f1-470a-9060-176b57774ac3}, !- Layer 1
   {b90e4833-ebb7-4a08-9352-d2acf4056209}, !- Layer 2
   {b90e4833-ebb7-4a08-9352-d2acf4056209}; !- Layer 3
@@ -5343,7 +5362,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  ,                                       !- Surface Rendering Name
+  {c2bfb1e7-25d5-456c-a61d-b8074b1f7ab3}, !- Surface Rendering Name
   {a130b610-1dbf-4096-b154-bdce0fa5492d}, !- Layer 1
   {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}, !- Layer 2
   {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}; !- Layer 3
@@ -5483,173 +5502,295 @@ OS:Curve:Linear,
   ,                                       !- Input Unit Type for X
   ;                                       !- Output Unit Type
 
-OS:SizingPeriod:DesignDay,
-  {3b40c140-37f0-4614-8ab5-8d82a45c942f}, !- Handle
-  Miami Intl Ap Ann Hum_n 99.6% Condns DP=>MCDB, !- Name
-  12.4,                                   !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -0.1,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  3.8,                                    !- Wind Speed {m/s}
-  340,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  1,                                      !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Dewpoint,                               !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
+OS:StandardsInformation:Material,
+  {99cd72e5-511b-472e-b460-6949f08b6325}, !- Handle
+  {db95956a-1ab9-43d9-a943-196d11c1b4b5}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {6df848f4-524f-41a8-a0df-e50dfc84ffbd}, !- Handle
-  Miami Intl Ap Ann Clg .4% Condns Enth=>MDB, !- Name
-  30.5,                                   !- Maximum Dry-Bulb Temperature {C}
-  6.7,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
-  83500,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  4.5,                                    !- Wind Speed {m/s}
-  140,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Enthalpy,                               !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.528,                                  !- ASHRAE Taub {dimensionless}
-  1.905;                                  !- ASHRAE Taud {dimensionless}
+OS:StandardsInformation:Material,
+  {a9f8395f-3013-4e63-aa16-924c54a693d5}, !- Handle
+  {59e99353-08e6-499e-878a-5919ea2e7221}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {efaba963-a76c-47c5-a645-fcce79253d2a}, !- Handle
-  Miami Intl Ap Ann Clg .4% Condns WB=>MDB, !- Name
-  30.5,                                   !- Maximum Dry-Bulb Temperature {C}
-  6.7,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
-  26.8,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  4.5,                                    !- Wind Speed {m/s}
-  140,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.528,                                  !- ASHRAE Taub {dimensionless}
-  1.905;                                  !- ASHRAE Taud {dimensionless}
+OS:StandardsInformation:Material,
+  {1664dae7-6ea6-4918-900e-839ce2141c41}, !- Handle
+  {df049637-4391-4940-ac91-2834bd2dbd38}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {e5fdcfab-90d6-4b48-a1b0-5de80ee84df8}, !- Handle
-  Miami Intl Ap Ann Htg 99.6% Condns DB,  !- Name
-  8.7,                                    !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  8.7,                                    !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  3.8,                                    !- Wind Speed {m/s}
-  340,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  1,                                      !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
+OS:StandardsInformation:Material,
+  {c068b801-67b4-431e-a234-7f90293d6fe3}, !- Handle
+  {534be637-adef-4954-973c-658f8a181031}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {93624cff-dfed-4c75-ba65-0918797b60d0}, !- Handle
-  Miami Intl Ap Ann Htg Wind 99.6% Condns WS=>MCDB, !- Name
-  20.2,                                   !- Maximum Dry-Bulb Temperature {C}
-  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  20.2,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  10.6,                                   !- Wind Speed {m/s}
-  340,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  1,                                      !- Month
-  WinterDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAEClearSky;                         !- Solar Model Indicator
+OS:StandardsInformation:Material,
+  {34668f2a-6da3-431c-8610-e5e13ed44fae}, !- Handle
+  {6686210c-5336-471a-bef8-2b48a48b6b7c}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {a80cce61-025c-4d89-9173-559de7d46872}, !- Handle
-  Miami Intl Ap Ann Clg .4% Condns DB=>MWB, !- Name
-  33.2,                                   !- Maximum Dry-Bulb Temperature {C}
-  6.7,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
-  25.3,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  4.5,                                    !- Wind Speed {m/s}
-  140,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.528,                                  !- ASHRAE Taub {dimensionless}
-  1.905;                                  !- ASHRAE Taud {dimensionless}
+OS:StandardsInformation:Material,
+  {0e8418b5-158f-46bc-a817-e1ca756a770b}, !- Handle
+  {6d3314a2-a571-4aa6-9484-e87c10f461b4}; !- Material Name
 
-OS:SizingPeriod:DesignDay,
-  {2b81ae4e-cb3e-455b-b10a-3e49542b34d9}, !- Handle
-  Miami Intl Ap Ann Clg .4% Condns DP=>MDB, !- Name
-  28.6,                                   !- Maximum Dry-Bulb Temperature {C}
-  6.7,                                    !- Daily Dry-Bulb Temperature Range {deltaC}
-  25.8,                                   !- Humidity Indicating Conditions at Maximum Dry-Bulb
-  101193,                                 !- Barometric Pressure {Pa}
-  4.5,                                    !- Wind Speed {m/s}
-  140,                                    !- Wind Direction {deg}
-  0,                                      !- Sky Clearness
-  0,                                      !- Rain Indicator
-  0,                                      !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  0,                                      !- Daylight Saving Time Indicator
-  Dewpoint,                               !- Humidity Indicating Type
-  ,                                       !- Humidity Indicating Day Schedule Name
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.528,                                  !- ASHRAE Taub {dimensionless}
-  1.905;                                  !- ASHRAE Taud {dimensionless}
+OS:StandardsInformation:Material,
+  {7ba835e2-495e-4baa-ad0b-f66ee51b0625}, !- Handle
+  {496688e1-725a-4c9f-ba4b-bccda96124b5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a79fb03f-5bd8-41de-88b8-5a94ff61b547}, !- Handle
+  {d6c995a8-04d1-43bb-8878-eff1d0282ff0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c3a84623-887b-4857-be57-0b378334010d}, !- Handle
+  {683971a6-54c5-49dd-898c-a45575abf130}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {afad8747-2f6b-4b38-a69c-6dba9f7618d3}, !- Handle
+  {30249c30-d68a-4c10-86e6-003f3174b3c3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a0061c5f-f472-4c6d-b400-705506d7b4b7}, !- Handle
+  {fd283a08-2055-431b-ab90-b6217367abfb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {08715989-5616-4e0a-acab-5f5aed776970}, !- Handle
+  {615892bd-dc75-4a58-82f7-1f1d503efb5f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {884c6829-910e-442a-8093-c57c961d74a6}, !- Handle
+  {32c2b7b0-9b65-4dba-8cc8-eb553b10d15e}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {66d385d9-192f-4f73-be98-a516af380519}, !- Handle
+  {4f603e09-4636-41f7-a4d6-5d975941d98c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6548e6bc-b2cb-42b5-9d41-33c33ccc2bcf}, !- Handle
+  {2075ec93-11f5-4d6f-b148-8fe95fe98360}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {45e86a6d-235e-4cc2-84ad-ccd472919944}, !- Handle
+  {f753129d-49a8-43a4-9dc3-bd8183e548a5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7211a55e-9011-4384-86cc-6d8ae155c186}, !- Handle
+  {f3457c7b-9382-480f-842a-e2a429b6ca78}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {54c336d9-bab2-4554-adcc-fd0d737d6b90}, !- Handle
+  {a0c2b7cd-1dca-46d0-9316-6762bc420149}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {ed03387c-2597-4f2d-bef4-effb15243583}, !- Handle
+  {c6082477-f1fb-48bf-a723-18cc72bd903b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {86ed7630-d331-4fdf-b0c1-7fb854962dc0}, !- Handle
+  {0f694730-a379-468e-acf0-c4f23e98b71c}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {38f7fbe1-595e-49a7-9f40-3837005b12df}, !- Handle
+  {cba6dd21-427b-4174-8557-27ee7098422e}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {d02bd297-618a-4941-8ac3-5215a8ac0ffb}, !- Handle
+  {5bf4661f-3aca-4529-97d4-c92dfef9dc99}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {76715ef2-5cda-44e0-9a43-385530e74053}, !- Handle
+  {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {c072e718-1fcf-4272-8c44-cbe8d919d963}, !- Handle
+  {d388cd56-a0ef-4ece-80a6-eae661ba28b4}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {6a506458-7437-4002-a38c-05e251f142f5}, !- Handle
+  {fd661dac-ba20-439f-b0a1-f2a1d845e691}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b860c620-8094-47c6-8aab-46a251c04bf6}, !- Handle
+  {949231a9-bc1b-4886-a247-52904b2ced01}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {507dd573-36fc-4c85-b3df-c23ae21929ce}, !- Handle
+  {e9b5850c-82d3-4bfa-a5b1-e7fead007202}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {8a19ffe2-04ae-429c-b734-14c764c5a520}, !- Handle
+  {b786f76a-f79c-4ef6-ba5f-6e0cb442a026}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {53eae513-5077-43d6-9ed0-274b17bb1817}, !- Handle
+  {074ae43a-bdc8-4651-99dc-b7eb852f7123}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {2974ab23-75c4-485a-87b9-85e5a6ee8a53}, !- Handle
+  {d03922e1-58eb-4a58-b45c-6a197ce409e0}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {98aaf9a7-c3b8-4843-bbe1-8e0c212c9410}, !- Handle
+  {8c39945c-d85c-4c30-bdce-edf16dd252a6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {554b1c0e-156f-4fe9-8dd0-95557b5ef947}, !- Handle
+  {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {3442fb97-9911-4b37-8df5-239f32040b52}, !- Handle
+  {3bcc6870-1dfb-43c8-9feb-7edebc4b8c8d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {fa434cfc-5238-4b57-9e7c-900ca95ffe5f}, !- Handle
+  {0960bfb1-27c5-49a3-a7d2-304d94e0fae1}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {0d2eed9a-5865-46a0-9ed9-3f89daf346ec}, !- Handle
+  {f0dfa29b-ab2a-49d8-8614-5c0392c2e5aa}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {93b04574-1466-48fc-88c1-a8486cac2e19}, !- Handle
+  {2f4e14f9-41f5-44da-b005-d20fae60a7ae}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {5dfc3f10-c93d-4c48-bda5-6731790cbedb}, !- Handle
+  {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {a415f3bf-61c4-4a53-ae4c-03479c35e9fd}, !- Handle
+  {b5407ae4-6ca6-48d3-bee5-99c9d3d8eac8}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {e75c04d1-ce85-41c2-abd3-23a784d0e7f8}, !- Handle
+  {d254436f-17f1-470a-9060-176b57774ac3}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {83b49d3b-980c-406e-92d8-5b627fcd577b}, !- Handle
+  {b90e4833-ebb7-4a08-9352-d2acf4056209}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e11440e7-dc86-49cb-8d30-4192490f15ec}, !- Handle
+  {56539a5d-7642-4f06-a08b-f8565e82344d}; !- Construction Name
+
+OS:StandardsInformation:Material,
+  {1b35deca-dd9e-465b-8b74-964a29a85a7e}, !- Handle
+  {a130b610-1dbf-4096-b154-bdce0fa5492d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {afeb3091-9ddb-4b52-909a-d4f6da8ecc09}, !- Handle
+  {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}; !- Material Name
+
+OS:StandardsInformation:Construction,
+  {e5658d06-6cf3-4b7a-a72a-9172a00a1c49}, !- Handle
+  {cf57744c-1c14-462f-be43-5541cd19ece6}; !- Construction Name
+
+OS:Rendering:Color,
+  {05712f7d-365d-449a-91e8-cb9a44fe243c}, !- Handle
+  Rendering Color 37,                     !- Name
+  238,                                    !- Rendering Red Value
+  130,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {5e4174e1-13b6-44d6-a53d-44b8ce7ecfa4}, !- Handle
+  Rendering Color 38,                     !- Name
+  127,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  212;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {d854c5a0-029c-44ab-a6ff-6bc43970d7cc}, !- Handle
+  Rendering Color 39,                     !- Name
+  255,                                    !- Rendering Red Value
+  228,                                    !- Rendering Green Value
+  196;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {abc79065-86ba-40ca-aacf-dad749888f4c}, !- Handle
+  Rendering Color 40,                     !- Name
+  218,                                    !- Rendering Red Value
+  165,                                    !- Rendering Green Value
+  32;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {952018d6-fef2-4197-9d6c-52a0381980a4}, !- Handle
+  Rendering Color 41,                     !- Name
+  210,                                    !- Rendering Red Value
+  180,                                    !- Rendering Green Value
+  140;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {760e3374-33b4-4f84-aab4-1a2b363ddd57}, !- Handle
+  Rendering Color 42,                     !- Name
+  32,                                     !- Rendering Red Value
+  178,                                    !- Rendering Green Value
+  170;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c0b26e27-b8af-4925-8a24-8208f45ce08c}, !- Handle
+  Rendering Color 43,                     !- Name
+  211,                                    !- Rendering Red Value
+  211,                                    !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ec674398-21f7-4e98-bdb4-b1532692e2f2}, !- Handle
+  Rendering Color 44,                     !- Name
+  175,                                    !- Rendering Red Value
+  238,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {80de7ca9-4371-4499-a891-5102a3bcba6b}, !- Handle
+  Rendering Color 45,                     !- Name
+  95,                                     !- Rendering Red Value
+  158,                                    !- Rendering Green Value
+  160;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {c2bfb1e7-25d5-456c-a61d-b8074b1f7ab3}, !- Handle
+  Rendering Color 46,                     !- Name
+  127,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  212;                                    !- Rendering Blue Value
+
+OS:ShadingSurfaceGroup,
+  {b83a2eb5-9a4c-453e-b602-89fca73888c7}, !- Handle
+  Sub Surface 3 Shading Surfaces,         !- Name
+  Space,                                  !- Shading Surface Type
+  {1e59010b-982d-470b-a4bc-13132419f5c8}, !- Space Name
+  ,                                       !- Direction of Relative North {deg}
+  ,                                       !- X Origin {m}
+  ,                                       !- Y Origin {m}
+  ,                                       !- Z Origin {m}
+  {cba41ef3-7b77-4b76-8b34-49d0c425fc14}; !- Shaded Object Name
+
+OS:ShadingSurface,
+  {2543d9c1-f6e1-47a1-92a6-d0b19a792cb8}, !- Handle
+  Sub Surface 3 - Overhang,               !- Name
+  ,                                       !- Construction Name
+  {b83a2eb5-9a4c-453e-b602-89fca73888c7}, !- Shading Surface Group Name
+  ,                                       !- Transmittance Schedule Name
+  ,                                       !- Number of Vertices
+  31.5323406869551, 0, 2.56046589856735,  !- X,Y,Z Vertex 1 {m}
+  8.4676593130449, 0, 2.56046589856735,   !- X,Y,Z Vertex 2 {m}
+  8.4676593130449, -0.659016257523225, 2.56046589856735, !- X,Y,Z Vertex 3 {m}
+  31.5323406869551, -0.659016257523225, 2.56046589856735; !- X,Y,Z Vertex 4 {m}
+
+OS:ShadingSurfaceGroup,
+  {f23941a5-6112-44f2-a2b7-83e6d353d44e}, !- Handle
+  Sub Surface 8 Shading Surfaces,         !- Name
+  Space,                                  !- Shading Surface Type
+  {98d6a246-ffcd-44e2-b6d1-a406e085742c}, !- Space Name
+  ,                                       !- Direction of Relative North {deg}
+  ,                                       !- X Origin {m}
+  ,                                       !- Y Origin {m}
+  ,                                       !- Z Origin {m}
+  {b92b9bc6-2487-44b1-9bff-1cb23d9fb6cf}; !- Shaded Object Name
+
+OS:ShadingSurface,
+  {001995f9-5bcd-45ee-8970-1a39829f4d59}, !- Handle
+  Sub Surface 8 - Overhang,               !- Name
+  ,                                       !- Construction Name
+  {f23941a5-6112-44f2-a2b7-83e6d353d44e}, !- Shading Surface Group Name
+  ,                                       !- Transmittance Schedule Name
+  ,                                       !- Number of Vertices
+  31.5323406869551, 0, 2.56046589856735,  !- X,Y,Z Vertex 1 {m}
+  8.4676593130449, 0, 2.56046589856735,   !- X,Y,Z Vertex 2 {m}
+  8.4676593130449, -0.659016257523225, 2.56046589856735, !- X,Y,Z Vertex 3 {m}
+  31.5323406869551, -0.659016257523225, 2.56046589856735; !- X,Y,Z Vertex 4 {m}
 
