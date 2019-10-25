@@ -4433,7 +4433,7 @@ class Standard
     radiant_loops = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding radiant loop for #{zone.name}.")
-      if zone.name.include? ':'
+      if zone.name.to_s.include? ':'
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Thermal zone '#{zone.name}' has a restricted character ':' in the name and will not work with some EMS and output reporting objects. Please rename the zone.")
       end
 
@@ -6145,7 +6145,7 @@ class Standard
                               zone_equipment_ventilation: false)
       elsif system_type.include? 'with DOAS'
         # add DOAS system
-        model_add_hvac_system(model, 'with DOAS', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
+        model_add_hvac_system(model, 'DOAS', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
                               hot_water_loop_type: hot_water_loop_type,
                               chilled_water_loop_cooling_type: chilled_water_loop_cooling_type,
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
