@@ -88,6 +88,9 @@ class Standard
     # Remove all HVAC from model, excluding service water heating
     model_remove_prm_hvac(model)
 
+    # Remove all EMS objects from the model
+    model_remove_prm_ems_objects(model)
+
     # Modify the service water heating loops per the baseline rules
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
     model_apply_baseline_swh_loops(model, building_type)
@@ -3772,6 +3775,26 @@ class Standard
 
     # Outdoor VRF units (not in zone, not in loops)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
+
+    return true
+  end
+
+  # Remove EMS objects that may be orphaned from removing HVAC
+  #
+  # @return [Bool] true if successful, false if not
+  def model_remove_prm_ems_objects(model)
+    model.getEnergyManagementSystemActuators(&:remove)
+    model.getEnergyManagementSystemConstructionIndexVariables(&:remove)
+    model.getEnergyManagementSystemCurveOrTableIndexVariables(&:remove)
+    model.getEnergyManagementSystemGlobalVariables(&:remove)
+    model.getEnergyManagementSystemInternalVariables(&:remove)
+    model.getEnergyManagementSystemMeteredOutputVariables(&:remove)
+    model.getEnergyManagementSystemOutputVariables(&:remove)
+    model.getEnergyManagementSystemPrograms(&:remove)
+    model.getEnergyManagementSystemProgramCallingManagers(&:remove)
+    model.getEnergyManagementSystemSensors(&:remove)
+    model.getEnergyManagementSystemSubroutines(&:remove)
+    model.getEnergyManagementSystemTrendVariables(&:remove)
 
     return true
   end
