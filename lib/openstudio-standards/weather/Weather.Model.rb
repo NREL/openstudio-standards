@@ -3,15 +3,7 @@ class Standard
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
-  def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
-    success = true
-    require_relative 'Weather.stat_file'
-
-    # Remove any existing Design Day objects that are in the file
-    model.getDesignDays.each(&:remove)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
-
+  def get_climate_zone_weather_file_map(epw_file = '')
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
         'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
@@ -78,6 +70,20 @@ class Standard
         'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
         'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
     }
+    return climate_zone_weather_file_map
+  end
+
+  def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+    success = true
+    require_relative 'Weather.stat_file'
+
+    # Remove any existing Design Day objects that are in the file
+    model.getDesignDays.each(&:remove)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
+
+    # Define the weather file for each climate zone
+    climate_zone_weather_file_map = get_climate_zone_weather_file_map(epw_file)
 
     # Get the weather file name from the hash
     weather_file_name = if epw_file.nil? || (epw_file.to_s.strip == '')
@@ -175,37 +181,52 @@ class Standard
   end
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
-    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
-    if ground_temp_vals && ground_temp_vals['jan']
-      ground_temp = model.getSiteGroundTemperatureBuildingSurface
-      ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
-      ground_temp.setFebruaryGroundTemperature(ground_temp_vals['feb'])
-      ground_temp.setMarchGroundTemperature(ground_temp_vals['mar'])
-      ground_temp.setAprilGroundTemperature(ground_temp_vals['apr'])
-      ground_temp.setMayGroundTemperature(ground_temp_vals['may'])
-      ground_temp.setJuneGroundTemperature(ground_temp_vals['jun'])
-      ground_temp.setJulyGroundTemperature(ground_temp_vals['jul'])
-      ground_temp.setAugustGroundTemperature(ground_temp_vals['aug'])
-      ground_temp.setSeptemberGroundTemperature(ground_temp_vals['sep'])
-      ground_temp.setOctoberGroundTemperature(ground_temp_vals['oct'])
-      ground_temp.setNovemberGroundTemperature(ground_temp_vals['nov'])
-      ground_temp.setDecemberGroundTemperature(ground_temp_vals['dec'])
+
+    # When a 90.1 template is run, utilize the ground temperature approximation method from stat files
+    if is_90_1_building()
+      # Get ground temperatures from stat file. Stat file is mapped via climate zone.
+      climate_zone_weather_file_map = get_climate_zone_weather_file_map()
+      stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
+      ground_temperatures = get_monthly_ground_temps_from_stat_file(stat_file_path)
+
+      #set the site ground temperature building surface
+      ground_temp = model.getSiteGroundTemperatureFCfactorMethod
+      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures; will use generic temperatures, which will skew results.')
-      ground_temp = model.getSiteGroundTemperatureBuildingSurface
-      ground_temp.setJanuaryGroundTemperature(19.527)
-      ground_temp.setFebruaryGroundTemperature(19.502)
-      ground_temp.setMarchGroundTemperature(19.536)
-      ground_temp.setAprilGroundTemperature(19.598)
-      ground_temp.setMayGroundTemperature(20.002)
-      ground_temp.setJuneGroundTemperature(21.640)
-      ground_temp.setJulyGroundTemperature(22.225)
-      ground_temp.setAugustGroundTemperature(22.375)
-      ground_temp.setSeptemberGroundTemperature(21.449)
-      ground_temp.setOctoberGroundTemperature(20.121)
-      ground_temp.setNovemberGroundTemperature(19.802)
-      ground_temp.setDecemberGroundTemperature(19.633)
+      #Look up ground temperatures from templates
+      ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
+      if ground_temp_vals && ground_temp_vals['jan']
+        ground_temp = model.getSiteGroundTemperatureBuildingSurface
+        ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
+        ground_temp.setFebruaryGroundTemperature(ground_temp_vals['feb'])
+        ground_temp.setMarchGroundTemperature(ground_temp_vals['mar'])
+        ground_temp.setAprilGroundTemperature(ground_temp_vals['apr'])
+        ground_temp.setMayGroundTemperature(ground_temp_vals['may'])
+        ground_temp.setJuneGroundTemperature(ground_temp_vals['jun'])
+        ground_temp.setJulyGroundTemperature(ground_temp_vals['jul'])
+        ground_temp.setAugustGroundTemperature(ground_temp_vals['aug'])
+        ground_temp.setSeptemberGroundTemperature(ground_temp_vals['sep'])
+        ground_temp.setOctoberGroundTemperature(ground_temp_vals['oct'])
+        ground_temp.setNovemberGroundTemperature(ground_temp_vals['nov'])
+        ground_temp.setDecemberGroundTemperature(ground_temp_vals['dec'])
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures; will use generic temperatures, which will skew results.')
+        ground_temp = model.getSiteGroundTemperatureBuildingSurface
+        ground_temp.setJanuaryGroundTemperature(19.527)
+        ground_temp.setFebruaryGroundTemperature(19.502)
+        ground_temp.setMarchGroundTemperature(19.536)
+        ground_temp.setAprilGroundTemperature(19.598)
+        ground_temp.setMayGroundTemperature(20.002)
+        ground_temp.setJuneGroundTemperature(21.640)
+        ground_temp.setJulyGroundTemperature(22.225)
+        ground_temp.setAugustGroundTemperature(22.375)
+        ground_temp.setSeptemberGroundTemperature(21.449)
+        ground_temp.setOctoberGroundTemperature(20.121)
+        ground_temp.setNovemberGroundTemperature(19.802)
+        ground_temp.setDecemberGroundTemperature(19.633)
+      end
     end
+
   end
 
   # Gets the maximum OA dry bulb temperatures
@@ -220,6 +241,24 @@ class Standard
     end
 
     return heating_design_outdoor_temps
+  end
+
+  # This function gets the average ground temperature averages, under the assumption that ground temperature
+  # lags 3 months behind the ambient dry bulb temperature. (e.g. April's ground temperature equal January's
+  # average dry bulb temperature)
+  # @param stat_file_path [String] path to STAT file
+  # @return [Array] a length 12 array of monthly ground temperatures, one for each month
+  def get_monthly_ground_temps_from_stat_file(stat_file_path)
+
+    if File.exist? stat_file_path
+      stat_file = EnergyPlus::StatFile.new(stat_file_path)
+
+      monthly_dry_bulb = stat_file.monthly_dry_bulb[0..11]
+      ground_temperatures = monthly_dry_bulb.rotate(-3)
+      return ground_temperatures
+    else
+      raise "Stat file: #{stat_file_path} was not found when calculating ground temperatures."
+    end
   end
 end
 

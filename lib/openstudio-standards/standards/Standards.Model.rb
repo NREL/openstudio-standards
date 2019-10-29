@@ -3426,9 +3426,9 @@ class Standard
   # @param standards_construction_type [string]  the type of construction
   # @param building_category [string] the type of building
   # @return [hash] hash of construction properties
-  def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
+  def model_get_construction_properties(model, climate_zone, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
+
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone']
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
