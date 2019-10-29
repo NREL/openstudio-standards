@@ -1,7 +1,7 @@
 
 OS:Version,
-  {2e685b27-aa0a-4f63-a36f-0ab3ec67ba5c}, !- Handle
-  2.9.0;                                  !- Version Identifier
+  {284c65e5-bd98-4197-aa03-e92224692909}, !- Handle
+  2.7.1;                                  !- Version Identifier
 
 OS:ClimateZones,
   {8a3ac41c-57d4-48e4-a48e-1f232e262211}, !- Handle
@@ -758,31 +758,31 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
   0,                                      !- Minute 1
-  18.3,                                   !- Value Until Time 1
+  18.3333290947809,                       !- Value Until Time 1
   22,                                     !- Hour 2
   0,                                      !- Minute 2
-  21,                                     !- Value Until Time 2
+  21.1111111111111,                       !- Value Until Time 2
   24,                                     !- Hour 3
   0,                                      !- Minute 3
-  18.3;                                   !- Value Until Time 3
+  18.3333333333334;                       !- Value Until Time 3
 
 OS:Schedule:Day,
   {52253fba-a7fe-4341-ae8f-c5a0b5b473ec}, ! Handle
   Medium Office HtgSetp Summer Design Day, ! Name
   {49dbf634-e849-4b2c-8f8b-b16bc49a7589}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  24,                                     ! Hour 1
-  0,                                      ! Minute 1
-  18.3;                                   ! Value Until Time 1
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  18.3333333333334;                       !- Value Until Time 1
 
 OS:Schedule:Day,
   {987bc735-aead-4693-8d00-c89322ddb7bb}, ! Handle
   Medium Office HtgSetp Winter Design Day, ! Name
   {49dbf634-e849-4b2c-8f8b-b16bc49a7589}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  24,                                     ! Hour 1
-  0,                                      ! Minute 1
-  21;                                     ! Value Until Time 1
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  21.1111111111111;                       !- Value Until Time 1
 
 OS:Schedule:Rule,
   {c6e7c335-fc84-4748-8b65-588310b657f0}, ! Handle
@@ -809,9 +809,9 @@ OS:Schedule:Day,
   Medium Office HtgSetp Rule 1 Day Schedule, ! Name
   {49dbf634-e849-4b2c-8f8b-b16bc49a7589}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  24,                                     ! Hour 1
-  0,                                      ! Minute 1
-  18.3;                                   ! Value Until Time 1
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  18.3333333333334;                       !- Value Until Time 1
 
 OS:Schedule:Rule,
   {41b2ed2b-da36-437d-a77d-d83ec3abe82c}, ! Handle
@@ -838,15 +838,15 @@ OS:Schedule:Day,
   Medium Office HtgSetp Rule 2 Day Schedule, ! Name
   {49dbf634-e849-4b2c-8f8b-b16bc49a7589}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  6,                                      ! Hour 1
-  0,                                      ! Minute 1
-  18.3,                                   ! Value Until Time 1
-  18,                                     ! Hour 2
-  0,                                      ! Minute 2
-  21,                                     ! Value Until Time 2
-  24,                                     ! Hour 3
-  0,                                      ! Minute 3
-  18.3;                                   ! Value Until Time 3
+  6,                                      !- Hour 1
+  0,                                      !- Minute 1
+  18.3333248562283,                       !- Value Until Time 1
+  18,                                     !- Hour 2
+  0,                                      !- Minute 2
+  21.1111111111111,                       !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  18.3333290947809;                       !- Value Until Time 3
 
 OS:Schedule:Ruleset,
   {e078a21f-47b3-48b6-adc8-9f0ae1b7e5ef}, ! Handle
@@ -871,37 +871,31 @@ OS:Schedule:Day,
   ,                                       ! Interpolate to Timestep
   6,                                      !- Hour 1
   0,                                      !- Minute 1
-  26.7,                                   !- Value Until Time 1
+  25.5555555555556,                       !- Value Until Time 1
   22,                                     !- Hour 2
   0,                                      !- Minute 2
-  24,                                     !- Value Until Time 2
+  23.8888888888889,                       !- Value Until Time 2
   24,                                     !- Hour 3
   0,                                      !- Minute 3
-  26.7;                                   !- Value Until Time 3
+  25.5555555555556;                       !- Value Until Time 3
 
 OS:Schedule:Day,
   {4814dcdf-879a-45b9-a087-ba4a4891034d}, ! Handle
   Medium Office ClgSetp Summer Design Day, ! Name
   {b9ff68ce-9158-4567-b4b2-2f759042d545}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  6,                                      ! Hour 1
-  0,                                      ! Minute 1
-  26.699999999999999,                     ! Value Until Time 1
-  22,                                     ! Hour 2
-  0,                                      ! Minute 2
-  24,                                     ! Value Until Time 2
-  24,                                     ! Hour 3
-  0,                                      ! Minute 3
-  26.699999999999999;                     ! Value Until Time 3
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  23.8888888888889;                       !- Value Until Time 1
 
 OS:Schedule:Day,
   {2edee494-9c74-4928-93c5-7eecc673627e}, ! Handle
   Medium Office ClgSetp Winter Design Day, ! Name
   {b9ff68ce-9158-4567-b4b2-2f759042d545}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  24,                                     ! Hour 1
-  0,                                      ! Minute 1
-  26.699999999999999;                     ! Value Until Time 1
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  25.5555555555556;                       !- Value Until Time 1
 
 OS:Schedule:Rule,
   {475dfc23-8307-40e9-b61d-c96cd03ac424}, ! Handle
@@ -928,9 +922,9 @@ OS:Schedule:Day,
   Medium Office ClgSetp Rule 1 Day Schedule, ! Name
   {b9ff68ce-9158-4567-b4b2-2f759042d545}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  24,                                     ! Hour 1
-  0,                                      ! Minute 1
-  26.699999999999999;                     ! Value Until Time 1
+  24,                                     !- Hour 1
+  0,                                      !- Minute 1
+  25.5555555555556;                       !- Value Until Time 1
 
 OS:Schedule:Rule,
   {77bd13da-082e-486d-9374-e2de505e6b9e}, ! Handle
@@ -957,15 +951,15 @@ OS:Schedule:Day,
   Medium Office ClgSetp Rule 2 Day Schedule, ! Name
   {b9ff68ce-9158-4567-b4b2-2f759042d545}, ! Schedule Type Limits Name
   ,                                       ! Interpolate to Timestep
-  6,                                      ! Hour 1
-  0,                                      ! Minute 1
-  26.699999999999999,                     ! Value Until Time 1
-  18,                                     ! Hour 2
-  0,                                      ! Minute 2
-  24,                                     ! Value Until Time 2
-  24,                                     ! Hour 3
-  0,                                      ! Minute 3
-  26.699999999999999;                     ! Value Until Time 3
+  6,                                      !- Hour 1
+  0,                                      !- Minute 1
+  25.5555555555556,                       !- Value Until Time 1
+  18,                                     !- Hour 2
+  0,                                      !- Minute 2
+  23.8888888888889,                       !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  25.5555555555556;                       !- Value Until Time 3
 
 OS:SpaceType,
   {b8b694bc-3474-4572-a829-f132f873bbd5}, !- Handle
@@ -1503,8 +1497,7 @@ OS:DefaultConstructionSet,
   {959397f6-6153-46bd-9bbe-6551585f93da}, !- Interior Partition Construction Name
   ,                                       !- Space Shading Construction Name
   ,                                       !- Building Shading Construction Name
-  ,                                       !- Site Shading Construction Name
-  ;                                       !- Adiabatic Surface Construction Name
+  ;                                       !- Site Shading Construction Name
 
 OS:DefaultSurfaceConstructions,
   {3d3c9504-90dd-4e2b-98df-f8dfa1f6931d}, !- Handle
@@ -3325,7 +3318,7 @@ OS:ThermalZone,
   {06857800-2ef4-4f6c-a982-bef15ba588af}, !- Zone Air Inlet Port List
   {5007f6fc-1ce9-4aa5-9023-f9a77e6c10b0}, !- Zone Air Exhaust Port List
   {61534c7f-6ab3-4f03-a454-7860307e077e}, !- Zone Air Node Name
-  {b72963d6-6014-4493-ad01-358fea569610}, !- Zone Return Air Port List
+  {7d6fc973-3d03-4f31-b689-b839183d36bc}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3336,7 +3329,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {b72963d6-6014-4493-ad01-358fea569610}, !- Handle
+  {7d6fc973-3d03-4f31-b689-b839183d36bc}, !- Handle
   Port List 1,                            !- Name
   {c8ad0790-2519-484b-b1fd-b06609085362}, !- HVAC Component
   ;                                       !- Port 1
@@ -3402,7 +3395,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {9b9bd3b9-b652-4639-bd8a-de17911423e4}, !- Handle
-  Thermal Zone Story 1 Core Space,       !- Name
+  Thermal Zone Story 1 Core Space,        !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3413,7 +3406,7 @@ OS:ThermalZone,
   {5adaff33-6b8a-4e95-96fd-c4150073e2b1}, !- Zone Air Inlet Port List
   {2c5ed060-e133-4d1a-b223-cb3383fb8fd2}, !- Zone Air Exhaust Port List
   {35a2b7f9-d696-4bc6-869d-fc1c47ef30a2}, !- Zone Air Node Name
-  {b63eb1f4-9c7f-49d3-8823-2685c46ad08e}, !- Zone Return Air Port List
+  {d482c613-ea74-49fb-9bc8-aba6cb48a7f5}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3424,7 +3417,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {b63eb1f4-9c7f-49d3-8823-2685c46ad08e}, !- Handle
+  {d482c613-ea74-49fb-9bc8-aba6cb48a7f5}, !- Handle
   Port List 22,                           !- Name
   {9b9bd3b9-b652-4639-bd8a-de17911423e4}, !- HVAC Component
   ;                                       !- Port 1
@@ -3501,7 +3494,7 @@ OS:ThermalZone,
   {25215cdc-19f8-46db-8141-57aa25fd4492}, !- Zone Air Inlet Port List
   {61dd255c-5d71-44a9-8cda-f48323587c37}, !- Zone Air Exhaust Port List
   {5192a0d4-9b85-4dca-9927-cda75bf087dc}, !- Zone Air Node Name
-  {5025812a-2a90-4635-a95b-7bc5ca0c9c93}, !- Zone Return Air Port List
+  {b92ab8fb-d3af-4f68-bfd8-1fa7599faa32}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3512,7 +3505,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {5025812a-2a90-4635-a95b-7bc5ca0c9c93}, !- Handle
+  {b92ab8fb-d3af-4f68-bfd8-1fa7599faa32}, !- Handle
   Port List 23,                           !- Name
   {f934735d-2cda-4cd1-90b2-6efc750ed8bb}, !- HVAC Component
   ;                                       !- Port 1
@@ -3589,7 +3582,7 @@ OS:ThermalZone,
   {b13e5385-3ff1-40d6-91a2-a916874e4ee7}, !- Zone Air Inlet Port List
   {e292527e-6b0f-4d44-84ef-ccb622f4332a}, !- Zone Air Exhaust Port List
   {32528eb6-d1fe-439e-ae55-ad5cd80449df}, !- Zone Air Node Name
-  {d4a11504-f5c7-4447-8a76-c9602f268da2}, !- Zone Return Air Port List
+  {bf3d7009-d19f-48cd-a637-48f7605748c6}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3600,7 +3593,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {d4a11504-f5c7-4447-8a76-c9602f268da2}, !- Handle
+  {bf3d7009-d19f-48cd-a637-48f7605748c6}, !- Handle
   Port List 24,                           !- Name
   {8a2393fc-a413-4e34-9f7a-36d5eb32f4d2}, !- HVAC Component
   ;                                       !- Port 1
@@ -3677,7 +3670,7 @@ OS:ThermalZone,
   {8403890a-f083-4bf8-9901-5ba594f6dba0}, !- Zone Air Inlet Port List
   {019823ad-7eb9-4418-8bc0-31b19d020745}, !- Zone Air Exhaust Port List
   {816a560b-7e34-474c-beea-588dbb0e10b2}, !- Zone Air Node Name
-  {766c491c-a6a1-416b-ab6a-1dc281abe1ae}, !- Zone Return Air Port List
+  {b5498947-a6d3-4883-91e9-966cd3290024}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3688,7 +3681,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {766c491c-a6a1-416b-ab6a-1dc281abe1ae}, !- Handle
+  {b5498947-a6d3-4883-91e9-966cd3290024}, !- Handle
   Port List 25,                           !- Name
   {e5cbbb8e-f53b-4c34-9974-7b88193df606}, !- HVAC Component
   ;                                       !- Port 1
@@ -3765,7 +3758,7 @@ OS:ThermalZone,
   {d4c4f9bf-655d-4c09-ab3c-b9b776d2854b}, !- Zone Air Inlet Port List
   {86ac9e72-b481-4cee-b727-c9a081a372ef}, !- Zone Air Exhaust Port List
   {31932f29-796c-4407-94d7-26ce903606a8}, !- Zone Air Node Name
-  {cd1933ad-2a1e-4837-98d2-83d3eedfa41f}, !- Zone Return Air Port List
+  {a9759ca2-33aa-4904-8515-4fd7e0c686f3}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3776,7 +3769,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {cd1933ad-2a1e-4837-98d2-83d3eedfa41f}, !- Handle
+  {a9759ca2-33aa-4904-8515-4fd7e0c686f3}, !- Handle
   Port List 26,                           !- Name
   {de2e25d5-5c00-4b0d-a4b1-02786fa65a1d}, !- HVAC Component
   ;                                       !- Port 1
@@ -3842,7 +3835,7 @@ OS:ZoneHVAC:EquipmentList,
 
 OS:ThermalZone,
   {98d36e9a-613f-4699-9ebf-b9b4a0b850a8}, !- Handle
-  Thermal Zone Story 2 Core Space,       !- Name
+  Thermal Zone Story 2 Core Space,        !- Name
   ,                                       !- Multiplier
   ,                                       !- Ceiling Height {m}
   ,                                       !- Volume {m3}
@@ -3853,7 +3846,7 @@ OS:ThermalZone,
   {6c9509ef-6a59-4a42-90f0-154db199d359}, !- Zone Air Inlet Port List
   {c7009808-5d3f-4a97-8a85-726a3943e8ad}, !- Zone Air Exhaust Port List
   {44ff5932-b89f-413e-badd-33adf8c2f1cb}, !- Zone Air Node Name
-  {96480ecf-62a4-4ac0-b051-a01dc4af1c0a}, !- Zone Return Air Port List
+  {feceff46-f4be-497a-a3ad-8bee3aaaff5c}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3864,7 +3857,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {96480ecf-62a4-4ac0-b051-a01dc4af1c0a}, !- Handle
+  {feceff46-f4be-497a-a3ad-8bee3aaaff5c}, !- Handle
   Port List 27,                           !- Name
   {98d36e9a-613f-4699-9ebf-b9b4a0b850a8}, !- HVAC Component
   ;                                       !- Port 1
@@ -3941,7 +3934,7 @@ OS:ThermalZone,
   {190059b4-45b6-4409-8b2a-c1f4cc001b40}, !- Zone Air Inlet Port List
   {42bcbff6-89c6-48d8-abd9-d6205f3ff9a2}, !- Zone Air Exhaust Port List
   {69c740f5-232c-4626-880d-bda62135bb87}, !- Zone Air Node Name
-  {7fcc52a4-6b8a-4beb-95b3-1745bbb0c68f}, !- Zone Return Air Port List
+  {a3afa291-7732-410d-b72d-105c3ca8e9b9}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -3952,7 +3945,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {7fcc52a4-6b8a-4beb-95b3-1745bbb0c68f}, !- Handle
+  {a3afa291-7732-410d-b72d-105c3ca8e9b9}, !- Handle
   Port List 28,                           !- Name
   {011f8eb4-bcfc-49f1-a53e-d835492e3b5f}, !- HVAC Component
   ;                                       !- Port 1
@@ -4029,7 +4022,7 @@ OS:ThermalZone,
   {b55cb602-46b5-4e92-b18e-5fc849372682}, !- Zone Air Inlet Port List
   {e407f1a2-d206-4d6e-a244-ef58ec51dc17}, !- Zone Air Exhaust Port List
   {59e0d3ff-17c7-4e0b-b8af-24f9ab645863}, !- Zone Air Node Name
-  {d0664192-c7f7-40de-b6be-ddec5f07a4ce}, !- Zone Return Air Port List
+  {7ce6961b-e5fb-4f09-a6a4-dfdbefa4b31a}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -4040,7 +4033,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {d0664192-c7f7-40de-b6be-ddec5f07a4ce}, !- Handle
+  {7ce6961b-e5fb-4f09-a6a4-dfdbefa4b31a}, !- Handle
   Port List 29,                           !- Name
   {f64364c1-8af3-4d2a-b1af-958654165549}, !- HVAC Component
   ;                                       !- Port 1
@@ -4117,7 +4110,7 @@ OS:ThermalZone,
   {5c470115-4d71-4135-8fd4-e43d169501a4}, !- Zone Air Inlet Port List
   {20c0ae99-c073-42d7-a6d6-56dfa439b0f6}, !- Zone Air Exhaust Port List
   {5b7bd5bd-6354-4bcb-88ca-168c1f969318}, !- Zone Air Node Name
-  {3684a9c6-5a7e-41c9-bed6-1264d8c4b994}, !- Zone Return Air Port List
+  {c5615448-6b43-4404-91da-3f82de7fb739}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
@@ -4128,7 +4121,7 @@ OS:ThermalZone,
   No;                                     !- Use Ideal Air Loads
 
 OS:PortList,
-  {3684a9c6-5a7e-41c9-bed6-1264d8c4b994}, !- Handle
+  {c5615448-6b43-4404-91da-3f82de7fb739}, !- Handle
   Port List 30,                           !- Name
   {7d4c83f0-8dde-47d3-a7fe-6c0d70394c3c}, !- HVAC Component
   ;                                       !- Port 1
@@ -5092,7 +5085,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {05712f7d-365d-449a-91e8-cb9a44fe243c}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {f753129d-49a8-43a4-9dc3-bd8183e548a5}, !- Layer 1
   {f3457c7b-9382-480f-842a-e2a429b6ca78}, !- Layer 2
   {f3457c7b-9382-480f-842a-e2a429b6ca78}; !- Layer 3
@@ -5122,7 +5115,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {5e4174e1-13b6-44d6-a53d-44b8ce7ecfa4}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {c6082477-f1fb-48bf-a723-18cc72bd903b}, !- Layer 1
   {0f694730-a379-468e-acf0-c4f23e98b71c}, !- Layer 2
   {0f694730-a379-468e-acf0-c4f23e98b71c}; !- Layer 3
@@ -5152,7 +5145,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {d854c5a0-029c-44ab-a6ff-6bc43970d7cc}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {5bf4661f-3aca-4529-97d4-c92dfef9dc99}, !- Layer 1
   {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}, !- Layer 2
   {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}; !- Layer 3
@@ -5182,7 +5175,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {abc79065-86ba-40ca-aacf-dad749888f4c}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {fd661dac-ba20-439f-b0a1-f2a1d845e691}, !- Layer 1
   {949231a9-bc1b-4886-a247-52904b2ced01}, !- Layer 2
   {949231a9-bc1b-4886-a247-52904b2ced01}; !- Layer 3
@@ -5212,7 +5205,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {952018d6-fef2-4197-9d6c-52a0381980a4}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {b786f76a-f79c-4ef6-ba5f-6e0cb442a026}, !- Layer 1
   {074ae43a-bdc8-4651-99dc-b7eb852f7123}, !- Layer 2
   {074ae43a-bdc8-4651-99dc-b7eb852f7123}; !- Layer 3
@@ -5242,7 +5235,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {760e3374-33b4-4f84-aab4-1a2b363ddd57}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {8c39945c-d85c-4c30-bdce-edf16dd252a6}, !- Layer 1
   {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}, !- Layer 2
   {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}; !- Layer 3
@@ -5272,7 +5265,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {c0b26e27-b8af-4925-8a24-8208f45ce08c}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {0960bfb1-27c5-49a3-a7d2-304d94e0fae1}, !- Layer 1
   {2075ec93-11f5-4d6f-b148-8fe95fe98360}, !- Layer 2
   {2075ec93-11f5-4d6f-b148-8fe95fe98360}; !- Layer 3
@@ -5302,7 +5295,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {ec674398-21f7-4e98-bdb4-b1532692e2f2}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {2f4e14f9-41f5-44da-b005-d20fae60a7ae}, !- Layer 1
   {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}, !- Layer 2
   {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}; !- Layer 3
@@ -5332,7 +5325,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {80de7ca9-4371-4499-a891-5102a3bcba6b}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {d254436f-17f1-470a-9060-176b57774ac3}, !- Layer 1
   {b90e4833-ebb7-4a08-9352-d2acf4056209}, !- Layer 2
   {b90e4833-ebb7-4a08-9352-d2acf4056209}; !- Layer 3
@@ -5362,7 +5355,7 @@ OS:Construction:InternalSource,
   ,                                       !- Temperature Calculation Requested After Layer Number
   ,                                       !- Dimensions for the CTF Calculation
   ,                                       !- Tube Spacing {m}
-  {c2bfb1e7-25d5-456c-a61d-b8074b1f7ab3}, !- Surface Rendering Name
+  ,                                       !- Surface Rendering Name
   {a130b610-1dbf-4096-b154-bdce0fa5492d}, !- Layer 1
   {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}, !- Layer 2
   {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}; !- Layer 3
@@ -5503,253 +5496,183 @@ OS:Curve:Linear,
   ;                                       !- Output Unit Type
 
 OS:StandardsInformation:Material,
-  {99cd72e5-511b-472e-b460-6949f08b6325}, !- Handle
+  {18ccb7f6-e5e3-429a-a535-973bb5ca22e1}, !- Handle
   {db95956a-1ab9-43d9-a943-196d11c1b4b5}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {a9f8395f-3013-4e63-aa16-924c54a693d5}, !- Handle
+  {d4024ed5-e35f-426e-9fcc-c0bbabdefd17}, !- Handle
   {59e99353-08e6-499e-878a-5919ea2e7221}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {1664dae7-6ea6-4918-900e-839ce2141c41}, !- Handle
+  {bce90467-a028-4c11-8615-d3509ed6e11b}, !- Handle
   {df049637-4391-4940-ac91-2834bd2dbd38}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {c068b801-67b4-431e-a234-7f90293d6fe3}, !- Handle
+  {8102abac-92dd-4732-9e7d-7456d46d9770}, !- Handle
   {534be637-adef-4954-973c-658f8a181031}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {34668f2a-6da3-431c-8610-e5e13ed44fae}, !- Handle
+  {c96084b5-07e0-4201-b8a7-a069c757740e}, !- Handle
   {6686210c-5336-471a-bef8-2b48a48b6b7c}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {0e8418b5-158f-46bc-a817-e1ca756a770b}, !- Handle
+  {479dc0ca-39da-4070-b305-725ee35ee110}, !- Handle
   {6d3314a2-a571-4aa6-9484-e87c10f461b4}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {7ba835e2-495e-4baa-ad0b-f66ee51b0625}, !- Handle
+  {b87bc4ec-c6cc-4e0c-8f1d-509dbe895547}, !- Handle
   {496688e1-725a-4c9f-ba4b-bccda96124b5}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {a79fb03f-5bd8-41de-88b8-5a94ff61b547}, !- Handle
+  {332a25de-e468-4906-80fb-a267c5c9cc19}, !- Handle
   {d6c995a8-04d1-43bb-8878-eff1d0282ff0}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {c3a84623-887b-4857-be57-0b378334010d}, !- Handle
+  {d572eb77-3ea1-40f1-91d6-df1306a60a56}, !- Handle
   {683971a6-54c5-49dd-898c-a45575abf130}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {afad8747-2f6b-4b38-a69c-6dba9f7618d3}, !- Handle
+  {93b9e21b-3d6b-4a3a-8c06-6fe78ae63b0b}, !- Handle
   {30249c30-d68a-4c10-86e6-003f3174b3c3}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {a0061c5f-f472-4c6d-b400-705506d7b4b7}, !- Handle
+  {c6a13b25-5b64-4a50-9f16-2052495d1ffb}, !- Handle
   {fd283a08-2055-431b-ab90-b6217367abfb}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {08715989-5616-4e0a-acab-5f5aed776970}, !- Handle
+  {d2aebaf3-d699-4b89-9597-5ddcef5367ac}, !- Handle
   {615892bd-dc75-4a58-82f7-1f1d503efb5f}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {884c6829-910e-442a-8093-c57c961d74a6}, !- Handle
+  {06f5bf9c-c114-4018-b60d-6d330740a5cf}, !- Handle
   {32c2b7b0-9b65-4dba-8cc8-eb553b10d15e}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {66d385d9-192f-4f73-be98-a516af380519}, !- Handle
+  {a1ee1750-a398-4b13-8467-628f296a24a8}, !- Handle
   {4f603e09-4636-41f7-a4d6-5d975941d98c}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {6548e6bc-b2cb-42b5-9d41-33c33ccc2bcf}, !- Handle
+  {658b308d-655b-4808-871d-aa86ba35b177}, !- Handle
   {2075ec93-11f5-4d6f-b148-8fe95fe98360}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {45e86a6d-235e-4cc2-84ad-ccd472919944}, !- Handle
+  {5a1c6089-b952-4450-a6a8-86e35a82c75e}, !- Handle
   {f753129d-49a8-43a4-9dc3-bd8183e548a5}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {7211a55e-9011-4384-86cc-6d8ae155c186}, !- Handle
+  {7bfb1175-e2a7-4787-9724-aff63f88a30b}, !- Handle
   {f3457c7b-9382-480f-842a-e2a429b6ca78}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {54c336d9-bab2-4554-adcc-fd0d737d6b90}, !- Handle
+  {d919cec8-2ebe-4449-b4f9-54ecf77be78a}, !- Handle
   {a0c2b7cd-1dca-46d0-9316-6762bc420149}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {ed03387c-2597-4f2d-bef4-effb15243583}, !- Handle
+  {6c5e1c70-312b-49e8-9e56-25da6117e109}, !- Handle
   {c6082477-f1fb-48bf-a723-18cc72bd903b}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {86ed7630-d331-4fdf-b0c1-7fb854962dc0}, !- Handle
+  {ff3482e8-fe9a-4418-9c27-61a2f2b29d9f}, !- Handle
   {0f694730-a379-468e-acf0-c4f23e98b71c}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {38f7fbe1-595e-49a7-9f40-3837005b12df}, !- Handle
+  {17f77297-8aed-40a2-aaf9-c744ef7bb234}, !- Handle
   {cba6dd21-427b-4174-8557-27ee7098422e}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {d02bd297-618a-4941-8ac3-5215a8ac0ffb}, !- Handle
+  {e9b9b260-b264-48af-909d-e9346e5c3c1e}, !- Handle
   {5bf4661f-3aca-4529-97d4-c92dfef9dc99}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {76715ef2-5cda-44e0-9a43-385530e74053}, !- Handle
+  {76b9e43e-3639-478e-90f8-3c9b8dbc7a54}, !- Handle
   {c3506b87-bf8c-4e33-a17f-4e212bb31d4b}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {c072e718-1fcf-4272-8c44-cbe8d919d963}, !- Handle
+  {a15341c4-e68d-480e-a1d3-2fe07ed10792}, !- Handle
   {d388cd56-a0ef-4ece-80a6-eae661ba28b4}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {6a506458-7437-4002-a38c-05e251f142f5}, !- Handle
+  {d1f3e1d7-d2ca-400e-8c71-5af41eea2756}, !- Handle
   {fd661dac-ba20-439f-b0a1-f2a1d845e691}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {b860c620-8094-47c6-8aab-46a251c04bf6}, !- Handle
+  {6f13cae2-c905-4fce-b934-f17396d78839}, !- Handle
   {949231a9-bc1b-4886-a247-52904b2ced01}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {507dd573-36fc-4c85-b3df-c23ae21929ce}, !- Handle
+  {98e8b9ec-a21c-48af-b29b-058f058794b5}, !- Handle
   {e9b5850c-82d3-4bfa-a5b1-e7fead007202}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {8a19ffe2-04ae-429c-b734-14c764c5a520}, !- Handle
+  {27590e02-f82c-4f24-b8d9-649d711f6942}, !- Handle
   {b786f76a-f79c-4ef6-ba5f-6e0cb442a026}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {53eae513-5077-43d6-9ed0-274b17bb1817}, !- Handle
+  {c3854a92-ae49-4b20-8bf0-2700e8d39a2b}, !- Handle
   {074ae43a-bdc8-4651-99dc-b7eb852f7123}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {2974ab23-75c4-485a-87b9-85e5a6ee8a53}, !- Handle
+  {29927e3b-6390-48ee-9ad6-e447310c271f}, !- Handle
   {d03922e1-58eb-4a58-b45c-6a197ce409e0}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {98aaf9a7-c3b8-4843-bbe1-8e0c212c9410}, !- Handle
+  {b750b94d-515c-4786-b794-34ae3ac53ec8}, !- Handle
   {8c39945c-d85c-4c30-bdce-edf16dd252a6}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {554b1c0e-156f-4fe9-8dd0-95557b5ef947}, !- Handle
+  {83501cbb-c78e-42cf-b2ff-9af319eb868e}, !- Handle
   {ec1a51fe-1966-4cd8-97b6-be3f9a89dc63}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {3442fb97-9911-4b37-8df5-239f32040b52}, !- Handle
+  {8886a3b5-9e0d-451a-ba8e-65bf0392f68c}, !- Handle
   {3bcc6870-1dfb-43c8-9feb-7edebc4b8c8d}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {fa434cfc-5238-4b57-9e7c-900ca95ffe5f}, !- Handle
+  {4bea1410-c6f8-48d4-beee-575691f21d2b}, !- Handle
   {0960bfb1-27c5-49a3-a7d2-304d94e0fae1}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {0d2eed9a-5865-46a0-9ed9-3f89daf346ec}, !- Handle
+  {2f17d961-a6c4-43e1-a58e-bf89ed59815e}, !- Handle
   {f0dfa29b-ab2a-49d8-8614-5c0392c2e5aa}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {93b04574-1466-48fc-88c1-a8486cac2e19}, !- Handle
+  {8ad04b55-ab38-4418-a562-d9ecf013f2a0}, !- Handle
   {2f4e14f9-41f5-44da-b005-d20fae60a7ae}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {5dfc3f10-c93d-4c48-bda5-6731790cbedb}, !- Handle
+  {cf6a77ec-a318-4ac5-b680-2c62136f7cd0}, !- Handle
   {6b712df1-b78a-4b94-b2a2-dcfd9c2507c1}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {a415f3bf-61c4-4a53-ae4c-03479c35e9fd}, !- Handle
+  {4b5c6aad-15bb-4baf-8c39-58d9b61fa0c0}, !- Handle
   {b5407ae4-6ca6-48d3-bee5-99c9d3d8eac8}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {e75c04d1-ce85-41c2-abd3-23a784d0e7f8}, !- Handle
+  {f63a3995-a432-46af-86cb-9e9a0117ed86}, !- Handle
   {d254436f-17f1-470a-9060-176b57774ac3}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {83b49d3b-980c-406e-92d8-5b627fcd577b}, !- Handle
+  {99296ed6-7504-4a47-8d64-22929c10feaa}, !- Handle
   {b90e4833-ebb7-4a08-9352-d2acf4056209}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {e11440e7-dc86-49cb-8d30-4192490f15ec}, !- Handle
+  {dc010786-3013-4be3-9b17-eadc39379377}, !- Handle
   {56539a5d-7642-4f06-a08b-f8565e82344d}; !- Construction Name
 
 OS:StandardsInformation:Material,
-  {1b35deca-dd9e-465b-8b74-964a29a85a7e}, !- Handle
+  {3f60e979-2c9a-40d1-b6e9-4bd67cc4b035}, !- Handle
   {a130b610-1dbf-4096-b154-bdce0fa5492d}; !- Material Name
 
 OS:StandardsInformation:Material,
-  {afeb3091-9ddb-4b52-909a-d4f6da8ecc09}, !- Handle
+  {2b249f1f-034f-4f88-ab6f-45ed32a10fb0}, !- Handle
   {db642b7e-66c2-41a3-bb87-2e60c7a2c4df}; !- Material Name
 
 OS:StandardsInformation:Construction,
-  {e5658d06-6cf3-4b7a-a72a-9172a00a1c49}, !- Handle
+  {afa5cb02-0bc1-4c89-a204-56de2b47d818}, !- Handle
   {cf57744c-1c14-462f-be43-5541cd19ece6}; !- Construction Name
 
-OS:Rendering:Color,
-  {05712f7d-365d-449a-91e8-cb9a44fe243c}, !- Handle
-  Rendering Color 37,                     !- Name
-  238,                                    !- Rendering Red Value
-  130,                                    !- Rendering Green Value
-  238;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {5e4174e1-13b6-44d6-a53d-44b8ce7ecfa4}, !- Handle
-  Rendering Color 38,                     !- Name
-  127,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  212;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {d854c5a0-029c-44ab-a6ff-6bc43970d7cc}, !- Handle
-  Rendering Color 39,                     !- Name
-  255,                                    !- Rendering Red Value
-  228,                                    !- Rendering Green Value
-  196;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {abc79065-86ba-40ca-aacf-dad749888f4c}, !- Handle
-  Rendering Color 40,                     !- Name
-  218,                                    !- Rendering Red Value
-  165,                                    !- Rendering Green Value
-  32;                                     !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {952018d6-fef2-4197-9d6c-52a0381980a4}, !- Handle
-  Rendering Color 41,                     !- Name
-  210,                                    !- Rendering Red Value
-  180,                                    !- Rendering Green Value
-  140;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {760e3374-33b4-4f84-aab4-1a2b363ddd57}, !- Handle
-  Rendering Color 42,                     !- Name
-  32,                                     !- Rendering Red Value
-  178,                                    !- Rendering Green Value
-  170;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {c0b26e27-b8af-4925-8a24-8208f45ce08c}, !- Handle
-  Rendering Color 43,                     !- Name
-  211,                                    !- Rendering Red Value
-  211,                                    !- Rendering Green Value
-  211;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {ec674398-21f7-4e98-bdb4-b1532692e2f2}, !- Handle
-  Rendering Color 44,                     !- Name
-  175,                                    !- Rendering Red Value
-  238,                                    !- Rendering Green Value
-  238;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {80de7ca9-4371-4499-a891-5102a3bcba6b}, !- Handle
-  Rendering Color 45,                     !- Name
-  95,                                     !- Rendering Red Value
-  158,                                    !- Rendering Green Value
-  160;                                    !- Rendering Blue Value
-
-OS:Rendering:Color,
-  {c2bfb1e7-25d5-456c-a61d-b8074b1f7ab3}, !- Handle
-  Rendering Color 46,                     !- Name
-  127,                                    !- Rendering Red Value
-  255,                                    !- Rendering Green Value
-  212;                                    !- Rendering Blue Value
-
 OS:ShadingSurfaceGroup,
-  {b83a2eb5-9a4c-453e-b602-89fca73888c7}, !- Handle
+  {eefc8312-29a8-4f3f-a246-580c8686cfe6}, !- Handle
   Sub Surface 3 Shading Surfaces,         !- Name
   Space,                                  !- Shading Surface Type
   {1e59010b-982d-470b-a4bc-13132419f5c8}, !- Space Name
@@ -5760,10 +5683,10 @@ OS:ShadingSurfaceGroup,
   {cba41ef3-7b77-4b76-8b34-49d0c425fc14}; !- Shaded Object Name
 
 OS:ShadingSurface,
-  {2543d9c1-f6e1-47a1-92a6-d0b19a792cb8}, !- Handle
+  {82153202-a5c6-437d-89e5-a72b92baf489}, !- Handle
   Sub Surface 3 - Overhang,               !- Name
   ,                                       !- Construction Name
-  {b83a2eb5-9a4c-453e-b602-89fca73888c7}, !- Shading Surface Group Name
+  {eefc8312-29a8-4f3f-a246-580c8686cfe6}, !- Shading Surface Group Name
   ,                                       !- Transmittance Schedule Name
   ,                                       !- Number of Vertices
   31.5323406869551, 0, 2.56046589856735,  !- X,Y,Z Vertex 1 {m}
@@ -5772,7 +5695,7 @@ OS:ShadingSurface,
   31.5323406869551, -0.659016257523225, 2.56046589856735; !- X,Y,Z Vertex 4 {m}
 
 OS:ShadingSurfaceGroup,
-  {f23941a5-6112-44f2-a2b7-83e6d353d44e}, !- Handle
+  {d12b0956-fd8b-46b0-b682-0c48d7cd4b66}, !- Handle
   Sub Surface 8 Shading Surfaces,         !- Name
   Space,                                  !- Shading Surface Type
   {98d6a246-ffcd-44e2-b6d1-a406e085742c}, !- Space Name
@@ -5783,10 +5706,10 @@ OS:ShadingSurfaceGroup,
   {b92b9bc6-2487-44b1-9bff-1cb23d9fb6cf}; !- Shaded Object Name
 
 OS:ShadingSurface,
-  {001995f9-5bcd-45ee-8970-1a39829f4d59}, !- Handle
+  {4781d154-eb57-4f66-8b1b-27616e573d20}, !- Handle
   Sub Surface 8 - Overhang,               !- Name
   ,                                       !- Construction Name
-  {f23941a5-6112-44f2-a2b7-83e6d353d44e}, !- Shading Surface Group Name
+  {d12b0956-fd8b-46b0-b682-0c48d7cd4b66}, !- Shading Surface Group Name
   ,                                       !- Transmittance Schedule Name
   ,                                       !- Number of Vertices
   31.5323406869551, 0, 2.56046589856735,  !- X,Y,Z Vertex 1 {m}
