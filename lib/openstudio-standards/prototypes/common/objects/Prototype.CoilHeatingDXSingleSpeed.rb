@@ -86,8 +86,7 @@ class Standard
     elsif type == 'Residential Minisplit HP'
       # Performance curves
       # These coefficients are in IP UNITS
-      heat_cap_ft_coeffs_ip = [1.0029281211538501, -0.010386676170938, 0, 0.025961538461538501, 0, 0]
-      heat_cap_ft_coeffs_si = convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
+      heat_cap_ft_coeffs_si = [1.14715889038462, -0.010386676170938, 0, 0.00865384615384615, 0, 0]
       # These coefficients are in SI UNITS
       heat_eir_ft_coeffs_si = [0.9999941697687026, 0.004684593830254383, 5.901286675833333e-05, -0.0028624467783091973, 1.3041120194135802e-05, -0.00016172918478765433]
       heat_cap_fflow_coeffs = [1, 0, 0]
