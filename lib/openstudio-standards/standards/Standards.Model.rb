@@ -1504,7 +1504,7 @@ class Standard
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
-    # pull the capacities of their paried DX clg coils, and this does not work
+    # pull the capacities of their paired DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
     model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 

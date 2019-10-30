@@ -2254,6 +2254,21 @@ class Standard
     return has_erv
   end
 
+  # Determine if the air loop is a unitary system
+  #
+  # @return [Bool] Returns true if a unitary system is present, false if not.
+  def air_loop_hvac_unitary_system?(air_loop_hvac)
+    is_unitary_system = false
+    air_loop_hvac.supplyComponents.each do |component|
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitarySystem', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed', 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        is_unitary_system = true
+      end
+    end
+    return is_unitary_system
+  end
+
   # Set the VAV damper control to single maximum or dual maximum control depending on the standard.
   #
   # @return [Bool] Returns true if successful, false if not
