@@ -3498,13 +3498,16 @@ class Standard
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to. Set to nil for heating types besides water
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
+  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs
   def model_add_ptac(model,
                      thermal_zones,
                      cooling_type: 'Two Speed DX AC',
                      heating_type: 'Gas',
                      hot_water_loop: nil,
-                     fan_type: 'ConstantVolume')
+                     fan_type: 'ConstantVolume',
+                     ventilation: true)
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
@@ -3598,6 +3601,11 @@ class Standard
       elsif fan_type == 'Cycling'
         ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       end
+      if ventilation
+        ptac_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        ptac_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        ptac_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
+      end
       ptac_system.addToThermalZone(zone)
       ptacs << ptac_system
     end
@@ -3609,10 +3617,13 @@ class Standard
   #
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
+  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs.
   def model_add_pthp(model,
                      thermal_zones,
-                     fan_type: 'Cycling')
+                     fan_type: 'Cycling',
+                     ventilation: true)
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
@@ -3674,6 +3685,11 @@ class Standard
         pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       elsif fan_type == 'Cycling'
         pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
+      end
+      if ventilation
+        pthp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
+        pthp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
+        pthp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
       end
       pthp_system.addToThermalZone(zone)
       pthps << pthp_system
@@ -5634,12 +5650,14 @@ class Standard
                      cooling_type: 'Single Speed DX AC',
                      heating_type: heating_type,
                      hot_water_loop: hot_water_loop,
-                     fan_type: 'ConstantVolume')
+                     fan_type: 'ConstantVolume',
+                     ventilation: zone_equipment_ventilation)
 
     when 'PTHP'
       model_add_pthp(model,
                      zones,
-                     fan_type: 'ConstantVolume')
+                     fan_type: 'ConstantVolume',
+                     ventilation: zone_equipment_ventilation)
 
     when 'PSZ-AC'
       case main_heat_fuel
