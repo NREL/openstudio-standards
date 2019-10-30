@@ -18,6 +18,8 @@ module CoilDX
       sub_category = 'Single Package'
     elsif coil_dx.name.get.to_s.include?('Split System')
       sub_category = 'Split System'
+    elsif coil_dx.name.get.to_s.include?('Central Air Source HP')
+      sub_category = 'Split System'
     elsif coil_dx.name.get.to_s.include?('Minisplit')
       sub_category = 'Split System'
     elsif coil_dx.name.get.to_s.include?('CRAC')
