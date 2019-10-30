@@ -830,7 +830,17 @@ class Standard
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
 
-    return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+    # Determine if the airloop has an humidifier
+    has_humidifier = false
+    if air_loop_hvac_humidifier_count(air_loop_hvac) > 0
+      has_humidifier = true
+    end
+
+    # Determine if the system serves residential spaces
+    is_res = false
+    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
+      is_res = true
+    end
 
     # Determine if the airloop serves any computer rooms
     # / data centers, which changes the economizer.
@@ -858,6 +868,11 @@ class Standard
     infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr if minimum_capacity_btu_per_hr.nil?
 
+    # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2013 (6.5.1.5)
+    if is_res
+      minimum_capacity_btu_per_hr = minimum_capacity_btu_per_hr / 5
+    end
+
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
@@ -866,6 +881,8 @@ class Standard
     if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
       if is_dc
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      elsif is_res
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for residential spaces.")
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
@@ -873,9 +890,16 @@ class Standard
     else
       if is_dc
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      elsif is_res
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for residential spaces.")
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
+    end
+
+    # Exception valid for 90.1-2004 (6.5.1.(c)) through 90.1-2013 (6.5.1.3)
+    unless has_humidifier
+      economizer_required = false
     end
 
     return economizer_required
@@ -1050,7 +1074,7 @@ class Standard
 
     # Apply integrated or non-integrated economizer
     if integrated_economizer_required
-      oa_control.setLockoutType('NoLockout')
+      oa_control.setLockoutType('LockoutWithHeating')
     else
       oa_control.setLockoutType('LockoutWithCompressor')
     end
@@ -3003,6 +3027,27 @@ class Standard
     return design_supply_air_flow_rate
   end
 
+  # Determine how much residential
+  # area the airloop serves.
+  def air_loop_hvac_residential_area_served(air_loop_hvac)
+    res_area_m2 = 0.0
+
+    air_loop_hvac.thermalZones.each do |zone|
+      zone.spaces.each do |space|
+        # Skip spaces with no space type
+        next if space.spaceType.empty?
+        space_type = space.spaceType.get
+        next if space_type.standardsSpaceType.empty?
+        standards_space_type = space_type.standardsSpaceType.get
+        if standards_space_type.downcase.include?('apartment') || standards_space_type.downcase.include?('guestroom') || standards_space_type.downcase.include?('patroom')
+          res_area_m2 += space.floorArea
+        end
+      end
+    end
+
+    return res_area_m2
+  end
+
   # Determine how much data center
   # area the airloop serves.
   #
@@ -3034,6 +3079,15 @@ class Standard
     end
 
     return dc_area_m2
+  end
+
+  def air_loop_hvac_humidifier_count(air_loop_hvac)
+    humdifiers = 0
+    air_loop_hvac.supplyComponents.each do |cmp|
+      if cmp.to_HumidifierSteamElectric.is_initialized
+        humidifiers += 1
+      end
+    end
   end
 
   # Sets the maximum reheat temperature to the specified
