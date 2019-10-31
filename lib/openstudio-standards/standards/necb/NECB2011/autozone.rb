@@ -52,7 +52,9 @@ class NECB2011
   # Some expections are dwelling units wet zone and wild zones.  These spaces will have special considerations when autozoning a
   # building.
 
-  def auto_zoning(model:, sizing_run_dir: Dir.pwd)
+  def apply_auto_zoning(model:, sizing_run_dir: Dir.pwd)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    raise('validation of spacetypes failed.') unless validate_space_types(model)
     # The first thing we need to do is get a sizing run to determine the heating loads of all the spaces. The default
     # btap geometry has a one to one relationship of zones to spaces.. So we simply create the thermal zones for all the spaces.
     # to do this we need to create thermals zone for each space.
@@ -68,31 +70,44 @@ class NECB2011
 
     # collect sizing information on each space.
     self.store_space_sizing_loads(model)
-
     # Remove any Thermal zones assigned again to start fresh.
     model.getThermalZones.each(&:remove)
-
     self.auto_zone_dwelling_units(model)
     self.auto_zone_wet_spaces(model)
     self.auto_zone_all_other_spaces(model)
     self.auto_zone_wild_spaces(model)
+    #THis will color the spaces and zones.
+    random = Random.new(1234)
+    model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+    model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
   end
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def auto_system(model:,
-                  boiler_fueltype: "NaturalGas",
-                  baseboard_type: "Hot Water",
-                  mau_type: true,
-                  mau_heating_coil_type: "Hot Water",
-                  mau_cooling_type: "DX",
-                  chiller_type: "Scroll",
-                  heating_coil_type_sys3: "Gas",
-                  heating_coil_type_sys4: "Gas",
-                  heating_coil_type_sys6: "Hot Water",
-                  fan_type: "var_speed_drive",
-                  swh_fueltype: "NaturalGas"
-  )
+  def apply_systems(model:, primary_heating_fuel:)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    raise('validation of spacetypes failed.') unless validate_space_types(model)
+    # Set the primary fuel set to default to to specific fuel type.
+    if primary_heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      primary_heating_fuel = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
+    end
+    # Get fuelset.
+    system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
+    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")if system_fuel_defaults.nil?
+
+
+    # Assign fuel sources.
+    boiler_fueltype = system_fuel_defaults['boiler_fueltype']
+    baseboard_type = system_fuel_defaults['baseboard_type']
+    mau_type = system_fuel_defaults['mau_type']
+    mau_heating_coil_type = system_fuel_defaults['mau_heating_coil_type']
+    mau_cooling_type = system_fuel_defaults['mau_cooling_type']
+    chiller_type = system_fuel_defaults['chiller_type']
+    heating_coil_type_sys3 = system_fuel_defaults['heating_coil_type_sys3']
+    heating_coil_type_sys4 = system_fuel_defaults['heating_coil_type_sys4']
+    heating_coil_type_sys6 = system_fuel_defaults['heating_coil_type_sys6']
+    fan_type = system_fuel_defaults['fan_type']
 
     #remove idealair from zones if any.
     model.getZoneHVACIdealLoadsAirSystems.each(&:remove)
@@ -147,6 +162,11 @@ class NECB2011
                                  mau_heating_coil_type: mau_heating_coil_type,
                                  mau_type: mau_type
     )
+    model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
+    model_apply_sizing_parameters(model)
+    # set a larger tolerance for unmet hours from default 0.2 to 1.0C
+    model.getOutputControlReportingTolerances.setToleranceforTimeHeatingSetpointNotMet(1.0)
+    model.getOutputControlReportingTolerances.setToleranceforTimeCoolingSetpointNotMet(1.0)
   end
 
   # Method to store space sizing loads. This is needed because later when the zones are destroyed this information will be lost.
@@ -581,9 +601,9 @@ class NECB2011
   def is_an_necb_wildcard_space?(space)
     space_type_table = @standards_data['space_types']
     space_type_data = model_find_object(space_type_table,
-                                                   {'template' => self.class.name,
-                                                                     'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                     'building_type' => space.spaceType.get.standardsBuildingType.get})
+                                        {'template' => self.class.name,
+                                         'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                         'building_type' => space.spaceType.get.standardsBuildingType.get})
     raise("#{space}") if space_type_data.nil?
     return space_type_data["necb_hvac_system_selection_type"] == "Wildcard"
   end
@@ -607,9 +627,9 @@ class NECB2011
   def is_a_necb_dwelling_unit?(space)
     space_type_table = @standards_data['space_types']
     space_type_data = model_find_object(space_type_table,
-                                                   {'template' => self.class.name,
-                                                                     'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                     'building_type' => space.spaceType.get.standardsBuildingType.get})
+                                        {'template' => self.class.name,
+                                         'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                         'building_type' => space.spaceType.get.standardsBuildingType.get})
 
     necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']
     necb_hvac_system_select = necb_hvac_system_selection_table.detect do |necb_hvac_system_select|
@@ -624,8 +644,8 @@ class NECB2011
   def get_necb_spacetype_system_selection(space)
     space_type_table = @standards_data['space_types']
     space_type_data = model_find_object(space_type_table, {'template' => self.class.name,
-                                                                                                'space_type' => space.spaceType.get.standardsSpaceType.get,
-                                                                                                'building_type' => space.spaceType.get.standardsBuildingType.get})
+                                                           'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                           'building_type' => space.spaceType.get.standardsBuildingType.get})
 
     # identify space-system_index and assign the right NECB system type 1-7.
     necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']
