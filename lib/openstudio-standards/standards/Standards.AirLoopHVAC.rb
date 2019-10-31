@@ -1,4 +1,3 @@
-
 class Standard
   # @!group AirLoopHVAC
 
@@ -159,10 +158,8 @@ class Standard
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     end
 
-    # Zones that require DCV preserve
-    # both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted
-    # to per-area values only so that DCV
+    # Zones that require DCV preserve both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted to per-area values only so that DCV
     air_loop_hvac.thermalZones.sort.each do |zone|
       if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
         thermal_zone_convert_oa_req_to_per_area(zone)
@@ -1374,7 +1371,7 @@ class Standard
          'ASHRAE 169-2006-6A',
          'ASHRAE 169-2013-5A',
          'ASHRAE 169-2013-6A'
-        prohibited_types = []
+      prohibited_types = []
     end
 
     # Check if the specified type is allowed
@@ -1429,11 +1426,7 @@ class Standard
       end
     end
 
-    # ERV Not Applicable for AHUs that have DCV
-    # or that have no OA intake.
-    controller_oa = nil
-    controller_mv = nil
-    oa_system = nil
+    # ERV Not Applicable for AHUs that have DCV or that have no OA intake.
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
@@ -1521,14 +1514,7 @@ class Standard
     # Create an ERV
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
     erv.setName("#{air_loop_hvac.name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
     erv.setSupplyAirOutletTemperatureControl(false)
     erv.setHeatExchangerType('Rotary')
     erv.setFrostControlType('ExhaustOnly')
@@ -1589,6 +1575,22 @@ class Standard
     oa_system.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
 
     return true
+  end
+
+  # Apply efficiency values to the erv
+  #
+  # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
+    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    return erv
   end
 
   # Determine if multizone vav optimization is required.
@@ -2250,6 +2252,21 @@ class Standard
     end
 
     return has_erv
+  end
+
+  # Determine if the air loop is a unitary system
+  #
+  # @return [Bool] Returns true if a unitary system is present, false if not.
+  def air_loop_hvac_unitary_system?(air_loop_hvac)
+    is_unitary_system = false
+    air_loop_hvac.supplyComponents.each do |component|
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitarySystem', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed', 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        is_unitary_system = true
+      end
+    end
+    return is_unitary_system
   end
 
   # Set the VAV damper control to single maximum or dual maximum control depending on the standard.
