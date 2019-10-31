@@ -3414,10 +3414,25 @@ class Standard
       hvac_op_sch = model_add_schedule(model, hvac_op_sch)
     end
 
+    # default design temperatures across all air loops
+    dsgn_temps = standard_design_sizing_temperatures
+
+    # adjusted temperatures for minisplit
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+    dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
+    minisplit_hps = []
     thermal_zones.each do |zone|
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
       air_loop.setName("#{zone.name} Minisplit Heat Pump")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding minisplit HP for #{zone.name}.")
+
+      # default design settings used across all air loops
+      sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
+      sizing_system.setAllOutdoorAirinCooling(false)
+      sizing_system.setAllOutdoorAirinHeating(false)
 
       # create heating coil
       case heating_type
@@ -3432,15 +3447,20 @@ class Standard
         htg_coil.setDefrostControl('OnDemand')
         htg_coil.resetDefrostTimePeriodFraction
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No cooling coil type selected for minisplit HP for #{zone.name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No heating coil type selected for minisplit HP for #{zone.name}.")
         htg_coil = nil
       end
+
+      # create backup heating coil
+      supplemental_htg_coil = create_coil_heating_electric(model,
+                                                           name: "#{air_loop.name} Electric Backup Htg Coil")
 
       # create cooling coil
       case cooling_type
       when 'Two Speed DX AC'
         clg_coil = create_coil_cooling_dx_two_speed(model,
-                                                    name: "#{air_loop.name} 2spd DX AC Clg Coil")
+                                                    name: "#{air_loop.name} 2spd DX AC Clg Coil",
+                                                    type: 'Residential Minisplit HP')
       when 'Single Speed DX AC'
         clg_coil = create_coil_cooling_dx_single_speed(model,
                                                        name: "#{air_loop.name} 1spd DX AC Clg Coil", type: 'Split AC')
@@ -3456,12 +3476,8 @@ class Standard
       fan = create_fan_by_name(model,
                                'Minisplit_HP_Fan',
                                fan_name: "#{air_loop.name} Fan",
-                               end_use_subcategory: 'Supply Fans')
+                               end_use_subcategory: 'Minisplit HP Fans')
       fan.setAvailabilitySchedule(hvac_op_sch)
-
-      # create backup heating coil
-      supplemental_htg_coil = create_coil_heating_electric(model,
-                                                           name: "#{air_loop.name} Electric Backup Htg Coil")
 
       # create unitary system (holds the coils and fan)
       unitary = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
@@ -3471,7 +3487,6 @@ class Standard
       unitary.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
       unitary.setControllingZoneorThermostatLocation(zone)
       unitary.addToNode(air_loop.supplyInletNode)
-      unitary.setControllingZoneorThermostatLocation(zone)
       unitary.setSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(0.0)
 
       # attach the coils and fan
@@ -3486,9 +3501,11 @@ class Standard
       diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
       diffuser.setName(" #{zone.name} Direct Air")
       air_loop.multiAddBranchForZone(zone, diffuser.to_HVACComponent.get)
+
+      minisplit_hps << air_loop
     end
 
-    return true
+    return minisplit_hps
   end
 
   # Creates a PTAC system for each zone and adds it to the model.
@@ -4750,21 +4767,21 @@ class Standard
     crank_case_heat_w = 0.0
     crank_case_max_temp_f = 55
 
+    # default design temperatures across all air loops
+    dsgn_temps = standard_design_sizing_temperatures
+
+    # adjusted temperatures for furnace_central_ac
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
+    dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
+    dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
+
     hps = []
     thermal_zones.each do |zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding Central Air Source HP for #{zone.name}.")
 
       air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
       air_loop.setName("#{zone.name} Central Air Source HP")
-
-      # default design temperatures across all air loops
-      dsgn_temps = standard_design_sizing_temperatures
-
-      # adjusted temperatures for furnace_central_ac
-      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 122.0
-      dsgn_temps['zn_htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['zn_htg_dsgn_sup_air_temp_f'], 'F', 'C').get
-      dsgn_temps['htg_dsgn_sup_air_temp_f'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_f']
-      dsgn_temps['htg_dsgn_sup_air_temp_c'] = dsgn_temps['zn_htg_dsgn_sup_air_temp_c']
 
       # default design settings used across all air loops
       sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: 'NonCoincident')
