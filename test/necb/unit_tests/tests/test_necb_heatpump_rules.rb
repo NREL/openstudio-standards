@@ -70,14 +70,27 @@ class NECB_HVAC_Tests < MiniTest::Test
         puts "***************************************#{name}*******************************************************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
+
+        #Set up thermal zones for initial sizing run.
+        standard.model_create_thermal_zones(model)
+
+        # Set FDWR and SSR.  Do this after the thermal zones are set because the methods need to know what walls and roofs
+        # are adjacent to conditioned spaces.
+        standard.apply_standard_window_to_wall_ratio(model: model)
+        standard.apply_standard_skylight_to_roof_ratio(model: model)
+        
+
+        # Create Reference HVAC Systems.
+
+        standard.auto_zoning(model: model, sizing_run_dir: output_folder)
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
                                                                                                     baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop)
+                                                                                                    hw_loop: hw_loop,
+                                                                                                    new_auto_zoner: false)
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
@@ -143,12 +156,16 @@ class NECB_HVAC_Tests < MiniTest::Test
     puts "***************************************#{name}*******************************************************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
+    if standard.model_run_sizing_run(model, "#{output_folder}/SR0") == false
+      raise("sizing run 0 failed!")
+    end
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop)
+                                                                                                hw_loop: hw_loop,
+                                                                                                new_auto_zoner: false)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards

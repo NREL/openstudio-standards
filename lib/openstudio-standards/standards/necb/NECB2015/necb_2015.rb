@@ -66,7 +66,6 @@ class NECB2015 < NECB2011
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: true,
                            primary_heating_fuel: 'DefaultFuel')
 
 
@@ -80,7 +79,6 @@ class NECB2015 < NECB2011
                   z_scale: z_scale,
                   fdwr_set: fdwr_set,
                   srr_set: srr_set,
-                  new_auto_zoner: true,
                   primary_heating_fuel: primary_heating_fuel)
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily

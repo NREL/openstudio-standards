@@ -174,7 +174,6 @@ class NECB2011 < Standard
                                    z_scale: 1.0,
                                    fdwr_set: 1.1,
                                    srr_set: 1.1,
-                                   new_auto_zoner: true,
                                    primary_heating_fuel: 'DefaultFuel')
 
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
@@ -189,7 +188,6 @@ class NECB2011 < Standard
                                 sizing_run_dir: sizing_run_dir,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
-                                new_auto_zoner: true,
                                 primary_heating_fuel: primary_heating_fuel)
   end
 
@@ -205,7 +203,6 @@ class NECB2011 < Standard
                            z_scale: 1.0,
                            fdwr_set: 1.1,
                            srr_set: 1.1,
-                           new_auto_zoner: true,
                            primary_heating_fuel: 'DefaultFuel')
 
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
@@ -273,34 +270,31 @@ class NECB2011 < Standard
     end
 
     # Create Reference HVAC Systems.
-    if new_auto_zoner
-      auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      # Set the primary fuel set to default to to specific fuel type.
-      if primary_heating_fuel == 'DefaultFuel'
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        primary_heating_fuel = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-      end
-      # Get fuelset.
-      system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
-      if system_fuel_defaults.nil?
-        raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")
-      end
-      auto_system(model: model,
-                  boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
-                  baseboard_type: system_fuel_defaults['baseboard_type'],
-                  mau_type: system_fuel_defaults['mau_type'],
-                  mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
-                  mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
-                  chiller_type: system_fuel_defaults['chiller_type'],
-                  heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
-                  heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
-                  heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6'])
-      random = Random.new(1234)
-      model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
-      model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
-    else
-      raise('this code should never be reached.. will delete after testing')
+
+    auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    # Set the primary fuel set to default to to specific fuel type.
+    if primary_heating_fuel == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      primary_heating_fuel = @standards_data['regional_fuel_use'].detect {|fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
     end
+    # Get fuelset.
+    system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
+    if system_fuel_defaults.nil?
+      raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")
+    end
+    auto_system(model: model,
+                boiler_fueltype: system_fuel_defaults['boiler_fueltype'],
+                baseboard_type: system_fuel_defaults['baseboard_type'],
+                mau_type: system_fuel_defaults['mau_type'],
+                mau_heating_coil_type: system_fuel_defaults['mau_heating_coil_type'],
+                mau_cooling_type: system_fuel_defaults['mau_cooling_type'],
+                chiller_type: system_fuel_defaults['chiller_type'],
+                heating_coil_type_sys3: system_fuel_defaults['heating_coil_type_sys3'],
+                heating_coil_type_sys4: system_fuel_defaults['heating_coil_type_sys4'],
+                heating_coil_type_sys6: system_fuel_defaults['heating_coil_type_sys6'])
+    random = Random.new(1234)
+    model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
+    model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     model_add_swh(model: model, swh_fueltype: system_fuel_defaults['swh_fueltype'])
     model_apply_sizing_parameters(model)
 
@@ -405,121 +399,7 @@ class NECB2011 < Standard
     end
   end
 
-  def set_wildcard_schedules_to_dominant_building_schedule(model, runner = nil)
-    new_sched_ruleset = OpenStudio::Model::DefaultScheduleSet.new(model) # initialize
-    BTAP.runner_register('Info', 'set_wildcard_schedules_to_dominant_building_schedule', runner)
-    # Set wildcard schedules based on dominant schedule type in building.
-    dominant_sched_type = determine_dominant_necb_schedule_type(model)
-    # puts "dominant_sched_type = #{dominant_sched_type}"
-    # find schedule set that corresponds to dominant schedule type
-    model.getDefaultScheduleSets.sort.each do |sched_ruleset|
-      # just check people schedule
-      # TO DO: should make this smarter: check all schedules
-      people_sched = sched_ruleset.numberofPeopleSchedule
-      people_sched_name = people_sched.get.name.to_s unless people_sched.empty?
 
-      search_string = "NECB-#{dominant_sched_type}"
-
-      if people_sched.empty? == false
-        if people_sched_name.include? search_string
-          new_sched_ruleset = sched_ruleset
-        end
-      end
-    end
-
-    # replace the default schedule set for the space type with * to schedule ruleset with dominant schedule type
-
-    model.getSpaces.sort.each do |space|
-      # check to see if space space type has a "*" wildcard schedule.
-      spacetype_name = space.spaceType.get.name.to_s unless space.spaceType.empty?
-      if determine_necb_schedule_type(space).to_s == '*'.to_s
-        new_sched = spacetype_name.to_s
-        optional_spacetype = model.getSpaceTypeByName(new_sched)
-        if optional_spacetype.empty?
-          BTAP.runner_register('Error', "Cannot find NECB spacetype #{new_sched}", runner)
-        else
-          BTAP.runner_register('Info', "Setting wildcard spacetype #{spacetype_name} default schedule set to #{new_sched_ruleset.name}", runner)
-          optional_spacetype.get.setDefaultScheduleSet(new_sched_ruleset) # this works!
-        end
-      end
-    end # end of do |space|
-
-    return true
-  end
-
-  # This model determines the dominant NECB schedule type
-  # @param model [OpenStudio::model::Model] A model object
-  # return s.each [String]
-  def determine_dominant_necb_schedule_type(model)
-    # lookup necb space type properties
-    space_type_properties = @standards_data['space_types']
-
-    # Here is a hash to keep track of the m2 running total of spacetypes for each
-    # sched type.
-    # 2018-04-11:  Not sure if this is still used but the list was expanded to incorporate additional existing or potential
-    # future schedules.
-    s = Hash[
-        'A', 0,
-        'B', 0,
-        'C', 0,
-        'D', 0,
-        'E', 0,
-        'F', 0,
-        'G', 0,
-        'H', 0,
-        'I', 0,
-        'J', 0,
-        'K', 0,
-        'L', 0,
-        'M', 0,
-        'N', 0,
-        'O', 0,
-        'P', 0,
-        'Q', 0
-    ]
-    # iterate through spaces in building.
-    wildcard_spaces = 0
-    model.getSpaces.sort.each do |space|
-      found_space_type = false
-      # iterate through the NECB spacetype property table
-      space_type_properties.each do |spacetype|
-        unless space.spaceType.empty?
-          if space.spaceType.get.standardsSpaceType.empty? || space.spaceType.get.standardsBuildingType.empty?
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Space #{space.name} does not have a standardSpaceType defined")
-            found_space_type = false
-          elsif space.spaceType.get.standardsSpaceType.get == spacetype['space_type'] && space.spaceType.get.standardsBuildingType.get == spacetype['building_type']
-            if spacetype['necb_schedule_type'] == '*'
-              wildcard_spaces = +1
-            else
-              s[spacetype['necb_schedule_type']] = s[spacetype['necb_schedule_type']] + space.floorArea if (spacetype['necb_schedule_type'] != '*') && (spacetype['necb_schedule_type'] != '- undefined -')
-            end
-            # puts "Found #{space.spaceType.get.name} schedule #{spacetype[2]} match with floor area of #{space.floorArea()}"
-            found_space_type = true
-          elsif spacetype['necb_schedule_type'] != '*'
-            # found wildcard..will not count to total.
-            found_space_type = true
-          end
-        end
-      end
-      raise "Did not find #{space.spaceType.get.name} in NECB space types." if found_space_type == false
-    end
-    # finds max value and returns NECB schedule letter.
-    raise('Only wildcard spaces in model. You need to define the actual spaces. ') if wildcard_spaces == model.getSpaces.size
-    dominant_schedule = s.each {|k, v| return k.to_s if v == s.values.max}
-    return dominant_schedule
-  end
-
-  # This method determines the spacetype schedule type. This will re
-  # @author phylroy.lopez@nrcan.gc.ca
-  # @param space [String]
-  # @return [String]:["A","B","C","D","E","F","G","H","I"] spacetype
-  def determine_necb_schedule_type(space)
-    spacetype_data = @standards_data['space_types']
-    raise "Spacetype not defined for space #{space.get.name}) if space.spaceType.empty?" if space.spaceType.empty?
-    raise "Undefined standardsSpaceType or StandardsBuildingType for space #{space.spaceType.get.name}) if space.spaceType.empty?" if space.spaceType.get.standardsSpaceType.empty? | space.spaceType.get.standardsBuildingType.empty?
-    space_type_properties = spacetype_data.detect {|st| (st['space_type'] == space.spaceType.get.standardsSpaceType.get) && (st['building_type'] == space.spaceType.get.standardsBuildingType.get)}
-    return space_type_properties['necb_schedule_type'].strip
-  end
 
   # Determine whether or not water fixtures are attached to spaces
   def model_attach_water_fixtures_to_spaces?(model)
