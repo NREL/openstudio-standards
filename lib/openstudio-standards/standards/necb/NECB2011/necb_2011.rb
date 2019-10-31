@@ -191,12 +191,41 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel')
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-
+    apply_loads(epw_file: epw_file, model: model)
     apply_standard_envelope_and_loads(epw_file: epw_file, model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
     apply_standard_efficiencies(model, sizing_run_dir)
     return model
+  end
+
+  def apply_loads(epw_file:, model:)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    raise('validation of spacetypes failed.') unless validate_space_types(model)
+    climate_zone = 'NECB HDD Method'
+    # Fix EMS references. Temporary workaround for OS issue #2598
+    model_temp_fix_ems_references(model)
+    model.getThermostatSetpointDualSetpoints(&:remove)
+    model.getYearDescription.setDayofWeekforStartDay('Sunday')
+    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
+    model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
+    set_occ_sensor_spacetypes(model, @space_type_map)
+    model_add_loads(model)
+  end
+
+  def apply_standard_envelope_and_loads(epw_file:, model:)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    raise('validation of spacetypes failed.') unless validate_space_types(model)
+    model_apply_infiltration_standard(model)
+    model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+    model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
+    model_add_constructions(model)
+    apply_standard_construction_properties(model)
+    model_create_thermal_zones(model, @space_multiplier_map)
+    # Thermal zones need to be set to determine conditioned spaces. Setting it to 1.1 means maximize NECB.
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: 1.1)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: 1.1)
+    model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
   def apply_standard_efficiencies(model, sizing_run_dir)
@@ -212,29 +241,7 @@ class NECB2011 < Standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
   end
 
-  def apply_standard_envelope_and_loads(epw_file:, model:)
-    raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
-    climate_zone = 'NECB HDD Method'
-    # Fix EMS references. Temporary workaround for OS issue #2598
-    model_temp_fix_ems_references(model)
-    model.getThermostatSetpointDualSetpoints(&:remove)
-    model.getYearDescription.setDayofWeekforStartDay('Sunday')
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
-    set_occ_sensor_spacetypes(model, @space_type_map)
-    model_add_loads(model)
-    model_apply_infiltration_standard(model)
-    model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-    model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-    model_add_constructions(model)
-    apply_standard_construction_properties(model)
-    model_create_thermal_zones(model, @space_multiplier_map)
-    # Thermal zones need to be set to determine conditioned spaces. Setting it to 1.1 means maximize NECB.
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: 1.1)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: 1.1)
-    model_add_daylighting_controls(model) # to be removed after refactor.
-  end
+
 
   #this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't
   # determine it.

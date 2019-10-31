@@ -84,9 +84,18 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:)
+  def apply_systems(model:, primary_heating_fuel:,sizing_run_dir: )
     raise('validation of model failed.') unless validate_initial_model(model)
     raise('validation of spacetypes failed.') unless validate_space_types(model)
+
+    # do a sizing run.
+    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
+      raise('autorun sizing run failed!')
+    end
+
+    # collect sizing information on each space.
+    self.store_space_sizing_loads(model)
+
     # Set the primary fuel set to default to to specific fuel type.
     if primary_heating_fuel == 'DefaultFuel'
       epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
