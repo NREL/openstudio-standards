@@ -3601,7 +3601,7 @@ class Standard
       elsif fan_type == 'Cycling'
         ptac_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       end
-      if ventilation
+      unless ventilation
         ptac_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         ptac_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
         ptac_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
@@ -3686,7 +3686,7 @@ class Standard
       elsif fan_type == 'Cycling'
         pthp_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       end
-      if ventilation
+      unless ventilation
         pthp_system.setOutdoorAirFlowRateDuringCoolingOperation(0.0)
         pthp_system.setOutdoorAirFlowRateDuringHeatingOperation(0.0)
         pthp_system.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded(0.0)
