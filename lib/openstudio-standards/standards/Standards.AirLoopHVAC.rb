@@ -838,7 +838,7 @@ class Standard
 
     # Determine if the system serves residential spaces
     is_res = false
-    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
+    if air_loop_hvac_residential_area_served(air_loop_hvac) > 0
       is_res = true
     end
 
@@ -3082,12 +3082,13 @@ class Standard
   end
 
   def air_loop_hvac_humidifier_count(air_loop_hvac)
-    humdifiers = 0
+    humidifiers = 0
     air_loop_hvac.supplyComponents.each do |cmp|
       if cmp.to_HumidifierSteamElectric.is_initialized
         humidifiers += 1
       end
     end
+    return humidifiers
   end
 
   # Sets the maximum reheat temperature to the specified
