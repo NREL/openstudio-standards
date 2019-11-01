@@ -242,6 +242,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Model"
+  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
   # ZE AEDG Multifamily
@@ -254,6 +255,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Space"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.ThermalZone"
   # DEER Common
