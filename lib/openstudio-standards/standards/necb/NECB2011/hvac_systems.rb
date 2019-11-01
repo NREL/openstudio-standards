@@ -661,7 +661,6 @@ class NECB2011
     # Define the criteria to find the furnace properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = template
     search_criteria['fluid_type'] = 'Air'
     search_criteria['fuel_type'] = 'Gas'
 
@@ -803,7 +802,6 @@ class NECB2011
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = template
     cooling_type = coil_cooling_dx_multi_speed.condenserType
     search_criteria['cooling_type'] = cooling_type
 
