@@ -4141,12 +4141,15 @@ class Standard
   #   If nil, a zero-capacity, electric heating coil set to Always-Off will be included in the unit.
   # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
+  # @param capacity_control_method [String] Capacity control method for the fan coil. Options are ConstantFanVariableFlow,
+  #   CyclingFan, VariableFanVariableFlow, and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
   # @return [Array<OpenStudio::Model::ZoneHVACFourPipeFanCoil>] array of fan coil units.
   def model_add_four_pipe_fan_coil(model,
                                    thermal_zones,
                                    chilled_water_loop,
                                    hot_water_loop: nil,
-                                   ventilation: false)
+                                   ventilation: false,
+                                   capacity_control_method: 'VariableFanVariableFlow')
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
@@ -4181,10 +4184,18 @@ class Standard
                                                     nominal_capacity: 0.0)
       end
 
-      fcu_fan = create_fan_by_name(model,
-                                   'Fan_Coil_Fan',
-                                   fan_name: "#{zone.name} Fan Coil fan",
-                                   end_use_subcategory: 'FCU Fans')
+      case capacity_control_method
+      when 'VariableFanVariableFlow', 'VariableFanConstantFlow'
+        fcu_fan = create_fan_by_name(model,
+                                     'Fan_Coil_VarSpeed_Fan',
+                                     fan_name: "#{zone.name} Fan Coil Variable Fan",
+                                     end_use_subcategory: 'FCU Fans')
+      else
+        fcu_fan = create_fan_by_name(model,
+                                     'Fan_Coil_Fan',
+                                     fan_name: "#{zone.name} Fan Coil fan",
+                                     end_use_subcategory: 'FCU Fans')
+      end
       fcu_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       fcu_fan.autosizeMaximumFlowRate
 
@@ -4194,7 +4205,7 @@ class Standard
                                                            fcu_clg_coil,
                                                            fcu_htg_coil)
       fcu.setName("#{zone.name} FCU")
-      fcu.setCapacityControlMethod('CyclingFan')
+      fcu.setCapacityControlMethod(capacity_control_method)
       fcu.autosizeMaximumSupplyAirFlowRate
       unless ventilation
         fcu.setMaximumOutdoorAirFlowRate(0.0)
@@ -5626,6 +5637,9 @@ class Standard
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
   #   including as fan coil units, VRF terminals, or water source heat pumps.
+  # @param fan_coil_capacity_control_method [String] Only applicable to Fan Coil system type.
+  #   Capacity control method for the fan coil. Options are ConstantFanVariableFlow, CyclingFan, VariableFanVariableFlow,
+  #   and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -5638,7 +5652,8 @@ class Standard
                             heat_pump_loop_cooling_type: 'EvaporativeFluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
-                            zone_equipment_ventilation: true)
+                            zone_equipment_ventilation: true,
+                            fan_coil_capacity_control_method: 'VariableFanVariableFlow')
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -5778,7 +5793,8 @@ class Standard
                                    zones,
                                    chilled_water_loop,
                                    hot_water_loop: hot_water_loop,
-                                   ventilation: zone_equipment_ventilation)
+                                   ventilation: zone_equipment_ventilation,
+                                   capacity_control_method: fan_coil_capacity_control_method)
 
     when 'Radiant Slab'
       case main_heat_fuel
