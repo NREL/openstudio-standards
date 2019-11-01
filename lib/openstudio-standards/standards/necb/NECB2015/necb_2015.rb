@@ -64,12 +64,16 @@ class NECB2015 < NECB2011
                            primary_heating_fuel: 'DefaultFuel')
 
 
-    #Run everything like parent NECB2011 'model_apply_standard' method.
-    model = super(model: model,
-                  epw_file: epw_file,
-                  debug: debug,
-                  sizing_run_dir: sizing_run_dir,
-                  primary_heating_fuel: primary_heating_fuel)
+    # Run everything like parent NECB2011 'model_apply_standard' method.
+      building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
+      model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
+      Standard.build("NECB2015").apply_loads(epw_file: epw_file, model: model)
+      Standard.build("NECB2015").apply_envelope(epw_file: epw_file, model: model)
+      Standard.build("NECB2015").apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+      Standard.build("NECB2015").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+      Standard.build("NECB2015").apply_standard_efficiencies(model, sizing_run_dir)
+
+
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then

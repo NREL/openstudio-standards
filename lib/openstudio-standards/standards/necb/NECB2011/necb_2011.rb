@@ -191,11 +191,11 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel')
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    apply_loads(epw_file: epw_file, model: model)
-    apply_standard_envelope_and_loads(epw_file: epw_file, model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model, sizing_run_dir)
+    Standard.build("NECB2011").apply_loads(epw_file: epw_file, model: model)
+    Standard.build("NECB2011").apply_envelope(epw_file: epw_file, model: model)
+    Standard.build("NECB2011").apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    Standard.build("NECB2011").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    Standard.build("NECB2011").apply_standard_efficiencies(model, sizing_run_dir)
     return model
   end
 
@@ -213,7 +213,7 @@ class NECB2011 < Standard
     model_add_loads(model)
   end
 
-  def apply_standard_envelope_and_loads(epw_file:, model:)
+  def apply_envelope(epw_file:, model:)
     raise('validation of model failed.') unless validate_initial_model(model)
     raise('validation of spacetypes failed.') unless validate_space_types(model)
     model_apply_infiltration_standard(model)
@@ -247,7 +247,7 @@ class NECB2011 < Standard
   # determine it.
   def determine_spacetype_vintage(model)
     #this code is the list of available vintages
-    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017']
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017','NECBPRE1980']
     #this reorders the list to do the current class first.
     space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
     #Set the space_type
