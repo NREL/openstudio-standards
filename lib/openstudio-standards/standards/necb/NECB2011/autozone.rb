@@ -54,7 +54,16 @@ class NECB2011
 
   def apply_auto_zoning(model:, sizing_run_dir: Dir.pwd)
     raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
+
+    # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
+    # other spacetype data. This is required for correct system mapping.
+    template = determine_spacetype_vintage(model)
+    unless template == self.class.name
+      # Frankenstein the standards data wrt spacetype data.
+      @standards_data['space_types'] = Standard.build(template).standards_data['space_types']
+    end
+
+
     # The first thing we need to do is get a sizing run to determine the heating loads of all the spaces. The default
     # btap geometry has a one to one relationship of zones to spaces.. So we simply create the thermal zones for all the spaces.
     # to do this we need to create thermals zone for each space.
@@ -84,9 +93,15 @@ class NECB2011
 
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
-  def apply_systems(model:, primary_heating_fuel:,sizing_run_dir: )
+  def apply_systems(model:, primary_heating_fuel:, sizing_run_dir:)
     raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
+    # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
+    # other spacetype data. This is required for correct system mapping.
+    template = determine_spacetype_vintage(model)
+    unless template == self.class.name
+      # Frankenstein the standards data wrt spacetype data.
+      @standards_data['space_types'] = Standard.build(template).standards_data['space_types']
+    end
 
     # do a sizing run.
     if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
@@ -103,7 +118,7 @@ class NECB2011
     end
     # Get fuelset.
     system_fuel_defaults = @standards_data['fuel_type_sets'].detect {|fuel_type_set| fuel_type_set['name'] == primary_heating_fuel}
-    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.")if system_fuel_defaults.nil?
+    raise("fuel_type_sets named #{primary_heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
 
 
     # Assign fuel sources.
@@ -652,9 +667,10 @@ class NECB2011
   # Determines what system index number is required for the space's spacetype by NECB rules.
   def get_necb_spacetype_system_selection(space)
     space_type_table = @standards_data['space_types']
-    space_type_data = model_find_object(space_type_table, {'template' => self.class.name,
-                                                           'space_type' => space.spaceType.get.standardsSpaceType.get,
+    space_type_data = model_find_object(space_type_table, {'space_type' => space.spaceType.get.standardsSpaceType.get,
                                                            'building_type' => space.spaceType.get.standardsBuildingType.get})
+    raise("Could not find space_type_data for #{{'space_type' => space.spaceType.get.standardsSpaceType.get,
+                                                 'building_type' => space.spaceType.get.standardsBuildingType.get}} ")if space_type_data.nil?
 
     # identify space-system_index and assign the right NECB system type 1-7.
     necb_hvac_system_selection_table = @standards_data['necb_hvac_system_selection_type']

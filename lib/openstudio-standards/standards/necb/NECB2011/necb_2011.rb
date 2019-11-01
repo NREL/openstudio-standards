@@ -201,7 +201,7 @@ class NECB2011 < Standard
 
   def apply_loads(epw_file:, model:)
     raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
+    raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
     climate_zone = 'NECB HDD Method'
     # Fix EMS references. Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
@@ -215,7 +215,6 @@ class NECB2011 < Standard
 
   def apply_envelope(epw_file:, model:)
     raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
     model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
@@ -230,7 +229,6 @@ class NECB2011 < Standard
 
   def apply_standard_efficiencies(model, sizing_run_dir)
     raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_space_types(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
@@ -276,7 +274,7 @@ class NECB2011 < Standard
   end
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
-  def validate_space_types(model)
+  def validate_and_upate_space_types(model)
     space_type_vintage = determine_spacetype_vintage(model)
     if space_type_vintage.nil?
       message = "These some of the spacetypes in the model are not part of any necb standard.\n  Please ensure all spacetype in model are correct."

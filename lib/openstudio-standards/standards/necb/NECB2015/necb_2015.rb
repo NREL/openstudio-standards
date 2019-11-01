@@ -64,7 +64,6 @@ class NECB2015 < NECB2011
       Standard.build("NECB2015").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
       Standard.build("NECB2015").apply_standard_efficiencies(model, sizing_run_dir)
 
-
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
