@@ -75,6 +75,6 @@ class ZEAEDGMultifamily < ASHRAE901
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for ZE AEDG Multifamily template.')
   end
 end
