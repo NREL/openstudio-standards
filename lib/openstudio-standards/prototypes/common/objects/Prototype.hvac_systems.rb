@@ -4149,7 +4149,7 @@ class Standard
                                    chilled_water_loop,
                                    hot_water_loop: nil,
                                    ventilation: false,
-                                   capacity_control_method: 'VariableFanVariableFlow')
+                                   capacity_control_method: 'CyclingFan')
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
@@ -5653,7 +5653,7 @@ class Standard
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
                             zone_equipment_ventilation: true,
-                            fan_coil_capacity_control_method: 'VariableFanVariableFlow')
+                            fan_coil_capacity_control_method: 'CyclingFan')
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -6184,7 +6184,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with DOAS with DCV', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6193,7 +6194,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       elsif system_type.include? 'with DOAS'
         # add DOAS system
         model_add_hvac_system(model, 'DOAS', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6202,7 +6204,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with DOAS', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6211,7 +6214,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       elsif system_type.include? 'with ERVs'
         # add DOAS system
         model_add_hvac_system(model, 'ERVs', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6220,7 +6224,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with ERVs', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6229,7 +6234,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "HVAC system type '#{system_type}' not recognized")
         return false
