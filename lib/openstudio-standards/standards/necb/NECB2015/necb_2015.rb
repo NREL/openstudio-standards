@@ -58,12 +58,23 @@ class NECB2015 < NECB2011
     # Run everything like parent NECB2011 'model_apply_standard' method.
       building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
       model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-      Standard.build("NECB2015").apply_loads(epw_file: epw_file, model: model)
-      Standard.build("NECB2015").apply_envelope(epw_file: epw_file, model: model)
-      Standard.build("NECB2015").apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      Standard.build("NECB2015").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-      Standard.build("NECB2015").apply_standard_efficiencies(model, sizing_run_dir)
+      apply_loads(epw_file: epw_file, model: model)
+      apply_envelope(epw_file: epw_file, model: model)
+      apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+      apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+      apply_standard_efficiencies(model, sizing_run_dir)
 
+
+      model = apply_loop_pump_power(model, sizing_run_dir)
+      return model
+  end
+
+  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
+  def set_occ_sensor_spacetypes(model, space_type_map)
+    return true
+  end
+
+  def apply_loop_pump_power(model, sizing_run_dir)
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
@@ -74,16 +85,9 @@ class NECB2015 < NECB2011
     end
     # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
     apply_maximum_loop_pump_power(model)
-
     # Remove duplicate materials and constructions
     # Note For NECB2015 This is the 2nd time this method is bieng run.
     # First time it ran in the super() within model_apply_standard() method
-    model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
-    return model
-  end
-
-  #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
-  def set_occ_sensor_spacetypes(model, space_type_map)
-    return true
+    model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
   end
 end

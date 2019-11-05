@@ -171,14 +171,18 @@ class NECB2011 < Standard
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'DefaultFuel')
 
-    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
-    model = BTAP::FileIO::load_osm(osm_model_path)
-    model.getBuilding.setName("#{File.basename(osm_model_path, '.osm')}-#{epw_file}")
-
+    model = load_building_type_from_library(building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel)
+  end
+
+  def load_building_type_from_library(building_type)
+    osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
+    model = BTAP::FileIO::load_osm(osm_model_path)
+    model.getBuilding.setName(building_type)
+    return model
   end
 
 
@@ -191,11 +195,12 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel')
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    Standard.build("NECB2011").apply_loads(epw_file: epw_file, model: model)
-    Standard.build("NECB2011").apply_envelope(epw_file: epw_file, model: model)
-    Standard.build("NECB2011").apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    Standard.build("NECB2011").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    Standard.build("NECB2011").apply_standard_efficiencies(model, sizing_run_dir)
+    apply_loads(epw_file: epw_file, model: model)
+    apply_envelope(epw_file: epw_file, model: model)
+    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    apply_standard_efficiencies(model, sizing_run_dir)
+    apply_loop_pump_power(model, sizing_run_dir)
     return model
   end
 
@@ -237,6 +242,13 @@ class NECB2011 < Standard
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
+  end
+
+  def apply_loop_pump_power(model, sizing_run_dir)
+    # Remove duplicate materials and constructions
+    # Note For NECB2015 This is the 2nd time this method is bieng run.
+    # First time it ran in the super() within model_apply_standard() method
+    model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
   end
 
 

@@ -56,11 +56,11 @@ class NECB2017 < NECB2015
     # Run everything like parent NECB2011 'model_apply_standard' method.
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    Standard.build("NECB2017").apply_loads(epw_file: epw_file, model: model)
-    Standard.build("NECB2017").apply_envelope(epw_file: epw_file, model: model)
-    Standard.build("NECB2017").apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    Standard.build("NECB2017").apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    Standard.build("NECB2017").apply_standard_efficiencies(model, sizing_run_dir)
+    apply_loads(epw_file: epw_file, model: model)
+    apply_envelope(epw_file: epw_file, model: model)
+    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
+    apply_standard_efficiencies(model, sizing_run_dir)
 
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
