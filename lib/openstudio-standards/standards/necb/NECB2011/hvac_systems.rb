@@ -1137,7 +1137,7 @@ class NECB2011
     motors_table = @standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = @template
+    template_mod = 'NECB2011'
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
       template_mod += '-CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
@@ -1212,6 +1212,62 @@ class NECB2011
 
     return [fan_motor_eff, nominal_hp]
   end
+
+  # Determines the minimum pump motor efficiency and nominal size
+  # for a given motor bhp.  This should be the total brake horsepower with
+  # any desired safety factor already included.  This method picks
+  # the next nominal motor catgory larger than the required brake
+  # horsepower, and the efficiency is based on that size.  For example,
+  # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
+  # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
+  # 4-pole, 1800rpm totally-enclosed fan-cooled motors.
+  #
+  # @param motor_bhp [Double] motor brake horsepower (hp)
+  # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
+  def pump_standard_minimum_motor_efficiency_and_size(pump, motor_bhp)
+    motor_eff = 0.85
+    nominal_hp = motor_bhp
+
+    # Don't attempt to look up motor efficiency
+    # for zero-hp pumps (required for circulation-pump-free
+    # service water heating systems).
+    return [1.0, 0] if motor_bhp == 0.0
+
+    # Lookup the minimum motor efficiency
+    motors = @standards_data['motors']
+
+    # Assuming all pump motors are 4-pole ODP
+    search_criteria = {
+        'template' => 'NECB2011',
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
+    }
+
+    motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+    if motor_properties.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+      return [motor_eff, nominal_hp]
+    end
+
+    motor_eff = motor_properties['nominal_full_load_efficiency']
+    nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+    # Round to nearest whole HP for niceness
+    if nominal_hp >= 2
+      nominal_hp = nominal_hp.round
+    end
+
+    # Get the efficiency based on the nominal horsepower
+    # Add 0.01 hp to avoid search errors.
+    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+    if motor_properties.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{pump.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+      return [motor_eff, nominal_hp]
+    end
+    motor_eff = motor_properties['nominal_full_load_efficiency']
+
+    return [motor_eff, nominal_hp]
+  end
+
 
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
