@@ -102,7 +102,7 @@ class NECBRegressionHelper < Minitest::Test
       expected_model = version_translator.loadModel(expected_osm_model_path).get
 
       # Compare the two models.
-      diffs = compare_osm_files(expected_model, @model)
+      diffs = BTAP::FileIO::compare_osm_files(expected_model, @model)
     rescue => exception
       # Log error/exception and then keep going.
       error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})"
