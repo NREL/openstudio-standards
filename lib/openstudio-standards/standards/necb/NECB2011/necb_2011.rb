@@ -449,4 +449,48 @@ class NECB2011 < Standard
     end
   end
 
+  #This model gets the climate zone column index from tables 3.2.2.x
+  #@author phylroy.lopez@nrcan.gc.ca
+  #@param hdd [Float]
+  #@return [Fixnum] climate zone 4-8
+  def self.get_climate_zone_index(hdd)
+    #check for climate zone index from NECB 3.2.2.X
+    case hdd
+    when 0..2999 then
+      return 0 #climate zone 4
+    when 3000..3999 then
+      return 1 #climate zone 5
+    when 4000..4999 then
+      return 2 #climate zone 6
+    when 5000..5999 then
+      return 3 #climate zone 7a
+    when 6000..6999 then
+      return 4 #climate zone 7b
+    when 7000..1000000 then
+      return 5 #climate zone 8
+    end
+  end
+
+  #This model gets the climate zone name and returns the climate zone string.
+  #@author phylroy.lopez@nrcan.gc.ca
+  #@param hdd [Float]
+  #@return [Fixnum] climate zone 4-8
+  def self.get_climate_zone_name(hdd)
+    case self.get_climate_zone_index(hdd)
+    when 0 then
+      return "4"
+    when 1 then
+      return "5" #climate zone 5
+    when 2 then
+      return "6" #climate zone 6
+    when 3 then
+      return "7a" #climate zone 7a
+    when 4 then
+      return "7b" #climate zone 7b
+    when 5 then
+      return "8" #climate zone 8
+    end
+  end
+
+
 end
