@@ -8,7 +8,6 @@ class NECB2011
   end
 
 
-
   # NECB does not change damper positions
   #
   # return [Bool] returns true if successful, false if not
@@ -1137,15 +1136,16 @@ class NECB2011
     motors_table = @standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = 'NECB2011'
+    motor_use = 'FAN'
+    motor_type = ''
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
-      template_mod += '-CONSTANT'
+      motor_type = 'CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
       # Is this a return or supply fan
       if fan.name.to_s.include?('Supply')
-        template_mod += '-VARIABLE-SUPPLY'
+        motor_type += 'VARIABLE-SUPPLY'
       elsif fan.name.to_s.include?('Return')
-        template_mod += '-VARIABLE-RETURN'
+        motor_type += 'VARIABLE-RETURN'
       end
       # 0.909 corrects for 10% over sizing implemented upstream
       # 0.7457 is to convert from bhp to kW
@@ -1170,7 +1170,8 @@ class NECB2011
     end
 
     search_criteria = {
-        'template' => template_mod,
+        'motor_use' => motor_use,
+        'motor_type' => motor_type,
         'number_of_poles' => 4.0,
         'type' => 'Enclosed'
     }
@@ -1238,7 +1239,7 @@ class NECB2011
 
     # Assuming all pump motors are 4-pole ODP
     search_criteria = {
-        'template' => 'NECB2011',
+        'motor_use' => 'PUMP',
         'number_of_poles' => 4.0,
         'type' => 'Enclosed'
     }
@@ -1864,7 +1865,7 @@ class NECB2011
     air_loop_sizing.setPreheatDesignHumidityRatio(system_data[:PreheatDesignHumidityRatio]) unless system_data[:PreheatDesignHumidityRatio].nil?
     air_loop_sizing.setPrecoolDesignTemperature(system_data[:PrecoolDesignTemperature]) unless system_data[:PrecoolDesignTemperature].nil?
     air_loop_sizing.setPrecoolDesignHumidityRatio(system_data[:PrecoolDesignHumidityRatio]) unless system_data[:PrecoolDesignHumidityRatio].nil?
-    air_loop_sizing.setSizingOption(system_data[:SizingOption] ) unless system_data[:SizingOption].nil?
+    air_loop_sizing.setSizingOption(system_data[:SizingOption]) unless system_data[:SizingOption].nil?
     air_loop_sizing.setCoolingDesignAirFlowMethod(system_data[:CoolingDesignAirFlowMethod]) unless system_data[:CoolingDesignAirFlowMethod].nil?
     air_loop_sizing.setCoolingDesignAirFlowRate(system_data[:CoolingDesignAirFlowRate]) unless system_data[:CoolingDesignAirFlowRate].nil?
     air_loop_sizing.setHeatingDesignAirFlowMethod(system_data[:HeatingDesignAirFlowMethod]) unless system_data[:HeatingDesignAirFlowMethod].nil?
@@ -1877,7 +1878,7 @@ class NECB2011
     air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
     air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
     air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio] ) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
     return mau_air_loop
   end
 
@@ -1927,7 +1928,6 @@ class NECB2011
     end
     return clg_availability_sch, htg_availability_sch
   end
-
 
 
 end
