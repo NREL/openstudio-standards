@@ -453,7 +453,7 @@ class NECB2011 < Standard
   #@author phylroy.lopez@nrcan.gc.ca
   #@param hdd [Float]
   #@return [Fixnum] climate zone 4-8
-  def self.get_climate_zone_index(hdd)
+  def get_climate_zone_index(hdd)
     #check for climate zone index from NECB 3.2.2.X
     case hdd
     when 0..2999 then
@@ -475,7 +475,7 @@ class NECB2011 < Standard
   #@author phylroy.lopez@nrcan.gc.ca
   #@param hdd [Float]
   #@return [Fixnum] climate zone 4-8
-  def self.get_climate_zone_name(hdd)
+  def get_climate_zone_name(hdd)
     case self.get_climate_zone_index(hdd)
     when 0 then
       return "4"
