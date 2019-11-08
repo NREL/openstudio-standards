@@ -1,4 +1,3 @@
-
 # Custom changes for the LargeOffice prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -43,7 +42,8 @@ module LargeOfficeDetailed
 
     # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
     model.getPlantLoops.each do |plant_loop|
-      next unless plant_loop.name.to_s.include? "Heat Pump Loop"
+      next unless plant_loop.name.to_s.include? 'Heat Pump Loop'
+
       sup_wtr_high_temp_f = 65.0
       sup_wtr_low_temp_f = 41.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
@@ -75,9 +75,36 @@ module LargeOfficeDetailed
       end
     end
 
+    remove_basement_infiltration(model)
+    change_exterior_equipment_fuel_type(model, 'Electricity')
+
     return true
   end
-  
+
+  def remove_basement_infiltration(model)
+    space_infltrations = model.getSpaceInfiltrationDesignFlowRates
+    space_infltrations.each do |space_inf|
+      if space_inf.name.to_s.include? 'Basement'
+        space_inf = nil
+      end
+    end
+  end
+
+  def change_exterior_equipment_fuel_type(model, fuel_type)
+    exterior_equipments = model.getExteriorFuelEquipments
+    exterior_equipments.each do |ext_equip|
+      ext_equip_name = ext_equip.name
+      ext_equip_def = ext_equip.exteriorFuelEquipmentDefinition
+      ext_equip_schedule = ext_equip.schedule
+      ext_equip_enduse = ext_equip.endUseSubcategory
+      ext_equip = nil # get existing fuel equipment attributes, then delete the fuel equipment object.
+      new_ext_equip = OpenStudio::Model::ExteriorFuelEquipment.new(ext_equip_def, ext_equip_schedule)
+      new_ext_equip.setName(ext_equip_name)
+      new_ext_equip.setEndUseSubcategory(ext_equip_enduse)
+      new_ext_equip.setFuelType(fuel_type)
+    end
+  end
+
   def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
@@ -94,7 +121,6 @@ module LargeOfficeDetailed
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
-
     return true
   end
 end
