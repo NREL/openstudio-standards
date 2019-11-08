@@ -46,29 +46,6 @@ class NECB2015 < NECB2011
     return @standards_data
   end
 
-  # Created this method so that additional methods can be addded for bulding the prototype model in later
-  # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
-  def model_apply_standard(model:,
-                           epw_file:,
-                           debug: false,
-                           sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
-
-
-    # Run everything like parent NECB2011 'model_apply_standard' method.
-      building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
-      model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-      apply_loads(epw_file: epw_file, model: model)
-      apply_envelope(epw_file: epw_file, model: model)
-      apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-      apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-      apply_standard_efficiencies(model, sizing_run_dir)
-
-
-      model = apply_loop_pump_power(model, sizing_run_dir)
-      return model
-  end
-
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true
@@ -85,9 +62,7 @@ class NECB2015 < NECB2011
     end
     # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
     apply_maximum_loop_pump_power(model)
-    # Remove duplicate materials and constructions
-    # Note For NECB2015 This is the 2nd time this method is bieng run.
-    # First time it ran in the super() within model_apply_standard() method
     model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    return model
   end
 end

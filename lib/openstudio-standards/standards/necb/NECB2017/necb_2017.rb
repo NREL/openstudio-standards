@@ -46,38 +46,4 @@ class NECB2017 < NECB2015
     return @standards_data
   end
 
-  def model_apply_standard(model:,
-                           epw_file:,
-                           debug: false,
-                           sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
-
-
-    # Run everything like parent NECB2011 'model_apply_standard' method.
-    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
-    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    apply_loads(epw_file: epw_file, model: model)
-    apply_envelope(epw_file: epw_file, model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
-    apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model, sizing_run_dir)
-
-    # NECB2015 Custom code
-    # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
-    # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
-    # the cooling tower loop capacity can be significantly off which will affect the NECB 2015 maximum loop pump capacity.  Found
-    # all sizing was off somewhat if the additional sizing run was not done.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-      raise("sizing run 2 failed!")
-    end
-    # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
-    apply_maximum_loop_pump_power(model)
-
-    # Remove duplicate materials and constructions
-    # Note For NECB2015 This is the 2nd time this method is bieng run.
-    # First time it ran in the super() within model_apply_standard() method
-    model  = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
-    return model
-    return model
-  end
 end
