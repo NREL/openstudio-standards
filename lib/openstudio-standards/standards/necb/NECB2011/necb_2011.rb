@@ -171,14 +171,14 @@ class NECB2011 < Standard
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'DefaultFuel')
 
-    model = load_building_type_from_library(building_type)
+    model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel)
   end
 
-  def load_building_type_from_library(building_type)
+  def load_building_type_from_library(building_type:)
     osm_model_path = File.absolute_path(File.join(__FILE__, '..', '..', '..', "necb/NECB2011/data/geometry/#{building_type}.osm"))
     model = BTAP::FileIO::load_osm(osm_model_path)
     model.getBuilding.setName(building_type)
@@ -190,16 +190,15 @@ class NECB2011 < Standard
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
                            epw_file:,
-                           debug: false,
                            sizing_run_dir: Dir.pwd,
                            primary_heating_fuel: 'DefaultFuel')
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     apply_loads(epw_file: epw_file, model: model)
-    apply_envelope(epw_file: epw_file, model: model)
+    apply_envelope( model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model, sizing_run_dir)
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     model = apply_loop_pump_power(model, sizing_run_dir)
     return model
   end
@@ -218,7 +217,7 @@ class NECB2011 < Standard
     model_add_loads(model)
   end
 
-  def apply_envelope(epw_file:, model:)
+  def apply_envelope(model:)
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
@@ -232,7 +231,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model, sizing_run_dir)
+  def apply_standard_efficiencies(model:, sizing_run_dir:)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
