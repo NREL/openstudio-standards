@@ -194,7 +194,8 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel')
     building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
     model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
-    apply_loads(epw_file: epw_file, model: model)
+    apply_weather_data(model: model, epw_file: epw_file)
+    apply_loads(model: model)
     apply_envelope( model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
@@ -203,18 +204,21 @@ class NECB2011 < Standard
     return model
   end
 
-  def apply_loads(epw_file:, model:)
+  def apply_loads( model:)
     raise('validation of model failed.') unless validate_initial_model(model)
     raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+    set_occ_sensor_spacetypes(model, @space_type_map)
+    model_add_loads(model)
+  end
+
+  def apply_weather_data(model:, epw_file:)
     climate_zone = 'NECB HDD Method'
     # Fix EMS references. Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getYearDescription.setDayofWeekforStartDay('Sunday')
     model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    model_add_ground_temperatures(model, nil, climate_zone) # prototype candidate
-    set_occ_sensor_spacetypes(model, @space_type_map)
-    model_add_loads(model)
+    model_add_ground_temperatures(model, nil, climate_zone)
   end
 
   def apply_envelope(model:)
