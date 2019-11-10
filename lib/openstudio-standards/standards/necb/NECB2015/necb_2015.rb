@@ -51,7 +51,7 @@ class NECB2015 < NECB2011
     return true
   end
 
-  def apply_loop_pump_power(model, sizing_run_dir)
+  def apply_loop_pump_power(model:, sizing_run_dir:)
     # NECB2015 Custom code
     # Do another sizing run to take into account adjustments to equipment efficiency etc. on capacities. This was done primarily
     # because the cooling tower loop capacity is affected by the chiller COP.  If the chiller COP is not properly set then
