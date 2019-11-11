@@ -93,14 +93,6 @@ module LargeOfficeDetailed
   def change_exterior_equipment_fuel_type(model, fuel_type)
     exterior_equipments = model.getExteriorFuelEquipments
     exterior_equipments.each do |ext_equip|
-      ext_equip_name = ext_equip.name
-      ext_equip_def = ext_equip.exteriorFuelEquipmentDefinition
-      ext_equip_schedule = ext_equip.schedule
-      ext_equip_enduse = ext_equip.endUseSubcategory
-      ext_equip = nil # get existing fuel equipment attributes, then delete the fuel equipment object.
-      new_ext_equip = OpenStudio::Model::ExteriorFuelEquipment.new(ext_equip_def, ext_equip_schedule)
-      new_ext_equip.setName(ext_equip_name)
-      new_ext_equip.setEndUseSubcategory(ext_equip_enduse)
       new_ext_equip.setFuelType(fuel_type)
     end
   end
