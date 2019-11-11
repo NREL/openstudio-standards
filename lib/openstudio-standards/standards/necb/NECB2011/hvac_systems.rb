@@ -8,7 +8,6 @@ class NECB2011
   end
 
 
-
   # NECB does not change damper positions
   #
   # return [Bool] returns true if successful, false if not
@@ -661,7 +660,6 @@ class NECB2011
     # Define the criteria to find the furnace properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = template
     search_criteria['fluid_type'] = 'Air'
     search_criteria['fuel_type'] = 'Gas'
 
@@ -803,7 +801,6 @@ class NECB2011
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['template'] = template
     cooling_type = coil_cooling_dx_multi_speed.condenserType
     search_criteria['cooling_type'] = cooling_type
 
@@ -1139,15 +1136,16 @@ class NECB2011
     motors_table = @standards_data['motors']
 
     # Assuming all fan motors are 4-pole ODP
-    template_mod = @template
+    motor_use = 'FAN'
+    motor_type = ''
     if fan.class.name == 'OpenStudio::Model::FanConstantVolume'
-      template_mod += '-CONSTANT'
+      motor_type = 'CONSTANT'
     elsif fan.class.name == 'OpenStudio::Model::FanVariableVolume'
       # Is this a return or supply fan
       if fan.name.to_s.include?('Supply')
-        template_mod += '-VARIABLE-SUPPLY'
+        motor_type += 'VARIABLE-SUPPLY'
       elsif fan.name.to_s.include?('Return')
-        template_mod += '-VARIABLE-RETURN'
+        motor_type += 'VARIABLE-RETURN'
       end
       # 0.909 corrects for 10% over sizing implemented upstream
       # 0.7457 is to convert from bhp to kW
@@ -1172,7 +1170,8 @@ class NECB2011
     end
 
     search_criteria = {
-        'template' => template_mod,
+        'motor_use' => motor_use,
+        'motor_type' => motor_type,
         'number_of_poles' => 4.0,
         'type' => 'Enclosed'
     }
@@ -1214,6 +1213,62 @@ class NECB2011
 
     return [fan_motor_eff, nominal_hp]
   end
+
+  # Determines the minimum pump motor efficiency and nominal size
+  # for a given motor bhp.  This should be the total brake horsepower with
+  # any desired safety factor already included.  This method picks
+  # the next nominal motor catgory larger than the required brake
+  # horsepower, and the efficiency is based on that size.  For example,
+  # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
+  # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
+  # 4-pole, 1800rpm totally-enclosed fan-cooled motors.
+  #
+  # @param motor_bhp [Double] motor brake horsepower (hp)
+  # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
+  def pump_standard_minimum_motor_efficiency_and_size(pump, motor_bhp)
+    motor_eff = 0.85
+    nominal_hp = motor_bhp
+
+    # Don't attempt to look up motor efficiency
+    # for zero-hp pumps (required for circulation-pump-free
+    # service water heating systems).
+    return [1.0, 0] if motor_bhp == 0.0
+
+    # Lookup the minimum motor efficiency
+    motors = @standards_data['motors']
+
+    # Assuming all pump motors are 4-pole ODP
+    search_criteria = {
+        'motor_use' => 'PUMP',
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
+    }
+
+    motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+    if motor_properties.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+      return [motor_eff, nominal_hp]
+    end
+
+    motor_eff = motor_properties['nominal_full_load_efficiency']
+    nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+    # Round to nearest whole HP for niceness
+    if nominal_hp >= 2
+      nominal_hp = nominal_hp.round
+    end
+
+    # Get the efficiency based on the nominal horsepower
+    # Add 0.01 hp to avoid search errors.
+    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+    if motor_properties.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{pump.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+      return [motor_eff, nominal_hp]
+    end
+    motor_eff = motor_properties['nominal_full_load_efficiency']
+
+    return [motor_eff, nominal_hp]
+  end
+
 
   # Determines whether there is a requirement to have a
   # VSD or some other method to reduce fan power
@@ -1810,7 +1865,7 @@ class NECB2011
     air_loop_sizing.setPreheatDesignHumidityRatio(system_data[:PreheatDesignHumidityRatio]) unless system_data[:PreheatDesignHumidityRatio].nil?
     air_loop_sizing.setPrecoolDesignTemperature(system_data[:PrecoolDesignTemperature]) unless system_data[:PrecoolDesignTemperature].nil?
     air_loop_sizing.setPrecoolDesignHumidityRatio(system_data[:PrecoolDesignHumidityRatio]) unless system_data[:PrecoolDesignHumidityRatio].nil?
-    air_loop_sizing.setSizingOption(system_data[:SizingOption] ) unless system_data[:SizingOption].nil?
+    air_loop_sizing.setSizingOption(system_data[:SizingOption]) unless system_data[:SizingOption].nil?
     air_loop_sizing.setCoolingDesignAirFlowMethod(system_data[:CoolingDesignAirFlowMethod]) unless system_data[:CoolingDesignAirFlowMethod].nil?
     air_loop_sizing.setCoolingDesignAirFlowRate(system_data[:CoolingDesignAirFlowRate]) unless system_data[:CoolingDesignAirFlowRate].nil?
     air_loop_sizing.setHeatingDesignAirFlowMethod(system_data[:HeatingDesignAirFlowMethod]) unless system_data[:HeatingDesignAirFlowMethod].nil?
@@ -1823,7 +1878,7 @@ class NECB2011
     air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
     air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
     air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio] ) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
     return mau_air_loop
   end
 
@@ -1873,7 +1928,6 @@ class NECB2011
     end
     return clg_availability_sch, htg_availability_sch
   end
-
 
 
 end

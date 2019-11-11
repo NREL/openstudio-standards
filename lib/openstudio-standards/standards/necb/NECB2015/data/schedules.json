@@ -7,7 +7,7 @@
       ],
       "table": [
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -21,7 +21,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-FAN",
           "category": "Fan",
           "units": "ON_OFF",
@@ -35,7 +35,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -49,7 +49,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -63,7 +63,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -77,7 +77,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -91,7 +91,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-*-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -105,7 +105,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-Activity",
           "category": "Activity",
           "units": "W",
@@ -119,7 +119,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "Always On",
           "category": "Unknown",
           "units": null,
@@ -133,7 +133,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -170,7 +170,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -207,7 +207,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -244,7 +244,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -281,7 +281,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -318,7 +318,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -355,7 +355,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -392,7 +392,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -429,7 +429,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -466,7 +466,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -503,7 +503,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -540,7 +540,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -577,7 +577,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -614,7 +614,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -651,7 +651,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -688,7 +688,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -725,7 +725,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -762,7 +762,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -799,7 +799,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -836,7 +836,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -873,7 +873,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-A-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -910,7 +910,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -947,7 +947,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -984,7 +984,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -1021,7 +1021,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1058,7 +1058,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1095,7 +1095,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1132,7 +1132,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -1169,7 +1169,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -1206,7 +1206,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -1243,7 +1243,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -1280,7 +1280,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -1317,7 +1317,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -1354,7 +1354,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1391,7 +1391,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1428,7 +1428,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1465,7 +1465,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1502,7 +1502,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1539,7 +1539,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -1576,7 +1576,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -1613,7 +1613,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -1650,7 +1650,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-B-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -1687,7 +1687,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -1724,7 +1724,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -1761,7 +1761,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -1798,7 +1798,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1835,7 +1835,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1872,7 +1872,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -1909,7 +1909,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -1946,7 +1946,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -1983,7 +1983,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -2020,7 +2020,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2057,7 +2057,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2094,7 +2094,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2131,7 +2131,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2168,7 +2168,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2205,7 +2205,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2242,7 +2242,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2279,7 +2279,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2316,7 +2316,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2353,7 +2353,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -2390,7 +2390,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -2427,7 +2427,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-C-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -2464,7 +2464,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -2501,7 +2501,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -2538,7 +2538,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -2575,7 +2575,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -2612,7 +2612,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -2649,7 +2649,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -2686,7 +2686,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -2723,7 +2723,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -2760,7 +2760,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -2797,7 +2797,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2834,7 +2834,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2871,7 +2871,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -2908,7 +2908,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2945,7 +2945,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -2982,7 +2982,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3019,7 +3019,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3056,7 +3056,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3093,7 +3093,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3130,7 +3130,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -3167,7 +3167,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -3204,7 +3204,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-D-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -3241,7 +3241,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -3278,7 +3278,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -3315,7 +3315,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -3352,7 +3352,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -3389,7 +3389,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -3426,7 +3426,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -3463,7 +3463,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -3500,7 +3500,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -3537,7 +3537,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -3574,7 +3574,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -3611,7 +3611,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -3648,7 +3648,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -3685,7 +3685,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3722,7 +3722,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3759,7 +3759,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3796,7 +3796,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3833,7 +3833,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3870,7 +3870,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -3907,7 +3907,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -3944,7 +3944,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -3981,7 +3981,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-E-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -4018,7 +4018,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4055,7 +4055,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4092,7 +4092,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4129,7 +4129,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -4166,7 +4166,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -4203,7 +4203,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -4240,7 +4240,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -4277,7 +4277,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -4314,7 +4314,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -4351,7 +4351,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -4388,7 +4388,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -4425,7 +4425,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -4462,7 +4462,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4499,7 +4499,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4536,7 +4536,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4573,7 +4573,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4610,7 +4610,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4647,7 +4647,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -4684,7 +4684,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -4721,7 +4721,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -4758,7 +4758,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-F-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -4795,7 +4795,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4832,7 +4832,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4869,7 +4869,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -4906,7 +4906,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -4943,7 +4943,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -4980,7 +4980,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -5017,7 +5017,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5054,7 +5054,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5091,7 +5091,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5128,7 +5128,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -5165,7 +5165,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -5202,7 +5202,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -5239,7 +5239,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5276,7 +5276,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5313,7 +5313,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5350,7 +5350,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5387,7 +5387,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5424,7 +5424,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -5461,7 +5461,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -5498,7 +5498,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -5535,7 +5535,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-G-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -5572,7 +5572,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -5609,7 +5609,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -5646,7 +5646,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -5683,7 +5683,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -5720,7 +5720,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -5757,7 +5757,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -5794,7 +5794,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5831,7 +5831,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5868,7 +5868,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -5905,7 +5905,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -5942,7 +5942,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -5979,7 +5979,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -6016,7 +6016,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6053,7 +6053,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6090,7 +6090,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6127,7 +6127,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6164,7 +6164,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6201,7 +6201,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6238,7 +6238,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -6275,7 +6275,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -6312,7 +6312,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-H-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -6349,7 +6349,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -6386,7 +6386,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -6423,7 +6423,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -6460,7 +6460,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -6497,7 +6497,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -6534,7 +6534,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -6571,7 +6571,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -6608,7 +6608,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -6645,7 +6645,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -6682,7 +6682,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -6719,7 +6719,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -6756,7 +6756,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -6793,7 +6793,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6830,7 +6830,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6867,7 +6867,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6904,7 +6904,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6941,7 +6941,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -6978,7 +6978,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7015,7 +7015,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7052,7 +7052,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7089,7 +7089,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-I-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7126,7 +7126,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -7163,7 +7163,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -7200,7 +7200,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -7237,7 +7237,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -7274,7 +7274,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -7311,7 +7311,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -7348,7 +7348,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -7385,7 +7385,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -7422,7 +7422,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -7459,7 +7459,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -7496,7 +7496,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -7533,7 +7533,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -7570,7 +7570,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7607,7 +7607,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7644,7 +7644,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7681,7 +7681,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7718,7 +7718,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7755,7 +7755,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -7792,7 +7792,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7829,7 +7829,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7866,7 +7866,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-J-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -7903,7 +7903,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -7940,7 +7940,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -7977,7 +7977,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Occupancy",
           "category": "Occupancy",
           "units": "FRACTION",
@@ -8014,7 +8014,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -8051,7 +8051,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -8088,7 +8088,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Lighting",
           "category": "Lighting",
           "units": "FRACTION",
@@ -8125,7 +8125,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -8162,7 +8162,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -8199,7 +8199,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Electric-Equipment",
           "category": "Equipment",
           "units": "FRACTION",
@@ -8236,7 +8236,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -8273,7 +8273,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -8310,7 +8310,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Fan",
           "category": "Fan",
           "units": "ON_OFF",
@@ -8347,7 +8347,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8384,7 +8384,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8421,7 +8421,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Cooling",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8458,7 +8458,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8495,7 +8495,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8532,7 +8532,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Thermostat Setpoint-Heating",
           "category": "Thermostat Setpoint",
           "units": "TEMPERATURE",
@@ -8569,7 +8569,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -8606,7 +8606,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",
@@ -8643,7 +8643,7 @@
           ]
         },
         {
-          "template": "NECB2015",
+          
           "name": "NECB-K-Service Water Heating",
           "category": "Service Water Heating",
           "units": "FRACTION",

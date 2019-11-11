@@ -1,11 +1,13 @@
 class NECB2011
 
+  # Some tests still require a simple way to set up a system without sizing.. so we are keeping the auto_zoner flag for this  method.
+  #
   def add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model:,
                                                                                          zones:,
                                                                                          heating_coil_type:,
                                                                                          baseboard_type:,
                                                                                          hw_loop:,
-                                                                                         new_auto_zoner: false)
+                                                                                         new_auto_zoner: true)
 
 
     system_data = Hash.new

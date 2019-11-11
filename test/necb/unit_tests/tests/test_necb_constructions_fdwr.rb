@@ -133,7 +133,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard = Standard.build(template)
 
         table = standard.standards_data['tables']['space_types']['table']
-        space_type_properties = table.detect {|st| st["template"] == template && st["building_type"] == building_type && st["space_type"] == space_type }
+        space_type_properties = table.detect {|st| st["building_type"] == building_type && st["space_type"] == space_type }
         st = OpenStudio::Model::SpaceType.new(@model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
         st.setStandardsSpaceType(space_type_properties['space_type'])
