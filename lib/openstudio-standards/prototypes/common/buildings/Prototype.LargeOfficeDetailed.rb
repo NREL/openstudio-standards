@@ -90,7 +90,7 @@ module LargeOfficeDetailed
     end
   end
 
-  def change_exterior_equipment_fuel_type(model, fuel_type)
+  def change_exterior_equipment_fuel_type(model, fuel_type) #Name - Fuel equipment 1, Fuel equipment 2
     exterior_equipments = model.getExteriorFuelEquipments
     exterior_equipments.each do |ext_equip|
       new_ext_equip.setFuelType(fuel_type)
