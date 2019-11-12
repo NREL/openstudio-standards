@@ -18,6 +18,10 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+                  zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+                elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
                 end
 
     # Do nothing for other types of zone HVAC equipment

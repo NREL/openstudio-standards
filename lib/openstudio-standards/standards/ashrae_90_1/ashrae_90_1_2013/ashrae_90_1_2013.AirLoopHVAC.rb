@@ -30,8 +30,7 @@ class ASHRAE9012013 < ASHRAE901
     return true
   end
 
-  # Determine the limits for the type of economizer present
-  # on the AirLoopHVAC, if any.
+  # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_economizer_limits(air_loop_hvac, climate_zone)
     drybulb_limit_f = nil
@@ -47,9 +46,11 @@ class ASHRAE9012013 < ASHRAE901
     end
     oa_control = oa_sys.getControllerOutdoorAir
     economizer_type = oa_control.getEconomizerControlType
+    oa_control.resetEconomizerMinimumLimitDryBulbTemperature
 
     case economizer_type
     when 'NoEconomizer'
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} no economizer")
       return [nil, nil, nil]
     when 'FixedDryBulb'
       case climate_zone
@@ -79,19 +80,23 @@ class ASHRAE9012013 < ASHRAE901
            'ASHRAE 169-2013-7B',
            'ASHRAE 169-2013-8A',
            'ASHRAE 169-2013-8B'
-        drybulb_limit_f = 75
+        drybulb_limit_f = 75.0
       when 'ASHRAE 169-2006-5A',
            'ASHRAE 169-2006-6A',
            'ASHRAE 169-2013-5A',
            'ASHRAE 169-2013-6A'
-        drybulb_limit_f = 70
+        drybulb_limit_f = 70.0
       end
     when 'FixedEnthalpy'
-      enthalpy_limit_btu_per_lb = 28
+      enthalpy_limit_btu_per_lb = 28.0
     when 'FixedDewPointAndDryBulb'
-      drybulb_limit_f = 75
-      dewpoint_limit_f = 55
+      drybulb_limit_f = 75.0
+      dewpoint_limit_f = 55.0
+    when 'DifferentialDryBulb', 'DifferentialEnthalpy'
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, no limits defined.")
     end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, limits [#{drybulb_limit_f},#{enthalpy_limit_btu_per_lb},#{dewpoint_limit_f}]")
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   end
@@ -103,8 +108,7 @@ class ASHRAE9012013 < ASHRAE901
     return integrated_economizer_required
   end
 
-  # Determine the economizer type and limits for the the PRM
-  # Defaults to 90.1-2007 logic.
+  # Determine the economizer type and limits for the the PRM Defaults to 90.1-2007 logic.
   # @return [Array<Double>] [economizer_type, drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
   def air_loop_hvac_prm_economizer_type_and_limits(air_loop_hvac, climate_zone)
     economizer_type = 'NoEconomizer'
@@ -346,8 +350,7 @@ class ASHRAE9012013 < ASHRAE901
     return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   end
 
-  # Determine the air flow and number of story limits
-  # for whether motorized OA damper is required.
+  # Determine the air flow and number of story limits for whether motorized OA damper is required.
   # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
@@ -375,9 +378,8 @@ class ASHRAE9012013 < ASHRAE901
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
-  # Determine the number of stages that should be used as controls
-  # for single zone DX systems.  90.1-2013 depends on the cooling
-  # capacity of the system.
+  # Determine the number of stages that should be used as controls for single zone DX systems.
+  # 90.1-2013 depends on the cooling capacity of the system.
   #
   # @return [Integer] the number of stages: 0, 1, 2
   def air_loop_hvac_single_zone_controls_num_stages(air_loop_hvac, climate_zone)
@@ -394,8 +396,8 @@ class ASHRAE9012013 < ASHRAE901
     return num_stages
   end
 
-  # Determine if the system required supply air temperature
-  # (SAT) reset. For 90.1-2013, SAT reset requirements are based on climate zone.
+  # Determine if the system required supply air temperature (SAT) reset.
+  # For 90.1-2013, SAT reset requirements are based on climate zone.
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
@@ -454,9 +456,8 @@ class ASHRAE9012013 < ASHRAE901
     end
   end
 
-  # Determine the airflow limits that govern whether or not
-  # an ERV is required.  Based on climate zone and % OA, plus
-  # the number of operating hours the system has.
+  # Determine the airflow limits that govern whether or not an ERV is required.
+  # Based on climate zone and % OA, plus the number of operating hours the system has.
   # @return [Double] the flow rate above which an ERV is required.
   # if nil, ERV is never required.
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)

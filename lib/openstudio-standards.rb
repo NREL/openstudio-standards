@@ -69,6 +69,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/comstock_ashrae_90_1_2013/comstock_ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily"
 
   require_relative "#{stds}/deer/deer"
   require_relative "#{stds}/deer/deer_pre_1975/deer_pre_1975"
@@ -136,6 +137,8 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
@@ -239,10 +242,20 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Model"
-  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
-  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ZoneHVACComponent"
+  # ZE AEDG Multifamily
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Space"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.ThermalZone"
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
@@ -361,6 +374,14 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
+  # ZE AEDG Multifamily
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.hvac_systems"
   # DEER
   require_relative "#{proto}/deer/deer.Model"
   # CBES Common
