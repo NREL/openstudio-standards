@@ -927,7 +927,7 @@ Standard.class_eval do
       nondimming_ext_lts.setControlOption('AstronomicalClock')
     end
 
-    # Fuel Equipment
+    # Fuel Equipment being used to model external elevators
     unless prototype_input['exterior_fuel_equipment1_power'].nil?
       fuel_ext_power = prototype_input['exterior_fuel_equipment1_power']
       fuel_ext_sch_name = prototype_input['exterior_fuel_equipment1_schedule']
@@ -937,6 +937,7 @@ Standard.class_eval do
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts.setFuelType('Electricity')
       fuel_ext_lts.setName(fuel_ext_name.to_s)
     end
 
@@ -949,6 +950,7 @@ Standard.class_eval do
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts.setFuelType('Electricity')
       fuel_ext_lts.setName(fuel_ext_name.to_s)
     end
 
