@@ -62,7 +62,7 @@ class NECB2015 < NECB2011
     end
     # Apply maxmimum loop pump power normalized by peak demand by served spaces as per NECB2015 5.2.6.3.(1)
     apply_maximum_loop_pump_power(model)
-    model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
+    #model = BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
     return model
   end
 end

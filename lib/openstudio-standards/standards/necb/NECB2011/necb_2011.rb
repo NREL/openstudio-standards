@@ -192,8 +192,6 @@ class NECB2011 < Standard
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
                            primary_heating_fuel: 'DefaultFuel')
-    building_type = model.getBuilding.standardsBuildingType.empty? ? "unknown" : model.getBuilding.standardsBuildingType.get
-    model.getBuilding.setStandardsBuildingType("#{self.class.name}_#{building_type}")
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model)
     apply_envelope( model: model)
@@ -207,6 +205,8 @@ class NECB2011 < Standard
   def apply_loads( model:)
     raise('validation of model failed.') unless validate_initial_model(model)
     raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+    #this sets/stores the template version loads that the model uses.
+    model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
     model_add_loads(model)
   end
