@@ -638,6 +638,9 @@ class NECB2011
       return false
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    fixed_window_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
+
 
     # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
     # should go.
@@ -662,7 +665,7 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: nonplenum_fdwr, construction: fixed_window_construct_set)
       end
     else
       # There was not enough non-plenum wall area so add the windows to both the plenum and non-plenum walls.  This is
@@ -672,13 +675,13 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
     end
     return true
@@ -711,6 +714,9 @@ class NECB2011
       return true
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    skylight_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.skylightConstruction.get
+
     # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
     # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
     # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
@@ -718,7 +724,7 @@ class NECB2011
     # L or a V).
     exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
       # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
-      sub_surface_create_scaled_subsurfaces_from_surface(roof, srr_lim, model)
+      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, model: model, consturction: skylight_construct_set)
     end
     return true
   end

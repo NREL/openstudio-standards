@@ -231,7 +231,7 @@ class Standard
   # 'sub_surface_create_centered_subsurface_from_scaled_surface' method because it can handle concave surfaces.
   # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
   # loops that cycle through the verticies in a surface.
-  def sub_surface_create_scaled_subsurfaces_from_surface (surface, area_fraction, model)
+  def sub_surface_create_scaled_subsurfaces_from_surface (surface:, area_fraction:, model:, consturction:)
     # Get rid of all existing subsurfaces.
     remove_All_Subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
@@ -295,6 +295,10 @@ class Standard
       if new_surfaces.length > 1
         new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + "#{index}"
       end
+      #Set the skylight type to 'Skylight'
+      new_sub_surface.setSubSurfaceType('Skylight')
+      #Set the skylight construction to whatever was passed (should be the default skylight construction)
+      new_sub_surface.setConstruction(consturction)
       new_sub_surface.setName(new_name)
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
@@ -303,9 +307,11 @@ class Standard
 
   # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
   # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  def set_Window_To_Wall_Ratio_set_name(surface, area_fraction)
+  def set_Window_To_Wall_Ratio_set_name(surface:, area_fraction:, construction:)
     surface.setWindowToWallRatio(area_fraction)
     surface.subSurfaces.sort.each do |sub_surf|
+      sub_surf.setSubSurfaceType('FixedWindow')
+      sub_surf.setConstruction(construction)
       new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
       sub_surf.setName(new_name)
     end
