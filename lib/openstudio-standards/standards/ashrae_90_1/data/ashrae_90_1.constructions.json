@@ -1778,6 +1778,16 @@
       ]
     },
     {
+      "name": "U 0.48 SHGC 0.19 Simple Glazing Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.48 SHGC 0.19 Simple Glazing"
+      ]
+    },
+    {
       "name": "U 0.48 SHGC 0.20 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1785,6 +1795,16 @@
       "skylight_framing": null,
       "materials": [
         "U 0.48 SHGC 0.20 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.48 SHGC 0.21 Simple Glazing Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.48 SHGC 0.21 Simple Glazing"
       ]
     },
     {
@@ -1807,6 +1827,16 @@
         "REF D CLEAR 6MM",
         "AIR 13MM",
         "CLEAR 6MM"
+      ]
+    },
+    {
+      "name": "U 0.50 SHGC 0.22 Simple Glazing Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.50 SHGC 0.22 Simple Glazing"
       ]
     },
     {
@@ -2073,6 +2103,16 @@
       "skylight_framing": null,
       "materials": [
         "U 0.61 SHGC 0.77 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.62 SHGC 0.20 Simple Glazing Window",
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.62 SHGC 0.20 Simple Glazing"
       ]
     },
     {

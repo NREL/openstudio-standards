@@ -973,7 +973,8 @@ class Standard
       return [nil, nil, nil]
     when 'FixedDryBulb'
       case climate_zone
-      when 'ASHRAE 169-2006-1B',
+      when 'ASHRAE 169-2006-0B',
+          'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2B',
           'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
@@ -985,6 +986,7 @@ class Standard
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
           'ASHRAE 169-2006-8B',
+          'ASHRAE 169-2013-0B',
           'ASHRAE 169-2013-1B',
           'ASHRAE 169-2013-2B',
           'ASHRAE 169-2013-3B',
@@ -1005,10 +1007,12 @@ class Standard
           'ASHRAE 169-2013-6A',
           'ASHRAE 169-2013-7A'
         drybulb_limit_f = 70
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+          'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-3A',
           'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2013-0A',
           'ASHRAE 169-2013-1A',
           'ASHRAE 169-2013-2A',
           'ASHRAE 169-2013-3A',
@@ -1078,7 +1082,9 @@ class Standard
     else
       # Exception c, Systems in climate zones 1,2,3a,4a,5a,5b,6,7,8
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-0B',
+           'ASHRAE 169-2006-1A',
            'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2A',
            'ASHRAE 169-2006-2B',
@@ -1092,6 +1098,8 @@ class Standard
            'ASHRAE 169-2006-7B',
            'ASHRAE 169-2006-8A',
            'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-0A',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2A',
@@ -1140,11 +1148,15 @@ class Standard
 
     # Determine the minimum capacity that requires an economizer
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2A',
@@ -1256,7 +1268,8 @@ class Standard
     dewpoint_limit_f = nil
 
     case climate_zone
-    when 'ASHRAE 169-2006-1B',
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
@@ -1268,6 +1281,7 @@ class Standard
          'ASHRAE 169-2006-7B',
          'ASHRAE 169-2006-8A',
          'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2B',
          'ASHRAE 169-2013-3B',
@@ -1333,7 +1347,8 @@ class Standard
     # Determine the prohibited types
     prohibited_types = []
     case climate_zone
-    when 'ASHRAE 169-2006-1B',
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
@@ -1345,6 +1360,7 @@ class Standard
          'ASHRAE 169-2006-7B',
          'ASHRAE 169-2006-8A',
          'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2B',
          'ASHRAE 169-2013-3B',
@@ -1358,10 +1374,12 @@ class Standard
          'ASHRAE 169-2013-8A',
          'ASHRAE 169-2013-8B'
       prohibited_types = ['FixedEnthalpy']
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-3A',
