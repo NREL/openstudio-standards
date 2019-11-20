@@ -195,6 +195,7 @@ class NECB2011 < Standard
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model)
     apply_envelope( model: model)
+    apply_fdwr_srr_daylighting(model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
     apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
@@ -229,9 +230,20 @@ class NECB2011 < Standard
     model_add_constructions(model)
     apply_standard_construction_properties(model)
     model_create_thermal_zones(model, @space_multiplier_map)
-    # Thermal zones need to be set to determine conditioned spaces. Setting it to 1.1 means maximize NECB.
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: 1.1)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: 1.1)
+  end
+
+  # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
+  #     # fdwr_set/srr_set settings:
+  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
+  #     # limit
+  #     # <-3.1:  Remove all the windows/skylights
+  #     # > 1:  Do nothing
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
