@@ -51,6 +51,9 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2017/necb_2017"
   require_relative "#{stds}/necb/NECB2017/hvac_systems"
 
+  # BTAPPRE1980
+  require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
+
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"

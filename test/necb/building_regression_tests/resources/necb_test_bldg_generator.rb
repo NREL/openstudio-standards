@@ -45,7 +45,8 @@ class GeneratorNECBRegressionTests
     templates = [
         'NECB2011',
         'NECB2015',
-        'NECB2017'
+        'NECB2017',
+        'BTAPPRE1980'
     ]
     building_types = [
         "FullServiceRestaurant",
