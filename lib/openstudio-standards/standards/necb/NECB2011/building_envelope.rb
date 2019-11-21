@@ -1,24 +1,37 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 1.1)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
     # NECB FDWR limit
     hdd = self.get_necb_hdd18(model)
+
     # Get the maximum NECB fdwr
+    # fdwr_set settings:
+    # 0-1:  Remove all windows and add windows to match this fdwr
+    # -1:  Remove all windows and add windows to match max fdwr from NECB
+    # -2:  Do not apply any fdwr changes, leave windows alone (also works for fdwr > 1)
+    # -3:  Use old method which reduces existing window size (if necessary) to meet maximum NECB fdwr limit
+    # <-3.1:  Remove all the windows
+    # > 1:  Do nothing
 
-    # If fdwr_set is 1.1 apply the NECB maximum fenestration and door to wall ratio to the model and ignore the
-    # rest of the method.  If it is between 0.0 and 1.0 apply whatever was passed.  If it is greater than 1.2 follow the
-    # original apply_limit_fdwr method which sets the necb fdwr only if the fdwr in the building is greater than the
-    # maximum allowed NECB fdwr.
-
-    if fdwr_set.to_f > 1.0 && fdwr_set.to_f < 1.2
-      fdwr_set = (max_fwdr(hdd)).round(3)
-    elsif fdwr_set.to_f > 1.2
-      fdwr_set = (max_fwdr(hdd) * 100.0).round(1)
-      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_set)
+    if fdwr_set.to_f > 1.0
+      return
+    elsif fdwr_set.to_f >= 0.0 and fdwr_set <= 1.0
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
+      return
+    elsif fdwr_set.to_f >= -1.1 and fdwr_set <= -0.9
+      fdwr_lim = (max_fwdr(hdd)).round(3)
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim.to_f)
+      return
+    elsif fdwr_set.to_f >= -2.1 and fdwr_set <= -1.9
+      return
+    elsif fdwr_set.to_f >= -3.1 and fdwr_set <= -2.9
+      fdwr_lim = (max_fwdr(hdd)*100.0).round(1)
+      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim.to_f)
+    elsif fdwr_set < -3.1
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
+      return
     end
-
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
   end
 
   def apply_limit_fdwr(model:, fdwr_lim:)
@@ -158,15 +171,40 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model:, srr_set: 1.1)
+  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0)
 
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
 
-    if srr_set.to_f < 1.2
-      srr_set = self.get_standards_constant('skylight_to_roof_ratio_max_value') if srr_set.to_f > 1.0
-      return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+    # srr_set settings:
+    # 0-1:  Remove all skylights and add skylights to match this srr
+    # -1:  Remove all skylights and add skylights to match max srr from NECB
+    # -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
+    # -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
+    # <-3.1:  Remove all the skylights
+    # > 1:  Do nothing
+
+    if srr_set.to_f > 1.0
+      return
+    elsif srr_set.to_f >= 0.0 && srr_set <= 1.0
+      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+      return
+    elsif srr_set.to_f >= -1.1 && srr_set <= -0.9
+      # Get the maximum NECB srr
+      srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
+      apply_max_srr_nrcan(model: model, srr_lim: srr_lim.to_f)
+      return
+    elsif srr_set.to_f >= -2.1 && srr_set <= -1.9
+      return
+    elsif srr_set.to_f >= -3.1 && srr_set <= -2.9
+      # Continue with the rest of this method, use old method which reduces existing skylight size (if necessary) to
+      # meet maximum srr limit
+    elsif srr_set < -3.1
+      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+      return
+    else
+      return
     end
 
     # SRR limit
@@ -638,6 +676,9 @@ class NECB2011
       return false
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    fixed_window_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
+
 
     # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
     # should go.
@@ -662,7 +703,7 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: nonplenum_fdwr, construction: fixed_window_construct_set)
       end
     else
       # There was not enough non-plenum wall area so add the windows to both the plenum and non-plenum walls.  This is
@@ -672,13 +713,13 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
     end
     return true
@@ -711,6 +752,9 @@ class NECB2011
       return true
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    skylight_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.skylightConstruction.get
+
     # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
     # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
     # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
@@ -718,7 +762,7 @@ class NECB2011
     # L or a V).
     exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
       # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
-      sub_surface_create_scaled_subsurfaces_from_surface(roof, srr_lim, model)
+      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, model: model, consturction: skylight_construct_set)
     end
     return true
   end
