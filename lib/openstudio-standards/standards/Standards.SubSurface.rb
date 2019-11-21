@@ -232,6 +232,8 @@ class Standard
   # However, it takes longer because it uses BTAP::Geometry::Surfaces.make_convex_surfaces which includes many nested
   # loops that cycle through the verticies in a surface.
   def sub_surface_create_scaled_subsurfaces_from_surface (surface:, area_fraction:, model:, consturction:)
+    # Set geometry tolerences:
+    geometry_tolerence = 12
     # Get rid of all existing subsurfaces.
     remove_All_Subsurfaces(surface: surface)
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
@@ -240,12 +242,12 @@ class Standard
     # Throw an error if the roof is not flat.
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
-        unless surf_vert_2.z.to_f == surf_vert.z.to_f
+        unless surf_vert_2.z.to_f.round(geometry_tolerence) == surf_vert.z.to_f.round(geometry_tolerence)
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
         end
       end
     end
-    new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: 12)
+    new_surfaces = BTAP::Geometry::Surfaces.make_convex_surfaces(surface: surface, tol: geometry_tolerence)
 
     # What is the centroid of the surface.
     new_surf_cents = []
