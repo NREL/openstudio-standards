@@ -3056,7 +3056,10 @@ module BTAP
             # Go through each line segment
             for j in 1..(surf_verts.length - 1)
               # Is the line segment to the left of the current (index i) line segment?  If no, then ignore it and go to the next one.
-              if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
+              # I revised this to check if the start or end of the current (index i) line segment is to the left of the
+              # line segment being checked.
+              #if surf_verts[j][:x] < surf_verts[i][:x] and surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
+              if surf_verts[j][:x] < surf_verts[i][:x] || surf_verts[j - 1][:x] < surf_verts[i - 1][:x]
                 # Is the line segment pointing down?  If no, then ignore it and go to the next line segment.
                 if surf_verts[j][:y] < surf_verts[j - 1][:y]
                   # Do the y coordinates of the line segment overlap with the current (index i) line segment?  If no
