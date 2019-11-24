@@ -399,14 +399,14 @@ class NECB2011
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
                                                                                                 surface_types_rsi['outdoors_wall_conductance'], surface_types_rsi['outdoors_floor_conductance'], surface_types_rsi['outdoors_roofceiling_conductance'],
                                                                                                 surface_types_rsi['ground_wall_conductance'], surface_types_rsi['ground_floor_conductance'], surface_types_rsi['ground_roofceiling_conductance'],
-                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
                                                                                                 surface_types_rsi['outdoors_door_conductance'],
                                                                                                 surface_types_rsi['outdoors_door_conductance'], nil, nil,
                                                                                                 surface_types_rsi['outdoors_door_conductance'],
-                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
-                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil)
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil)
     BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
     return true
   end
