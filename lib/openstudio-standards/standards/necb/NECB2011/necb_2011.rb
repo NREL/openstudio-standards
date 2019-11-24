@@ -224,14 +224,14 @@ class NECB2011 < Standard
 
   def apply_envelope(model:,
                      properties: {
-                         'cond_wall' => nil,
-                         'cond_floor' => nil,
-                         'cond_roof' => nil,
-                         'cond_ground_wall' => nil,
-                         'cond_ground_floor' => nil,
-                         'cond_ground_roof' => nil,
-                         'cond_door' => nil,
-                         'cond_window' => nil
+                         'outdoors_wall_conductance' => nil,
+                         'outdoors_floor_conductance' => nil,
+                         'outdoors_roofceiling_conductance' => nil,
+                         'ground_wall_conductance' => nil,
+                         'ground_floor_conductance' => nil,
+                         'ground_roofceiling_conductance' => nil,
+                         'outdoors_door_conductance' => nil,
+                         'outdoors_fixedwindow_conductance' => nil
                      })
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)

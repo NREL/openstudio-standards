@@ -26,7 +26,7 @@ class NECB2011
     elsif fdwr_set.to_f >= -2.1 and fdwr_set <= -1.9
       return
     elsif fdwr_set.to_f >= -3.1 and fdwr_set <= -2.9
-      fdwr_lim = (max_fwdr(hdd)*100.0).round(1)
+      fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
       return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim.to_f)
     elsif fdwr_set < -3.1
       apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
@@ -320,16 +320,18 @@ class NECB2011
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
 
-  def apply_standard_construction_properties(model: ,
+  def apply_standard_construction_properties(model:,
                                              runner: nil,
-                                             properties: {'cond_wall' => nil,
-                                             'cond_floor' => nil,
-                                             'cond_roof' => nil,
-                                             'cond_ground_wall' => nil,
-                                             'cond_ground_floor' => nil,
-                                             'cond_ground_roof' => nil,
-                                             'cond_door' => nil,
-                                             'cond_window' => nil})
+                                             properties: {
+                                                 'outdoors_wall_conductance' => nil,
+                                                 'outdoors_floor_conductance' => nil,
+                                                 'outdoors_roofceiling_conductance' => nil,
+                                                 'ground_wall_conductance' => nil,
+                                                 'ground_floor_conductance' => nil,
+                                                 'ground_roofceiling_conductance' => nil,
+                                                 'outdoors_door_conductance' => nil,
+                                                 'outdoors_fixedwindow_conductance' => nil
+                                             })
 
     model.getDefaultConstructionSets.sort.each do |set|
       set_construction_set_to_necb!(model: model,
@@ -351,14 +353,16 @@ class NECB2011
   def set_construction_set_to_necb!(model:,
                                     default_surface_construction_set:,
                                     runner: nil,
-                                    properties: {'cond_wall' => nil,
-                                                 'cond_floor' => nil,
-                                                 'cond_roof' => nil,
-                                                 'cond_ground_wall' => nil,
-                                                 'cond_ground_floor' => nil,
-                                                 'cond_ground_roof' => nil,
-                                                 'cond_door' => nil,
-                                                 'cond_window' => nil})
+                                    properties: {
+                                        'outdoors_wall_conductance' => nil,
+                                        'outdoors_floor_conductance' => nil,
+                                        'outdoors_roofceiling_conductance' => nil,
+                                        'ground_wall_conductance' => nil,
+                                        'ground_floor_conductance' => nil,
+                                        'ground_roofceiling_conductance' => nil,
+                                        'outdoors_door_conductance' => nil,
+                                        'outdoors_fixedwindow_conductance' => nil
+                                    })
     BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
     if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
 
@@ -375,34 +379,34 @@ class NECB2011
     standards_table = @standards_data['surface_thermal_transmittance']
 
     surface_types = [
-    {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'conductance' => properties['cond_wall']},
-    {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'conductance' => properties['cond_floor']},
-    {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'conductance' => properties['cond_roof']},
-    {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'conductance' => properties['cond_ground_wall']},
-    {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'conductance' => properties['cond_ground_floor']},
-    {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'conductance' => properties['cond_ground_roof']},
-    {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'conductance' => properties['cond_window']},
-    {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'conductance' => properties['cond_door']}
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'conductance' => properties['outdoors_wall_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'conductance' => properties['outdoors_floor_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'conductance' => properties['outdoors_roofceiling_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'conductance' => properties['ground_wall_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'conductance' => properties['ground_floor_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'conductance' => properties['ground_roofceiling_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'conductance' => properties['outdoors_fixedwindow_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'conductance' => properties['outdoors_door_conductance']}
     ]
-    
+
     surface_types_rsi = {}
     surface_types.each do |surface_type|
-      surface_types_rsi[surface_type['boundary_condition']+ surface_type['surface']] = surface_type['conductance'].nil? ? 1.0/(eval(self.model_find_objects(standards_table,surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
+      surface_types_rsi["#{surface_type['boundary_condition'].downcase}_#{surface_type['surface'].downcase}_conductance"] = surface_type['conductance'].nil? ? 1.0 / (eval(self.model_find_objects(standards_table, surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
     end
     puts surface_types_rsi
-    
+
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
-                                                                                                surface_types_rsi['OutdoorsWall'], surface_types_rsi['OutdoorsFloor'], surface_types_rsi['OutdoorsRoofCeiling'],
-                                                                                                surface_types_rsi['GroundWall'], surface_types_rsi['GroundFloor'], surface_types_rsi['GroundRoofCeiling'],
-                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
-                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
-                                                                                                surface_types_rsi['OutdoorsDoor'],
-                                                                                                surface_types_rsi['OutdoorsDoor'], nil, nil,
-                                                                                                surface_types_rsi['OutdoorsDoor'],
-                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
-                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
-                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil)
+                                                                                                surface_types_rsi['outdoors_wall_conductance'], surface_types_rsi['outdoors_floor_conductance'], surface_types_rsi['outdoors_roofceiling_conductance'],
+                                                                                                surface_types_rsi['ground_wall_conductance'], surface_types_rsi['ground_floor_conductance'], surface_types_rsi['ground_roofceiling_conductance'],
+                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_door_conductance'],
+                                                                                                surface_types_rsi['outdoors_door_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_door_conductance'],
+                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_fixedwindow_conductance'], nil, nil)
     BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
     return true
   end
@@ -687,13 +691,13 @@ class NECB2011
       return true
     end
     # Get the required window area.
-    win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
+    win_area = fdwr_lim * exp_surf_info["total_exp_wall_area_m2"]
     # Try to put the windows on non-plenum walls if possible.  So determine if you can fit the required window area
     # on the non-plenum wall area.
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
       # If you can fit the windows on the non-plenum wall area then recalculate the window ratio so that is is only for
       # the non-plenum walls.
-      nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
+      nonplenum_fdwr = win_area / exp_surf_info["exp_nonplenum_wall_area_m2"]
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
@@ -724,7 +728,7 @@ class NECB2011
   # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
   # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
   # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
-  def apply_max_srr_nrcan(model:, srr_lim: )
+  def apply_max_srr_nrcan(model:, srr_lim:)
     # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
     exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
     # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good

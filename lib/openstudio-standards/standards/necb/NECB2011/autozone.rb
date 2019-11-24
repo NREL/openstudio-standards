@@ -88,7 +88,7 @@ class NECB2011
     #THis will color the spaces and zones.
     random = Random.new(1234)
     #Set ideal hvac in case we want to not implement the hvac yet and still run osm right after this function.
-    #model.getThermalZones.each { |zone| zone.setUseIdealAirLoads(true) }
+    model.getThermalZones.each { |zone| zone.setUseIdealAirLoads(true) }
     model.getThermalZones.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
     model.getSpaceTypes.sort.each {|item| item.setRenderingColor(self.set_random_rendering_color(item, random))}
   end
