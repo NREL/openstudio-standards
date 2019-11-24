@@ -320,29 +320,22 @@ class NECB2011
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
 
-  def apply_standard_construction_properties(model,
-                                             runner = nil,
-                                             scale_wall = 1.0,
-                                             scale_floor = 1.0,
-                                             scale_roof = 1.0,
-                                             scale_ground_wall = 1.0,
-                                             scale_ground_floor = 1.0,
-                                             scale_ground_roof = 1.0,
-                                             scale_door = 1.0,
-                                             scale_window = 1.0)
+  def apply_standard_construction_properties(model: ,
+                                             runner: nil,
+                                             properties: {'cond_wall' => nil,
+                                             'cond_floor' => nil,
+                                             'cond_roof' => nil,
+                                             'cond_ground_wall' => nil,
+                                             'cond_ground_floor' => nil,
+                                             'cond_ground_roof' => nil,
+                                             'cond_door' => nil,
+                                             'cond_window' => nil})
 
     model.getDefaultConstructionSets.sort.each do |set|
-      set_construction_set_to_necb!(model,
-                                    set,
-                                    runner,
-                                    scale_wall,
-                                    scale_floor,
-                                    scale_roof,
-                                    scale_ground_wall,
-                                    scale_ground_floor,
-                                    scale_ground_roof,
-                                    scale_door,
-                                    scale_window)
+      set_construction_set_to_necb!(model: model,
+                                    default_surface_construction_set: set,
+                                    runner: nil,
+                                    properties: properties)
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
@@ -355,16 +348,17 @@ class NECB2011
   # @param model [OpenStudio::model::Model] A model object
   # @param default_surface_construction_set [String]
   # @return [Boolean] returns true if sucessful, false if not
-  def set_construction_set_to_necb!(model, default_surface_construction_set,
-                                    runner = nil,
-                                    scale_wall = 1.0,
-                                    scale_floor = 1.0,
-                                    scale_roof = 1.0,
-                                    scale_ground_wall = 1.0,
-                                    scale_ground_floor = 1.0,
-                                    scale_ground_roof = 1.0,
-                                    scale_door = 1.0,
-                                    scale_window = 1.0)
+  def set_construction_set_to_necb!(model:,
+                                    default_surface_construction_set:,
+                                    runner: nil,
+                                    properties: {'cond_wall' => nil,
+                                                 'cond_floor' => nil,
+                                                 'cond_roof' => nil,
+                                                 'cond_ground_wall' => nil,
+                                                 'cond_ground_floor' => nil,
+                                                 'cond_ground_roof' => nil,
+                                                 'cond_door' => nil,
+                                                 'cond_window' => nil})
     BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
     if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
 
@@ -380,34 +374,35 @@ class NECB2011
     # Get appropriate standards table
     standards_table = @standards_data['surface_thermal_transmittance']
 
+    surface_types = [
+    {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'conductance' => properties['cond_wall']},
+    {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'conductance' => properties['cond_floor']},
+    {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'conductance' => properties['cond_roof']},
+    {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'conductance' => properties['cond_ground_wall']},
+    {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'conductance' => properties['cond_ground_floor']},
+    {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'conductance' => properties['cond_ground_roof']},
+    {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'conductance' => properties['cond_window']},
+    {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'conductance' => properties['cond_door']}
+    ]
+    
+    surface_types_rsi = {}
+    surface_types.each do |surface_type|
+      surface_types_rsi[surface_type['boundary_condition']+ surface_type['surface']] = surface_type['conductance'].nil? ? 1.0/(eval(self.model_find_objects(standards_table,surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
+    end
+    puts surface_types_rsi
+    
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval(self.model_find_objects(standards_table,
-                                                                           {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.model_find_objects(standards_table,
-                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.model_find_objects(standards_table,
-                                                                                         {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.model_find_objects(standards_table,
-                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval(self.model_find_objects(standards_table,
-                                                                             {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
-                                                                                                wall_rsi, floor_rsi, roof_rsi,
-                                                                                                ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil,
-                                                                                                door_rsi,
-                                                                                                door_rsi, nil, nil,
-                                                                                                door_rsi,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil)
+                                                                                                surface_types_rsi['OutdoorsWall'], surface_types_rsi['OutdoorsFloor'], surface_types_rsi['OutdoorsRoofCeiling'],
+                                                                                                surface_types_rsi['GroundWall'], surface_types_rsi['GroundFloor'], surface_types_rsi['GroundRoofCeiling'],
+                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
+                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
+                                                                                                surface_types_rsi['OutdoorsDoor'],
+                                                                                                surface_types_rsi['OutdoorsDoor'], nil, nil,
+                                                                                                surface_types_rsi['OutdoorsDoor'],
+                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
+                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil,
+                                                                                                surface_types_rsi['OutdoorsWindow'], nil, nil)
     BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
     return true
   end
