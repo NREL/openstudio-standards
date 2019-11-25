@@ -194,7 +194,7 @@ class NECB2011 < Standard
                            primary_heating_fuel: 'DefaultFuel')
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model)
-    apply_envelope( model: model)
+    apply_envelope(model: model)
     apply_fdwr_srr_daylighting(model: model)
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
@@ -203,7 +203,7 @@ class NECB2011 < Standard
     return model
   end
 
-  def apply_loads( model:)
+  def apply_loads(model:)
     raise('validation of model failed.') unless validate_initial_model(model)
     raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
     #this sets/stores the template version loads that the model uses.
@@ -222,13 +222,23 @@ class NECB2011 < Standard
     model_add_ground_temperatures(model, nil, climate_zone)
   end
 
-  def apply_envelope(model:)
+  def apply_envelope(model:,
+                     properties: {
+                         'outdoors_wall_conductance' => nil,
+                         'outdoors_floor_conductance' => nil,
+                         'outdoors_roofceiling_conductance' => nil,
+                         'ground_wall_conductance' => nil,
+                         'ground_floor_conductance' => nil,
+                         'ground_roofceiling_conductance' => nil,
+                         'outdoors_door_conductance' => nil,
+                         'outdoors_fixedwindow_conductance' => nil
+                     })
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)
-    apply_standard_construction_properties(model)
+    apply_standard_construction_properties(model: model, properties: properties)
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
@@ -266,7 +276,6 @@ class NECB2011 < Standard
     # model = return BTAP::FileIO::remove_duplicate_materials_and_constructions(model)
     return model
   end
-
 
 
   #this method will determine the vintage of NECB spacetypes the model contains. It will return nil if it can't

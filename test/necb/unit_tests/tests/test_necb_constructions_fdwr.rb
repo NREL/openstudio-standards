@@ -155,7 +155,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @hdd = standard.get_necb_hdd18(@model)
 
 
-        standard.apply_standard_construction_properties(@model) # standards candidate
+        standard.apply_standard_construction_properties(model: @model) # standards candidate
         standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
         standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
 

@@ -134,7 +134,7 @@ module BTAP
           conductance = material.to_Shade.get.thermalConductance unless material.to_Shade.empty?
           conductance = material.to_Screen.get.thermalConductance unless material.to_Screen.empty?
           conductance = material.to_MasslessOpaqueMaterial.get.thermalConductance unless material.to_MasslessOpaqueMaterial.empty?
-          conductance = 1.0/material.to_AirGap.get.getThermalResistance.get.value unless material.to_AirGap.empty?
+          conductance = 1.0 / material.to_AirGap.get.getThermalResistance.get.value unless material.to_AirGap.empty?
           conductance = material.to_Gas.get.getThermalConductivity(temperature_k) unless material.to_Gas.empty?
           conductance = material.to_GasMixture.get.getThermalConductance(temperature_k) unless material.to_GasMixture.empty?
           conductance = material.to_RoofVegetation.get.thermalConductance unless material.to_RoofVegetation.empty?
@@ -386,7 +386,7 @@ module BTAP
           # @param gas_type [String] = "Air"
           # @param thickness [Float] = 0.003
           # @return [OpenStudio::Model::Gas::validGasTypes] gas
-          def self.create_gas(model, name = "air test", gas_type = "Air", thickness=0.003)
+          def self.create_gas(model, name = "air test", gas_type = "Air", thickness = 0.003)
             raise "gas_type #{gas_type} is not part of the allow values: #{OpenStudio::Model::Gas::validGasTypes()}" unless OpenStudio::Model::Gas::validGasTypes().include?(gas_type)
             gas = OpenStudio::Model::Gas.new(model)
             gas.setGasType(gas_type)
@@ -408,7 +408,7 @@ module BTAP
           # @param backSideSlatDiffuseSolarReflectance [Float] = 0.1
           # @param slatBeamVisibleTransmittance [Float] = 0.1
           # @return [OpenStudio::Model::Blind] blind
-          def self.create_blind(model, name = "blind test", slatWidth=0.1, slatSeparation=0.1, frontSideSlatBeamSolarReflectance=0.1, backSideSlatBeamSolarReflectance=0.1, frontSideSlatDiffuseSolarReflectance=0.1, backSideSlatDiffuseSolarReflectance=0.1, slatBeamVisibleTransmittance=0.1)
+          def self.create_blind(model, name = "blind test", slatWidth = 0.1, slatSeparation = 0.1, frontSideSlatBeamSolarReflectance = 0.1, backSideSlatBeamSolarReflectance = 0.1, frontSideSlatDiffuseSolarReflectance = 0.1, backSideSlatDiffuseSolarReflectance = 0.1, slatBeamVisibleTransmittance = 0.1)
             blind = OpenStudio::Model::Blind.new(model, slatWidth, slatSeparation, frontSideSlatBeamSolarReflectance, backSideSlatBeamSolarReflectance, frontSideSlatDiffuseSolarReflectance, backSideSlatDiffuseSolarReflectance, slatBeamVisibleTransmittance)
             blind.setName(name)
             return blind
@@ -424,7 +424,7 @@ module BTAP
           # @param screenMaterialSpacing [Float] = 0.1
           # @param screenMaterialDiameter [Float] = 0.1
           # @return [OpenStudio::Model::Screen] screen
-          def self.create_screen(model, name = "screen test", diffuseSolarReflectance=0.1, diffuseVisibleReflectance=0.1, screenMaterialSpacing=0.1, screenMaterialDiameter=0.1)
+          def self.create_screen(model, name = "screen test", diffuseSolarReflectance = 0.1, diffuseVisibleReflectance = 0.1, screenMaterialSpacing = 0.1, screenMaterialDiameter = 0.1)
             screen = OpenStudio::Model::Screen.new(model, diffuseSolarReflectance, diffuseVisibleReflectance, screenMaterialSpacing, screenMaterialDiameter)
             screen.setName(name)
             return screen
@@ -444,7 +444,7 @@ module BTAP
           # @param thickness [Float] = 0.1
           # @param conductivity [Float] = 0.1
           # @return [OpenStudio::Model::Shade.new] shade
-          def self.create_shade(model, name ="shade test", solarTransmittance=0.1, solarReflectance=0.1, visibleTransmittance=0.1, visibleReflectance=0.1, thermalHemisphericalEmissivity=0.1, thermalTransmittance=0.1, thickness=0.1, conductivity=0.1)
+          def self.create_shade(model, name = "shade test", solarTransmittance = 0.1, solarReflectance = 0.1, visibleTransmittance = 0.1, visibleReflectance = 0.1, thermalHemisphericalEmissivity = 0.1, thermalTransmittance = 0.1, thickness = 0.1, conductivity = 0.1)
             shade = OpenStudio::Model::Shade.new(model, solarTransmittance, solarReflectance, visibleTransmittance, visibleReflectance, thermalHemisphericalEmissivity, thermalTransmittance, thickness, conductivity)
             shade.setName(name)
             return shade
@@ -717,7 +717,7 @@ module BTAP
           construction = BTAP::Common::validate_array(model, construction, "Construction").first
           new_construction = construction.clone.to_Construction.get
           #interating through layers."
-          (0..new_construction.layers.length-1).each do |layernumber|
+          (0..new_construction.layers.length - 1).each do |layernumber|
             #cloning material"
             cloned_layer = new_construction.getLayer(layernumber).clone.to_Material.get
             #"setting material to new construction."
@@ -760,7 +760,7 @@ module BTAP
         #@param at_temperature_c [Float] = 0.0
         #@return [String] create_construction
         def self.customize_fenestration_construction(
-                model,
+            model,
                 construction,
                 conductance = nil,
                 solarTransmittanceatNormalIncidence = nil,
@@ -890,10 +890,10 @@ module BTAP
               construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions(model, "test construction set", walls_cons, floor_cons, roof_cons)
               #Check that the construction was created
               assert(!(construction_set.to_DefaultSurfaceConstructions.empty?))
-              new_set = BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_constructions_rsi(model, "changed_rsi", construction_set, 1.0/2.45, 1.0/2.55, 1.0/2.65)
-              assert_in_delta(1.0/2.45, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.wallConstruction.get).to_f, 0.00001)
-              assert_in_delta(1.0/2.55, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.floorConstruction.get).to_f, 0.00001)
-              assert_in_delta(1.0/2.65, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.roofCeilingConstruction.get).to_f, 0.00001)
+              new_set = BTAP::Resources::Envelope::ConstructionSets::customize_default_surface_constructions_rsi(model, "changed_rsi", construction_set, 1.0 / 2.45, 1.0 / 2.55, 1.0 / 2.65)
+              assert_in_delta(1.0 / 2.45, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.wallConstruction.get).to_f, 0.00001)
+              assert_in_delta(1.0 / 2.55, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.floorConstruction.get).to_f, 0.00001)
+              assert_in_delta(1.0 / 2.65, BTAP::Resources::Envelope::Constructions::get_conductance(new_set.roofCeilingConstruction.get).to_f, 0.00001)
             end
 
 
@@ -1032,17 +1032,36 @@ module BTAP
         #@param tubular_daylight_diffuser_rsi [Float] = nil
         #@param tubular_daylight_diffuser_solar_trans [Float] = nil
         #@param tubular_daylight_diffuser_vis_trans [Float] = nil
-        def self.customize_default_surface_construction_set_rsi!(model, name, default_surface_construction_set,
-            ext_wall_rsi = nil, ext_floor_rsi = nil, ext_roof_rsi = nil,
-            ground_wall_rsi = nil, ground_floor_rsi = nil, ground_roof_rsi = nil,
-            fixed_window_rsi = nil, fixed_wind_solar_trans = nil, fixed_wind_vis_trans = nil,
-            operable_window_rsi = nil, operable_wind_solar_trans = nil, operable_wind_vis_trans = nil,
+        def self.customize_default_surface_construction_set_rsi!(model,
+            name,
+            default_surface_construction_set,
+            ext_wall_rsi = nil,
+            ext_floor_rsi = nil,
+            ext_roof_rsi = nil,
+            ground_wall_rsi = nil,
+            ground_floor_rsi = nil,
+            ground_roof_rsi = nil,
+            #subsurfaces
+            fixed_window_rsi = nil,
+            fixed_wind_solar_trans = nil,
+            fixed_wind_vis_trans = nil,
+            operable_window_rsi = nil,
+            operable_wind_solar_trans = nil,
+            operable_wind_vis_trans = nil,
             door_construction_rsi = nil,
-            glass_door_rsi = nil, glass_door_solar_trans = nil, glass_door_vis_trans = nil,
+            glass_door_rsi = nil,
+            glass_door_solar_trans = nil,
+            glass_door_vis_trans = nil,
             overhead_door_rsi = nil,
-            skylight_rsi = nil, skylight_solar_trans = nil, skylight_vis_trans = nil,
-            tubular_daylight_dome_rsi = nil, tubular_daylight_dome_solar_trans = nil, tubular_daylight_dome_vis_trans = nil,
-            tubular_daylight_diffuser_rsi = nil, tubular_daylight_diffuser_solar_trans = nil, tubular_daylight_diffuser_vis_trans = nil
+            skylight_rsi = nil,
+            skylight_solar_trans = nil,
+            skylight_vis_trans = nil,
+            tubular_daylight_dome_rsi = nil,
+            tubular_daylight_dome_solar_trans = nil,
+            tubular_daylight_dome_vis_trans = nil,
+            tubular_daylight_diffuser_rsi = nil,
+            tubular_daylight_diffuser_solar_trans = nil,
+            tubular_daylight_diffuser_vis_trans = nil
         )
           #Change name if required.
           default_surface_construction_set.setName(name) unless name.nil?
@@ -1345,7 +1364,7 @@ module BTAP
           setDoorConstruction = BTAP::Common::validate_array(model, setDoorConstruction, "Construction").first
           setGlassDoorConstruction = BTAP::Common::validate_array(model, setGlassDoorConstruction, "Construction").first
           overheadDoorConstruction = BTAP::Common::validate_array(model, overheadDoorConstruction, "Construction").first
-          skylightConstruction= BTAP::Common::validate_array(model, skylightConstruction, "Construction").first
+          skylightConstruction = BTAP::Common::validate_array(model, skylightConstruction, "Construction").first
           tubularDaylightDomeConstruction = BTAP::Common::validate_array(model, tubularDaylightDomeConstruction, "Construction").first
           tubularDaylightDiffuserConstruction = BTAP::Common::validate_array(model, tubularDaylightDiffuserConstruction, "Construction").first
 
