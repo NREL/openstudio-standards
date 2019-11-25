@@ -282,14 +282,22 @@ module Fan
     # Exhaust fan
     if fan.to_FanZoneExhaust.is_initialized
       is_small = true
-    # Fan coil unit, unit heater, PTAC, PTHP
+    # Fan coil unit, unit heater, PTAC, PTHP, VRF terminals, WSHP, ERV
     elsif fan.containingZoneHVACComponent.is_initialized
       zone_hvac = fan.containingZoneHVACComponent.get
       if zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         is_small = true
+      elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
+        is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         is_small = true
       elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+        is_small = true
+      elsif zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized
+        is_small = true
+      elsif zone.hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
         is_small = true
       end
     # Powered VAV terminal
