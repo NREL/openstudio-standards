@@ -4,7 +4,7 @@
       "data_type": "table",
       "notes": "Requires hdd to be defined to be evaluated in code. Never have ground windows or doors.",
       "refs": [
-        "NREL_Technical report TP-5500-46861 Tables 19-25"
+        "NREL Technical Report TP-5500-46861 Tables 19-25"
       ],
       "units": "W_per_m2_K",
       "table": [
