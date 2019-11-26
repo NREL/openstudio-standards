@@ -21,7 +21,7 @@
         {
           "boundary_condition": "Outdoors",
           "surface": "Floor",
-          "formula": "( hdd < 3000) ? 15.157 : ( hdd < 4000) ? 15.157 : ( hdd < 5000 ) ? 15.157 : ( hdd < 6000) ? 15.157 :( hdd < 7000) ? 15.157 : 15.157"
+          "formula": "( hdd < 3000) ? 3.822 : ( hdd < 4000) ? 3.822 : ( hdd < 5000 ) ? 3.822 : ( hdd < 6000) ? 3.822 :( hdd < 7000) ? 3.822 : 3.822"
         },
         {
           "boundary_condition": "Outdoors",
@@ -36,17 +36,17 @@
         {
           "boundary_condition": "Ground",
           "surface": "Wall",
-          "formula": "( hdd < 3000) ? 15.157: ( hdd < 4000) ? 15.157 : ( hdd < 7000) ? 15.157 : 15.157"
+          "formula": "( hdd < 3000) ? 14.93 : ( hdd < 4000) ? 14.93 : ( hdd < 7000) ? 14.93 : 14.93"
         },
         {
           "boundary_condition": "Ground",
           "surface": "RoofCeiling",
-          "formula": "( hdd < 3000) ? 15.157 : ( hdd < 4000) ? 15.157 : ( hdd < 7000) ? 15.157 : 15.157"
+          "formula": "( hdd < 3000) ? 14.93 : ( hdd < 4000) ? 14.93 : ( hdd < 7000) ? 14.93 : 14.93"
         },
         {
           "boundary_condition": "Ground",
           "surface": "Floor",
-          "formula": "( hdd < 7000) ? 15.157 : 15.157"
+          "formula": "( hdd < 7000) ? 14.93 : 14.93"
         }
       ]
     }
