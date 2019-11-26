@@ -1321,9 +1321,9 @@ class Standard
                                          fan_name: 'DOAS Exhaust Fan',
                                          end_use_subcategory: 'DOAS Fans')
       end
-      # set pressure rise 0.5 inH2O lower than supply fan, 0.5 inH2O minimum
-      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
-      exhaust_fan_pressure_rise = OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
+      # set pressure rise 1.0 inH2O lower than supply fan, 1.0 inH2O minimum
+      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      exhaust_fan_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
       exhaust_fan.setPressureRise(exhaust_fan_pressure_rise)
       exhaust_fan.addToNode(air_loop.supplyInletNode)
     end
