@@ -532,8 +532,8 @@ Standard.class_eval do
   def get_space_below_grade_wall_height(space)
 
     #Check if space is below grade
-    z_origin = space.zOrigin
-    return nil if z_origin >= 0 #return nil if space is above grade
+    #z_origin = space.zOrigin
+    #return nil if z_origin >= 0 #return nil if space is above grade
 
     #Find height of walls adjacent to ground in model
     space.surfaces.each do |surface|
