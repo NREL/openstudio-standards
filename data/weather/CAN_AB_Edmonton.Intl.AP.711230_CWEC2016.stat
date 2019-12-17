@@ -1,4 +1,4 @@
- -EnergyPlus Weather Converter Version 2017.17.06
+ -EnergyPlus Weather Converter Version 2018.10.01
  Statistics for CAN_AB_Edmonton.Intl.AP.711230_CWEC2016
  Location -- Edmonton Intl AP AB CAN  
       {N 53° 18.60'} {W 113° 34.74'} {GMT -7.0 Hours}
@@ -16,6 +16,12 @@
  Comment 2: Downloaded from Climate.Onebuilding.Org -- Ground temps represent 
  undisturbed earth temperatures - calculated from this weather data.
 
+ - Actual Data Years for Monthly Data**
+         Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+         2013	1999	2007	2014	2014	2014	2003	2011	2000	2000	1999	2001	
+ - ** Not all weather data sources represent contiguous years.
+ - ** Monthly data values may come from different years.
+
  ========================= Handbook Conditions for Design =========================
  - Displaying Design Conditions from "2017 ASHRAE Handbook -- Fundamentals - Chapter 14 Climatic Design Information"
  - ASHRAE design conditions are carefully generated from a period of record 
@@ -26,11 +32,11 @@
     	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
     	Heating	1	-32.6	-29.2	-37.6	0.1	-32.5	-34.2	0.2	-29.2	11.5	-2.7	10.2	-6.2	2.1	180
 
-    	DesignStat	Hottest Month	Hottest Month DB Ran	Cooling DB/MCWB						Evaporation WB/MCDB						MCWS/PCWD to 0.4% DB		Dehumidification DP/									Enthaply/MCDB						Extreme Max WB	
-    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
+    	DesignStat	HottestMonth		Cooling DB/MCWB						Evaporation WB/MCDB						MCWS/PCWD to 0.4% DB		Dehumidification DP/									Enthaply/MCDB						Extreme Max WB	
+    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{°C}	
     	Cooling	7	12.5	27.8	17.9	25.9	17.2	24.3	16.1	19.5	25.8	18.3	24.3	17.2	22.8	3.8	150	17.1	13.4	23	15.9	12.3	21.6	14.7	11.4	20.3	58.8	25.7	54.6	24.4	50.9	22.7	26.6
 
-    	DesignStat	Extreme Annual WS			Extreme Annual DB				n-Year Return Period								Extreme Annual WB
+    	DesignStat	Extreme Annual WS			Extreme Annual DB				n-Year Return Period								
     	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
     	Extremes	10.2	8.9	7.7	-38	31.3	3.9	1.9	-40.8	32.7	-43	33.8	-45.2	34.9	-48.1	36.3	-38.1
 
@@ -48,6 +54,9 @@
 
  	                      ib	 - Clear Sky Noon Beam Normal Irradiance on 21st Day
  	                      id	 - Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
+
+ - Average Monthly Mean Daily All-Sky Radiation Wh/m²
+ 	                Avg Rad 	 1090	 2200	 3900	 4790	 5540	 5920	 6120	 5050	 3600	 2100	 1100	  770	
 
  - Monthly Drybulb and Mean Coincident Wetbulb Temperatures [C]
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -81,20 +90,20 @@
 
  - Monthly Standard Heating/Cooling Degree Days/Hours
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	        HDD base 10C	 3353	  692	  559	  471	  198	   56	    4	    1	    4	   42	  206	  461	
- 	      HDD base 18.3C	 5818	  951	  793	  729	  442	  261	  135	   81	  107	  232	  458	  711	
+ 	        HDD base 10C	  692	  559	  471	  198	   56	    4	    1	    4	   42	  206	  461	  660	
+ 	      HDD base 18.3C	  951	  793	  729	  442	  261	  135	   81	  107	  232	  458	  711	  918	
 
- 	        CDD base 10C	  600	    0	    0	    0	    6	   54	  122	  190	  163	   61	    6	    0	
- 	      CDD base 18.3C	   25	    0	    0	    0	    0	    1	    3	   12	    8	    1	    0	    0	
+ 	        CDD base 10C	    0	    0	    0	    6	   54	  122	  190	  163	   61	    6	    0	    0	
+ 	      CDD base 18.3C	    0	    0	    0	    0	    1	    3	   12	    8	    1	    0	    0	    0	
 
- 	      CDH base 23.3C	  577	    0	    0	    0	    1	   44	   68	  201	  191	   69	    3	    0	
- 	      CDH base 26.7C	  109	    0	    0	    0	    0	    9	    9	   38	   39	   14	    0	    0	
+ 	      CDH base 23.3C	    0	    0	    0	    1	   44	   68	  201	  191	   69	    3	    0	    0	
+ 	      CDH base 26.7C	    0	    0	    0	    0	    9	    9	   38	   39	   14	    0	    0	    0	
 
-    -  918 annual (standard) cooling degree-days (10C baseline)
-    - 8.33 annual (standard) heating degree-days (10C baseline)
+    -  600 annual (standard) cooling degree-days (10C baseline)
+    - 3353 annual (standard) heating degree-days (10C baseline)
 
-    -    0 annual (standard) cooling degree-days (18.3C baseline)
-    -  660 annual (standard) heating degree-days (18.3C baseline)
+    -   25 annual (standard) cooling degree-days (18.3C baseline)
+    - 5818 annual (standard) heating degree-days (18.3C baseline)
 
  - Monthly Standard Average Liquid Precipitation mm
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -425,14 +434,15 @@
 
  - Monthly Statistics for Solar Radiation  (Direct Normal, Diffuse, Global Horizontal) [Wh/m²]
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Direct Avg 	2552 	3327 	4169 	5012 	5176 	5649 	6500 	5754 	3943 	3738 	2571 	2570 	
+ 	Direct Avg 	2550 	3326 	4167 	5011 	5175 	5649 	6499 	5753 	3942 	3737 	2570 	2569 	
 
- 	Direct Max 	6379 	8132 	10097	10850	10527	11197	10544	9794 	8286 	7903 	6452 	4793 	
+ 	Direct Max 	6374 	8129 	10097	10850	10527	11197	10540	9794 	8286 	7902 	6451 	4791 	
  	    Day    	  29 	  26 	  28 	  29 	  11 	  22 	  15 	   1 	   6 	   5 	   4 	   9 	
 
- 	Diffuse Avg	462  	786  	1413 	2082 	2523 	2545 	2240 	1895 	1382 	784  	496  	320  	
+ 	Diffuse Avg	461  	784  	1411 	2079 	2521 	2545 	2238 	1893 	1380 	783  	495  	318  	
 
- 	Global Avg 	996  	1812 	3123 	4723 	5718 	6235 	6408 	5389 	3290 	2157 	1120 	782  	
+ 	Global Avg 	993  	1809 	3119 	4720 	5715 	6235 	6405 	5386 	3288 	2155 	1117 	779  	
+
  - Maximum Direct Normal Solar of 11196 Wh/m² on Jun 22
 
  - Average Hourly Statistics for Direct Normal Solar Radiation [Wh/m²]
@@ -441,11 +451,11 @@
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 2:01- 3:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 3:01- 4:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
- 	 4:01- 5:00	    0	    0	    0	    0	    1	    0	    1	    0	    0	    0	    0	    0	
- 	 5:01- 6:00	    0	    0	    0	    1	    0	    6	   52	    1	    0	    0	    0	    0	
- 	 6:01- 7:00	    0	    0	    1	   39	  146	  124	  180	   14	    1	    0	    0	    0	
- 	 7:01- 8:00	    0	    1	   79	  192	  327	  324	  276	  150	   91	    0	    0	    0	
- 	 8:01- 9:00	    1	   36	  321	  327	  448	  420	  376	  332	  241	  161	   48	    1	
+ 	 4:01- 5:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	 5:01- 6:00	    0	    0	    0	    0	    0	    6	   52	    0	    0	    0	    0	    0	
+ 	 6:01- 7:00	    0	    0	    0	   39	  146	  124	  180	   14	    0	    0	    0	    0	
+ 	 7:01- 8:00	    0	    0	   79	  192	  327	  324	  276	  150	   91	    0	    0	    0	
+ 	 8:01- 9:00	    0	   36	  321	  327	  448	  420	  376	  332	  241	  161	   48	    0	
  	 9:01-10:00	  200	  235	  392	  386	  522	  521	  506	  480	  349	  357	  240	   58	
  	10:01-11:00	  321	  314	  425	  470	  552	  543	  568	  591	  398	  450	  340	  318	
  	11:01-12:00	  409	  406	  400	  480	  482	  547	  655	  613	  430	  456	  377	  406	
@@ -453,10 +463,10 @@
  	13:01-14:00	  381	  478	  408	  501	  409	  448	  636	  635	  491	  461	  407	  452	
  	14:01-15:00	  374	  447	  417	  469	  395	  461	  545	  553	  446	  426	  369	  492	
  	15:01-16:00	  351	  396	  474	  445	  370	  424	  499	  527	  393	  518	  306	  386	
- 	16:01-17:00	  117	  388	  399	  435	  332	  417	  434	  481	  348	  362	   59	    0	
+ 	16:01-17:00	  116	  388	  399	  435	  332	  417	  434	  481	  348	  362	   58	    0	
  	17:01-18:00	    0	  136	  339	  419	  323	  336	  484	  378	  267	   60	    0	    0	
- 	18:01-19:00	    0	    0	  110	  341	  228	  316	  375	  300	   52	    0	    0	    0	
- 	19:01-20:00	    0	    0	    0	   39	  161	  223	  212	   85	    0	    0	    0	    0	
+ 	18:01-19:00	    0	    0	  109	  341	  228	  316	  375	  300	   52	    0	    0	    0	
+ 	19:01-20:00	    0	    0	    0	   38	  161	  223	  212	   85	    0	    0	    0	    0	
  	20:01-21:00	    0	    0	    0	    0	    3	   62	   41	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -470,11 +480,11 @@
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 2:01- 3:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 3:01- 4:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
- 	 4:01- 5:00	    0	    0	    0	    0	    1	    0	    1	    0	    0	    0	    0	    0	
- 	 5:01- 6:00	    0	    0	    0	    1	   12	   32	   28	    1	    0	    0	    0	    0	
- 	 6:01- 7:00	    0	    0	    1	   34	   75	   88	   67	   32	    3	    0	    0	    0	
- 	 7:01- 8:00	    0	    1	   26	   94	  118	  131	  103	   95	   47	    5	    0	    0	
- 	 8:01- 9:00	    1	   18	   83	  146	  158	  162	  154	  146	   85	   46	    6	    1	
+ 	 4:01- 5:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	 5:01- 6:00	    0	    0	    0	    0	   12	   32	   28	    0	    0	    0	    0	    0	
+ 	 6:01- 7:00	    0	    0	    0	   34	   75	   88	   67	   32	    2	    0	    0	    0	
+ 	 7:01- 8:00	    0	    0	   26	   94	  118	  131	  103	   95	   47	    4	    0	    0	
+ 	 8:01- 9:00	    0	   18	   83	  146	  158	  162	  154	  146	   85	   46	    6	    0	
  	 9:01-10:00	   30	   60	  117	  194	  181	  176	  179	  168	  135	   84	   48	   25	
  	10:01-11:00	   60	  100	  161	  223	  220	  200	  191	  170	  149	  102	   67	   49	
  	11:01-12:00	   76	  121	  186	  249	  253	  220	  207	  183	  161	  105	   86	   57	
@@ -482,10 +492,10 @@
  	13:01-14:00	   86	  122	  194	  231	  284	  270	  207	  198	  166	  109	   84	   59	
  	14:01-15:00	   69	  112	  163	  209	  261	  255	  213	  200	  153	   98	   68	   42	
  	15:01-16:00	   43	   78	  127	  175	  236	  220	  208	  186	  141	   73	   40	   22	
- 	16:01-17:00	   10	   44	   97	  134	  179	  200	  176	  138	  102	   40	    7	    1	
- 	17:01-18:00	    0	   10	   48	   94	  140	  151	  133	  110	   56	    9	    0	    0	
- 	18:01-19:00	    0	    0	    9	   51	   94	  108	   91	   70	   11	    0	    0	    0	
- 	19:01-20:00	    0	    0	    0	    8	   41	   65	   52	   19	    0	    0	    0	    0	
+ 	16:01-17:00	    9	   44	   97	  134	  179	  200	  176	  138	  102	   40	    6	    0	
+ 	17:01-18:00	    0	    9	   48	   94	  140	  151	  133	  110	   56	    8	    0	    0	
+ 	18:01-19:00	    0	    0	    8	   51	   94	  108	   91	   70	   11	    0	    0	    0	
+ 	19:01-20:00	    0	    0	    0	    7	   41	   65	   52	   19	    0	    0	    0	    0	
  	20:01-21:00	    0	    0	    0	    0	    2	   14	   11	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -499,11 +509,11 @@
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 2:01- 3:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 3:01- 4:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
- 	 4:01- 5:00	    0	    0	    0	    0	    2	    0	    3	    0	    0	    0	    0	    0	
- 	 5:01- 6:00	    0	    0	    0	    2	   12	   33	   35	    2	    0	    0	    0	    0	
- 	 6:01- 7:00	    0	    0	    2	   40	  111	  126	  115	   35	    4	    1	    0	    0	
- 	 7:01- 8:00	    0	    2	   38	  146	  249	  276	  216	  144	   66	    5	    1	    0	
- 	 8:01- 9:00	    2	   23	  164	  284	  398	  406	  360	  302	  168	   81	   12	    2	
+ 	 4:01- 5:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	 5:01- 6:00	    0	    0	    0	    0	   12	   33	   35	    0	    0	    0	    0	    0	
+ 	 6:01- 7:00	    0	    0	    0	   40	  111	  126	  115	   35	    2	    0	    0	    0	
+ 	 7:01- 8:00	    0	    0	   38	  146	  249	  276	  216	  144	   66	    4	    0	    0	
+ 	 8:01- 9:00	    0	   23	  164	  284	  398	  406	  360	  302	  168	   81	   11	    0	
  	 9:01-10:00	   49	  109	  264	  403	  522	  538	  515	  453	  297	  203	   88	   30	
  	10:01-11:00	  121	  196	  363	  521	  631	  626	  622	  576	  373	  289	  152	  101	
  	11:01-12:00	  178	  273	  402	  581	  640	  681	  745	  643	  427	  321	  200	  145	
@@ -511,11 +521,11 @@
  	13:01-14:00	  187	  311	  421	  583	  613	  649	  736	  681	  464	  317	  202	  157	
  	14:01-15:00	  152	  268	  372	  513	  556	  622	  639	  594	  394	  263	  152	  122	
  	15:01-16:00	   91	  187	  327	  423	  479	  521	  555	  512	  312	  220	   80	   51	
- 	16:01-17:00	   18	  106	  217	  324	  358	  450	  430	  381	  215	  100	   11	    1	
- 	17:01-18:00	    0	   19	  104	  219	  271	  308	  353	  249	  107	   13	    0	    0	
- 	18:01-19:00	    0	    0	   17	  101	  153	  211	  208	  138	   16	    0	    0	    0	
- 	19:01-20:00	    0	    0	    0	   11	   59	  105	   88	   27	    0	    0	    0	    0	
- 	20:01-21:00	    0	    0	    0	    0	    3	   18	   14	    0	    0	    0	    0	    0	
+ 	16:01-17:00	   17	  106	  217	  324	  358	  450	  430	  381	  215	  100	   10	    0	
+ 	17:01-18:00	    0	   18	  104	  219	  271	  308	  353	  249	  107	   12	    0	    0	
+ 	18:01-19:00	    0	    0	   16	  101	  153	  211	  208	  138	   16	    0	    0	    0	
+ 	19:01-20:00	    0	    0	    0	    9	   59	  105	   88	   27	    0	    0	    0	    0	
+ 	20:01-21:00	    0	    0	    0	    0	    2	   18	   13	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -532,10 +542,10 @@
  	Direct Avg 	125  	222  	287  	349  	395  	419  	466  	430  	259  	257  	148  	123  	
 
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Diffuse Avg 	53   	91   	164  	242  	296  	300  	266  	224  	162  	93   	58   	38   	
+ 	Diffuse Avg 	52   	91   	163  	241  	294  	298  	263  	222  	158  	90   	57   	37   	
 
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Global Avg 	110  	201  	352  	541  	654  	719  	738  	616  	380  	242  	124  	86   	
+ 	Global Avg 	109  	200  	351  	540  	651  	716  	735  	614  	376  	239  	123  	86   	
 
  - Monthly Statistics for Zenith Luminance [kCD/m²] **
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
