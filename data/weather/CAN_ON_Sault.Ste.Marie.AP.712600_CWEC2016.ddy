@@ -10,23 +10,50 @@
  ! TMY data files as future months will not use their start days of week (simulations need to show
  ! continuity in day of week presentation).
  
- ! In an effort to accomodate, the following RunPeriod object is included:
+ ! In an effort to accomodate, the following initial month days are included:
  ! Note JAN 1, 2010 is a Friday
+ ! Note FEB 1, 2009 is a Sunday
+ ! Note MAR 1, 2011 is a Tuesday
+ ! Note APR 1, 2001 is a Sunday
+ ! Note MAY 1, 2000 is a Monday
+ ! Note JUN 1, 2001 is a Friday
+ ! Note JUL 1, 2007 is a Sunday
+ ! Note AUG 1, 2006 is a Tuesday
+ ! Note SEP 1, 1999 is a Wednesday
+ ! Note OCT 1, 2001 is a Monday
+ ! Note NOV 1, 2010 is a Monday
+ ! Note DEC 1, 2005 is a Thursday
+ 
+ ! Since the RunPeriod object changes in V9.0, the following are RunPeriod objects in comments:
+ ! Version before EnergyPlus release V9.0
+ !RunPeriod,
+ !Weather Data,    !- Name
+ !  1,             !- Begin Month
+ !  1,             !- Begin Day of Month
+ !  12,            !- End Month
+ !  31,            !- End Day of Month
+ !Friday,      !- Day of Week for Start Day
+ !  No,            !- Use Weather File Holidays and Special Days
+ !  No,            !- Use Weather File Daylight Saving Period
+ ! Yes,            !- Apply Weekend Holiday Rule
+ ! Yes,            !- Use Weather File Rain Indicators
+ ! Yes;            !- Use Weather File Snow Indicators
  
  RunPeriod,
- Weather Data,    ! Name
-   1,             ! Begin Month
-   1,             ! Begin Day of Month
-    ,             ! Begin Year
-   12,            ! End Month
-   31,            ! End Day of Month
-    ,             ! End Year
- Friday,      ! Day of Week for Start Day
-   No,            ! Use Weather File Holidays and Special Days
-   No,            ! Use Weather File Daylight Saving Period
-  Yes,            ! Apply Weekend Holiday Rule
-  Yes,            ! Use Weather File Rain Indicators
-  Yes;            ! Use Weather File Snow Indicators
+  Weather Data,  !- Name
+  1,             !- Begin Month
+  1,             !- Begin Day of Month
+   ,             !- Begin Year
+  12,            !- End Month
+  31,            !- End Day of Month
+   ,             !- End Year
+  Friday,      !- Day of Week for Start Day Friday 
+  No,            !- Use Weather File Holidays and Special Days
+  No,            !- Use Weather File Daylight Saving Period
+  Yes,           !- Apply Weekend Holiday Rule
+  Yes,           !- Use Weather File Rain Indicators
+  Yes,           !- Use Weather File Snow Indicators
+  ;              !- Treat Weather as Acual
  
  Site:Location,
   Sault Ste Marie AP_ON_CAN Design_Conditions,     !- Location Name
