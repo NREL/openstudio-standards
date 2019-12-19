@@ -23,6 +23,7 @@ class BTAPPRE1980
                                              })
 
     model.getDefaultConstructionSets.sort.each do |set|
+      # Set the SHGC of the default glazing material before making new constructions based on it and changing U-values.
       assign_SHGC_to_windows(model: model, default_construction_set: set)
       set_construction_set_to_necb!(model: model,
                                     default_surface_construction_set: set,
