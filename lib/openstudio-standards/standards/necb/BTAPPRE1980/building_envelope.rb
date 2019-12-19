@@ -27,10 +27,16 @@ class BTAPPRE19880
                                     default_surface_construction_set: set,
                                     runner: nil,
                                     properties: properties)
+      assign_SHGC_to_windows(model: model, default_surface_construction_set: set)
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
     # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
+  end
+
+  def assign_SHGC_to_Windows(model:, default_surface_construction_set:)
+    #surface_types_rsi["#{surface_type['boundary_condition'].downcase}_#{surface_type['surface'].downcase}_conductance"] = surface_type['conductance'].nil? ? 1.0 / (eval(self.model_find_objects(standards_table, surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
+    #puts 'hello'
   end
 end
