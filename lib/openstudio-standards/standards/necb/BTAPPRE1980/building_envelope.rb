@@ -1,4 +1,4 @@
-class BTAPPRE19880
+class BTAPPRE1980
 
   # Go through the default construction sets and hard-assigned
   # constructions. Clone the existing constructions and set their
@@ -35,8 +35,10 @@ class BTAPPRE19880
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
   end
 
-  def assign_SHGC_to_Windows(model:, default_surface_construction_set:)
-    #surface_types_rsi["#{surface_type['boundary_condition'].downcase}_#{surface_type['surface'].downcase}_conductance"] = surface_type['conductance'].nil? ? 1.0 / (eval(self.model_find_objects(standards_table, surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
-    #puts 'hello'
+  def assign_SHGC_to_windows(model:, default_surface_construction_set:)
+    # Get HDD to determine which SHGC to use
+    hdd = self.get_necb_hdd18(model)
+    standards_table = @standards_data['SHGC']
+    shgc = eval(self.model_find_objects(standards_table, "window")[0]['formula'])
   end
 end
