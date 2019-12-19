@@ -23,11 +23,11 @@ class BTAPPRE1980
                                              })
 
     model.getDefaultConstructionSets.sort.each do |set|
+      assign_SHGC_to_windows(model: model, default_construction_set: set)
       set_construction_set_to_necb!(model: model,
                                     default_surface_construction_set: set,
                                     runner: nil,
                                     properties: properties)
-      assign_SHGC_to_windows(model: model, default_surface_construction_set: set)
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
@@ -35,10 +35,18 @@ class BTAPPRE1980
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
   end
 
-  def assign_SHGC_to_windows(model:, default_surface_construction_set:)
+  def assign_SHGC_to_windows(model:, default_construction_set:)
     # Get HDD to determine which SHGC to use
     hdd = self.get_necb_hdd18(model)
-    standards_table = @standards_data['SHGC']
-    shgc = eval(self.model_find_objects(standards_table, "window")[0]['formula'])
+    # Determine the solar heat gain coefficient from the standards data
+    shgc_table = @standards_data['SHGC']
+    shgc = eval(shgc_table[0]['formula'])
+    # Find the default window construction material
+    sub_surf_consts = default_construction_set.defaultExteriorSubSurfaceConstructions.get
+    fixed_window_material = OpenStudio::Model::getConstructionByName(model, sub_surf_consts.fixedWindowConstruction.get.name.to_s).get.getLayer(0).to_SimpleGlazing.get
+    # Reset the SHGC for the window material.  When I wrote this all of the windows, doors etc. used the same window
+    # material.  So I set the SHGC for that material expecting it will be modified for all of the other constructions
+    # too.
+    fixed_window_material.setSolarHeatGainCoefficient(shgc.to_f)
   end
 end
