@@ -53,6 +53,7 @@ module OpenstudioStandards
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
+  require_relative "#{stds}/necb/BTAPPRE1980/building_envelope"
 
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
