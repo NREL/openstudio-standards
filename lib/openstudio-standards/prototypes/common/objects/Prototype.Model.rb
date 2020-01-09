@@ -653,7 +653,7 @@ Standard.class_eval do
       end
 
       #get area of floor surface. Assumes only one floor per space!
-      if surface.surfaceType == 'Floor' and surface.surfaceType == 'Ground'
+      if surface.surfaceType == 'Floor' and surface.outsideBoundaryCondition == 'Ground'
         area = surface.netArea()
       end
 
