@@ -25,7 +25,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
 
-    templates = ['NECB2011', 'NECB2015']
+    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
     templates.each do |template|
 
       heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
