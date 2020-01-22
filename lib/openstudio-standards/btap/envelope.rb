@@ -630,6 +630,7 @@ module BTAP
             if minimum_resistance > (1 / conductance)
               #tell user why we are defaulting and set the conductance of the
               # construction.
+              new_construction = shrink_construction(model: model, construction: new_construction, req_conductance: conductance)
               raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
               # new_construction.setConductance((1.0/minimum_resistance))
             else
@@ -639,6 +640,19 @@ module BTAP
             end
           end
           return new_construction
+        end
+
+        # This removes construction layers if the required conductance for a construction is higher than the maximum
+        # conductance that construction can have.
+        # @author Chris Kirney <chris.kirney@canada.ca>
+        # parame model [OpenStudio::Model::Model]
+        # @param construction <String>
+        # @param conductance [Fixnum]
+        # @return [<String]OpenStudio::Model::getConstructionByName] new_construction
+        def self.shrink_construction(model:, construction:, req_conductance:)
+          construction.layers.sort.each do |layer|
+            puts 'hello'
+          end
         end
 
         #This model gets tsol
