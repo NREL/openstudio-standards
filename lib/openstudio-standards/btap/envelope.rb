@@ -621,17 +621,28 @@ module BTAP
             #re-find insulation layer
             find_and_set_insulaton_layer(model, new_construction)
 
+            #test start
+            #conductance = 4.0
+            #test end
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.
             minimum_resistance = (1 / new_construction.thermalConductance.to_f) - (1.0 / new_construction.insulation.get.thermalConductance.to_f)
+            #test_start
+            mat_layers = new_construction.layers
+            total_cond = new_construction.thermalConductance.to_f
+            total_res = 1.0/total_cond
+            ins_cond = new_construction.insulation.get.thermalConductance.to_f
+            ins_res = 1.0/ins_cond
+            req_res = 1.0/conductance
+            #test_end
 
             #Check if the requested resistance is smaller than the minimum
             # resistance. If so, use the minimum resistance instead.
             if minimum_resistance > (1 / conductance)
               #tell user why we are defaulting and set the conductance of the
               # construction.
-              new_construction = shrink_construction(model: model, construction: new_construction, req_conductance: conductance)
-              raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
+              new_construction = adjust_opaque_construction(construction: new_construction, req_conductance: conductance.to_f)
+              #raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
               # new_construction.setConductance((1.0/minimum_resistance))
             else
               unless new_construction.setConductance(conductance)
@@ -649,9 +660,78 @@ module BTAP
         # @param construction <String>
         # @param conductance [Fixnum]
         # @return [<String]OpenStudio::Model::getConstructionByName] new_construction
-        def self.shrink_construction(model:, construction:, req_conductance:)
-          construction.layers.sort.each do |layer|
-            puts 'hello'
+        def self.adjust_opaque_construction(construction:, req_conductance:)
+          #test_start
+          test = construction.layers
+          #test_end
+          construction.layers.reverse.each_with_index do |layer, layer_index|
+            total_conductance = construction.thermalConductance.to_f
+            if total_conductance >= req_conductance
+              return construction
+            end
+            mat_type = layer.iddObjectType.valueName.to_s
+            case mat_type
+            when "OS_Material"
+              mat_layer = layer.to_StandardOpaqueMaterial.get
+              mat_resistance = 1/(mat_layer.conductivity.to_f*mat_layer.thickness.to_f)
+              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
+              if target_res > 0
+                thickness = 1/(target_res*mat_layer.thickness.to_f)
+                mat_layer.setThickness((1/(req_res_delta*mat_layer.thickness.to_f)))
+              else
+                unless is_concrete?(mat_layer: mat_layer)
+                  construction.eraseLayer(layer_index)
+                end
+              end
+            when "OS_Material_NoMass"
+              mat_layer = layer.to_MasslessOpaqueMaterial.get
+              mat_resistance = mat_layer.thermalResistance.to_f
+              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
+              if target_res > 0
+                mat_layer.setThermalResistance(target_res)
+              else
+                construction.eraseLayer(layer_index)
+              end
+            when "OS_Material_AirGap"
+              mat_layer = layer.to_AirGap.get
+              mat_resistance = mat_layer.thermalResistance.get.to_f
+              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
+              if target_res > 0
+                mat_layer.setThermalResistance(target_res)
+              else
+                construction.eraseLayer(layer_index)
+              end
+            end
+          end
+          raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
+        end
+
+        # This checks if the construction layer can be modified to set thermal resistance of the whole construction to
+        # be less than the required resistance
+        # @author Chris Kirney <chris.kirney@canada.ca>
+        # @param mat_resistance <Fixnum>
+        # @param total_conductance <Fixnum>
+        # @param req_conductance <Fixnum>
+        # @return [<Fixnum>] layer resistance needed to meet construction material resistance, -999 if this is not enough
+        def self.should_modify_layer(mat_resistance:, total_conductance:, req_conductance:)
+          # Determine if the amount of resistance you can modify in this layer is greater than the amount of resistance
+          # you have to change.
+          if mat_resistance > ((1.0/total_conductance) - (1.0/req_conductance))
+            # If yes, determine what the resistance for this layer should be to meet the required resistance of the
+            # entire assembly.  Then return the new resistance value.
+            target_res = mat_resistance - ((1.0/total_conductance) - (1.0/req_conductance))
+            return target_res
+          else
+            # If no, then return an unambiguous no.
+            return -999
+          end
+        end
+
+        def self.is_concrete?(mat_layer:)
+          if /concrete/.match(mat_layer.name.to_s.downcase).nil?
+            return false
+          else
+            return true
           end
         end
 

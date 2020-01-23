@@ -154,7 +154,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
         @hdd = standard.get_necb_hdd18(@model)
 
-
+        standard.apply_building_default_constructionset(@model) # add necb default construction set
         standard.apply_standard_construction_properties(model: @model) # standards candidate
         standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
         standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
