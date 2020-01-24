@@ -622,7 +622,7 @@ module BTAP
             find_and_set_insulaton_layer(model, new_construction)
 
             #test start
-            #conductance = 4.0
+            conductance = 10.0
             #test end
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.
@@ -631,6 +631,7 @@ module BTAP
             mat_layers = new_construction.layers
             total_cond = new_construction.thermalConductance.to_f
             total_res = 1.0/total_cond
+            test = new_construction.insulation.get
             ins_cond = new_construction.insulation.get.thermalConductance.to_f
             ins_res = 1.0/ins_cond
             req_res = 1.0/conductance
@@ -641,6 +642,8 @@ module BTAP
             if minimum_resistance > (1 / conductance)
               #tell user why we are defaulting and set the conductance of the
               # construction.
+              # from the previous check getting rid of the insulation is not enough so we'll at least start with that.
+
               new_construction = adjust_opaque_construction(construction: new_construction, req_conductance: conductance.to_f)
               #raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
               # new_construction.setConductance((1.0/minimum_resistance))
@@ -664,46 +667,83 @@ module BTAP
           #test_start
           test = construction.layers
           #test_end
-          construction.layers.reverse.each_with_index do |layer, layer_index|
-            total_conductance = construction.thermalConductance.to_f
-            if total_conductance >= req_conductance
-              return construction
-            end
+          layer_comp = []
+          construction.layers.each_with_index do |layer, layer_index|
             mat_type = layer.iddObjectType.valueName.to_s
             case mat_type
             when "OS_Material"
               mat_layer = layer.to_StandardOpaqueMaterial.get
-              mat_resistance = 1/(mat_layer.conductivity.to_f*mat_layer.thickness.to_f)
-              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
-              if target_res > 0
-                thickness = 1/(target_res*mat_layer.thickness.to_f)
-                mat_layer.setThickness((1/(req_res_delta*mat_layer.thickness.to_f)))
-              else
-                unless is_concrete?(mat_layer: mat_layer)
-                  construction.eraseLayer(layer_index)
-                end
-              end
+              layer_comp << {
+                  thickness_m: mat_layer.thickness.to_f,
+                  conductivity_SI: mat_layer.conductivity.to_f,
+                  conductance_SI: (mat_layer.conductivity.to_f/mat_layer.thickness.to_f),
+                  resistance_SI: (mat_layer.thickness.to_f/mat_layer.conductivity.to_f),
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
             when "OS_Material_NoMass"
               mat_layer = layer.to_MasslessOpaqueMaterial.get
-              mat_resistance = mat_layer.thermalResistance.to_f
-              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
-              if target_res > 0
-                mat_layer.setThermalResistance(target_res)
-              else
-                construction.eraseLayer(layer_index)
-              end
+              layer_comp << {
+                  thickness_m: 0,
+                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  resistance_SI: mat_layer.thermalResistance.to_f,
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
             when "OS_Material_AirGap"
               mat_layer = layer.to_AirGap.get
-              mat_resistance = mat_layer.thermalResistance.get.to_f
-              target_res = should_modify_layer(mat_resistance: mat_resistance, total_conductance: total_conductance, req_conductance: req_conductance)
-              if target_res > 0
-                mat_layer.setThermalResistance(target_res)
-              else
-                construction.eraseLayer(layer_index)
-              end
+              layer_comp << {
+                  thickness_m: 0,
+                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  resistance_SI: mat_layer.thermalResistance.to_f,
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
             end
           end
-          raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
+          sorted_layers = layer_comp.sort{ |a, b| b[:conductivity_SI] <=> a[:conductivity_SI]}
+          index = 0
+          total_conductance = construction.thermalConductance.to_f
+          while total_conductance < req_conductance
+            const_index = sorted_layers[index][:construction_index]
+            if sorted_layers[index][:resistance_SI] > ((1.0/total_conductance) - (1.0/req_conductance))
+              if sorted_layers[index][:thickness_m] == 0
+                res_mod = sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance))
+                mat_type = construction.layers[const_index].iddObjectType.valueName.to_s
+                case mat_type
+                when "OS_Material_NoMass"
+                  mat = construction.layers[const_index].to_MasslessOpaqueMaterial.get
+                  mat.thermalResistance = res_mod
+                  puts 'hello'
+                when "OS_Material_AirGap"
+                  construction.layers[const_index].to_AirGap.get.thermalResistance = res_mod
+                  puts 'hello'
+                end
+              else
+                thick_mod = (sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance)))*(sorted_layers[index][:thickness_m])
+                construction.layers[const_index].to_StandardOpaqueMaterial.get.thermalResistance = thick_mod
+              end
+              index += 1
+            else
+              if sorted_layers.size == 1
+                raise ("could not set conductance of construction #{construction.name.to_s} to #{req_conductance} because existing layers make this impossible. Could not automatically change the constructions. Change the construction to allow for this conductance to be set.")
+                return construction
+              end
+              construction.eraseLayer(const_index)
+              sorted_layers.delete_at(index)
+              sorted_layers.each do |sorted_layer|
+                if sorted_layer[:construction_index] > (const_index - 1)
+                  sorted_layer[:construction_index] -= 1
+                end
+              end
+            end
+            total_conductance = construction.thermalConductance.to_f
+            test_layers = construction.layers
+            puts 'hello'
+          end
+          puts 'hello'
         end
 
         # This checks if the construction layer can be modified to set thermal resistance of the whole construction to
