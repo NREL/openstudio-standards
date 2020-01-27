@@ -744,7 +744,7 @@ module BTAP
               # If this is the only layer then we cannot get rid of it so throw an error.  This should never happen but
               # you never know.
               if sorted_layers.size == 1
-                raise ("could not set conductance of construction #{construction.name.to_s} to #{req_conductance} because existing layers make this impossible. Could not automatically change the constructions. Change the construction to allow for this conductance to be set.")
+                raise ("Could not set conductance of construction #{construction.name.to_s} to #{req_conductance} because existing layers make this impossible. Could not automatically change the constructions. Change the construction to allow for this conductance to be set.")
                 return construction
               end
               # Delete the layer from the construction.
@@ -768,10 +768,10 @@ module BTAP
             # Check if we have anything left to modify.  If yes, then keep going.  If not, then if we have done enough
             # we can stop and return the revised construction, otherwise throw an error.
             if construction.layers.size < index + 1
-              if total_conductance.round(4) <= req_conductance
+              if total_conductance.round(4) >= req_conductance
                 return construction
               else
-                raise ("Gould not set conductance of construction #{construction.name.to_s} from the current conductance of #{total_conductance} to #{req_conductance} because existing layers make this impossible. Change the construction to allow for this conductance to be set.")
+                raise ("Could not set conductance of construction #{construction.name.to_s} from the current conductance of #{total_conductance} to #{req_conductance} because existing layers make this impossible. Change the construction to allow for this conductance to be set.")
                 return construction
               end
             end
