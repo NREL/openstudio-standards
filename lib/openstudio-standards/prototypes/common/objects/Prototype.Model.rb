@@ -495,7 +495,7 @@ Standard.class_eval do
       #If space is below grade...
       unless below_grade_wall_height.nil?
 
-        c_factor_wall_name = "Basement C-Factor Wall Height-#{below_grade_wall_height.round(1)}"
+        c_factor_wall_name = "Basement Wall C-Factor: #{c_factor} Height: #{below_grade_wall_height.round(1)}"
 
         # Check if the wall construction has been constructed already. If so, look it up in the model
         if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
@@ -589,7 +589,7 @@ Standard.class_eval do
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction
-      f_floor_const_name ="Basement F-Factor Floor Perim:#{perimeter.round(2).to_s} Area: #{area.round(2).to_s}"
+      f_floor_const_name ="Basement Floor F-Factor: #{f_factor.round(2).to_s} Perim:#{perimeter.round(2).to_s} Area: #{area.round(2).to_s}"
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized

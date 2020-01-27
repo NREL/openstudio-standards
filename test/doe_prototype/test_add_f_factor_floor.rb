@@ -49,7 +49,7 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
       standard.set_90_1_floor_constructions(model, climate_zone)
 
       #parse the modified model for the F-Factor constructions
-      expected_name = "Basement F-Factor Floor Perim:#{standard_perimeter.round(2).to_s} Area: #{standard_area.round(2).to_s}"
+      expected_name = "Basement Floor F-Factor: #{standard_f_factor.round(2).to_s} Perim:#{standard_perimeter.round(2).to_s} Area: #{standard_area.round(2).to_s}"
       f_factor_construction = model.getFFactorGroundFloorConstructionByName(expected_name)
 
       #Ensure that the f_factor
