@@ -626,12 +626,11 @@ module BTAP
             minimum_resistance = (1 / new_construction.thermalConductance.to_f) - (1.0 / new_construction.insulation.get.thermalConductance.to_f)
 
             #Check if the requested resistance is smaller than the minimum
-            # resistance. If so, use the minimum resistance instead.
+            # resistance. If so, revise the construction layers.
             if minimum_resistance > (1 / conductance)
-              #tell user why we are defaulting and set the conductance of the
-              # construction.
-              raise ("could not set conductance of construction #{new_construction.name.to_s} to because existing layers make this impossible. Change the construction to allow for this conductance to be set." + (conductance).to_s + "setting to closest value possible value:" + (1.0 / minimum_resistance).to_s)
-              # new_construction.setConductance((1.0/minimum_resistance))
+              # Changing the insulation layer will not be enough so either start removing layers or modify them to get
+              # to the required conductance.
+              new_construction = adjust_opaque_construction(construction: new_construction, req_conductance: conductance.to_f)
             else
               unless new_construction.setConductance(conductance)
                 raise("could not set conductance of construction #{new_construction.name.to_s}")
@@ -639,6 +638,167 @@ module BTAP
             end
           end
           return new_construction
+        end
+
+        # This removes construction layers if the required conductance for a construction is higher than the maximum
+        # conductance that construction can have.  Otherwise it modifies existing layers to set their thickness or
+        # resistance values (depending on what is in the layer) to achieve the required conductance.
+        # @author Chris Kirney <chris.kirney@canada.ca>
+        # @param construction <String> the construction we are modifying
+        # @param req_conductance [Fixnum] the conductance we are trying to reach
+        # @return [<String]OpenStudio::Model::getConstructionByName] the final construction after modification
+        def self.adjust_opaque_construction(construction:, req_conductance:)
+          layer_comp = []
+          # Extract the thickness, conductivity, resistance of each layer of the construction.  If the material is
+          # "No Mass", or "Air gap" set the conductivity (how well the material conducts heat) and conductance (how well
+          # the material with a given thickness conducts heat) to the inverse of the resistance.  This is because
+          # No Mass and Air gap materials do not have a thickness value.  Also, include which layer index the material
+          # has and the material object itself.
+          construction.layers.each_with_index do |layer, layer_index|
+            mat_type = layer.iddObjectType.valueName.to_s
+            case mat_type
+            when "OS_Material"
+              mat_layer = layer.to_StandardOpaqueMaterial.get
+              layer_comp << {
+                  thickness_m: mat_layer.thickness.to_f,
+                  conductivity_SI: mat_layer.conductivity.to_f,
+                  conductance_SI: (mat_layer.conductivity.to_f/mat_layer.thickness.to_f),
+                  resistance_SI: (mat_layer.thickness.to_f/mat_layer.conductivity.to_f),
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
+            when "OS_Material_NoMass"
+              mat_layer = layer.to_MasslessOpaqueMaterial.get
+              layer_comp << {
+                  thickness_m: 0,
+                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  resistance_SI: mat_layer.thermalResistance.to_f,
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
+            when "OS_Material_AirGap"
+              mat_layer = layer.to_AirGap.get
+              layer_comp << {
+                  thickness_m: 0,
+                  conductivity_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  conductance_SI: 1.0/mat_layer.thermalResistance.to_f,
+                  resistance_SI: mat_layer.thermalResistance.to_f,
+                  construction_index: layer_index,
+                  layer_object: mat_layer
+              }
+            end
+          end
+          # Sort the above layers by the conductivity of the layers.  The lowest conductivity layers first followed by
+          # layers with progressively higher conductivities.
+          sorted_layers = layer_comp.sort{ |a, b| b[:conductivity_SI] <=> a[:conductivity_SI]}
+          index = 0
+          total_conductance = construction.thermalConductance.to_f
+          # The following loop steps through the array of layers, sorted form highest conductivity to lowest.  It
+          # deletes a layer in the construction if the conductance for the layer is not enough to reach the total
+          # conductance for the construction that we are trying to reach.  If modifies the thickness or resistance
+          # (depending on the layer material type) of a layer if doing so will reach the overall construction
+          # conductance target. The total conductance of the construction is rounded because the conductance never seems
+          # to be set precisely enough.
+
+          while total_conductance.round(4) < req_conductance
+            # There are too indicies that are tracked:
+            # index:  The index of the element in the sorted array of layers that we are currently considering
+            # const_index:  The index of the layer we are currently considering in the construction
+            # Note that both the construction array and sorted array contain the same elements.  However these elements
+            # may be in a different order.  Thus, the index and const_index may be different.  They will both indicate
+            # the same layer.  However, they may differ because the sorted array is sorted by conductivity while the
+            # construction array is ordered with the first layer outside (a given space) and the final layer inside (a
+            # given space).
+            const_index = sorted_layers[index][:construction_index]
+            # Check if modifying the resistance of the currently layer will be enough to reach our total construction
+            # conductance goal.  If it will, modify the layer.  If it will not, delete the layer.
+            if sorted_layers[index][:resistance_SI] > ((1.0/total_conductance) - (1.0/req_conductance))
+              # If the current layer is a NoMass or AirGap material its thickness is zero so we set the resistance.
+              if sorted_layers[index][:thickness_m] == 0
+                # Determine the resistance we want to set the layer to.
+                res_mod = sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance))
+                # Find out if the layer is an AirGap or NoMass and set the resistance for the layer with the right
+                # command systax.
+                mat_type = construction.layers[const_index].iddObjectType.valueName.to_s
+                case mat_type
+                when "OS_Material_NoMass"
+                  construction.layers[const_index].to_MasslessOpaqueMaterial.get.setThermalResistance(res_mod)
+                when "OS_Material_AirGap"
+                  construction.layers[const_index].to_AirGap.get.setThermalResistance(res_mod)
+                end
+              else
+                # The the current layer is a regular opaque material it has a thickness so we set that to reach the
+                # desired resistance for that layer.
+                # Determine the thickness we want to set the layer.
+                thick_mod = (sorted_layers[index][:resistance_SI] - ((1.0/total_conductance) - (1.0/req_conductance)))*(sorted_layers[index][:conductivity_SI])
+                # Set the thickness of the layer.
+                construction.layers[const_index].to_StandardOpaqueMaterial.get.setThickness(thick_mod)
+              end
+              # Step the index of the sorted array forward by 1.  We should be able to leave the loop now because the
+              # construction should have the conductance we want now.  But you never know.
+              index += 1
+            else
+              # There the layer could not be adjusted to reach the desired conductance for the construction so get rid
+              # of the layer.
+              # If this is the only layer then we cannot get rid of it so throw an error.  This should never happen but
+              # you never know.
+              if sorted_layers.size == 1
+                raise ("Could not set conductance of construction #{construction.name.to_s} to #{req_conductance} because existing layers make this impossible. Could not automatically change the constructions. Change the construction to allow for this conductance to be set.")
+                return construction
+              end
+              # Delete the layer from the construction.
+              construction.eraseLayer(const_index)
+              # Delete the layer from the sorted set of layers (so that both the construction array and sorted array
+              # continue to contain the same layers).
+              sorted_layers.delete_at(index)
+              # Go through the sorted array and change the construction indicies so that they continue to point to the
+              # correct layers of the construction array. Note that index is not increased.  This is because the element
+              # we were looking at just got removed so its index will be the same as that of what would have been the
+              # next element.
+              sorted_layers.each do |sorted_layer|
+                if sorted_layer[:construction_index] > (const_index - 1)
+                  sorted_layer[:construction_index] -= 1
+                end
+              end
+            end
+            # Get the revised conductance for the construction now that it has been modified (by either removing or
+            # modifying layers).
+            total_conductance = construction.thermalConductance.to_f
+            # Check if we have anything left to modify.  If yes, then keep going.  If not, then if we have done enough
+            # we can stop and return the revised construction, otherwise throw an error.
+            if construction.layers.size < index + 1
+              if total_conductance.round(4) >= req_conductance
+                return construction
+              else
+                raise ("Could not set conductance of construction #{construction.name.to_s} from the current conductance of #{total_conductance} to #{req_conductance} because existing layers make this impossible. Change the construction to allow for this conductance to be set.")
+                return construction
+              end
+            end
+          end
+          # We have achieved our goal, return the revised construction.
+          return construction
+        end
+
+        # This checks if the construction layer can be modified to set thermal resistance of the whole construction to
+        # be less than the required resistance
+        # @author Chris Kirney <chris.kirney@canada.ca>
+        # @param mat_resistance <Fixnum>
+        # @param total_conductance <Fixnum>
+        # @param req_conductance <Fixnum>
+        # @return [<Fixnum>] layer resistance needed to meet construction material resistance, -999 if this is not enough
+        def self.should_modify_layer(mat_resistance:, total_conductance:, req_conductance:)
+          # Determine if the amount of resistance you can modify in this layer is greater than the amount of resistance
+          # you have to change.
+          if mat_resistance > ((1.0/total_conductance) - (1.0/req_conductance))
+            # If yes, determine what the resistance for this layer should be to meet the required resistance of the
+            # entire assembly.  Then return the new resistance value.
+            target_res = mat_resistance - ((1.0/total_conductance) - (1.0/req_conductance))
+            return target_res
+          else
+            # If no, then return an unambiguous no.
+            return -999
+          end
         end
 
         #This model gets tsol
