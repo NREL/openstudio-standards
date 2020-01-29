@@ -9,7 +9,7 @@ class BTAPPRE1980
     return erv_required
   end
 
-  # Applies the standard efficiency ratings and typical performance curves to this object.
+  # Applies the standard efficiency ratings and typical performance curves to this object from MNECB Supplement 5.4.8.3.
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
@@ -29,13 +29,29 @@ class BTAPPRE1980
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
-    if (capacity_w / 1000.0) < 2100.0
+
+    if (capacity_w / 1000.0) <= 700.0
+      search_criteria['compressor_type'] = "Reciprocating"
+      compressor_type = search_criteria['compressor_type']
+      chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
+      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+        chiller_capacity = capacity_w
+      elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
+        chiller_capacity = 0.001
+      end
+    elsif ((capacity_w / 1000.0) > 700.0) && ((capacity_w / 1000.0) <= 2100.0)
+      search_criteria['compressor_type'] = "Centrifugal"
+      compressor_type = search_criteria['compressor_type']
+      chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
       if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
         chiller_capacity = capacity_w
       elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
         chiller_capacity = 0.001
       end
     else
+      search_criteria['compressor_type'] = "Centrifugal"
+      compressor_type = search_criteria['compressor_type']
+      chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
       chiller_capacity = capacity_w / 2.0
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
@@ -83,7 +99,11 @@ class BTAPPRE1980
     # Set the efficiency value
     kw_per_ton = nil
     cop = nil
-    if chlr_props['minimum_full_load_efficiency']
+    if chlr_props['cop']
+      cop = chlr_props['cop']
+      kw_per_ton = cop_to_kw_per_ton(cop)
+      chiller_electric_eir.setReferenceCOP(cop)
+    elsif !chlr_props['cop'] && chlr_props['minimum_full_load_efficiency']
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
       cop = kw_per_ton_to_cop(kw_per_ton)
       chiller_electric_eir.setReferenceCOP(cop)
@@ -164,6 +184,25 @@ class BTAPPRE1980
     motor_eff = motor_properties['nominal_full_load_efficiency']
 
     return [motor_eff, nominal_hp]
+  end
+
+  # Replace the chiller compressor type in the chiller name.
+  def replace_compressor_name(chiller: ,comp_type:, chillers:)
+    # Get the current name.
+    chiller_name = chiller.name.to_s
+    # Get the unique compressor types from the chiller table (from the chillers.json file.)
+    chiller_types = chillers.uniq{|chill_param| chill_param['compressor_type']}
+    new_name = chiller_name
+    # Go through each chiller compressor type from the chiller table and see if it is in the chiller name.  If it is,
+    # then replace the old compressor type in the name with the new one.
+    chiller_types.each do |chill_type|
+      if chiller_name.include? chill_type['compressor_type']
+        new_name = chiller_name.sub(chill_type['compressor_type'], comp_type)
+        break
+      end
+    end
+    chiller.setName(new_name)
+    return chiller
   end
 
 end
