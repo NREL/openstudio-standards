@@ -183,6 +183,7 @@ class BTAPPRE1980
     end
     motor_eff = motor_properties['nominal_full_load_efficiency']
 
+    apply_pump_impeller_efficiency(pump: pump, motor_eff: motor_eff)
     return [motor_eff, nominal_hp]
   end
 
@@ -203,6 +204,15 @@ class BTAPPRE1980
     end
     chiller.setName(new_name)
     return chiller
+  end
+
+  def apply_pump_impeller_efficiency(pump:, motor_eff:)
+    plant_loop_comp = pump.plantLoop.get.supplyComponents
+    plant_loop_comp.each do |comp|
+      obj_type = comp.iddObjectType.valueName.to_s
+      puts 'hello'
+    end
+    puts 'hello'
   end
 
 end
