@@ -10,7 +10,7 @@
           "comb_eff": 0.6,
           "components": [
             "OS_Chiller_Absorption",
-            "OS_Chiller_Absorption:Indirect",
+            "OS_Chiller_Absorption_Indirect",
             "OS_Chiller_EIR",
             "OS_ChillerHeaterPerformance_Electric_EIR"
           ],
@@ -39,7 +39,7 @@
           "comb_eff": 0.6,
           "components": [
             "OS_WaterHeater_HeatPump",
-            "OS_WaterHeater_HeatPump:WrappedCondenser",
+            "OS_WaterHeater_HeatPump_WrappedCondenser",
             "OS_WaterHeater_Mixed",
             "OS_WaterHeater_Stratified"
           ],

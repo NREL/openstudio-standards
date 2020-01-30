@@ -31,6 +31,8 @@ class BTAPPRE1980
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
 
     if (capacity_w / 1000.0) <= 700.0
+      # As per MNECB if chiller capacity <= 700 kW the compressor should be reciprocating so change the type here in
+      # the name, compressor_type and search_criteria which is where the compressor type is used.
       search_criteria['compressor_type'] = "Reciprocating"
       compressor_type = search_criteria['compressor_type']
       chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
@@ -40,6 +42,8 @@ class BTAPPRE1980
         chiller_capacity = 0.001
       end
     elsif ((capacity_w / 1000.0) > 700.0) && ((capacity_w / 1000.0) <= 2100.0)
+      # As per MNECB if chiller capacity > 700 kW the compressor should be centrifugal so change the type here in
+      # the name, compressor_type and search_criteria which is where the compressor type is used.
       search_criteria['compressor_type'] = "Centrifugal"
       compressor_type = search_criteria['compressor_type']
       chiller_electric_eir = replace_compressor_name(chiller: chiller_electric_eir, comp_type: compressor_type, chillers: chillers)
@@ -183,6 +187,7 @@ class BTAPPRE1980
     end
     motor_eff = motor_properties['nominal_full_load_efficiency']
 
+    # Change the pump design shaft power per unit flow rate per unit head to use MNECB combined efficiency values
     apply_pump_impeller_efficiency(pump: pump, motor_eff: motor_eff)
     return [motor_eff, nominal_hp]
   end
@@ -206,13 +211,24 @@ class BTAPPRE1980
     return chiller
   end
 
+  # Set the pump design shaft power per unit flow rate per unit head to incorporate total pump efficiency (adjusted for
+  # motor efficiency).
   def apply_pump_impeller_efficiency(pump:, motor_eff:)
-    plant_loop_comp = pump.plantLoop.get.supplyComponents
-    plant_loop_comp.each do |comp|
+    # Get the pump efficiency table from the pump_efficiencies.json
+    pump_data = @standards_data['pump_combined_eff']
+    pump_info = nil
+    # Go through the components of the plant loop the plant is attached to.  Find the type of plant loop based on the
+    # equipment in it (e.g. it is a hot water loop if the loop contains a boiler supply component).  Once we know the
+    # type of plant loop get the combined pump efficiency from pump_data
+    pump.plantLoop.get.supplyComponents.each do |comp|
       obj_type = comp.iddObjectType.valueName.to_s
-      puts 'hello'
+      break if pump_info = pump_data.find { |pump| pump['components'].find {|component| component.include?(obj_type)}}
     end
-    puts 'hello'
+    return if pump_info.nil?
+    # DesignShaftPowerPerUnitFlowRatePerUnitHead seems to be the inverse of an efficiency so get the inverse efficiency
+    # by dividing the motor efficiency from the total pump efficiency.
+    inv_impeller_eff = motor_eff/pump_info['comb_eff'].to_f
+    pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(inv_impeller_eff)
   end
 
 end
