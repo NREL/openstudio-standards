@@ -27,9 +27,13 @@ module CITestGenerator
 
   # Method that will generate the necb building test files.
   def self.generate_necb_bldg_test_files
-    templates = ['NECB2011',
-                 'NECB2015',
-                 'NECB2017']
+    templates = [
+        'BTAPPRE1980',
+        'BTAP1980TO2010',
+        'NECB2011',
+        'NECB2015',
+        'NECB2017'
+    ]
     building_types = [
         "FullServiceRestaurant",
         "HighriseApartment",
