@@ -282,7 +282,7 @@ class NECB2011 < Standard
   # determine it.
   def determine_spacetype_vintage(model)
     #this code is the list of available vintages
-    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
+    space_type_vintage_list = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
     #this reorders the list to do the current class first.
     space_type_vintage_list.insert(0, space_type_vintage_list.delete(self.class.name))
     #Set the space_type
