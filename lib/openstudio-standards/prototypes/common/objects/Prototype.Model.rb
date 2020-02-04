@@ -589,7 +589,7 @@ Standard.class_eval do
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction
-      f_floor_const_name ="Basement Floor F-Factor: #{f_factor.round(2).to_s} Perim:#{perimeter.round(2).to_s} Area: #{area.round(2).to_s}"
+      f_floor_const_name ="Foundation F #{f_factor.round(2).to_s} Perim #{perimeter.round(2).to_s} Area #{area.round(2).to_s}".gsub('.','')
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
