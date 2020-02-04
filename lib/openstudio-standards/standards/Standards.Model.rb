@@ -4038,7 +4038,7 @@ class Standard
 
     # Check the results
     if possible_climate_zone_sets.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}.  Make sure to use ASHRAE standards with ASHRAE climate zones and DEER or CA Title 24 standards with CEC climate zones.")
     elsif possible_climate_zone_sets.size > 2
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
     end
@@ -4048,7 +4048,7 @@ class Standard
 
     # Check that a climate zone set was found
     if climate_zone_set.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set in standard #{template}")
     end
 
     return climate_zone_set
