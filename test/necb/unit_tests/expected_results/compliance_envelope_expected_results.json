@@ -547,7 +547,7 @@
   },
   "BTAPPRE1980": {
     "2800.0": {
-      "fdwr": 0.4,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.363,
       "outdoor_walls_average_conductances": 0.994,
@@ -577,7 +577,7 @@
       }
     },
     "3450.0": {
-      "fdwr": 0.4,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.296,
       "outdoor_walls_average_conductances": 0.9,
@@ -607,7 +607,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.367,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.267,
       "outdoor_walls_average_conductances": 0.823,
@@ -637,7 +637,7 @@
       }
     },
     "5500.0": {
-      "fdwr": 0.3,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.772,
@@ -667,7 +667,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.233,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.772,
@@ -729,7 +729,7 @@
   },
   "BTAP1980TO2010": {
     "2800.0": {
-      "fdwr": 0.4,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.363,
       "outdoor_walls_average_conductances": 0.568,
@@ -759,7 +759,7 @@
       }
     },
     "3450.0": {
-      "fdwr": 0.4,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.296,
       "outdoor_walls_average_conductances": 0.682,
@@ -789,7 +789,7 @@
       }
     },
     "4500.0": {
-      "fdwr": 0.367,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.267,
       "outdoor_walls_average_conductances": 0.426,
@@ -819,7 +819,7 @@
       }
     },
     "5500.0": {
-      "fdwr": 0.3,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.346,
@@ -849,7 +849,7 @@
       }
     },
     "6500.0": {
-      "fdwr": 0.233,
+      "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.227,
       "outdoor_walls_average_conductances": 0.346,
