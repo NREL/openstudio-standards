@@ -26,7 +26,8 @@ class NRELZNEReady2017 < ASHRAE901
       return [nil, nil, nil]
     when 'FixedDryBulb'
       case climate_zone
-      when 'ASHRAE 169-2006-1B',
+      when 'ASHRAE 169-2006-0B',
+           'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2B',
            'ASHRAE 169-2006-3B',
            'ASHRAE 169-2006-3C',
@@ -39,6 +40,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2006-7B',
            'ASHRAE 169-2006-8A',
            'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2B',
            'ASHRAE 169-2013-3B',
@@ -117,7 +119,8 @@ class NRELZNEReady2017 < ASHRAE901
     # Determine the prohibited types
     prohibited_types = []
     case climate_zone
-    when 'ASHRAE 169-2006-1B',
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
@@ -129,6 +132,7 @@ class NRELZNEReady2017 < ASHRAE901
          'ASHRAE 169-2006-7B',
          'ASHRAE 169-2006-8A',
          'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2B',
          'ASHRAE 169-2013-3B',
@@ -142,10 +146,12 @@ class NRELZNEReady2017 < ASHRAE901
          'ASHRAE 169-2013-8A',
          'ASHRAE 169-2013-8B'
       prohibited_types = ['FixedEnthalpy']
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-3A',
@@ -278,13 +284,17 @@ class NRELZNEReady2017 < ASHRAE901
   # @return [Array<Double>] [minimum_oa_flow_cfm, maximum_stories]
   def air_loop_hvac_motorized_oa_damper_limits(air_loop_hvac, climate_zone)
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3A',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2013-0A',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2A',
@@ -336,15 +346,18 @@ class NRELZNEReady2017 < ASHRAE901
     end
 
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
          'ASHRAE 169-2006-2A',
          'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2013-0A',
          'ASHRAE 169-2013-1A',
          'ASHRAE 169-2013-2A',
          'ASHRAE 169-2013-3A'
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset is not required per 6.5.3.4 Exception 1, the system is located in climate zone #{climate_zone}.")
       return is_sat_reset_required
-    when 'ASHRAE 169-2006-1B',
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
          'ASHRAE 169-2006-2B',
          'ASHRAE 169-2006-3B',
          'ASHRAE 169-2006-3C',
@@ -360,6 +373,7 @@ class NRELZNEReady2017 < ASHRAE901
          'ASHRAE 169-2006-7B',
          'ASHRAE 169-2006-8A',
          'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
          'ASHRAE 169-2013-1B',
          'ASHRAE 169-2013-2B',
          'ASHRAE 169-2013-3B',
@@ -498,9 +512,11 @@ class NRELZNEReady2017 < ASHRAE901
         elsif pct_oa >= 0.8
           erv_cfm = nil
         end
-      when 'ASHRAE 169-2006-1B',
+      when 'ASHRAE 169-2006-0B',
+           'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2B',
            'ASHRAE 169-2006-5C',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2B',
            'ASHRAE 169-2013-5C'
@@ -544,12 +560,14 @@ class NRELZNEReady2017 < ASHRAE901
         elsif pct_oa >= 0.8
           erv_cfm = 1500
         end
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-1A',
            'ASHRAE 169-2006-2A',
            'ASHRAE 169-2006-3A',
            'ASHRAE 169-2006-4A',
            'ASHRAE 169-2006-5A',
            'ASHRAE 169-2006-6A',
+           'ASHRAE 169-2006-0A',
            'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-3A',
@@ -609,11 +627,13 @@ class NRELZNEReady2017 < ASHRAE901
       when 'ASHRAE 169-2006-3C',
            'ASHRAE 169-2013-3C'
         erv_cfm = nil
-      when 'ASHRAE 169-2006-1B',
+      when 'ASHRAE 169-2006-0B',
+           'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2B',
            'ASHRAE 169-2006-3B',
            'ASHRAE 169-2006-4C',
            'ASHRAE 169-2006-5C',
+           'ASHRAE 169-2013-0B',
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2B',
            'ASHRAE 169-2013-3B',
@@ -638,11 +658,13 @@ class NRELZNEReady2017 < ASHRAE901
         elsif pct_oa >= 0.8
           erv_cfm = 120
         end
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-1A',
            'ASHRAE 169-2006-2A',
            'ASHRAE 169-2006-3A',
            'ASHRAE 169-2006-4B',
            'ASHRAE 169-2006-5B',
+           'ASHRAE 169-2006-0A',
            'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-3A',
@@ -708,19 +730,100 @@ class NRELZNEReady2017 < ASHRAE901
     return erv_cfm
   end
 
+  # Determine whether to apply an Energy Recovery Ventilator 'ERV' or a Heat Recovery Ventilator 'HRV' depending on the climate zone
+  # Defaults to ERV.
+  # @return [String] the ERV type
+  def air_loop_hvac_energy_recovery_ventilator_type(air_loop_hvac, climate_zone)
+    erv_type = 'ERV'
+    return erv_type
+  end
+
+  # Determine whether to use a Plate-Frame or Rotary Wheel style ERV depending on air loop outdoor air flow rate
+  # Defaults to Rotary.
+  # @return [String] the ERV type
+  def air_loop_hvac_energy_recovery_ventilator_heat_exchanger_type(air_loop_hvac)
+    # Get the OA system
+    if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+      oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.nrel_zne_ready_2017.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV type not applicable because it has no OA intake.")
+      return false
+    end
+
+    # Get the minimum OA flow rate
+    if controller_oa.maximumOutdoorAirFlowRate.is_initialized
+      max_oa_flow_m3_per_s = controller_oa.maximumOutdoorAirFlowRate.get
+    elsif controller_oa.autosizedMaximumOutdoorAirFlowRate.is_initialized
+      max_oa_flow_m3_per_s = controller_oa.autosizedMaximumOutdoorAirFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.nrel_zne_ready_2017.AirLoopHVAC', "For #{controller_oa.name}: maximum OA flow rate is not available, cannot determine ERV type.")
+      return false
+    end
+    max_oa_flow_cfm = OpenStudio.convert(max_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+
+    # Use a 500 cfm threshold
+    if max_oa_flow_cfm < 500.0
+      heat_exchanger_type = 'Plate'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.nrel_zne_ready_2017.AirLoopHVAC', "For #{air_loop_hvac.name}, maximum outdoor air flow rate is less than 500 cfm, assuming a plate and frame heat exchanger.")
+    else
+      heat_exchanger_type = 'Rotary'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.nrel_zne_ready_2017.AirLoopHVAC', "For #{air_loop_hvac.name}, maximum outdoor air flow rate is greater than 500 cfm, assuming a rotary wheel heat exchanger.")
+    end
+
+    return heat_exchanger_type
+  end
+
   # Apply efficiency values to the erv
   #
   # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @param erv_type [String] erv type ERV or HRV
+  # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
   # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
-  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv)
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.81)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.68)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.81)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.68)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
+    if heat_exchanger_type == 'Plate'
+      # based on Zehnder ComfoAir
+      if erv_type == 'HRV'
+        erv.setSensibleEffectivenessat100HeatingAirFlow(0.865)
+        erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
+        erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
+        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+        erv.setSensibleEffectivenessat100CoolingAirFlow(0.865)
+        erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
+        erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
+        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+      else
+        erv.setSensibleEffectivenessat100HeatingAirFlow(0.755)
+        erv.setLatentEffectivenessat100HeatingAirFlow(0.564)
+        erv.setSensibleEffectivenessat75HeatingAirFlow(0.791)
+        erv.setLatentEffectivenessat75HeatingAirFlow(0.625)
+        erv.setSensibleEffectivenessat100CoolingAirFlow(0.755)
+        erv.setLatentEffectivenessat100CoolingAirFlow(0.564)
+        erv.setSensibleEffectivenessat75CoolingAirFlow(0.791)
+        erv.setLatentEffectivenessat75CoolingAirFlow(0.625)
+      end
+    else
+      if erv_type == 'HRV'
+        erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
+        erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
+        erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
+        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+        erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+        erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
+        erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
+        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+      else
+        erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
+        erv.setLatentEffectivenessat100HeatingAirFlow(0.74)
+        erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
+        erv.setLatentEffectivenessat75HeatingAirFlow(0.79)
+        erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+        erv.setLatentEffectivenessat100CoolingAirFlow(0.74)
+        erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
+        erv.setLatentEffectivenessat75CoolingAirFlow(0.78)
+      end
+    end
+
     return erv
   end
 end
