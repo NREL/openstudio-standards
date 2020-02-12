@@ -8,7 +8,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # outpatient.osm file).
 class SHW_test < Minitest::Test
   #Standards
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017']
+  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
 
 

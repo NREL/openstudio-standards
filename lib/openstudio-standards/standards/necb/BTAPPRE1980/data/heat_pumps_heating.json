@@ -1,0 +1,132 @@
+{
+  "tables": {
+    "heat_pumps_heating": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Single Package",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 65000.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        },
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Split System",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 65000.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        },
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Single Package",
+          "minimum_capacity": 65001.0,
+          "maximum_capacity": 238840.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        },
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Split System",
+          "minimum_capacity": 65001.0,
+          "maximum_capacity": 238840.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        },
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Single Package",
+          "minimum_capacity": 238841.0,
+          "maximum_capacity": 9999999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        },
+        {
+          
+          "cooling_type": "AirCooled",
+          "subcategory": "Split System",
+          "minimum_capacity": 238841.0,
+          "maximum_capacity": 9999999.0,
+          "start_date": "9/9/1919",
+          "end_date": "2999-09-09T00:00:00+00:00",
+          "minimum_heating_seasonal_performance_factor": null,
+          "minimum_coefficient_of_performance_heating": 3.0,
+          "minimum_energy_efficiency_ratio": null,
+          "pthp_cop_coefficient_1": null,
+          "pthp_cop_coefficient_2": null,
+          "heat_cap_ft": "DXHEAT-NECB2011-REF-CAPFT",
+          "heat_cap_fflow": "DXHEAT-NECB2011-REF-CAPFFLOW",
+          "heat_eir_ft": "DXHEAT-NECB2011-REF-EIRFT",
+          "heat_eir_fflow": "DXHEAT-NECB2011-REF-EIRFFLOW",
+          "heat_plf_fplr": "DXHEAT-NECB2011-REF-PLFFPLR",
+          "notes": "From MNECB supplement 5.4.7.2. and MNECB Appendix D"
+        }
+      ]
+    }
+  }
+}
