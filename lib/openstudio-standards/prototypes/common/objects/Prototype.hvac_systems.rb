@@ -1478,6 +1478,8 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
     sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
@@ -1602,10 +1604,10 @@ class Standard
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1619,8 +1621,8 @@ class Standard
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1833,6 +1835,9 @@ class Standard
     # default design settings used across all air loops
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
+
     # air handler controls
     sa_temp_sch = model_add_constant_schedule_ruleset(model,
                                                       dsgn_temps['clg_dsgn_sup_air_temp_c'],
@@ -1931,8 +1936,8 @@ class Standard
       terminal.setName("#{zone.name} VAV Terminal")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2150,6 +2155,9 @@ class Standard
     # default design settings used across all air loops
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
+
     # air handler controls
     sa_temp_sch = model_add_constant_schedule_ruleset(model,
                                                       dsgn_temps['clg_dsgn_sup_air_temp_c'],
@@ -2226,11 +2234,11 @@ class Standard
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Terminal")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
       # zone sizing
       sizing_zone = zone.sizingZone

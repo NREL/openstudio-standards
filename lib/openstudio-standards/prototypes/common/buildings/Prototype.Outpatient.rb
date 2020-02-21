@@ -249,8 +249,35 @@ module Outpatient
     end
   end
 
-  # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
   def model_adjust_vav_minimum_damper(model)
+    # Minimum damper position for Outpatient prototype
+    # Based on AIA 2001 ventilation requirements
+    # See Section 5.2.2.16 in Thornton et al. 2010
+    # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
+    init_mdp = {
+      "FLOOR 1 ANESTHESIA" => 1.0,
+      "FLOOR 1 CLEAN" => 1.0,
+      "FLOOR 1 CLEAN WORK" => 1.0,
+      "FLOOR 1 LOBBY TOILET" => 1.0,
+      "FLOOR 1 MRI TOILET" => 1.0,
+      "FLOOR 1 NURSE TOILET" => 1.0,
+      "FLOOR 1 OPERATING ROOM 1" => 1.0,
+      "FLOOR 1 OPERATING ROOM 2" => 1.0,
+      "FLOOR 1 OPERATING ROOM 3" => 1.0,
+      "FLOOR 1 PACU" => 1.0,
+      "FLOOR 1 PRE-OP ROOM 1" => 1.0,
+      "FLOOR 1 PRE-OP ROOM 2" => 1.0,
+      "FLOOR 1 PRE-OP TOILET" => 1.0,
+      "FLOOR 1 PROCEDURE ROOM" => 1.0,
+      "FLOOR 1 RECOVERY ROOM" => 0.87,
+      "FLOOR 1 RECOVERY ROOM" => 1.0,
+      "FLOOR 1 SOIL" => 1.0,
+      "FLOOR 1 SOIL HOLD" => 1.0,
+      "FLOOR 1 SOIL WORK" => 1.0,
+      "FLOOR 1 STEP DOWN" => 0.69,
+      "FLOOR 1 STEP DOWN" => 1.0,
+    }
+
     model.getThermalZones.each do |zone|
       air_terminal = zone.airLoopHVACTerminal
       if air_terminal.is_initialized
@@ -258,17 +285,24 @@ module Outpatient
         if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
           air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
           vav_name = air_terminal.name.get
+          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          case template
           # High OA zones
           # Determine whether or not to use the high minimum guess.
           # Cutoff was determined by correlating apparent minimum guesses
           # to OA rates in prototypes since not well documented in papers.
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
-          case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
             air_terminal.setConstantMinimumAirFlowFraction(1.0) if vav_name.include?('Floor 1')
+          # Minimum damper position for Outpatient prototype
+          # Based on AIA 2001 ventilation requirements
+          # See Section 5.2.2.16 in Thornton et al. 2010
+          # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-           end
+            zone_name = zone.name.to_s.upcase.gsub(" ZN", "").strip
+            if init_mdp.key? zone_name
+              air_terminal.setConstantMinimumAirFlowFraction(init_mdp[zone_name])
+            end
+          end
         end
       end
     end

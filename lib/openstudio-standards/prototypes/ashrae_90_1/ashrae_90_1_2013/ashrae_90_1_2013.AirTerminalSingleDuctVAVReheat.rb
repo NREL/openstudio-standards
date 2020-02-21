@@ -11,15 +11,41 @@ class ASHRAE9012013 < ASHRAE901
                           when 'HotWater'
                             0.2
                           when 'Electricity', 'NaturalGas'
-                            0.3
+                            0.2
                           end
 
-    # High OA zones
-    # Determine whether or not to use the high minimum guess.
-    # Cutoff was determined by correlating apparent minimum guesses
-    # to OA rates in prototypes since not well documented in papers.
-    if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-      min_damper_position = 0.7
+    # Minimum damper position for Outpatient prototype
+    # Based on AIA 2001 ventilation requirements
+    # See Section 5.2.2.16 in Thornton et al. 2010
+    # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
+    airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
+    if airlp.name.to_s.include? "Outpatient"
+      init_mdp = {
+        "FLOOR 2 CONFERENCE TOILET"=> 1.0,
+        "FLOOR 2 EXAM 1"=> 0.51,
+        "FLOOR 2 EXAM 2"=> 1.0,
+        "FLOOR 2 EXAM 3"=> 1.0,
+        "FLOOR 2 EXAM 4"=> 0.64,
+        "FLOOR 2 EXAM 5"=> 0.69,
+        "FLOOR 2 EXAM 6"=> 0.94,
+        "FLOOR 2 EXAM 7"=> 1.0,
+        "FLOOR 2 EXAM 8"=> 0.93,
+        "FLOOR 2 EXAM 9"=> 1.0,
+        "FLOOR 2 RECEPTION TOILET"=> 1.0,
+        "FLOOR 2 WORK TOILET"=> 1.0,
+        "FLOOR 3 LOUNGE TOILET"=> 1.0,
+        "FLOOR 3 OFFICE TOILET"=> 1.0,
+        "FLOOR 3 PHYSICAL THERAPY 1"=> 0.69,
+        "FLOOR 3 PHYSICAL THERAPY 2"=> 0.83,
+        "FLOOR 3 PHYSICAL THERAPY TOILET"=> 1.0,
+        "FLOOR 3 STORAGE 1"=> 1.0,
+        "FLOOR 3 TREATMENT"=> 0.81,
+      }
+      init_mdp.each do |zn_name, mdp|
+        if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
+          min_damper_position = mdp
+        end
+      end
     end
 
     # Set the minimum flow fraction

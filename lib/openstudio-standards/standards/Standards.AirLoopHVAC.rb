@@ -1737,6 +1737,22 @@ class Standard
     e_vzs = []
     e_vzs_adj = []
     num_zones_adj = 0
+
+    # Retrieve the sum of the zone minimum primary airflow
+    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+
+    # Retrieve the autosized system outdoor air intake (V_ot) 
+    # only if the "VentilationRateProcedure" method was used
+    # for the sizing run
+    sizing_system = air_loop_hvac.sizingSystem
+    if sizing_system.systemOutdoorAirMethod == "VentilationRateProcedure"
+      v_ot_siz = air_loop_hvac.autosize621OutdoorAirIntakeFlow
+    else
+      # A value of 0.0 indicates that Vot
+      # was not sized by using the VRP
+      v_ot_siz = 0.0
+    end
+
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
       v_bz = thermal_zone_outdoor_airflow_rate(zone)
@@ -1799,11 +1815,24 @@ class Standard
       # For VAV Reheat terminals, min flow is greater of mdp
       # and min flow rate / design flow rate.
       mdp = mdp_term
-      mdp_oa = min_zn_flow / v_ps
+      mdp_oa = min_zn_flow / v_pz
       if min_zn_flow > 0.0
         mdp = [mdp_term, mdp_oa].max.round(2)
       end
-      # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} mdp_term = #{mdp_term.round(2)}, mdp_oa = #{mdp_oa.round(2)}; mdp_final = #{mdp}")
+
+      mdp_adj = mdp
+
+      # In EnergyPlus 9.0.1, if Vot > Vpz_min_sum,
+      # Vpz_min is used during simulations in place
+      # of the input MDP, and as a results V_ot is 
+      # not provided by the system.
+      #
+      # The following adjust all MDPs to make sure 
+      # that Vot provided by the system during
+      # simulations.
+      if v_ot_siz > vpz_min_sum and v_ot_siz > 0
+        mdp_adj = v_ot_siz / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate
+      end
 
       # Zone minimum discharge airflow rate
       v_dz = v_pz * mdp
@@ -1811,7 +1840,7 @@ class Standard
       # Zone discharge air fraction
       z_d = v_oz / v_dz
 
-      # Zone ventilation effectiveness  !!!
+      # Zone ventilation effectiveness
       e_vz = 1.0 + x_s - z_d
 
       # Store the ventilation effectiveness
@@ -1822,7 +1851,7 @@ class Standard
       # Check the ventilation effectiveness against
       # the minimum limit per PNNL and increase
       # as necessary.
-      if e_vz < 0.6
+      if e_vz < 0.6 and v_ot_siz <= vpz_min_sum
 
         # Adjusted discharge air fraction
         z_d_adj = 1.0 + x_s - 0.6
@@ -1848,23 +1877,6 @@ class Standard
         # at the ~13th decimal place, which can cause regression errors
         mdp_adj = mdp_adj.round(11)
 
-        # Set the adjusted minimum damper position
-        zone.equipment.each do |equip|
-          if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
-            term.setZoneMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
-            term.setZoneMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
-            term.setConstantMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVReheat.get
-            term.setConstantMinimumAirFlowFraction(mdp_adj)
-          end
-        end
-
         num_zones_adj += 1
 
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Zone #{zone.name} has a ventilation effectiveness of #{e_vz.round(2)}.  Increasing to #{e_vz_adj.round(2)} by increasing minimum damper position from #{mdp.round(2)} to #{mdp_adj.round(2)}.")
@@ -1873,6 +1885,24 @@ class Standard
         # Store the unadjusted value
         e_vzs_adj << e_vz
       end
+
+      # Set the adjusted minimum damper position
+      zone.equipment.each do |equip|
+        if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
+          term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
+          term.setZoneMinimumAirFlowFraction(mdp_adj)
+        elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
+          term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+          term.setZoneMinimumAirFlowFraction(mdp_adj)
+        elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
+          term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
+          term.setConstantMinimumAirFlowFraction(mdp_adj)
+        elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          term = equip.to_AirTerminalSingleDuctVAVReheat.get
+          term.setConstantMinimumAirFlowFraction(mdp_adj)
+        end
+      end
+
     end
 
     # Min system zone ventilation effectiveness
@@ -1896,10 +1926,13 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone requirements gives a value of #{v_ou_cfm.round} cfm.  However, applying the multizone method requires #{v_ot_adj_cfm.round} cfm based on the ventilation effectiveness of the system.")
     end
 
-    # Hard-size the sizing:system
-    # object with the calculated min OA flow rate
-    sizing_system = air_loop_hvac.sizingSystem
-    sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+    # Inject Vot in the system sizing object
+    if v_ot_siz > 0
+      sizing_system.setDesignOutdoorAirFlowRate(v_ot_siz)
+      sizing_system.setSystemOutdoorAirMethod("ZoneSum")
+    else
+      sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+    end
 
     return true
   end

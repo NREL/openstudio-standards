@@ -260,10 +260,15 @@ module Hospital
             if vav_name.include?('PatRoom') || vav_name.include?('OR') || vav_name.include?('ICU') || vav_name.include?('Lab') || vav_name.include?('ER') || vav_name.include?('Kitchen')
               air_terminal.setConstantMinimumAirFlowFraction(1.0)
             end
+          # Minimum damper position for Outpatient prototype
+          # Based on AIA 2001 ventilation requirements
+          # See Section 5.2.2.16 in Thornton et al. 2010
+          # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+            air_terminal.setConstantMinimumAirFlowFraction(1.0)
           when '90.1-2010', '90.1-2013'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
+            airlp = air_terminal.airLoopHVAC.get
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include? "VAV_1" or airlp.name.to_s.include? "VAV_2"
             air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? "PatRoom"
           end
         end
