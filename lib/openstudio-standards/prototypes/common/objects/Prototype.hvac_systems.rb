@@ -2155,9 +2155,6 @@ class Standard
     # default design settings used across all air loops
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
     # air handler controls
     sa_temp_sch = model_add_constant_schedule_ruleset(model,
                                                       dsgn_temps['clg_dsgn_sup_air_temp_c'],

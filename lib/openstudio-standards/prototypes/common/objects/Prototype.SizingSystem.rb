@@ -36,30 +36,12 @@ class Standard
 
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
     sizing_system = air_loop_hvac.sizingSystem
-    # Only apply to prototypes maintained by PNNL
-    if template.include? ("90.1") and (@instvarbuilding_type == 'HighriseApartment' or
-      @instvarbuilding_type == 'Warehouse' or 
-      @instvarbuilding_type == 'SecondarySchool' or
-      @instvarbuilding_type == 'LargeHotel' or 
-      @instvarbuilding_type == 'Outpatient' or
-      @instvarbuilding_type == 'MidriseApartment' or
-      @instvarbuilding_type == 'PrimarySchool' or
-      @instvarbuilding_type == 'SmallHotel' or
-      @instvarbuilding_type == 'MediumOffice' or
-      @instvarbuilding_type == 'SmallOffice' or
-      @instvarbuilding_type == 'RetailStandalone' or
-      @instvarbuilding_type == 'Hospital' or
-      @instvarbuilding_type == 'LargeOffice' or
-      @instvarbuilding_type == 'FullServiceRestaurant' or
-      @instvarbuilding_type == 'RetailStripmall' or
-      @instvarbuilding_type == 'QuickServiceRestaurant')
-      sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
-      # Set the minimum zone ventilation efficiency to be 0.6
-      air_loop_hvac.thermalZones.sort.each do |zone|
-        sizing_zone = zone.sizingZone
-        sizing_zone.setDesignZoneAirDistributionEffectivenessinCoolingMode(0.6)
-        sizing_zone.setDesignZoneAirDistributionEffectivenessinHeatingMode(0.6)
-      end
+    sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
+    # Set the minimum zone ventilation efficiency to be 0.6
+    air_loop_hvac.thermalZones.sort.each do |zone|
+      sizing_zone = zone.sizingZone
+      sizing_zone.setDesignZoneAirDistributionEffectivenessinCoolingMode(0.6)
+      sizing_zone.setDesignZoneAirDistributionEffectivenessinHeatingMode(0.6)
     end
 
     return true  
