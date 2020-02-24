@@ -284,7 +284,7 @@ class NECB2011
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac)
+  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate_zone)
     # Get the oa system
     oa_system = nil
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized

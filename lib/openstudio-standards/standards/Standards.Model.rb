@@ -1,7 +1,5 @@
 require 'csv'
 
-
-
 class Standard
   attr_accessor :space_multiplier_map
   attr_accessor :standards_data
@@ -89,6 +87,9 @@ class Standard
 
     # Remove all HVAC from model, excluding service water heating
     model_remove_prm_hvac(model)
+
+    # Remove all EMS objects from the model
+    model_remove_prm_ems_objects(model)
 
     # Modify the service water heating loops per the baseline rules
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
@@ -1473,7 +1474,7 @@ class Standard
   def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started applying HVAC efficiency standards for #{template} template.")
 
     # Air Loop Controls
     if apply_controls.nil? || apply_controls == true
@@ -1503,7 +1504,7 @@ class Standard
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
-    # pull the capacities of their paried DX clg coils, and this does not work
+    # pull the capacities of their paired DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
     model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
@@ -3774,6 +3775,26 @@ class Standard
 
     # Outdoor VRF units (not in zone, not in loops)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
+
+    return true
+  end
+
+  # Remove EMS objects that may be orphaned from removing HVAC
+  #
+  # @return [Bool] true if successful, false if not
+  def model_remove_prm_ems_objects(model)
+    model.getEnergyManagementSystemActuators(&:remove)
+    model.getEnergyManagementSystemConstructionIndexVariables(&:remove)
+    model.getEnergyManagementSystemCurveOrTableIndexVariables(&:remove)
+    model.getEnergyManagementSystemGlobalVariables(&:remove)
+    model.getEnergyManagementSystemInternalVariables(&:remove)
+    model.getEnergyManagementSystemMeteredOutputVariables(&:remove)
+    model.getEnergyManagementSystemOutputVariables(&:remove)
+    model.getEnergyManagementSystemPrograms(&:remove)
+    model.getEnergyManagementSystemProgramCallingManagers(&:remove)
+    model.getEnergyManagementSystemSensors(&:remove)
+    model.getEnergyManagementSystemSubroutines(&:remove)
+    model.getEnergyManagementSystemTrendVariables(&:remove)
 
     return true
   end

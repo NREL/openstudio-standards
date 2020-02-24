@@ -85,10 +85,8 @@ class Standard
       def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
     elsif type == 'Residential Minisplit HP'
       # Performance curves
-      # These coefficients are in IP UNITS
-      heat_cap_ft_coeffs_ip = [1.0029281211538501, -0.010386676170938, 0, 0.025961538461538501, 0, 0]
-      heat_cap_ft_coeffs_si = convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
       # These coefficients are in SI UNITS
+      heat_cap_ft_coeffs_si = [1.14715889038462, -0.010386676170938, 0, 0.00865384615384615, 0, 0]
       heat_eir_ft_coeffs_si = [0.9999941697687026, 0.004684593830254383, 5.901286675833333e-05, -0.0028624467783091973, 1.3041120194135802e-05, -0.00016172918478765433]
       heat_cap_fflow_coeffs = [1, 0, 0]
       heat_eir_fflow_coeffs = [1, 0, 0]
@@ -102,7 +100,7 @@ class Standard
       htg_part_load_fraction = create_curve_quadratic(model, heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0.6, 1, is_dimensionless = true)
 
       # Heating defrost curve for reverse cycle
-      def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
+      def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'Defrost EIR', -100, 100, -100, 100, nil, nil)
     else # default curve set
       htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
       htg_cap_f_of_temp.setName("#{htg_coil.name} Htg Cap Func of Temp Curve")

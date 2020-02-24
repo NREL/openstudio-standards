@@ -1,8 +1,13 @@
 class Standard
   # @!group ZoneHVACComponent
 
+  def zone_hvac_component_prm_baseline_fan_efficacy
+    fan_efficacy_w_per_cfm = 0.3
+    return fan_efficacy_w_per_cfm
+  end
+
   # Sets the fan power of zone level HVAC equipment
-  # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
+  # (Fan coils, Unit Heaters, PTACs, PTHPs, VRF Terminals, WSHPs, ERVs)
   # based on the W/cfm specified in the standard.
   #
   # @return [Bool] returns true if successful, false if not
@@ -18,6 +23,12 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+                  zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+                elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
+                  zone_hvac_component.to_ZoneHVACEnergyRecoveryVentilator.get
                 end
 
     # Do nothing for other types of zone HVAC equipment
@@ -26,7 +37,7 @@ class Standard
     end
 
     # Determine the W/cfm
-    fan_efficacy_w_per_cfm = 0.3
+    fan_efficacy_w_per_cfm = zone_hvac_component_prm_baseline_fan_efficacy
 
     # Convert efficacy to metric
     # 1 cfm = 0.0004719 m^3/s
