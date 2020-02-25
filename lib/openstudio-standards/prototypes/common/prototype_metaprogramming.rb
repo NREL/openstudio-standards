@@ -22,20 +22,27 @@ def create_class_array
       'RetailStripmall',
       'Warehouse',
       'SuperMarket',
-	  'SmallOfficeDetailed',
-	  'MediumOfficeDetailed',
-	  'LargeOfficeDetailed'
+      'SmallDataCenterLowITE',
+      'SmallDataCenterHighITE',
+      'LargeDataCenterLowITE',
+      'LargeDataCenterHighITE',
+      'SmallOfficeDetailed',
+      'MediumOfficeDetailed',
+      'LargeOfficeDetailed',
+      'Laboratory'
   ]
 
-  templates = ['ASHRAE9012004',
-               'ASHRAE9012007',
-               'ASHRAE9012010',
-               'ASHRAE9012013',
-               'DOERef1980to2004',
-               'DOERefPre1980',
-               'NRELZNEReady2017']
+  templates = {
+    'ASHRAE9012004' => '90.1-2004',
+    'ASHRAE9012007' => '90.1-2007',
+    'ASHRAE9012010' => '90.1-2010',
+    'ASHRAE9012013' => '90.1-2013',
+    'DOERef1980to2004' => 'DOE Ref 1980-2004',
+    'DOERefPre1980' => 'DOE Ref Pre-1980',
+    'NRELZNEReady2017' => 'NREL ZNE Ready 2017'
+  }
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class NECB2011_Prototype < NECB2011
     class_array << "
@@ -54,7 +61,7 @@ end
   # This class represents a prototypical #{template} #{name}.
   class #{template}#{name} < #{template}
   @@building_type = \"#{name}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"#{template_string}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -65,7 +72,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type }, nil)
+    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs',search_criteria: {'template' => @template,'building_type' => @@building_type })
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type }}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{name}, cannot create model.\")
@@ -160,7 +167,8 @@ end
   end
 
   ['NECB2011',
-   'NECB2015'].each do |template|
+   'NECB2015',
+   'NECB2017'].each do |template|
     # Create Prototype base class (May not be needed...)
     # Ex: class NECB2011_Prototype < NECB2011
     class_array << "
@@ -194,7 +202,7 @@ end
       @building_type = BUILDING_TYPE
       @template = TEMPLATE
       @instvarbuilding_type = @building_type
-      @prototype_input = self.model_find_object(@standards_data['prototype_inputs'], {'template' => \"#{template}\",'building_type' => \"#{name}\" }, nil)
+      @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => \"#{template}\",'building_type' => \"#{name}\" })
       if @prototype_input.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => \"#{template}\",'building_type' => \"#{name}\" }}, cannot create model.\")
         #puts JSON.pretty_generate(standards_data['prototype_inputs'])
@@ -479,18 +487,20 @@ def create_deer_class_array
       'WRf' => ['DXGF']
   }
   
-  templates = ['DEERPRE1975',
-                'DEER1985',
-                'DEER1996',
-                'DEER2003',
-                'DEER2007',
-                'DEER2011',
-                'DEER2014',
-                'DEER2015',
-                'DEER2017']
+  templates = {
+    'DEERPRE1975' => 'DEER Pre-1975',
+    'DEER1985' => 'DEER 1985',
+    'DEER1996' => 'DEER 1996',
+    'DEER2003' => 'DEER 2003',
+    'DEER2007' => 'DEER 2007',
+    'DEER2011' => 'DEER 2011',
+    'DEER2014' => 'DEER 2014',
+    'DEER2015' => 'DEER 2015',
+    'DEER2017' => 'DEER 2017'
+  }
 
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class DEER_Prototype < DEER1985
     class_array << "
@@ -512,7 +522,7 @@ end
   class #{template}#{building_type}#{hvac_system} < #{template}
   @@building_type = \"#{building_type}\"
   @@hvac_system = \"#{hvac_system}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}_\#{@@hvac_system}\")
+  register_standard (\"#{template_string}_\#{@@building_type}_\#{@@hvac_system}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -524,7 +534,7 @@ end
   def initialize
     super()
     @instvarbuilding_type = @@building_type
-    @prototype_input = self.model_find_object(standards_data['prototype_inputs'], {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system}, nil)
+    @prototype_input = self.standards_lookup_table_first(table_name: 'prototype_inputs', search_criteria: {'template' => @template,'building_type' => @@building_type, 'hvac_system' => @@hvac_system})
     if @prototype_input.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', \"Could not find prototype inputs for \#{{'template' => @template,'building_type' => @@building_type, 'hvac' => @@hvac_system}}, cannot create model.\")
       raise(\"Could not find prototype inputs for #{template}#{building_type}#{hvac_system}, cannot create model.\")
@@ -609,6 +619,15 @@ end
     return true
   end
 
+  # Makes changes to the geometry that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
   # Makes changes to the daylighting sensors that are too
   # specific to be coded generically.
   #
@@ -631,17 +650,17 @@ def create_cbes_class_array
       'SmallOffice'
   ]
 
-  templates = [
-    'CBESPre1978',
-    'CBEST241978',
-    'CBEST241992',
-    'CBEST242001',
-    'CBEST242005',
-    'CBEST242008'
-  ]
+  templates = {
+    'CBESPre1978' => 'CBES Pre-1978',
+    'CBEST241978' => 'CBES T24 1978',
+    'CBEST241992' => 'CBES T24 1992',
+    'CBEST242001' => 'CBES T24 2001',
+    'CBEST242005' => 'CBES T24 2005',
+    'CBEST242008' => 'CBES T24 2008'
+  }
 
   class_array = []
-  templates.each do |template|
+  templates.each_pair do |template, template_string|
     # Create Prototype base class (May not be needed...)
     # Ex: class CBESPre1978_Prototype < CBESPre1978
     class_array << "
@@ -660,7 +679,7 @@ end
   # This class represents a prototypical #{template} #{building_type}.
   class #{template}#{building_type} < #{template}
   @@building_type = \"#{building_type}\"
-  register_standard (\"\#{@@template}_\#{@@building_type}\")
+  register_standard (\"#{template_string}_\#{@@building_type}\")
   attr_accessor :prototype_database
   attr_accessor :prototype_input
   attr_accessor :lookup_building_type
@@ -771,6 +790,15 @@ end
   #
   # @return [Bool] returns true if successful, false if not
   def model_custom_swh_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  # Makes changes to the geometry that are too
+  # specific to be coded generically.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
     return true
   end
 

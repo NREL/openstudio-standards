@@ -1,4 +1,3 @@
-
 class Standard
   # @!group AirLoopHVAC
 
@@ -34,7 +33,7 @@ class Standard
   def air_loop_hvac_apply_standard_controls(air_loop_hvac, climate_zone)
     # Energy Recovery Ventilation
     if air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
-      air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac)
+      air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate_zone)
     end
 
     # Economizers
@@ -144,7 +143,8 @@ class Standard
 
     # Unoccupied shutdown
     if air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
-      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+      occ_threshold = air_loop_hvac_unoccupied_threshold
+      air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = occ_threshold)
     else
       air_loop_hvac.setAvailabilitySchedule(air_loop_hvac.model.alwaysOnDiscreteSchedule)
     end
@@ -158,10 +158,8 @@ class Standard
       air_loop_hvac_remove_motorized_oa_damper(air_loop_hvac)
     end
 
-    # Zones that require DCV preserve
-    # both per-area and per-person OA reqs.
-    # Other zones have OA reqs converted
-    # to per-area values only so that DCV
+    # Zones that require DCV preserve both per-area and per-person OA reqs.
+    # Other zones have OA reqs converted to per-area values only so that DCV
     air_loop_hvac.thermalZones.sort.each do |zone|
       if thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
         thermal_zone_convert_oa_req_to_per_area(zone)
@@ -218,6 +216,10 @@ class Standard
   #
   def air_loop_hvac_optimum_start_required?(air_loop_hvac)
     opt_start_required = false
+
+    # data centers don't require optimum start as generally not occupied
+    return opt_start_required if air_loop_hvac.name.to_s.include?('CRAH') ||
+        air_loop_hvac.name.to_s.include?('CRAC')
 
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
@@ -817,10 +819,10 @@ class Standard
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @param climate_zone [String] valid choices: 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B',
-  # 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2006-4A', 'ASHRAE 169-2006-4B', 'ASHRAE 169-2006-4C',
-  # 'ASHRAE 169-2006-5A', 'ASHRAE 169-2006-5B', 'ASHRAE 169-2006-5C', 'ASHRAE 169-2006-6A', 'ASHRAE 169-2006-6B', 'ASHRAE 169-2006-7A',
-  # 'ASHRAE 169-2006-7B', 'ASHRAE 169-2006-8A', 'ASHRAE 169-2006-8B'
+  # @param climate_zone [String] valid choices: 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B',
+  # 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C', 'ASHRAE 169-2013-4A', 'ASHRAE 169-2013-4B', 'ASHRAE 169-2013-4C',
+  # 'ASHRAE 169-2013-5A', 'ASHRAE 169-2013-5B', 'ASHRAE 169-2013-5C', 'ASHRAE 169-2013-6A', 'ASHRAE 169-2013-6B', 'ASHRAE 169-2013-7A',
+  # 'ASHRAE 169-2013-7B', 'ASHRAE 169-2013-8A', 'ASHRAE 169-2013-8B'
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
@@ -842,7 +844,7 @@ class Standard
     }
     econ_limits = model_find_object(standards_data['economizers'], search_criteria)
     if econ_limits.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for template: #{template}, climate zone: #{climate_zone}, and data center: #{is_dc}; assuming no economizer required.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for #{template}, #{climate_zone}, assuming no economizer required.")
       return economizer_required
     end
 
@@ -857,6 +859,7 @@ class Standard
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
     total_cooling_capacity_btu_per_hr = OpenStudio.convert(total_cooling_capacity_w, 'W', 'Btu/hr').get
+
     if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
       if is_dc
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
@@ -970,7 +973,8 @@ class Standard
       return [nil, nil, nil]
     when 'FixedDryBulb'
       case climate_zone
-      when 'ASHRAE 169-2006-1B',
+      when 'ASHRAE 169-2006-0B',
+          'ASHRAE 169-2006-1B',
           'ASHRAE 169-2006-2B',
           'ASHRAE 169-2006-3B',
           'ASHRAE 169-2006-3C',
@@ -981,16 +985,38 @@ class Standard
           'ASHRAE 169-2006-6B',
           'ASHRAE 169-2006-7B',
           'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+          'ASHRAE 169-2006-8B',
+          'ASHRAE 169-2013-0B',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2B',
+          'ASHRAE 169-2013-3B',
+          'ASHRAE 169-2013-3C',
+          'ASHRAE 169-2013-4B',
+          'ASHRAE 169-2013-4C',
+          'ASHRAE 169-2013-5B',
+          'ASHRAE 169-2013-5C',
+          'ASHRAE 169-2013-6B',
+          'ASHRAE 169-2013-7B',
+          'ASHRAE 169-2013-8A',
+          'ASHRAE 169-2013-8B'
         drybulb_limit_f = 75
       when 'ASHRAE 169-2006-5A',
           'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-7A'
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2013-5A',
+          'ASHRAE 169-2013-6A',
+          'ASHRAE 169-2013-7A'
         drybulb_limit_f = 70
-      when 'ASHRAE 169-2006-1A',
+      when 'ASHRAE 169-2006-0A',
+          'ASHRAE 169-2006-1A',
           'ASHRAE 169-2006-2A',
           'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A'
+          'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2013-0A',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-3A',
+          'ASHRAE 169-2013-4A'
         drybulb_limit_f = 65
       end
     when 'FixedEnthalpy'
@@ -1056,27 +1082,50 @@ class Standard
     else
       # Exception c, Systems in climate zones 1,2,3a,4a,5a,5b,6,7,8
       case climate_zone
-      when 'ASHRAE 169-2006-1A',
-          'ASHRAE 169-2006-1B',
-          'ASHRAE 169-2006-2A',
-          'ASHRAE 169-2006-2B',
-          'ASHRAE 169-2006-3A',
-          'ASHRAE 169-2006-4A',
-          'ASHRAE 169-2006-5A',
-          'ASHRAE 169-2006-5B',
-          'ASHRAE 169-2006-6A',
-          'ASHRAE 169-2006-6B',
-          'ASHRAE 169-2006-7A',
-          'ASHRAE 169-2006-7B',
-          'ASHRAE 169-2006-8A',
-          'ASHRAE 169-2006-8B'
+      when 'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2006-0B',
+           'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2006-3A',
+           'ASHRAE 169-2006-4A',
+           'ASHRAE 169-2006-5A',
+           'ASHRAE 169-2006-5B',
+           'ASHRAE 169-2006-6A',
+           'ASHRAE 169-2006-6B',
+           'ASHRAE 169-2006-7A',
+           'ASHRAE 169-2006-7B',
+           'ASHRAE 169-2006-8A',
+           'ASHRAE 169-2006-8B',
+           'ASHRAE 169-2013-0A',
+           'ASHRAE 169-2013-0B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B',
+           'ASHRAE 169-2013-3A',
+           'ASHRAE 169-2013-4A',
+           'ASHRAE 169-2013-5A',
+           'ASHRAE 169-2013-5B',
+           'ASHRAE 169-2013-6A',
+           'ASHRAE 169-2013-6B',
+           'ASHRAE 169-2013-7A',
+           'ASHRAE 169-2013-7B',
+           'ASHRAE 169-2013-8A',
+           'ASHRAE 169-2013-8B'
         integrated_economizer_required = false
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: non-integrated economizer per 6.5.1.3 exception c, climate zone #{climate_zone}.")
       when 'ASHRAE 169-2006-3B',
-          'ASHRAE 169-2006-3C',
-          'ASHRAE 169-2006-4B',
-          'ASHRAE 169-2006-4C',
-          'ASHRAE 169-2006-5C'
+           'ASHRAE 169-2006-3C',
+           'ASHRAE 169-2006-4B',
+           'ASHRAE 169-2006-4C',
+           'ASHRAE 169-2006-5C',
+           'ASHRAE 169-2013-3B',
+           'ASHRAE 169-2013-3C',
+           'ASHRAE 169-2013-4B',
+           'ASHRAE 169-2013-4C',
+           'ASHRAE 169-2013-5C'
         integrated_economizer_required = true
       end
     end
@@ -1099,11 +1148,20 @@ class Standard
 
     # Determine the minimum capacity that requires an economizer
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-1B',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
+         'ASHRAE 169-2013-0B',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       min_int_area_served_ft2 = infinity_ft2 # No requirement
       min_ext_area_served_ft2 = infinity_ft2 # No requirement
     else
@@ -1210,23 +1268,40 @@ class Standard
     dewpoint_limit_f = nil
 
     case climate_zone
-    when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-5C',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-5C',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 75
     when 'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-7A'
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A',
+         'ASHRAE 169-2013-7A'
       economizer_type = 'FixedDryBulb'
       drybulb_limit_f = 70
     else
@@ -1272,29 +1347,49 @@ class Standard
     # Determine the prohibited types
     prohibited_types = []
     case climate_zone
-    when 'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B'
+    when 'ASHRAE 169-2006-0B',
+         'ASHRAE 169-2006-1B',
+         'ASHRAE 169-2006-2B',
+         'ASHRAE 169-2006-3B',
+         'ASHRAE 169-2006-3C',
+         'ASHRAE 169-2006-4B',
+         'ASHRAE 169-2006-4C',
+         'ASHRAE 169-2006-5B',
+         'ASHRAE 169-2006-6B',
+         'ASHRAE 169-2006-7A',
+         'ASHRAE 169-2006-7B',
+         'ASHRAE 169-2006-8A',
+         'ASHRAE 169-2006-8B',
+         'ASHRAE 169-2013-0B',
+         'ASHRAE 169-2013-1B',
+         'ASHRAE 169-2013-2B',
+         'ASHRAE 169-2013-3B',
+         'ASHRAE 169-2013-3C',
+         'ASHRAE 169-2013-4B',
+         'ASHRAE 169-2013-4C',
+         'ASHRAE 169-2013-5B',
+         'ASHRAE 169-2013-6B',
+         'ASHRAE 169-2013-7A',
+         'ASHRAE 169-2013-7B',
+         'ASHRAE 169-2013-8A',
+         'ASHRAE 169-2013-8B'
       prohibited_types = ['FixedEnthalpy']
-    when
-      'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-4A'
+    when 'ASHRAE 169-2006-0A',
+         'ASHRAE 169-2006-1A',
+         'ASHRAE 169-2006-2A',
+         'ASHRAE 169-2006-3A',
+         'ASHRAE 169-2006-4A',
+         'ASHRAE 169-2013-0A',
+         'ASHRAE 169-2013-1A',
+         'ASHRAE 169-2013-2A',
+         'ASHRAE 169-2013-3A',
+         'ASHRAE 169-2013-4A'
       prohibited_types = ['DifferentialDryBulb']
-    when
-      'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-6A',
-        prohibited_types = []
+    when 'ASHRAE 169-2006-5A',
+         'ASHRAE 169-2006-6A',
+         'ASHRAE 169-2013-5A',
+         'ASHRAE 169-2013-6A'
+      prohibited_types = []
     end
 
     # Check if the specified type is allowed
@@ -1349,11 +1444,7 @@ class Standard
       end
     end
 
-    # ERV Not Applicable for AHUs that have DCV
-    # or that have no OA intake.
-    controller_oa = nil
-    controller_mv = nil
-    oa_system = nil
+    # ERV Not Applicable for AHUs that have DCV or that have no OA intake.
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
@@ -1422,14 +1513,29 @@ class Standard
     return erv_cfm
   end
 
-  # Add an ERV to this airloop.
-  # Will be a rotary-type HX
+  # Determine whether to apply an Energy Recovery Ventilator 'ERV' or a Heat Recovery Ventilator 'HRV' depending on the climate zone
+  # Defaults to ERV.
+  # @return [String] the ERV type
+  def air_loop_hvac_energy_recovery_ventilator_type(air_loop_hvac, climate_zone)
+    erv_type = 'ERV'
+    return erv_type
+  end
+
+  # Determine whether to use a Plate-Frame or Rotary Wheel style ERV depending on air loop outdoor air flow rate
+  # Defaults to Rotary.
+  # @return [String] the ERV type
+  def air_loop_hvac_energy_recovery_ventilator_heat_exchanger_type(air_loop_hvac)
+    heat_exchanger_type = 'Rotary'
+    return heat_exchanger_type
+  end
+
+  # Add an ERV to this airloop
   #
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac)
-    # Get the oa system
+  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate_zone)
+    # Get the OA system
     oa_system = nil
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
@@ -1438,57 +1544,52 @@ class Standard
       return false
     end
 
-    # Create an ERV
+    # Create an ERV and add it to the OA system
     erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
-    erv.setName("#{air_loop_hvac.name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    erv.addToNode(oa_system.outboardOANode.get)
+
+    # Determine whether to use an ERV and HRV and heat exchanger style
+    erv_type = air_loop_hvac_energy_recovery_ventilator_type(air_loop_hvac, climate_zone)
+    heat_exchanger_type = air_loop_hvac_energy_recovery_ventilator_heat_exchanger_type(air_loop_hvac)
+    erv.setName("#{air_loop_hvac.name} #{erv_type}")
+    erv.setHeatExchangerType(heat_exchanger_type)
+
+    # apply heat exchanger efficiencies
+    air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: erv_type, heat_exchanger_type: heat_exchanger_type)
+
+    # Apply the prototype heat exchanger power assumptions for rotary style heat exchangers
+    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(erv)
+
+    # add economizer lockout
     erv.setSupplyAirOutletTemperatureControl(false)
-    erv.setHeatExchangerType('Rotary')
-    erv.setFrostControlType('ExhaustOnly')
     erv.setEconomizerLockout(true)
+
+    # add defrost
+    erv.setFrostControlType('ExhaustOnly')
     erv.setThresholdTemperature(-23.3) # -10F
     erv.setInitialDefrostTimeFraction(0.167)
     erv.setRateofDefrostTimeFractionIncrease(1.44)
 
-    # Add the ERV to the OA system
-    erv.addToNode(oa_system.outboardOANode.get)
-
-    # Add a setpoint manager OA pretreat
-    # to control the ERV
+    # Add a setpoint manager OA pretreat to control the ERV
     spm_oa_pretreat = OpenStudio::Model::SetpointManagerOutdoorAirPretreat.new(air_loop_hvac.model)
     spm_oa_pretreat.setMinimumSetpointTemperature(-99.0)
     spm_oa_pretreat.setMaximumSetpointTemperature(99.0)
     spm_oa_pretreat.setMinimumSetpointHumidityRatio(0.00001)
     spm_oa_pretreat.setMaximumSetpointHumidityRatio(1.0)
-    # Reference setpoint node and
-    # Mixed air stream node are outlet
-    # node of the OA system
+    # Reference setpoint node and mixed air stream node are outlet node of the OA system
     mixed_air_node = oa_system.mixedAirModelObject.get.to_Node.get
     spm_oa_pretreat.setReferenceSetpointNode(mixed_air_node)
     spm_oa_pretreat.setMixedAirStreamNode(mixed_air_node)
-    # Outdoor air node is
-    # the outboard OA node of teh OA system
+    # Outdoor air node is the outboard OA node of the OA system
     spm_oa_pretreat.setOutdoorAirStreamNode(oa_system.outboardOANode.get)
-    # Return air node is the inlet
-    # node of the OA system
+    # Return air node is the inlet node of the OA system
     return_air_node = oa_system.returnAirModelObject.get.to_Node.get
     spm_oa_pretreat.setReturnAirStreamNode(return_air_node)
     # Attach to the outlet of the ERV
     erv_outlet = erv.primaryAirOutletModelObject.get.to_Node.get
     spm_oa_pretreat.addToNode(erv_outlet)
 
-    # Apply the prototype Heat Exchanger power assumptions.
-    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(erv)
-
-    # Determine if the system is a DOAS based on
-    # whether there is 100% OA in heating and cooling sizing.
+    # Determine if the system is a DOAS based on whether there is 100% OA in heating and cooling sizing.
     is_doas = false
     sizing_system = air_loop_hvac.sizingSystem
     if sizing_system.allOutdoorAirinCooling && sizing_system.allOutdoorAirinHeating
@@ -1509,6 +1610,24 @@ class Standard
     oa_system.getControllerOutdoorAir.setHeatRecoveryBypassControlType(bypass_ctrl_type)
 
     return true
+  end
+
+  # Apply efficiency values to the erv
+  #
+  # @param erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  # @param erv_type [String] erv type ERV or HRV
+  # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
+  # @return erv [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
+  def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
+    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    return erv
   end
 
   # Determine if multizone vav optimization is required.
@@ -1725,6 +1844,10 @@ class Standard
         # Store the ventilation effectiveness
         e_vzs_adj << e_vz_adj
 
+        # Round the minimum damper position to avoid nondeterministic results
+        # at the ~13th decimal place, which can cause regression errors
+        mdp_adj = mdp_adj.round(11)
+
         # Set the adjusted minimum damper position
         zone.equipment.each do |equip|
           if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
@@ -1804,6 +1927,10 @@ class Standard
             rated_maximum_flow_rate = vav_terminal.autosizedMaximumAirFlowRate.get
             # compare the VAV autosized maximum airflow with the minimum airflow rate required by the accreditation standard
             ratio = minimum_airflow_per_zone / rated_maximum_flow_rate
+
+            # round to avoid results variances in sizing runs
+            ratio = ratio.round(11)
+
             if ratio >= 0.95
               vav_terminal.setConstantMinimumAirFlowFraction(1)
             elsif ratio < 0.95
@@ -2164,6 +2291,21 @@ class Standard
     return has_erv
   end
 
+  # Determine if the air loop is a unitary system
+  #
+  # @return [Bool] Returns true if a unitary system is present, false if not.
+  def air_loop_hvac_unitary_system?(air_loop_hvac)
+    is_unitary_system = false
+    air_loop_hvac.supplyComponents.each do |component|
+      obj_type = component.iddObjectType.valueName.to_s
+      case obj_type
+      when 'OS_AirLoopHVAC_UnitarySystem', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir', 'OS_AirLoopHVAC_UnitaryHeatPump_AirToAir_MultiSpeed', 'OS_AirLoopHVAC_UnitaryHeatCool_VAVChangeoverBypass'
+        is_unitary_system = true
+      end
+    end
+    return is_unitary_system
+  end
+
   # Set the VAV damper control to single maximum or dual maximum control depending on the standard.
   #
   # @return [Bool] Returns true if successful, false if not
@@ -2319,7 +2461,7 @@ class Standard
   # If not supplied, one will be created based on the supplied
   # occupancy threshold.
   # @return [Bool] true if successful, false if not
-  def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.15, occ_sch = nil)
+  def air_loop_hvac_add_motorized_oa_damper(air_loop_hvac, min_occ_pct = 0.05, occ_sch = nil)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
     if oa_sys.is_initialized
@@ -2551,73 +2693,72 @@ class Standard
     setup_mgr.setCallingPoint('BeginNewEnvironment')
     setup_mgr.addProgram(num_stg_prg)
 
-    ### Economizer Control ###
-
-    # Actuators
-    econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
-    econ_eff_act.setName("#{snc}TimestepEconEff")
-
-    # Programs
-    econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
-    econ_prg.setName("#{snc}EconomizerCTRLProg")
-    econ_prg_body = <<-EMS
-      SET #{econ_eff_act.handle} = 0.7
-      SET MaxE = 0.7
-      SET #{dat_sen.handle} = (#{dat_sen.handle}*1.8)+32
-      SET OATF = (#{oat_db_c_sen.handle}*1.8)+32
-      SET OAwbF = (#{oat_wb_c_sen.handle}*1.8)+32
-      IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-        SET EconoActive = 1
-      ELSE
-        SET EconoActive = 0
-      ENDIF
-      SET dTNeeded = 75-#{dat_sen.handle}
-      SET CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55
-      SET CoolLoad = dTNeeded/ CoolDesdT
-      IF CoolLoad > 1
-        SET CoolLoad = 1
-      ELSEIF CoolLoad < 0
-        SET CoolLoad = 0
-      ENDIF
-      IF EconoActive == 1
-        SET Stage = #{snc}NumberofStages
-        IF Stage == 2
-          IF CoolLoad < 0.6
-            SET #{econ_eff_act.handle} = MaxE
-          ELSE
-            SET ECOEff = 0-2.18919863612305
-            SET ECOEff = ECOEff+(0-0.674461284910428*CoolLoad)
-            SET ECOEff = ECOEff+(0.000459106275872404*(OATF^2))
-            SET ECOEff = ECOEff+(0-0.00000484778537945252*(OATF^3))
-            SET ECOEff = ECOEff+(0.182915713033586*OAwbF)
-            SET ECOEff = ECOEff+(0-0.00382838660261133*(OAwbF^2))
-            SET ECOEff = ECOEff+(0.0000255567460240583*(OAwbF^3))
-            SET #{econ_eff_act.handle} = ECOEff
-          ENDIF
-        ELSE
-          SET ECOEff = 2.36337942464462
-          SET ECOEff = ECOEff+(0-0.409939515512619*CoolLoad)
-          SET ECOEff = ECOEff+(0-0.0565205596792225*OAwbF)
-          SET ECOEff = ECOEff+(0-0.0000632612294169389*(OATF^2))
-          SET #{econ_eff_act.handle} = ECOEff+(0.000571724868775081*(OAwbF^2))
-        ENDIF
-        IF #{econ_eff_act.handle} > MaxE
-          SET #{econ_eff_act.handle} = MaxE
-        ELSEIF #{econ_eff_act.handle} < (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-          SET #{econ_eff_act.handle} = (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
-        ENDIF
-      ENDIF
-    EMS
-    econ_prg.setBody(econ_prg_body)
-
-    # Program Calling Managers
-    econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
-    econ_mgr.setName("#{snc}EcoManager")
-    econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
-    econ_mgr.addProgram(econ_prg)
-
     ### Fan Control ###
     if fan_control
+
+      ### Economizer Control ###
+      # Actuators
+      econ_eff_act = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_sch, 'Schedule:Year', 'Schedule Value')
+      econ_eff_act.setName("#{snc}TimestepEconEff")
+
+      # Programs
+      econ_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
+      econ_prg.setName("#{snc}EconomizerCTRLProg")
+      econ_prg_body = <<-EMS
+        SET #{econ_eff_act.handle} = 0.7
+        SET MaxE = 0.7
+        SET #{dat_sen.handle} = (#{dat_sen.handle}*1.8)+32
+        SET OATF = (#{oat_db_c_sen.handle}*1.8)+32
+        SET OAwbF = (#{oat_wb_c_sen.handle}*1.8)+32
+        IF #{oa_flow_sen.handle} > (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+          SET EconoActive = 1
+        ELSE
+          SET EconoActive = 0
+        ENDIF
+        SET dTNeeded = 75-#{dat_sen.handle}
+        SET CoolDesdT = ((98*0.15)+(75*(1-0.15)))-55
+        SET CoolLoad = dTNeeded/ CoolDesdT
+        IF CoolLoad > 1
+          SET CoolLoad = 1
+        ELSEIF CoolLoad < 0
+          SET CoolLoad = 0
+        ENDIF
+        IF EconoActive == 1
+          SET Stage = #{snc}NumberofStages
+          IF Stage == 2
+            IF CoolLoad < 0.6
+              SET #{econ_eff_act.handle} = MaxE
+            ELSE
+              SET ECOEff = 0-2.18919863612305
+              SET ECOEff = ECOEff+(0-0.674461284910428*CoolLoad)
+              SET ECOEff = ECOEff+(0.000459106275872404*(OATF^2))
+              SET ECOEff = ECOEff+(0-0.00000484778537945252*(OATF^3))
+              SET ECOEff = ECOEff+(0.182915713033586*OAwbF)
+              SET ECOEff = ECOEff+(0-0.00382838660261133*(OAwbF^2))
+              SET ECOEff = ECOEff+(0.0000255567460240583*(OAwbF^3))
+              SET #{econ_eff_act.handle} = ECOEff
+            ENDIF
+          ELSE
+            SET ECOEff = 2.36337942464462
+            SET ECOEff = ECOEff+(0-0.409939515512619*CoolLoad)
+            SET ECOEff = ECOEff+(0-0.0565205596792225*OAwbF)
+            SET ECOEff = ECOEff+(0-0.0000632612294169389*(OATF^2))
+            SET #{econ_eff_act.handle} = ECOEff+(0.000571724868775081*(OAwbF^2))
+          ENDIF
+          IF #{econ_eff_act.handle} > MaxE
+            SET #{econ_eff_act.handle} = MaxE
+          ELSEIF #{econ_eff_act.handle} < (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+            SET #{econ_eff_act.handle} = (#{oa_flow_var.handle}*#{oa_sch_sen.handle})
+          ENDIF
+        ENDIF
+      EMS
+      econ_prg.setBody(econ_prg_body)
+
+      # Program Calling Managers
+      econ_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
+      econ_mgr.setName("#{snc}EcoManager")
+      econ_mgr.setCallingPoint('InsideHVACSystemIterationLoop')
+      econ_mgr.addProgram(econ_prg)
 
       # Sensors
       zn_temp_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Temperature')
@@ -2792,30 +2933,23 @@ class Standard
     return sp_reset_required
   end
 
-  # Determine if a system's fans must shut off when
-  # not required.
-  #
+  # Determine if a system's fans must shut off when not required.
+  # Per ASHRAE 90.1 section 6.4.3.3, HVAC systems are required to have off-hour controls
   # @return [Bool] true if required, false if not
   def air_loop_hvac_unoccupied_fan_shutoff_required?(air_loop_hvac)
     shutoff_required = true
 
-    # Per 90.1 6.4.3.4.5, systems less than 0.75 HP
-    # must turn off when unoccupied.
-    minimum_fan_hp = 0.75
-
-    # Determine the system fan horsepower
-    total_hp = 0.0
-    air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-      total_hp += fan_motor_horsepower(fan)
-    end
-
-    # Check the HP exception
-    if total_hp < minimum_fan_hp
+    # Determine if the airloop serves any computer rooms or data centers, which default to always on.
+    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
       shutoff_required = false
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Unoccupied fan shutoff not required because system fan HP of #{total_hp.round(2)} HP is less than the minimum threshold of #{minimum_fan_hp} HP.")
     end
 
     return shutoff_required
+  end
+
+  # Default occupancy fraction threshold for determining if the spaces on the air loop are occupied
+  def air_loop_hvac_unoccupied_threshold
+    return 0.15
   end
 
   # Shut off the system during unoccupied periods.
@@ -2835,7 +2969,7 @@ class Standard
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
   # @return [Bool] true if successful, false if not
-  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.15)
+  def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
 
@@ -2943,8 +3077,13 @@ class Standard
         next if space_type.standardsSpaceType.empty?
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
-        next unless standards_space_type.downcase.include?('data')
-        dc_area_m2 += space.floorArea
+        if standards_space_type.downcase.include?('data center') || standards_space_type.downcase.include?('datacenter')
+          dc_area_m2 += space.floorArea
+        end
+        std_bldg_type = space.spaceType.get.standardsBuildingType.get
+        if std_bldg_type.downcase.include?('datacenter') && standards_space_type.downcase.include?('computerroom')
+          dc_area_m2 += space.floorArea
+        end
       end
     end
 

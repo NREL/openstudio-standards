@@ -82,6 +82,22 @@ geometry_json = JSON.parse('
             "SmallHotel": {
                 "above_ground_floors": 4,
                 "below_ground_floors": 0
+            },
+            "SmallDataCenterLowITE": {
+                "above_ground_floors": 1,
+                "below_ground_floors": 0
+            },
+            "SmallDataCenterHighITE": {
+                "above_ground_floors": 1,
+                "below_ground_floors": 0
+            },
+            "LargeDataCenterLowITE": {
+                "above_ground_floors": 1,
+                "below_ground_floors": 0
+            },
+            "LargeDataCenterHighITE": {
+                "above_ground_floors": 1,
+                "below_ground_floors": 0
             }
 }
 ')

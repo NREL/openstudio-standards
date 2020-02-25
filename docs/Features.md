@@ -10,13 +10,13 @@ These three things are all highly related, and share many common subtasks.  For 
 
 The code has been structured such that several higher level methods may all call the same lower level method. For example, both of the methods below eventually call `space_type_add_loads`.  Rather than having two copies of this code inside of the two top level methods, there is one method.
 
-	model_create_prototype_building('Small Office, '90.1-2010', 'ASHRAE 169-2006-5A')
+	model_create_prototype_building('Small Office, '90.1-2010', 'ASHRAE 169-2013-5A')
 		model_add_schedules
 			space_type_add_schedules
 		model_apply_standard
 			space_type_add_loads(people = true, lights = true, plug_loads = true)
 	
-	model_create_prm_baseline_building('Small Office', '90.1-2010', 'ASHRAE 169-2006-5A', 'Xcel Energy CO EDA', Dir.pwd, false)
+	model_create_prm_baseline_building('Small Office', '90.1-2010', 'ASHRAE 169-2013-5A', 'Xcel Energy CO EDA', Dir.pwd, false)
 		model_add_baseline_hvac_systems
 		model_apply_standard
 			space_type_add_loads(people = true, lights = true, plug_loads = false)
@@ -91,6 +91,7 @@ Where a method needs to operate **very differently** in two different situations
     - **`cooling_tower_two_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
     - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.  
   - **`model_custom_swh_tweaks()`** Some building types have even more unique SWH characteristics.  This approach keeps them isolated, which makes the already-complex methods `model_add_swh()` as simple as possible.
+  - **`model_custom_geometry_tweaks()`** Some building types have even more unique geometry characteristics.  This approach keeps them isolated.
   - **`model_add_daylighting_controls()`** Adds daylighting controls to the model.  **NOTE: This should probably be moved before the first sizing run.**
 
 ### `model_create_prm_baseline_building()`**

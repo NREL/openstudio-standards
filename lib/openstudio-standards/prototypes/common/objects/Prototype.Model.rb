@@ -5,12 +5,16 @@ Standard.class_eval do
     building_type = @instvarbuilding_type
     raise 'no building_type!' if @instvarbuilding_type.nil?
     model = nil
-    # There are no reference models for HighriseApartment at vintages Pre-1980 and 1980-2004, nor for NECB2011. This is a quick check.
-    if @instvarbuilding_type == 'HighriseApartment'
+    # There are no reference models for HighriseApartment and data centers at vintages Pre-1980 and 1980-2004,
+    # nor for NECB2011. This is a quick check.
+    case @instvarbuilding_type
+    when 'HighriseApartment','SmallDataCenterLowITE','SmallDataCenterHighITE','LargeDataCenterLowITE','LargeDataCenterHighITE'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
       end
+    else
+      # do nothing
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
@@ -20,6 +24,7 @@ Standard.class_eval do
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
+    model_custom_geometry_tweaks(building_type, climate_zone, @prototype_input, model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
     # save new basefile to new geometry folder as class name.
@@ -41,7 +46,6 @@ Standard.class_eval do
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-    # set climate zone and building type
     model.getBuilding.setStandardsBuildingType(building_type)
     model_set_climate_zone(model, climate_zone)
     # Perform a sizing model_run(model)
@@ -178,7 +182,7 @@ Standard.class_eval do
   end
 
   def model_add_full_space_type_libs(model)
-    space_type_properties_list = model_find_objects(standards_data['space_types'], '' => 'NECB2011')
+    space_type_properties_list = standards_lookup_table_many(table_name: 'space_types')
     space_type_properties_list.each do |space_type_property|
       stub_space_type = OpenStudio::Model::SpaceType.new(model)
       stub_space_type.setStandardsBuildingType(space_type_property['building_type'])
@@ -411,7 +415,9 @@ Standard.class_eval do
           if space_type.standardsSpaceType.is_initialized
             space_type_name = space_type.standardsSpaceType.get
           end
-          data = model_find_object(standards_data['space_types'], 'template' => template, 'building_type' => new_lookup_building_type, 'space_type' => space_type_name)
+          data = standards_lookup_table_first(table_name: 'space_types', search_criteria: {'template' => template,
+                                                                                           'building_type' => new_lookup_building_type,
+                                                                                           'space_type' => space_type_name})
           exterior_spaces_area += space.floorArea
           story_exterior_residential_area += space.floorArea if data['is_residential'] == 'Yes' # "Yes" is residential, "No" or nil is nonresidential
         end
@@ -490,7 +496,10 @@ Standard.class_eval do
 
     # add internal mass
     # not required for NECB2011
-    unless (template == 'NECB2011') || ((building_type == 'SmallHotel') && (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
+    unless (template == 'NECB2011') ||
+           (building_type.include?('DataCenter')) ||
+           ((building_type == 'SmallHotel') &&
+            (template == '90.1-2004' || template == '90.1-2007' || template == '90.1-2010' || template == '90.1-2013' || template == 'NREL ZNE Ready 2017'))
       internal_mass_def = OpenStudio::Model::InternalMassDefinition.new(model)
       internal_mass_def.setSurfaceAreaperSpaceFloorArea(2.0)
       internal_mass_def.setConstruction(construction)
@@ -1065,7 +1074,10 @@ Standard.class_eval do
             clg = 1.33
             htg = 1.33
         end
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
+      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
+        # exit if is one of the 90.1 templates as their sizing paramters are explicitly specified in geometry osms
+        return
+      when 'CBES Pre-1978', 'CBES T24 1978', 'CBES T24 1992', 'CBES T24 2001', 'CBES T24 2005', 'CBES T24 2008'
         case building_type
           when 'Hospital', 'LargeHotel', 'MediumOffice', 'LargeOffice', 'MediumOfficeDetailed','LargeOfficeDetailed', 'Outpatient', 'PrimarySchool'
             clg = 1.0
@@ -1114,6 +1126,9 @@ Standard.class_eval do
     # TODO: What is the logic behind hard-sizing
     # hot water coil convergence tolerances?
     model.getControllerWaterCoils.sort.each {|obj| controller_water_coil_set_convergence_limits(obj)}
+
+    # adjust defrost curve limits for coil heating dx single speed
+    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj)}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying prototype HVAC assumptions.')
   end

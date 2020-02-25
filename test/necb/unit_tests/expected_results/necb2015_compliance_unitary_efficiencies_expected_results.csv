@@ -1,0 +1,11 @@
+Heating Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)
+Electric Resistance,0,65000,15.92,
+Electric Resistance,65001,136480,,9.48
+Electric Resistance,136481,238840,,9.13
+Electric Resistance,238841,759999,,7.77
+Electric Resistance,760000,9999999,,5.22
+All Other,0,65000,15.92,
+All Other,65001,136480,,9.31
+All Other,136481,238840,,8.96
+All Other,238841,759999,,7.61
+All Other,760000,9999999,,5.11

@@ -434,13 +434,45 @@ Standard.class_eval do
     # get the info
     energy_gj = sql.execAndReturnFirstDouble(query)
 
-    # make sure all the data are availalbe
+    # make sure all the data are available
     if energy_gj.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not get energy for #{fuel_type} #{end_use}.")
       return 0.0
     end
 
     return energy_gj.get
+  end
+
+  def model_dd_energy_by_fuel_by_enduse(model, fuel_type, end_use)
+    sql = model_sql_file(model)
+
+    # setup the end use index query
+    get_rpt_mtr_data_dic_idx = "SELECT ReportMeterDataDictionaryIndex
+                                FROM ReportMeterDataDictionary
+                                WHERE VariableName='#{end_use}:#{fuel_type}'"
+
+    # get the end use index
+    idx = sql.execAndReturnFirstDouble(get_rpt_mtr_data_dic_idx)
+
+    # if no index it means that the end use isn't used in the model
+    if idx.empty?
+      return 0.0
+    end
+
+    # setup the energy use retrieval queries for the design days
+    get_energy_j = "SELECT SUM (VariableValue)
+                    FROM ReportMeterData
+                    WHERE ReportMeterDataDictionaryIndex='#{idx}'"
+
+    # get the end use energy value
+    energy_j = sql.execAndReturnFirstDouble(get_energy_j)
+
+    # no energy value, means that something isn't right, set it to 0 as a safeguard
+    if energy_j.empty?
+      return 0.0
+    end
+
+    return energy_j.get
   end
 
   # Gets all annual energy consumption by enduse and fuel type from the sql file
@@ -461,6 +493,27 @@ Standard.class_eval do
     end_uses.each do |end_use|
       fuel_types.each do |fuel_type|
         energy_values["#{end_use}|#{fuel_type}"] = model_annual_energy_by_fuel_and_enduse(model, fuel_type, end_use)
+      end
+    end
+
+    return energy_values
+  end
+  
+  def model_dd_results_by_end_use_and_fuel_type(model)
+    energy_values = {}
+
+    # List of all fuel types, based on Table 5.1 of EnergyPlus' Input Output Reference manual
+    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOil#1', 'FuelOil#2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+    'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+
+    # List of all end uses, based on Table 5.3 of EnergyPlus' Input Output Reference manual
+    end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 
+    'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
+
+    # Get the value for each end use/ fuel type combination
+    end_uses.each do |end_use|
+      fuel_types.each do |fuel_type|
+        energy_values["#{end_use}|#{fuel_type}"] = model_dd_energy_by_fuel_by_enduse(model, fuel_type, end_use)
       end
     end
 

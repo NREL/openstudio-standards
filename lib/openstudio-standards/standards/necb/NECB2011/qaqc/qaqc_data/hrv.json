@@ -1,0 +1,16 @@
+{
+  "tables": {
+    "hrv_compliance": {
+      "data_type": "table",
+      "refs": [
+        "NECB2011-5.2.10.1"
+      ],
+      "table": [
+        {
+          "var": "hrv_required?",
+          "expected_value": "(0.00123*outdoor_air_L_per_s*(21-db990)) > 150"
+        }
+      ]
+    }
+  }
+}

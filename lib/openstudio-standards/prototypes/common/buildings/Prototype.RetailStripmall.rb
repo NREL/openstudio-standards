@@ -17,7 +17,14 @@ module RetailStripmall
       infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
     when '90.1-2007', '90.1-2010', '90.1-2013'
       case climate_zone
-      when 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B'
+      when 'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2006-1B',
+           'ASHRAE 169-2006-2A',
+           'ASHRAE 169-2006-2B',
+           'ASHRAE 169-2013-1A',
+           'ASHRAE 169-2013-1B',
+           'ASHRAE 169-2013-2A',
+           'ASHRAE 169-2013-2B'
         door_infiltration_map = { ['LGstore1', 'LGstore2'] => 0.388884328,
                                   ['SMstore1', 'SMstore2', 'SMstore3', 'SMstore4', 'SMstore5', 'SMstore6', 'SMstore7', 'SMstore8'] => 0.222287037 }
         infiltration_schedule = model_add_schedule(model, 'RetailStripmall INFIL_Door_Opening_SCH')
@@ -71,18 +78,12 @@ module RetailStripmall
 
   # add hvac
 
-  def update_waterheater_loss_coefficient(model)
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
-        model.getWaterHeaterMixeds.sort.each do |water_heater|
-          water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.205980747)
-          water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.205980747)
-        end
-    end
+  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
+
+    return true
   end
 
-  def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
-    update_waterheater_loss_coefficient(model)
+  def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
 
     return true
   end
