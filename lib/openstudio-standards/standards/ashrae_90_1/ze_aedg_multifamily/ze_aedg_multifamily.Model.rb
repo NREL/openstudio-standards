@@ -31,7 +31,7 @@ class ZEAEDGMultifamily < ASHRAE901
     model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
     model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
     model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
-    model.getPlantLoops.sort.each { |obj| plant_loop_apply_prm_baseline_pump_power(obj) unless plant_loop_swh_loop?(obj) }
+    model.getPlantLoops.sort.each { |obj| plant_loop_apply_prm_baseline_pumping_type(obj) unless plant_loop_swh_loop?(obj) }
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
@@ -75,6 +75,6 @@ class ZEAEDGMultifamily < ASHRAE901
     # Gas Heaters
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for nrel_zne_ready_2017 template.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards for ZE AEDG Multifamily template.')
   end
 end

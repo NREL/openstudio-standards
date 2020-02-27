@@ -1219,10 +1219,14 @@ class Standard
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+        'ASHRAE 169-2006-0B',
+        'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2A',
         'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2013-0A',
+        'ASHRAE 169-2013-0B',
         'ASHRAE 169-2013-1A',
         'ASHRAE 169-2013-1B',
         'ASHRAE 169-2013-2A',
