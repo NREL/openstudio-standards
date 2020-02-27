@@ -1,48 +1,11 @@
 {
   "climate_zone_sets": [
     {
-      "name": "ClimateZone 0",
-      "climate_zones": [
-        "ASHRAE 169-2006-0A",
-        "ASHRAE 169-2006-0B",
-        "ASHRAE 169-2013-0A",
-        "ASHRAE 169-2013-0B"
-      ]
-    },
-    {
-      "name": "ClimateZone 0A",
-      "climate_zones": [
-        "ASHRAE 169-2006-0A",
-        "ASHRAE 169-2013-0A"
-      ]
-    },
-    {
-      "name": "ClimateZone 0B",
-      "climate_zones": [
-        "ASHRAE 169-2006-0B",
-        "ASHRAE 169-2013-0B"
-      ]
-    },
-    {
       "name": "ClimateZone 1",
       "climate_zones": [
         "ASHRAE 169-2006-1A",
         "ASHRAE 169-2006-1B",
         "ASHRAE 169-2013-1A",
-        "ASHRAE 169-2013-1B"
-      ]
-    },
-    {
-      "name": "ClimateZone 1A",
-      "climate_zones": [
-        "ASHRAE 169-2006-1A",
-        "ASHRAE 169-2013-1A"
-      ]
-    },
-    {
-      "name": "ClimateZone 1B",
-      "climate_zones": [
-        "ASHRAE 169-2006-1B",
         "ASHRAE 169-2013-1B"
       ]
     },

@@ -1,45 +1,33 @@
 {
   "climate_zones": [
     {
-      "name": "ASHRAE 169-2006-0A",
-      "standard": "ASHRAE 169-2006",
-      "representative_city": "Hanoi, Vietnam",
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "ASHRAE 169-2006-0B",
-      "standard": "ASHRAE 169-2006",
-      "representative_city": "Abu Dhabi, UAE",
-      "bcl_weather_component_id": null
-    },
-    {
       "name": "ASHRAE 169-2006-1A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Miami, FL",
+      "representative_city": "Honolulu, HI",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-1B",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Riyadh, Saudi Arabia",
+      "representative_city": "New Delhi, India",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-2A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Houston, TX",
+      "representative_city": "Tampa, FL",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-2B",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Phoenix, AZ",
+      "representative_city": "Tucson, AZ",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-3A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Memphis, TN",
+      "representative_city": "Atlanta, GA",
       "bcl_weather_component_id": null
     },
     {
@@ -51,13 +39,13 @@
     {
       "name": "ASHRAE 169-2006-3C",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "San Francisco, CA",
+      "representative_city": "San Diego, CA",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-4A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Baltimore, MD",
+      "representative_city": "New York, NY",
       "bcl_weather_component_id": null
     },
     {
@@ -69,49 +57,49 @@
     {
       "name": "ASHRAE 169-2006-4C",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Salem, OR",
+      "representative_city": "Seattle, WA",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-5A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Chicago, IL",
+      "representative_city": "Buffalo, NY",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-5B",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Boise, ID",
+      "representative_city": "Denver, CO",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-5C",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Vancouver, BC",
+      "representative_city": "Port Angeles, WA",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-6A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Burlington, VT",
+      "representative_city": "Rochester, MN",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-6B",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Helena, MT",
+      "representative_city": "Great Falls, MT",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-7A",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Duluth, MN",
+      "representative_city": "International Falls, MN",
       "bcl_weather_component_id": null
     },
     {
       "name": "ASHRAE 169-2006-7B",
       "standard": "ASHRAE 169-2006",
-      "representative_city": "Duluth, MN",
+      "representative_city": "International Falls, MN",
       "bcl_weather_component_id": null
     },
     {
@@ -124,18 +112,6 @@
       "name": "ASHRAE 169-2006-8B",
       "standard": "ASHRAE 169-2006",
       "representative_city": "Fairbanks, AK",
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "ASHRAE 169-2013-0A",
-      "standard": "ASHRAE 169-2013",
-      "representative_city": "Hanoi, Vietnam",
-      "bcl_weather_component_id": null
-    },
-    {
-      "name": "ASHRAE 169-2013-0B",
-      "standard": "ASHRAE 169-2013",
-      "representative_city": "Abu Dhabi, UAE",
       "bcl_weather_component_id": null
     },
     {
