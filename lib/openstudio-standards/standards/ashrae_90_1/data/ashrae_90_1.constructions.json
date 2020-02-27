@@ -155,7 +155,8 @@
       "materials": [
         "CP02 CARPET PAD",
         "100mm Normalweight concrete floor",
-        "Nonres_Floor_Insulation"
+        "Nonres_Floor_Insulation",
+        "G01 13mm gypsum board"
       ]
     },
     {
@@ -165,6 +166,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
+        "G01 13mm gypsum board",
         "Nonres_Floor_Insulation",
         "100mm Normalweight concrete floor",
         "CP02 CARPET PAD"

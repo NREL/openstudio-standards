@@ -827,6 +827,9 @@ class Standard
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
 
+    # skip systems without outdoor air
+    return economizer_required unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
     return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
 
     # Determine if the airloop serves any computer rooms
