@@ -1,7 +1,5 @@
-
 # Custom changes for the LargeOffice prototype.
-# These are changes that are inconsistent with other prototype
-# building types.
+# These are changes that are inconsistent with other prototype building types.
 module LargeOfficeDetailed
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     system_to_space_map = define_hvac_system_map(building_type, climate_zone)
@@ -43,7 +41,7 @@ module LargeOfficeDetailed
 
     # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
     model.getPlantLoops.each do |plant_loop|
-      next unless plant_loop.name.to_s.include? "Heat Pump Loop"
+      next unless plant_loop.name.to_s.include? 'Heat Pump Loop'
       sup_wtr_high_temp_f = 65.0
       sup_wtr_low_temp_f = 41.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
@@ -77,7 +75,7 @@ module LargeOfficeDetailed
 
     return true
   end
-  
+
   def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
