@@ -3,7 +3,7 @@ class Standard
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
-  def get_climate_zone_weather_file_map(epw_file = '')
+  def model_get_climate_zone_weather_file_map(epw_file = '')
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
         'ASHRAE 169-2006-0A' => 'VNM_Hanoi.488200_IWEC.epw',
@@ -87,7 +87,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Started adding weather file for climate zone: #{climate_zone}.")
 
     # Define the weather file for each climate zone
-    climate_zone_weather_file_map = get_climate_zone_weather_file_map(epw_file)
+    climate_zone_weather_file_map = model_get_climate_zone_weather_file_map(epw_file)
 
     # Get the weather file name from the hash
     weather_file_name = if epw_file.nil? || (epw_file.to_s.strip == '')
@@ -154,7 +154,7 @@ class Standard
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Mean dry bulb is #{stat_file.mean_dry_bulb}")
       # OpenStudio::logFree(OpenStudio::Info, "openstudio.weather.Model", "Delta dry bulb is #{stat_file.delta_dry_bulb}")
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not find .stat file for weather, will use default water mains temperatures which may be inaccurate for the location.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find .stat file for weather, will use default water mains temperatures which may be inaccurate for the location.')
       success = false
     end
 
@@ -186,18 +186,17 @@ class Standard
 
   def model_add_ground_temperatures(model, building_type, climate_zone)
 
-    # When a 90.1 template is run, utilize the ground temperature approximation method from stat files
-    if is_90_1_building()
-      # Get ground temperatures from stat file. Stat file is mapped via climate zone.
-      climate_zone_weather_file_map = get_climate_zone_weather_file_map()
-      stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
-      ground_temperatures = get_monthly_ground_temps_from_stat_file(stat_file_path)
+    # Get ground temperatures from stat file. Stat file is mapped via climate zone.
+    stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{model_get_climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
+    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
 
-      #set the site ground temperature building surface
+    if !ground_temperatures.empty?
+      # set the site ground temperature building surface
       ground_temp = model.getSiteGroundTemperatureFCfactorMethod
       ground_temp.setAllMonthlyTemperatures(ground_temperatures)
     else
-      #Look up ground temperatures from templates
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures in stat file; will use standards lookup.')
+      # Look up ground temperatures from templates
       ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
       if ground_temp_vals && ground_temp_vals['jan']
         ground_temp = model.getSiteGroundTemperatureBuildingSurface
@@ -214,7 +213,7 @@ class Standard
         ground_temp.setNovemberGroundTemperature(ground_temp_vals['nov'])
         ground_temp.setDecemberGroundTemperature(ground_temp_vals['dec'])
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures; will use generic temperatures, which will skew results.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures in standards lookup; will use generic temperatures, which will skew results.')
         ground_temp = model.getSiteGroundTemperatureBuildingSurface
         ground_temp.setJanuaryGroundTemperature(19.527)
         ground_temp.setFebruaryGroundTemperature(19.502)
@@ -230,7 +229,6 @@ class Standard
         ground_temp.setDecemberGroundTemperature(19.633)
       end
     end
-
   end
 
   # Gets the maximum OA dry bulb temperatures
@@ -252,16 +250,15 @@ class Standard
   # average dry bulb temperature)
   # @param stat_file_path [String] path to STAT file
   # @return [Array] a length 12 array of monthly ground temperatures, one for each month
-  def get_monthly_ground_temps_from_stat_file(stat_file_path)
-
+  def model_get_monthly_ground_temps_from_stat_file(stat_file_path)
     if File.exist? stat_file_path
       stat_file = EnergyPlus::StatFile.new(stat_file_path)
-
       monthly_dry_bulb = stat_file.monthly_dry_bulb[0..11]
       ground_temperatures = monthly_dry_bulb.rotate(-3)
       return ground_temperatures
     else
-      raise "Stat file: #{stat_file_path} was not found when calculating ground temperatures."
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Stat file: #{stat_file_path} was not found when calculating ground temperatures.")
+      return []
     end
   end
 end
