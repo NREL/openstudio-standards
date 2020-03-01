@@ -325,27 +325,22 @@ Standard.class_eval do
     m10_200mm_concrete_block_basement_wall.setDensity(1842)
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
-    # Buildings using the 90.1 template use the ground FC factor method
-    if is_90_1_building()
+    # Buildings default to using the ground FC factor method
+    model_set_below_grade_wall_constructions(model, climate_zone)
+    model_set_floor_constructions(model, climate_zone)
 
-      set_90_1_below_grade_wall_constructions(model, climate_zone)
-      set_90_1_floor_constructions(model, climate_zone)
+    basement_wall_construction = OpenStudio::Model::Construction.new(model)
+    basement_wall_construction.setName('Basement Wall construction')
+    basement_wall_layers = OpenStudio::Model::MaterialVector.new
+    basement_wall_layers << m10_200mm_concrete_block_basement_wall
+    basement_wall_construction.setLayers(basement_wall_layers)
 
-    else
-      basement_wall_construction = OpenStudio::Model::Construction.new(model)
-      basement_wall_construction.setName('Basement Wall construction')
-      basement_wall_layers = OpenStudio::Model::MaterialVector.new
-      basement_wall_layers << m10_200mm_concrete_block_basement_wall
-      basement_wall_construction.setLayers(basement_wall_layers)
-
-      basement_floor_construction = OpenStudio::Model::Construction.new(model)
-      basement_floor_construction.setName('Basement Floor construction')
-      basement_floor_layers = OpenStudio::Model::MaterialVector.new
-      basement_floor_layers << m10_200mm_concrete_block_basement_wall
-      basement_floor_layers << cp02_carpet_pad
-      basement_floor_construction.setLayers(basement_floor_layers)
-    end
-
+    basement_floor_construction = OpenStudio::Model::Construction.new(model)
+    basement_floor_construction.setName('Basement Floor construction')
+    basement_floor_layers = OpenStudio::Model::MaterialVector.new
+    basement_floor_layers << m10_200mm_concrete_block_basement_wall
+    basement_floor_layers << cp02_carpet_pad
+    basement_floor_construction.setLayers(basement_floor_layers)
 
     model.getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
@@ -355,16 +350,13 @@ Standard.class_eval do
           surface.setConstruction(floor_adiabatic_construction)
         end
       elsif surface.outsideBoundaryCondition.to_s == 'OtherSideCoefficients'
-
-        unless is_90_1_building()
-          # Ground
-          if surface.surfaceType.to_s == 'Wall'
-            surface.setOutsideBoundaryCondition('Ground')
-            surface.setConstruction(basement_wall_construction)
-          else
-            surface.setOutsideBoundaryCondition('Ground')
-            surface.setConstruction(basement_floor_construction)
-          end
+        # Ground
+        if surface.surfaceType.to_s == 'Wall'
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_wall_construction)
+        else
+          surface.setOutsideBoundaryCondition('Ground')
+          surface.setConstruction(basement_floor_construction)
         end
       end
     end
@@ -478,96 +470,61 @@ Standard.class_eval do
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
   # @param model[OpenStudio::Model::Model]
   # @return [void]
-  def set_90_1_below_grade_wall_constructions(model, climate_zone)
-
+  def model_set_below_grade_wall_constructions(model, climate_zone)
     wall_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactWall', 'Mass')
-    c_factor = wall_construction_properties['assembly_maximum_c_factor']*5.678  # 1 Btu/(hr-ft2-F) = 5.678 W/(m2-K)
+    c_factor = wall_construction_properties['assembly_maximum_c_factor'] * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
 
-    adiabatic_floor_construction = model.getConstructionByName('Floor Adiabatic construction').get
-
-    #iterate through spaces and set any necessary CFactorUndergroundWallConstructions
+    # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
 
-      # Find height of all below grade wall heights in this space. Used for C factor construction. Will return nil if
-      # none are found
-      below_grade_wall_height = get_space_below_grade_wall_height(space)
+      # Get height of the first below grade wall in this space. Will return nil if none are found.
+      below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+      next if below_grade_wall_height.nil?
 
-      #If space is below grade...
-      unless below_grade_wall_height.nil?
+      c_factor_wall_name = "Basement Wall C-Factor: #{c_factor} Height: #{below_grade_wall_height.round(1)}"
 
-        c_factor_wall_name = "Basement Wall C-Factor: #{c_factor} Height: #{below_grade_wall_height.round(1)}"
-
-        # Check if the wall construction has been constructed already. If so, look it up in the model
-        if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
-          basement_wall_construction = model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).get
-        else
-          #Create CFactorUndergroundWallConstruction objects
-          basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
-          basement_wall_construction.setCFactor(c_factor)
-          basement_wall_construction.setName(c_factor_wall_name)
-          basement_wall_construction.setHeight(below_grade_wall_height)
-        end
-
-        #Set surface construction for walls adjacent to ground (i.e. basement walls)
-        space.surfaces.each do |surface|
-          if surface.surfaceType == 'Wall' and surface.outsideBoundaryCondition == 'OtherSideCoefficients'
-            surface.setConstruction(basement_wall_construction)
-            surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
-          elsif surface.surfaceType == 'Floor' and surface.outsideBoundaryCondition == 'OtherSideCoefficients'
-            surface.setConstruction(adiabatic_floor_construction)
-            surface.setOutsideBoundaryCondition('Adiabatic')
-          end
-        end
-
+      # Check if the wall construction has been constructed already. If so, look it up in the model
+      if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
+        basement_wall_construction = model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).get
+      else
+        # Create CFactorUndergroundWallConstruction objects
+        basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+        basement_wall_construction.setCFactor(c_factor)
+        basement_wall_construction.setName(c_factor_wall_name)
+        basement_wall_construction.setHeight(below_grade_wall_height)
       end
 
+      # Set surface construction for walls adjacent to ground (i.e. basement walls)
+      space.surfaces.each do |surface|
+        if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
+          surface.setConstruction(basement_wall_construction)
+          surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+        end
+      end
     end
-
   end
 
-  # Finds heights of below grade walls and returns them as a numeric. Used when defining C Factor walls. Returns
-  # nil if the space is above grade.
-  # @param model[OpenStudio::Model::Model]
+  # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
+  # Returns nil if the space is above grade.
+  # @param space [OpenStudio::Model::Space] space to determine below grade wall height
   # @return [Numeric, nil]
-  def get_space_below_grade_wall_height(space)
+  def model_get_space_below_grade_wall_height(space)
 
-    #Check if space is below grade
-    #z_origin = space.zOrigin
-    #return nil if z_origin >= 0 #return nil if space is above grade
-
-    #Find height of walls adjacent to ground in model
+    # find height of first below-grade wall adjacent to the ground
     space.surfaces.each do |surface|
-
-      # Check that this surface is an exterior below grade wall
-      surface_type = surface.surfaceType
       boundary_condition = surface.outsideBoundaryCondition
-      is_adjacent_to_ground = (boundary_condition == 'OtherSideCoefficients' or boundary_condition == 'Ground')
-      is_below_grade_exterior_wall = (surface_type == 'Wall' and is_adjacent_to_ground)
+      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
+      next unless surface.surfaceType == 'Wall'
 
-      next unless is_below_grade_exterior_wall
-
-      #Find maximum height (assumes square, vertical walls)
-      vertices = surface.vertices()
-      min_z = vertices[0].z
-      max_z = vertices[0].z
+      # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
+      z_values = []
       surface.vertices.each do |vertex|
-        z_value = vertex.z
-
-        #Check if z_value is a minimum or maximum for surface
-        if z_value < min_z
-          min_z = z_value
-        elsif z_value > max_z
-          max_z = z_value
-        end
+        z_values << vertex.z
       end
-
-      surface_height = max_z - min_z
-
-      #return below grade wall height if any below grade walls are found
+      surface_height = z_values.max - z_values.min
       return surface_height
     end
 
-    #If space has no exterior walls below grade, return nil
     return nil
   end
 
@@ -575,17 +532,17 @@ Standard.class_eval do
   # calculated. Used for F-Factor floors that require additional parameters.
   # @param model [OpenStudio Model] OpenStudio model being modified
   # @param climate_zone [String] climate zone as described for prototype models. F-Factor is based on this parameter.
-  def set_90_1_floor_constructions(model, climate_zone)
+  def model_set_floor_constructions(model, climate_zone)
 
-    #Find Floor F factor
+    # Find Floor F factor
     floor_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactFloor', 'Unheated')
-    f_factor = floor_construction_properties['assembly_maximum_f_factor'] * 1.731 # 1 Btu/(hr-ft-F) = 1.731 W/(m-K)
+    f_factor = floor_construction_properties['assembly_maximum_f_factor'] * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
-    #iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
+    # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
-
-      #Find this space's exposed floor area and perimeter
-      perimeter, area = get_f_floor_geometries(space)
+      # Find this space's exposed floor area and perimeter
+      perimeter = model_get_f_floor_perimeter(space)
+      area = space.floorArea
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction
@@ -602,22 +559,25 @@ Standard.class_eval do
         f_floor_construction.setPerimeterExposed(perimeter)
       end
 
-      #Set surface construction for floors adjacent to ground
+      adiabatic_floor_construction = model.getConstructionByName('Floor Adiabatic construction').get
+
+      # Set surface construction for floors adjacent to ground
       space.surfaces.each do |surface|
-        if surface.surfaceType == 'Floor' and surface.outsideBoundaryCondition == 'Ground'
+        if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
           surface.setConstruction(f_floor_construction)
           surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+        elsif surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
+          surface.setConstruction(adiabatic_floor_construction)
+          surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     end
-
-
   end
 
   # This function returns the space's ground perimeter and area
   # @param space[OpenStudio::Model::Space]
   # @return [Numeric, Numeric]
-  def get_f_floor_geometries(space)
+  def model_get_f_floor_perimeter(space)
 
     perimeter = 0
     area = 0
@@ -625,10 +585,10 @@ Standard.class_eval do
     #cycle through surfaces in space
     space.surfaces.each do |surface|
 
-      #find perimeter of floor by finding wall above floor perimeter and measuring projection on x,y plane
-      if surface.surfaceType == 'Wall' and surface.outsideBoundaryCondition == 'Outdoors'
+      # find perimeter of floor by finding wall above floor perimeter and measuring projection on x,y plane
+      if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
 
-        vertices = surface.vertices()
+        vertices = surface.vertices
 
         max_x = vertices[0].x
         min_x = vertices[0].x
@@ -649,17 +609,11 @@ Standard.class_eval do
           end
         end
 
-        perimeter += Math.sqrt((max_x-min_x)**2 +(max_y-min_y)**2)
+        perimeter += Math.sqrt((max_x - min_x)**2 + (max_y - min_y)**2)
       end
-
-      #get area of floor surface. Assumes only one floor per space!
-      if surface.surfaceType == 'Floor' and surface.outsideBoundaryCondition == 'Ground'
-        area = surface.netArea()
-      end
-
     end
 
-    return perimeter, area
+    return perimeter
   end
 
   # Adds internal mass objects and constructions based on the building type
@@ -2009,9 +1963,4 @@ Standard.class_eval do
     end
   end
 
-  # This function checks if the Standard being run is being ran for a 90.1 building
-  # @return [Boolean] returns whether or not this Standard is used for a 90.1 compliant building
-  def is_90_1_building()
-    return template.include? '90.1'
-  end
 end

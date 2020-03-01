@@ -4,7 +4,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
 
-  def test_set_90_1_floor_constructions
+  def test_model_set_floor_constructions
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
@@ -46,7 +46,7 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
       standard = Standard.build(template)
 
       #Set f-factor constructions
-      standard.set_90_1_floor_constructions(model, climate_zone)
+      standard.model_set_floor_constructions(model, climate_zone)
 
       #parse the modified model for the F-Factor constructions
       expected_name = "Foundation F #{f_factor.round(2).to_s} Perim #{perimeter.round(2).to_s} Area #{area.round(2).to_s}".gsub('.','')
@@ -73,6 +73,6 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
       end
     end
 
-  end #END: test_set_90_1_floor_constructions
+  end
 
 end

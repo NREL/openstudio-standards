@@ -5,7 +5,7 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
 
 
-  def test_set_90_1_below_grade_wall_constructions
+  def test_model_set_below_grade_wall_constructions
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
@@ -45,7 +45,7 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       standard = Standard.build(template)
 
       #Set c-factor constructions
-      standard.set_90_1_below_grade_wall_constructions(model, climate_zone)
+      standard.model_set_below_grade_wall_constructions(model, climate_zone)
 
       #parse the modified model for the C-Factor constructions (it should be the only CFactor construction)
       c_factor_construction = model.getCFactorUndergroundWallConstructions[0]
@@ -64,6 +64,6 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       end
     end
 
-  end #END: test_set_90_1_below_grade_wall_constructions
+  end
 
 end
