@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
+  spec.add_development_dependency 'launchy', '2.4.3' # fixing version to ensure compatibility with Ruy 2.2.4
   spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
