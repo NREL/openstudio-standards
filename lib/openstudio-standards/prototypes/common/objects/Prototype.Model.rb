@@ -1790,6 +1790,17 @@ Standard.class_eval do
             air_loop.name.to_s.downcase.include?('datacenter') &&
             air_loop.name.to_s.downcase.include?('basement') &&
             !(template == '90.1-2004' || template == '90.1-2007')
+        # System serving the data center in the basement of the large
+        # office is assumed to be always large enough to require an
+        # economizer when economizer requirement is based on equipment
+        # size.
+        #
+        # No economizer modeled for 90.1-2004 and 2007:
+        # Specific economizer requirements for computer rooms were
+        # introduced in 90.1-2010. Before that, although not explicitly
+        # specified, economizer requirements were aimed at comfort
+        # cooling, not computer room cooling (as per input from the MSC).
+
         # Get the size threshold requirement
         search_criteria = {
           'template' => template,
@@ -1798,13 +1809,6 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-
-        # System serving the data center in the basement of the large
-        # office is assumed to be always large enough to require an
-        # economizer when economizer are required based on size
-        #
-        # No economizer modeled for 90.1-2004 and 2007
-        # @TODO Add justification
         economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
