@@ -827,12 +827,6 @@ class Standard
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
 
-    # Determine if the airloop has an humidifier
-    has_humidifier = false
-    if air_loop_hvac_humidifier_count(air_loop_hvac) > 0
-      has_humidifier = true
-    end
-
     # Determine if the system serves residential spaces
     is_res = false
     if air_loop_hvac_residential_area_served(air_loop_hvac) > 0
@@ -867,7 +861,7 @@ class Standard
 
     # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2013 (6.5.1.5)
     if is_res
-      minimum_capacity_btu_per_hr = minimum_capacity_btu_per_hr / 5
+      minimum_capacity_btu_per_hr /= 5
     end
 
     # Check whether the system requires an economizer by comparing
@@ -892,11 +886,6 @@ class Standard
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
-    end
-
-    # Exception valid for 90.1-2004 (6.5.1.(c)) through 90.1-2013 (6.5.1.3)
-    unless has_humidifier
-      economizer_required = false
     end
 
     return economizer_required
@@ -1066,11 +1055,10 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
+
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
     # Apply integrated or non-integrated economizer
     if integrated_economizer_required
@@ -1081,7 +1069,7 @@ class Standard
       # similar to a non-integrated economizer. This is done
       # because LockoutWithCompressor doesn't work with hydronic
       # coils
-      if air_loop_hvac_hydronic_cooling_coil?(air_loop_hvac)
+      if air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
         oa_control.setLockoutType('LockoutWithHeating')
         oa_control.setEconomizerMaximumLimitDryBulbTemperature(standard_design_sizing_temperatures['clg_dsgn_sup_air_temp_c'])
       else
@@ -1093,10 +1081,26 @@ class Standard
   end
 
   # Determine if the airloop includes hydronic cooling coils
-  def air_loop_hvac_hydronic_cooling_coil?(air_loop_hvac)
+  #
+  # @return [Bool] returns true if hydronic coolings coils are included on the airloop
+  def air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
     air_loop_hvac.supplyComponents.each do |comp|
-      if comp.to_CoilCoolingWater.is_initialized
-          return true
+      return true if comp.to_CoilCoolingWater.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes WSHP cooling coils
+  #
+  # @return [Bool] returns true if WSHP cooling coils are included on the airloop
+  def air_loop_hvac_include_wshp?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+
+      if comp.to_AirLoopHVACUnitarySystem.is_initialized
+        clg_coil = comp.to_AirLoopHVACUnitarySystem.get.coolingCoil.get
+        return true if clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+
       end
     end
     return false
@@ -3100,25 +3104,29 @@ class Standard
     return design_supply_air_flow_rate
   end
 
-  # Determine how much residential
-  # area the airloop serves.
+  # Determine how much residential area the airloop serves.
+  #
+  # @returns [Double] res_area m^2
   def air_loop_hvac_residential_area_served(air_loop_hvac)
-    res_area_m2 = 0.0
+    res_area = 0.0
 
     air_loop_hvac.thermalZones.each do |zone|
       zone.spaces.each do |space|
         # Skip spaces with no space type
         next if space.spaceType.empty?
+
         space_type = space.spaceType.get
+
         next if space_type.standardsSpaceType.empty?
+
         standards_space_type = space_type.standardsSpaceType.get
         if standards_space_type.downcase.include?('apartment') || standards_space_type.downcase.include?('guestroom') || standards_space_type.downcase.include?('patroom')
-          res_area_m2 += space.floorArea
+          res_area += space.floorArea
         end
       end
     end
 
-    return res_area_m2
+    return res_area
   end
 
   # Determine how much data center
@@ -3137,8 +3145,11 @@ class Standard
       zone.spaces.each do |space|
         # Skip spaces with no space type
         next if space.spaceType.empty?
+
         space_type = space.spaceType.get
+
         next if space_type.standardsSpaceType.empty?
+
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
         if standards_space_type.downcase.include?('data center') || standards_space_type.downcase.include?('datacenter')
@@ -3154,6 +3165,9 @@ class Standard
     return dc_area_m2
   end
 
+  # Determine how many humidifies are on the air loop
+  #
+  # @return [Integer] the number of humidifiers
   def air_loop_hvac_humidifier_count(air_loop_hvac)
     humidifiers = 0
     air_loop_hvac.supplyComponents.each do |cmp|
