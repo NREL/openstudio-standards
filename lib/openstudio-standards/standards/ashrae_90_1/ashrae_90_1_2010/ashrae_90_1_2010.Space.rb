@@ -33,14 +33,14 @@ class ASHRAE9012010 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area less than 250ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     else
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
       if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture less than 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
     end
@@ -53,14 +53,14 @@ class ASHRAE9012010 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
       req_top_ctrl = false
     elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area less than 900ft2 per 9.4.1.5.")
       req_top_ctrl = false
     else
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_skylight_effective_aperture(space, areas['toplighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
       if sidelighted_effective_aperture < 0.006
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture less than 0.006 per 9.4.1.5 Exception b.")
         req_top_ctrl = false
       end
     end

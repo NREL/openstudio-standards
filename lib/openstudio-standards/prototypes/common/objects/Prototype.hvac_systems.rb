@@ -1391,9 +1391,9 @@ class Standard
       # the system will lower the ventilation rate rather than trying to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
         if demand_control_ventilation
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions < 2.8.0.')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions less than 2.8.0.')
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
         end
       else
         zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
@@ -5003,7 +5003,7 @@ class Standard
 
       # set the cooling and heating fraction to zero so that the ERV does not try to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
       else
         zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
         zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)
