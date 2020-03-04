@@ -5289,9 +5289,15 @@ OS:Schedule:Day,
   OfficeLarge BLDG_EQUIP_SCH_2013 Default, !- Name
   {1f987c0c-4112-46c7-bc7c-2bd17f10c79b}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
+  6,                                      !- Hour 1
   0,                                      !- Minute 1
-  0.2210823264;                           !- Value Until Time 1
+  0.2210823264,                           !- Value Until Time 1
+  18,                                     !- Hour 2
+  0,                                      !- Minute 2
+  0.2847429789,                           !- Value Until Time 2
+  24,                                     !- Hour 3
+  0,                                      !- Minute 3
+  0.2210823264;                           !- Value Until Time 3
 
 OS:Schedule:Rule,
   {5b60dd0d-ea51-4845-b217-7ad1bfd100e4}, !- Handle
