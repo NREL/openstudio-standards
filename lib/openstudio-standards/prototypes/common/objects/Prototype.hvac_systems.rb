@@ -4270,7 +4270,7 @@ class Standard
       radiant_htg_dsgn_sup_wtr_temp_f = 110
     else
       climate_zone_set = model_find_climate_zone_set(model, climate_zone)
-      case climate_zone_set.gsub('ClimateZone ', '')
+      case climate_zone_set.gsub('ClimateZone ', '').gsub('CEC T24 ', '')
       when '1'
         cz_mult = 2
         radiant_htg_dsgn_sup_wtr_temp_f = 90
