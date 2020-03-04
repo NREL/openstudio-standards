@@ -1186,7 +1186,7 @@ class Standard
       if min_int_area_served_ft2 == infinity_ft2 && min_ext_area_served_ft2 == infinity_ft2
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for climate zone #{climate_zone}.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 < minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 < minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 is less than the minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 is less than the minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
       end
       return economizer_required
     end
@@ -2176,7 +2176,7 @@ class Standard
     # supply outlet node of the system.
     sat_oa_reset.addToNode(supplyOutletNode)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled.  When OAT > #{hi_oat_f.round}F, SAT is #{sat_at_hi_oat_f.round}F.  When OAT < #{lo_oat_f.round}F, SAT is #{sat_at_lo_oat_f.round}F.  It varies linearly in between these points.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled.  When OAT is greater than #{hi_oat_f.round}F, SAT is #{sat_at_hi_oat_f.round}F.  When OAT is less than #{lo_oat_f.round}F, SAT is #{sat_at_lo_oat_f.round}F.  It varies linearly in between these points.")
 
     return true
   end
@@ -2431,7 +2431,7 @@ class Standard
     end
 
     # If here, motorized damper is required
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper is required because the building has #{num_stories} stories, >= the minimum of #{maximum_stories} stories for climate zone #{climate_zone}, and the system OA intake of #{oa_flow_cfm.round} cfm is >= the minimum threshold of #{minimum_oa_flow_cfm} cfm. ")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper is required because the building has #{num_stories} stories which is greater than or equal to the minimum of #{maximum_stories} stories for climate zone #{climate_zone}, and the system OA intake of #{oa_flow_cfm.round} cfm is greater than or equal to the minimum threshold of #{minimum_oa_flow_cfm} cfm. ")
     motorized_oa_damper_required = true
 
     return motorized_oa_damper_required
@@ -3054,7 +3054,7 @@ class Standard
     elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
       design_supply_air_flow_rate = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design sypply air flow rate is not available.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design supply air flow rate is not available.")
     end
 
     return design_supply_air_flow_rate
