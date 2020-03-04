@@ -861,7 +861,7 @@ class Standard
 
     # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2013 (6.5.1.5)
     if is_res
-      minimum_capacity_btu_per_hr /= 5
+      minimum_capacity_btu_per_hr *= 5
     end
 
     # Check whether the system requires an economizer by comparing
@@ -3104,7 +3104,7 @@ class Standard
     return design_supply_air_flow_rate
   end
 
-  # Determine how much residential area the airloop serves.
+  # Determine how much residential area the airloop serves
   #
   # @returns [Double] res_area m^2
   def air_loop_hvac_residential_area_served(air_loop_hvac)
@@ -3117,6 +3117,7 @@ class Standard
 
         space_type = space.spaceType.get
 
+        # Skip spaces with no standards space type
         next if space_type.standardsSpaceType.empty?
 
         standards_space_type = space_type.standardsSpaceType.get
@@ -3148,6 +3149,7 @@ class Standard
 
         space_type = space.spaceType.get
 
+        # Skip spaces with no standards space type
         next if space_type.standardsSpaceType.empty?
 
         standards_space_type = space_type.standardsSpaceType.get
@@ -3165,7 +3167,7 @@ class Standard
     return dc_area_m2
   end
 
-  # Determine how many humidifies are on the air loop
+  # Determine how many humidifies are on the airloop
   #
   # @return [Integer] the number of humidifiers
   def air_loop_hvac_humidifier_count(air_loop_hvac)

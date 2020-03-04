@@ -1782,9 +1782,9 @@ Standard.class_eval do
     model.getAirLoopHVACs.sort.each do |air_loop|
       economizer_required = false
 
-      # Determine if the airloop has a humidifier
       if air_loop_hvac_humidifier_count(air_loop) > 0
-        # Exception valid for 90.1-2004 (6.5.1.(c)) through 90.1-2013 (6.5.1.3)
+        # If airloop includes it is assumed that exception c to 90.1-2004 Section 6.5.1 applies
+        # This exception exist through 90.1-2013, see Section 6.5.1.3
         economizer_required = false
       elsif @instvarbuilding_type == 'LargeOffice' &&
             air_loop.name.to_s.downcase.include?('datacenter') &&
