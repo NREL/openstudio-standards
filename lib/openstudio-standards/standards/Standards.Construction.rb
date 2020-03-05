@@ -645,7 +645,7 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)
     if target_tvis >= 1.0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is > 1.0")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is greater than 1.0")
       return false
     end
 
