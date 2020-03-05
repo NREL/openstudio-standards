@@ -827,6 +827,8 @@ class Standard
   def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
 
+    # skip systems without outdoor air
+    return economizer_required unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
     # Determine if the system serves residential spaces
     is_res = false
     if air_loop_hvac_residential_area_served(air_loop_hvac) > 0
