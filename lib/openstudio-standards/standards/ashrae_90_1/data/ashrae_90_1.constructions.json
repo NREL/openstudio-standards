@@ -2978,6 +2978,16 @@
       ]
     },
     {
+      "name": "Uninsulated Steel Stud Wall",
+      "intended_surface_type": "InteriorPartition",
+      "standards_construction_type": "SteelFramed",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "Metal Framed Wall - 24inOC - 2x4 - R0 ins."
+      ]
+    },
+    {
       "name": "Window_U_0.50_SHGC_0.40_Skylight_Frame_Width_0.000_in",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
