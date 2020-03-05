@@ -100,16 +100,6 @@ class Standard
       ## end
     end
 
-    # Single zone systems
-    if air_loop_hvac.thermalZones.size == 1
-      air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
-        if fan.to_FanVariableVolume.is_initialized
-          fan_variable_volume_set_control_type(fan, 'Single Zone VAV Fan')
-        end
-      end
-      air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
-    end
-
     # DCV
     if air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
@@ -170,8 +160,16 @@ class Standard
     end
 
     # Optimum Start
-    if air_loop_hvac_optimum_start_required?(air_loop_hvac)
-      air_loop_hvac_enable_optimum_start(air_loop_hvac)
+    air_loop_hvac_enable_optimum_start(air_loop_hvac) if air_loop_hvac_optimum_start_required?(air_loop_hvac)
+
+    # Single zone systems
+    if air_loop_hvac.thermalZones.size == 1
+      air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
+        if fan.to_FanVariableVolume.is_initialized
+          fan_variable_volume_set_control_type(fan, 'Single Zone VAV Fan')
+        end
+      end
+      air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     end
   end
 
@@ -832,8 +830,11 @@ class Standard
 
     # skip systems without outdoor air
     return economizer_required unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-
-    return economizer_required if air_loop_hvac.name.to_s.include? 'Outpatient F1'
+    # Determine if the system serves residential spaces
+    is_res = false
+    if air_loop_hvac_residential_area_served(air_loop_hvac) > 0
+      is_res = true
+    end
 
     # Determine if the airloop serves any computer rooms
     # / data centers, which changes the economizer.
@@ -861,6 +862,11 @@ class Standard
     infinity_btu_per_hr = 999_999_999_999
     minimum_capacity_btu_per_hr = infinity_btu_per_hr if minimum_capacity_btu_per_hr.nil?
 
+    # Exception valid for 90.1-2004 (6.5.1.(e)) through 90.1-2013 (6.5.1.5)
+    if is_res
+      minimum_capacity_btu_per_hr *= 5
+    end
+
     # Check whether the system requires an economizer by comparing
     # the system capacity to the minimum capacity.
     total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
@@ -869,6 +875,8 @@ class Standard
     if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
       if is_dc
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      elsif is_res
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for residential spaces.")
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
@@ -876,6 +884,8 @@ class Standard
     else
       if is_dc
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+      elsif is_res
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for residential spaces.")
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
       end
@@ -1044,21 +1054,55 @@ class Standard
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    if oa_sys.is_initialized
-      oa_sys = oa_sys.get
-    else
-      return false # No OA system
-    end
-    oa_control = oa_sys.getControllerOutdoorAir
 
+    return false unless oa_sys.is_initialized
+
+    oa_sys = oa_sys.get
+    oa_control = oa_sys.getControllerOutdoorAir
     # Apply integrated or non-integrated economizer
     if integrated_economizer_required
-      oa_control.setLockoutType('NoLockout')
+      oa_control.setLockoutType('LockoutWithHeating')
     else
-      oa_control.setLockoutType('LockoutWithCompressor')
+      # If the airloop include hyrdronic cooling coils,
+      # prevent economizer from operating at and above SAT,
+      # similar to a non-integrated economizer. This is done
+      # because LockoutWithCompressor doesn't work with hydronic
+      # coils
+      if air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
+        oa_control.setLockoutType('LockoutWithHeating')
+        oa_control.setEconomizerMaximumLimitDryBulbTemperature(standard_design_sizing_temperatures['clg_dsgn_sup_air_temp_c'])
+      else
+        oa_control.setLockoutType('LockoutWithCompressor')
+      end
     end
 
     return true
+  end
+
+  # Determine if the airloop includes hydronic cooling coils
+  #
+  # @return [Bool] returns true if hydronic coolings coils are included on the airloop
+  def air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWater.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes WSHP cooling coils
+  #
+  # @return [Bool] returns true if WSHP cooling coils are included on the airloop
+  def air_loop_hvac_include_wshp?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+
+      if comp.to_AirLoopHVACUnitarySystem.is_initialized
+        clg_coil = comp.to_AirLoopHVACUnitarySystem.get.coolingCoil.get
+        return true if clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+
+      end
+    end
+    return false
   end
 
   # Determine if the system economizer must be integrated or not.
@@ -1177,7 +1221,7 @@ class Standard
       if min_int_area_served_ft2 == infinity_ft2 && min_ext_area_served_ft2 == infinity_ft2
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for climate zone #{climate_zone}.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 < minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 < minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 is less than the minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 is less than the minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
       end
       return economizer_required
     end
@@ -2133,7 +2177,7 @@ class Standard
     # supply outlet node of the system.
     sat_oa_reset.addToNode(supplyOutletNode)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled.  When OAT > #{hi_oat_f.round}F, SAT is #{sat_at_hi_oat_f.round}F.  When OAT < #{lo_oat_f.round}F, SAT is #{sat_at_lo_oat_f.round}F.  It varies linearly in between these points.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Supply air temperature reset was enabled.  When OAT is greater than #{hi_oat_f.round}F, SAT is #{sat_at_hi_oat_f.round}F.  When OAT is less than #{lo_oat_f.round}F, SAT is #{sat_at_lo_oat_f.round}F.  It varies linearly in between these points.")
 
     return true
   end
@@ -2373,7 +2417,7 @@ class Standard
     end
 
     # If here, motorized damper is required
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper is required because the building has #{num_stories} stories, >= the minimum of #{maximum_stories} stories for climate zone #{climate_zone}, and the system OA intake of #{oa_flow_cfm.round} cfm is >= the minimum threshold of #{minimum_oa_flow_cfm} cfm. ")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Motorized OA damper is required because the building has #{num_stories} stories which is greater than or equal to the minimum of #{maximum_stories} stories for climate zone #{climate_zone}, and the system OA intake of #{oa_flow_cfm.round} cfm is greater than or equal to the minimum threshold of #{minimum_oa_flow_cfm} cfm. ")
     motorized_oa_damper_required = true
 
     return motorized_oa_damper_required
@@ -2996,10 +3040,36 @@ class Standard
     elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
       design_supply_air_flow_rate = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design sypply air flow rate is not available.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} design supply air flow rate is not available.")
     end
 
     return design_supply_air_flow_rate
+  end
+
+  # Determine how much residential area the airloop serves
+  #
+  # @returns [Double] res_area m^2
+  def air_loop_hvac_residential_area_served(air_loop_hvac)
+    res_area = 0.0
+
+    air_loop_hvac.thermalZones.each do |zone|
+      zone.spaces.each do |space|
+        # Skip spaces with no space type
+        next if space.spaceType.empty?
+
+        space_type = space.spaceType.get
+
+        # Skip spaces with no standards space type
+        next if space_type.standardsSpaceType.empty?
+
+        standards_space_type = space_type.standardsSpaceType.get
+        if standards_space_type.downcase.include?('apartment') || standards_space_type.downcase.include?('guestroom') || standards_space_type.downcase.include?('patroom')
+          res_area += space.floorArea
+        end
+      end
+    end
+
+    return res_area
   end
 
   # Determine how much data center
@@ -3018,8 +3088,12 @@ class Standard
       zone.spaces.each do |space|
         # Skip spaces with no space type
         next if space.spaceType.empty?
+
         space_type = space.spaceType.get
+
+        # Skip spaces with no standards space type
         next if space_type.standardsSpaceType.empty?
+
         standards_space_type = space_type.standardsSpaceType.get
         # Counts as a data center if the name includes 'data'
         if standards_space_type.downcase.include?('data center') || standards_space_type.downcase.include?('datacenter')
@@ -3033,6 +3107,19 @@ class Standard
     end
 
     return dc_area_m2
+  end
+
+  # Determine how many humidifies are on the airloop
+  #
+  # @return [Integer] the number of humidifiers
+  def air_loop_hvac_humidifier_count(air_loop_hvac)
+    humidifiers = 0
+    air_loop_hvac.supplyComponents.each do |cmp|
+      if cmp.to_HumidifierSteamElectric.is_initialized
+        humidifiers += 1
+      end
+    end
+    return humidifiers
   end
 
   # Sets the maximum reheat temperature to the specified

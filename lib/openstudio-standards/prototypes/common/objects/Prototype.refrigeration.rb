@@ -524,19 +524,20 @@ class Standard
       }
       props_lineup = model_find_object(standards_data['refrigeration_system_lineup'], search_criteria)
       if props_lineup.nil?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "No refrigeration system lineup found for #{search_criteria}, no system will be added.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "No refrigeration system lineup found for #{search_criteria}, no system will be added.")
         next
       end
       number_of_display_cases = props_lineup['number_of_display_cases']
       number_of_walkins = props_lineup['number_of_walkins']
       compressor_name = props_lineup['compressor_name']
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Refrigeration system lineup found for #{search_criteria}: #{number_of_display_cases} display cases and #{number_of_walkins} walkins, with compressor '#{compressor_name}'.")
 
       # Find the thermal zones most suited for holding the display cases
       thermal_zone_case = nil
       if number_of_display_cases > 0
         thermal_zone_case = model_typical_display_case_zone(model)
         if thermal_zone_case.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model',"Attempted to add #{number_of_display_cases} display cases to the model, but could find no thermal zone to put them into.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Attempted to add #{number_of_display_cases} display cases to the model, but could find no thermal zone to put them into.")
           return false
         end
       end
@@ -636,9 +637,7 @@ class Standard
         walkin_floor_area_ft2 = OpenStudio.convert(ref_walkin.insulatedFloorSurfaceArea, 'm^2', 'ft^2').get.round
         walkin_zone_floor_area_ft2 = OpenStudio.convert(thermal_zone_walkin.floorArea, 'm^2', 'ft^2').get.round
         if walkin_floor_area_ft2 > walkin_zone_floor_area_ft2
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Walkin #{ref_walkin.name} has an area of #{walkin_floor_area_ft2} ft^2, which is larger than the #{walkin_zone_floor_area_ft2} ft^2 zone.  Walkin will be removed from model.")
-          ref_walkin.remove
-          next
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Walkin #{ref_walkin.name} has an area of #{walkin_floor_area_ft2} ft^2, which is larger than the #{walkin_zone_floor_area_ft2} ft^2 zone.  Walkin will be kept in the model, but considered re-sizing the zone '#{thermal_zone_walkin.name}'.")
         end
 
         # Find defrost and dripdown properties

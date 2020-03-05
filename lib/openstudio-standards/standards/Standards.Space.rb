@@ -214,7 +214,7 @@ class Standard
             # Make the new vertex
             new_vertex = OpenStudio::Point3d.new(new_x, new_y, new_z)
             pri_sidelit_sub_polygon << new_vertex
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "#{vertex.x.round(2)}, #{vertex.y.round(2)}, #{vertex.z.round(2)} ==> #{new_vertex.x.round(2)}, #{new_vertex.y.round(2)}, #{new_vertex.z.round(2)}")
+            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "#{vertex.x.round(2)}, #{vertex.y.round(2)}, #{vertex.z.round(2)} to #{new_vertex.x.round(2)}, #{new_vertex.y.round(2)}, #{new_vertex.z.round(2)}")
 
             # Secondary sidelighted area
             # Move the x vertices outward by the specified amount.
@@ -637,7 +637,7 @@ class Standard
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture calculation.")
           vt = 0
         end
 
@@ -748,7 +748,7 @@ class Standard
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture calculation.")
           vt = 0
         end
 
@@ -1855,7 +1855,7 @@ class Standard
     fails = []
     errs = 0
     polygons.each do |polygon|
-      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{polygon.to_s.gsub(/\[|\]/,'|')}.")
+      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} is greater than or equal to #{polygon.to_s.gsub(/\[|\]/,'|')}.")
       polygon.each do |vertex|
         # clsss << vertex.class
         unless vertex.z == 0.0
@@ -1864,7 +1864,7 @@ class Standard
         end
       end
     end
-    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
+    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} is greater than or equal to #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
     if errs > 0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
     end
@@ -1997,7 +1997,7 @@ class Standard
       # Remove duplicate polygons
       unique_a_minus_b_polygons_ruby = a_minus_b_polygons_ruby.uniq
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} ==> #{unique_a_minus_b_polygons_ruby.size}")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} to #{unique_a_minus_b_polygons_ruby.size}")
 
       # TODO: bug workaround?
       # If the result includes the a polygon, the a polygon
@@ -2034,7 +2034,7 @@ class Standard
     # end
     # end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} ==> #{unique_final_polygons_ruby.size}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} to #{unique_final_polygons_ruby.size}")
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} minus #{b_name} = #{unique_final_polygons_ruby.size} polygons.")
 
@@ -2135,7 +2135,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
     if inner_loop_errs > 0
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly because the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
 
