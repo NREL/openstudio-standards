@@ -207,8 +207,11 @@ class NECB2011
         air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature] )
         air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling])
         air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating])
-        air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
-
+        if model.version < OpenStudio::VersionString.new('2.7.0')
+          air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
+        else
+          air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio])
+        end
 
         supply_fan = OpenStudio::Model::FanVariableVolume.new(model, always_on)
         supply_fan.setName('Sys6 Supply Fan')
