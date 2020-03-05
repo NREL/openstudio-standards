@@ -1143,7 +1143,6 @@ class Standard
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
   #   If enabled, the DOAS will be sized for twice the ventilation minimum to allow economizing
   # @param include_exhaust_fan [Bool] if true, include an exhaust fan
-  # @param energy_recovery [Bool] if true, an ERV will be added to the system
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
@@ -1159,7 +1158,6 @@ class Standard
                      fan_maximum_flow_rate: nil,
                      econo_ctrl_mthd: 'NoEconomizer',
                      include_exhaust_fan: true,
-                     energy_recovery: true,
                      demand_control_ventilation: false,
                      doas_control_strategy: 'NeutralSupplyAir',
                      clg_dsgn_sup_air_temp: 60.0,
@@ -1323,9 +1321,9 @@ class Standard
                                          fan_name: 'DOAS Exhaust Fan',
                                          end_use_subcategory: 'DOAS Fans')
       end
-      # set pressure rise 0.5 inH2O lower than supply fan, 0.5 inH2O minimum
-      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
-      exhaust_fan_pressure_rise = OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
+      # set pressure rise 1.0 inH2O lower than supply fan, 1.0 inH2O minimum
+      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      exhaust_fan_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
       exhaust_fan.setPressureRise(exhaust_fan_pressure_rise)
       exhaust_fan.addToNode(air_loop.supplyInletNode)
     end
@@ -1343,40 +1341,6 @@ class Standard
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
     air_loop.setNightCycleControlType('CycleOnAnyZoneFansOnly')
-
-    # add energy recovery if requested
-    if energy_recovery
-      # Get the OA system and its outboard OA node
-      oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
-
-      # create the ERV and set its properties
-      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.setName("#{air_loop.name} Heat Exchanger")
-      erv.addToNode(oa_system.outboardOANode.get)
-      erv.setHeatExchangerType('Rotary')
-      erv.setSupplyAirOutletTemperatureControl(false)
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
-      erv.setEconomizerLockout(true)
-      # TODO: estimate ERV motor power which might require knowing airflow (like prototype buildings do)
-      # erv.setNominalElectricPower(value_new)
-      # TODO: set erv defrost control
-
-      # increase fan static pressure to account for ERV
-      erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
-      supply_fan_new_pressure_rise = supply_fan.pressureRise + erv_pressure_rise
-      supply_fan.setPressureRise(supply_fan_new_pressure_rise)
-      if include_exhaust_fan
-        exhaust_fan_new_pressure_rise = exhaust_fan.pressureRise + erv_pressure_rise
-        supply_fan.setPressureRise(exhaust_fan_new_pressure_rise)
-      end
-    end
 
     # add thermal zones to airloop
     thermal_zones.each do |zone|
@@ -1412,7 +1376,6 @@ class Standard
 
       # attach new terminal to the zone and to the airloop
       air_loop.multiAddBranchForZone(zone, air_terminal.to_HVACComponent.get)
-
 
       # ensure the DOAS takes priority, so ventilation load is included when treated by other zonal systems
       # From EnergyPlus I/O reference:

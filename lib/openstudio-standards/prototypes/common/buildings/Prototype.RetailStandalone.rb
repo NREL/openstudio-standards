@@ -84,6 +84,9 @@ module RetailStandalone
       IF OAT_F > 45
         SET FrontEntry_Coil = 0
         SET FrontEntry_Fan = 0
+      ELSE
+      SET FrontEntry_Coil = 1
+      SET FrontEntry_Fan = 1
       ENDIF
       EMS
       frt_entry_prg.setBody(frt_entry_prg_body)

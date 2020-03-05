@@ -9,7 +9,7 @@ class Standard
   # @param type [String] the type of two speed DX coil to reference the correct curve set
   def create_coil_cooling_dx_two_speed(model,
                                        air_loop_node: nil,
-                                       name: "2spd DX Clg Coil",
+                                       name: '2spd DX Clg Coil',
                                        schedule: nil,
                                        type: nil)
 
@@ -28,7 +28,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule
