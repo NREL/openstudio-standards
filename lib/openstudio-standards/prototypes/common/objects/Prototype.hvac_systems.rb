@@ -1478,8 +1478,6 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
     sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
@@ -1634,6 +1632,9 @@ class Standard
         zone.setReturnPlenum(return_plenum)
       end
     end
+
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
 
     # set the damper action based on the template
     air_loop_hvac_apply_vav_damper_action(air_loop)
@@ -1835,9 +1836,6 @@ class Standard
     # default design settings used across all air loops
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
     # air handler controls
     sa_temp_sch = model_add_constant_schedule_ruleset(model,
                                                       dsgn_temps['clg_dsgn_sup_air_temp_c'],
@@ -1948,6 +1946,9 @@ class Standard
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
+
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
 
     # set the damper action based on the template
     air_loop_hvac_apply_vav_damper_action(air_loop)

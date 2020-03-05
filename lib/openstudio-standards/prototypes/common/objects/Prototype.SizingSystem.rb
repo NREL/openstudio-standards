@@ -40,8 +40,10 @@ class Standard
     # Set the minimum zone ventilation efficiency to be 0.6
     air_loop_hvac.thermalZones.sort.each do |zone|
       sizing_zone = zone.sizingZone
-      sizing_zone.setDesignZoneAirDistributionEffectivenessinCoolingMode(0.6)
-      sizing_zone.setDesignZoneAirDistributionEffectivenessinHeatingMode(0.6)
+      # It is not yet possible to adjust the minimum zone ventilation efficiency
+      # @todo, update this section when OS allows to adjust minimum zone ventilation efficiency
+      # In EnergyPlus this is done through the DesignSpecification:ZoneAirDistribution object
+      # which is then assigned to a Sizing:Zone object
     end
 
     return true  
