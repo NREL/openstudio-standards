@@ -255,6 +255,7 @@ module Hospital
           # Cutoff was determined by correlating apparent minimum guesses
           # to OA rates in prototypes since not well documented in papers.
           zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          airlp = air_terminal.airLoopHVAC.get
           case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
             if vav_name.include?('PatRoom') || vav_name.include?('OR') || vav_name.include?('ICU') || vav_name.include?('Lab') || vav_name.include?('ER') || vav_name.include?('Kitchen')
@@ -265,9 +266,8 @@ module Hospital
           # See Section 5.2.2.16 in Thornton et al. 2010
           # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0)
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include? "VAV_1" or airlp.name.to_s.include? "VAV_2"
           when '90.1-2010', '90.1-2013'
-            airlp = air_terminal.airLoopHVAC.get
             air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include? "VAV_1" or airlp.name.to_s.include? "VAV_2"
             air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? "PatRoom"
           end
