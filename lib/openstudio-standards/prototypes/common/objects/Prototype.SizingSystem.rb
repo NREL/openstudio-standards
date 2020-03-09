@@ -23,7 +23,11 @@ class Standard
     sizing_system.setPrecoolDesignHumidityRatio(0.008)
     sizing_system.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     sizing_system.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
+    end
     sizing_system.setSizingOption(sizing_option)
     sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)
