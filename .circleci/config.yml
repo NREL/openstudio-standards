@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/openstudio-standards
     docker:
-      - image: nrel/openstudio-3.0.0-beta-ruby-slim
+      - image: nrel/openstudio:3.0.0-beta
     parallelism: 7
     steps:
       - checkout
