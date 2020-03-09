@@ -1,5 +1,6 @@
+ -EnergyPlus Weather Converter V8.1.0.005
  Statistics for VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2
- Location -- Ho Chi Minh City-Tan Son Nhat AP - VNM  
+ Location -- Ho Chi Minh City-Tan Son Nhat Intl AP - VNM  
       {N 10° 49'} {E 106° 40'} {GMT +7.0 Hours}
  Elevation --     5m above sea level
  Standard Pressure at Elevation -- 101265Pa
@@ -7,24 +8,86 @@
 
  WMO Station 489000
 
- - Using Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
-
- - If the design condition source is ASHRAE, the design conditions are carefully generated
- - from a period of record (typically 30 years) to be representative of that location and
- - be suitable for use in heating/cooling load calculations. If the source is not ASHRAE,
- - please consult the referenced source for the reasoning behind the data.
+ - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
+ - ASHRAE design conditions are carefully generated from a period of record 
+ - (typically 30 years) to be representative of that location and to be suitable
+ - for use in heating/cooling load calculations.
 
     	Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996	
     	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
-    	Heating	12	20.1	21.1	15.3	10.8	26.2	16.5	11.8	26.2	11.3	28.2	7.5	27.6	1.8	0
+    	Heating	12	20	21.1	15	10.7	26.1	16.2	11.6	26.4	11.3	29.1	8	27.9	1.9	0
 
     	Design Stat	HottestMonth	DBR	DB004	WB_DB004	DB010	WB_DB010	DB020	WB_DB020	WB004	DB_WB004	WB010	DB_WB010	WB020	DB_WB020	WS_DB004	WD_DB004	DP004	HR_DP004	DB_DP004	DP010	HR_DP010	DB_DP010	DP020	HR_DP020	DB_DP020	EN004	DB_EN004	EN010	DB_EN010	EN020	DB_EN020	#Hrs_8-4_&_DB-12.8/20.6	
     	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
-    	Cooling	4	8.5	35.2	25.8	34.7	25.8	34	25.8	28	31.8	27.6	31.4	27.3	31.1	4.1	160	27.1	22.8	29.9	26.7	22.3	29.6	26.2	21.6	29.3	89.7	31.9	88	31.9	86.5	31.5	3
+    	Cooling	4	8.6	35.4	25.8	34.7	25.8	34	25.7	28	31.8	27.6	31.4	27.3	31.1	4.2	160	27.1	22.8	29.8	26.7	22.3	29.6	26.2	21.6	29.1	89.7	31.9	88	31.9	86.6	31.5	3
 
     	Design Stat	WS010	WS025	WS050	WBmax	DBmin_mean	DBmax_mean	DBmin_stddev	DBmax_stddev	DBmin05years	DBmax05years	DBmin10years	DBmax10years	DBmin20years	DBmax20years	DBmin50years	DBmax50years
     	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
-    	Extremes	11.5	7.9	6.7	33.6	17.9	37.4	1.4	1.1	16.9	38.1	16.1	38.8	15.4	39.4	14.4	40.2
+    	Extremes	11.8	8.5	6.9	30.8	17.9	37.3	1.4	1	16.9	38	16.1	38.6	15.4	39.2	14.4	39.9
+
+ - Displaying Monthly Design Conditions "Climate Design Data 2013 ASHRAE Handbook"
+ - Monthly Optical Sky Depth Beam (taub) and Diffuse (taud)
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	             taub (beam)	0.486	0.508	0.529	0.506	0.455	0.449	0.449	0.457	0.487	0.475	0.475	0.472	
+ 	          taud (diffuse)	2.306	2.193	2.085	2.121	2.255	2.247	2.248	2.264	2.227	2.331	2.371	2.391	
+
+ 	                    taub	= Clear Sky Optical Depth for Beam Irradiance
+ 	                    taud	= Clear Sky Optical Depth for Diffuse Irradiance
+
+ - Monthly Solar Irradiance Wh/m² (noon on 21st of month)
+ 	               ib (beam)	  823	  818	  806	  816	  843	  838	  841	  846	  829	  837	  827	  827	
+ 	            id (diffuse)	  130	  150	  170	  162	  139	  138	  139	  139	  145	  129	  121	  118	
+
+ 	                      ib	= Clear Sky Noon Beam Normal Irradiance on 21st Day
+ 	                      id	= Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
+
+ - Monthly Drybulb and Mean Coincident Wetbulb Temperatures °C
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	            Drybulb 0.4%	 34.1	 34.7	   36	 36.5	 36.3	 35.1	 34.1	   34	 33.6	 33.1	 33.2	 33.2	
+ 	 Coincident Wetbulb 0.4%	   24	 23.9	 24.5	 25.8	 26.4	 26.9	   27	 26.9	 26.8	 26.3	 25.4	 24.5	
+ 	            Drybulb 2.0%	   33	 33.8	 34.8	 35.2	 35.2	   34	 33.1	   33	 32.9	 32.2	 32.3	 32.2	
+ 	 Coincident Wetbulb 2.0%	   24	   24	 24.9	 25.9	 26.3	 26.7	 26.7	 26.6	 26.7	 26.1	 25.4	 24.3	
+ 	            Drybulb 5.0%	 32.2	   33	 33.9	 34.6	 34.2	 33.2	 32.4	 32.2	 32.1	 31.8	 31.9	 31.6	
+ 	 Coincident Wetbulb 5.0%	 23.8	   24	 24.9	 25.8	 26.4	 26.6	 26.5	 26.4	 26.4	 26.1	 25.4	 24.2	
+ 	            Drybulb 10.%	 31.2	 32.1	   33	 33.9	 33.2	 32.2	 31.8	 31.4	 31.2	 30.9	   31	 30.9	
+ 	 Coincident Wetbulb 10.%	 23.7	 23.8	 24.7	 25.8	 26.4	 26.5	 26.4	 26.4	 26.3	   26	 25.3	 24.2	
+
+ 	            Drybulb 0.4%	= 0.4% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 0.4%	= 0.4% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 2.0%	= 2.0% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 2.0%	= 2.0% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 5.0%	= 5.0% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 5.0%	= 5.0% Monthly Mean Coincident Wetbulb Temperature
+ 	            Drybulb 10.%	= 10.% Monthly Design Drybulb Temperature
+ 	 Coincident Wetbulb 10.%	= 10.% Monthly Mean Coincident Wetbulb Temperature
+
+ - Monthly Drybulb and Wetbulb Daily Ranges delta°C
+ 	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	                 Drybulb	  9.8	   10	  9.3	  8.6	  8.2	  7.9	  7.6	  7.3	  7.3	  7.3	  8.1	    9	
+ 	   Drybulb range - DB 5%	 10.3	 10.3	  9.8	  9.1	  8.8	  8.8	  8.4	  8.2	  8.2	  8.3	  8.9	  9.7	
+ 	   Wetbulb range - DB 5%	  3.5	  3.3	  2.8	  2.7	  2.8	  3.2	  3.4	  3.2	  3.3	  3.3	  3.3	  3.6	
+
+ 	                 Drybulb	= Mean Daily Dry Bulb Temperature Range
+ 	   Drybulb range - DB 5%	= Mean Daily Dry Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
+ 	   Wetbulb range - DB 5%	= Mean Daily Wet Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
+
+ - Displaying Heating/Cooling Degree Days/Hours from "Climate Design Data 2013 ASHRAE Handbook"
+ - Monthly Standard Heating/Cooling Degree Days/Hours
+ 	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+ 	       HDD base 10°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	     HDD base 18.3°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+
+ 	       CDD base 10°C	  526	  498	  594	  607	  612	  563	  563	  562	  539	  544	  519	  513	
+ 	     CDD base 18.3°C	  267	  265	  336	  357	  353	  313	  305	  303	  289	  286	  269	  255	
+
+ 	     CDH base 23.3°C	 2556	 2669	 3807	 4414	 4164	 3380	 3056	 3022	 2794	 2654	 2538	 2339	
+ 	     CDH base 26.7°C	  995	 1102	 1674	 2123	 1907	 1355	 1119	 1060	  955	  880	  909	  847	
+
+    - 6640 annual (standard) cooling degree-days (10°C baseline)
+    -    0 annual (standard) heating degree-days (10°C baseline)
+
+    - 3598 annual (standard) cooling degree-days (18.3°C baseline)
+    -    0 annual (standard) heating degree-days (18.3°C baseline)
 
  - Monthly Statistics for Dry Bulb temperatures °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -429,7 +492,7 @@
  - Monthly Calculated "undisturbed" Ground Temperatures** °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	   0.5 m  	 26.2	 26.4	 27.0	 27.5	 28.4	 28.9	 29.0	 28.8	 28.2	 27.5	 26.8	 26.3	
- 	   2.0 m  	 26.5	 26.6	 26.9	 27.2	 28.0	 28.4	 28.7	 28.6	 28.3	 27.8	 27.2	 26.8	
+ 	   2.0 m  	 26.5	 26.6	 26.9	 27.2	 28.0	 28.4	 28.6	 28.6	 28.3	 27.8	 27.2	 26.8	
  	   4.0 m  	 26.9	 26.9	 27.0	 27.2	 27.7	 28.0	 28.3	 28.3	 28.2	 27.9	 27.5	 27.2	
 
    - **These ground temperatures should NOT BE USED in the GroundTemperatures object to compute building floor losses.
@@ -437,7 +500,9 @@
    -   The temperatures for 4.0 m depth can be used for GroundTemperatures:Deep.
    -   Calculations use a standard soil diffusivity of 2.3225760E-03 {m**2/day}
 
- - Monthly Heating/Cooling Degree Days/Hours
+ - Heating/Cooling Degree Days/Hours calculated from this weather file.
+ - Heating/Cooling Degree Days/Hours from design conditions shown earlier in this report.
+ - Monthly Weather File Heating/Cooling Degree Days/Hours
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	HDD base 10C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	HDD base 18C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -449,11 +514,11 @@
  	CDH base 23C	 2730	 3044	 3968	 4429	 4468	 4217	 3162	 3381	 3296	 2897	 2675	 2414	
  	CDH base 27C	  861	 1067	 1455	 1697	 1828	 1689	  911	 1011	 1005	  723	  696	  705	
 
-    - 6422 annual cooling degree-days (10°C baseline)
-    -    0 annual heating degree-days (10°C baseline)
+    - 6422 annual (wthr file) cooling degree-days (10°C baseline)
+    -    0 annual (wthr file) heating degree-days (10°C baseline)
 
-    - 3502 annual cooling degree-days (18°C baseline)
-    -    0 annual heating degree-days (18°C baseline)
+    - 3502 annual (wthr file) cooling degree-days (18°C baseline)
+    -    0 annual (wthr file) heating degree-days (18°C baseline)
 
  - Climate type "Am" (Köppen classification)**
  - Tropical monsoonal or tradewind-coastal (short dry season, lat. 5-25°)
@@ -461,17 +526,21 @@
  - **Note that the Köppen classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.
 
- - Climate type "1A" (ASHRAE Standards 90.1-2004 and 90.2-2004 Climate Zone)**
+ - Climate type "1A" (ASHRAE Standard 196-2006 Climate Zone)**
  - Very Hot - Humid, Probable Köppen classification=Aw, Tropical Wet-and-Dry
  - **Note that the ASHRAE classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.
 
  - Typical/Extreme Period Determination
- - No discernible dry period.....
-     Week closest to average annual temperature selected for Typical Period
-     Typical Week Period selected: Aug 13:Aug 19, Average Temp=  27.59°C, Deviation=| 0.012|°C
- - Extremes Selected from annual Min/Max
-     Week closest to maximum annual temperature selected for Typical Period
+
+ - Summer is Jan:Dec
+     Extreme Summer Week (nearest maximum temperature for summer)
      Extreme Hot Week Period selected: Jun 11:Jun 17, Maximum Temp=  37.60°C, Deviation=| 7.252|°C
-     Week closest to minimum annual temperature selected for Typical Period
+     Typical Summer Week (nearest average temperature for summer)
+     Typical Week Period selected: Aug 13:Aug 19, Average Temp=  27.59°C, Deviation=| 0.012|°C
+
+ - Winter is Jan:Dec
+     Extreme Winter Week (nearest minimum temperature for winter)
      Extreme Cold Week Period selected: Dec 17:Dec 23, Minimum Temp=  18.00°C, Deviation=| 7.052|°C
+     Typical Winter Week (nearest average temperature for winter)
+     Typical Week Period selected: Aug 13:Aug 19, Average Temp=  27.59°C, Deviation=| 0.012|°C
