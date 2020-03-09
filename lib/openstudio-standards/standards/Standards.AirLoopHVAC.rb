@@ -1762,9 +1762,7 @@ class Standard
                                                 air_loop_hvac.name.to_s.include?("VAV_OR") || air_loop_hvac.name.to_s.include?("VAV_LABS") ||
                                                 air_loop_hvac.name.to_s.include?("VAV_PATRMS"))) || 
        (@instvarbuilding_type == "Outpatient" && air_loop_hvac.name.to_s.include?("Outpatient F1"))
-      puts "\n\n\n"
-       puts air_loop_hvac.name.to_s
-      puts "\n\n\n"
+
       return true
     end
 
@@ -1946,24 +1944,12 @@ class Standard
     v_ot_adj = v_ou / e_v_adj
     v_ot_adj_cfm = OpenStudio.convert(v_ot_adj, 'm^3/s', 'cfm').get
 
-    puts "\n\n\n"
-    puts air_loop_hvac.name.to_s
-    puts "v_ou: " 
-    puts v_ou
-    puts "ev: " 
-    puts e_v_adj
-    puts "vot"
-    puts v_ot_adj
-    puts "vpz_sum"
-    puts vpz_min_sum
-
     # Adjust minimum damper position if the sum of maximum
     # zone airflow are lower than the calculated system 
     # outdoor air intake
     if v_ot_adj > vpz_min_sum && v_ot_adj > 0
       mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min
       air_loop_hvac.thermalZones.sort.each do |zone|
-        puts "y"
         air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
       end
     end
