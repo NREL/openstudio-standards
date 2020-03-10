@@ -251,6 +251,13 @@ class Standard
         additional_lights_def.setFractionRadiant(lights_frac_radiant)
         additional_lights_def.setFractionVisible(lights_frac_visible)
 
+        # By default, all additional lighting is specialty lighting
+        definition.additionalProperties.setFeature('lpd_fraction_linear_fluorescent', 0.0)
+        definition.additionalProperties.setFeature('lpd_fraction_compact_fluorescent', 0.0)
+        definition.additionalProperties.setFeature('lpd_fraction_high_bay', 0.0)
+        definition.additionalProperties.setFeature('lpd_fraction_specialty_lighting', 1.0)
+        definition.additionalProperties.setFeature('lpd_fraction_exit_lighting', 0.0)
+
         # Create the lighting instance and hook it up to the space type
         additional_lights = OpenStudio::Model::Lights.new(additional_lights_def)
         additional_lights.setName("#{space_type.name} Additional Lights")
