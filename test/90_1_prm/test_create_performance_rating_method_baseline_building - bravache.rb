@@ -273,7 +273,7 @@ class TestRun18 < Minitest::Test
 		cooling_coils = @@model.getCoilCoolingDXSingleSpeeds
 		cooling_coils.each do |cooling_coil|
 			puts "#{cooling_coil}"
-			coil_capacity_SI = cooling_coil.getRatedTotalCoolingCapacity.get
+			coil_capacity_SI = cooling_coil.ratedTotalCoolingCapacity.get
 			
 			puts "#{coil_capacity_SI}"
 			
@@ -285,7 +285,7 @@ class TestRun18 < Minitest::Test
 			
 			coil_name = cooling_coil.name.get
 			
-			coil_COP = cooling_coil.getRatedCOP.get
+			coil_COP = cooling_coil.ratedCOP.get
 			coil_EER = OpenStudio.convert(coil_COP, 'W/W', 'Btu/h*W').get
 			coil_SEER = coil_EER / 0.875			
 			
