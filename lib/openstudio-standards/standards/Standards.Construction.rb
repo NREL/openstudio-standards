@@ -44,6 +44,14 @@ class Standard
       construction.eraseLayer(layer_index)
       return true
     end
+	
+    min_r_value_si = film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    max_u_value_si = 1.0 / min_r_value_si
+    max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    if target_u_value_ip >= max_u_value_ip
+      target_u_value_ip = 1.0 / (OpenStudio.convert(min_r_value_si + 0.001, 'm^2*K/W', 'ft^2*hr*R/Btu').get)
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
+    end
 
     # Convert the target U-value to SI
     target_u_value_ip = target_u_value_ip.to_f
