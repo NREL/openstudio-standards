@@ -1694,6 +1694,12 @@ OS:Timestep,
   {212ac3d2-8364-41b9-bdbd-3b692a139d8d}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {089461f3-fea4-491b-929d-43eac3d49807}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:SubSurface,
   {3f372ebb-06a5-4ebe-923a-ab1264fadefd}, !- Handle
   Corridor_Flr_3_Wall_1_North_Window,     !- Name

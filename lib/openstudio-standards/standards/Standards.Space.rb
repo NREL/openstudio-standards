@@ -214,7 +214,7 @@ class Standard
             # Make the new vertex
             new_vertex = OpenStudio::Point3d.new(new_x, new_y, new_z)
             pri_sidelit_sub_polygon << new_vertex
-            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "#{vertex.x.round(2)}, #{vertex.y.round(2)}, #{vertex.z.round(2)} ==> #{new_vertex.x.round(2)}, #{new_vertex.y.round(2)}, #{new_vertex.z.round(2)}")
+            # OpenStudio::logFree(OpenStudio::Info, "openstudio.model.Space", "#{vertex.x.round(2)}, #{vertex.y.round(2)}, #{vertex.z.round(2)} to #{new_vertex.x.round(2)}, #{new_vertex.y.round(2)}, #{new_vertex.z.round(2)}")
 
             # Secondary sidelighted area
             # Move the x vertices outward by the specified amount.
@@ -637,7 +637,7 @@ class Standard
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture calculation.")
           vt = 0
         end
 
@@ -748,7 +748,7 @@ class Standard
         # Get the VT from the map
         vt = construction_name_to_vt_map[construction_name]
         if vt.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture caluclation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture calculation.")
           vt = 0
         end
 
@@ -1216,8 +1216,15 @@ class Standard
     # data center keeps positive pressure all the time, so no infiltration
     if space.spaceType.is_initialized && space.spaceType.get.standardsSpaceType.is_initialized
       std_space_type = space.spaceType.get.standardsSpaceType.get
-      if std_space_type.downcase.include?('data') || std_space_type.downcase.include?('computer')
+      if std_space_type.downcase.include?('data center') || std_space_type.downcase.include?('datacenter')
         return true
+      end
+
+      if space.spaceType.get.standardsBuildingType.is_initialized
+        std_bldg_type = space.spaceType.get.standardsBuildingType.get
+        if std_bldg_type.downcase.include?('datacenter') && std_space_type.downcase.include?('computerroom')
+          return true
+        end
       end
     end
 
@@ -1240,7 +1247,7 @@ class Standard
 
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_window_area_m2 <= 0.0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, no exterior wall area was found, no infiltration will be added.")
       return true
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{space.name}, set infiltration rate to #{adj_infil_rate_cfm_per_ft2.round(3)} cfm/ft2 exterior wall area (aka #{basic_infil_rate_cfm_per_ft2} cfm/ft2 @75Pa).")
@@ -1283,7 +1290,7 @@ class Standard
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
     infiltration.setName("#{space.name} Infiltration")
     # infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2)
-    infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
+    infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2.round(13))
     infiltration.setSchedule(infil_sch)
     infiltration.setConstantTermCoefficient(0.0)
     infiltration.setTemperatureTermCoefficient 0.0
@@ -1627,6 +1634,215 @@ class Standard
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
+  # todo - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
+
+  # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
+  # report hours of operation. Won't be a single set of values, will be a collection of rules
+  # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
+  #
+  # @author David Goldwasser
+  # @param space [Space] takes space
+  # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+  def space_hours_of_operation(space)
+
+    default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
+    hours_of_operation = space.getDefaultSchedule(default_sch_type)
+    if !hours_of_operation.is_initialized
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Hours of Operation Schedule is not set for #{space.name}.")
+      return nil
+    end
+    hours_of_operation = hours_of_operation.get
+    if !hours_of_operation.to_ScheduleRuleset.is_initialized
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "Hours of Operation Schedule #{hours_of_operation.name} is not a ScheduleRuleset.")
+      return nil
+    end
+    hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
+    profiles = {}
+
+    # get indices for current schedule
+    year_description = hours_of_operation.model.yearDescription.get
+    year = year_description.assumedYear
+    year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+    year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+    indices_vector = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
+
+    # add default profile to hash
+    hoo_start = nil
+    hoo_end = nil
+    unexpected_val = false
+    times = hours_of_operation.defaultDaySchedule.times
+    values = hours_of_operation.defaultDaySchedule.values
+    times.each_with_index do |time,i|
+      if values[i] == 0 && hoo_start.nil?
+        hoo_start = time.totalHours
+      elsif values[i] == 1 && hoo_end.nil?
+        hoo_end = time.totalHours
+      elsif values[i] != 1 && values[i] != 0
+        unexpected_val = true
+      end
+    end
+
+    # address schedule that is always on or always off (start and end can not both be nil unless unexpected value was found)
+    if !hoo_start.nil? && hoo_end.nil?
+      hoo_end = hoo_start
+    elsif !hoo_end.nil? && hoo_start.nil?
+      hoo_start = hoo_end
+    end
+
+    # some validation
+    if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+      return nil
+    end
+
+    # hours of operation start and finish
+    rule_hash = {}
+    rule_hash[:hoo_start] = hoo_start
+    rule_hash[:hoo_end] = hoo_end
+    hoo_hours = nil
+    if hoo_start == hoo_end
+      if values.uniq == [1]
+        hoo_hours = 24
+      else
+        hoo_hours = 0
+      end
+    elsif hoo_end > hoo_start
+      hoo_hours = hoo_end - hoo_start
+    elsif hoo_start > hoo_end
+      hoo_hours = hoo_end + 24 - hoo_start
+    end
+    rule_hash[:hoo_hours] = hoo_hours
+    days_used = []
+    indices_vector.each_with_index do |profile_index,i|
+      if profile_index == -1 then days_used << i+1 end
+    end
+    rule_hash[:days_used] = days_used
+    profiles[-1] = rule_hash
+
+    hours_of_operation.scheduleRules.reverse.each do |rule|
+      # may not need date and days of week, will likely refer to specific date and get rule when applying parametricformula
+      rule_hash = {}
+
+      hoo_start = nil
+      hoo_end = nil
+      unexpected_val = false
+      times = rule.daySchedule.times
+      values = rule.daySchedule.values
+      times.each_with_index do |time,i|
+        if values[i] == 0 && hoo_start.nil?
+          hoo_start = time.totalHours
+        elsif values[i] == 1  && hoo_end.nil?
+          hoo_end = time.totalHours
+        elsif values[i] != 1 && values[i] != 0
+          unexpected_val = true
+        end
+      end
+
+      # address schedule that is always on or always off (start and end can not both be nil unless unexpected value was found)
+      if !hoo_start.nil? && hoo_end.nil?
+        hoo_end = hoo_start
+      elsif !hoo_end.nil? && hoo_start.nil?
+        hoo_start = hoo_end
+      end
+
+      # some validation
+      if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+        return nil
+      end
+
+      # hours of operation start and finish
+      rule_hash[:hoo_start] = hoo_start
+      rule_hash[:hoo_end] = hoo_end
+      hoo_hours = nil
+      if hoo_start == hoo_end
+        if values.uniq == [1]
+          hoo_hours = 24
+        else
+          hoo_hours = 0
+        end
+      elsif hoo_end > hoo_start
+        hoo_hours = hoo_end - hoo_start
+      elsif hoo_start > hoo_end
+        hoo_hours = hoo_end + 24 - hoo_start
+      end
+      rule_hash[:hoo_hours] = hoo_hours
+      days_used = []
+      indices_vector.each_with_index do |profile_index,i|
+        if profile_index == rule.ruleIndex then days_used << i+1 end
+      end
+      rule_hash[:days_used] = days_used
+
+=begin
+      # todo - delete rule details below unless end up needing to use them
+      if rule.startDate.is_initialized
+        date = rule.startDate.get
+        rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      else
+        rule_hash[:start_date] = nil
+      end
+      if rule.endDate.is_initialized
+        date = rule.endDate.get
+        rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      else
+        rule_hash[:end_date] = nil
+      end
+      rule_hash[:mon] = rule.applyMonday
+      rule_hash[:tue] = rule.applyTuesday
+      rule_hash[:wed] = rule.applyWednesday
+      rule_hash[:thu] = rule.applyThursday
+      rule_hash[:fri] = rule.applyFriday
+      rule_hash[:sat] = rule.applySaturday
+      rule_hash[:sun] = rule.applySunday
+=end
+
+      # update hash
+      profiles[rule.ruleIndex] = rule_hash
+
+    end
+
+    return profiles
+  end
+
+  # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
+  # report hours of operation. Won't be a single set of values, will be a collection of rules
+  # this will call space_hours_of_operation on each space in array
+  # loop through all days of year to make as many rules as ncessary
+  # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
+  #
+  # @author David Goldwasser
+  # @param space [Spaces] takes array of spaces
+  # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+  def spaces_hours_of_operation(spaces)
+    hours_of_operation_array = []
+    space_names = []
+    spaces.each do |space|
+      space_names << space.name.to_s
+      hoo_hash = space_hours_of_operation(space)
+      if !hoo_hash.nil?
+        # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, hours of operation hash = #{hoo_hash}.")
+        hours_of_operation_array << hoo_hash
+      end
+    end
+
+    # todo - replace this with logic to get combined hours of operation for collection of spaces.
+    # each hours_of_operation_array is hash with key for each profile.
+    # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
+    # my goal is to compare profiles and days used across all profiles to create new entries as necessary
+    # then for all days I need to extend hours of operation addressing any situations where multile occupancy gaps occur
+    #
+    # loop through all 365/366 days
+
+    # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
+
+    # todo - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+    hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
+
+    return hours_of_operation
+
+  end
+
   private
 
   # A series of private methods to modify polygons.  Most are
@@ -1639,7 +1855,7 @@ class Standard
     fails = []
     errs = 0
     polygons.each do |polygon|
-      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{polygon.to_s.gsub(/\[|\]/,'|')}.")
+      # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} is greater than or equal to #{polygon.to_s.gsub(/\[|\]/,'|')}.")
       polygon.each do |vertex|
         # clsss << vertex.class
         unless vertex.z == 0.0
@@ -1648,7 +1864,7 @@ class Standard
         end
       end
     end
-    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} => #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
+    # OpenStudio::logFree(OpenStudio::Error, "openstudio.model.Space", "Checking z=0: #{name} is greater than or equal to #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
     if errs > 0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
     end
@@ -1781,7 +1997,7 @@ class Standard
       # Remove duplicate polygons
       unique_a_minus_b_polygons_ruby = a_minus_b_polygons_ruby.uniq
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} ==> #{unique_a_minus_b_polygons_ruby.size}")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} to #{unique_a_minus_b_polygons_ruby.size}")
 
       # TODO: bug workaround?
       # If the result includes the a polygon, the a polygon
@@ -1818,7 +2034,7 @@ class Standard
     # end
     # end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} ==> #{unique_final_polygons_ruby.size}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---Remove final duplicates: #{final_polygons_ruby.size} to #{unique_final_polygons_ruby.size}")
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "---#{a_name} minus #{b_name} = #{unique_final_polygons_ruby.size} polygons.")
 
@@ -1919,7 +2135,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
     if inner_loop_errs > 0
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly becasue the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, #{inner_loop_errs} of #{polygons.size} #{space.name} were not joined properly because the joined polygons have an internal hole.  The resulting daylighted areas will be smaller than they should be.")
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Space', "For #{space.name}, the #{name.gsub('_polygons', '')} daylight area calculations hit limitations.  Double-check and possibly correct the fraction of lights controlled by each daylight sensor.")
     end
 

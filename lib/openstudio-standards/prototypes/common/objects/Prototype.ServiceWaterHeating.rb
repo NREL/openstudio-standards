@@ -37,8 +37,6 @@ class Standard
                          number_of_stories = 1,
                          pipe_insulation_thickness = 0.0127, # 1/2in
                          number_water_heaters = 1)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_swh_loop, number_water_heaters = #{number_water_heaters}")
-
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
     service_water_loop.setMinimumLoopTemperature(10.0)
@@ -172,7 +170,6 @@ class Standard
                              flowrate_schedule,
                              water_heater_thermal_zone,
                              number_water_heaters)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_water_heater, number_water_heaters = #{number_water_heaters}")
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
@@ -262,7 +259,7 @@ class Standard
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     elsif water_heater_fuel == 'HeatPump'
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple but crappy workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
       # the COP of a HPWH.

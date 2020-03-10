@@ -195,6 +195,12 @@ OS:ConvergenceLimits,
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
 
+OS:Sizing:Parameters,
+  {ede32cfa-f149-43eb-8c2e-1b859e103d90}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:SubSurface,
   {635cf325-9c30-4af5-9211-97e8552b27f4}, !- Handle
   skylights_R1C3,                         !- Name

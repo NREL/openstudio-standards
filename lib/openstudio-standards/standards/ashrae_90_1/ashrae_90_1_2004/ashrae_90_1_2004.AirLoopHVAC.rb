@@ -75,7 +75,7 @@ class ASHRAE9012004 < ASHRAE901
       if min_int_area_served_ft2 == infinity_ft2 && min_ext_area_served_ft2 == infinity_ft2
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for climate zone #{climate_zone}.")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 < minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 < minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer not required for because the interior area served of #{int_area_served_m2} ft2 is less than the minimum of #{min_int_area_served_m2} and the perimeter area served of #{ext_area_served_m2} ft2 is less than the minimum of #{min_ext_area_served_m2} for climate zone #{climate_zone}.")
       end
       return economizer_required
     end

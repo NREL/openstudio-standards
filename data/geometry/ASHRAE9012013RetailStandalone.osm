@@ -240,6 +240,12 @@ OS:ConvergenceLimits,
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
 
+OS:Sizing:Parameters,
+  {45cab5fb-aa10-47f1-9b84-019a1405e296}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {81686f66-944c-4647-a238-0e76788e8058}, !- Handle
   Front_Retail_Roof,                      !- Name

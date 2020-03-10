@@ -7,6 +7,17 @@ OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {b6a92135-0779-4996-8417-b9efc076ef68}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {cd5444e3-389b-440d-86bd-a3ba5b03f157}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
 OS:Surface,
   {536547a8-0ff7-41c8-95f3-7331a5af3d86}, !- Handle
   ER_Exam3_Mult4_Flr_1_Wall_East,         !- Name
