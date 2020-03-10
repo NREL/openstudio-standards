@@ -1754,14 +1754,14 @@ class Standard
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
-    # Do not apply the adjustment to some of the system in 
+    # Do not apply the adjustment to some of the system in
     # the hospital and outpatient which have their minimum
     # damper position determined based on AIA 2001 ventilation
     # requirements
-    if (@instvarbuilding_type == "Hospital" && (air_loop_hvac.name.to_s.include?("VAV_ER") || air_loop_hvac.name.to_s.include?("VAV_ICU") || 
-                                                air_loop_hvac.name.to_s.include?("VAV_OR") || air_loop_hvac.name.to_s.include?("VAV_LABS") ||
-                                                air_loop_hvac.name.to_s.include?("VAV_PATRMS"))) || 
-       (@instvarbuilding_type == "Outpatient" && air_loop_hvac.name.to_s.include?("Outpatient F1"))
+    if (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+       (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
 
       return true
     end
@@ -1861,7 +1861,7 @@ class Standard
         end
       end
 
-      # Zone ventilation efficiency calculation is computed 
+      # Zone ventilation efficiency calculation is computed
       # on a per zone basis, the zone primary airflow is
       # adjusted to removed the zone multiplier
       v_pz /= zone.multiplier.to_f
@@ -1927,7 +1927,6 @@ class Standard
         # Store the unadjusted value
         e_vzs_adj << e_vz
       end
-
     end
 
     # Min system zone ventilation effectiveness
@@ -1945,7 +1944,7 @@ class Standard
     v_ot_adj_cfm = OpenStudio.convert(v_ot_adj, 'm^3/s', 'cfm').get
 
     # Adjust minimum damper position if the sum of maximum
-    # zone airflow are lower than the calculated system 
+    # zone airflow are lower than the calculated system
     # outdoor air intake
     if v_ot_adj > vpz_min_sum && v_ot_adj > 0
       mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min

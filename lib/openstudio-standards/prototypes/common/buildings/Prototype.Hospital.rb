@@ -62,7 +62,7 @@ module Hospital
         air_loop.supplyFan.get.remove
         fan = create_fan_by_name(model,
                                  'Hospital_CAV_Sytem_Fan',
-                                 fan_name: "#{air_loop.name} Fan",
+                                 fan_name: '#{air_loop.name} Fan',
                                  end_use_subcategory: 'CAV System Fans')
         fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
         fan.addToNode(air_loop.supplyOutletNode)
@@ -79,7 +79,7 @@ module Hospital
 
           # make new terminal
           new_terminal = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, model.alwaysOnDiscreteSchedule)
-          new_terminal.setName("#{zone.name} CAV Terminal")
+          new_terminal.setName('#{zone.name} CAV Terminal')
           air_loop.addBranchForZone(zone, new_terminal.to_StraightComponent)
           zone.setCoolingPriority(new_terminal.to_ModelObject.get, 1)
           zone.setHeatingPriority(new_terminal.to_ModelObject.get, 1)
@@ -204,7 +204,7 @@ module Hospital
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100_000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
+        humidifier.setName('#{air_loop.name.get} Electric Steam Humidifier')
         # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
         htg_coil = nil
         air_loop.supplyComponents.each do |equip|
@@ -220,11 +220,11 @@ module Hospital
         when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
           create_coil_heating_electric(model,
                                        air_loop_node: supply_outlet_node,
-                                       name: "#{space_name} Electric Htg Coil")
+                                       name: '#{space_name} Electric Htg Coil')
           create_coil_heating_water(model,
                                     hot_water_loop,
                                     air_loop_node: supply_outlet_node,
-                                    name: "#{space_name} Water Htg Coil")
+                                    name: '#{space_name} Water Htg Coil')
         end
         # humidity_spm.addToNode(supply_outlet_node)
         humidity_spm.addToNode(humidifier.outletModelObject.get.to_Node.get)
@@ -266,10 +266,10 @@ module Hospital
           # See Section 5.2.2.16 in Thornton et al. 2010
           # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include? "VAV_1" or airlp.name.to_s.include? "VAV_2"
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
           when '90.1-2010', '90.1-2013'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include? "VAV_1" or airlp.name.to_s.include? "VAV_2"
-            air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? "PatRoom"
+            air_terminal.setConstantMinimumAirFlowFraction(1.0) unless airlp.name.to_s.include?('VAV_1') || airlp.name.to_s.include?('VAV_2')
+            air_terminal.setConstantMinimumAirFlowFraction(0.5) if vav_name.include? 'PatRoom'
           end
         end
       end

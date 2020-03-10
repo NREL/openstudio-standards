@@ -19,7 +19,6 @@ class ASHRAE9012010 < ASHRAE901
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     end
 
-
     return true
   end
 

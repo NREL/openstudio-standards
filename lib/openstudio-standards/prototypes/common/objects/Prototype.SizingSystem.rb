@@ -40,7 +40,7 @@ class Standard
 
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
     sizing_system = air_loop_hvac.sizingSystem
-    #sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
+    # sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
     # Set the minimum zone ventilation efficiency to be 0.6
     air_loop_hvac.thermalZones.sort.each do |zone|
       sizing_zone = zone.sizingZone
@@ -50,6 +50,6 @@ class Standard
       # which is then assigned to a Sizing:Zone object
     end
 
-    return true  
+    return true
   end
 end

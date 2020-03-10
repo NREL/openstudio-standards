@@ -137,7 +137,7 @@ module Outpatient
           end
           # Create an infiltration rate object for this space
           infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-          infiltration.setName("#{space.name} Infiltration")
+          infiltration.setName('#{space.name} Infiltration')
           infiltration.setFlowperExteriorSurfaceArea(infil_rate) unless infil_rate.nil? || infil_rate.to_f.zero?
           infiltration.setAirChangesperHour(infil_ach) unless infil_ach.nil? || infil_ach.to_f.zero?
           infiltration.setSchedule(infil_sch)
@@ -198,7 +198,7 @@ module Outpatient
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100_000)
-        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
+        humidifier.setName('#{air_loop.name.get} Electric Steam Humidifier')
         # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
         htg_coil = nil
         air_loop.supplyComponents.each do |equip|
@@ -255,27 +255,25 @@ module Outpatient
     # See Section 5.2.2.16 in Thornton et al. 2010
     # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
     init_mdp = {
-      "FLOOR 1 ANESTHESIA" => 1.0,
-      "FLOOR 1 CLEAN" => 1.0,
-      "FLOOR 1 CLEAN WORK" => 1.0,
-      "FLOOR 1 LOBBY TOILET" => 1.0,
-      "FLOOR 1 MRI TOILET" => 1.0,
-      "FLOOR 1 NURSE TOILET" => 1.0,
-      "FLOOR 1 OPERATING ROOM 1" => 1.0,
-      "FLOOR 1 OPERATING ROOM 2" => 1.0,
-      "FLOOR 1 OPERATING ROOM 3" => 1.0,
-      "FLOOR 1 PACU" => 1.0,
-      "FLOOR 1 PRE-OP ROOM 1" => 1.0,
-      "FLOOR 1 PRE-OP ROOM 2" => 1.0,
-      "FLOOR 1 PRE-OP TOILET" => 1.0,
-      "FLOOR 1 PROCEDURE ROOM" => 1.0,
-      "FLOOR 1 RECOVERY ROOM" => 0.87,
-      "FLOOR 1 RECOVERY ROOM" => 1.0,
-      "FLOOR 1 SOIL" => 1.0,
-      "FLOOR 1 SOIL HOLD" => 1.0,
-      "FLOOR 1 SOIL WORK" => 1.0,
-      "FLOOR 1 STEP DOWN" => 0.69,
-      "FLOOR 1 STEP DOWN" => 1.0,
+      'FLOOR 1 ANESTHESIA' => 1.0,
+      'FLOOR 1 CLEAN' => 1.0,
+      'FLOOR 1 CLEAN WORK' => 1.0,
+      'FLOOR 1 LOBBY TOILET' => 1.0,
+      'FLOOR 1 MRI TOILET' => 1.0,
+      'FLOOR 1 NURSE TOILET' => 1.0,
+      'FLOOR 1 OPERATING ROOM 1' => 1.0,
+      'FLOOR 1 OPERATING ROOM 2' => 1.0,
+      'FLOOR 1 OPERATING ROOM 3' => 1.0,
+      'FLOOR 1 PACU' => 1.0,
+      'FLOOR 1 PRE-OP ROOM 1' => 1.0,
+      'FLOOR 1 PRE-OP ROOM 2' => 1.0,
+      'FLOOR 1 PRE-OP TOILET' => 1.0,
+      'FLOOR 1 PROCEDURE ROOM' => 1.0,
+      'FLOOR 1 RECOVERY ROOM' => 1.0,
+      'FLOOR 1 SOIL' => 1.0,
+      'FLOOR 1 SOIL HOLD' => 1.0,
+      'FLOOR 1 SOIL WORK' => 1.0,
+      'FLOOR 1 STEP DOWN' => 1.0
     }
 
     model.getThermalZones.each do |zone|
@@ -298,7 +296,7 @@ module Outpatient
           # See Section 5.2.2.16 in Thornton et al. 2010
           # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            zone_name = zone.name.to_s.upcase.gsub(" ZN", "").strip
+            zone_name = zone.name.to_s.upcase.gsub(' ZN', '').strip
             if init_mdp.key? zone_name
               air_terminal.setConstantMinimumAirFlowFraction(init_mdp[zone_name])
             end
@@ -367,7 +365,7 @@ module Outpatient
       data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
       if data.nil? ###
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find data for #{search_criteria}')
         next
       end
 
