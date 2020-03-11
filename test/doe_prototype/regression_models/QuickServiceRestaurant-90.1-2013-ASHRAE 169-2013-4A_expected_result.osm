@@ -6369,14 +6369,6 @@ OS:ZoneMixing,
   ,                                       !- Minimum Outdoor Temperature Schedule Name
   ;                                       !- Maximum Outdoor Temperature Schedule Name
 
-OS:ScheduleTypeLimits,
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Handle
-  Fractional 1,                           !- Name
-  0,                                      !- Lower Limit Value
-  1,                                      !- Upper Limit Value
-  Continuous,                             !- Numeric Type
-  ;                                       !- Unit Type
-
 OS:Material,
   {56b0862f-c211-4355-a63c-ef15160f6f31}, !- Handle
   Std Wood 6inch,                         !- Name
@@ -7016,15 +7008,15 @@ OS:WaterUse:Equipment,
 OS:Schedule:Ruleset,
   {e23eedba-4945-4115-a283-fd0655336852}, !- Handle
   RestaurantFastFood BLDG_SWH_SCH,        !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
-  {a3f3eb7b-9a4c-416e-8713-67f32a0f1501}, !- Default Day Schedule Name
-  {ca7c9dd8-4d17-43e2-bbd1-8c7993607af9}, !- Summer Design Day Schedule Name
-  {d5fac7e7-353c-4462-83de-f87734377ca0}; !- Winter Design Day Schedule Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
+  {56480163-23bf-4921-b23d-3483f416feb6}, !- Default Day Schedule Name
+  {06b21b92-e9a3-437f-afc6-edbbb2196006}, !- Summer Design Day Schedule Name
+  {7bd12a89-e6ca-4a3e-acbc-e04d436c5de6}; !- Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {a3f3eb7b-9a4c-416e-8713-67f32a0f1501}, !- Handle
   RestaurantFastFood BLDG_SWH_SCH Default, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   7,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7095,7 +7087,7 @@ OS:Schedule:Rule,
 OS:Schedule:Day,
   {0cc90a28-626e-4db2-b339-1eac6c441c88}, !- Handle
   RestaurantFastFood BLDG_SWH_SCH Wkdy Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   6,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7155,7 +7147,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {d5fac7e7-353c-4462-83de-f87734377ca0}, !- Handle
   RestaurantFastFood BLDG_SWH_SCH Winter Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   7,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7206,7 +7198,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {ca7c9dd8-4d17-43e2-bbd1-8c7993607af9}, !- Handle
   RestaurantFastFood BLDG_SWH_SCH Summer Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   7,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7306,15 +7298,15 @@ OS:Exterior:Lights:Definition,
 OS:Schedule:Ruleset,
   {ba104adb-0cd3-4de7-8a39-81bda39a482f}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_b, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
-  {9847634b-3c16-4e66-b242-6232059bc1b6}, !- Default Day Schedule Name
-  {3d8b5725-2be3-482d-b51f-deb0a2369b3e}, !- Summer Design Day Schedule Name
-  {748df7c9-7763-4928-bca5-3e438a0fbcf1}; !- Winter Design Day Schedule Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
+  {31e2384e-f5af-4196-8afb-58ca24066635}, !- Default Day Schedule Name
+  {52d61ec5-fff3-4919-8869-a8ca8e6f0adb}, !- Summer Design Day Schedule Name
+  {95e2b4f7-7d56-4320-8cab-9aaca55a3892}; !- Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {9847634b-3c16-4e66-b242-6232059bc1b6}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_b Default, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7329,7 +7321,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {748df7c9-7763-4928-bca5-3e438a0fbcf1}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_b Winter Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7344,7 +7336,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {3d8b5725-2be3-482d-b51f-deb0a2369b3e}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_b Summer Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7373,15 +7365,15 @@ OS:Exterior:Lights:Definition,
 OS:Schedule:Ruleset,
   {298134d2-08f9-4b0c-a164-17e7ee5abd32}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_a, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
-  {79c74fd4-c24f-49a0-b391-794bdb90597e}, !- Default Day Schedule Name
-  {95668202-9130-48bc-8cd4-4e86ff9edaae}, !- Summer Design Day Schedule Name
-  {55d1b6ef-9955-46f0-b23a-ed6686e9e3fc}; !- Winter Design Day Schedule Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
+  {228bdce3-a8f9-4a1b-9ad4-9ae797ce9714}, !- Default Day Schedule Name
+  {d0b961a3-694f-4a8c-a85e-c36a68787835}, !- Summer Design Day Schedule Name
+  {2948f825-6105-4868-bd6b-42af5eb335d5}; !- Winter Design Day Schedule Name
 
 OS:Schedule:Day,
   {79c74fd4-c24f-49a0-b391-794bdb90597e}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_a Default, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7396,7 +7388,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {55d1b6ef-9955-46f0-b23a-ed6686e9e3fc}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_a Winter Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1
@@ -7411,7 +7403,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {95668202-9130-48bc-8cd4-4e86ff9edaae}, !- Handle
   RestaurantFastFood Exterior_lighting_schedule_a Summer Design Day, !- Name
-  {1738ac97-d297-466c-a437-6e6f7a16503b}, !- Schedule Type Limits Name
+  {0f9cc20c-4391-4657-a24f-93c49eef10e3}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   1,                                      !- Hour 1
   0,                                      !- Minute 1

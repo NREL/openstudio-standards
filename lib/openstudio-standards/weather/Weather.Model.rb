@@ -14,8 +14,8 @@ class Standard
 
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
-        'ASHRAE 169-2006-0A' => 'VNM_Hanoi.488200_IWEC.epw',
-        'ASHRAE 169-2006-0B' => 'ARE_Abu.Dhabi.412170_IWEC.epw',
+        'ASHRAE 169-2006-0A' => 'VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2.epw',
+        'ASHRAE 169-2006-0B' => 'ARE_Dubai.Intl.AP.411940_IWEC2.epw',
         'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
         'ASHRAE 169-2006-1B' => 'SAU_Riyadh.404380_IWEC.epw',
         'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
@@ -35,8 +35,8 @@ class Standard
         'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
         'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
         'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2013-0A' => 'VNM_Hanoi.488200_IWEC.epw',
-        'ASHRAE 169-2013-0B' => 'ARE_Abu.Dhabi.412170_IWEC.epw',
+        'ASHRAE 169-2013-0A' => 'VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2.epw',
+        'ASHRAE 169-2013-0B' => 'ARE_Dubai.Intl.AP.411940_IWEC2.epw',
         'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
         'ASHRAE 169-2013-1B' => 'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2.epw',
         'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
