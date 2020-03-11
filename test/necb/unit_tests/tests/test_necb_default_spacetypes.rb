@@ -229,16 +229,16 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         dsoa = st.designSpecificationOutdoorAir.get
         header_output << "outdoorAirMethod,"         
         output << "#{dsoa.outdoorAirMethod },"
-        header_output << "OutdoorAirFlowperFloorArea (m^3/s-m^2) ,"
+        header_output << "OutdoorAirFlowperFloorArea (m/s) ,"
         output << "#{dsoa.outdoorAirFlowperFloorArea.round(4)},"
           
-        header_output << "OutdoorAirFlowperPerson  (m^3/s-person) ,"
+        header_output << "OutdoorAirFlowperPerson  (m^3/s*person) ,"
         output << "#{dsoa.outdoorAirFlowperPerson.round(4)},"
           
         header_output << "OutdoorAirFlowRate (m^3/s) ,"
         output << "#{dsoa.outdoorAirFlowRate.round(4)},"
           
-        header_output << "OutdoorAirFlowAirChangesperHour (ACH) ,"
+        header_output << "OutdoorAirFlowAirChangesperHour (1/h) ,"
         output << "#{dsoa.outdoorAirFlowAirChangesperHour.round(4)},"
           
         header_output << "outdoorAirFlowRateFractionSchedule,"
