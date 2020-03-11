@@ -1246,7 +1246,7 @@ class Standard
       array_of_zones = model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     else
       zn_name = array_of_zones[biggest_delta_i]['zone'].name.get.to_s
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} #{worst.round(2)} #{units} - average #{field_name} #{avg.round(2)} #{units} = #{biggest_delta.round(2)} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} #{worst.round(2)} #{units} - average #{field_name} #{avg.round(2)} #{units} = #{biggest_delta.round(2)} #{units} less than the tolerance of #{tolerance} #{units}, stopping elimination process.")
     end
 
     return array_of_zones
@@ -3161,7 +3161,7 @@ class Standard
          ext_subsurfs.empty? ||
          int_subsurfs.empty?
 
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; constructions from this set will not be reported.")
         next
       end
 
@@ -4038,9 +4038,9 @@ class Standard
 
     # Check the results
     if possible_climate_zone_sets.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}.  Make sure to use ASHRAE standards with ASHRAE climate zones and DEER or CA Title 24 standards with CEC climate zones.")
     elsif possible_climate_zone_sets.size > 2
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching climate zone set.")
     end
 
     # Get the climate zone from the possible set
@@ -4048,7 +4048,7 @@ class Standard
 
     # Check that a climate zone set was found
     if climate_zone_set.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set in standard #{template}")
     end
 
     return climate_zone_set
@@ -4309,7 +4309,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of meals = #{num_meals}.") unless num_meals.nil?
 
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards building type and space type for #{space_type.name}, it won't be added to space_type_hash.")
       end
     end
 
@@ -4524,7 +4524,7 @@ class Standard
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     unless @space_multiplier_map.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found multipliers for space #{@space_multiplier_map}")
     end
     return is_valid
   end

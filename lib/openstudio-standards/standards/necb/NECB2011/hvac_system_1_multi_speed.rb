@@ -70,7 +70,11 @@ class NECB2011
       air_loop_sizing = mau_air_loop.sizingSystem # TODO units
       air_loop_sizing.setTypeofLoadtoSizeOn('Sensible')
       air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-      air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        air_loop_sizing.setMinimumSystemAirFlowRatio(1.0)
+      else
+        air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+      end
       air_loop_sizing.setPreheatDesignTemperature(7.0)
       air_loop_sizing.setPreheatDesignHumidityRatio(0.008)
       air_loop_sizing.setPrecoolDesignTemperature(12.8)

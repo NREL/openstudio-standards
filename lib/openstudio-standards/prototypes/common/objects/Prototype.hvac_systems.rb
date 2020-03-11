@@ -983,7 +983,11 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1210,7 +1214,11 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1321,9 +1329,9 @@ class Standard
                                          fan_name: 'DOAS Exhaust Fan',
                                          end_use_subcategory: 'DOAS Fans')
       end
-      # set pressure rise 0.5 inH2O lower than supply fan, 0.5 inH2O minimum
-      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
-      exhaust_fan_pressure_rise = OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(0.5, 'inH_{2}O', 'Pa').get
+      # set pressure rise 1.0 inH2O lower than supply fan, 1.0 inH2O minimum
+      exhaust_fan_pressure_rise = supply_fan.pressureRise - OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
+      exhaust_fan_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get if exhaust_fan_pressure_rise < OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
       exhaust_fan.setPressureRise(exhaust_fan_pressure_rise)
       exhaust_fan.addToNode(air_loop.supplyInletNode)
     end
@@ -1391,9 +1399,9 @@ class Standard
       # the system will lower the ventilation rate rather than trying to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
         if demand_control_ventilation
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions < 2.8.0.')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions less than 2.8.0.')
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
         end
       else
         zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
@@ -1476,7 +1484,13 @@ class Standard
     # default design temperatures and settings used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
+    if !min_sys_airflow_ratio.nil?
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+      else
+        sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
+      end
+    end
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
@@ -4141,12 +4155,15 @@ class Standard
   #   If nil, a zero-capacity, electric heating coil set to Always-Off will be included in the unit.
   # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
+  # @param capacity_control_method [String] Capacity control method for the fan coil. Options are ConstantFanVariableFlow,
+  #   CyclingFan, VariableFanVariableFlow, and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
   # @return [Array<OpenStudio::Model::ZoneHVACFourPipeFanCoil>] array of fan coil units.
   def model_add_four_pipe_fan_coil(model,
                                    thermal_zones,
                                    chilled_water_loop,
                                    hot_water_loop: nil,
-                                   ventilation: false)
+                                   ventilation: false,
+                                   capacity_control_method: 'CyclingFan')
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
@@ -4181,10 +4198,18 @@ class Standard
                                                     nominal_capacity: 0.0)
       end
 
-      fcu_fan = create_fan_by_name(model,
-                                   'Fan_Coil_Fan',
-                                   fan_name: "#{zone.name} Fan Coil fan",
-                                   end_use_subcategory: 'FCU Fans')
+      case capacity_control_method
+      when 'VariableFanVariableFlow', 'VariableFanConstantFlow'
+        fcu_fan = create_fan_by_name(model,
+                                     'Fan_Coil_VarSpeed_Fan',
+                                     fan_name: "#{zone.name} Fan Coil Variable Fan",
+                                     end_use_subcategory: 'FCU Fans')
+      else
+        fcu_fan = create_fan_by_name(model,
+                                     'Fan_Coil_Fan',
+                                     fan_name: "#{zone.name} Fan Coil fan",
+                                     end_use_subcategory: 'FCU Fans')
+      end
       fcu_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       fcu_fan.autosizeMaximumFlowRate
 
@@ -4194,7 +4219,7 @@ class Standard
                                                            fcu_clg_coil,
                                                            fcu_htg_coil)
       fcu.setName("#{zone.name} FCU")
-      fcu.setCapacityControlMethod('CyclingFan')
+      fcu.setCapacityControlMethod(capacity_control_method)
       fcu.autosizeMaximumSupplyAirFlowRate
       unless ventilation
         fcu.setMaximumOutdoorAirFlowRate(0.0)
@@ -4259,7 +4284,7 @@ class Standard
       radiant_htg_dsgn_sup_wtr_temp_f = 110
     else
       climate_zone_set = model_find_climate_zone_set(model, climate_zone)
-      case climate_zone_set.gsub('ClimateZone ', '')
+      case climate_zone_set.gsub('ClimateZone ', '').gsub('CEC T24 ', '')
       when '1'
         cz_mult = 2
         radiant_htg_dsgn_sup_wtr_temp_f = 90
@@ -4992,7 +5017,7 @@ class Standard
 
       # set the cooling and heating fraction to zero so that the ERV does not try to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
       else
         zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
         zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)
@@ -5626,6 +5651,9 @@ class Standard
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
   # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
   #   including as fan coil units, VRF terminals, or water source heat pumps.
+  # @param fan_coil_capacity_control_method [String] Only applicable to Fan Coil system type.
+  #   Capacity control method for the fan coil. Options are ConstantFanVariableFlow, CyclingFan, VariableFanVariableFlow,
+  #   and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
   # @return [Bool] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
@@ -5638,7 +5666,8 @@ class Standard
                             heat_pump_loop_cooling_type: 'EvaporativeFluidCooler',
                             air_loop_heating_type: 'Water',
                             air_loop_cooling_type: 'Water',
-                            zone_equipment_ventilation: true)
+                            zone_equipment_ventilation: true,
+                            fan_coil_capacity_control_method: 'CyclingFan')
 
     # don't do anything if there are no zones
     return true if zones.empty?
@@ -5778,7 +5807,8 @@ class Standard
                                    zones,
                                    chilled_water_loop,
                                    hot_water_loop: hot_water_loop,
-                                   ventilation: zone_equipment_ventilation)
+                                   ventilation: zone_equipment_ventilation,
+                                   capacity_control_method: fan_coil_capacity_control_method)
 
     when 'Radiant Slab'
       case main_heat_fuel
@@ -6168,7 +6198,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with DOAS with DCV', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6177,7 +6208,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       elsif system_type.include? 'with DOAS'
         # add DOAS system
         model_add_hvac_system(model, 'DOAS', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6186,7 +6218,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with DOAS', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6195,7 +6228,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       elsif system_type.include? 'with ERVs'
         # add DOAS system
         model_add_hvac_system(model, 'ERVs', main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6204,7 +6238,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
         # add paired system type
         paired_system_type = system_type.gsub(' with ERVs', '')
         model_add_hvac_system(model, paired_system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones,
@@ -6213,7 +6248,8 @@ class Standard
                               heat_pump_loop_cooling_type: heat_pump_loop_cooling_type,
                               air_loop_heating_type: air_loop_heating_type,
                               air_loop_cooling_type: air_loop_cooling_type,
-                              zone_equipment_ventilation: false)
+                              zone_equipment_ventilation: false,
+                              fan_coil_capacity_control_method: fan_coil_capacity_control_method)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "HVAC system type '#{system_type}' not recognized")
         return false
