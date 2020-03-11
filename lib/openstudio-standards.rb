@@ -55,6 +55,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
   require_relative "#{stds}/necb/BTAPPRE1980/building_envelope"
   require_relative "#{stds}/necb/BTAPPRE1980/hvac_systems"
+  require_relative "#{stds}/necb/BTAPPRE1980/hvac_system_4"
 
   # BTAP1980TO2010
   require_relative "#{stds}/necb/BTAP1980TO2010/btap_1980to2010"
