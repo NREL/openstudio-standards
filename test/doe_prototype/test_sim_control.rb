@@ -56,8 +56,8 @@ class TestSimControl < CreateDOEPrototypeBuildingTest
         timestep = model.getTimestep.numberOfTimestepsPerHour
 
         sizing_parameters = model.getSizingParameters
-        htg_factor = sizing_parameters.getHeatingSizingFactor
-        clg_factor = sizing_parameters.getCoolingSizingFactor
+        htg_factor = sizing_parameters.heatingSizingFactor
+        clg_factor = sizing_parameters.coolingSizingFactor
         sizing_timestep = sizing_parameters.timestepsinAveragingWindow
 
         convergence_limits = model.getConvergenceLimits

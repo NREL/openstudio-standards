@@ -43160,7 +43160,7 @@ OS:Exterior:FuelEquipment,
   Fuel equipment 1,                       !- Name
   {dacce0bc-806c-412e-8846-5bd63d184684}, !- Exterior Fuel Equipment Definition Name
   {37c292df-09e8-4660-b11b-015b2573cac4}, !- Schedule Name
-  NaturalGas,                             !- Fuel Use Type
+  Electricity,                             !- Fuel Use Type
   ,                                       !- Multiplier
   General;                                !- End-Use Subcategory
 
@@ -43306,7 +43306,7 @@ OS:Exterior:FuelEquipment,
   Fuel equipment 2,                       !- Name
   {31b40a2d-33d5-40df-8d16-306455a3d219}, !- Exterior Fuel Equipment Definition Name
   {735921bd-6002-4114-98ad-25aaf32711ae}, !- Schedule Name
-  NaturalGas,                             !- Fuel Use Type
+  Electricity,                             !- Fuel Use Type
   ,                                       !- Multiplier
   General;                                !- End-Use Subcategory
 

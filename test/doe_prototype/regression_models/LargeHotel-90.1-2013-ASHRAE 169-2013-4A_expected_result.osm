@@ -24921,7 +24921,7 @@ OS:Exterior:FuelEquipment,
   Fuel equipment 1,                       !- Name
   {7bef2c55-7010-4280-8bbe-72339f13947d}, !- Exterior Fuel Equipment Definition Name
   {b40cd579-7a7f-4643-8c42-cfbabbdc832e}, !- Schedule Name
-  NaturalGas,                             !- Fuel Use Type
+  Electricity,                             !- Fuel Use Type
   ,                                       !- Multiplier
   General;                                !- End-Use Subcategory
 
@@ -25006,7 +25006,7 @@ OS:Exterior:FuelEquipment,
   Fuel equipment 2,                       !- Name
   {a8c4a237-5596-47ec-aaf9-1dacfca1e2d4}, !- Exterior Fuel Equipment Definition Name
   {92907e9d-e940-4d16-b6fc-32dfcde08133}, !- Schedule Name
-  NaturalGas,                             !- Fuel Use Type
+  Electricity,                             !- Fuel Use Type
   ,                                       !- Multiplier
   General;                                !- End-Use Subcategory
 
