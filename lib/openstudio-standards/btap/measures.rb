@@ -906,12 +906,12 @@ module BTAP
             unless pump_const.plantLoop.empty?
               pump_variable = OpenStudio::Model::PumpVariableSpeed.new(model)
               #pass information from constant speed fan as much as possible.
-              pump_variable.setRatedFlowRate(pump_const.getRatedFlowRate.get)
-              pump_variable.setRatedPumpHead(pump_const.ratedPumpHead())
+              pump_variable.setRatedFlowRate(pump_const.ratedFlowRate)
+              pump_variable.setRatedPumpHead(pump_const.ratedPumpHead)
               pump_variable.setRatedPowerConsumption(pump_const.ratedPowerConsumption.to_f)
-              pump_variable.setMotorEfficiency(pump_const.motorEfficiency().to_f)
-              pump_variable.setPumpControlType( pump_const.pumpControlType )
-              pump_variable.setFractionofMotorInefficienciestoFluidStream(pump_const.fractionofMotorInefficienciestoFluidStream().to_f)
+              pump_variable.setMotorEfficiency(pump_const.motorEfficiency.to_f)
+              pump_variable.setPumpControlType(pump_const.pumpControlType)
+              pump_variable.setFractionofMotorInefficienciestoFluidStream(pump_const.fractionofMotorInefficienciestoFluidStream.to_f)
               pump_variable.autosizeRatedFlowRate if pump_const.isRatedFlowRateAutosized
               pump_variable.autosizeRatedPowerConsumption if pump_const.isRatedPowerConsumptionAutosized
 
@@ -932,7 +932,7 @@ module BTAP
               new_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
               #pass information from constant speed fan as much as possible.
 
-              new_pump.setRatedFlowRate(pump.getRatedFlowRate.get)
+              new_pump.setRatedFlowRate(pump.ratedFlowRate.get)
               new_pump.setRatedPumpHead(pump.ratedPumpHead())
               new_pump.setRatedPowerConsumption(pump.ratedPowerConsumption.to_f)
               new_pump.setMotorEfficiency(pump.motorEfficiency().to_f)
@@ -1071,7 +1071,7 @@ module BTAP
           end
           item.setHeaterFuelType(@shw_heater_fuel_type) unless @shw_heater_fuel_type.nil?
           item.setHeaterThermalEfficiency(@shw_thermal_eff) unless @shw_thermal_eff.nil?
-          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.getHeaterThermalEfficiency.get}\n"
+          log  << item.name.get.to_s << ",#{item.setpointTemperatureSchedule},#{item.heaterFuelType},#{item.heaterThermalEfficiency}\n"
         end
         return log
       end
