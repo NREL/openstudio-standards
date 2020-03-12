@@ -45,6 +45,14 @@ class Standard
       return true
     end
 
+    min_r_value_si = film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    max_u_value_si = 1.0 / min_r_value_si
+    max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    if target_u_value_ip >= max_u_value_ip
+      target_u_value_ip = 1.0 / OpenStudio.convert(min_r_value_si + 0.001, 'm^2*K/W', 'ft^2*hr*R/Btu').get
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
+    end
+
     # Convert the target U-value to SI
     target_u_value_ip = target_u_value_ip.to_f
     target_r_value_ip = 1.0 / target_u_value_ip
@@ -84,7 +92,7 @@ class Standard
       next unless layer.name.get == insulation_layer_name
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
-        layer.setThickness(ins_r_value_si * layer.getConductivity)
+        layer.setThickness(ins_r_value_si * layer.conductivity)
         layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
         break # Stop looking for the insulation layer once found
       elsif layer.to_MasslessOpaqueMaterial.is_initialized
@@ -518,21 +526,21 @@ class Standard
   end
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
-    #If user has no changes...do nothing and return true.
+    # If user has no changes...do nothing and return true.
     return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
 
-    #set initial targets
+    # set initial targets
     target_u_value_si = conductance
     target_shgc = shgc
     target_tvis = tvis
-    #Mulitply by percentages if required.
-    if true == is_percentage
-      target_u_value_si = target_u_value_si / 100.0  * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
-      if true == standard.construction_simple_glazing?(construction)
-        target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.getSolarHeatGainCoefficient() unless target_shgc.nil?
-        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance() unless target_tvis.nil?
+    # Mulitply by percentages if required.
+    if is_percentage
+      target_u_value_si = target_u_value_si / 100.0 * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
+      if standard.construction_simple_glazing?(construction)
+        target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.solarHeatGainCoefficient unless target_shgc.nil?
+        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance unless target_tvis.nil?
       end
     end
 
