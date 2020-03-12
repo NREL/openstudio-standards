@@ -104,8 +104,8 @@ class BTAPPRE1980
         #sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
         #sat_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
         sat_stpt_manager = OpenStudio::Model::SetpointManagerWarmest.new(model)
-        sat_stpt_manager.maximumSetpointTemperature(system_data[:max_system_supply_air_temperature])
-        sat_stpt_manager.minimumSetpointTemperature(system_data[:min_system_supply_air_temperature])
+        sat_stpt_manager.setMaximumSetpointTemperature(system_data[:max_system_supply_air_temperature])
+        sat_stpt_manager.setMinimumSetpointTemperature(system_data[:min_system_supply_air_temperature])
         sat_stpt_manager.addToNode(supply_outlet_node)
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
@@ -257,8 +257,8 @@ class BTAPPRE1980
         #sat_sch.defaultDaySchedule.setName('Supply Air Temp Default')
         #sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
         sat_stpt_manager = OpenStudio::Model::SetpointManagerWarmest.new(model)
-        sat_stpt_manager.maximumSetpointTemperature(system_data[:max_system_supply_air_temperature])
-        sat_stpt_manager.minimumSetpointTemperature(system_data[:min_system_supply_air_temperature])
+        sat_stpt_manager.setMaximumSetpointTemperature(system_data[:max_system_supply_air_temperature])
+        sat_stpt_manager.setMinimumSetpointTemperature(system_data[:min_system_supply_air_temperature])
         sat_stpt_manager.addToNode(supply_outlet_node)
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
