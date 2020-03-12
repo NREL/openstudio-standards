@@ -674,7 +674,7 @@ module BTAP
           if construction.isFenestration
             construction.layers.each do |layer|
               #check to see if it is a simple glazing. If so use the SHGC method.
-              tvis = tvis * layer.to_SimpleGlazing.get.visibleTransmittance unless layer.to_SimpleGlazing.empty?
+              tvis = tvis * layer.to_SimpleGlazing.get.visibleTransmittance.get unless layer.to_SimpleGlazing.empty?
               #check to see if it is a standard glazing. If so use the solar transmittance method.
               tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence.get unless layer.to_StandardGlazing.empty?
             end
