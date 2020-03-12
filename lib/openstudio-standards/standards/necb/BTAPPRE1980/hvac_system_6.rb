@@ -27,7 +27,7 @@ class BTAPPRE1980
     system_data = Hash.new
     system_data[:name] = 'Sys_6_VAV with Reheat'
     system_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-    system_data[:CentralHeatingDesignSupplyAirTemperature] = 13.1
+    system_data[:CentralHeatingDesignSupplyAirTemperature] = 20.0
     system_data[:AllOutdoorAirinCooling] = false
     system_data[:AllOutdoorAirinHeating] = false
     system_data[:MinimumSystemAirFlowRatio] = 0.3
@@ -174,7 +174,7 @@ class BTAPPRE1980
     system_6_data = Hash.new
     system_6_data[:name] = 'Sys_6_VAV with Reheat'
     system_6_data[:CentralCoolingDesignSupplyAirTemperature] = 13.0
-    system_6_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
+    system_6_data[:CentralHeatingDesignSupplyAirTemperature] = 20.0
     system_6_data[:AllOutdoorAirinCooling] = false
     system_6_data[:AllOutdoorAirinHeating] = false
     system_6_data[:MinimumSystemAirFlowRatio] = 0.03
