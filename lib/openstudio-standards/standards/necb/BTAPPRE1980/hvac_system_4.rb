@@ -10,7 +10,9 @@ class BTAPPRE1980
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:AllOutdoorAirinCooling] = false
     system_data[:AllOutdoorAirinHeating] = false
-    system_data[:TypeofLoadtoSizeOn] = 'Sensible'
+    # Setting system 4 airloops in BTAPPRE1980 and BTAP1980TO2010 buildings to size by ventilation requirement rather
+    # than cooling or heating load.
+    system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
     system_data[:MinimumSystemAirFlowRatio] = 1.0
 
     system_data[:PreheatDesignTemperature] = 7.0
@@ -60,21 +62,8 @@ class BTAPPRE1980
     # (2) supermarket/food service: food preparation with kitchen hood/vented appliance
     # (3) warehouse area (non-refrigerated spaces)
 
-    space_types_table = @standards_data['space_types']
-    zone_oa_m3pers = 0
-    zones.each do |zone|
-      zone.spaces.each do |space|
-        floor_area = space.floorArea.to_f
-        space_type_name = space.spaceType.nameString
-        if space_type_name.include? ("Space Function")
-          puts 'hello'
-        elsif space_type_name.include? ("WholeBuilding")
-          puts 'hello'
-        end
-      end
-    end
 
-      air_loop = sys4_air_loop( model: model, system_data: system_data)
+      air_loop = common_air_loop( model: model, system_data: system_data)
       air_loop.setName("#{system_data[:name]}_#{control_zone.name}")
 
       # Zone sizing temperature

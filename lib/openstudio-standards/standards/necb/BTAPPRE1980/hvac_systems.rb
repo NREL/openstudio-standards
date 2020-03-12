@@ -230,30 +230,4 @@ class BTAPPRE1980
     inv_impeller_eff = motor_eff/pump_info['comb_eff'].to_f
     pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(inv_impeller_eff)
   end
-
-  def sys4_air_loop(model:, system_data:)
-    mau_air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
-    mau_air_loop.setName(system_data[:name])
-    air_loop_sizing = mau_air_loop.sizingSystem
-    air_loop_sizing.autosizeDesignOutdoorAirFlowRate
-    air_loop_sizing.setPreheatDesignTemperature(system_data[:PreheatDesignTemperature]) unless system_data[:PreheatDesignTemperature].nil?
-    air_loop_sizing.setPreheatDesignHumidityRatio(system_data[:PreheatDesignHumidityRatio]) unless system_data[:PreheatDesignHumidityRatio].nil?
-    air_loop_sizing.setPrecoolDesignTemperature(system_data[:PrecoolDesignTemperature]) unless system_data[:PrecoolDesignTemperature].nil?
-    air_loop_sizing.setPrecoolDesignHumidityRatio(system_data[:PrecoolDesignHumidityRatio]) unless system_data[:PrecoolDesignHumidityRatio].nil?
-    air_loop_sizing.setSizingOption(system_data[:SizingOption]) unless system_data[:SizingOption].nil?
-    air_loop_sizing.setCoolingDesignAirFlowMethod(system_data[:CoolingDesignAirFlowMethod]) unless system_data[:CoolingDesignAirFlowMethod].nil?
-    air_loop_sizing.setCoolingDesignAirFlowRate(system_data[:CoolingDesignAirFlowRate]) unless system_data[:CoolingDesignAirFlowRate].nil?
-    air_loop_sizing.setHeatingDesignAirFlowMethod(system_data[:HeatingDesignAirFlowMethod]) unless system_data[:HeatingDesignAirFlowMethod].nil?
-    air_loop_sizing.setHeatingDesignAirFlowRate(system_data[:HeatingDesignAirFlowRate]) unless system_data[:HeatingDesignAirFlowRate].nil?
-    air_loop_sizing.setSystemOutdoorAirMethod(system_data[:SystemOutdoorAirMethod]) unless system_data[:SystemOutdoorAirMethod].nil?
-    air_loop_sizing.setCentralCoolingDesignSupplyAirHumidityRatio(system_data[:CentralCoolingDesignSupplyAirHumidityRatio]) unless system_data[:CentralCoolingDesignSupplyAirHumidityRatio].nil?
-    air_loop_sizing.setCentralHeatingDesignSupplyAirHumidityRatio(system_data[:CentralHeatingDesignSupplyAirHumidityRatio]) unless system_data[:CentralHeatingDesignSupplyAirHumidityRatio].nil?
-    air_loop_sizing.setTypeofLoadtoSizeOn(system_data[:TypeofLoadtoSizeOn]) unless system_data[:TypeofLoadtoSizeOn].nil?
-    air_loop_sizing.setCentralCoolingDesignSupplyAirTemperature(system_data[:CentralCoolingDesignSupplyAirTemperature]) unless system_data[:CentralCoolingDesignSupplyAirTemperature].nil?
-    air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
-    air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
-    air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
-    return mau_air_loop
-  end
 end
