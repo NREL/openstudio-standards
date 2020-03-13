@@ -137,7 +137,7 @@ module Outpatient
           end
           # Create an infiltration rate object for this space
           infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
-          infiltration.setName('#{space.name} Infiltration')
+          infiltration.setName("#{space.name} Infiltration")
           infiltration.setFlowperExteriorSurfaceArea(infil_rate) unless infil_rate.nil? || infil_rate.to_f.zero?
           infiltration.setAirChangesperHour(infil_ach) unless infil_ach.nil? || infil_ach.to_f.zero?
           infiltration.setSchedule(infil_sch)
@@ -198,7 +198,7 @@ module Outpatient
         humidifier = OpenStudio::Model::HumidifierSteamElectric.new(model)
         humidifier.setRatedCapacity(3.72E-5)
         humidifier.setRatedPower(100_000)
-        humidifier.setName('#{air_loop.name.get} Electric Steam Humidifier')
+        humidifier.setName("#{air_loop.name.get} Electric Steam Humidifier")
         # get the water heating coil and add humidifier to the outlet of heating coil (right before fan)
         htg_coil = nil
         air_loop.supplyComponents.each do |equip|
@@ -365,7 +365,7 @@ module Outpatient
       data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
       if data.nil? ###
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', 'Could not find data for #{search_criteria}')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}"")
         next
       end
 
@@ -454,11 +454,15 @@ module Outpatient
       }
     end
 
-    airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
-    init_mdp.each do |zn_name, mdp|
-      if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
-        min_damper_position = mdp
+    if !init_mdp.nil?
+      airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
+      init_mdp.each do |zn_name, mdp|
+        if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
+          min_damper_position = mdp
+        end
       end
+    else
+      min_damper_position = 0.3
     end
 
     # Set the minimum flow fraction
