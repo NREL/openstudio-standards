@@ -44,7 +44,7 @@ class Standard
     standards_info = construction.standardsInformation
     surf_type = standards_info.intendedSurfaceType
     if surf_type.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the intended surface type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the intended surface type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
       return previous_construction_map
     end
     surf_type = surf_type.get
@@ -65,11 +65,11 @@ class Standard
         when 'Non-Metal Framing'
           stds_type = 'Nonmetal framing (all)'
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "The standards fenestration frame type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "The standards fenestration frame type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
           return previous_construction_map
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
     # Skylights
@@ -85,11 +85,11 @@ class Standard
         when 'Plastic Skylight without Curb', 'Glass Skylight without Curb'
           stds_type = 'Without Curb'
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "The standards fenestration type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "The standards fenestration type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
           return previous_construction_map
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
     # All other surface types
@@ -98,7 +98,7 @@ class Standard
       if stds_type.is_initialized
         stds_type = stds_type.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
     end
@@ -123,9 +123,9 @@ class Standard
     # Assign the new construction to the surface
     if new_construction
       planar_surface.setConstruction(new_construction)
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.PlanarSurface', "Set the construction for #{planar_surface.name} to #{new_construction.name}.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.PlanarSurface', "Set the construction for #{planar_surface.name} to #{new_construction.name}.")
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not generate a standard construction for #{planar_surface.name}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not generate a standard construction for #{planar_surface.name}.")
       return previous_construction_map
     end
 
