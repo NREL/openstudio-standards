@@ -93,6 +93,7 @@ class BTAPPRE1980
     # baseboard_type choices are "Hot Water" or "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # For BTAPPRE1980 (and BTAP1980TO2010 which is created from BTAPPRE1980) add a constant speed return fan
 
 
     always_on = model.alwaysOnDiscreteSchedule
@@ -107,6 +108,10 @@ class BTAPPRE1980
     sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
 
     fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+
+    # Create a return fan for BTAPPRE1980 system 3 systems
+    return_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    return_fan.setName('Sys3 Return Fan')
 
     case heating_coil_type
     when 'Electric' # electric coil
@@ -150,6 +155,10 @@ class BTAPPRE1980
       clg_coil.addToNode(supply_inlet_node)
     end
     oa_system.addToNode(supply_inlet_node)
+
+    # Find return air node and add a return air fan to it for BTAPPRE1980 system 3 airloops.
+    returnAirNode = oa_system.returnAirModelObject.get.to_Node.get
+    return_fan.addToNode(returnAirNode)
 
     # Add a setpoint manager single zone reheat to control the
     # supply air temperature based on the needs of this zone
