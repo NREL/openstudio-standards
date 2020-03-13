@@ -64,6 +64,19 @@ class BTAPPRE1980 < NECB2011
     return model
   end
 
+  def apply_standard_efficiencies(model:, sizing_run_dir:)
+    raise('validation of model failed.') unless validate_initial_model(model)
+    climate_zone = 'NECB HDD Method'
+    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
+    # This is needed for NECB2011 as a workaround for sizing the reheat boxes
+    model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
+    # Apply the prototype HVAC assumptions
+    model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
+    # Apply the HVAC efficiency standard
+    model_apply_hvac_efficiency_standard(model, climate_zone)
+    model_apply_constant_speeed_return_fan_characteristics(model: model)
+  end
+
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true

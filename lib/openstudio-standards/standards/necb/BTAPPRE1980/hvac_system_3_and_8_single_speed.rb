@@ -112,6 +112,7 @@ class BTAPPRE1980
     # Create a return fan for BTAPPRE1980 system 3 systems
     return_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
     return_fan.setName('Sys3 Return Fan')
+    return_fan.setEndUseSubcategory('Return_Fan')
 
     case heating_coil_type
     when 'Electric' # electric coil
