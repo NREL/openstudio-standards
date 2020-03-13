@@ -1262,7 +1262,7 @@ class Standard
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
   def model_differentiate_primary_secondary_thermal_zones(model, zones)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
 
     # Determine the operational hours (proxy is annual
     # full load lighting hours) for all zones
@@ -1366,10 +1366,10 @@ class Standard
 
     # Report out the primary vs. secondary zones
     unless pri_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
     end
     unless sec_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
     return { 'primary' => pri_zones, 'secondary' => sec_zones }
@@ -1392,7 +1392,7 @@ class Standard
         if space.thermalZone.is_initialized
           all_zones_on_story << space.thermalZone.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
         end
       end
 
@@ -1450,7 +1450,7 @@ class Standard
       if space_obj.buildingStory.empty?
         story = model_get_story_for_nominal_z_coordinate(model, space_minz)
         space_obj.setBuildingStory(story)
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
       end
     end
 
@@ -4918,7 +4918,7 @@ class Standard
         # for now don't look at schedules without targets, in future can alter these by looking at building level hours of operation
         next if not sch.directUseCount > 0 # won't catch if used for space type load instance, but that space type isn't used
         # todo - address schedules that fall into this category, if they are used in the model
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
         next
       end
 
@@ -5391,7 +5391,7 @@ class Standard
       if percent_change.abs > 0.05
         # todo - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
         # post application checks compares against actual instead of estimated values
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
       end
 
       raw_string = []
