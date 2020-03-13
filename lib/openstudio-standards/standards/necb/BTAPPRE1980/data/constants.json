@@ -36,6 +36,15 @@
       "units": "Pa",
       "notes": ""
     },
+    "return_fan_constant_volume_pressure_rise_value": {
+      "data_type": "value",
+      "refs": [
+        "MNECB Table 5.4.1.A value"
+      ],
+      "value": 150.0,
+      "units": "Pa",
+      "notes": "Sets the return fan pressure rise for constant speed return fans based on the MNECB"
+    },
     "supply_fan_variable_volume_pressure_rise_value": {
       "data_type": "value",
       "refs": [
