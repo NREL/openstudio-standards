@@ -365,7 +365,7 @@ module Outpatient
       data = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
 
       if data.nil? ###
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}"")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Could not find data for #{search_criteria}")
         next
       end
 
