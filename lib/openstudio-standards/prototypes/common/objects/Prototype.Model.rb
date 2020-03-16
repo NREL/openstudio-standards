@@ -326,8 +326,8 @@ Standard.class_eval do
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
     # Buildings default to using the ground FC factor method
-    model_set_below_grade_wall_constructions(model, climate_zone)
-    model_set_floor_constructions(model, climate_zone)
+    model_set_below_grade_wall_constructions(model, building_type, climate_zone)
+    model_set_floor_constructions(model, building_type, climate_zone)
 
     basement_wall_construction = OpenStudio::Model::Construction.new(model)
     basement_wall_construction.setName('Basement Wall construction')
@@ -468,10 +468,17 @@ Standard.class_eval do
 
   # Creates and sets below grade wall constructions for 90.1 prototype building models. These utilize
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
-  # @param model[OpenStudio::Model::Model]
+  # @param model[OpenStudio::Model::Model] OpenStudio Model
+  # @param climate_zone [string] climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [string] the type of building
   # @return [void]
-  def model_set_below_grade_wall_constructions(model, climate_zone)
-    wall_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactWall', 'Mass')
+  def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
+
+    #Find ground contact wall building category
+    construction_set_data = model_get_construction_set(building_type)
+    building_type_category = construction_set_data['exterior_wall_building_category']
+
+    wall_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactWall', 'Mass', building_type_category)
     c_factor = wall_construction_properties['assembly_maximum_c_factor'] * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
 
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
@@ -481,7 +488,7 @@ Standard.class_eval do
       below_grade_wall_height = model_get_space_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
-      c_factor_wall_name = "Basement Wall C-Factor: #{c_factor} Height: #{below_grade_wall_height.round(1)}"
+      c_factor_wall_name = "Basement Wall C-Factor #{c_factor} Height #{below_grade_wall_height.round(1)}"
 
       # Check if the wall construction has been constructed already. If so, look it up in the model
       if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
@@ -531,11 +538,16 @@ Standard.class_eval do
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
   # calculated. Used for F-Factor floors that require additional parameters.
   # @param model [OpenStudio Model] OpenStudio model being modified
-  # @param climate_zone [String] climate zone as described for prototype models. F-Factor is based on this parameter.
-  def model_set_floor_constructions(model, climate_zone)
+  # @param building_type [string] the type of building
+  # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
+  def model_set_floor_constructions(model, building_type, climate_zone)
+
+    #Find ground contact wall building category
+    construction_set_data = model_get_construction_set(building_type)
+    building_type_category = construction_set_data['exterior_floor_building_category']
 
     # Find Floor F factor
-    floor_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactFloor', 'Unheated')
+    floor_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactFloor', 'Unheated', building_type_category)
     f_factor = floor_construction_properties['assembly_maximum_f_factor'] * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable

@@ -3424,13 +3424,13 @@ class Standard
   # Returns standards data for selected construction
   #
   # @param intended_surface_type [string] the surface type
+  # @param climate_zone [string] the building's climate zone
   # @param standards_construction_type [string]  the type of construction
   # @param building_category [string] the type of building
   # @return [hash] hash of construction properties
-  def model_get_construction_properties(model, intended_surface_type, standards_construction_type, building_category = 'Nonresidential')
+  def model_get_construction_properties(model, climate_zone, intended_surface_type, standards_construction_type, building_category)
 
     # get climate_zone_set
-    climate_zone = model_get_building_climate_zone_and_building_type(model)['climate_zone']
     climate_zone_set = model_find_climate_zone_set(model, climate_zone)
 
     # populate search hash
@@ -3446,6 +3446,25 @@ class Standard
     construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
 
     return construction_properties
+  end
+
+  # Returns standards data for selected construction set
+  #
+  # @param building_category [string] the type of building
+  # @param space_type [string] space type within the building type. Typically nil.
+  # @return [hash] hash of construction set data
+  def model_get_construction_set(building_type, space_type = nil)
+    #populate search hash
+    search_criteria = {
+        'template' => template,
+        'building_type' => building_type,
+        'space_type' => space_type
+    }
+
+    #Search construction sets table for the exterior wall building category and construction type
+    construction_set_data = model_find_object(standards_data['construction_sets'], search_criteria)
+
+    return construction_set_data
   end
 
   # Reduces the WWR to the values specified by the PRM.
