@@ -587,11 +587,56 @@ class Standard
           next
         end
 
-        # Get the VT
-        vt = construction.visibleTransmittance
-        if vt.is_initialized
-          vt = vt.get
-        else
+        # Store VT for this construction in map if not already looked up
+        if construction_name_to_vt_map[construction_name].nil?
+
+          sql = space.model.sqlFile
+
+          if sql.is_initialized
+            sql = sql.get
+
+            row_query = "SELECT RowName
+                        FROM tabulardatawithstrings
+                        WHERE ReportName='EnvelopeSummary'
+                        AND ReportForString='Entire Facility'
+                        AND TableName='Exterior Fenestration'
+                        AND Value='#{construction_name.upcase}'"
+
+            row_id = sql.execAndReturnFirstString(row_query)
+
+            if row_id.is_initialized
+              row_id = row_id.get
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
+              row_id = 9999
+            end
+
+            vt_query = "SELECT Value
+                        FROM tabulardatawithstrings
+                        WHERE ReportName='EnvelopeSummary'
+                        AND ReportForString='Entire Facility'
+                        AND TableName='Exterior Fenestration'
+                        AND ColumnName='Glass Visible Transmittance'
+                        AND RowName='#{row_id}'"
+
+            vt = sql.execAndReturnFirstDouble(vt_query)
+
+            vt = if vt.is_initialized
+                   vt.get
+                 end
+
+            # Record the VT
+            construction_name_to_vt_map[construction_name] = vt
+
+          else
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no sql file containing results, cannot lookup data.')
+          end
+
+        end
+
+        # Get the VT from the map
+        vt = construction_name_to_vt_map[construction_name]
+        if vt.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in sidelighting effective aperture calculation.")
           vt = 0
         end
@@ -653,11 +698,56 @@ class Standard
           next
         end
 
-        # Get the VT
-        vt = construction.visibleTransmittance
-        if vt.is_initialized
-          vt = vt.get
-        else
+        # Store VT for this construction in map if not already looked up
+        if construction_name_to_vt_map[construction_name].nil?
+
+          sql = space.model.sqlFile
+
+          if sql.is_initialized
+            sql = sql.get
+
+            row_query = "SELECT RowName
+                        FROM tabulardatawithstrings
+                        WHERE ReportName='EnvelopeSummary'
+                        AND ReportForString='Entire Facility'
+                        AND TableName='Exterior Fenestration'
+                        AND Value='#{construction_name}'"
+
+            row_id = sql.execAndReturnFirstString(row_query)
+
+            if row_id.is_initialized
+              row_id = row_id.get
+            else
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Data not found for query: #{row_query}")
+              next
+            end
+
+            vt_query = "SELECT Value
+                        FROM tabulardatawithstrings
+                        WHERE ReportName='EnvelopeSummary'
+                        AND ReportForString='Entire Facility'
+                        AND TableName='Exterior Fenestration'
+                        AND ColumnName='Glass Visible Transmittance'
+                        AND RowName='#{row_id}'"
+
+            vt = sql.execAndReturnFirstDouble(vt_query)
+
+            vt = if vt.is_initialized
+                   vt.get
+                 end
+
+            # Record the VT
+            construction_name_to_vt_map[construction_name] = vt
+
+          else
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no sql file containing results, cannot lookup data.')
+          end
+
+        end
+
+        # Get the VT from the map
+        vt = construction_name_to_vt_map[construction_name]
+        if vt.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, could not determine VLT for #{construction_name}, will not be included in skylight effective aperture calculation.")
           vt = 0
         end
