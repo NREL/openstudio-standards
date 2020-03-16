@@ -431,7 +431,7 @@ class Standard
         sch_day.remove # remove day schedule for this rule
         rule.remove # remove the rule
       elsif !sch_day.additionalProperties.hasFeature("param_day_profile")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule.name} doesn't have a parametric forumla for #{rule.name} This profile will not be altered.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule.name} doesn't have a parametric formula for #{rule.name} This profile will not be altered.")
         next
       else
         profiles[sch_day] = rule
@@ -791,7 +791,7 @@ class Standard
 
     # issue warning if order was changed
     if throw_order_warning
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjsuted as shown to crate a valid profile: #{time_value_pairs}")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{sch_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
     end
 
     # add interpolated values at ramp_frequency

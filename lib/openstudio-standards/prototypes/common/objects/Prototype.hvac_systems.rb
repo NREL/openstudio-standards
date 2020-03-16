@@ -983,7 +983,11 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1210,7 +1214,11 @@ class Standard
     sizing_system.setAllOutdoorAirinCooling(true)
     sizing_system.setAllOutdoorAirinHeating(true)
     # set minimum airflow ratio to 1.0 to avoid under-sizing heating coil
-    sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(1.0)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(1.0)
+    end
     sizing_system.setSizingOption('Coincident')
     sizing_system.setCentralCoolingDesignSupplyAirTemperature(clg_dsgn_sup_air_temp_c)
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
@@ -1391,9 +1399,9 @@ class Standard
       # the system will lower the ventilation rate rather than trying to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
         if demand_control_ventilation
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions < 2.8.0.')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Unable to add DOAS with DCV to model because the setSequentialCoolingFraction method is not available in OpenStudio versions less than 2.8.0.')
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0.  The DOAS system will not be able to have DCV if changed at a later date.')
         end
       else
         zone.setSequentialCoolingFraction(air_terminal.to_ModelObject.get, 0.0)
@@ -1476,7 +1484,13 @@ class Standard
     # default design temperatures and settings used across all air loops
     dsgn_temps = standard_design_sizing_temperatures
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio) unless min_sys_airflow_ratio.nil?
+    if !min_sys_airflow_ratio.nil?
+      if model.version < OpenStudio::VersionString.new('2.7.0')
+        sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+      else
+        sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
+      end
+    end
     sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
@@ -1602,10 +1616,10 @@ class Standard
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         terminal.setMaximumFlowFractionDuringReheat(0.5)
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1619,8 +1633,8 @@ class Standard
         terminal = OpenStudio::Model::AirTerminalSingleDuctVAVNoReheat.new(model, model.alwaysOnDiscreteSchedule)
         terminal.setName("#{zone.name} VAV Terminal")
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -1632,6 +1646,9 @@ class Standard
         zone.setReturnPlenum(return_plenum)
       end
     end
+
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
 
     # set the damper action based on the template
     air_loop_hvac_apply_vav_damper_action(air_loop)
@@ -1931,8 +1948,8 @@ class Standard
       terminal.setName("#{zone.name} VAV Terminal")
       terminal.setZoneMinimumAirFlowMethod('Constant')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -1943,6 +1960,9 @@ class Standard
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
+
+    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
+    model_system_outdoor_air_sizing_vrp_method(air_loop)
 
     # set the damper action based on the template
     air_loop_hvac_apply_vav_damper_action(air_loop)
@@ -2226,11 +2246,11 @@ class Standard
       terminal = OpenStudio::Model::AirTerminalSingleDuctVAVReheat.new(model, model.alwaysOnDiscreteSchedule, rht_coil)
       terminal.setName("#{zone.name} VAV Terminal")
       terminal.setZoneMinimumAirFlowMethod('Constant')
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
       terminal.setMaximumFlowPerZoneFloorAreaDuringReheat(0.0)
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -4270,7 +4290,7 @@ class Standard
       radiant_htg_dsgn_sup_wtr_temp_f = 110
     else
       climate_zone_set = model_find_climate_zone_set(model, climate_zone)
-      case climate_zone_set.gsub('ClimateZone ', '')
+      case climate_zone_set.gsub('ClimateZone ', '').gsub('CEC T24 ', '')
       when '1'
         cz_mult = 2
         radiant_htg_dsgn_sup_wtr_temp_f = 90
@@ -5003,7 +5023,7 @@ class Standard
 
       # set the cooling and heating fraction to zero so that the ERV does not try to meet the heating or cooling load.
       if model.version < OpenStudio::VersionString.new('2.8.0')
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is < 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'OpenStudio version is less than 2.8.0; ERV will attempt to meet heating and cooling load up to ventilation rate.  If this is not intended, use a newer version of OpenStudio.')
       else
         zone.setSequentialCoolingFraction(zone_hvac.to_ModelObject.get, 0.0)
         zone.setSequentialHeatingFraction(zone_hvac.to_ModelObject.get, 0.0)

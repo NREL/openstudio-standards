@@ -19,11 +19,11 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
   def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
     # Skip layer-by-layer fenestration constructions
     if construction.isFenestration
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of opaque constructions or simple glazing. #{construction.name} is not opaque or simple glazing.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of opaque constructions or simple glazing. #{construction.name} is not opaque or simple glazing.")
       return false
     end
 
@@ -45,6 +45,14 @@ class Standard
       return true
     end
 
+    min_r_value_si = film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    max_u_value_si = 1.0 / min_r_value_si
+    max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    if target_u_value_ip >= max_u_value_ip
+      target_u_value_ip = 1.0 / OpenStudio.convert(min_r_value_si + 0.001, 'm^2*K/W', 'ft^2*hr*R/Btu').get
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
+    end
+
     # Convert the target U-value to SI
     target_u_value_ip = target_u_value_ip.to_f
     target_r_value_ip = 1.0 / target_u_value_ip
@@ -52,11 +60,11 @@ class Standard
     target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
     target_r_value_si = 1.0 / target_u_value_si
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "#{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "#{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
 
     # Determine the R-value of the non-insulation layers
     other_layer_r_value_si = 0.0
@@ -74,7 +82,7 @@ class Standard
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - other_layer_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will not be modified.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will not be modified.")
       return false
     end
     ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
@@ -84,7 +92,7 @@ class Standard
       next unless layer.name.get == insulation_layer_name
       if layer.to_StandardOpaqueMaterial.is_initialized
         layer = layer.to_StandardOpaqueMaterial.get
-        layer.setThickness(ins_r_value_si * layer.getConductivity)
+        layer.setThickness(ins_r_value_si * layer.conductivity)
         layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
         break # Stop looking for the insulation layer once found
       elsif layer.to_MasslessOpaqueMaterial.is_initialized
@@ -123,16 +131,16 @@ class Standard
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting U-Value for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
     
     # Skip layer-by-layer fenestration constructions
     unless construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
       return false
     end
     
     glass_layer = construction.layers.first.to_SimpleGlazing.get
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
     
     # Convert the target U-value to SI
     target_u_value_ip = target_u_value_ip.to_f
@@ -141,11 +149,11 @@ class Standard
     target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
     target_r_value_si = 1.0 / target_u_value_si
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "#{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "#{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
 
     # Determine the R-value of the air films, if requested
     film_coeff_r_value_si = 0.0
@@ -154,23 +162,23 @@ class Standard
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
     
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---film_coeff_r_value_si = #{film_coeff_r_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---film_coeff_u_value_si = #{film_coeff_u_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---film_coeff_u_value_ip = #{film_coeff_u_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---film_coeff_r_value_ip = #{film_coeff_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_si = #{film_coeff_r_value_si.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_si = #{film_coeff_u_value_si.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_ip = #{film_coeff_u_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_ip = #{film_coeff_r_value_ip.round(2)} for #{construction.name}.")
     
     # Determine the difference between the desired R-value
     # and the R-value of the and air films.
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - film_coeff_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
       return false
     end
     ins_u_value_si = 1.0 / ins_r_value_si
     
     if ins_u_value_si > 7.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
       ins_u_value_si = 7.0
     end
     
@@ -182,10 +190,10 @@ class Standard
     glass_layer.setUFactor(ins_u_value_si)
     glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
     
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
 
     # Modify the construction name
     construction.setName("#{construction.name} U-#{target_u_value_ip.round(2)}")
@@ -199,11 +207,11 @@ class Standard
   # @param target_shgc [Double] Solar Heat Gain Coefficient
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_shgc(construction, target_shgc)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting SHGC for #{construction.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting SHGC for #{construction.name}.")
 
     # Skip layer-by-layer fenestration constructions
     unless construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ConstructionBase', "Can only set the SHGC of simple glazing. #{construction.name} is not simple glazing.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the SHGC of simple glazing. #{construction.name} is not simple glazing.")
       return false
     end
 
@@ -305,7 +313,7 @@ class Standard
       if row_id.is_initialized
         row_id = row_id.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Construction', "SHGC row ID not found for construction: #{construction_name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "SHGC row ID not found for construction: #{construction_name}.")
         row_id = 9999
       end
 
@@ -355,7 +363,7 @@ class Standard
       if row_id.is_initialized
         row_id = row_id.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "VT row ID not found for construction: #{construction_name}.")
         row_id = 9999
       end
 
@@ -374,7 +382,7 @@ class Standard
            end
 
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no sql file containing results, cannot lookup data.')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', 'Model has no sql file containing results, cannot lookup data.')
     end
 
     return vt
@@ -405,7 +413,7 @@ class Standard
       if row_id.is_initialized
         row_id = row_id.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Construction', "U-Factor row ID not found for construction: #{construction_name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "U-Factor row ID not found for construction: #{construction_name}.")
         row_id = 9999
       end
 
@@ -456,7 +464,7 @@ class Standard
       end
       if construction.insulation.empty? and construction.isOpaque
         raise ()
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "This construction has no insulation layer specified. Construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
       end
     else
       return construction.insulation.get
@@ -518,21 +526,21 @@ class Standard
   end
 
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
-    #If user has no changes...do nothing and return true.
+    # If user has no changes...do nothing and return true.
     return true if conductance.nil? and shgc.nil? and tvis.nil?
     standard = Standard.new()
     construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
 
-    #set initial targets
+    # set initial targets
     target_u_value_si = conductance
     target_shgc = shgc
     target_tvis = tvis
-    #Mulitply by percentages if required.
-    if true == is_percentage
-      target_u_value_si = target_u_value_si / 100.0  * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
-      if true == standard.construction_simple_glazing?(construction)
-        target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.getSolarHeatGainCoefficient() unless target_shgc.nil?
-        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance() unless target_tvis.nil?
+    # Mulitply by percentages if required.
+    if is_percentage
+      target_u_value_si = target_u_value_si / 100.0 * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
+      if standard.construction_simple_glazing?(construction)
+        target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.solarHeatGainCoefficient unless target_shgc.nil?
+        target_tvis = target_tvis / 100.0  * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance unless target_tvis.nil?
       end
     end
 
@@ -645,15 +653,15 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)
     if target_tvis >= 1.0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is > 1.0")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is greater than 1.0")
       return false
     end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ConstructionBase', "Setting TVis for #{construction.name} to #{target_tvis}")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting TVis for #{construction.name} to #{target_tvis}")
     standard = Standard.new()
     # Skip layer-by-layer fenestration constructions
     unless standard.construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ConstructionBase', "Can only set the Tvis of simple glazing. #{construction.name} is not simple glazing.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis of simple glazing. #{construction.name} is not simple glazing.")
       return false
     end
 

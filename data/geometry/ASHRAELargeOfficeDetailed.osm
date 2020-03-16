@@ -346,11 +346,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {028af023-65bd-494f-805d-65623355f305}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   16.0797875, 0, 2.31011654250324e-014,   !- X,Y,Z Vertex 1 {m}
   16.0797875, 0, -2.4384,                 !- X,Y,Z Vertex 2 {m}
@@ -2617,11 +2617,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {316fddf4-8cea-4c27-b604-515fad8156a5}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   73.10755, 48.7378375, 1.15505827125162e-014, !- X,Y,Z Vertex 1 {m}
   73.10755, 48.7378375, -2.43840000000002, !- X,Y,Z Vertex 2 {m}
@@ -2651,11 +2651,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {316fddf4-8cea-4c27-b604-515fad8156a5}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   73.10755, 36.5458375, 1.15505827125162e-014, !- X,Y,Z Vertex 1 {m}
   73.10755, 36.5458375, -2.43840000000002, !- X,Y,Z Vertex 2 {m}
@@ -2752,11 +2752,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {f6009d98-ae01-49dd-bf1f-f8d89b2e9054}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   0, 48.7378375, 2.31011654250324e-014,   !- X,Y,Z Vertex 1 {m}
   0, 48.7378375, -2.4384,                 !- X,Y,Z Vertex 2 {m}
@@ -2769,11 +2769,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {f6009d98-ae01-49dd-bf1f-f8d89b2e9054}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   0, 0, 2.31011654250324e-014,            !- X,Y,Z Vertex 1 {m}
   0, 0, -2.4384,                          !- X,Y,Z Vertex 2 {m}
@@ -2786,11 +2786,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {f6009d98-ae01-49dd-bf1f-f8d89b2e9054}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   16.0797875, 48.7378375, 2.25840720084241e-014, !- X,Y,Z Vertex 1 {m}
   16.0797875, 48.7378375, -2.4384,        !- X,Y,Z Vertex 2 {m}
@@ -6199,11 +6199,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d3d3811d-bfc1-4455-b7ad-240f00545023}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   73.10755, -7.69297646937852e-017, 3.60955709766105e-016, !- X,Y,Z Vertex 1 {m}
   46.0416275, -7.69297646937853e-017, -2.16573425859689e-015, !- X,Y,Z Vertex 2 {m}
@@ -6233,11 +6233,11 @@ OS:Surface,
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {d3d3811d-bfc1-4455-b7ad-240f00545023}, !- Space Name
-  Outdoors,                               !- Outside Boundary Condition
+  OtherSideCoefficients,                  !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
-  SunExposed,                             !- Sun Exposure
-  WindExposed,                            !- Wind Exposure
-  ,                                       !- View Factor to Ground
+  NoSun,                                  !- Sun Exposure
+  NoWind,                                 !- Wind Exposure
+  0,                                      !- View Factor to Ground
   ,                                       !- Number of Vertices
   73.10755, -7.69297646937852e-017, 3.60955709766105e-016, !- X,Y,Z Vertex 1 {m}
   73.10755, 0, -2.43840000000002,         !- X,Y,Z Vertex 2 {m}

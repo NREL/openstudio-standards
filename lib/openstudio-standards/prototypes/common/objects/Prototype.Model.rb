@@ -738,7 +738,7 @@ Standard.class_eval do
 
   # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
   # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
-  # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same buidling type.
+  # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same building type.
   # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
   #
   # @param kitchen_makeup [String] Valid choices are
@@ -860,7 +860,7 @@ Standard.class_eval do
 
             end
 
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_target} is #{largest_target_zone.name} which will provide exahust for #{target_effective_floor_area} m^2")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_target} is #{largest_target_zone.name} which will provide exhaust for #{target_effective_floor_area} m^2")
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_source} is #{largest_source_zone.name} which will provide makeup air for #{makeup_target}")
 
             # add in extra arguments for makeup air
@@ -1093,7 +1093,7 @@ Standard.class_eval do
       nondimming_ext_lts.setControlOption('AstronomicalClock')
     end
 
-    # Fuel Equipment
+    # Fuel Equipment being used to model external elevators
     unless prototype_input['exterior_fuel_equipment1_power'].nil?
       fuel_ext_power = prototype_input['exterior_fuel_equipment1_power']
       fuel_ext_sch_name = prototype_input['exterior_fuel_equipment1_schedule']
@@ -1103,6 +1103,7 @@ Standard.class_eval do
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts.setFuelType('Electricity')
       fuel_ext_lts.setName(fuel_ext_name.to_s)
     end
 
@@ -1115,6 +1116,7 @@ Standard.class_eval do
       fuel_ext_def.setDesignLevel(fuel_ext_power)
       fuel_ext_sch = model_add_schedule(model, fuel_ext_sch_name)
       fuel_ext_lts = OpenStudio::Model::ExteriorFuelEquipment.new(fuel_ext_def, fuel_ext_sch)
+      fuel_ext_lts.setFuelType('Electricity')
       fuel_ext_lts.setName(fuel_ext_name.to_s)
     end
 
@@ -1946,7 +1948,45 @@ Standard.class_eval do
 
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
-      if air_loop_hvac_economizer_required?(air_loop, climate_zone)
+      economizer_required = false
+
+      if air_loop_hvac_humidifier_count(air_loop) > 0
+        # If airloop includes it is assumed that exception c to 90.1-2004 Section 6.5.1 applies
+        # This exception exist through 90.1-2013, see Section 6.5.1.3
+        economizer_required = false
+      elsif @instvarbuilding_type == 'LargeOffice' &&
+            air_loop.name.to_s.downcase.include?('datacenter') &&
+            air_loop.name.to_s.downcase.include?('basement') &&
+            !(template == '90.1-2004' || template == '90.1-2007')
+        # System serving the data center in the basement of the large
+        # office is assumed to be always large enough to require an
+        # economizer when economizer requirement is based on equipment
+        # size.
+        #
+        # No economizer modeled for 90.1-2004 and 2007:
+        # Specific economizer requirements for computer rooms were
+        # introduced in 90.1-2010. Before that, although not explicitly
+        # specified, economizer requirements were aimed at comfort
+        # cooling, not computer room cooling (as per input from the MSC).
+
+        # Get the size threshold requirement
+        search_criteria = {
+          'template' => template,
+          'climate_zone' => climate_zone,
+          'data_center' => true
+        }
+        econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+        minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
+        economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
+      elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
+        # WSHP serving the IT closets are assumed to always be too
+        # small to require an economizer
+        economizer_required = false
+      elsif air_loop_hvac_economizer_required?(air_loop, climate_zone)
+        economizer_required = true
+      end
+
+      if economizer_required
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
         economizer_type = model_economizer_type(model, climate_zone)
@@ -1967,7 +2007,7 @@ Standard.class_eval do
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
         unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for , climate zone #{climate_zone}.  Economizer type will be switched to No Economizer.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for climate zone #{climate_zone}. Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
 
