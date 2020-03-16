@@ -1754,10 +1754,24 @@ class Standard
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
+    # Do not apply the adjustment to some of the system in
+    # the hospital and outpatient which have their minimum
+    # damper position determined based on AIA 2001 ventilation
+    # requirements
+    if (@instvarbuilding_type == 'Hospital' && (air_loop_hvac.name.to_s.include?('VAV_ER') || air_loop_hvac.name.to_s.include?('VAV_ICU') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_OR') || air_loop_hvac.name.to_s.include?('VAV_LABS') ||
+                                                air_loop_hvac.name.to_s.include?('VAV_PATRMS'))) ||
+       (@instvarbuilding_type == 'Outpatient' && air_loop_hvac.name.to_s.include?('Outpatient F1'))
+
+      return true
+    end
+
     # Total uncorrected outdoor airflow rate
     v_ou = 0.0
     air_loop_hvac.thermalZones.each do |zone|
-      v_ou += thermal_zone_outdoor_airflow_rate(zone)
+      # Vou is the system uncorrected outdoor airflow:
+      # Zone airflow is multiplied by the zone multiplier
+      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -1784,6 +1798,10 @@ class Standard
     e_vzs = []
     e_vzs_adj = []
     num_zones_adj = 0
+
+    # Retrieve the sum of the zone minimum primary airflow
+    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
       v_bz = thermal_zone_outdoor_airflow_rate(zone)
@@ -1843,14 +1861,18 @@ class Standard
         end
       end
 
+      # Zone ventilation efficiency calculation is computed
+      # on a per zone basis, the zone primary airflow is
+      # adjusted to removed the zone multiplier
+      v_pz /= zone.multiplier.to_f
+
       # For VAV Reheat terminals, min flow is greater of mdp
       # and min flow rate / design flow rate.
       mdp = mdp_term
-      mdp_oa = min_zn_flow / v_ps
+      mdp_oa = min_zn_flow / v_pz
       if min_zn_flow > 0.0
         mdp = [mdp_term, mdp_oa].max.round(2)
       end
-      # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{self.name}: Zone #{zone.name} mdp_term = #{mdp_term.round(2)}, mdp_oa = #{mdp_oa.round(2)}; mdp_final = #{mdp}")
 
       # Zone minimum discharge airflow rate
       v_dz = v_pz * mdp
@@ -1858,7 +1880,7 @@ class Standard
       # Zone discharge air fraction
       z_d = v_oz / v_dz
 
-      # Zone ventilation effectiveness  !!!
+      # Zone ventilation effectiveness
       e_vz = 1.0 + x_s - z_d
 
       # Store the ventilation effectiveness
@@ -1890,27 +1912,12 @@ class Standard
 
         # Store the ventilation effectiveness
         e_vzs_adj << e_vz_adj
-
         # Round the minimum damper position to avoid nondeterministic results
         # at the ~13th decimal place, which can cause regression errors
         mdp_adj = mdp_adj.round(11)
 
         # Set the adjusted minimum damper position
-        zone.equipment.each do |equip|
-          if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
-            term.setZoneMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
-            term.setZoneMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
-            term.setConstantMinimumAirFlowFraction(mdp_adj)
-          elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-            term = equip.to_AirTerminalSingleDuctVAVReheat.get
-            term.setConstantMinimumAirFlowFraction(mdp_adj)
-          end
-        end
+        air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
 
         num_zones_adj += 1
 
@@ -1936,6 +1943,16 @@ class Standard
     v_ot_adj = v_ou / e_v_adj
     v_ot_adj_cfm = OpenStudio.convert(v_ot_adj, 'm^3/s', 'cfm').get
 
+    # Adjust minimum damper position if the sum of maximum
+    # zone airflow are lower than the calculated system
+    # outdoor air intake
+    if v_ot_adj > vpz_min_sum && v_ot_adj > 0
+      mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min
+      air_loop_hvac.thermalZones.sort.each do |zone|
+        air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
+      end
+    end
+
     # Report out the results of the multizone calculations
     if num_zones_adj > 0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: the multizone outdoor air calculation method was applied.  A simple summation of the zone outdoor air requirements gives a value of #{v_ou_cfm.round} cfm.  Applying the multizone method gives a value of #{v_ot_cfm.round} cfm, with an original system ventilation effectiveness of #{e_v.round(2)}.  After increasing the minimum damper position in #{num_zones_adj} critical zones, the resulting requirement is #{v_ot_adj_cfm.round} cfm with a system ventilation effectiveness of #{e_v_adj.round(2)}.")
@@ -1947,6 +1964,27 @@ class Standard
     # object with the calculated min OA flow rate
     sizing_system = air_loop_hvac.sizingSystem
     sizing_system.setDesignOutdoorAirFlowRate(v_ot_adj)
+
+    return true
+  end
+
+  # Set an air terminal's minimum damper position
+  def air_loop_hvac_set_minimum_damper_position(zone, mdp)
+    zone.equipment.each do |equip|
+      if equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.is_initialized
+        term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolNoReheat.get
+        term.setZoneMinimumAirFlowFraction(mdp)
+      elsif equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.is_initialized
+        term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+        term.setZoneMinimumAirFlowFraction(mdp)
+      elsif equip.to_AirTerminalSingleDuctVAVNoReheat.is_initialized
+        term = equip.to_AirTerminalSingleDuctVAVNoReheat.get
+        term.setConstantMinimumAirFlowFraction(mdp)
+      elsif equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
+        term = equip.to_AirTerminalSingleDuctVAVReheat.get
+        term.setConstantMinimumAirFlowFraction(mdp)
+      end
+    end
 
     return true
   end

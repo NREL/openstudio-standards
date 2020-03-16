@@ -38,7 +38,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 16, 'Large Hotel (90.1-2004) - 600 gal - Off cycle loss coefficient to ambient')
@@ -47,16 +47,17 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons < 18667.44 * 1.005 && on_par_fuel_cons > 18667.44 * 0.995, 'Large Hotel (90.1-2004) - 600 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('300gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 11, 'Large Hotel (90.1-2004) - 300 gal - Off cycle loss coefficient to ambient')
-        assert(e_t < 0.804 * 1.005 && e_t > 0.804 * 0.995, 'Large Hotel (90.1-2004) - 300 gal - Thermal Efficiency')
+        assert(e_t < 0.804 * 1.005, 'Large Hotel (90.1-2004) - 300 gal - Thermal Efficiency')
+        assert(e_t > 0.804 * 0.995, 'Large Hotel (90.1-2004) - 300 gal - Thermal Efficiency')
         assert(off_par_fuel_cons == 0, 'Large Hotel (90.1-2004) - 300 gal - Off cycle parasitic fuel consumption')
         assert(on_par_fuel_cons == 0, 'Large Hotel (90.1-2004) - 300 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('6.0gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 2, 'Large Hotel (90.1-2004) - 6.0 gal - Off cycle loss coefficient to ambient')
@@ -74,7 +75,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 16, 'Large Hotel (90.1-2013) - 600 gal - Off cycle loss coefficient to ambient')
@@ -83,7 +84,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons < 18467.44 * 1.005 && on_par_fuel_cons > 18467.44 * 0.995, 'Large Hotel (90.1-2013) - 600 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('300gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 11, 'Large Hotel (90.1-2013) - 300 gal - Off cycle loss coefficient to ambient')
@@ -92,7 +93,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons == 0, 'Large Hotel (90.1-2013) - 300 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('6.0gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 1, 'Large Hotel (90.1-2013) - 6.0 gal - Off cycle loss coefficient to ambient')
@@ -109,7 +110,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 16, 'Highrise Apt. (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -125,7 +126,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 46, 'Midrise Apt. (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -142,7 +143,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 16, 'Hospital (90.1-2004) - 600 gal - Off cycle loss coefficient to ambient')
@@ -151,7 +152,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons < 20291.76 * 1.005 && on_par_fuel_cons > 20291.76 * 0.995, 'Hospital (90.1-2004) - 600 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('300gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 11, 'Hospital (90.1-2004) - 300 gal - Off cycle loss coefficient to ambient')
@@ -160,7 +161,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons == 0, 'Hospital (90.1-2004) - 300 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('6.0gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 2, 'Large Hotel (90.1-2013) - 6.0 gal - Off cycle loss coefficient to ambient')
@@ -178,7 +179,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('600gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 16, 'Hospital (90.1-2013) - 600 gal - Off cycle loss coefficient to ambient')
@@ -187,7 +188,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons < 20036.76 * 1.005 && on_par_fuel_cons > 20036.76 * 0.995, 'Hospital (90.1-2013) - 600 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('300gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 11, 'Hospital (90.1-2013) - 300 gal - Off cycle loss coefficient to ambient')
@@ -196,7 +197,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons == 0, 'Hospital (90.1-2013) - 300 gal - On cycle parasitic fuel consumption')
       elsif water_heater.name.to_s.include?('6.0gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 1, 'Hospital (90.1-2013) - 6.0 gal - Off cycle loss coefficient to ambient')
@@ -214,7 +215,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('300gal')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0) == 11)
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
@@ -224,7 +225,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
         assert(on_par_fuel_cons < 8296.73 * 1.005 && on_par_fuel_cons > 8296.73 * 0.995, 'Small Hotel (90.1-2013) - 300 gal - On cycle parasitic fuel consumption')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 10, 'Small Hotel (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -241,7 +242,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 2, 'Small Office (90.1-2004) - Off cycle loss coefficient to ambient')
@@ -257,7 +258,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 1, 'Small Office (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -274,12 +275,12 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(off_cycle_loss_coeff_to_amb == 2, 'Full Service Restaurant (90.1-2004) - Booster - Off cycle loss coefficient to ambient')
         assert(e_t == 1, 'Full Service Restaurant (90.1-2004) - Booster - Thermal Efficiency')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 10, 'Full Service Restaurant (90.1-2004) - Off cycle loss coefficient to ambient')
@@ -297,12 +298,12 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(off_cycle_loss_coeff_to_amb == 1, 'Full Service Restaurant (90.1-2013) - Booster - Off cycle loss coefficient to ambient')
         assert(e_t == 1, 'Full Service Restaurant (90.1-2013) - Booster - Thermal Efficiency')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 10, 'Full Service Restaurant (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -319,7 +320,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 4, 'Retail Standalone (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -335,7 +336,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 2, 'Retail Stripmall (90.1-2004) - Off cycle loss coefficient to ambient')
@@ -351,7 +352,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 1, 'Retail Stripmall (90.1-2013) - Off cycle loss coefficient to ambient')
@@ -368,12 +369,12 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(off_cycle_loss_coeff_to_amb == 2, 'Primary School (90.1-2004) - Booster - Off cycle loss coefficient to ambient')
         assert(e_t == 1, 'Primary School (90.1-2004) - Booster - Thermal Efficiency')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 10, 'Primary School (90.1-2004) - Off cycle loss coefficient to ambient')
@@ -391,12 +392,12 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(off_cycle_loss_coeff_to_amb == 1, 'Primary School (90.1-2010) - Booster - Off cycle loss coefficient to ambient')
         assert(e_t == 1, 'Primary School (90.1-2010) - Booster - Thermal Efficiency')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 10, 'Primary School (90.1-2010) - Off cycle loss coefficient to ambient')
@@ -414,12 +415,12 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         assert(off_cycle_loss_coeff_to_amb == 2, 'Secondary School (90.1-2010) - Booster - Off cycle loss coefficient to ambient')
         assert(e_t == 1, 'Secondary School (90.1-2010) - Booster - Thermal Efficiency')
       else
         off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-        e_t = water_heater.heaterThermalEfficiency
+        e_t = water_heater.heaterThermalEfficiency.get
         off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
         on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
         assert(off_cycle_loss_coeff_to_amb == 16, 'Secondary School (90.1-2010) - Off cycle loss coefficient to ambient')
@@ -436,7 +437,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 1, 'Warehouse (90.1-2004) - Off cycle loss coefficient to ambient')
@@ -452,7 +453,7 @@ class TestSHW < CreateDOEPrototypeBuildingTest
     model = TestSHW.model_test(template, building_type)  
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       off_cycle_loss_coeff_to_amb = water_heater.offCycleLossCoefficienttoAmbientTemperature.get.round(0)
-      e_t = water_heater.heaterThermalEfficiency
+      e_t = water_heater.heaterThermalEfficiency.get
       off_par_fuel_cons = water_heater.offCycleParasiticFuelConsumptionRate
       on_par_fuel_cons = water_heater.onCycleParasiticFuelConsumptionRate
       assert(off_cycle_loss_coeff_to_amb == 1, 'Warehouse (90.1-2013) - Off cycle loss coefficient to ambient')

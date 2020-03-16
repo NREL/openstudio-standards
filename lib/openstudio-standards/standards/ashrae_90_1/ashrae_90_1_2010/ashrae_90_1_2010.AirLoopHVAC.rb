@@ -19,14 +19,6 @@ class ASHRAE9012010 < ASHRAE901
       air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     end
 
-    # Second time adjustment:
-    # Only apply to 2010 and 2013 Outpatient (both AHU1 and AHU2)
-    # TODO maybe apply to hospital as well?
-    # TODO refactor: move building-type-specific code to Prototype classes
-    if air_loop_hvac.name.to_s.include? 'Outpatient'
-      air_loop_hvac_adjust_minimum_vav_damper_positions_outpatient(air_loop_hvac)
-    end
-
     return true
   end
 
