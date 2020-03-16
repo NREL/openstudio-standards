@@ -231,4 +231,34 @@ class BTAPPRE1980
     pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(inv_impeller_eff)
   end
 
+  # Adjust the total efficiency, motor efficiency, and pressure rise for constant speed return fans.  This was
+  # introduced since standards only adjust variable speed return fans rather than constant speed return fans.  This was
+  # introduced for BTAPPRE1980 and BTAP1980TO2010 system 3 air loop types with the introduction of return fans.
+  def model_apply_constant_speeed_return_fan_characteristics(model:)
+    standards_fan_total_efficiency = @standards_data["fans"].select {|standards_fan| standards_fan["fan_type"] == "CONSTANT-RETURN"}
+    if standards_fan_total_efficiency.empty?
+      fan_total_efficiency = 0.25
+      puts "No return fan total efficiency found. Defaulting to #{fan_total_efficiency}."
+    else
+      fan_total_efficiency = standards_fan_total_efficiency[0]["fan_total_efficiency"]
+    end
+    standards_fan_motor_efficiency = @standards_data["motors"].select {|standards_motor| (standards_motor["motor_use"] == "FAN" && standards_motor["motor_type"] == "CONSTANT-RETURN")}
+    if standards_fan_motor_efficiency.empty?
+      fan_motor_efficiency = 0.385
+      puts "No return fan motor efficiency found. Defaulting to #{fan_motor_efficiency}."
+    else
+      fan_motor_efficiency = standards_fan_motor_efficiency[0]["nominal_full_load_efficiency"]
+    end
+    fan_pressure_rise = @standards_data["constants"]["return_fan_constant_volume_pressure_rise_value"]["value"]
+    if fan_pressure_rise.nil?
+      fan_pressure_rise = 150.0
+      puts "No return fan pressure rise found. Defaulting to #{fan_pressure_rise}."
+    end
+    ret_fans = model.getFanConstantVolumes.select {|ret_fan| ret_fan.endUseSubcategory.to_s == "Return_Fan"}
+    ret_fans.each do |ret_fan|
+      ret_fan.setPressureRise(fan_pressure_rise)
+      ret_fan.setFanTotalEfficiency(fan_total_efficiency)
+      ret_fan.setMotorEfficiency(fan_motor_efficiency)
+    end
+  end
 end

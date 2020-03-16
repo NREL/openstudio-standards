@@ -19,6 +19,17 @@
         },
         {
           "motor_use": "FAN",
+          "motor_type": "CONSTANT-RETURN",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.385,
+          "notes": "Total efficiency of 25% from table 5.4.1.A of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.25/0.65)"
+        },
+        {
+          "motor_use": "FAN",
           "motor_type": "VARIABLE",
           "number_of_poles": 4.0,
           "type": "Enclosed",
