@@ -583,7 +583,7 @@ class Standard
         if construction.is_initialized
           construction_name = construction.get.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, could not determine construction for #{sub_surface.name}, will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, could not determine construction for #{sub_surface.name}, will not be included in space_sidelighting_effective_aperture(space) calculation.")
           next
         end
 
@@ -591,9 +591,8 @@ class Standard
         if construction_name_to_vt_map[construction_name].nil?
 
           # Get the VT from construction (Simple Glazing) if available
-          vt = construction.visibleTransmittance
-          if vt.is_initialized
-            construction_name_to_vt_map[construction_name] = vt.get
+          if construction.is_initialized && construction.get.visibleTransmittance.is_initialized
+            construction_name_to_vt_map[construction_name] = construction.get.visibleTransmittance.get
           else
             # get the VT from the sql file
             sql = space.model.sqlFile
@@ -612,7 +611,7 @@ class Standard
               if row_id.is_initialized
                 row_id = row_id.get
               else
-                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in  space_sidelighting_effective_aperture(space)  calculation.")
+                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "VT row ID not found for construction: #{construction_name}, #{sub_surface.name} will not be included in space_sidelighting_effective_aperture(space) calculation.")
                 row_id = 9999
               end
 
@@ -706,9 +705,8 @@ class Standard
         if construction_name_to_vt_map[construction_name].nil?
 
           # Get the VT from construction (Simple Glazing) if available
-          vt = construction.visibleTransmittance
-          if vt.is_initialized
-            construction_name_to_vt_map[construction_name] = vt.get
+          if construction.is_initialized && construction.get.visibleTransmittance.is_initialized
+            construction_name_to_vt_map[construction_name] = construction.get.visibleTransmittance.get
           else
             # get the VT from the sql file
             sql = space.model.sqlFile
