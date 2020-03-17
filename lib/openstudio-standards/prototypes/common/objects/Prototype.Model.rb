@@ -488,7 +488,7 @@ Standard.class_eval do
       below_grade_wall_height = model_get_space_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
-      c_factor_wall_name = "Basement Wall C-Factor #{c_factor} Height #{below_grade_wall_height.round(1)}"
+      c_factor_wall_name = "Basement Wall C-Factor #{c_factor.round(2)} Height #{below_grade_wall_height.round(2)}"
 
       # Check if the wall construction has been constructed already. If so, look it up in the model
       if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
