@@ -699,7 +699,7 @@ class Standard
           construction = construction.get
           construction_name = construction.name.get.upcase
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, ")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "For #{space.name}, could not determine construction for #{sub_surface.name}, will not be included in space_skylight_effective_aperture(space) calculation.")
           next
         end
 
