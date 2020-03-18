@@ -34,7 +34,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'public_suffix', '3.0.3' # fixing version of google-api-client dependency
   spec.add_development_dependency 'faraday', '0.15.4' # fixing version of google-api-client dependency
+  spec.add_development_dependency 'signet', '< 0.12.0' # development dependency for google-api-client
+  spec.add_development_dependency 'launchy', '< 2.5.0' # development dependency for google-api-client
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
+  spec.add_development_dependency 'simplecov-html', '< 0.11.0'
   spec.add_development_dependency 'codecov' # to perform code coverage checking
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
