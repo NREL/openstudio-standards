@@ -547,7 +547,7 @@ Standard.class_eval do
     building_type_category = construction_set_data['exterior_floor_building_category']
 
     # Find Floor F factor
-    floor_construction_properties = model_get_construction_properties(model, climate_zone, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
+    floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
     f_factor = floor_construction_properties['assembly_maximum_f_factor'] * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
