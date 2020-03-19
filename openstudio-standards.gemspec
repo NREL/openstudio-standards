@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license = 'LGPL'
 
   spec.required_ruby_version = '>= 2.5.1'
-  spec.required_rubygems_version = '>= 2.1.0'
+  spec.required_rubygems_version = '>= 1.3.6'
 
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
   # spec.test_files = Dir['test/**/*']
@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
   spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
-  spec.add_development_dependency 'bundler', '~> 1.9'
+  spec.add_development_dependency 'bundler', '~> 2.1.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'yard', '~> 0.9'
   spec.add_development_dependency 'rubocop', '0.68.1'
