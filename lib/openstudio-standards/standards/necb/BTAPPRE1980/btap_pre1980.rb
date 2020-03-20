@@ -74,7 +74,7 @@ class BTAPPRE1980 < NECB2011
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
-    model_apply_constant_speeed_return_fan_characteristics(model: model)
+    model_apply_constant_speed_return_fan_characteristics(model: model)
   end
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method

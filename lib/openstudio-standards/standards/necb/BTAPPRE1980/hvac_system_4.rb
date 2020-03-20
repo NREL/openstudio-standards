@@ -128,6 +128,8 @@ class BTAPPRE1980
       #              Connect heat exchanger
       #              oa_node = oa_system.outboardOANode
       #              heat_exchanger.addToNode(oa_node.get)
+    fan_data = @standards_data["fans"]
+    exhaust_fan_name = 'Sys_4_zone_exhaust_fan'
     zones.each do |zone|
       sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
@@ -142,15 +144,7 @@ class BTAPPRE1980
                           hw_loop: hw_loop,
                           model: model,
                           zone: zone)
-      outdoor_air = 0.0
-      zone.spaces.sort.each do |space|
-        outdoor_air_rate = space.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea
-        floor_area = space.floorArea
-        outdoor_air += (outdoor_air_rate*floor_area)
-      end
-      exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      exhaust_fan.setSystemAvailabilityManegerCouplingMode = 'Coupled'
-      exhaust_fan.setMaximumFlowRate(outdoor_air.to_f)
+      add_exhaust_fan(zone: zone, model: model, fan_data: fan_data, name: exhaust_fan_name)
     end # zone loop
 
     return true

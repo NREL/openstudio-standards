@@ -234,25 +234,25 @@ class BTAPPRE1980
   # Adjust the total efficiency, motor efficiency, and pressure rise for constant speed return fans.  This was
   # introduced since standards only adjust variable speed return fans rather than constant speed return fans.  This was
   # introduced for BTAPPRE1980 and BTAP1980TO2010 system 3 air loop types with the introduction of return fans.
-  def model_apply_constant_speeed_return_fan_characteristics(model:)
+  def model_apply_constant_speed_return_fan_characteristics(model:)
     standards_fan_total_efficiency = @standards_data["fans"].select {|standards_fan| standards_fan["fan_type"] == "CONSTANT-RETURN"}
     if standards_fan_total_efficiency.empty?
       fan_total_efficiency = 0.25
-      puts "No return fan total efficiency found. Defaulting to #{fan_total_efficiency}."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_contant_speed_return_fan_characteristics', "Cannot find return fan data in standards fans data.  Defaulting total fan efficinecy to #{fan_total_efficiency}.")
     else
       fan_total_efficiency = standards_fan_total_efficiency[0]["fan_total_efficiency"]
     end
     standards_fan_motor_efficiency = @standards_data["motors"].select {|standards_motor| (standards_motor["motor_use"] == "FAN" && standards_motor["motor_type"] == "CONSTANT-RETURN")}
     if standards_fan_motor_efficiency.empty?
       fan_motor_efficiency = 0.385
-      puts "No return fan motor efficiency found. Defaulting to #{fan_motor_efficiency}."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_contant_speed_return_fan_characteristics', "Cannot find return fan motor data in standards fans data.  Defaulting fan moter efficinecy to #{fan_motor_efficiency}.")
     else
       fan_motor_efficiency = standards_fan_motor_efficiency[0]["nominal_full_load_efficiency"]
     end
     fan_pressure_rise = @standards_data["constants"]["return_fan_constant_volume_pressure_rise_value"]["value"]
     if fan_pressure_rise.nil?
       fan_pressure_rise = 150.0
-      puts "No return fan pressure rise found. Defaulting to #{fan_pressure_rise}."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_contant_speed_return_fan_characteristics', "Cannot find return fan pressure data in constants data.  Defaulting total fan pressure rise to #{fan_pressure_rise}.")
     end
     ret_fans = model.getFanConstantVolumes.select {|ret_fan| ret_fan.endUseSubcategory.to_s == "Return_Fan"}
     ret_fans.each do |ret_fan|
@@ -260,5 +260,33 @@ class BTAPPRE1980
       ret_fan.setFanTotalEfficiency(fan_total_efficiency)
       ret_fan.setMotorEfficiency(fan_motor_efficiency)
     end
+  end
+
+  def add_exhaust_fan(zone:, model:, fan_data:, name:)
+    fan_eff_data = fan_data.select {|standards_fan| standards_fan["fan_type"] == "EXHAUST"}
+    if fan_eff_data.empty?
+      fan_eff = 0.25
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.add_exhaust_fan', "Cannot find exhaust fan data in standards fans data.  Defaulting total fan efficinecy to #{fan_eff}.")
+    else
+      fan_eff = fan_eff_data[0]["fan_total_efficiency"]
+    end
+    fan_pressure_rise = @standards_data["constants"]["exaust_fan_pressure_rise_value"]["value"]
+    if fan_pressure_rise.nil?
+      fan_pressure_rise = 125.0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.add_exhaust_fan', "Cannot find exhaust fan pressure data in constants data.  Defaulting total fan pressure rise to #{fan_pressure_rise}.")
+    end
+    outdoor_air = 0.0
+    zone.spaces.sort.each do |space|
+      outdoor_air_rate = space.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea
+      floor_area = space.floorArea
+      outdoor_air += (outdoor_air_rate*floor_area)
+    end
+    exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+    exhaust_fan.setName(name)
+    exhaust_fan.setSystemAvailabilityManagerCouplingMode('Coupled')
+    exhaust_fan.setMaximumFlowRate(outdoor_air.to_f)
+    exhaust_fan.setFanTotalEfficiency(fan_eff)
+    exhaust_fan.setPressureRise(fan_pressure_rise)
+    exhaust_fan.addToThermalZone(zone)
   end
 end
