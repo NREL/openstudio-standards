@@ -1165,6 +1165,8 @@ class NECB2011
       fan.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
       fan.setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
       fan.setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+    elsif fan.class.name == 'OpenStudio::Model::FanZoneExhaust'
+      motor_type = 'CONSTANT-RETURN'
     else
       raise('')
     end

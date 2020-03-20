@@ -108,7 +108,7 @@
     "units": "",
     "notes": ""
   },
-    "exaust_fan_pressure_rise_value": {
+    "exhaust_fan_pressure_rise_value": {
       "data_type": "value",
       "refs": [
         "Pressure rise value for most entries in ASHRAE 90.1-2010 Table 6.5.3.1.1B"
