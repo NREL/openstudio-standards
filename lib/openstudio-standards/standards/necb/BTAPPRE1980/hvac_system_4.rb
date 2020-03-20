@@ -142,6 +142,15 @@ class BTAPPRE1980
                           hw_loop: hw_loop,
                           model: model,
                           zone: zone)
+      outdoor_air = 0.0
+      zone.spaces.sort.each do |space|
+        outdoor_air_rate = space.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea
+        floor_area = space.floorArea
+        outdoor_air += (outdoor_air_rate*floor_area)
+      end
+      exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+      exhaust_fan.setSystemAvailabilityManegerCouplingMode = 'Coupled'
+      exhaust_fan.setMaximumFlowRate(outdoor_air.to_f)
     end # zone loop
 
     return true
