@@ -231,34 +231,86 @@ class BTAPPRE1980
     pump.setDesignShaftPowerPerUnitFlowRatePerUnitHead(inv_impeller_eff)
   end
 
-  # Adjust the total efficiency, motor efficiency, and pressure rise for constant speed return fans.  This was
-  # introduced since standards only adjust variable speed return fans rather than constant speed return fans.  This was
-  # introduced for BTAPPRE1980 and BTAP1980TO2010 system 3 air loop types with the introduction of return fans.
-  def model_apply_constant_speeed_return_fan_characteristics(model:)
-    standards_fan_total_efficiency = @standards_data["fans"].select {|standards_fan| standards_fan["fan_type"] == "CONSTANT-RETURN"}
+  # Adjust the total efficiency, motor efficiency (if applicable), and pressure rise for fans used in BTAPPRE1980 and
+  # BTAP1980TO2010.  This probably should be implemented a different way but rather than truly understanding the code
+  # I wrote this.  So far it applies fan performance to system 3 return fans and to zone exhaust fans which were added
+  # to BTAPPRE1980 and BTAP1980TO2010 since they are not used in NECB2011, NECB2015, or NECB2017.
+  def model_apply_existing_building_fan_performance(model:)
+    ret_fans = model.getFanConstantVolumes.select {|ret_fan| ret_fan.endUseSubcategory.to_s == "Return_Fan"}
+    unless ret_fans.empty?
+      fan_type = 'CONSTANT-RETURN'
+      motor_type = 'CONSTANT-RETURN'
+      pressure_rise = 'return_fan_constant_volume_pressure_rise_value'
+      fan_hash = get_fan_chars(fan_type: fan_type, motor_type: motor_type, press_rise: pressure_rise)
+      ret_fans.each do |ret_fan|
+        ret_fan.setPressureRise(fan_hash[:press_rise].to_f)
+        ret_fan.setFanTotalEfficiency(fan_hash[:total_eff].to_f)
+        ret_fan.setMotorEfficiency(fan_hash[:motor_eff].to_f)
+      end
+      exhaust_fans = model.getFanZoneExhausts
+      unless exhaust_fans.empty?
+        fan_type = 'EXHAUST'
+        pressure_rise = 'exhaust_fan_pressure_rise_value'
+        fan_hash = get_fan_chars(fan_type: fan_type, press_rise: pressure_rise)
+        exhaust_fans.sort.each do |exhaust_fan|
+          exhaust_fan.setFanTotalEfficiency(fan_hash[:total_eff])
+          exhaust_fan.setPressureRise(fan_hash[:press_rise])
+        end
+      end
+    end
+  end
+
+  # This method gets the required fan performance characteristics.  It would probably be better to change the
+  # appropriate methods in standards or prototype or create another class but I did this here for expediency.
+  # The method looks for:
+  # -the total fan efficiency in fans.json (a custom json just for BTAP vintage files)
+  # -the motor efficiency (if applicable) in moters.json
+  # -the pressure rise in constants.json
+  # If the above cannot be found it defaults values (this should not happen).
+  # The method return a hash containing the total fan efficiency, motor efficiency and pressure rise.
+  def get_fan_chars(fan_type:, motor_type: nil, press_rise:)
+    standards_fan_total_efficiency = @standards_data["fans"].select {|standards_fan| standards_fan["fan_type"] == fan_type}
     if standards_fan_total_efficiency.empty?
       fan_total_efficiency = 0.25
-      puts "No return fan total efficiency found. Defaulting to #{fan_total_efficiency}."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan data in standards fans data.  Defaulting total fan efficiency to #{fan_total_efficiency}.")
     else
       fan_total_efficiency = standards_fan_total_efficiency[0]["fan_total_efficiency"]
     end
-    standards_fan_motor_efficiency = @standards_data["motors"].select {|standards_motor| (standards_motor["motor_use"] == "FAN" && standards_motor["motor_type"] == "CONSTANT-RETURN")}
-    if standards_fan_motor_efficiency.empty?
-      fan_motor_efficiency = 0.385
-      puts "No return fan motor efficiency found. Defaulting to #{fan_motor_efficiency}."
-    else
-      fan_motor_efficiency = standards_fan_motor_efficiency[0]["nominal_full_load_efficiency"]
+    fan_motor_efficiency = nil
+    unless motor_type.nil?
+      standards_fan_motor_efficiency = @standards_data["motors"].select {|standards_motor| (standards_motor["motor_use"] == "FAN" && standards_motor["motor_type"] == motor_type)}
+      if standards_fan_motor_efficiency.empty?
+        fan_motor_efficiency = 0.385
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan motor data in standards fans data.  Defaulting fan moter efficinecy to #{fan_motor_efficiency}.")
+      else
+        fan_motor_efficiency = standards_fan_motor_efficiency[0]["nominal_full_load_efficiency"]
+      end
     end
-    fan_pressure_rise = @standards_data["constants"]["return_fan_constant_volume_pressure_rise_value"]["value"]
+    fan_pressure_rise = @standards_data["constants"][press_rise]["value"]
     if fan_pressure_rise.nil?
       fan_pressure_rise = 150.0
-      puts "No return fan pressure rise found. Defaulting to #{fan_pressure_rise}."
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.model_apply_existing_building_fan_characteristics', "Cannot find fan pressure data in constants data.  Defaulting total fan pressure rise to #{fan_pressure_rise}.")
     end
-    ret_fans = model.getFanConstantVolumes.select {|ret_fan| ret_fan.endUseSubcategory.to_s == "Return_Fan"}
-    ret_fans.each do |ret_fan|
-      ret_fan.setPressureRise(fan_pressure_rise)
-      ret_fan.setFanTotalEfficiency(fan_total_efficiency)
-      ret_fan.setMotorEfficiency(fan_motor_efficiency)
+    return {
+        total_eff: fan_total_efficiency,
+        motor_eff: fan_motor_efficiency,
+        press_rise: fan_pressure_rise
+    }
+  end
+
+  # This adds a zone exhaust fan to the zone passed to it.  The flow rate for the exhaust fan is set to the sum of the
+  # outdoor air requirements for the spaces in the zone.  If the exhaust fan is set to run whenever the supply fan runs.
+  def add_exhaust_fan(zone:, model:, name:)
+    outdoor_air = 0.0
+    zone.spaces.sort.each do |space|
+      outdoor_air_rate = space.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea
+      floor_area = space.floorArea
+      outdoor_air += (outdoor_air_rate*floor_area)
     end
+    exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+    exhaust_fan.setName(name)
+    exhaust_fan.setSystemAvailabilityManagerCouplingMode('Coupled')
+    exhaust_fan.setMaximumFlowRate(outdoor_air.to_f)
+    exhaust_fan.addToThermalZone(zone)
   end
 end

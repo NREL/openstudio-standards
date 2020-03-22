@@ -128,6 +128,7 @@ class BTAPPRE1980
       #              Connect heat exchanger
       #              oa_node = oa_system.outboardOANode
       #              heat_exchanger.addToNode(oa_node.get)
+    exhaust_fan_name = 'Sys_4_zone_exhaust_fan'
     zones.each do |zone|
       sizing_zone = zone.sizingZone
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
@@ -142,6 +143,7 @@ class BTAPPRE1980
                           hw_loop: hw_loop,
                           model: model,
                           zone: zone)
+      add_exhaust_fan(zone: zone, model: model, name: exhaust_fan_name)
     end # zone loop
 
     return true
