@@ -1341,7 +1341,7 @@
       "exterior_wall_standards_construction_type": "Metal Building",
       "exterior_wall_building_category": "Semiheated",
       "exterior_floor_standards_construction_type": "Mass",
-      "exterior_floor_building_category": "Nonresidential",
+      "exterior_floor_building_category": "Semiheated",
       "exterior_roof_standards_construction_type": "Metal Building",
       "exterior_roof_building_category": "Semiheated",
       "interior_walls": "Typical Interior Wall",
