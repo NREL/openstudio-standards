@@ -326,8 +326,8 @@ Standard.class_eval do
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
     # Buildings default to using the ground FC factor method
-    model_set_below_grade_wall_constructions(model, building_type, climate_zone)
-    model_set_floor_constructions(model, building_type, climate_zone)
+    model_set_below_grade_wall_constructions(model, @lookup_building_type, climate_zone)
+    model_set_floor_constructions(model, @lookup_building_type, climate_zone)
 
     basement_wall_construction = OpenStudio::Model::Construction.new(model)
     basement_wall_construction.setName('Basement Wall construction')
