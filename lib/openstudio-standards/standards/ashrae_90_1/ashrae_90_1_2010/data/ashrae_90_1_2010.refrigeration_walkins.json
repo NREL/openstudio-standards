@@ -35,10 +35,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -76,10 +76,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -117,10 +117,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -158,10 +158,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -199,10 +199,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -240,10 +240,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -363,10 +363,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -568,10 +568,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -609,10 +609,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -732,10 +732,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -937,10 +937,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -978,10 +978,10 @@
       "temperatureterminationdefrostfractiontoice": null,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1019,10 +1019,10 @@
       "temperatureterminationdefrostfractiontoice": null,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1060,10 +1060,10 @@
       "temperatureterminationdefrostfractiontoice": null,
       "restocking_schedule": "Always Off",
       "lighting_schedule": "Always On",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1101,10 +1101,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "RestaurantSitDown Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "RestaurantSitDown BLDG_LIGHT_KITCHEN_SCH_2004_2007",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1142,10 +1142,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "Hospital Kitchen_Flr_5_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "Hospital BLDG_LIGHT_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1183,10 +1183,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "HotelLarge Kitchen_Flr_6_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "HotelLarge BLDG_LIGHT_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1224,10 +1224,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1265,10 +1265,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "RestaurantFastFood walkin_occ_lght_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     },
     {
@@ -1306,10 +1306,10 @@
       "temperatureterminationdefrostfractiontoice": 0.7,
       "restocking_schedule": "SchoolSecondary Kitchen_ZN_1_FLR_1_Case:1_WALKINFREEZER_WalkInStockingSched",
       "lighting_schedule": "SchoolSecondary BLDG_LIGHT_SCH",
-      "minutes_defrost": null,
-      "defrost_per_day": null,
-      "minutes_dripdown": null,
-      "dripdown_per_day": null,
+      "minutes_defrost": 0.0,
+      "defrost_per_day": 0.0,
+      "minutes_dripdown": 0.0,
+      "dripdown_per_day": 0.0,
       "doorway_protection_type": "StripCurtain"
     }
   ]
