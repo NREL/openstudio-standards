@@ -286,7 +286,8 @@ class Standard
                        oa_damper_sch: system['CRAC_oa_damper_schedule'],
                        fan_location: 'DrawThrough',
                        fan_type: system['CRAC_fan_type'],
-                       cooling_type: system['CRAC_cooling_type'])
+                       cooling_type: system['CRAC_cooling_type'],
+                       supply_temp_sch: nil)
 
       when 'CRAH' # Large Data Center (standalone)
         # Retrieve the existing chilled water loop or add a new one if necessary.
@@ -319,7 +320,8 @@ class Standard
                        chilled_water_loop: chilled_water_loop,
                        hvac_op_sch: system['operation_schedule'],
                        oa_damper_sch: system['oa_damper_schedule'],
-                       return_plenum: nil)
+                       return_plenum: nil,
+                       supply_temp_sch: nil)
 
       when 'SAC'
         model_add_split_ac(model,

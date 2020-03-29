@@ -2915,7 +2915,8 @@ class Standard
                      oa_damper_sch: nil,
                      fan_location: 'DrawThrough',
                      fan_type: 'ConstantVolume',
-                     cooling_type: 'Single Speed DX AC')
+                     cooling_type: 'Single Speed DX AC',
+                     supply_temp_sch: nil)
 
     # hvac operation schedule
     if hvac_op_sch.nil?
@@ -3073,16 +3074,17 @@ class Standard
       zone.setZoneControlHumidistat(humidistat)
 
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
-      # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
-      setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
-      setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+      if supply_temp_sch.nil?
+        supply_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                              dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                              name = "AHU Supply Temp Sch")
+      end
+      setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
+      setpoint_mgr_cooling.setName("CRAC supply air setpoint manager")
+      setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
       # Add the OA system
       oa_system.addToNode(supply_inlet_node)
-
-      # Attach the setpoint manager to the supply outlet node
-      setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
       # set air loop availability controls
       air_loop.setAvailabilitySchedule(hvac_op_sch)
@@ -3117,7 +3119,8 @@ class Standard
                      chilled_water_loop: nil,
                      hvac_op_sch: nil,
                      oa_damper_sch: nil,
-                     return_plenum: nil)
+                     return_plenum: nil,
+                     supply_temp_sch: nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CRAH system for #{thermal_zones.size} zones data center.")
     thermal_zones.each do |zone|
@@ -3167,10 +3170,12 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 0.3)
 
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
-    # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
-    setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
-    setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
-    setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+    if supply_temp_sch.nil?
+      supply_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                            dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                            name = "AHU Supply Temp Sch")
+    end
+    setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
     setpoint_mgr_cooling.setName("CRAH supply air setpoint manager")
     setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
@@ -3200,8 +3205,7 @@ class Standard
                                 chilled_water_loop,
                                 air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Water Clg Coil",
-                                schedule: hvac_op_sch,
-                                design_outlet_air_temperature: dsgn_temps['clg_dsgn_sup_air_temp_c'])
+                                schedule: hvac_op_sch)
     end
 
     # outdoor air intake system
