@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
   spec.add_development_dependency 'nokogiri', '~> 1.8.2'
-  spec.add_development_dependency 'bundler', '~> 2.1'
+  spec.add_development_dependency 'bundler', '< 2.0.0'
   spec.add_development_dependency 'rake', '~> 12.3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
   spec.add_development_dependency 'rubocop', '~> 0.80.1'
