@@ -2195,10 +2195,7 @@ class Standard
       material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
       material.setName(material_name)
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu', 'm^2*K/W').get)
-
       material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
-      material.setDensity(OpenStudio.convert(data['density'].to_f, 'lb/ft^3', 'kg/m^3').get)
-      material.setSpecificHeat(OpenStudio.convert(data['specific_heat'].to_f, 'Btu/lb*R', 'J/kg*K').get)
       material.setThermalAbsorptance(data['thermal_absorptance'].to_f)
       material.setSolarAbsorptance(data['solar_absorptance'].to_f)
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
