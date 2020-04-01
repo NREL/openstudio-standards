@@ -169,7 +169,7 @@ class Standard
     plant_loop_enable_supply_water_temperature_reset(plant_loop)
 
     # Boiler properties
-    if model.version < OpenStudio::VersionString.new('3.0.0')
+    if plant_loop.model.version < OpenStudio::VersionString.new('3.0.0')
       plant_loop.supplyComponents.each do |sc|
         if sc.to_BoilerHotWater.is_initialized
           boiler = sc.to_BoilerHotWater.get
