@@ -11,6 +11,7 @@ class Standard
   # @param eff_curve_temp_eval_var [String] LeavingBoiler or EnteringBoiler temperature for the boiler efficiency curve
   # @param flow_mode [String] boiler flow mode
   # @param lvg_temp_dsgn [Double] boiler leaving design temperature, degrees Fahrenheit
+  #   note that this field is deprecated in OS versions 3.0+
   # @param out_temp_lmt [Double] boiler outlet temperature limit, degrees Fahrenheit
   # @param min_plr [Double] boiler minimum part load ratio
   # @param max_plr [Double] boiler maximum part load ratio
@@ -67,10 +68,12 @@ class Standard
       boiler.setBoilerFlowMode(flow_mode)
     end
 
-    if lvg_temp_dsgn.nil?
-      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(180.0, 'F', 'C').get)
-    else
-      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(lvg_temp_dsgn, 'F', 'C').get)
+    if model.version < OpenStudio::VersionString.new('3.0.0')
+      if lvg_temp_dsgn.nil?
+        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(180.0, 'F', 'C').get)
+      else
+        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(lvg_temp_dsgn, 'F', 'C').get)
+      end
     end
 
     if !out_temp_lmt.nil?
@@ -81,7 +84,9 @@ class Standard
 
     # logic to set different defaults for condensing boilers if not specified
     if draft_type == 'Condensing'
-      boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get) if lvg_temp_dsgn.nil?
+      if model.version < OpenStudio::VersionString.new('3.0.0')
+        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get) if lvg_temp_dsgn.nil?
+      end
       boiler.setNominalThermalEfficiency(0.96) if nominal_thermal_efficiency.nil?
     end
 
