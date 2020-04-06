@@ -36,17 +36,17 @@
         {
           "boundary_condition": "Ground",
           "surface": "Wall",
-          "formula": "( hdd < 3000) ? 15.16 : ( hdd < 4000) ? 15.16 : ( hdd < 7000) ? 15.16 : 15.16"
+          "formula": "( hdd < 3000) ? 0.678 : ( hdd < 4000) ? 0.678 : ( hdd < 7000) ? 0.678 : 0.678"
         },
         {
           "boundary_condition": "Ground",
           "surface": "RoofCeiling",
-          "formula": "( hdd < 3000) ? 15.16 : ( hdd < 4000) ? 15.16 : ( hdd < 7000) ? 15.16 : 15.16"
+          "formula": "( hdd < 3000) ? 0.678 : ( hdd < 4000) ? 0.678 : ( hdd < 7000) ? 0.678 : 0.678"
         },
         {
           "boundary_condition": "Ground",
           "surface": "Floor",
-          "formula": "( hdd < 7000) ? 15.16 : 15.16"
+          "formula": "( hdd < 7000) ? 0.678 : 0.678"
         }
       ]
     }
