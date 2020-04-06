@@ -312,7 +312,8 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  condenser_water_loop: condenser_water_loop)
+                                                  condenser_water_loop: condenser_water_loop,
+                                                  waterside_economizer: system['waterside_economizer'])
         end
         model_add_crah(model,
                        thermal_zones,

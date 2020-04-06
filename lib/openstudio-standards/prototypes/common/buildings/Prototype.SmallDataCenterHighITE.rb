@@ -33,19 +33,16 @@ module SmallDataCenterHighITE
       elec_equip_sch = space_type_properties['electric_equipment_schedule']
       elec_equip_have_info = true unless elec_equip_per_area.zero?
 
-      # The way ITE object is designed can't input the CPU load and IT fan power separately
-      # calculation below is to indirectly address this
-      total_power_input_per_area = elec_equip_per_area.to_f * (1 + 0.4)  # assuming IT fan power is 0.4 of total CPU load
-      it_fan_power_ratio = elec_equip_per_area.to_f * 0.4/total_power_input_per_area
+      it_fan_power_ratio = 0.4/(1+0.4)   # assuming IT fan power is 0.4 of total CPU load
 
       if (space_type.name.get.downcase.include?('computer')) || (space_type.name.get.downcase.include?('datacenter'))
         if elec_equip_have_info
           it_equipment_def = OpenStudio::Model::ElectricEquipmentITEAirCooledDefinition.new(model)
           it_equipment_def.setName("IT equipment def")
-          it_equipment_def.setWattsperZoneFloorArea(OpenStudio.convert(total_power_input_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-          it_equipment_def.setDesignFanAirFlowRateperPowerInput(0.0001*(1-it_fan_power_ratio))
+          it_equipment_def.setWattsperZoneFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+          it_equipment_def.setDesignFanAirFlowRateperPowerInput(0.0001)
           it_equipment_def.setDesignFanPowerInputFraction(it_fan_power_ratio)
-          it_equipment_def.setDesignEnteringAirTemperature(27)    # recommended SAT 18-27C, use the middle T as design
+          it_equipment_def.setDesignEnteringAirTemperature(22.5)    # recommended SAT 18-27C, use the middle T as design
           it_equipment_def.setAirFlowCalculationMethod("FlowControlWithApproachTemperatures")
           # Set the approach temperatures based on CFD simulation results
           it_equipment_def.setSupplyTemperatureDifference(8.3)   # This is under fully open configuration assumption, based on the lookup table in scorecard
