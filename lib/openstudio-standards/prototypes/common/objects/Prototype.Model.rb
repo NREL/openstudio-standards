@@ -242,6 +242,89 @@ Standard.class_eval do
     return true
   end
 
+  # Checks to see if the an adiabatic floor construction has been constructed in an OpenStudio model.
+  # If so, it returns it. If not, it constructs an adiabatic floor construction, adds it to the model,
+  # and then returns it.
+  # @return [OpenStudio::Model::Construction]
+  def model_get_adiabatic_floor_construction(model)
+    adiabatic_construction_name = 'Floor Adiabatic construction'
+
+    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
+    if model.getConstructionByName(adiabatic_construction_name).is_initialized
+      return model.getConstructionByName(adiabatic_construction_name).get
+    else
+      # Assign construction to adiabatic construction
+      cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+      cp02_carpet_pad.setName('CP02 CARPET PAD')
+      cp02_carpet_pad.setRoughness('VeryRough')
+      cp02_carpet_pad.setThermalResistance(0.21648)
+      cp02_carpet_pad.setThermalAbsorptance(0.9)
+      cp02_carpet_pad.setSolarAbsorptance(0.7)
+      cp02_carpet_pad.setVisibleAbsorptance(0.8)
+
+      normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+      normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
+      normalweight_concrete_floor.setRoughness('MediumSmooth')
+      normalweight_concrete_floor.setThickness(0.1016)
+      normalweight_concrete_floor.setConductivity(2.31)
+      normalweight_concrete_floor.setDensity(2322)
+      normalweight_concrete_floor.setSpecificHeat(832)
+
+      nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+      nonres_floor_insulation.setName('Nonres_Floor_Insulation')
+      nonres_floor_insulation.setRoughness('MediumSmooth')
+      nonres_floor_insulation.setThermalResistance(2.88291975297193)
+      nonres_floor_insulation.setThermalAbsorptance(0.9)
+      nonres_floor_insulation.setSolarAbsorptance(0.7)
+      nonres_floor_insulation.setVisibleAbsorptance(0.7)
+
+      floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+      floor_adiabatic_construction.setName(adiabatic_construction_name)
+      floor_layers = OpenStudio::Model::MaterialVector.new
+      floor_layers << cp02_carpet_pad
+      floor_layers << normalweight_concrete_floor
+      floor_layers << nonres_floor_insulation
+      floor_adiabatic_construction.setLayers(floor_layers)
+
+      return floor_adiabatic_construction
+    end
+
+  end
+
+  # Checks to see if the an adiabatic wall construction has been constructed in an OpenStudio model.
+  # If so, it returns it. If not, it constructs an adiabatic wall construction, adds it to the model,
+  # and then returns it.
+  # @return [OpenStudio::Model::Construction]
+  def model_get_adiabatic_wall_construction(model)
+    adiabatic_construction_name = 'Wall Adiabatic construction'
+
+    #Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
+    if model.getConstructionByName(adiabatic_construction_name).is_initialized
+      return model.getConstructionByName(adiabatic_construction_name).get
+    else
+      g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+      g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
+      g01_13mm_gypsum_board.setRoughness('Smooth')
+      g01_13mm_gypsum_board.setThickness(0.0127)
+      g01_13mm_gypsum_board.setConductivity(0.1600)
+      g01_13mm_gypsum_board.setDensity(800)
+      g01_13mm_gypsum_board.setSpecificHeat(1090)
+      g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
+      g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
+      g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
+
+      wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+      wall_adiabatic_construction.setName(adiabatic_construction_name)
+      wall_layers = OpenStudio::Model::MaterialVector.new
+      wall_layers << g01_13mm_gypsum_board
+      wall_layers << g01_13mm_gypsum_board
+      wall_adiabatic_construction.setLayers(wall_layers)
+
+      return wall_adiabatic_construction
+    end
+
+  end
+
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
   # Where there is a separate construction set specified for the
@@ -266,7 +349,10 @@ Standard.class_eval do
         new_lookup_building_type = model_get_lookup_name(building_type)
     end
 
-    # Assign construction to adiabatic construction
+    #Construct adiabatic constructions
+    floor_adiabatic_construction = model_get_adiabatic_floor_construction(model)
+    wall_adiabatic_construction = model_get_adiabatic_wall_construction(model)
+
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
     cp02_carpet_pad.setName('CP02 CARPET PAD')
     cp02_carpet_pad.setRoughness('VeryRough')
@@ -274,48 +360,6 @@ Standard.class_eval do
     cp02_carpet_pad.setThermalAbsorptance(0.9)
     cp02_carpet_pad.setSolarAbsorptance(0.7)
     cp02_carpet_pad.setVisibleAbsorptance(0.8)
-
-    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
-    normalweight_concrete_floor.setRoughness('MediumSmooth')
-    normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setConductivity(2.31)
-    normalweight_concrete_floor.setDensity(2322)
-    normalweight_concrete_floor.setSpecificHeat(832)
-
-    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
-    nonres_floor_insulation.setRoughness('MediumSmooth')
-    nonres_floor_insulation.setThermalResistance(2.88291975297193)
-    nonres_floor_insulation.setThermalAbsorptance(0.9)
-    nonres_floor_insulation.setSolarAbsorptance(0.7)
-    nonres_floor_insulation.setVisibleAbsorptance(0.7)
-
-    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    floor_adiabatic_construction.setName('Floor Adiabatic construction')
-    floor_layers = OpenStudio::Model::MaterialVector.new
-    floor_layers << cp02_carpet_pad
-    floor_layers << normalweight_concrete_floor
-    floor_layers << nonres_floor_insulation
-    floor_adiabatic_construction.setLayers(floor_layers)
-
-    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
-    g01_13mm_gypsum_board.setRoughness('Smooth')
-    g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setConductivity(0.1600)
-    g01_13mm_gypsum_board.setDensity(800)
-    g01_13mm_gypsum_board.setSpecificHeat(1090)
-    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
-    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
-    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
-
-    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    wall_adiabatic_construction.setName('Wall Adiabatic construction')
-    wall_layers = OpenStudio::Model::MaterialVector.new
-    wall_layers << g01_13mm_gypsum_board
-    wall_layers << g01_13mm_gypsum_board
-    wall_adiabatic_construction.setLayers(wall_layers)
 
     m10_200mm_concrete_block_basement_wall = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
@@ -501,11 +545,16 @@ Standard.class_eval do
         basement_wall_construction.setHeight(below_grade_wall_height)
       end
 
+      #adiabatic_wall_construction = model_get_adiabatic_wall_construction(model)
+
       # Set surface construction for walls adjacent to ground (i.e. basement walls)
       space.surfaces.each do |surface|
         if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
           surface.setConstruction(basement_wall_construction)
           surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+        #elsif surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Adiabatic'
+        #  surface.setConstruction(adiabatic_wall_construction)
+        #  surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     end
@@ -571,16 +620,16 @@ Standard.class_eval do
         f_floor_construction.setPerimeterExposed(perimeter)
       end
 
-      adiabatic_floor_construction = model.getConstructionByName('Floor Adiabatic construction').get
+      #adiabatic_floor_construction = model_get_adiabatic_floor_construction(model)
 
       # Set surface construction for floors adjacent to ground
       space.surfaces.each do |surface|
         if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
           surface.setConstruction(f_floor_construction)
           surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
-        elsif surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
-          surface.setConstruction(adiabatic_floor_construction)
-          surface.setOutsideBoundaryCondition('Adiabatic')
+        #elsif surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
+        #  surface.setConstruction(adiabatic_floor_construction)
+        #  surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     end
