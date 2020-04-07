@@ -524,6 +524,10 @@ Standard.class_eval do
     building_type_category = construction_set_data['exterior_wall_building_category']
 
     wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
+
+    #If no construction properties are found at all, return and allow code to use default constructions
+    return if wall_construction_properties.nil?
+
     c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
 
     #If no c-factor is found in construction properties, return and allow code to use defaults
@@ -605,6 +609,10 @@ Standard.class_eval do
 
     # Find Floor F factor
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
+
+    #If no construction properties are found at all, return and allow code to use default constructions
+    return if floor_construction_properties.nil?
+
     f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
 
     #If no f-factor is found in construction properties, return and allow code to use defaults
