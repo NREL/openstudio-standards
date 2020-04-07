@@ -369,10 +369,6 @@ Standard.class_eval do
     m10_200mm_concrete_block_basement_wall.setDensity(1842)
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
-    # Buildings default to using the ground FC factor method
-    model_set_below_grade_wall_constructions(model, @lookup_building_type, climate_zone)
-    model_set_floor_constructions(model, @lookup_building_type, climate_zone)
-
     basement_wall_construction = OpenStudio::Model::Construction.new(model)
     basement_wall_construction.setName('Basement Wall construction')
     basement_wall_layers = OpenStudio::Model::MaterialVector.new
@@ -386,6 +382,11 @@ Standard.class_eval do
     basement_floor_layers << cp02_carpet_pad
     basement_floor_construction.setLayers(basement_floor_layers)
 
+    # Constructs all relevant ground FC factor method constructions
+    model_set_below_grade_wall_constructions(model, @lookup_building_type, climate_zone)
+    model_set_floor_constructions(model, @lookup_building_type, climate_zone)
+
+    #Set all remaining wall and floor constructions
     model.getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
         if surface.surfaceType.to_s == 'Wall'
@@ -523,7 +524,13 @@ Standard.class_eval do
     building_type_category = construction_set_data['exterior_wall_building_category']
 
     wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
-    c_factor = wall_construction_properties['assembly_maximum_c_factor'] * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+    c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
+
+    #If no c-factor is found in construction properties, return and allow code to use defaults
+    return if c_factor_ip.nil?
+
+    #convert to SI
+    c_factor_si = c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
 
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
@@ -532,7 +539,7 @@ Standard.class_eval do
       below_grade_wall_height = model_get_space_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
-      c_factor_wall_name = "Basement Wall C-Factor #{c_factor.round(2)} Height #{below_grade_wall_height.round(2)}"
+      c_factor_wall_name = "Basement Wall C-Factor #{c_factor_si.round(2)} Height #{below_grade_wall_height.round(2)}"
 
       # Check if the wall construction has been constructed already. If so, look it up in the model
       if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
@@ -540,7 +547,7 @@ Standard.class_eval do
       else
         # Create CFactorUndergroundWallConstruction objects
         basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
-        basement_wall_construction.setCFactor(c_factor)
+        basement_wall_construction.setCFactor(c_factor_si)
         basement_wall_construction.setName(c_factor_wall_name)
         basement_wall_construction.setHeight(below_grade_wall_height)
       end
@@ -568,9 +575,10 @@ Standard.class_eval do
 
     # find height of first below-grade wall adjacent to the ground
     space.surfaces.each do |surface|
+      next unless surface.surfaceType == 'Wall'
+
       boundary_condition = surface.outsideBoundaryCondition
       next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
-      next unless surface.surfaceType == 'Wall'
 
       # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
       z_values = []
@@ -597,7 +605,12 @@ Standard.class_eval do
 
     # Find Floor F factor
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
-    f_factor = floor_construction_properties['assembly_maximum_f_factor'] * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+    f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
+
+    #If no f-factor is found in construction properties, return and allow code to use defaults
+    return if f_factor_ip.nil?
+
+    f_factor_si = f_factor_ip* OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
@@ -606,8 +619,10 @@ Standard.class_eval do
       area = space.floorArea
       next if area == 0 # skip floors not adjacent to ground
 
-      # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction
-      f_floor_const_name ="Foundation F #{f_factor.round(2).to_s} Perim #{perimeter.round(2).to_s} Area #{area.round(2).to_s}".gsub('.','')
+      # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
+      # NOTE: periods '.' were causing issues and were therefore removed. Caused E+ error with duplicate names despite
+      #       being different.
+      f_floor_const_name ="Foundation F #{f_factor_si.round(2).to_s} Perim #{perimeter.round(2).to_s} Area #{area.round(2).to_s}".gsub('.','')
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
@@ -615,7 +630,7 @@ Standard.class_eval do
       else
         f_floor_construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
         f_floor_construction.setName(f_floor_const_name)
-        f_floor_construction.setFFactor(f_factor)
+        f_floor_construction.setFFactor(f_factor_si)
         f_floor_construction.setArea(area)
         f_floor_construction.setPerimeterExposed(perimeter)
       end
@@ -635,7 +650,7 @@ Standard.class_eval do
     end
   end
 
-  # This function returns the space's ground perimeter and area
+  # This function returns the space's ground perimeter and area. Assumes only one floor per space!
   # @param space[OpenStudio::Model::Space]
   # @return [Numeric, Numeric]
   def model_get_f_floor_perimeter(space)
