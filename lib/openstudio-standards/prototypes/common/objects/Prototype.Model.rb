@@ -666,38 +666,111 @@ Standard.class_eval do
     perimeter = 0
     area = 0
 
+    floors = []
+
+    #Find space's floors
+    space.surfaces.each do |surface|
+      if surface.surfaceType == 'Floor'
+        floors << surface
+      end
+    end
+
+    #Raise a warning for any space with more than 1 floor surface.
+    if floors.length > 1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
+    else
+      floor = floors[0]
+    end
+
     #cycle through surfaces in space
     space.surfaces.each do |surface|
 
-      # find perimeter of floor by finding wall above floor perimeter and measuring projection on x,y plane
+      # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
       if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
 
-        vertices = surface.vertices
-
-        max_x = vertices[0].x
-        min_x = vertices[0].x
-        max_y = vertices[0].y
-        min_y = vertices[0].y
-
-        vertices.each do |point|
-          if point.x > max_x
-            max_x = point.x
-          elsif point.x < min_x
-            min_x = point.x
-          end
-
-          if point.y > max_y
-            max_y = point.y
-          elsif point.y < min_y
-            min_y = point.y
-          end
-        end
-
-        perimeter += Math.sqrt((max_x - min_x)**2 + (max_y - min_y)**2)
+        perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
       end
     end
 
     return perimeter
+  end
+
+  # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
+  # FFactorGroundFloorConstruction exposed perimeter calculations.
+  # NOTE: this calculation has a few assumptions:
+  # - Floors are flat. This means they have a constant z-axis value.
+  # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
+  # - The wall and floor share a common space. This space is assumed to only have one floor!
+  # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
+  # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
+  # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
+  def model_calculate_wall_and_floor_intersection(wall, floor)
+
+    #used for determining if two points are 'equal' if within this length
+    tolerance = 0.0001
+
+    #Get floor and wall edges
+    wall_edge_array =  model_get_surface_edges(wall)
+    floor_edge_array =  model_get_surface_edges(floor)
+
+    #Floor assumed flat and constant in x-y plane (i.e. a single z value)
+    floor_z_value = floor_edge_array[0][0].z
+
+    #Iterate through wall edges
+    wall_edge_array.each do |wall_edge|
+
+      wall_edge_p1 = wall_edge[0]
+      wall_edge_p2 = wall_edge[1]
+
+      # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
+      # floor and can be skipped
+
+      if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
+        next
+      end
+
+      # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
+      if tolerance <= (wall_edge_p1.z - floor_z_value).abs
+        next
+      end
+
+      # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
+      # length of the wall edge
+      edge_vector = OpenStudio::Vector3d.new(wall_edge_p1-wall_edge_p2)
+      return(edge_vector.length)
+
+    end
+
+    #If no edges intersected, return 0
+    return 0
+
+  end
+
+  # Returns an array of OpenStudio::Point3D pairs an OpenStudio::Model::Surface's edges. Used to calculate surface
+  # intersections.
+  # @param surface[OpenStudio::Model::Surface] - surface whos
+  # @return [#TODO: figure out how to describe an array for YARD]
+  def model_get_surface_edges(surface)
+
+    vertices = surface.vertices
+    n_vertices = vertices.length
+
+    # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
+    # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
+    edge_array = [] #format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
+
+    #Iterate through each vertex in the surface and construct an edge for it
+    for edge_counter in 0..n_vertices-1
+
+      #If not the last vertex in surface
+      if edge_counter < n_vertices-1
+        edge_array << [vertices[edge_counter], vertices[edge_counter+1]]
+      else #Make index adjustments for final index in vertices array
+        edge_array << [vertices[edge_counter], vertices[0]]
+      end
+    end
+
+    return edge_array
   end
 
   # Adds internal mass objects and constructions based on the building type
