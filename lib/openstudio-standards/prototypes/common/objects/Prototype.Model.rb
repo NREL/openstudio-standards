@@ -605,7 +605,7 @@ Standard.class_eval do
 
     #Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
-    building_type_category = construction_set_data['exterior_floor_building_category']
+    building_type_category = construction_set_data['ground_contact_floor_building_category']
 
     # Find Floor F factor
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
@@ -664,23 +664,24 @@ Standard.class_eval do
   def model_get_f_floor_perimeter(space)
 
     perimeter = 0
-    area = 0
 
     floors = []
 
     #Find space's floors
     space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor'
+      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
         floors << surface
       end
     end
 
-    #Raise a warning for any space with more than 1 floor surface.
+    #Raise a warning for any space with more than 1 ground contact floor surface.
     if floors.length > 1
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
-    else
-      floor = floors[0]
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
+    elsif floors.empty? #If this space has no ground contact floors, return 0
+      return 0
     end
+
+    floor = floors[0]
 
     #cycle through surfaces in space
     space.surfaces.each do |surface|
