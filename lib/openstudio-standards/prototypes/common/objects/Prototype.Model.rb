@@ -746,10 +746,10 @@ Standard.class_eval do
 
   end
 
-  # Returns an array of OpenStudio::Point3D pairs an OpenStudio::Model::Surface's edges. Used to calculate surface
+  # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
   # intersections.
-  # @param surface[OpenStudio::Model::Surface] - surface whos
-  # @return [#TODO: figure out how to describe an array for YARD]
+  # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
+  # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
   def model_get_surface_edges(surface)
 
     vertices = surface.vertices
