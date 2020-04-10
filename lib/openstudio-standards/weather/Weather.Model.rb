@@ -188,14 +188,22 @@ class Standard
 
     # Get ground temperatures from stat file. Stat file is mapped via climate zone.
     stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{model_get_climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
-    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
 
-    if !ground_temperatures.empty?
-      # set the site ground temperature building surface
-      ground_temp = model.getSiteGroundTemperatureFCfactorMethod
-      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
-    else
+    ground_temperatures = []
+
+    if stat_file_path.include? '.stat'
+      ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+      unless ground_temperatures.empty?
+        # set the site ground temperature building surface
+        ground_temp = model.getSiteGroundTemperatureFCfactorMethod
+        ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+      end
+    end
+
+    if ground_temperatures.empty?
+      #If stat_file_path did not turn up an EPW file, set default ground temperatures
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures in stat file; will use standards lookup.')
+
       # Look up ground temperatures from templates
       ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
       if ground_temp_vals && ground_temp_vals['jan']
@@ -229,6 +237,7 @@ class Standard
         ground_temp.setDecemberGroundTemperature(19.633)
       end
     end
+
   end
 
   # Gets the maximum OA dry bulb temperatures
