@@ -370,7 +370,7 @@ module BTAP
             stdglazing.setInfraredTransmittanceatNormalIncidence(infraredTransmittanceatNormalIncidence.to_f)
             stdglazing.setFrontSideInfraredHemisphericalEmissivity(frontSideInfraredHemisphericalEmissivity.to_f)
             stdglazing.setBackSideInfraredHemisphericalEmissivity(backSideInfraredHemisphericalEmissivity.to_f)
-            stdglazing.setConductivity(conductivity.to_f)
+            stdglazing.setThermalConductivity(conductivity.to_f)
             stdglazing.setName(name)
             stdglazing.setOpticalDataType(opticalDataType)
             stdglazing.setDirtCorrectionFactorforSolarandVisibleTransmittance(dirt_correction_factor)

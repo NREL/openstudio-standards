@@ -1099,7 +1099,9 @@ module BTAP
               boiler = icomponent.to_BoilerHotWater.get
 
               #set design outlet temp
-              boiler.setDesignWaterOutletTemperature(@hw_boiler_design_water_outlet_temperature) unless @hw_boiler_design_water_outlet_temperature.nil?
+              if model.version < OpenStudio::VersionString.new('3.0.0')
+                boiler.setDesignWaterOutletTemperature(@hw_boiler_design_water_outlet_temperature) unless @hw_boiler_design_water_outlet_temperature.nil?
+              end
               #set fuel type
               boiler.setFuelType(@hw_boiler_fuel_type) unless @hw_boiler_fuel_type.nil?
               #set thermal eff
@@ -1109,7 +1111,9 @@ module BTAP
                 ["ConstantFlow","LeavingSetpointModulated","NotModulated"].include?(@hw_boiler_flow_mode) ? boiler.setBoilerFlowMode(@hw_boiler_flow_mode) : raise("Boiler flow mode #{@hw_boiler_flow_mode} invalid.")
               end
               #set setDesignWaterOutletTemperature
-              boiler.setDesignWaterOutletTemperature(@hotwaterboiler_reset_highsupplytemp) unless @hotwaterboiler_reset_highsupplytemp.nil?
+              if model.version < OpenStudio::VersionString.new('3.0.0')
+                boiler.setDesignWaterOutletTemperature(@hotwaterboiler_reset_highsupplytemp) unless @hotwaterboiler_reset_highsupplytemp.nil?
+              end
               #set EfficiencyCurveTemperatureEvaluationVariable
               unless @hw_boiler_eff_curve_temp_eval_var.nil?
                 ["LeavingBoiler","EnteringBoiler"].include?(@hw_boiler_eff_curve_temp_eval_var) ? boiler.setEfficiencyCurveTemperatureEvaluationVariable(@hw_boiler_eff_curve_temp_eval_var) : raise("EfficiencyCurveTemperatureEvaluationVariable  #{@hw_boiler_eff_curve_temp_eval_var} invalid.")
