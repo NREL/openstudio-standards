@@ -622,9 +622,8 @@ Standard.class_eval do
 
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
-      # Find this space's exposed floor area and perimeter
-      perimeter = model_get_f_floor_perimeter(space)
-      area = space.floorArea
+      # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
+      perimeter, area = model_get_f_floor_geometry(space)
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
@@ -661,7 +660,7 @@ Standard.class_eval do
   # This function returns the space's ground perimeter and area. Assumes only one floor per space!
   # @param space[OpenStudio::Model::Space]
   # @return [Numeric, Numeric]
-  def model_get_f_floor_perimeter(space)
+  def model_get_f_floor_geometry(space)
 
     perimeter = 0
 
@@ -678,7 +677,7 @@ Standard.class_eval do
     if floors.length > 1
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
     elsif floors.empty? #If this space has no ground contact floors, return 0
-      return 0
+      return 0, 0
     end
 
     floor = floors[0]
@@ -693,7 +692,10 @@ Standard.class_eval do
       end
     end
 
-    return perimeter
+    #Get floor area
+    area = floor.netArea
+
+    return perimeter, area
   end
 
   # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
