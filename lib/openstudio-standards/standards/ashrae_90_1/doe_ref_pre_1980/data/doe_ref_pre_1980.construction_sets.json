@@ -532,7 +532,7 @@
       "interior_ceilings": "Typical Interior Ceiling",
       "ground_contact_wall_standards_construction_type": "Mass",
       "ground_contact_wall_building_category": "Residential",
-      "ground_contact_floor_standards_construction_type": "Mass",
+      "ground_contact_floor_standards_construction_type": "Unheated",
       "ground_contact_floor_building_category": "Residential",
       "ground_contact_ceiling_standards_construction_type": null,
       "ground_contact_ceiling_building_category": "Residential",
