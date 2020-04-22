@@ -249,45 +249,47 @@ Standard.class_eval do
   def model_get_adiabatic_floor_construction(model)
     adiabatic_construction_name = 'Floor Adiabatic construction'
 
+    # Check if adiabatic floor construction already exists in the model
+    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
+
     # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    if model.getConstructionByName(adiabatic_construction_name).is_initialized
-      return model.getConstructionByName(adiabatic_construction_name).get
-    else
-      # Assign construction to adiabatic construction
-      cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-      cp02_carpet_pad.setName('CP02 CARPET PAD')
-      cp02_carpet_pad.setRoughness('VeryRough')
-      cp02_carpet_pad.setThermalResistance(0.21648)
-      cp02_carpet_pad.setThermalAbsorptance(0.9)
-      cp02_carpet_pad.setSolarAbsorptance(0.7)
-      cp02_carpet_pad.setVisibleAbsorptance(0.8)
+    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
 
-      normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-      normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
-      normalweight_concrete_floor.setRoughness('MediumSmooth')
-      normalweight_concrete_floor.setThickness(0.1016)
-      normalweight_concrete_floor.setThermalConductivity(2.31)
-      normalweight_concrete_floor.setDensity(2322)
-      normalweight_concrete_floor.setSpecificHeat(832)
+    # Assign construction to adiabatic construction
+    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    cp02_carpet_pad.setName('CP02 CARPET PAD')
+    cp02_carpet_pad.setRoughness('VeryRough')
+    cp02_carpet_pad.setThermalResistance(0.21648)
+    cp02_carpet_pad.setThermalAbsorptance(0.9)
+    cp02_carpet_pad.setSolarAbsorptance(0.7)
+    cp02_carpet_pad.setVisibleAbsorptance(0.8)
 
-      nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-      nonres_floor_insulation.setName('Nonres_Floor_Insulation')
-      nonres_floor_insulation.setRoughness('MediumSmooth')
-      nonres_floor_insulation.setThermalResistance(2.88291975297193)
-      nonres_floor_insulation.setThermalAbsorptance(0.9)
-      nonres_floor_insulation.setSolarAbsorptance(0.7)
-      nonres_floor_insulation.setVisibleAbsorptance(0.7)
+    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
+    normalweight_concrete_floor.setRoughness('MediumSmooth')
+    normalweight_concrete_floor.setThickness(0.1016)
+    normalweight_concrete_floor.setThermalConductivity(2.31)
+    normalweight_concrete_floor.setDensity(2322)
+    normalweight_concrete_floor.setSpecificHeat(832)
 
-      floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-      floor_adiabatic_construction.setName(adiabatic_construction_name)
-      floor_layers = OpenStudio::Model::MaterialVector.new
-      floor_layers << cp02_carpet_pad
-      floor_layers << normalweight_concrete_floor
-      floor_layers << nonres_floor_insulation
-      floor_adiabatic_construction.setLayers(floor_layers)
+    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
+    nonres_floor_insulation.setRoughness('MediumSmooth')
+    nonres_floor_insulation.setThermalResistance(2.88291975297193)
+    nonres_floor_insulation.setThermalAbsorptance(0.9)
+    nonres_floor_insulation.setSolarAbsorptance(0.7)
+    nonres_floor_insulation.setVisibleAbsorptance(0.7)
 
-      return floor_adiabatic_construction
-    end
+    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    floor_adiabatic_construction.setName(adiabatic_construction_name)
+    floor_layers = OpenStudio::Model::MaterialVector.new
+    floor_layers << cp02_carpet_pad
+    floor_layers << normalweight_concrete_floor
+    floor_layers << nonres_floor_insulation
+    floor_adiabatic_construction.setLayers(floor_layers)
+
+    return floor_adiabatic_construction
+
 
   end
 
@@ -298,30 +300,32 @@ Standard.class_eval do
   def model_get_adiabatic_wall_construction(model)
     adiabatic_construction_name = 'Wall Adiabatic construction'
 
-    #Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    if model.getConstructionByName(adiabatic_construction_name).is_initialized
-      return model.getConstructionByName(adiabatic_construction_name).get
-    else
-      g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-      g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
-      g01_13mm_gypsum_board.setRoughness('Smooth')
-      g01_13mm_gypsum_board.setThickness(0.0127)
-      g01_13mm_gypsum_board.setThermalConductivity(0.1600)
-      g01_13mm_gypsum_board.setDensity(800)
-      g01_13mm_gypsum_board.setSpecificHeat(1090)
-      g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
-      g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
-      g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
+    # Check if adiabatic wall construction already exists in the model
+    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
 
-      wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-      wall_adiabatic_construction.setName(adiabatic_construction_name)
-      wall_layers = OpenStudio::Model::MaterialVector.new
-      wall_layers << g01_13mm_gypsum_board
-      wall_layers << g01_13mm_gypsum_board
-      wall_adiabatic_construction.setLayers(wall_layers)
+    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
+    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
 
-      return wall_adiabatic_construction
-    end
+    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
+    g01_13mm_gypsum_board.setRoughness('Smooth')
+    g01_13mm_gypsum_board.setThickness(0.0127)
+    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
+    g01_13mm_gypsum_board.setDensity(800)
+    g01_13mm_gypsum_board.setSpecificHeat(1090)
+    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
+    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
+    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
+
+    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
+    wall_adiabatic_construction.setName(adiabatic_construction_name)
+    wall_layers = OpenStudio::Model::MaterialVector.new
+    wall_layers << g01_13mm_gypsum_board
+    wall_layers << g01_13mm_gypsum_board
+    wall_adiabatic_construction.setLayers(wall_layers)
+
+    return wall_adiabatic_construction
+
 
   end
 
@@ -349,7 +353,7 @@ Standard.class_eval do
         new_lookup_building_type = model_get_lookup_name(building_type)
     end
 
-    #Construct adiabatic constructions
+    # Construct adiabatic constructions
     floor_adiabatic_construction = model_get_adiabatic_floor_construction(model)
     wall_adiabatic_construction = model_get_adiabatic_wall_construction(model)
 
@@ -386,7 +390,7 @@ Standard.class_eval do
     model_set_below_grade_wall_constructions(model, @lookup_building_type, climate_zone)
     model_set_floor_constructions(model, @lookup_building_type, climate_zone)
 
-    #Set all remaining wall and floor constructions
+    # Set all remaining wall and floor constructions
     model.getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
         if surface.surfaceType.to_s == 'Wall'
@@ -519,21 +523,21 @@ Standard.class_eval do
   # @return [void]
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
 
-    #Find ground contact wall building category
+    # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
     building_type_category = construction_set_data['exterior_wall_building_category']
 
     wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
 
-    #If no construction properties are found at all, return and allow code to use default constructions
+    # If no construction properties are found at all, return and allow code to use default constructions
     return if wall_construction_properties.nil?
 
     c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
 
-    #If no c-factor is found in construction properties, return and allow code to use defaults
+    # If no c-factor is found in construction properties, return and allow code to use defaults
     return if c_factor_ip.nil?
 
-    #convert to SI
+    # convert to SI
     c_factor_si = c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
 
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
@@ -556,16 +560,11 @@ Standard.class_eval do
         basement_wall_construction.setHeight(below_grade_wall_height)
       end
 
-      #adiabatic_wall_construction = model_get_adiabatic_wall_construction(model)
-
       # Set surface construction for walls adjacent to ground (i.e. basement walls)
       space.surfaces.each do |surface|
         if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
           surface.setConstruction(basement_wall_construction)
           surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
-        #elsif surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Adiabatic'
-        #  surface.setConstruction(adiabatic_wall_construction)
-        #  surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     end
@@ -618,7 +617,7 @@ Standard.class_eval do
     #If no f-factor is found in construction properties, return and allow code to use defaults
     return if f_factor_ip.nil?
 
-    f_factor_si = f_factor_ip* OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+    f_factor_si = f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
@@ -629,7 +628,7 @@ Standard.class_eval do
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
       # NOTE: periods '.' were causing issues and were therefore removed. Caused E+ error with duplicate names despite
       #       being different.
-      f_floor_const_name ="Foundation F #{f_factor_si.round(2).to_s} Perim #{perimeter.round(2).to_s} Area #{area.round(2).to_s}".gsub('.','')
+      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
@@ -642,16 +641,11 @@ Standard.class_eval do
         f_floor_construction.setPerimeterExposed(perimeter)
       end
 
-      #adiabatic_floor_construction = model_get_adiabatic_floor_construction(model)
-
       # Set surface construction for floors adjacent to ground
       space.surfaces.each do |surface|
         if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
           surface.setConstruction(f_floor_construction)
           surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
-        #elsif surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
-        #  surface.setConstruction(adiabatic_floor_construction)
-        #  surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     end
@@ -666,14 +660,14 @@ Standard.class_eval do
 
     floors = []
 
-    #Find space's floors
+    # Find space's floors
     space.surfaces.each do |surface|
       if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
         floors << surface
       end
     end
 
-    #Raise a warning for any space with more than 1 ground contact floor surface.
+    # Raise a warning for any space with more than 1 ground contact floor surface.
     if floors.length > 1
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
     elsif floors.empty? #If this space has no ground contact floors, return 0
@@ -682,7 +676,7 @@ Standard.class_eval do
 
     floor = floors[0]
 
-    #cycle through surfaces in space
+    # cycle through surfaces in space
     space.surfaces.each do |surface|
 
       # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
@@ -692,7 +686,7 @@ Standard.class_eval do
       end
     end
 
-    #Get floor area
+    # Get floor area
     area = floor.netArea
 
     return perimeter, area
@@ -709,17 +703,17 @@ Standard.class_eval do
   # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
   def model_calculate_wall_and_floor_intersection(wall, floor)
 
-    #used for determining if two points are 'equal' if within this length
+    # Used for determining if two points are 'equal' if within this length
     tolerance = 0.0001
 
-    #Get floor and wall edges
-    wall_edge_array =  model_get_surface_edges(wall)
-    floor_edge_array =  model_get_surface_edges(floor)
+    # Get floor and wall edges
+    wall_edge_array = model_get_surface_edges(wall)
+    floor_edge_array = model_get_surface_edges(floor)
 
-    #Floor assumed flat and constant in x-y plane (i.e. a single z value)
+    # Floor assumed flat and constant in x-y plane (i.e. a single z value)
     floor_z_value = floor_edge_array[0][0].z
 
-    #Iterate through wall edges
+    # Iterate through wall edges
     wall_edge_array.each do |wall_edge|
 
       wall_edge_p1 = wall_edge[0]
@@ -744,7 +738,7 @@ Standard.class_eval do
 
     end
 
-    #If no edges intersected, return 0
+    # If no edges intersected, return 0
     return 0
 
   end
@@ -760,15 +754,15 @@ Standard.class_eval do
 
     # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
     # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
-    edge_array = [] #format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
+    edge_array = [] # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
 
-    #Iterate through each vertex in the surface and construct an edge for it
-    for edge_counter in 0..n_vertices-1
+    # Iterate through each vertex in the surface and construct an edge for it
+    for edge_counter in 0..n_vertices - 1
 
-      #If not the last vertex in surface
+      # If not the last vertex in surface
       if edge_counter < n_vertices-1
-        edge_array << [vertices[edge_counter], vertices[edge_counter+1]]
-      else #Make index adjustments for final index in vertices array
+        edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
+      else # Make index adjustments for final index in vertices array
         edge_array << [vertices[edge_counter], vertices[0]]
       end
     end
