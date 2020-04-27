@@ -1995,7 +1995,7 @@ class Standard
     # create air handler
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
     if system_name.nil?
-      air_loop.setName("#{thermal_zones.size} Zone VAV with PFP Boxes and Reheat")
+      air_loop.setName("#{thermal_zones.size} Zone PVAV with PFP Boxes and Reheat")
     else
       air_loop.setName(system_name)
     end
