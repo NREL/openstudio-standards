@@ -3848,7 +3848,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {23bb7aaa-6a7c-4d7a-826f-f4ffe1c733a5}, !- Space Name
-  Ground,                                 !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -6879,7 +6879,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {23bb7aaa-6a7c-4d7a-826f-f4ffe1c733a5}, !- Space Name
-  Ground,                                 !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
@@ -6896,7 +6896,7 @@ OS:Surface,
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {23bb7aaa-6a7c-4d7a-826f-f4ffe1c733a5}, !- Space Name
-  Ground,                                 !- Outside Boundary Condition
+  Adiabatic,                              !- Outside Boundary Condition
   ,                                       !- Outside Boundary Condition Object
   NoSun,                                  !- Sun Exposure
   NoWind,                                 !- Wind Exposure
