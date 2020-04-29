@@ -234,7 +234,7 @@ class Standard
     if File.exist? ddy_file
       dds = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
       dds.getDesignDays.sort.each do |dd|
-        if dd.name.get.include? ('4% Condns WB=>MDB')
+        if dd.name.get.include? '4% Condns WB=>MDB'
           return dd.humidityIndicatingConditionsAtMaximumDryBulb
         end
       end
@@ -242,7 +242,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
       puts "Could not find .ddy file for: #{ddy_file}."
     end
-  return false
+    return false
   end
 end
 

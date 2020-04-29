@@ -458,7 +458,7 @@ class Standard
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     sizing_plant.setSizingOption('Coincident')
     sizing_plant.setZoneTimestepsinAveragingWindow(6)
-    sizing_plant.	setCoincidentSizingFactorMode('GlobalCoolingSizingFactor')
+    sizing_plant.setCoincidentSizingFactorMode('GlobalCoolingSizingFactor')
 
     # follow outdoor air wetbulb with given approach temperature
     cw_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)

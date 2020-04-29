@@ -81,7 +81,7 @@ class Standard
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         elsif building_type == 'Hospital'
           condenser_water_loop = nil
-          condenser_water_loop = model_add_cw_loop(model, cooling_tower_capacity_control: "Variable Speed Fan") if system['chiller_cooling_type'] == 'WaterCooled'
+          condenser_water_loop = model_add_cw_loop(model, cooling_tower_capacity_control: 'Variable Speed Fan') if system['chiller_cooling_type'] == 'WaterCooled'
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
                                                   dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
