@@ -24,10 +24,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
   if RUBY_VERSION < "2.3"
-    spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
+    spec.add_development_dependency 'nokogiri', '~> 1.9.0'
     spec.add_development_dependency 'bundler', '~> 1.9'
   else
-    spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'nokogiri', '~> 1.9.0'
     spec.add_development_dependency 'bundler', '~> 2.1'
   end
   spec.add_development_dependency 'rake', '~> 10.0'
@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.53.0'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'
   spec.add_development_dependency 'minitest-ci', '<= 5.10.3'
-  spec.add_development_dependency 'rubyXL', '3.3.8' # install rubyXL gem to export excel files to json
+  spec.add_development_dependency 'rubyXL', '3.3.33' # install rubyXL gem to export excel files to json
   spec.add_development_dependency 'activesupport', '4.2.5' # pairs with google-api-client, > 5.0.0 does not work
   spec.add_development_dependency 'google-api-client', '0.8.6' # to download Openstudio_Standards Google Spreadsheet
   spec.add_development_dependency 'codecov' # to perform code coverage checking

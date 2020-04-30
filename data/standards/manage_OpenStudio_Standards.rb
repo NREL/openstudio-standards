@@ -232,7 +232,9 @@ def export_spreadsheet_to_json
     header_row = 2 # Base 0
 
     # Get all data
-    all_data = worksheet.extract_data
+    all_data = worksheet.sheet_data.rows.map { |row|
+        row.cells.map { |c| c && c.value() } unless row.nil?
+    }
 
     # Get the header row data
     header_data = all_data[header_row]
