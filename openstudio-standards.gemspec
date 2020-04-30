@@ -23,11 +23,16 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
-  spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
-  spec.add_development_dependency 'bundler', '~> 1.9'
+  if RUBY_VERSION < "2.3"
+    spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
+    spec.add_development_dependency 'bundler', '~> 1.9'
+  else
+    spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'bundler', '~> 2.1'
+  end
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'yard', '~> 0.9'
-  spec.add_development_dependency 'rubocop', '~> 0.53'
+  spec.add_development_dependency 'rubocop', '~> 0.53.0'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'
   spec.add_development_dependency 'minitest-ci', '<= 5.10.3'
   spec.add_development_dependency 'rubyXL', '3.3.8' # install rubyXL gem to export excel files to json
@@ -37,5 +42,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rest-client', '2.0.2'
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'roo', '2.7.1'
+  spec.add_development_dependency 'public_suffix', '~> 3.1'
+  spec.add_development_dependency 'simplecov-html', '~> 0.10.2'
+  spec.add_development_dependency 'signet', '~> 0.11.0'
+  spec.add_development_dependency 'launchy', '~> 2.4.3'
   spec.add_development_dependency 'openstudio-api-stubs'
 end
