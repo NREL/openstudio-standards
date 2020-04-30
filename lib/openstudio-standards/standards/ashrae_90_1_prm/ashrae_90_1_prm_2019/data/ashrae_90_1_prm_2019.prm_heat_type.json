@@ -1,0 +1,124 @@
+{
+  "prm_heat_type": [
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 0A",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 0B",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 1A",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 1B",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 2A",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 2B",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 3A",
+      "heat_type": "Electric"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 3B",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 3C",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 4A",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 4B",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 4C",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 5A",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 5B",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 5C",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 6A",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 6B",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 7",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "all others",
+      "climate_zone": "ClimateZone 8",
+      "heat_type": "Gas"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "hospital",
+      "climate_zone": "Any",
+      "heat_type": "Gas"
+    }
+  ]
+}
