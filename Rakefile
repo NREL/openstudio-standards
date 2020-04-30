@@ -149,7 +149,8 @@ namespace :data do
   # as data may be overwritten when parsing later spreadsheets.
   spreadsheets_ashrae = [
       'OpenStudio_Standards-ashrae_90_1',
-      'OpenStudio_Standards-ashrae_90_1(space_types)'
+      'OpenStudio_Standards-ashrae_90_1(space_types)',
+      'OpenStudio_Standards-ashrae_90_1_prm(space_types)'
   ]
 
   spreadsheets_deer = [

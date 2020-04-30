@@ -1,0 +1,36 @@
+{
+  "prm_hvac_bldg_type": [
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "heated-only storage"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "hospital"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "hospitals"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "none"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "other nonresidential"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "public assembly"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "residential"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "retail"
+    }
+  ]
+}
