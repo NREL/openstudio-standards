@@ -68,8 +68,12 @@ class Standard
     end
 
     # Add daylighting controls to each space
-    model.getSpaces.sort.each do |space|
-      added = space_add_daylighting_controls(space, false, false)
+    if /prm/i =~ template
+      model.getSpaces.sort.each do |space|
+        added = space_add_daylighting_controls(space, false, false)
+      end
+    else
+      model_remove_daylighting_controls(model)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
@@ -3256,6 +3260,13 @@ class Standard
 
     return all_constructions
   end
+
+  # Remove all daylighting controls for Appendix G PRM 2016 and later
+  def model_remove_daylighting_controls(model)
+
+
+  end
+
 
   # Go through the default construction sets and hard-assigned constructions.
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
