@@ -21,8 +21,6 @@ Follow installation instructions for [OpenStudio Extension Gem](https://github.c
 ### Windows Installation
 Install Ruby using the [RubyInstaller](https://rubyinstaller.org/downloads/archives/) for [Ruby 2.2.4 (x64)](https://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-2.2.4-x64.exe).
 
-Install Devkit using the [mingw64](https://dl.bintray.com/oneclick/rubyinstaller/DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe) installer.
-
 Check the ruby installation returns the correct Ruby version (2.2.4):
 ```
 ruby -v
@@ -32,6 +30,18 @@ Install bundler from the command line
 ```
 gem install bundler -v 1.17.3
 ```
+
+Install Devkit using the [mingw64](https://dl.bintray.com/oneclick/rubyinstaller/DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe) installer.
+
+Open a command prompt, `cd <DEVKIT_INSTALL_DIR>` where Devkit is installed.  Run the following commands:
+
+```
+ruby dk.rb init
+ruby dk.rb review
+ruby dk.rb install
+```
+
+See Devkit [detailed instructions](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit) if needed.
 
 Install OpenStudio.  Create a file ```C:\Ruby22-x64\lib\ruby\site_ruby\openstudio.rb``` and point it to your OpenStudio installation by editing the contents.  E.g.:
 
