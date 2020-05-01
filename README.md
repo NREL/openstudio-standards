@@ -23,6 +23,13 @@ Install Ruby using the [RubyInstaller](https://rubyinstaller.org/downloads/archi
 
 Install Devkit using the [mingw64](https://dl.bintray.com/oneclick/rubyinstaller/DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe) installer.
 
+Once downloaded extract the installer into a directory then using the cmd line:
+```
+1.  
+2.
+3.
+```
+
 Check the ruby installation returns the correct Ruby version (2.2.4):
 ```
 ruby -v
