@@ -1,0 +1,64 @@
+{
+  "lpd_building_type": [
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "All Other"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Convention Center"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Exercise Center"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Health Care"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Hotel"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Manufacturing Facility"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Motion Picture Theater"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Penitentiary"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Performing Arts Theater"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Religious Facility"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "School (college/university)"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "School (primary)"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "School (secondary)"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Sports Arena"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "lpd_building_type": "Transportation Facility"
+    }
+  ]
+}
