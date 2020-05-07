@@ -84,7 +84,9 @@ def unique_properties(sheet_name)
   return case sheet_name
          when 'templates', 'standards', 'climate_zone_sets', 'constructions', 'curves', 'fans'
            ['name']
-         when 'materials'
+          when 'prm_constructions'
+            ['template', 'name']
+          when 'materials'
            ['name', 'code_category']
          when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
            ['template', 'building_type', 'space_type']
@@ -126,7 +128,9 @@ def unique_properties(sheet_name)
            ['template', 'compressor_name', 'compressor_type']
          when 'economizers'
            ['template', 'climate_zone', 'data_center']
-         when 'motors'
+          when 'prm_economizers'
+            ['template', 'climate_ID']
+          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
          when 'ground_temperatures'
            ['building_type', 'template', 'climate_zone']
@@ -342,6 +346,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
 
     # Open workbook
     workbook = RubyXL::Parser.parse(xlsx_path)
+    puts "After parse workbook"
 
     # Find all the template directories that match the search criteria embedded in the spreadsheet title
     standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
@@ -476,7 +481,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
           end
           new_obj['climate_zones'] = items
           objs << new_obj
-        elsif sheet_name == 'constructions'
+        elsif sheet_name == 'constructions' or sheet_name == 'prm_constructions'
           new_obj = {}
           new_obj['name'] = obj['name']
           items = []
