@@ -238,7 +238,6 @@ class Standard
       ground_temp.setNovemberGroundTemperature(19.802)
       ground_temp.setDecemberGroundTemperature(19.633)
     end
-
   end
 
   # Gets the maximum OA dry bulb temperatures
@@ -270,6 +269,24 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Stat file: #{stat_file_path} was not found when calculating ground temperatures.")
       return []
     end
+
+  # Helper method to retrieve the cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
+  def get_wb_mcb(weather_file)
+    # Load in the ddy file based on convention that it is in
+    # the same directory and has the same basename as the epw file.
+    ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+    if File.exist? ddy_file
+      dds = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+      dds.getDesignDays.sort.each do |dd|
+        if dd.name.get.include? '4% Condns WB=>MDB'
+          return dd.humidityIndicatingConditionsAtMaximumDryBulb
+        end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
+      puts "Could not find .ddy file for: #{ddy_file}."
+    end
+    return false
   end
 end
 

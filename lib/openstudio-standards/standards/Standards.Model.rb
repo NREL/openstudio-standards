@@ -3801,18 +3801,18 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def model_remove_prm_ems_objects(model)
-    model.getEnergyManagementSystemActuators(&:remove)
-    model.getEnergyManagementSystemConstructionIndexVariables(&:remove)
-    model.getEnergyManagementSystemCurveOrTableIndexVariables(&:remove)
-    model.getEnergyManagementSystemGlobalVariables(&:remove)
-    model.getEnergyManagementSystemInternalVariables(&:remove)
-    model.getEnergyManagementSystemMeteredOutputVariables(&:remove)
-    model.getEnergyManagementSystemOutputVariables(&:remove)
-    model.getEnergyManagementSystemPrograms(&:remove)
-    model.getEnergyManagementSystemProgramCallingManagers(&:remove)
-    model.getEnergyManagementSystemSensors(&:remove)
-    model.getEnergyManagementSystemSubroutines(&:remove)
-    model.getEnergyManagementSystemTrendVariables(&:remove)
+    model.getEnergyManagementSystemActuators.each { |x| x.remove }
+    model.getEnergyManagementSystemConstructionIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemCurveOrTableIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemGlobalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemInternalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemMeteredOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemPrograms.each { |x| x.remove }
+    model.getEnergyManagementSystemProgramCallingManagers.each { |x| x.remove }
+    model.getEnergyManagementSystemSensors.each { |x| x.remove }
+    model.getEnergyManagementSystemSubroutines.each { |x| x.remove }
+    model.getEnergyManagementSystemTrendVariables.each { |x| x.remove }
 
     return true
   end
