@@ -72,7 +72,7 @@ class Standard
     # Convert to cfm
     tot_oa_flow_rate_cfm = OpenStudio.convert(tot_oa_flow_rate, 'm^3/s', 'cfm').get
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
 
     return tot_oa_flow_rate
   end
@@ -106,10 +106,12 @@ class Standard
   # @return [Bool] true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert all design OA to per-area
+    # unless the "Outdoor Air Method" is "Maximum"
     thermal_zone.spaces.each do |space|
       dsn_oa = space.designSpecificationOutdoorAir
       next if dsn_oa.empty?
       dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
 
       # Get the space properties
       floor_area = space.floorArea
@@ -290,13 +292,13 @@ class Standard
     end
 
     unless sch_name.nil?
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Finding space schedules for #{sch_name}.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Finding space schedules for #{sch_name}.")
     end
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
     occ_schedules_num_occ.each do |occ_sch, num_occ|
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "...#{occ_sch.name} - #{num_occ.round} people")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "...#{occ_sch.name} - #{num_occ.round} people")
     end
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
 
     # Store arrays of 365 day schedules used by each occ schedule once for later
     # Store arrays of day schedule times for later
@@ -473,7 +475,7 @@ class Standard
         end
 
         # If here, we need to make a rule to cover from the previous rule to today
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
         sch_rule.setName("#{sch_name} #{weekday} Rule")
         day_sch = sch_rule.daySchedule
@@ -666,7 +668,7 @@ class Standard
     elsif htg_fuels.size.zero? && clg_fuels.size.zero?
       fuel_type = 'unconditioned'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
       fuel_type = 'fossil'
     end
 
@@ -721,25 +723,25 @@ class Standard
     # Electric and fossil and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
     end
 
     # Electric and fossil
     if htg_fuels.include?('Electricity') && fossil
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
     end
 
     # Electric and district
     if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed electricity and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and district.")
     end
 
     # Fossil and district
     if fossil && htg_fuels.include?('DistrictHeating')
       is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.Model', "For #{thermal_zone.name}, heating mixed fossil and district.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed fossil and district.")
     end
 
     return is_mixed
@@ -1255,10 +1257,14 @@ class Standard
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
     case climate_zone
-    when 'ASHRAE 169-2006-1A',
+    when 'ASHRAE 169-2006-0A',
+        'ASHRAE 169-2006-0B',
+        'ASHRAE 169-2006-1A',
         'ASHRAE 169-2006-1B',
         'ASHRAE 169-2006-2A',
         'ASHRAE 169-2006-2B',
+        'ASHRAE 169-2013-0A',
+        'ASHRAE 169-2013-0B',
         'ASHRAE 169-2013-1A',
         'ASHRAE 169-2013-1B',
         'ASHRAE 169-2013-2A',

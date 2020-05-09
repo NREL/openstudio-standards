@@ -69,6 +69,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/comstock_ashrae_90_1_2013/comstock_ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily"
 
   require_relative "#{stds}/deer/deer"
   require_relative "#{stds}/deer/deer_pre_1975/deer_pre_1975"
@@ -136,6 +137,8 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
@@ -146,11 +149,13 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilCoolingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilCoolingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilCoolingDXTwoSpeed"
+  require_relative "#{stds}/Standards.CoilCoolingWaterToAirHeatPumpEquationFit"
   require_relative "#{stds}/Standards.CoilDX"
   require_relative "#{stds}/Standards.CoilHeatingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilHeatingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
   require_relative "#{stds}/Standards.CoilHeatingGas"
+  require_relative "#{stds}/Standards.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{stds}/Standards.Construction"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
@@ -161,6 +166,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.FanOnOff"
   require_relative "#{stds}/Standards.FanVariableVolume"
   require_relative "#{stds}/Standards.FanZoneExhaust"
+  require_relative "#{stds}/Standards.FluidCooler"
   require_relative "#{stds}/Standards.HeaderedPumpsConstantSpeed"
   require_relative "#{stds}/Standards.HeaderedPumpsVariableSpeed"
   require_relative "#{stds}/Standards.HeatExchangerSensLat"
@@ -240,6 +246,20 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.Space"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.ZoneHVACComponent"
+  # ZE AEDG Multifamily
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Space"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.ZoneHVACComponent"
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
@@ -281,6 +301,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.LargeOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
+  require_relative "#{proto}/common/buildings/Prototype.Laboratory"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -301,6 +322,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
+  require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
   require_relative "#{proto}/common/objects/Prototype.FanOnOff"
@@ -353,9 +375,19 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.HeatExchangerAirToAirSensibleAndLatent"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
+  # ZE AEDG Multifamily
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.HeatExchangerAirToAirSensibleAndLatent"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.hvac_systems"
   # DEER
   require_relative "#{proto}/deer/deer.Model"
   # CBES Common
@@ -370,17 +402,17 @@ module OpenstudioStandards
   def self.get_run_env()
     # blank out bundler and gem path modifications, will be re-setup by new call
     new_env = {}
-    new_env["BUNDLER_ORIG_MANPATH"] = nil
-    new_env["BUNDLER_ORIG_PATH"] = nil
-    new_env["BUNDLER_VERSION"] = nil
-    new_env["BUNDLE_BIN_PATH"] = nil
-    new_env["RUBYLIB"] = nil
-    new_env["RUBYOPT"] = nil
+    new_env['BUNDLER_ORIG_MANPATH'] = nil
+    new_env['BUNDLER_ORIG_PATH'] = nil
+    new_env['BUNDLER_VERSION'] = nil
+    new_env['BUNDLE_BIN_PATH'] = nil
+    new_env['RUBYLIB'] = nil
+    new_env['RUBYOPT'] = nil
 
     # DLM: preserve GEM_HOME and GEM_PATH set by current bundle because we are not supporting bundle
     # requires to ruby gems will work, will fail if we require a native gem
-    #new_env["GEM_PATH"] = nil
-    #new_env["GEM_HOME"] = nil
+    new_env['GEM_PATH'] = nil
+    new_env['GEM_HOME'] = nil
 
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
     #bundle_gemfile = ENV['BUNDLE_GEMFILE']
@@ -388,6 +420,7 @@ module OpenstudioStandards
     #if bundle_gemfile.nil? || bundle_path.nil?
       new_env['BUNDLE_GEMFILE'] = nil
       new_env['BUNDLE_PATH'] = nil
+      new_env['BUNDLE_WITHOUT'] = nil
     #else
     #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
     #  new_env['BUNDLE_PATH'] = bundle_path

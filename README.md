@@ -1,6 +1,6 @@
 # OpenStudio-Standards
 
-**Unit Test Status:** [![Circle CI](https://circleci.com/gh/NREL/openstudio-standards/tree/nrcan.svg?style=svg)](https://circleci.com/gh/NREL/openstudio-standards/tree/nrcan)
+**Unit Test Status:** [![Circle CI](https://circleci.com/gh/NREL/openstudio-standards/tree/nrcan.svg?style=svg)](https://circleci.com/gh/NREL/openstudio-standards)
 
 **Code Coverage:** [![codecov](https://codecov.io/gh/NREL/openstudio-standards/branch/nrcan/graph/badge.svg)](https://codecov.io/gh/NREL/openstudio-standards)
 

@@ -136,7 +136,7 @@ class Standard
     if hp_limit && cap_limit_btu_per_hr
       air_loop = fan_variable_volume.airLoopHVAC
       unless air_loop.is_initialized
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: Could not find the air loop to get cooling capacity for determining part load fan power control requirement.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.FanVariableVolume', "For #{fan_variable_volume.name}: Could not find the air loop to get cooling capacity for determining part load fan power control requirement.")
         return part_load_control_required
       end
       air_loop = air_loop.get
@@ -144,13 +144,13 @@ class Standard
       clg_cap_btu_per_hr = OpenStudio.convert(clg_cap_w, 'W', 'Btu/hr').get
       fan_hp = fan_motor_horsepower(fan_variable_volume)
       if fan_hp >= hp_limit && clg_cap_btu_per_hr >= cap_limit_btu_per_hr
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{fan_variable_volume.name}: part load fan power control is required for #{fan_hp.round(1)} HP fan, #{clg_cap_btu_per_hr.round} Btu/hr cooling capacity.")
         part_load_control_required = true
       end
     elsif hp_limit
       fan_hp = fan_motor_horsepower(fan_variable_volume)
       if fan_hp >= hp_limit
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan_variable_volume.name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FanVariableVolume', "For #{fan_variable_volume.name}: Part load fan power control is required for #{fan_hp.round(1)} HP fan.")
         part_load_control_required = true
       end
     end
@@ -252,7 +252,7 @@ class Standard
             sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||
             sc.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized ||
             sc.to_AirLoopHVACUnitarySystem.is_initialized
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "#{air_loop.name} has a cooling coil named #{sc.name}, whose type is not yet covered by cooling system type checks.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.FanVariableVolume', "#{air_loop.name} has a cooling coil named #{sc.name}, whose type is not yet covered by cooling system type checks.")
       end
     end
 

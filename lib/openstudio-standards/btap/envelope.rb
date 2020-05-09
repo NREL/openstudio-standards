@@ -134,7 +134,7 @@ module BTAP
           conductance = material.to_Shade.get.thermalConductance unless material.to_Shade.empty?
           conductance = material.to_Screen.get.thermalConductance unless material.to_Screen.empty?
           conductance = material.to_MasslessOpaqueMaterial.get.thermalConductance unless material.to_MasslessOpaqueMaterial.empty?
-          conductance = 1.0/material.to_AirGap.get.getThermalResistance.get.value unless material.to_AirGap.empty?
+          conductance = 1.0/material.to_AirGap.get.thermalResistance unless material.to_AirGap.empty?
           conductance = material.to_Gas.get.getThermalConductivity(temperature_k) unless material.to_Gas.empty?
           conductance = material.to_GasMixture.get.getThermalConductance(temperature_k) unless material.to_GasMixture.empty?
           conductance = material.to_RoofVegetation.get.thermalConductance unless material.to_RoofVegetation.empty?
@@ -370,7 +370,7 @@ module BTAP
             stdglazing.setInfraredTransmittanceatNormalIncidence(infraredTransmittanceatNormalIncidence.to_f)
             stdglazing.setFrontSideInfraredHemisphericalEmissivity(frontSideInfraredHemisphericalEmissivity.to_f)
             stdglazing.setBackSideInfraredHemisphericalEmissivity(backSideInfraredHemisphericalEmissivity.to_f)
-            stdglazing.setConductivity(conductivity.to_f)
+            stdglazing.setThermalConductivity(conductivity.to_f)
             stdglazing.setName(name)
             stdglazing.setOpticalDataType(opticalDataType)
             stdglazing.setDirtCorrectionFactorforSolarandVisibleTransmittance(dirt_correction_factor)
@@ -654,9 +654,9 @@ module BTAP
 
             construction.layers.each do |layer|
               #check to see if it is a simple glazing. If so use the SHGC method.
-              tsol = tsol * layer.to_SimpleGlazing.get.getSolarHeatGainCoefficient().value unless layer.to_SimpleGlazing.empty?
+              tsol = tsol * layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
               #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tsol = tsol * layer.to_StandardGlazing.get.solarTransmittance() unless layer.to_StandardGlazing.empty?
+              tsol = tsol * layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
             end
           end
           return tsol
@@ -674,9 +674,9 @@ module BTAP
           if construction.isFenestration
             construction.layers.each do |layer|
               #check to see if it is a simple glazing. If so use the SHGC method.
-              tvis = tvis * layer.to_SimpleGlazing.get.getVisibleTransmittance().get.value unless layer.to_SimpleGlazing.empty?
+              tvis = tvis * layer.to_SimpleGlazing.get.visibleTransmittance.get unless layer.to_SimpleGlazing.empty?
               #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence().get unless layer.to_StandardGlazing.empty?
+              tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence.get unless layer.to_StandardGlazing.empty?
             end
           end
           return tvis

@@ -41,39 +41,7 @@ module LargeOffice
       end
     end
 
-    # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
-    model.getPlantLoops.each do |plant_loop|
-      next unless plant_loop.name.to_s.include? "Heat Pump Loop"
-      sup_wtr_high_temp_f = 65.0
-      sup_wtr_low_temp_f = 41.0
-      sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
-      sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp_f, 'F', 'C').get
-      hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                             sup_wtr_high_temp_c,
-                                                             name = "#{plant_loop.name} High Temp - #{sup_wtr_high_temp_f.round(0)}F")
-      hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            sup_wtr_low_temp_c,
-                                                            name = "#{plant_loop.name} Low Temp - #{sup_wtr_low_temp_f.round(0)}F")
-
-      # add cooling tower object
-      cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
-      cooling_tower.setName("#{plant_loop.name} Central Tower")
-      plant_loop.addSupplyBranchForComponent(cooling_tower)
-      #### Add SPM Scheduled Dual Setpoint to outlet of Fluid Cooler so correct Plant Operation Scheme is generated
-      cooling_tower_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
-      cooling_tower_stpt_manager.setName("#{plant_loop.name} Fluid Cooler Scheduled Dual Setpoint")
-      cooling_tower_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
-      cooling_tower_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
-      cooling_tower_stpt_manager.addToNode(cooling_tower.outletModelObject.get.to_Node.get)
-
-      # remove EvaporativeFluidCoolerSingleSpeed object
-      model.getEvaporativeFluidCoolerSingleSpeeds.each do |fluid_cooler|
-        if fluid_cooler.plantLoop.get.name.to_s == plant_loop.name.to_s
-          fluid_cooler.remove
-          break
-        end
-      end
-    end
+    # TODO: replace CoolingTowerTwoSpeed with a FluidCoolerTwoSpeed once the simulation failures are resolved
 
     # set infiltration schedule for plenums
     # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
@@ -108,6 +76,15 @@ module LargeOffice
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end

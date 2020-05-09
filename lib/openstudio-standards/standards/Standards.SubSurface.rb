@@ -46,7 +46,7 @@ class Standard
       when 'OverheadDoor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['loading_dock_door']
       when 'GlassDoor'
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{sub_surface.name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SubSurface', "For #{sub_surface.name}, assuming swinging_or_revolving_glass_door for infiltration calculation.")
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['swinging_or_revolving_glass_door']
       when 'FixedWindow', 'OperableWindow'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['window']
@@ -55,7 +55,7 @@ class Standard
       end
     end
     if infil_rate_cfm_per_ft2.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "For #{sub_surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SubSurface', "For #{sub_surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
       return comp_infil_rate_m3_per_s
     end
 
@@ -241,7 +241,7 @@ class Standard
     surface.vertices.each do |surf_vert|
       surface.vertices.each do |surf_vert_2|
         unless surf_vert_2.z.to_f == surf_vert.z.to_f
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Currently skylights can only be added to buildings with non-plenum flat roofs.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SubSurface', 'Currently skylights can only be added to buildings with non-plenum flat roofs.')
         end
       end
     end

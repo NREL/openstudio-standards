@@ -7,6 +7,17 @@ OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {2a1864b6-de5b-4e2d-b106-91a086709e86}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {d19df09d-726b-4160-8ecb-570196e99762}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
+
 OS:SubSurface,
   {14a25927-c7c1-4cd4-bfed-b91ae977fc4d}, !- Handle
   SMstore2_Wall_1_Window_1,               !- Name
