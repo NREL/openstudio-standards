@@ -269,6 +269,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Stat file: #{stat_file_path} was not found when calculating ground temperatures.")
       return []
     end
+  end
 
   # Helper method to retrieve the cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
   def get_wb_mcb(weather_file)

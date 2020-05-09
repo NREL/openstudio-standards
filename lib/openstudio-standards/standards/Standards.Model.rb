@@ -2783,8 +2783,7 @@ class Standard
     end
   end
 
-  # Get the full path to the weather file that is specified in the model.
-  #
+  # Get the full path to the weather file that is specified in the model
   # @return [OpenStudio::OptionalPath]
   def model_get_full_weather_file_path(model)
     full_epw_path = OpenStudio::OptionalPath.new
