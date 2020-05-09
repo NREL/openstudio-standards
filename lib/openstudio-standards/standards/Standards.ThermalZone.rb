@@ -128,6 +128,9 @@ class Standard
       # Convert total to per-area
       tot_oa_per_area = tot_oa / floor_area
 
+      # Save the per-person requirement in additional properties for future DCV
+      dsn_oa.additionalProperties.setFeature('outdoor_air_flow_per_person_m3_per_s', dsn_oa.outdoorAirFlowperPerson)
+
       # Set the per-area requirement
       dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
       # Zero-out the per-person, ACH, and flow requirements
