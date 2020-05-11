@@ -25,14 +25,25 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
       # Specify all standards building and space types
-      # TODO: Currently using the same one for all cases
+      # TODO: Currently using the same one for all cases (except one)
       #       but we plan on updating it using a spreadsheet
       #       that Doug developed
       bldg = model.building.get()
-      bldg.setStandardsBuildingType("All Other")
-      model.getSpaceTypes.sort.each do |spc|
-        spc.setStandardsBuildingType("All Other")
-        spc.setStandardsSpaceType("office - whole building")
+      bldg.setStandardsBuildingType("Office <= 5,000 sq ft")
+      model.getSpaceTypes.sort.each do |spc_type|
+        spc_type.setStandardsBuildingType("Office <= 5,000 sq ft")
+        spc_type.setStandardsSpaceType("office - whole building")
+      end
+
+      # Change space type for the west facing perimeter zone
+      new_spc_type = OpenStudio::Model::SpaceType.new(model)
+      new_spc_type.setName("Add'l Space Type")
+      new_spc_type.setStandardsBuildingType("All others")
+      new_spc_type.setStandardsSpaceType("office - whole building")
+      model.getSpaces.sort.each do |spc|
+        if spc.name.to_s == "Perimeter_ZN_4"
+          spc.setSpaceType(new_spc_type)
+        end
       end
 
       # Save prototype OSM file
@@ -63,9 +74,31 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       all_comp =  @building_types.product @templates, @climate_zones
       all_comp.each do |building_type, template, climate_zone|
         model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone)
-        assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}")
+        assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
-        # TODO: Load newly created baseline model and create additional assertions
+        # Load baseline model
+        @test_dir = "#{Dir.pwd}/output"
+        model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm")
+        model_baseline = model_baseline.get
+
+        # Do sizing run for baseline model
+        prototype_creator = Standard.build("90.1-PRM-2019")
+        sim_control = model_baseline.getSimulationControl
+        sim_control.setRunSimulationforSizingPeriods(true)
+        sim_control.setRunSimulationforWeatherFileRunPeriods(false)
+        baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
+
+        # Get WWR of baseline model
+        query = "Select Value FROM TabularDataWithStrings WHERE
+        ReportName = 'InputVerificationandResultsSummary' AND
+        TableName = 'Window-Wall Ratio' AND
+        RowName = 'Gross Window-Wall Ratio' AND
+        ColumnName = 'Total' AND
+        Units = '%'"
+        wwr_baseline = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+
+        # Check WWR against expected WWR
+        assert(wwr_baseline == 19.2,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
       end
   end
 end
