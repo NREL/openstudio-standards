@@ -3505,8 +3505,13 @@ class Standard
     space_cats = {}
 
     model.getSpaces.sort.each do |space|
-      # Get standards space type
-      std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+      # Get standards space type and
+      # catch spaces without space types
+      if space.spaceType.is_initialized
+        std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+      else
+        std_spc_type = 'no_space_type'
+      end
 
       # Initialize intermediate variables if space type hasn't
       # been encountered yet
@@ -3615,15 +3620,22 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{vals['wwr_sh'].round}%; window = #{vals['sh_wind_ft2'].round} ft2, wall = #{vals['sh_wall_ft2'].round} ft2.")
 
       # WWR limit or target
-      wwr_lib = standards_data['prm_wwr_bldg_type']
-      search_criteria = {
-        'template' => template,
-        'wwr_building_type' => bat,
-      }
-      if model_find_object(wwr_lib, search_criteria).nil? 
-        wwr_lim = 40.0
+      if template == '90.1-PRM-2019'
+        # Lookup WWR target from stable baseline table
+        wwr_lib = standards_data['prm_wwr_bldg_type']
+        search_criteria = {
+          'template' => template,
+          'wwr_building_type' => bat,
+        }
+        # If building type isn't found, assume that it's
+        # the same as 'All Others'
+        if model_find_object(wwr_lib, search_criteria).nil? 
+          wwr_lim = 40.0
+        else
+          wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
+        end
       else
-        wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
+        wwr_lim = 40.0
       end
 
       # Check against WWR limit
@@ -3642,7 +3654,12 @@ class Standard
 
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
-        next unless space.spaceType.get.standardsBuildingType.to_s == bat
+        # Catch spaces without space types
+        if space.spaceType.is_initialized
+          next unless space.spaceType.get.standardsBuildingType.to_s == bat
+        else
+          next unless bat == 'no_space_type'
+        end
 
         # Determine the space category
         # from the previously stored values
