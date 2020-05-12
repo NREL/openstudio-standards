@@ -79,19 +79,15 @@ class Standard
         added = space_add_daylighting_controls(space, false, false)
       end
     end
+    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 
-    if /prm/i !~ template
-      puts "Skipping these steps until they are updated to handle 2019 PRM"
+    # Modify some of the construction types as necessary
+    model_apply_prm_construction_types(model)
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
+    # Set the construction properties of all the surfaces in the model
+    model_apply_standard_constructions(model, climate_zone)
 
-      # Modify some of the construction types as necessary
-      model_apply_prm_construction_types(model)
-
-      # Set the construction properties of all the surfaces in the model
-      model_apply_standard_constructions(model, climate_zone)
-
-    end
     if /prm/i !~ template
 
         # Get the groups of zones that define the baseline HVAC systems for later use.
@@ -2306,7 +2302,12 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = model_find_object(standards_data['constructions'], 'name' => construction_name)
+    if /prm/i !~ template
+      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
+    else
+      data = model_find_object(standards_data['prm_constructions'], 'name' => construction_name)
+    end
+
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
