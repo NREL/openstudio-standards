@@ -32,9 +32,11 @@ doe_prototype/test_small_office_detailed.rb
 doe_prototype/test_high_rise_apartment.rb
 doe_prototype/test_supermarket.rb
 
+doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
 doe_prototype/test_add_exhaust.rb
 doe_prototype/test_add_exterior_lights.rb
+doe_prototype/test_add_f_factor_floor.rb
 doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
