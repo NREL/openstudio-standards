@@ -43,7 +43,7 @@ class Standard
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
+    model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
     model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
     # Assign building stories to spaces in the building where stories are not yet assigned.
@@ -3507,7 +3507,7 @@ class Standard
   # Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
-  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
+  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type = nil)
     # Define a Hash that will contain wall and window area for all
     # building area types included in the model
     bat_win_wall_info = {}
@@ -3518,7 +3518,15 @@ class Standard
     model.getSpaces.sort.each do |space|
       # Get standards space type and
       # catch spaces without space types
-      if space.spaceType.is_initialized
+      #
+      # Currently, priority is given to the wwr_building_type,
+      # meaning that only one building area type is used. The
+      # method can however handle models with multiple building 
+      # area type, if they are specified through each space's
+      # space type standards building type.
+      if !wwr_building_type.nil?
+        std_spc_type = wwr_building_type
+      elsif space.spaceType.is_initialized
         std_spc_type = space.spaceType.get.standardsBuildingType.to_s
       else
         std_spc_type = 'no_space_type'
@@ -3666,10 +3674,12 @@ class Standard
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
         # Catch spaces without space types
-        if space.spaceType.is_initialized
-          next unless space.spaceType.get.standardsBuildingType.to_s == bat
+        if !wwr_building_type.nil?
+          std_spc_type = wwr_building_type
+        elsif space.spaceType.is_initialized
+          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
         else
-          next unless bat == 'no_space_type'
+          std_spc_type = 'no_space_type'
         end
 
         # Determine the space category

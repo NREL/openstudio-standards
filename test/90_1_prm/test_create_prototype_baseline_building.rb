@@ -24,17 +24,6 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       prototype_creator = Standard.build("#{template}_#{building_type}")
       model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
 
-      # Change space type for the west facing perimeter zone
-      new_spc_type = OpenStudio::Model::SpaceType.new(model)
-      new_spc_type.setName("Add'l Space Type")
-      new_spc_type.setStandardsBuildingType("All others")
-      new_spc_type.setStandardsSpaceType("office - whole building")
-      model.getSpaces.sort.each do |spc|
-        if spc.name.to_s == "Perimeter_ZN_4"
-          spc.setSpaceType(new_spc_type)
-        end
-      end
-
       # Save prototype OSM file
       osm_path = OpenStudio::Path.new("#{run_dir}/#{model_name}.osm")
       model.save(osm_path, true)
@@ -62,7 +51,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       # Generate prototype building models and associated baselines
       all_comp =  @building_types.product @templates, @climate_zones
       all_comp.each do |building_type, template, climate_zone|
-        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, wwr_building_type = 'Office <= 5,000 sq ft')
+        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, 'All others', 'Office <= 5,000 sq ft', 'All others')
         assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
         # Load baseline model
@@ -87,7 +76,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         wwr_baseline = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
 
         # Check WWR against expected WWR
-        assert(wwr_baseline == 19.2,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+        wwr_goal = 19.0
+        assert(wwr_baseline == wwr_goal,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
       end
   end
 end
