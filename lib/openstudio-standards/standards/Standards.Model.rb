@@ -43,12 +43,8 @@ class Standard
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    if /prm/i =~ template
-      puts "After win/wall ratio"  
-    else
-      model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
-      model_apply_prm_baseline_skylight_to_roof_ratio(model)
-    end
+    model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+    model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
     # Assign building stories to spaces in the building where stories are not yet assigned.
     model_assign_spaces_to_stories(model)
@@ -3511,22 +3507,53 @@ class Standard
   # Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
-  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
-    # Loop through all spaces in the model, and
-    # per the PNNL PRM Reference Manual, find the areas
-    # of each space conditioning category (res, nonres, semi-heated)
-    # separately.  Include space multipliers.
-    nr_wall_m2 = 0.001 # Avoids divide by zero errors later
-    nr_wind_m2 = 0
-    res_wall_m2 = 0.001
-    res_wind_m2 = 0
-    sh_wall_m2 = 0.001
-    sh_wind_m2 = 0
-    total_wall_m2 = 0.001
-    total_subsurface_m2 = 0.0
+  def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type = nil)
+    # Define a Hash that will contain wall and window area for all
+    # building area types included in the model
+    bat_win_wall_info = {}
+
     # Store the space conditioning category for later use
     space_cats = {}
+
     model.getSpaces.sort.each do |space|
+      # Get standards space type and
+      # catch spaces without space types
+      #
+      # Currently, priority is given to the wwr_building_type,
+      # meaning that only one building area type is used. The
+      # method can however handle models with multiple building 
+      # area type, if they are specified through each space's
+      # space type standards building type.
+      if !wwr_building_type.nil?
+        std_spc_type = wwr_building_type
+      elsif space.spaceType.is_initialized
+        std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+      else
+        std_spc_type = 'no_space_type'
+      end
+
+      # Initialize intermediate variables if space type hasn't
+      # been encountered yet
+      if !bat_win_wall_info.key?(std_spc_type)
+        bat_win_wall_info[std_spc_type] = {}
+        bat = bat_win_wall_info[std_spc_type]
+
+        # Loop through all spaces in the model, and
+        # per the PNNL PRM Reference Manual, find the areas
+        # of each space conditioning category (res, nonres, semi-heated)
+        # separately.  Include space multipliers.
+        bat.store('nr_wall_m2', 0.001) # Avoids divide by zero errors later
+        bat.store('nr_wind_m2', 0)
+        bat.store('res_wall_m2', 0.001)
+        bat.store('res_wind_m2', 0)
+        bat.store('sh_wall_m2', 0.001)
+        bat.store('sh_wind_m2', 0)
+        bat.store('total_wall_m2', 0.001)
+        bat.store('total_subsurface_m2', 0.0)
+      else
+        bat = bat_win_wall_info[std_spc_type]
+      end
+
       # Loop through all surfaces in this space
       wall_area_m2 = 0
       wind_area_m2 = 0
@@ -3535,11 +3562,13 @@ class Standard
         next unless surface.outsideBoundaryCondition == 'Outdoors'
         # Skip non-walls
         next unless surface.surfaceType.casecmp('wall').zero?
+
         # This wall's gross area (including window area)
         wall_area_m2 += surface.grossArea * space.multiplier
         # Subsurfaces in this surface
         surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
+          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
           wind_area_m2 += ss.netArea * space.multiplier
         end
       end
@@ -3576,91 +3605,129 @@ class Standard
         when 'Unconditioned'
           next # Skip unconditioned spaces
         when 'NonResConditioned'
-          nr_wall_m2 += wall_area_m2
-          nr_wind_m2 += wind_area_m2
+          bat['nr_wall_m2'] += wall_area_m2
+          bat['nr_wind_m2'] += wind_area_m2
         when 'ResConditioned'
-          res_wall_m2 += wall_area_m2
-          res_wind_m2 += wind_area_m2
+          bat['res_wall_m2'] += wall_area_m2
+          bat['res_wind_m2'] += wind_area_m2
         when 'Semiheated'
-          sh_wall_m2 += wall_area_m2
-          sh_wind_m2 += wind_area_m2
+          bat['sh_wall_m2'] += wall_area_m2
+          bat['sh_wind_m2'] += wind_area_m2
       end
     end
 
-    # Calculate the WWR of each category
-    wwr_nr = ((nr_wind_m2 / nr_wall_m2) * 100.0).round(1)
-    wwr_res = ((res_wind_m2 / res_wall_m2) * 100).round(1)
-    wwr_sh = ((sh_wind_m2 / sh_wall_m2) * 100).round(1)
+    # Retrieve WWR info for all Building Area Types included in the model
+    # and perform adjustements if
+    bat_win_wall_info.each do |bat, vals|
+      # Calculate the WWR of each category
+      vals.store('wwr_nr', ((vals['nr_wind_m2'] / vals['nr_wall_m2']) * 100.0).round(1))
+      vals.store('wwr_res', ((vals['res_wind_m2'] / vals['res_wall_m2']) * 100).round(1))
+      vals.store('wwr_sh', ((vals['sh_wind_m2'] / vals['sh_wall_m2']) * 100).round(1))
 
-    # Convert to IP and report
-    nr_wind_ft2 = OpenStudio.convert(nr_wind_m2, 'm^2', 'ft^2').get
-    nr_wall_ft2 = OpenStudio.convert(nr_wall_m2, 'm^2', 'ft^2').get
+      # Convert to IP and report
+      vals.store('nr_wind_ft2', OpenStudio.convert(vals['nr_wind_m2'], 'm^2', 'ft^2').get)
+      vals.store('nr_wall_ft2', OpenStudio.convert(vals['nr_wall_m2'], 'm^2', 'ft^2').get)
 
-    res_wind_ft2 = OpenStudio.convert(res_wind_m2, 'm^2', 'ft^2').get
-    res_wall_ft2 = OpenStudio.convert(res_wall_m2, 'm^2', 'ft^2').get
+      vals.store('res_wind_ft2', OpenStudio.convert(vals['res_wind_m2'], 'm^2', 'ft^2').get)
+      vals.store('res_wall_ft2', OpenStudio.convert(vals['res_wall_m2'], 'm^2', 'ft^2').get)
 
-    sh_wind_ft2 = OpenStudio.convert(sh_wind_m2, 'm^2', 'ft^2').get
-    sh_wall_ft2 = OpenStudio.convert(sh_wall_m2, 'm^2', 'ft^2').get
+      vals.store('sh_wind_ft2', OpenStudio.convert(vals['sh_wind_m2'], 'm^2', 'ft^2').get)
+      vals.store('sh_wall_ft2', OpenStudio.convert(vals['sh_wall_m2'], 'm^2', 'ft^2').get)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{wwr_nr.round}%; window = #{nr_wind_ft2.round} ft2, wall = #{nr_wall_ft2.round} ft2.")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{wwr_res.round}%; window = #{res_wind_ft2.round} ft2, wall = #{res_wall_ft2.round} ft2.")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{wwr_sh.round}%; window = #{sh_wind_ft2.round} ft2, wall = #{sh_wall_ft2.round} ft2.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR NonRes = #{vals['wwr_nr'].round}%; window = #{vals['nr_wind_ft2'].round} ft2, wall = #{vals['nr_wall_ft2'].round} ft2.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Res = #{vals['wwr_res'].round}%; window = #{vals['res_wind_ft2'].round} ft2, wall = #{vals['res_wall_ft2'].round} ft2.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "WWR Semiheated = #{vals['wwr_sh'].round}%; window = #{vals['sh_wind_ft2'].round} ft2, wall = #{vals['sh_wall_ft2'].round} ft2.")
 
-    # WWR limit
-    wwr_lim = 40.0
-
-    # Check against WWR limit
-    red_nr = wwr_nr > wwr_lim
-    red_res = wwr_res > wwr_lim
-    red_sh = wwr_sh > wwr_lim
-
-    # Stop here unless windows need reducing
-    return true unless red_nr || red_res || red_sh
-
-    # Determine the factors by which to reduce the window area
-    mult_nr_red = wwr_lim / wwr_nr
-    mult_res_red = wwr_lim / wwr_res
-    mult_sh_red = wwr_lim / wwr_sh
-
-    # Reduce the window area if any of the categories necessary
-    model.getSpaces.sort.each do |space|
-      # Determine the space category
-      # from the previously stored values
-      cat = space_cats[space]
-
-      # Get the correct multiplier
-      case cat
-        when 'Unconditioned'
-          next # Skip unconditioned spaces
-        when 'NonResConditioned'
-          next unless red_nr
-          mult = mult_nr_red
-        when 'ResConditioned'
-          next unless red_res
-          mult = mult_res_red
-        when 'Semiheated'
-          next unless red_sh
-          mult = mult_sh_red
+      # WWR limit or target
+      if template == '90.1-PRM-2019'
+        # Lookup WWR target from stable baseline table
+        wwr_lib = standards_data['prm_wwr_bldg_type']
+        search_criteria = {
+          'template' => template,
+          'wwr_building_type' => bat,
+        }
+        # If building type isn't found, assume that it's
+        # the same as 'All Others'
+        if model_find_object(wwr_lib, search_criteria).nil? 
+          wwr_lim = 40.0
+        else
+          wwr_lim = model_find_object(wwr_lib, search_criteria)['wwr'] * 100.0
+        end
+      else
+        wwr_lim = 40.0
       end
 
-      # Loop through all surfaces in this space
-      space.surfaces.sort.each do |surface|
-        # Skip non-outdoor surfaces
-        next unless surface.outsideBoundaryCondition == 'Outdoors'
-        # Skip non-walls
-        next unless surface.surfaceType.casecmp('wall').zero?
-        # Subsurfaces in this surface
-        surface.subSurfaces.sort.each do |ss|
-          next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow'
-          # Reduce the size of the window
-          # If a vertical rectangle, raise sill height to avoid
-          # impacting daylighting areas, otherwise
-          # reduce toward centroid.
-          red = 1.0 - mult
-          if sub_surface_vertical_rectangle?(ss)
-            sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
-          else
-            sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+      # Check against WWR limit
+      vals['red_nr'] = vals['wwr_nr'] > wwr_lim
+      vals['red_res'] = vals['wwr_res'] > wwr_lim
+      vals['red_sh'] = vals['wwr_sh'] > wwr_lim
+
+      # Stop here unless windows need reducing or increasing if
+      # following the stable baseline approach
+      return true unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
+
+      # Determine the factors by which to reduce the window area
+      vals['mult_nr_red'] = wwr_lim / vals['wwr_nr']
+      vals['mult_res_red'] = wwr_lim / vals['wwr_res']
+      vals['mult_sh_red'] = wwr_lim / vals['wwr_sh']
+
+      # Reduce the window area if any of the categories necessary
+      model.getSpaces.sort.each do |space|
+        # Catch spaces without space types
+        if !wwr_building_type.nil?
+          std_spc_type = wwr_building_type
+        elsif space.spaceType.is_initialized
+          std_spc_type = space.spaceType.get.standardsBuildingType.to_s
+        else
+          std_spc_type = 'no_space_type'
+        end
+
+        # Determine the space category
+        # from the previously stored values
+        cat = space_cats[space]
+
+        # Get the correct multiplier
+        case cat
+          when 'Unconditioned'
+            next # Skip unconditioned spaces
+          when 'NonResConditioned'
+            next unless vals['red_nr']
+
+            mult = vals['mult_nr_red']
+          when 'ResConditioned'
+            next unless vals['red_res']
+
+            mult = vals['mult_res_red']
+          when 'Semiheated'
+            next unless vals['red_sh']
+
+            mult = vals['mult_sh_red']
+        end
+
+        # Loop through all surfaces in this space
+        space.surfaces.sort.each do |surface|
+          # Skip non-outdoor surfaces
+          next unless surface.outsideBoundaryCondition == 'Outdoors'
+          # Skip non-walls
+          next unless surface.surfaceType.casecmp('wall').zero?
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |ss|
+            next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+            # Reduce the size of the window
+            # If a vertical rectangle, raise sill height to avoid
+            # impacting daylighting areas, otherwise
+            # reduce toward centroid.
+            #
+            # For 90.1-PRM-2019 a.k.a "stable baseline" we always
+            # want to adjust by shrinking toward centroid since
+            # daylighting control isn't modeled
+            red = 1.0 - mult
+            if sub_surface_vertical_rectangle?(ss) && template != '90.1-PRM-2019'
+              sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
+            else
+              sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+            end
           end
         end
       end

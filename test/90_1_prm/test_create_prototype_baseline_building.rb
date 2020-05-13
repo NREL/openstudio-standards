@@ -51,10 +51,33 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       # Generate prototype building models and associated baselines
       all_comp =  @building_types.product @templates, @climate_zones
       all_comp.each do |building_type, template, climate_zone|
-        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, wwr_building_type = 'Office <= 5,000 sq ft')
-        assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}")
+        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, 'All others', 'Office <= 5,000 sq ft', 'All others')
+        assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
-        # TODO: Load newly created baseline model and create additional assertions
+        # Load baseline model
+        @test_dir = "#{Dir.pwd}/output"
+        model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm")
+        model_baseline = model_baseline.get
+
+        # Do sizing run for baseline model
+        prototype_creator = Standard.build("90.1-PRM-2019")
+        sim_control = model_baseline.getSimulationControl
+        sim_control.setRunSimulationforSizingPeriods(true)
+        sim_control.setRunSimulationforWeatherFileRunPeriods(false)
+        baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
+
+        # Get WWR of baseline model
+        query = "Select Value FROM TabularDataWithStrings WHERE
+        ReportName = 'InputVerificationandResultsSummary' AND
+        TableName = 'Window-Wall Ratio' AND
+        RowName = 'Gross Window-Wall Ratio' AND
+        ColumnName = 'Total' AND
+        Units = '%'"
+        wwr_baseline = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+
+        # Check WWR against expected WWR
+        wwr_goal = 19.0
+        assert(wwr_baseline == wwr_goal,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
       end
   end
 end
