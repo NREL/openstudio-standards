@@ -23,7 +23,18 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
+  
+  # Method used for 90.1-2016 and onward
+  def model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, custom, sizing_run_dir, debug)
+  end
+
+  # Method used for 90.1-2013 and prior
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', custom, sizing_run_dir, debug)
+  end
+
+  def model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, debug = false)
     model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
  
     # Remove external shading devices
