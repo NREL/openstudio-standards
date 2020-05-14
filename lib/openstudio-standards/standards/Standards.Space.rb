@@ -1420,6 +1420,10 @@ class Standard
   def space_residential?(space)
     is_res = false
 
+    # 2019TODO:
+    # temporary line until alternate lookup for 2019 PRM is established
+    return is_res if /prm/i =~ template
+
     space_to_check = space
 
     # If this space is a plenum, check the space type

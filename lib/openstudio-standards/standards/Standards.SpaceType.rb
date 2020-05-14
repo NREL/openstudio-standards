@@ -90,6 +90,8 @@ class Standard
       end
     end
 
+    return space_type_apply_int_loads_prm(space_type) if /prm/i =~ template
+
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
 
@@ -443,6 +445,17 @@ class Standard
       end
 
     end
+  end
+
+  # Sets the internal loads for Appendix G PRM for 2016 and later
+  # Initially, only lighting power density will be set
+  # Possibly infiltration will also be set from here
+
+  def space_type_apply_int_loads_prm(space_type)
+
+    # Get the LPD values and apply to model
+
+
   end
 
   # Sets the schedules for the selected internal loads to typical schedules.

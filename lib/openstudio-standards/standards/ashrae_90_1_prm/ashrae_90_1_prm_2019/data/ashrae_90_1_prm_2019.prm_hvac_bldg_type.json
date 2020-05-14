@@ -10,14 +10,6 @@
     },
     {
       "template": "90.1-PRM-2019",
-      "hvac_building_type": "hospitals"
-    },
-    {
-      "template": "90.1-PRM-2019",
-      "hvac_building_type": "none"
-    },
-    {
-      "template": "90.1-PRM-2019",
       "hvac_building_type": "other nonresidential"
     },
     {
@@ -31,6 +23,10 @@
     {
       "template": "90.1-PRM-2019",
       "hvac_building_type": "retail"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "hvac_building_type": "unconditioned"
     }
   ]
 }
