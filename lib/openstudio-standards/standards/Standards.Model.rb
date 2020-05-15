@@ -36,7 +36,17 @@ class Standard
 
   def model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, debug = false)
     model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
- 
+
+    # Perform a sizing run of the proposed model.
+    # Intend is to get individual space load to determine each space's
+    # conditioning type: conditioned, unconditioned, semiheated.
+    puts model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+    if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP") == false
+        return false
+      end
+    end
+
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
     model_remove_external_shading_devices(model)
@@ -284,6 +294,13 @@ class Standard
   # These VLT values are needed for the daylighting controls logic for some templates.
   def model_create_prm_baseline_building_requires_vlt_sizing_run(model)
     return false # Not required for most templates
+  end
+
+  # Determine if there is a need for a proposed model sizing run.
+  # A typical application of such sizing run is to determine space
+  # conditioning type.
+  def model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+    return false
   end
 
   # Determine the residential and nonresidential floor areas based on the space type properties for each space.
