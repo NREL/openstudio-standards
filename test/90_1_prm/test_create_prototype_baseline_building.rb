@@ -13,12 +13,20 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         Dir.mkdir(@test_dir)
       end
 
-      # Define model name and run folder if it doesn't already exist
+      # Define model name and run folder if it doesn't already exist,
+      # if it does, remove it and re-create it.
       model_name = "#{building_type}-#{template}-#{climate_zone}"
       run_dir = "#{@test_dir}/#{model_name}"
       if !Dir.exists?(run_dir)
         Dir.mkdir(run_dir)
-      end  
+      else
+        FileUtils.rm_rf(run_dir)
+        Dir.mkdir(run_dir)
+      end
+      run_dir_baseline = "#{run_dir}-Baseline"
+      if Dir.exists?(run_dir_baseline)
+        FileUtils.rm_rf(run_dir_baseline)
+      end
 
       # Create the prototype
       prototype_creator = Standard.build("#{template}_#{building_type}")
@@ -38,7 +46,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       prototype_creator = Standard.build("90.1-PRM-2019")
 
       # Create baseline model
-      model_baseline = prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, nil, "#{run_dir}-Baseline", false)
+      model_baseline = prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, nil, run_dir_baseline, false)
       return model_baseline, model
     end
 
@@ -77,7 +85,10 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
 
         # Check WWR against expected WWR
         wwr_goal = 19.0
-        assert(wwr_baseline == wwr_goal,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+        assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+
+        # Check that proposed sizing ran
+        assert(File.directory?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
       end
   end
 end
