@@ -88,7 +88,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
 
         # Check that proposed sizing ran
-        assert(File.directory?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
+        assert(File.file?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP/run/eplusout.sql"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
       end
   end
 end
