@@ -53,101 +53,101 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
   def test_create_prototype_baseline_building
       # Define prototypes to be generated
       @templates = ['90.1-2013']
-      @building_types = ['SmallOffice','ApartmentMidRise']
+      @building_types = ['SmallOffice','MidriseApartment']
       @climate_zones = ['ASHRAE 169-2013-2A']
 
       wwr_building_types = {
-        'ApartmentHighRise' => 'All others'
-        'ApartmentMidRise' => 'All others'
+        'HighriseApartment' => 'All others'
+        'MidriseApartment' => 'All others'
         'Hospital' => 'Hospital'
-        'HotelLarge' => 'Hotel/motel > 75 rooms'
+        'LargeHotel' => 'Hotel/motel > 75 rooms'
         'RetailStripmall' => 'Retail (strip mall)'
-        'HotelSmall' => 'Hotel/motel <= 75 rooms'
-        'OfficeLarge' => 'Office > 50,000 sq ft'
-        'OfficeMedium' => 'Office 5,000 to 50,000 sq ft'
-        'OfficeSmall' => 'Office <= 5,000 sq ft'
-        'OutPatientHealthCare' => 'Healthcare (outpatient)'
-        'RestaurantFastFood' => 'Restaurant (quick service)'
-        'RestaurantSitDown' => 'Restaurant (full service)'
+        'SmallHotel' => 'Hotel/motel <= 75 rooms'
+        'LargeOffice' => 'Office > 50,000 sq ft'
+        'MediumOffice' => 'Office 5,000 to 50,000 sq ft'
+        'SmallOffice' => 'Office <= 5,000 sq ft'
+        'Outpatient' => 'Healthcare (outpatient)'
+        'QuickServiceRestaurant' => 'Restaurant (quick service)'
+        'FullServiceRestaurant' => 'Restaurant (full service)'
         'RetailStandalone' => 'Retail (stand alone)'
-        'SchoolPrimary' => 'School (primary)'
-        'SchoolSecondary' => 'School (secondary and university)'
+        'PrimarySchool' => 'School (primary)'
+        'SecondarySchool' => 'School (secondary and university)'
         'Warehouse' => 'Warehouse (nonrefrigerated)'
       }
 
       hvac_building_types = {
-        'ApartmentHighRise' => 'residential'
-        'ApartmentMidRise' => 'residential'
+        'HighriseApartment' => 'residential'
+        'MidriseApartment' => 'residential'
         'Hospital' => 'hospital'
-        'HotelLarge' => 'residential'
+        'LargeHotel' => 'residential'
         'RetailStripmall' => 'retail'
-        'HotelSmall' => 'residential'
-        'OfficeLarge' => 'other nonresidential'
-        'OfficeMedium' => 'other nonresidential'
-        'OfficeSmall' => 'other nonresidential'
-        'OutPatientHealthCare' => 'hospital'
-        'RestaurantFastFood' => 'other nonresidential'
-        'RestaurantSitDown' => 'other nonresidential'
+        'SmallHotel' => 'residential'
+        'LargeOffice' => 'other nonresidential'
+        'MediumOffice' => 'other nonresidential'
+        'SmallOffice' => 'other nonresidential'
+        'Outpatient' => 'hospital'
+        'QuickServiceRestaurant' => 'other nonresidential'
+        'FullServiceRestaurant' => 'other nonresidential'
         'RetailStandalone' => 'retail'
-        'SchoolPrimary' => 'other nonresidential'
-        'SchoolSecondary' => 'other nonresidential'
+        'PrimarySchool' => 'other nonresidential'
+        'SecondarySchool' => 'other nonresidential'
         'Warehouse' => 'heated-only storage'
       }
 
       swh_building_types = {
-        'ApartmentHighRise' => 'Multifamily '
-        'ApartmentMidRise' => 'Multifamily '
+        'HighriseApartment' => 'Multifamily '
+        'MidriseApartment' => 'Multifamily '
         'Hospital' => 'Hospital and outpatient surgery center '
-        'HotelLarge' => 'Hotel '
+        'LargeHotel' => 'Hotel '
         'RetailStripmall' => 'Retail '
-        'HotelSmall' => 'Motel '
-        'OfficeLarge' => 'Office '
-        'OfficeMedium' => 'Office '
-        'OfficeSmall' => 'Office '
-        'OutPatientHealthCare' => 'Hospital and outpatient surgery center '
-        'RestaurantFastFood' => 'Dining: Cafeteria/fast food '
-        'RestaurantSitDown' => 'Dining: Family '
+        'SmallHotel' => 'Motel '
+        'LargeOffice' => 'Office '
+        'MediumOffice' => 'Office '
+        'SmallOffice' => 'Office '
+        'Outpatient' => 'Hospital and outpatient surgery center '
+        'QuickServiceRestaurant' => 'Dining: Cafeteria/fast food '
+        'FullServiceRestaurant' => 'Dining: Family '
         'RetailStandalone' => 'Retail '
-        'SchoolPrimary' => 'School/university '
-        'SchoolSecondary' => 'School/university '
+        'PrimarySchool' => 'School/university '
+        'SecondarySchool' => 'School/university '
         'Warehouse' => 'Warehouse '
       }
 
       wwr_values = {
-        'ApartmentHighRise' => '0.3'
-        'ApartmentMidRise' => '0.2'
+        'HighriseApartment' => '0.3'
+        'MidriseApartment' => '0.2'
         'Hospital' => '0.27'
-        'HotelLarge' => '0.34'
+        'LargeHotel' => '0.34'
         'RetailStripmall' => '0.2'
-        'HotelSmall' => '0.24'
-        'OfficeLarge' => '0.4'
-        'OfficeMedium' => '0.31'
-        'OfficeSmall' => '0.19'
-        'OutPatientHealthCare' => '0.21'
-        'RestaurantFastFood' => '0.34'
-        'RestaurantSitDown' => '0.24'
+        'SmallHotel' => '0.24'
+        'LargeOffice' => '0.4'
+        'MediumOffice' => '0.31'
+        'SmallOffice' => '0.19'
+        'Outpatient' => '0.21'
+        'QuickServiceRestaurant' => '0.34'
+        'FullServiceRestaurant' => '0.24'
         'RetailStandalone' => '0.11'
-        'SchoolPrimary' => '0.22'
-        'SchoolSecondary' => '0.22'
+        'PrimarySchool' => '0.22'
+        'SecondarySchool' => '0.22'
         'Warehouse' => '0.06'
       }
 
       hasres_values = {
-        'ApartmentHighRise' => true
-        'ApartmentMidRise' => true
+        'HighriseApartment' => true
+        'MidriseApartment' => true
         'Hospital' => true
-        'HotelLarge' => true
+        'LargeHotel' => true
         'RetailStripmall' => false
-        'HotelSmall' => true
-        'OfficeLarge' => false
-        'OfficeMedium' => false
-        'OfficeSmall' => false
-        'OutPatientHealthCare' => true
-        'RestaurantFastFood' => false
-        'RestaurantSitDown' => false
+        'SmallHotel' => true
+        'LargeOffice' => false
+        'MediumOffice' => false
+        'SmallOffice' => false
+        'Outpatient' => true
+        'QuickServiceRestaurant' => false
+        'FullServiceRestaurant' => false
         'RetailStandalone' => false
-        'SchoolPrimary' => false
-        'SchoolSecondary' => false
+        'PrimarySchool' => false
+        'SecondarySchool' => false
         'Warehouse' => false
       }
 
