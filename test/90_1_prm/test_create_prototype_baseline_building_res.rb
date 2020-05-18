@@ -53,7 +53,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
   def test_create_prototype_baseline_building
       # Define prototypes to be generated
       @templates = ['90.1-2013']
-      @building_types = ['SmallOffice']
+      @building_types = ['MidriseApartment']
       @climate_zones = ['ASHRAE 169-2013-2A']
 
       # Generate prototype building models and associated baselines
@@ -74,23 +74,10 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         sim_control.setRunSimulationforWeatherFileRunPeriods(false)
         baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
 
-        # Get WWR of baseline model
-        query = "Select Value FROM TabularDataWithStrings WHERE
-        ReportName = 'InputVerificationandResultsSummary' AND
-        TableName = 'Window-Wall Ratio' AND
-        RowName = 'Gross Window-Wall Ratio' AND
-        ColumnName = 'Total' AND
-        Units = '%'"
-        wwr_baseline = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
-
-        # Check WWR against expected WWR
-        wwr_goal = 19.0
-        assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
-
         # Check that proposed sizing ran
         assert(File.file?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP/run/eplusout.sql"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
  
-        # Check IsResidential for Small Office
+        # Check IsResidential for MidRiseApartment
         # Determine whether any space is residential
         has_res = false
         model_baseline.getSpaces.sort.each do |space|
@@ -98,7 +85,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
             has_res = true
           end
         end
-        has_res_goal = false
+        has_res_goal = true
         assert(has_res == has_res_goal, "Failure to set space_residential? for #{building_type}, #{template}, #{climate_zone}.")
 
       end
