@@ -53,13 +53,109 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
   def test_create_prototype_baseline_building
       # Define prototypes to be generated
       @templates = ['90.1-2013']
-      @building_types = ['SmallOffice']
+      @building_types = ['SmallOffice','ApartmentMidRise']
       @climate_zones = ['ASHRAE 169-2013-2A']
 
-      # Generate prototype building models and associated baselines
+      wwr_building_types = {
+        'ApartmentHighRise' => 'All others'
+        'ApartmentMidRise' => 'All others'
+        'Hospital' => 'Hospital'
+        'HotelLarge' => 'Hotel/motel > 75 rooms'
+        'RetailStripmall' => 'Retail (strip mall)'
+        'HotelSmall' => 'Hotel/motel <= 75 rooms'
+        'OfficeLarge' => 'Office > 50,000 sq ft'
+        'OfficeMedium' => 'Office 5,000 to 50,000 sq ft'
+        'OfficeSmall' => 'Office <= 5,000 sq ft'
+        'OutPatientHealthCare' => 'Healthcare (outpatient)'
+        'RestaurantFastFood' => 'Restaurant (quick service)'
+        'RestaurantSitDown' => 'Restaurant (full service)'
+        'RetailStandalone' => 'Retail (stand alone)'
+        'SchoolPrimary' => 'School (primary)'
+        'SchoolSecondary' => 'School (secondary and university)'
+        'Warehouse' => 'Warehouse (nonrefrigerated)'
+      }
+
+      hvac_building_types = {
+        'ApartmentHighRise' => 'residential'
+        'ApartmentMidRise' => 'residential'
+        'Hospital' => 'hospital'
+        'HotelLarge' => 'residential'
+        'RetailStripmall' => 'retail'
+        'HotelSmall' => 'residential'
+        'OfficeLarge' => 'other nonresidential'
+        'OfficeMedium' => 'other nonresidential'
+        'OfficeSmall' => 'other nonresidential'
+        'OutPatientHealthCare' => 'hospital'
+        'RestaurantFastFood' => 'other nonresidential'
+        'RestaurantSitDown' => 'other nonresidential'
+        'RetailStandalone' => 'retail'
+        'SchoolPrimary' => 'other nonresidential'
+        'SchoolSecondary' => 'other nonresidential'
+        'Warehouse' => 'heated-only storage'
+      }
+
+      swh_building_types = {
+        'ApartmentHighRise' => 'Multifamily '
+        'ApartmentMidRise' => 'Multifamily '
+        'Hospital' => 'Hospital and outpatient surgery center '
+        'HotelLarge' => 'Hotel '
+        'RetailStripmall' => 'Retail '
+        'HotelSmall' => 'Motel '
+        'OfficeLarge' => 'Office '
+        'OfficeMedium' => 'Office '
+        'OfficeSmall' => 'Office '
+        'OutPatientHealthCare' => 'Hospital and outpatient surgery center '
+        'RestaurantFastFood' => 'Dining: Cafeteria/fast food '
+        'RestaurantSitDown' => 'Dining: Family '
+        'RetailStandalone' => 'Retail '
+        'SchoolPrimary' => 'School/university '
+        'SchoolSecondary' => 'School/university '
+        'Warehouse' => 'Warehouse '
+      }
+
+      wwr_values = {
+        'ApartmentHighRise' => '0.3'
+        'ApartmentMidRise' => '0.2'
+        'Hospital' => '0.27'
+        'HotelLarge' => '0.34'
+        'RetailStripmall' => '0.2'
+        'HotelSmall' => '0.24'
+        'OfficeLarge' => '0.4'
+        'OfficeMedium' => '0.31'
+        'OfficeSmall' => '0.19'
+        'OutPatientHealthCare' => '0.21'
+        'RestaurantFastFood' => '0.34'
+        'RestaurantSitDown' => '0.24'
+        'RetailStandalone' => '0.11'
+        'SchoolPrimary' => '0.22'
+        'SchoolSecondary' => '0.22'
+        'Warehouse' => '0.06'
+      }
+
+      hasres_values = {
+        'ApartmentHighRise' => true
+        'ApartmentMidRise' => true
+        'Hospital' => true
+        'HotelLarge' => true
+        'RetailStripmall' => false
+        'HotelSmall' => true
+        'OfficeLarge' => false
+        'OfficeMedium' => false
+        'OfficeSmall' => false
+        'OutPatientHealthCare' => true
+        'RestaurantFastFood' => false
+        'RestaurantSitDown' => false
+        'RetailStandalone' => false
+        'SchoolPrimary' => false
+        'SchoolSecondary' => false
+        'Warehouse' => false
+      }
+
       all_comp =  @building_types.product @templates, @climate_zones
       all_comp.each do |building_type, template, climate_zone|
-        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, 'All others', 'Office <= 5,000 sq ft', 'All others')
+
+      # Generate prototype building models and associated baselines
+        model_baseline, model = DOEPrototypeBaseline.generate_prototype_model_and_baseline(building_type, template, climate_zone, hvac_building_types(building_type), wwr_building_types(building_type), swh_building_types(building_type))
         assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
         # Load baseline model
@@ -84,7 +180,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         wwr_baseline = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
 
         # Check WWR against expected WWR
-        wwr_goal = 19.0
+        wwr_goal = wwr_values(building_type)
         assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
 
         # Check that proposed sizing ran
@@ -98,7 +194,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
             has_res = true
           end
         end
-        has_res_goal = false
+        has_res_goal = hasres_values(building_type)
         assert(has_res == has_res_goal, "Failure to set space_residential? for #{building_type}, #{template}, #{climate_zone}.")
 
       end
