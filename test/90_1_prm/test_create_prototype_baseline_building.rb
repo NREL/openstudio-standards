@@ -1,6 +1,5 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
-require 'openstudio-standards'
 
 class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
 
@@ -397,7 +396,6 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         sim_control.setRunSimulationforWeatherFileRunPeriods(false)
         baseline_run = prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1")
 
-        # puts "#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1"
         # Get WWR of baseline model
         query = "Select Value FROM TabularDataWithStrings WHERE
         ReportName = 'InputVerificationandResultsSummary' AND
@@ -412,7 +410,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         assert(wwr_baseline == wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
 
          # Check that proposed sizing ran
-        assert(File.file?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR1/run/eplusout.sql"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
+        assert(File.file?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP/run/eplusout.sql"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
  
         # Check IsResidential for Small Office
         # Determine whether any space is residential
@@ -423,10 +421,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
           end
         end
 
+        # Check whether space_residential? function is working
         has_res_goal = hasres_values[building_type]
-
-        # puts "has_res = #{has_res} ; has_res_goal = #{has_res_goal}"
-
         assert(has_res == has_res_goal, "Failure to set space_residential? for #{building_type}, #{template}, #{climate_zone}.")
 
       end

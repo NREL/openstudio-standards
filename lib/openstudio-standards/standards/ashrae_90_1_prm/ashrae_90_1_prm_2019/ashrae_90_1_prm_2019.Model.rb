@@ -1,5 +1,12 @@
-class ASHRAE9012019 < ASHRAE901
+class ASHRAE901PRM2019 < ASHRAE901PRM
   # @!group Model
+
+  # Determine if there is a need for a proposed model sizing run.
+  # A typical application of such sizing run is to determine space
+  # conditioning type.
+  def model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+    return true
+  end
 
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
