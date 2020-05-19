@@ -1420,10 +1420,6 @@ class Standard
   def space_residential?(space)
     is_res = false
 
-    # 2019TODO:
-    # temporary line until alternate lookup for 2019 PRM is established
-    return is_res if /prm/i =~ template
-
     space_to_check = space
 
     # If this space is a plenum, check the space type
@@ -1462,12 +1458,24 @@ class Standard
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
-      space_type_properties = space_type_get_standards_data(space_type)
-      if space_type_properties.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
-        is_res = false
+      if /prm/i !~ template
+        # This is the PRM method for 2013 and prior
+        space_type_properties = space_type_get_standards_data(space_type)
+        if space_type_properties.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = space_type_properties['is_residential'] == 'Yes'
+        end
       else
-        is_res = space_type_properties['is_residential'] == 'Yes'
+        # This is the 2019 PRM method
+        lighting_properties = interior_lighting_get_prm_data(space_type)
+        if lighting_properties.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find lighting properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = lighting_properties['isresidential'] == '1'
+        end
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
