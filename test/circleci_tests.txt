@@ -42,7 +42,6 @@ cbes_prototype/test_medium_office.rb
 cbes_prototype/test_retail_standalone.rb
 
 necb/test_necb_auto_zone_test.rb
-necb/test_necb_boiler_rules.rb
 necb/test_necb_chiller_rules.rb
 necb/test_necb_constructions_fdwr.rb
 necb/test_necb_coolingtower_rules.rb
