@@ -46,14 +46,14 @@ class Standard
         return false
       end
     end
-
+    
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
     model_remove_external_shading_devices(model)
 
     # Reduce the WWR and SRR, if necessary
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+    sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
     model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
     # Assign building stories to spaces in the building where stories are not yet assigned.
@@ -96,19 +96,19 @@ class Standard
         added = space_add_daylighting_controls(space, false, false)
       end
     end
+    
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 
+    # Modify some of the construction types as necessary
+    model_apply_prm_construction_types(model)
+
+    # Set the construction properties of all the surfaces in the model
     if /prm/i !~ template
-      puts "Skipping these steps until they are updated to handle 2019 PRM"
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
-
-      # Modify some of the construction types as necessary
-      model_apply_prm_construction_types(model)
-
-      # Set the construction properties of all the surfaces in the model
       model_apply_standard_constructions(model, climate_zone)
-
+    else
+      model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
     end
+
     if /prm/i !~ template
 
         # Get the groups of zones that define the baseline HVAC systems for later use.
@@ -2330,7 +2330,12 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = model_find_object(standards_data['constructions'], 'name' => construction_name)
+    if /prm/i !~ template
+      data = model_find_object(standards_data['constructions'], 'name' => construction_name)
+    else
+      data = model_find_object(standards_data['prm_constructions'], 'name' => construction_name)
+    end
+
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2484,17 +2489,44 @@ class Standard
   end
 
   # Helper method to find a particular construction and add it to the model after modifying the insulation value if necessary.
-  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category)
+  def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category, wwr_building_type = nil, wwr_info = {})
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = model_find_object(standards_data['construction_properties'],
-                              'template' => template,
-                              'climate_zone_set' => climate_zone_set,
-                              'intended_surface_type' => intended_surface_type,
-                              'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category)
+    if wwr_building_type != nil
+      if wwr_info[wwr_building_type] <= 10
+        minimum_percent_of_surface = 0
+        maximum_percent_of_surface = 10
+      elsif wwr_info[wwr_building_type] <= 20
+        minimum_percent_of_surface = 10.1
+        maximum_percent_of_surface = 20
+      elsif wwr_info[wwr_building_type] <= 30
+        minimum_percent_of_surface = 20.1
+        maximum_percent_of_surface = 30
+      elsif wwr_info[wwr_building_type] <= 40
+        minimum_percent_of_surface = 30.1
+        maximum_percent_of_surface = 40
+      else
+        minimum_percent_of_surface = nil
+        maximum_percent_of_surface = nil
+      end
+      props = model_find_object(standards_data['construction_properties'],
+                                'template' => template,
+                                'climate_zone_set' => climate_zone_set,
+                                'intended_surface_type' => intended_surface_type,
+                                'standards_construction_type' => standards_construction_type,
+                                'building_category' => building_category,
+                                'minimum_percent_of_surface' => minimum_percent_of_surface,
+                                'maximum_percent_of_surface' => maximum_percent_of_surface)
+    else
+      props = model_find_object(standards_data['construction_properties'],
+                                'template' => template,
+                                'climate_zone_set' => climate_zone_set,
+                                'intended_surface_type' => intended_surface_type,
+                                'standards_construction_type' => standards_construction_type,
+                                'building_category' => building_category)
+    end
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -3418,7 +3450,7 @@ class Standard
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
   # @return [Bool] true if successful, false if not
-  def model_apply_standard_constructions(model, climate_zone)
+  def model_apply_standard_constructions(model, climate_zone, wwr_building_type = nil, wwr_info = {})
     types_to_modify = []
 
     # Possible boundary conditions are
@@ -3474,7 +3506,7 @@ class Standard
     # Modify these surfaces
     prev_created_consts = {}
     surfaces_to_modify.sort.each do |surf|
-      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts)
+      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info)
     end
 
     # List the unique array of constructions
@@ -3528,6 +3560,11 @@ class Standard
     # Define a Hash that will contain wall and window area for all
     # building area types included in the model
     bat_win_wall_info = {}
+
+    # Store the baseline wwr, only used for 90.1-PRM-2019,
+    # it is necessary for looking up baseline fenestration
+    # U-factor and SHGC requirements
+    base_wwr = {}
 
     # Store the space conditioning category for later use
     space_cats = {}
@@ -3681,12 +3718,20 @@ class Standard
 
       # Stop here unless windows need reducing or increasing if
       # following the stable baseline approach
-      return true unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
+      return true, base_wwr unless (vals['red_nr'] || vals['red_res'] || vals['red_sh']) || template == '90.1-PRM-2019'
 
       # Determine the factors by which to reduce the window area
       vals['mult_nr_red'] = wwr_lim / vals['wwr_nr']
       vals['mult_res_red'] = wwr_lim / vals['wwr_res']
       vals['mult_sh_red'] = wwr_lim / vals['wwr_sh']
+
+      # Report baseline WWR
+      vals['wwr_nr'] *= vals['mult_nr_red']
+      vals['wwr_res'] *= vals['mult_res_red']
+      vals['wwr_sh'] *= vals['mult_sh_red']
+      wwrs = [vals['wwr_nr'], vals['wwr_res'], vals['wwr_sh']]
+      wwrs = wwrs.reject! &:nan?
+      base_wwr[bat] = wwrs.max
 
       # Reduce the window area if any of the categories necessary
       model.getSpaces.sort.each do |space|
@@ -3750,7 +3795,7 @@ class Standard
       end
     end
 
-    return true
+    return true, base_wwr
   end
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
