@@ -1420,7 +1420,6 @@ class Standard
   def space_residential?(space)
     is_res = false
 
-
     space_to_check = space
 
     # If this space is a plenum, check the space type

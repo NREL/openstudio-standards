@@ -41,7 +41,7 @@ class Standard
     # populate search hash
     search_criteria = {
       'template' => template,
-      'space_type' => standards_space_type
+      'lpd_space_type' => standards_space_type
     }
 
     # lookup space type properties
