@@ -1081,7 +1081,7 @@ class Standard
       copper_pipe.setName("Copper pipe 0.75in type L")
       copper_pipe.setRoughness('Smooth')
       copper_pipe.setThickness(OpenStudio.convert(0.045, 'in', 'm').get)
-      copper_pipe.setConductivity(386.0)
+      copper_pipe.setThermalConductivity(386.0)
       copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
       copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
       copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
@@ -1102,7 +1102,7 @@ class Standard
         insulation.setName("Fiberglass batt #{pipe_insulation_thickness_in.round(2)}in")
         insulation.setRoughness('Smooth')
         insulation.setThickness(OpenStudio.convert(pipe_insulation_thickness_in, 'in', 'm').get)
-        insulation.setConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+        insulation.setThermalConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
         insulation.setDensity(OpenStudio.convert(0.7, 'lb/ft^3', 'kg/m^3').get)
         insulation.setSpecificHeat(OpenStudio.convert(0.2, 'Btu/lb*R', 'J/kg*K').get)
         insulation.setThermalAbsorptance(0.9) # Irrelevant for Pipe:Indoor; no radiation model is used

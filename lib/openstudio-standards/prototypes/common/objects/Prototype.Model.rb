@@ -8,7 +8,7 @@ Standard.class_eval do
     # There are no reference models for HighriseApartment and data centers at vintages Pre-1980 and 1980-2004,
     # nor for NECB2011. This is a quick check.
     case @instvarbuilding_type
-    when 'HighriseApartment','SmallDataCenterLowITE','SmallDataCenterHighITE','LargeDataCenterLowITE','LargeDataCenterHighITE'
+    when 'HighriseApartment','SmallDataCenterLowITE','SmallDataCenterHighITE','LargeDataCenterLowITE','LargeDataCenterHighITE','Laboratory'
       if template == 'DOE Ref Pre-1980' || template == 'DOE Ref 1980-2004'
         OpenStudio.logFree(OpenStudio::Error, 'Not available', "DOE Reference models for #{@instvarbuilding_type} at   are not available, the measure is disabled for this specific type.")
         return false
@@ -34,6 +34,7 @@ Standard.class_eval do
     model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
+    model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_custom_hvac_tweaks(building_type, climate_zone, @prototype_input, model)
@@ -41,7 +42,6 @@ Standard.class_eval do
     model_add_swh(model, @instvarbuilding_type, climate_zone, @prototype_input, epw_file)
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_daylight_savings(model)
     model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
@@ -279,7 +279,7 @@ Standard.class_eval do
     normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
     normalweight_concrete_floor.setRoughness('MediumSmooth')
     normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setConductivity(2.31)
+    normalweight_concrete_floor.setThermalConductivity(2.31)
     normalweight_concrete_floor.setDensity(2322)
     normalweight_concrete_floor.setSpecificHeat(832)
 
@@ -303,7 +303,7 @@ Standard.class_eval do
     g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
     g01_13mm_gypsum_board.setRoughness('Smooth')
     g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setConductivity(0.1600)
+    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
     g01_13mm_gypsum_board.setDensity(800)
     g01_13mm_gypsum_board.setSpecificHeat(1090)
     g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
@@ -321,7 +321,7 @@ Standard.class_eval do
     m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
     m10_200mm_concrete_block_basement_wall.setRoughness('MediumRough')
     m10_200mm_concrete_block_basement_wall.setThickness(0.2032)
-    m10_200mm_concrete_block_basement_wall.setConductivity(1.326)
+    m10_200mm_concrete_block_basement_wall.setThermalConductivity(1.326)
     m10_200mm_concrete_block_basement_wall.setDensity(1842)
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
@@ -473,7 +473,7 @@ Standard.class_eval do
     material.setName('Std Wood 6inch')
     material.setRoughness('MediumSmooth')
     material.setThickness(0.15)
-    material.setConductivity(0.12)
+    material.setThermalConductivity(0.12)
     material.setDensity(540)
     material.setSpecificHeat(1210)
     material.setThermalAbsorptance(0.9)

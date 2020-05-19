@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.description = 'Creates DOE Prototype building models and transforms proposed models to baseline models for energy codes like ASHRAE 90.1 and the Canadian NECB.'
   spec.license = 'LGPL'
 
-  spec.required_ruby_version = '>= 2.5.1'
+  spec.required_ruby_version = '>= 2.0.0'
   spec.required_rubygems_version = '>= 1.3.6'
 
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
@@ -23,9 +23,14 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   spec.add_development_dependency 'parallel_tests'
-  spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
-  spec.add_development_dependency 'bundler', '~> 2.1.0'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  if RUBY_VERSION < "2.3"
+    spec.add_development_dependency 'nokogiri', '<= 1.6.8.1'
+    spec.add_development_dependency 'bundler', '~> 1.9'
+  else
+    spec.add_development_dependency 'nokogiri', '<= 1.8.2'
+    spec.add_development_dependency 'bundler', '~> 2.1'
+  end
+  spec.add_development_dependency 'rake', '~> 12.3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
   spec.add_development_dependency 'rubocop', '0.68.1'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.1.1'

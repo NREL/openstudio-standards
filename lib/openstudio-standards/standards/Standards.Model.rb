@@ -2184,7 +2184,7 @@ class Standard
 
       material.setRoughness(data['roughness'].to_s)
       material.setThickness(OpenStudio.convert(data['thickness'].to_f, 'in', 'm').get)
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setDensity(OpenStudio.convert(data['density'].to_f, 'lb/ft^3', 'kg/m^3').get)
       material.setSpecificHeat(OpenStudio.convert(data['specific_heat'].to_f, 'Btu/lb*R', 'J/kg*K').get)
       material.setThermalAbsorptance(data['thermal_absorptance'].to_f)
@@ -2195,10 +2195,7 @@ class Standard
       material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
       material.setName(material_name)
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu', 'm^2*K/W').get)
-
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
-      material.setDensity(OpenStudio.convert(data['density'].to_f, 'lb/ft^3', 'kg/m^3').get)
-      material.setSpecificHeat(OpenStudio.convert(data['specific_heat'].to_f, 'Btu/lb*R', 'J/kg*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setThermalAbsorptance(data['thermal_absorptance'].to_f)
       material.setSolarAbsorptance(data['solar_absorptance'].to_f)
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
@@ -2239,7 +2236,7 @@ class Standard
       material.setInfraredTransmittanceatNormalIncidence(data['infrared_transmittance_at_normal_incidence'].to_f)
       material.setFrontSideInfraredHemisphericalEmissivity(data['front_side_infrared_hemispherical_emissivity'].to_f)
       material.setBackSideInfraredHemisphericalEmissivity(data['back_side_infrared_hemispherical_emissivity'].to_f)
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setDirtCorrectionFactorforSolarandVisibleTransmittance(data['dirt_correction_factor_for_solar_and_visible_transmittance'].to_f)
       if /true/i =~ data['solar_diffusing'].to_s
         material.setSolarDiffusing(true)
@@ -3783,18 +3780,18 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def model_remove_prm_ems_objects(model)
-    model.getEnergyManagementSystemActuators(&:remove)
-    model.getEnergyManagementSystemConstructionIndexVariables(&:remove)
-    model.getEnergyManagementSystemCurveOrTableIndexVariables(&:remove)
-    model.getEnergyManagementSystemGlobalVariables(&:remove)
-    model.getEnergyManagementSystemInternalVariables(&:remove)
-    model.getEnergyManagementSystemMeteredOutputVariables(&:remove)
-    model.getEnergyManagementSystemOutputVariables(&:remove)
-    model.getEnergyManagementSystemPrograms(&:remove)
-    model.getEnergyManagementSystemProgramCallingManagers(&:remove)
-    model.getEnergyManagementSystemSensors(&:remove)
-    model.getEnergyManagementSystemSubroutines(&:remove)
-    model.getEnergyManagementSystemTrendVariables(&:remove)
+    model.getEnergyManagementSystemActuators.each { |x| x.remove }
+    model.getEnergyManagementSystemConstructionIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemCurveOrTableIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemGlobalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemInternalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemMeteredOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemPrograms.each { |x| x.remove }
+    model.getEnergyManagementSystemProgramCallingManagers.each { |x| x.remove }
+    model.getEnergyManagementSystemSensors.each { |x| x.remove }
+    model.getEnergyManagementSystemSubroutines.each { |x| x.remove }
+    model.getEnergyManagementSystemTrendVariables.each { |x| x.remove }
 
     return true
   end
