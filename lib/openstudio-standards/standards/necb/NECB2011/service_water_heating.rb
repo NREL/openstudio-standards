@@ -1,6 +1,11 @@
 class NECB2011
-  def model_add_swh(model)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
+    #Get default fuel based on epw location province.
+    if swh_fueltype == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
@@ -16,7 +21,7 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
 
     main_swh_loop = model_add_swh_loop(model,
                                        'Main Service Water Loop',
@@ -75,7 +80,7 @@ class NECB2011
 
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
-    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
+    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOil#2'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
@@ -161,7 +166,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOil#2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end

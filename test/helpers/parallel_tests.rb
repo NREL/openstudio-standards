@@ -93,12 +93,13 @@ class ParallelTests
     unless did_all_tests_pass
       did_all_tests_pass = true
       failed_runs = []
-      files = Dir.glob("#{File.dirname(__FILE__)}/local_test_output/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{test_output_folder}/*.json").select {|e| File.file? e}
       files.each do |file|
         data = JSON.parse(File.read(file))
         failed_runs << data["test"]
       end
-      puts "These files failed in the initial simulation. This may have been due to computer performance issues. Rerunning failed tests.."
+      puts "These files failed in the initial simulation. This may have been due to computer performance issues. Rerunning failed tests. Just in case."
+      puts failed_runs
       Parallel.each(failed_runs, in_threads: (ProcessorsUsed), progress: "Progress :") do |test_file|
         file_name = test_file.gsub(/^.+(openstudio-standards\/test\/)/, '')
         timings_json[file_name.to_s] = {}

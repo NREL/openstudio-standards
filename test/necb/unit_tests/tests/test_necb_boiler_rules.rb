@@ -31,7 +31,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     baseboard_type = 'Hot Water'
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    templates = ['NECB2011', 'NECB2015']
+    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
     templates.each do |template|
       standard = Standard.build(template)
       boiler_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
@@ -192,7 +192,8 @@ class NECB_HVAC_Tests < MiniTest::Test
           zones: model.getThermalZones,
           heating_coil_type: heating_coil_type,
           baseboard_type: baseboard_type,
-          hw_loop: hw_loop)
+          hw_loop: hw_loop,
+          new_auto_zoner: false)
       # Save the model after btap hvac.
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}

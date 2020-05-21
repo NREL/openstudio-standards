@@ -66,13 +66,13 @@ class NECB_HVAC_Tests < MiniTest::Test
         if diff > tol then deltaT_set_correctly = false end
         assert(deltaT_set_correctly,'test_hw_loop_rules: Hot water loop design temperature difference does not match necb requirement')
         supply_comps = iloop.supplyComponents
-        pump_is_variable_speed = false
+        pump_is_constant_speed = false
         supply_comps.each do |icomp|
-          if icomp.to_PumpVariableSpeed.is_initialized
-            pump_is_variable_speed = true
+          if icomp.to_PumpConstantSpeed.is_initialized
+            pump_is_constant_speed = true
           end
         end
-        assert(pump_is_variable_speed,'test_hw_loop_rules: Hot water loop pump is not variable speed')
+        assert(!pump_is_constant_speed,'test_hw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagerOutdoorAirReset.get
         necb_outdoorLowTemperature = -16.0
