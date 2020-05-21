@@ -8,8 +8,8 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
-    small_office_osm = wd + '/SmallOffice_FFactor_Test.osm'
-    retail_stand_alone_osm = wd + '/RetailStandAlone_FFactor_Test.osm'
+    small_office_osm = OpenStudio::Path.new(wd + '/SmallOffice_FFactor_Test.osm')
+    retail_stand_alone_osm = OpenStudio::Path.new(wd + '/RetailStandAlone_FFactor_Test.osm')
 
     #Mapping of ASHRAE 90.1 standards + climate zones to their respective assembly F-Factor parameters
     cases = {

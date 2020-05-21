@@ -9,21 +9,21 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
-    hospital_osm_path = wd + '/Hospital_CFactor_Test.osm'
-    large_hotel_osm_path = wd + '/LargeHotel_CFactor_Test.osm'
+    hospital_osm_path = OpenStudio::Path.new( wd + '/Hospital_CFactor_Test.osm')
+    large_hotel_osm_path = OpenStudio::Path.new(wd + '/LargeHotel_CFactor_Test.osm')
 
     #Mapping of ASHRAE 90.1 standards + climate zones to their respective assembly C-Factors
     cases = {
         # Format: [CZ, template, OSM path] = C-factor (SI)
-        ['ASHRAE 169-2013-1A', '90.1-2004', hospital_osm_path, 'LargeHotel'] => 6.47,
-        ['ASHRAE 169-2013-2A', '90.1-2007', hospital_osm_path, 'LargeHotel'] => 6.47,
-        ['ASHRAE 169-2013-3A', '90.1-2010', hospital_osm_path, 'LargeHotel'] => 6.47,
-        ['ASHRAE 169-2013-3B', '90.1-2004', hospital_osm_path, 'LargeHotel'] => 6.47,
-        ['ASHRAE 169-2013-4A', '90.1-2013', hospital_osm_path, 'LargeHotel'] => 0.68,
-        ['ASHRAE 169-2013-5A', '90.1-2007', large_hotel_osm_path, 'Hospital'] => 0.68,
-        ['ASHRAE 169-2013-6A', '90.1-2013', large_hotel_osm_path, 'Hospital'] => 0.52,
-        ['ASHRAE 169-2013-7A', '90.1-2013', large_hotel_osm_path, 'Hospital'] => 0.36,
-        ['ASHRAE 169-2013-8A', '90.1-2007', large_hotel_osm_path, 'Hospital'] => 0.68
+        ['ASHRAE 169-2013-1A', '90.1-2004', hospital_osm_path, 'Hospital'] => 6.47,
+        ['ASHRAE 169-2013-2A', '90.1-2007', hospital_osm_path, 'Hospital'] => 6.47,
+        ['ASHRAE 169-2013-3A', '90.1-2010', hospital_osm_path, 'Hospital'] => 6.47,
+        ['ASHRAE 169-2013-3B', '90.1-2004', hospital_osm_path, 'Hospital'] => 6.47,
+        ['ASHRAE 169-2013-4A', '90.1-2013', hospital_osm_path, 'Hospital'] => 0.68,
+        ['ASHRAE 169-2013-5A', '90.1-2007', large_hotel_osm_path, 'LargeHotel'] => 0.68,
+        ['ASHRAE 169-2013-6A', '90.1-2013', large_hotel_osm_path, 'LargeHotel'] => 0.52,
+        ['ASHRAE 169-2013-7A', '90.1-2013', large_hotel_osm_path, 'LargeHotel'] => 0.36,
+        ['ASHRAE 169-2013-8A', '90.1-2007', large_hotel_osm_path, 'LargeHotel'] => 0.68
     }
 
     #Below grade wall height of both Large Hotel and Hospital is the same at 2.439 meters
