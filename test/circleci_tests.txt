@@ -44,6 +44,7 @@ doe_prototype/test_swh.rb
 doe_prototype/test_performance.rb
 doe_prototype/test_regression.rb
 doe_prototype/test_sim_control.rb
+doe_prototype/test_daylighting_ctrl.rb
 
 cbes_prototype/test_small_office.rb
 cbes_prototype/test_medium_office.rb
