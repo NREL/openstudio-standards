@@ -1474,7 +1474,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find lighting properties for #{space_to_check.name}, assuming nonresidential.")
           is_res = false
         else
-          is_res = lighting_properties['isresidential'] == '1'
+          is_res = lighting_properties['isresidential'].to_s == '1'
         end
       end
     else
