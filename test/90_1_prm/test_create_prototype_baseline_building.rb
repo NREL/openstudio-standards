@@ -193,7 +193,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         # Get WWR of baseline model
         query = "Select Value FROM TabularDataWithStrings WHERE
         ReportName = 'InputVerificationandResultsSummary' AND
-        TableName = 'Window-Wall Ratio' AND
+        TableName = 'Conditioned Window-Wall Ratio' AND
         RowName = 'Gross Window-Wall Ratio' AND
         ColumnName = 'Total' AND
         Units = '%'"
