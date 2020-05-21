@@ -824,6 +824,12 @@ OS:Timestep,
   {eb583d9a-28e0-49c6-8519-cae0088b5073}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {11b5cbd0-c450-4b2c-aa14-62edeaca5d67}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:Surface,
   {1f023a99-6062-4e6b-a2ee-74cc9513d97f}, !- Handle
   Perimeter_ZN_1_floor,                   !- Name
@@ -1855,3 +1861,36 @@ OS:Rendering:Color,
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
+OS:SubSurface,
+  {ab12c732-34af-48a3-addd-d61dc5fd3db1}, !- Handle
+  Perimeter_ZN_3_wall_north_Door1,        !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {17c4f45d-4218-45b0-b696-893c60c109f8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  14.911800279714, 18.46, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  14.911800279714, 18.46, 0,              !- X,Y,Z Vertex 2 {m}
+  13.997400279714, 18.46, 0,              !- X,Y,Z Vertex 3 {m}
+  13.997400279714, 18.46, 2.1336;         !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ab12b232-32bf-42b3-adad-d12dc5fd3de2}, !- Handle
+  Perimeter_ZN_3_wall_north_Door2,        !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {17c4f45d-4218-45b0-b696-893c60c109f8}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  19.131920148775, 18.46, 2.1336,         !- X,Y,Z Vertex 1 {m}
+  19.131920148775, 18.46, 0,              !- X,Y,Z Vertex 2 {m}
+  18.217520148775, 18.46, 0,              !- X,Y,Z Vertex 3 {m}
+  18.217520148775, 18.46, 2.1336;         !- X,Y,Z Vertex 4 {m}

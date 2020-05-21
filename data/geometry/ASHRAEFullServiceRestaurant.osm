@@ -180,6 +180,12 @@ OS:Timestep,
   {79cc9340-93d4-4f72-a5ca-b64451a57564}, !- Handle
   6;                                      !- Number of Timesteps per Hour
 
+OS:Sizing:Parameters,
+  {e669741c-7551-4941-8a74-865ceef7b932}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
 OS:SubSurface,
   {bf99c642-a6ea-4215-9205-bd72d66b667b}, !- Handle
   Dining_Wall_West_Window,                !- Name
@@ -814,3 +820,19 @@ OS:Rendering:Color,
   149,                                    !- Rendering Green Value
   230;                                    !- Rendering Blue Value
 
+OS:SubSurface,
+  {213701bf-9cfa-4eef-a172-e912cc3274d1}, !- Handle
+  Kitchen_Wall_East_Door,                 !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c948d197-ce91-4318-a26c-8d47d0d034ce}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  22.6087, 18.294305362758,2.1336,        !- X,Y,Z Vertex 1 {m}
+  22.6087, 18.294305362758,0,             !- X,Y,Z Vertex 2 {m}
+  22.6087, 19.208705362758,0,             !- X,Y,Z Vertex 3 {m}
+  22.6087, 19.208705362758,2.1336;        !- X,Y,Z Vertex 4 {m}

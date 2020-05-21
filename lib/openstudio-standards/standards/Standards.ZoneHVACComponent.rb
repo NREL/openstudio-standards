@@ -1,13 +1,18 @@
 class Standard
   # @!group ZoneHVACComponent
 
+  def zone_hvac_component_prm_baseline_fan_efficacy
+    fan_efficacy_w_per_cfm = 0.3
+    return fan_efficacy_w_per_cfm
+  end
+
   # Sets the fan power of zone level HVAC equipment
-  # (PTACs, PTHPs, Fan Coils, and Unit Heaters)
+  # (Fan coils, Unit Heaters, PTACs, PTHPs, VRF Terminals, WSHPs, ERVs)
   # based on the W/cfm specified in the standard.
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 
     # Convert this to the actual class type
     zone_hvac = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
@@ -18,6 +23,12 @@ class Standard
                   zone_hvac_component.to_ZoneHVACPackagedTerminalAirConditioner.get
                 elsif zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
                   zone_hvac_component.to_ZoneHVACPackagedTerminalHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
+                  zone_hvac_component.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.get
+                elsif zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.is_initialized
+                  zone_hvac_component.to_ZoneHVACWaterToAirHeatPump.get
+                elsif zone_hvac_component.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
+                  zone_hvac_component.to_ZoneHVACEnergyRecoveryVentilator.get
                 end
 
     # Do nothing for other types of zone HVAC equipment
@@ -26,7 +37,7 @@ class Standard
     end
 
     # Determine the W/cfm
-    fan_efficacy_w_per_cfm = 0.3
+    fan_efficacy_w_per_cfm = zone_hvac_component_prm_baseline_fan_efficacy
 
     # Convert efficacy to metric
     # 1 cfm = 0.0004719 m^3/s
@@ -66,7 +77,7 @@ class Standard
     # Calculate the newly set efficacy
     fan_power_new_w = fan_rise_new_pa * max_air_flow_rate / fan_tot_eff
     fan_efficacy_new_w_per_cfm = fan_power_new_w / max_air_flow_rate_cfm
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ZoneHVACComponent', "For #{zone_hvac_component.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ZoneHVACComponent', "For #{zone_hvac_component.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
 
     return true
   end
@@ -199,7 +210,7 @@ class Standard
     vestibule_htg_mgr.setCallingPoint('BeginTimestepBeforePredictor')
     vestibule_htg_mgr.addProgram(vestibule_htg_prg)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{zone_hvac_component.name}: Vestibule heating control applied, heating disabled below #{htg_lim_f} F.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ZoneHVACComponent', "For #{zone_hvac_component.name}: Vestibule heating control applied, heating disabled below #{htg_lim_f} F.")
 
     return true
   end

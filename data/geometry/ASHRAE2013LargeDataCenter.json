@@ -1,0 +1,16 @@
+[
+  {
+    "type": "CRAH",
+    "name": "CRAH",
+    "operation_schedule": "DataCenter HVACOperationSchd",
+    "oa_damper_schedule": "DataCenter MinOA_MotorizedDamper_Sched",
+    "chw_pumping_type": "const_pri_var_sec",
+    "chiller_cooling_type": "WaterCooled",
+    "chiller_condenser_type": null,
+    "chiller_compressor_type": "Centrifugal",
+	"waterside_economizer": "integrated",
+    "space_names": [
+      "DataCenter"
+    ]
+  }
+]

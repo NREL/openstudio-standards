@@ -9046,7 +9046,18 @@ OS:Output:Meter,
 
 OS:Timestep,
   {cec60208-b3d4-4d85-b12c-7b41277446e1}, !- Handle
-  4;                                      !- Number of Timesteps per Hour
+  6;                                      !- Number of Timesteps per Hour
+
+OS:Sizing:Parameters,
+  {6e59ff24-62cb-4472-9231-7a1cc4ddc925}, !- Handle
+  1.2,                                    !- Heating Sizing Factor
+  1.2,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
+
+OS:ConvergenceLimits,
+  {fe8f0a79-4d16-412a-a597-525e1f093783}, !- Handle
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:Surface,
   {a63b16a1-85aa-4795-aa03-2fea9ce92650}, !- Handle
@@ -17442,3 +17453,53 @@ OS:Rendering:Color,
   169,                                    !- Rendering Green Value
   31;                                     !- Rendering Blue Value
 
+OS:SubSurface,
+  {bb65c712-11ba-48c6-abbd-d61dc5ff3da2}, !- Handle
+  W_RearStairsFlr1_3_0_0_Door,            !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {243bcfcf-91f5-4fc7-932e-e84676de23a4}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  54.458910571864, 18.3374292198, 0,      !- X,Y,Z Vertex 1 {m}
+  53.544510571864, 18.3374292198, 0,      !- X,Y,Z Vertex 2 {m}
+  53.544510571864, 18.337429219927, 2.1336,!- X,Y,Z Vertex 3 {m}
+  54.458910571864, 18.337429219927, 2.1336;!- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ba65c234-12ba-48a6-abdd-d61dc5ff3cc3}, !- Handle
+  W_CorridorFlr1_10_0_0_Door,             !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {b4e5c4ef-b176-4f70-9b9a-c4caeb67e514}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  26.014739009222, 18.3374292198, 0,      !- X,Y,Z Vertex 1 {m}
+  25.100339009222, 18.3374292198, 0,      !- X,Y,Z Vertex 2 {m}
+  25.100339009222, 18.337429219927, 2.1336,!- X,Y,Z Vertex 3 {m}
+  26.014739009222, 18.337429219927, 2.1336;!- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ac65c231-32bc-42c6-accd-d61dc5ff3ea2}, !- Handle
+  W_FrontStairsFlr1_3_0_0_Door,           !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {d3978d7d-c802-4d12-82d2-aeadc2e5ad5c}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  1.894806091479, 18.3374292198, 0,       !- X,Y,Z Vertex 1 {m}
+  0.980406091479, 18.3374292198, 0,       !- X,Y,Z Vertex 2 {m}
+  0.980406091479, 18.337429219927, 2.1336,!- X,Y,Z Vertex 3 {m}
+  1.894806091479, 18.337429219927, 2.1336;!- X,Y,Z Vertex 4 {m}

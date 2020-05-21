@@ -23,7 +23,11 @@ class Standard
     sizing_system.setPrecoolDesignHumidityRatio(0.008)
     sizing_system.setCentralCoolingDesignSupplyAirHumidityRatio(0.0085)
     sizing_system.setCentralHeatingDesignSupplyAirHumidityRatio(0.0080)
-    sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('2.7.0')
+      sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
+    else
+      sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
+    end
     sizing_system.setSizingOption(sizing_option)
     sizing_system.setAllOutdoorAirinCooling(false)
     sizing_system.setAllOutdoorAirinHeating(false)
@@ -32,5 +36,20 @@ class Standard
     sizing_system.setHeatingDesignAirFlowMethod('DesignDay')
 
     return sizing_system
+  end
+
+  def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
+    sizing_system = air_loop_hvac.sizingSystem
+    # sizing_system.setSystemOutdoorAirMethod("VentilationRateProcedure")
+    # Set the minimum zone ventilation efficiency to be 0.6
+    air_loop_hvac.thermalZones.sort.each do |zone|
+      sizing_zone = zone.sizingZone
+      # It is not yet possible to adjust the minimum zone ventilation efficiency
+      # @todo, update this section when OS allows to adjust minimum zone ventilation efficiency
+      # In EnergyPlus this is done through the DesignSpecification:ZoneAirDistribution object
+      # which is then assigned to a Sizing:Zone object
+    end
+
+    return true
   end
 end

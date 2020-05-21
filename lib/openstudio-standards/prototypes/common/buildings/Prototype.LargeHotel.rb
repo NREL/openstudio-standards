@@ -28,7 +28,7 @@ module LargeHotel
         return false
       end
 
-      exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_schedule'])
+      exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_availability_schedule'])
       unless exhaust_schedule
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
         return false
@@ -181,6 +181,15 @@ module LargeHotel
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end

@@ -29,13 +29,13 @@ module RetailStandalone
       infiltration_entry.setName('Entry door Infiltration')
       case climate_zone
       when 'ASHRAE 169-2006-1A',
-           'ASHRAE 169-2006-1B',
-           'ASHRAE 169-2006-2A',
-           'ASHRAE 169-2006-2B',
-           'ASHRAE 169-2013-1A',
-           'ASHRAE 169-2013-1B',
-           'ASHRAE 169-2013-2A',
-           'ASHRAE 169-2013-2B'
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-2B'
         infiltration_per_zone = 1.418672682
         infiltration_entry.setSchedule(model_add_schedule(model, 'RetailStandalone INFIL_Door_Opening_SCH'))
       else
@@ -84,6 +84,9 @@ module RetailStandalone
       IF OAT_F > 45
         SET FrontEntry_Coil = 0
         SET FrontEntry_Fan = 0
+      ELSE
+      SET FrontEntry_Coil = 1
+      SET FrontEntry_Fan = 1
       ENDIF
       EMS
       frt_entry_prg.setBody(frt_entry_prg_body)
@@ -199,38 +202,38 @@ module RetailStandalone
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
-      when '90.1-2010', '90.1-2013'
-        case climate_zone
-          when 'ASHRAE 169-2006-6A',
-               'ASHRAE 169-2006-6B',
-               'ASHRAE 169-2006-7A',
-               'ASHRAE 169-2006-8A',
-               'ASHRAE 169-2013-6A',
-               'ASHRAE 169-2013-6B',
-               'ASHRAE 169-2013-7A',
-               'ASHRAE 169-2013-8A'
-            # Remove existing skylights
-            model.getSubSurfaces.each do |subsurf|
-              if subsurf.subSurfaceType.to_s == 'Skylight'
-                subsurf.remove
-              end
-            end
-            # Load older geometry corresponding to older code versions
-            old_geo = load_geometry_osm('geometry/ASHRAE90120042007RetailStandalone.osm')
-            # Clone the skylights from the older geometry
-            old_geo.getSubSurfaces.each do |subsurf|
-              if subsurf.subSurfaceType.to_s == 'Skylight'
-                new_skylight = subsurf.clone(model).to_SubSurface.get
-                old_roof = subsurf.surface.get
-                # Assign surfaces to skylights
-                model.getSurfaces.each do |model_surf|
-                  if model_surf.name.to_s == old_roof.name.to_s
-                    new_skylight.setSurface(model_surf)
-                  end
-                end
-              end
-            end
+    when '90.1-2010', '90.1-2013'
+      case climate_zone
+      when 'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2013-6A',
+          'ASHRAE 169-2013-6B',
+          'ASHRAE 169-2013-7A',
+          'ASHRAE 169-2013-8A'
+        # Remove existing skylights
+        model.getSubSurfaces.each do |subsurf|
+          if subsurf.subSurfaceType.to_s == 'Skylight'
+            subsurf.remove
+          end
         end
+        # Load older geometry corresponding to older code versions
+        old_geo = load_geometry_osm('geometry/ASHRAE90120042007RetailStandalone.osm')
+        # Clone the skylights from the older geometry
+        old_geo.getSubSurfaces.each do |subsurf|
+          if subsurf.subSurfaceType.to_s == 'Skylight'
+            new_skylight = subsurf.clone(model).to_SubSurface.get
+            old_roof = subsurf.surface.get
+            # Assign surfaces to skylights
+            model.getSurfaces.each do |model_surf|
+              if model_surf.name.to_s == old_roof.name.to_s
+                new_skylight.setSurface(model_surf)
+              end
+            end
+          end
+        end
+      end
     end
     return true
   end
