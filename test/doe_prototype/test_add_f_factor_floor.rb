@@ -1,6 +1,6 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
-
+require_relative '../../lib/openstudio-standards/btap/btap'
 
 class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
 
@@ -8,8 +8,8 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
-    small_office_osm = OpenStudio::Path.new(wd + '/SmallOffice_FFactor_Test.osm')
-    retail_stand_alone_osm = OpenStudio::Path.new(wd + '/RetailStandAlone_FFactor_Test.osm')
+    small_office_osm = wd + '/SmallOffice_FFactor_Test.osm'
+    retail_stand_alone_osm = wd + '/RetailStandAlone_FFactor_Test.osm'
 
     #Mapping of ASHRAE 90.1 standards + climate zones to their respective assembly F-Factor parameters
     cases = {
@@ -41,9 +41,7 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
       standard_perimeter = expected_parameters[2]
 
       #load the example OSM ready for f-factor constructions
-      translator = OpenStudio::OSVersion::VersionTranslator.new
-      ospath = OpenStudio::Path.new(osm_path)
-      model = translator.loadModel(ospath).get
+      model = BTAP::FileIO::load_osm(osm_path)
 
       #build the Standard object
       standard = Standard.build(template)

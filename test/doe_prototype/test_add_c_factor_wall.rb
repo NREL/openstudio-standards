@@ -1,6 +1,6 @@
 require_relative '../helpers/minitest_helper'
 require_relative '../helpers/create_doe_prototype_helper'
-
+require_relative '../../lib/openstudio-standards/btap/btap'
 
 class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
 
@@ -9,8 +9,8 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
     wd = File.expand_path('models/')
-    hospital_osm_path = OpenStudio::Path.new( wd + '/Hospital_CFactor_Test.osm')
-    large_hotel_osm_path = OpenStudio::Path.new(wd + '/LargeHotel_CFactor_Test.osm')
+    hospital_osm_path = wd + '/Hospital_CFactor_Test.osm'
+    large_hotel_osm_path = wd + '/LargeHotel_CFactor_Test.osm'
 
     #Mapping of ASHRAE 90.1 standards + climate zones to their respective assembly C-Factors
     cases = {
@@ -38,9 +38,7 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       building_type = parameters[3]
 
       #load the example OSM ready for c-factor constructions
-      translator = OpenStudio::OSVersion::VersionTranslator.new
-      ospath = OpenStudio::Path.new(osm_path)
-      model = translator.loadModel(ospath).get
+      model = BTAP::FileIO::load_osm(osm_path)
 
       #build the Standard object
       standard = Standard.build(template)
@@ -61,7 +59,7 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       }
       asserts.each do |assert_key, assert_content|
 
-        puts "#{climate_zone} #{template} - #{assert_key} - Generated = #{assert_content[0]}:  Expected = #{assert_content[1]}"
+        #puts "#{climate_zone} #{template} - #{assert_key} - Generated = #{assert_content[0]}:  Expected = #{assert_content[1]}"
         assert(assert_content[0].to_s.to_f == assert_content[1].to_s.to_f, "#{climate_zone} #{template} - #{assert_key} - #{assert_content[0]}:#{assert_content[1]}")
       end
     end
