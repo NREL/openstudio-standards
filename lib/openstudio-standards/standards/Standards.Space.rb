@@ -780,6 +780,18 @@ class Standard
     return skylight_effective_aperture
   end
 
+  # Removes daylighting controls
+  def space_remove_daylighting_controls(space)
+    # Retrieves daylighting control objects
+    existing_daylighting_controls = space.daylightingControls
+    unless existing_daylighting_controls.empty?
+      existing_daylighting_controls.each(&:remove)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+      return true
+    end
+    return false
+  end
+
   # Adds daylighting controls (sidelighting and toplighting) per the template
   # @note This method is super complicated because of all the polygon/geometry math required.
   #   and therefore may not return perfect results.  However, it works well in most tested
@@ -809,8 +821,7 @@ class Standard
     existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
-        existing_daylighting_controls.each(&:remove)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+        space_remove_daylighting_controls(space)
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false

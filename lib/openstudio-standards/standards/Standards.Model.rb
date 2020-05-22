@@ -40,7 +40,6 @@ class Standard
     # Perform a sizing run of the proposed model.
     # Intend is to get individual space load to determine each space's
     # conditioning type: conditioned, unconditioned, semiheated.
-    puts model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
     if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
       if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP") == false
         return false
@@ -88,11 +87,13 @@ class Standard
       end
     end
 
-    # Add daylighting controls to each space
-    if /prm/i =~ template
-      model_remove_daylighting_controls(model)
-    else
-      model.getSpaces.sort.each do |space|
+    # Add or remove daylighting controls to each space
+    # Add daylighting controls for 90.1-2013 and prior
+    # Remove daylighting control for 90.1-PRM-2019 and onward
+    model.getSpaces.sort.each do |space|
+      if /prm/i =~ template
+        space_remove_daylighting_controls(space)
+      else
         added = space_add_daylighting_controls(space, false, false)
       end
     end
