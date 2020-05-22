@@ -43,8 +43,12 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     standard = Standard.build(vintage)
     name = "sys3_Boiler-#{boiler_fueltype}_HeatingCoilType-#{heating_coil_type_sys3}_BaseboardType-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm(template_osm_file)
-    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
+    model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+    standard.apply_weather_data(model: model, epw_file: weather_file)
+    standard.apply_loads(model: model)
+    standard.apply_envelope(model: model)
+    standard.apply_fdwr_srr_daylighting(model: model)
+    standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
     hw_loop = nil
     if (baseboard_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)

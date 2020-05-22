@@ -200,10 +200,8 @@ class NECB2011
     @stored_space_heating_sizing_loads = {}
     @stored_space_cooling_sizing_loads = {}
     model.getSpaces.sort.each do |space|
-      puts space.name
-      puts space
+
       space_type = space.spaceType.get.standardsSpaceType.get
-      puts space_type
       @stored_space_heating_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get
       @stored_space_cooling_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get
     end

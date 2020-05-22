@@ -215,12 +215,13 @@ class NECB2011
       zone_thermostat = zone.thermostat.get
       if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
         dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
-        htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
-        htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
-        winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
-        heat_design_t = winter_dd_sch.values.max
+        if dual_thermostat.heatingSetpointTemperatureSchedule.is_initialized
+          htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+          htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
+          winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
+          heat_design_t = winter_dd_sch.values.max
+        end
       end
-
       # initialize counter
       zone_oa = 0.0
       # outdoor defined at space level; get OA flow for all spaces within zone
