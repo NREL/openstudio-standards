@@ -88,11 +88,11 @@ class Standard
       end
     end
 
-    # Add daylighting controls to each space
-    if /prm/i =~ template
-      model_remove_daylighting_controls(model)
-    else
-      model.getSpaces.sort.each do |space|
+    # Add or remove daylighting controls to each space
+    model.getSpaces.sort.each do |space|
+      if /prm/i =~ template
+        space_remove_daylighting_controls(space)
+      else
         added = space_add_daylighting_controls(space, false, false)
       end
     end
