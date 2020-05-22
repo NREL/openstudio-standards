@@ -1510,6 +1510,18 @@
       ]
     },
     {
+      "name": "U 0.35 SHGC 0.26 Dbl Ref-C-M Clr 6mm/13mm Arg",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF C CLEAR MID 6MM",
+        "ARGON 13MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.35 SHGC 0.35 Dbl LoE (e2-.1) Tint 6mm/13mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1599,8 +1611,8 @@
     },
     {
       "name": "U 0.40 SHGC 0.43 Dbl LoE Spec Sel Clr 3mm/6mm/6mm Air",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1714,9 +1726,21 @@
       ]
     },
     {
+      "name": "U 0.44 SHGC 0.20 Dbl Ref-B-H Tint 6mm/13mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B TINT HI 6MM",
+        "AIR 13MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.44 SHGC 0.26 Dbl Ref-B-H Clr 6mm/13mm Air",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -1748,6 +1772,18 @@
       ]
     },
     {
+      "name": "U 0.45 SHGC 0.31 Dbl Ref-B-H Clr 6mm/13mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B CLEAR HI 6MM",
+        "AIR 13MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.45 SHGC 0.33 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -1761,6 +1797,18 @@
       "name": "U 0.46 SHGC 0.45 Dbl Grey 6mm/13mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "GREY 6MM",
+        "AIR 13MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
+      "name": "U 0.46 SHGC 0.45 Dbl Grey 6mm/13mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2012,6 +2060,18 @@
       ]
     },
     {
+      "name": "U 0.57 SHGC 0.25 Dbl Ref-C-H Clr 6mm/6mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF C CLEAR HI 6MM",
+        "AIR 6MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.57 SHGC 0.39 Dbl Ref-D Clr 6mm/6mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -2024,9 +2084,33 @@
       ]
     },
     {
+      "name": "U 0.57 SHGC 0.39 Dbl Ref-D Clr 6mm/6mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF D CLEAR 6MM",
+        "AIR 6MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.57 SHGC 0.49 Dbl Blue 6mm/6mm Air",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "BLUE 6MM",
+        "AIR 6MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
+      "name": "U 0.57 SHGC 0.49 Dbl Blue 6mm/6mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2087,8 +2171,20 @@
     },
     {
       "name": "U 0.60 SHGC 0.25 Dbl 2.5mm air",
-      "intended_surface_type": null,
-      "standards_construction_type": null,
+      "intended_surface_type": "ExteriorWindow",
+      "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "Glass_2175_LayerAvg",
+        "Gap_1_W_0_0025",
+        "Glass_2022F_LayerAvg"
+      ]
+    },
+    {
+      "name": "U 0.60 SHGC 0.25 Dbl 2.5mm air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2186,6 +2282,18 @@
       ]
     },
     {
+      "name": "U 0.65 SHGC 0.25 Dbl Ref-C-H Clr 6mm/6mm Air",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF C CLEAR HI 6MM",
+        "AIR 6MM",
+        "CLEAR 6MM"
+      ]
+    },
+    {
       "name": "U 0.65 SHGC 0.35 Simple Glazing Skylight",
       "intended_surface_type": null,
       "standards_construction_type": null,
@@ -2197,8 +2305,8 @@
     },
     {
       "name": "U 0.67 SHGC 0.77 Sgl LoE (e2-.2) Clr 3mm",
-      "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2288,9 +2396,29 @@
       ]
     },
     {
+      "name": "U 0.72 SHGC 0.25 Sgl Ref-B-M Tint 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B TINT MID 6MM"
+      ]
+    },
+    {
       "name": "U 0.72 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 0.72 SHGC 0.25 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 0.72 SHGC 0.25 Simple Glazing Window",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2418,6 +2546,16 @@
       ]
     },
     {
+      "name": "U 0.88 SHGC 0.16 Sgl Ref-A-L Clr 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF A CLEAR LO 6MM"
+      ]
+    },
+    {
       "name": "U 0.88 SHGC 0.27 Sgl Elec Ref Colored 6mm",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
@@ -2461,6 +2599,16 @@
       "name": "U 0.98 SHGC 0.68 Sgl Ref-B-H Clr 6mm",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B CLEAR HI 6MM"
+      ]
+    },
+    {
+      "name": "U 0.98 SHGC 0.68 Sgl Ref-B-H Clr 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2521,6 +2669,16 @@
       "name": "U 1.17 SHGC 0.39 Sgl Ref-B-H Clr 6mm",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B CLEAR HI 6MM"
+      ]
+    },
+    {
+      "name": "U 1.17 SHGC 0.39 Sgl Ref-B-H Clr 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2598,9 +2756,29 @@
       ]
     },
     {
+      "name": "U 1.22 SHGC 0.25 Sgl Elec Ref Colored 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "ECREF-1 COLORED 6MM"
+      ]
+    },
+    {
       "name": "U 1.22 SHGC 0.25 Simple Glazing Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "U 1.22 SHGC 0.25 Simple Glazing"
+      ]
+    },
+    {
+      "name": "U 1.22 SHGC 0.25 Simple Glazing Window",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2618,9 +2796,29 @@
       ]
     },
     {
+      "name": "U 1.22 SHGC 0.34 Sgl Ref-C-H Clr 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF C CLEAR HI 6MM"
+      ]
+    },
+    {
       "name": "U 1.22 SHGC 0.39 Sgl Ref-B-H Clr 6mm",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "REF B CLEAR HI 6MM"
+      ]
+    },
+    {
+      "name": "U 1.22 SHGC 0.39 Sgl Ref-B-H Clr 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
@@ -2641,6 +2839,16 @@
       "name": "U 1.22 SHGC 0.61 Sgl Green 6mm",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Metal framing (all other)",
+      "insulation_layer": null,
+      "skylight_framing": null,
+      "materials": [
+        "GREEN 6MM"
+      ]
+    },
+    {
+      "name": "U 1.22 SHGC 0.61 Sgl Green 6mm",
+      "intended_surface_type": "GlassDoor",
+      "standards_construction_type": "Metal framing (entrance door)",
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [

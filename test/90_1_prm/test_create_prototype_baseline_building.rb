@@ -78,6 +78,84 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         # Check WWR against expected WWR
         wwr_goal = 19.0
         assert(wwr_baseline == wwr_goal,"Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+
+        # Get U-value of envelope in baseline model
+        u_value_baseline = {}
+        construction_baseline = {}
+        opaque_exterior_name = ['ATTIC_ROOF_EAST','PERIMETER_ZN_1_WALL_SOUTH']
+        exterior_fenestration_name = ['PERIMETER_ZN_1_WALL_SOUTH_DOOR','PERIMETER_ZN_1_WALL_SOUTH_WINDOW_1']
+        exterior_door_name = ['PERIMETER_ZN_3_WALL_NORTH_DOOR1']
+        
+        opaque_exterior_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Opaque Exterior' AND
+          RowName = '#{val}' AND
+          ColumnName = 'U-Factor with Film' AND
+          Units = 'W/m2-K'"
+          u_value_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+        end
+
+        opaque_exterior_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Opaque Exterior' AND
+          RowName = '#{val}' AND
+          ColumnName = 'Construction'"
+          construction_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstString(query).get().to_s
+        end
+
+        exterior_fenestration_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Exterior Fenestration' AND
+          RowName = '#{val}' AND
+          ColumnName = 'Glass U-Factor' AND
+          Units = 'W/m2-K'"
+          u_value_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+        end
+
+        exterior_fenestration_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Exterior Fenestration' AND
+          RowName = '#{val}' AND
+          ColumnName = 'Construction'"
+          construction_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstString(query).get().to_s
+        end
+
+        exterior_door_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Exterior Door' AND
+          RowName = '#{val}' AND
+          ColumnName = 'U-Factor with Film' AND
+          Units = 'W/m2-K'"
+          u_value_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+        end
+
+        exterior_door_name.each do |val|
+          query = "Select Value FROM TabularDataWithStrings WHERE
+          ReportName = 'EnvelopeSummary' AND
+          TableName = 'Exterior Door' AND
+          RowName = '#{val}' AND
+          ColumnName = 'Construction'"
+          construction_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstString(query).get().to_s
+        end
+
+        # Check U-value against expected U-value
+        u_value_goal = {'ATTIC_ROOF_EAST' => 0.063,
+                        'PERIMETER_ZN_1_WALL_SOUTH' => 0.124,
+                        'PERIMETER_ZN_1_WALL_SOUTH_DOOR' => 1.22,
+                        'PERIMETER_ZN_1_WALL_SOUTH_WINDOW_1' => 1.22,
+                        'PERIMETER_ZN_3_WALL_NORTH_DOOR1' => 0.7}
+        u_value_goal.each do |key, value|
+          value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
+          assert(((u_value_baseline[key] - value_si).abs < 0.001 || u_value_baseline[key] == 5.838),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
+          if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
+            assert((construction_baseline[key].include? "PRM"),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
+          end
+        end
       end
   end
 end

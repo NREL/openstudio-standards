@@ -2476,8 +2476,7 @@ class Standard
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
-
-    if wwr_building_type != nil
+    if wwr_building_type != nil && (intended_surface_type == 'ExteriorWindow' || intended_surface_type == 'GlassDoor')
       if wwr_info[wwr_building_type] <= 10
         minimum_percent_of_surface = 0
         maximum_percent_of_surface = 10

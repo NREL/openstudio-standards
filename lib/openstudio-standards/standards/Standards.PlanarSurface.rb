@@ -55,8 +55,8 @@ class Standard
     # Mapping is between standards-defined enumerations and the
     # enumerations available in OpenStudio.
     stds_type = nil
-    # Windows
-    if surf_type == 'ExteriorWindow'
+    # Windows and Glass Doors
+    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -70,14 +70,17 @@ class Standard
           stds_type = 'Nonmetal framing (all)'
         when 'Any Vertical Glazing'
           stds_type = 'Any Vertical Glazing'
-        
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "The standards fenestration frame type #{stds_type} cannot be used on #{surf_type} in #{planar_surface.name}.  This surface will not have the standard applied.")
           return previous_construction_map
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
-        return previous_construction_map
+        if wwr_building_type != nil
+          stds_type = 'Any Vertical Glazing'
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
+          return previous_construction_map
+        end
       end
     # Skylights
     elsif surf_type == 'Skylight'
