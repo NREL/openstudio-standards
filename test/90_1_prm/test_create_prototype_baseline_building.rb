@@ -219,6 +219,11 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         has_res_goal = hasres_values[building_type]
         assert(has_res == has_res_goal, "Failure to set space_residential? for #{building_type}, #{template}, #{climate_zone}.")
 
+        # Check the model include daylighting control objects
+        model_baseline.getSpaces.sort.each do |space|
+          existing_daylighting_controls = space.daylightingControls
+          assert(existing_daylighting_controls.empty?, "The baseline model for the #{building_type}-#{template} in #{climate_zone} has daylighting control.")
+        end
       end
   end
 end
