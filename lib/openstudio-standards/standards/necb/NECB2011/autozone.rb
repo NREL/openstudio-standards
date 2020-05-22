@@ -199,7 +199,7 @@ class NECB2011
   def store_space_sizing_loads(model)
     @stored_space_heating_sizing_loads = {}
     @stored_space_cooling_sizing_loads = {}
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       puts space.name
       puts space
       space_type = space.spaceType.get.standardsSpaceType.get
@@ -813,7 +813,7 @@ class NECB2011
   def create_hw_loop_if_required(baseboard_type, boiler_fueltype, mau_heating_coil_type, model)
     #get systems that will be used in the model based on the space types to determine if a hw_loop is required.
     systems_used = []
-    model.getSpaces.each do |space|
+    model.getSpaces.sort.each do |space|
       systems_used << get_necb_spacetype_system_selection(space)
       systems_used.uniq!
     end
