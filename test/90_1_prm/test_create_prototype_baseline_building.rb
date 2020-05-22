@@ -8,10 +8,10 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
 
       # Set folder for JSON files related to tests
-      @json_dir = "#{Dir.pwd}/data"
+      @json_dir = "#{File.dirname(__FILE__)}/data"
 
       # Create output folder if it doesn't already exist
-      @test_dir = "#{Dir.pwd}/output"
+      @test_dir = "#{File.dirname(__FILE__)}/output"
       if !Dir.exists?(@test_dir)
         Dir.mkdir(@test_dir)
       end
@@ -73,7 +73,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       @climate_zones = ['ASHRAE 169-2013-2A']
 
       # Set folder for JSON files related to tests
-      @json_dir = "#{Dir.pwd}/data"
+      @json_dir = "#{File.dirname(__FILE__)}/data"
 
       wwr_building_types = {
         'HighriseApartment' => 'All others',
@@ -179,7 +179,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         assert(model_baseline,"Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
         # Load baseline model
-        @test_dir = "#{Dir.pwd}/output"
+        @test_dir = "#{File.dirname(__FILE__)}/output"
         model_baseline = OpenStudio::Model::Model.load("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/final.osm")
         model_baseline = model_baseline.get
 
