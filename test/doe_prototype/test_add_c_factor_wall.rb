@@ -8,9 +8,8 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
   def test_model_set_below_grade_wall_constructions
 
     #Define paths to OSMs that have been prepared with no basement wall constructions defined
-    wd = File.expand_path('models/')
-    hospital_osm_path = wd + '/Hospital_CFactor_Test.osm'
-    large_hotel_osm_path = wd + '/LargeHotel_CFactor_Test.osm'
+    hospital_osm_path = "#{File.dirname(__FILE__)}/models/Hospital_CFactor_Test.osm"
+    large_hotel_osm_path = "#{File.dirname(__FILE__)}/models/LargeHotel_CFactor_Test.osm"
 
     #Mapping of ASHRAE 90.1 standards + climate zones to their respective assembly C-Factors
     cases = {
