@@ -157,9 +157,7 @@ def unique_properties(sheet_name)
         when 'prm_heat_type'
            ['template', 'hvac_building_type', 'climate_zone']
         when 'prm_interior_lighting'
-           ['template', 'lpd_building_type', 'lpd_space_type']
-        when 'lpd_building_type'
-           ['template', 'lpd_building_type']
+           ['template', 'lpd_space_type']
         when 'lpd_space_type'
            ['template', 'lpd_space_type']
         else

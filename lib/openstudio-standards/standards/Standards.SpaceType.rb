@@ -32,6 +32,29 @@ class Standard
     return space_type_properties
   end
 
+  def interior_lighting_get_prm_data(space_type)
+
+    standards_space_type = if space_type.standardsSpaceType.is_initialized
+                             space_type.standardsSpaceType.get
+                           end
+
+    # populate search hash
+    search_criteria = {
+      'template' => template,
+      'lpd_space_type' => standards_space_type
+    }
+
+    # lookup space type properties
+    interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
+
+    if interior_lighting_properties.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Interior lighting PRM properties lookup failed: #{search_criteria}.")
+      interior_lighting_properties = {}
+    end
+
+    return interior_lighting_properties
+  end
+
   # Sets the color for the space types as shown
   # in the SketchUp plugin using render by space type.
   #

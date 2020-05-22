@@ -780,6 +780,18 @@ class Standard
     return skylight_effective_aperture
   end
 
+  # Removes daylighting controls
+  def space_remove_daylighting_controls(space)
+    # Retrieves daylighting control objects
+    existing_daylighting_controls = space.daylightingControls
+    unless existing_daylighting_controls.empty?
+      existing_daylighting_controls.each(&:remove)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+      return true
+    end
+    return false
+  end
+
   # Adds daylighting controls (sidelighting and toplighting) per the template
   # @note This method is super complicated because of all the polygon/geometry math required.
   #   and therefore may not return perfect results.  However, it works well in most tested
@@ -809,8 +821,7 @@ class Standard
     existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
-        existing_daylighting_controls.each(&:remove)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+        space_remove_daylighting_controls(space)
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false
@@ -1420,10 +1431,6 @@ class Standard
   def space_residential?(space)
     is_res = false
 
-    # 2019TODO:
-    # temporary line until alternate lookup for 2019 PRM is established
-    return is_res if /prm/i =~ template
-
     space_to_check = space
 
     # If this space is a plenum, check the space type
@@ -1462,12 +1469,24 @@ class Standard
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
-      space_type_properties = space_type_get_standards_data(space_type)
-      if space_type_properties.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
-        is_res = false
+      if /prm/i !~ template
+        # This is the PRM method for 2013 and prior
+        space_type_properties = space_type_get_standards_data(space_type)
+        if space_type_properties.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = space_type_properties['is_residential'] == 'Yes'
+        end
       else
-        is_res = space_type_properties['is_residential'] == 'Yes'
+        # This is the 2019 PRM method
+        lighting_properties = interior_lighting_get_prm_data(space_type)
+        if lighting_properties.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find lighting properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = lighting_properties['isresidential'].to_s == '1'
+        end
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
