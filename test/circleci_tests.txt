@@ -61,6 +61,7 @@ necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_chiller_rules.rb
 necb/unit_tests/tests/test_necb_constructions_fdwr.rb
+necb/unit_tests/tests/test_necb_boiler_rules.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb

@@ -39,8 +39,8 @@
           "swh_fueltype": "Electricity"
         },
         {
-          "name": "FuelOil#2",
-          "boiler_fueltype": "FuelOil#2",
+          "name": "FuelOilNo2",
+          "boiler_fueltype": "FuelOilNo2",
           "baseboard_type": "Hot Water",
           "mau_type": true,
           "mau_heating_coil_type": "Hot Water",
