@@ -172,8 +172,8 @@ class Standard
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - film_coeff_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
-      return false
+      ins_r_value_si = 0.001
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R.")
     end
     ins_u_value_si = 1.0 / ins_r_value_si
     
