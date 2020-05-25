@@ -286,7 +286,7 @@ class NECB2011
     building_type = 'Commercial'
     province = provinces_names_map[qaqc[:geography][:state_province_region]]
     neb_fuel_list = ['Electricity', 'Natural Gas', "Oil"]
-    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOil#2"}
+    neb_eplus_fuel_map = {'Electricity' => 'Electricity', 'Natural Gas' => 'Gas', 'Oil' => "FuelOilNo2"}
     qaqc[:economics][:total_neb_cost] = 0.0
     qaqc[:economics][:total_neb_cost_per_m2] = 0.0
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
