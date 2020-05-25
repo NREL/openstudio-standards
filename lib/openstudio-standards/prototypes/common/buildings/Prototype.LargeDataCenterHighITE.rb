@@ -10,8 +10,9 @@ module LargeDataCenterHighITE
     # add IT equipment (ITE object) for data center building types
     add_data_center_load(model)
 
+    # This should be added as a retrofit measure instead of being in the prototype
     # modify CRAH supply air setpoint manager
-    modify_crah_sa_stpt_manager(model)
+    # modify_crah_sa_stpt_manager(model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
