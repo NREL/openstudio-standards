@@ -110,19 +110,22 @@ class Standard
       model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
     end
 
+    # Get the groups of zones that define the baseline HVAC systems for later use.
+    # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
     if /prm/i !~ template
-
-        # Get the groups of zones that define the baseline HVAC systems for later use.
-      # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
       sys_groups = model_prm_baseline_system_groups(model, custom)
-
-      # Remove all HVAC from model, excluding service water heating
-      model_remove_prm_hvac(model)
-
-      # Remove all EMS objects from the model
-      model_remove_prm_ems_objects(model)
+    else
+      sys_groups = model_prm_stable_baseline_system_groups(model, custom, hvac_building_type)
+      # Also get hash of zoneName:boolean to record which zones have district heating, if any
+      district_heat_zones = get_district_heating_zones(model)
     end
+    
+    # Remove all HVAC from model, excluding service water heating
+    model_remove_prm_hvac(model)
+
+    # Remove all EMS objects from the model
+    model_remove_prm_ems_objects(model)
 
     if /prm/i !~ template
 
@@ -388,8 +391,23 @@ class Standard
       zn_hash['bldg_type'] = thermal_zone_building_type(zone)
 
       # Fuel type
-      zn_hash['fuel'] = thermal_zone_fossil_or_electric_type(zone, custom)
-
+      if /prm/i !~ template
+        # for 2013 and prior, baseline fuel = proposed fuel
+        zn_hash['fuel'] = thermal_zone_fossil_or_electric_type(zone, custom)
+      else
+        # for 2016 and later, use fuel to identify zones with district energy
+        zone_fuels = ''
+        htg_fuels = zone.heating_fuels
+        if htg_fuels.include?('DistrictHeating')
+          zone_fuels = 'DistrictHeating'
+        end
+        clg_fuels = zone.cooling_fuels
+        if clg_fuels.include?('DistrictCooling')
+          zone_fuels += 'DistrictCooling'
+        end
+        zn_hash['fuel'] = zone_fuels
+       end
+      end
       zones << zn_hash
     end
 
@@ -656,6 +674,92 @@ class Standard
 
     return final_groups
   end
+
+  # Assign spaces to system groups based on building area type
+  # For now, there is only one building area type for a model
+  # For stable baseline, heating type is based on climate, not proposed heating type
+  # Isolate zones that have heating-only or district (purchased) heat or chilled water
+
+  def model_prm_stable_baseline_system_groups(model, custom, hvac_building_type)
+
+    zones = model_zones_with_occ_and_fuel_type(model, custom)
+
+    # Ensure that there is at least one conditioned zone
+    if zones.size.zero?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
+      return []
+    end
+
+    # Isolate heated-only and destrict cooling zones onto separate groups
+    # District heating does not require separate group
+    final_groups = []
+    heated_only_zones = []
+    heated_cooled_zones = []
+    district_cooled_zones = []
+    zones.each do |zn|
+      if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        heated_only_zones << zn
+      elsif zn['fuel'].include?("DistrictCooling")
+        district_cooled_zones << zn
+      else
+        heated_cooled_zones << zn
+      end
+    end
+    unless heated_only_zones.empty?
+      htd_only_group = {}
+      htd_only_group['occ'] = 'heatedonly'
+      htd_only_group['fuel'] = 'any'
+      htd_only_group['zones'] = heated_only_zones
+      final_groups << htd_only_group
+    end
+    unless district_cooled_zones.empty?
+      district_cooled_group = {}
+      district_cooled_group['occ'] = hvac_building_type
+      district_cooled_group['fuel'] = 'districtcooling'
+      district_cooled_group['zones'] = district_cooled_zones
+      final_groups << district_cooled_group
+    end
+    unless heated_cooled_zones.empty?
+      heated_cooled_group = {}
+      heated_cooled_group['occ'] = hvac_building_type
+      heated_cooled_group['fuel'] = 'any'
+      heated_cooled_group['zones'] = heated_cooled_zones
+      final_groups << heated_cooled_group
+    end
+
+    # Determine the number of stories spanned by each group and report out info.
+    final_groups.each do |group|
+      # Determine the number of stories this group spans
+      num_stories = model_num_stories_spanned(model, group['zones'])
+      group['stories'] = num_stories
+      # Report out the final grouping
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      group['zones'].sort.each_slice(5) do |zone_list|
+        zone_names = []
+        zone_list.each do |zone|
+          zone_names << zone.name.get.to_s
+        end
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+      end
+    end
+
+    return final_groups
+  end
+
+  # Before deleting proposed HVAC components, determine for each zone if it has district heating
+  def get_district_heating_zones(model)
+    has_district_hash = {}
+    model.getThermalZones.sort.each do |zone|
+      has_district_hash['building'] = false
+      if htg_fuels.include?('DistrictHeating')
+        has_district_hash[zone] = true
+        has_district_has['building'] = true
+      else
+        has_district_hash[zone] = false
+      end
+    end
+    return has_district_hash
+  end  
 
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
