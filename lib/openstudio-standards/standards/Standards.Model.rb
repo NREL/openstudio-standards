@@ -119,6 +119,8 @@ class Standard
       sys_groups = model_prm_stable_baseline_system_groups(model, custom, hvac_building_type)
       # Also get hash of zoneName:boolean to record which zones have district heating, if any
       district_heat_zones = get_district_heating_zones(model)
+      # sys_groups.each {|key, value| puts "#{key} = #{value}" }
+      # district_heat_zones.each {|key, value| puts "#{key} = #{value}" }
     end
     
     # Remove all HVAC from model, excluding service water heating
@@ -406,7 +408,6 @@ class Standard
           zone_fuels += 'DistrictCooling'
         end
         zn_hash['fuel'] = zone_fuels
-       end
       end
       zones << zn_hash
     end
@@ -698,17 +699,18 @@ class Standard
     district_cooled_zones = []
     zones.each do |zn|
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
-        heated_only_zones << zn
-      elsif zn['fuel'].include?("DistrictCooling")
-        district_cooled_zones << zn
+        heated_only_zones << zn['zone']
+      elsif zn['fuel'].include?('DistrictCooling')
+        district_cooled_zones << zn['zone']
       else
-        heated_cooled_zones << zn
+        heated_cooled_zones << zn['zone']
       end
     end
     unless heated_only_zones.empty?
       htd_only_group = {}
       htd_only_group['occ'] = 'heatedonly'
       htd_only_group['fuel'] = 'any'
+      htd_only_group['area_ft2'] = 0
       htd_only_group['zones'] = heated_only_zones
       final_groups << htd_only_group
     end
@@ -716,17 +718,69 @@ class Standard
       district_cooled_group = {}
       district_cooled_group['occ'] = hvac_building_type
       district_cooled_group['fuel'] = 'districtcooling'
+      district_cooled_group['area_ft2'] = 0
       district_cooled_group['zones'] = district_cooled_zones
+      # store info if any zone has district, fuel, or electric heating
+      district_heat? = false
+      fuel_heat? = false
+      elec_heat? = false
+      district_cooled_zones.each do |zone|
+        if zone.heating_fuels.include?('DistrictHeating')
+          district_heat? = true
+        end
+        other_heat = thermal_zone_fossil_or_electric_type(zone,'')
+        if other_heat == 'fossil'
+          fuel_heat? = true
+        elsif other_heat == 'electric'        
+          elec_heat? = true
+        end
+      end        
+      if district_heat?
+        district_cooled_group['fuel'] = 'districtcooling_districtheating'
+      end
+      if fuel_heat?
+        district_cooled_group['fuel'] += '_fuel'
+      end
+      if elec_heat?
+        district_cooled_group['fuel'] += '_electric'
+      end
+
       final_groups << district_cooled_group
     end
     unless heated_cooled_zones.empty?
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
       heated_cooled_group['fuel'] = 'any'
+      heated_cooled_group['area_ft2'] = 0
       heated_cooled_group['zones'] = heated_cooled_zones
+      # store info if any zone has district, fuel, or electric heating
+      district_heat? = false
+      fuel_heat? = false
+      elec_heat? = false
+      heated_cooled_zones.each do |zone|
+        if zone.heating_fuels.include?('DistrictHeating')
+          district_heat? = true
+        end
+        other_heat = thermal_zone_fossil_or_electric_type(zone,'')
+        if other_heat == 'fossil'
+          fuel_heat? = true
+        elsif other_heat == 'electric'        
+          elec_heat? = true
+        end
+      end        
+      if district_heat?
+        heated_cooled_group['fuel'] = 'districtheating'
+      end
+      if fuel_heat?
+        heated_cooled_group['fuel'] += '_fuel'
+      end
+      if elec_heat?
+        heated_cooled_group['fuel'] += '_electric'
+      end
       final_groups << heated_cooled_group
     end
 
+    ngrps = final_groups.count
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
@@ -751,11 +805,12 @@ class Standard
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
       has_district_hash['building'] = false
+      htg_fuels = zone.heating_fuels
       if htg_fuels.include?('DistrictHeating')
-        has_district_hash[zone] = true
+        has_district_hash[zone.name] = true
         has_district_has['building'] = true
       else
-        has_district_hash[zone] = false
+        has_district_hash[zone.name] = false
       end
     end
     return has_district_hash
@@ -878,6 +933,190 @@ class Standard
   # @return [String] the revised fuel type
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
+  end
+
+  # Alternate method for 2016 and later stable baseline
+  # Limits for each building area type are taken from data table
+  # Heating fuel is based on climate zone, unless district heat is in proposed
+
+  def model_prm_stable_baseline_system_type(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, district_heat_zones)
+    #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
+    system_type = [nil, nil, nil, nil]
+
+    # Find matching record from prm baseline hvac table
+    # First filter by number of stories
+    iStoryGroup = 0
+    loop do
+      iStoryGroup += 1
+      props = model_find_object(standards_data['prm_baseline_hvac'],
+        'template' => template,
+        'hvac_building_type' => area_type,
+        'flrs_range_group' => iStoryGroup
+        'area_range_group' => 1)
+
+      if !props
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      end
+      if num_stories < props[bldg_flrs_max]
+        # Story Group Is found
+        break
+      endif
+      if iStoryGroup > 10
+        break
+      end
+    end
+    # Next filter by floor area
+    iAreaGroup = 0
+    baseine_is_found? = false
+    do
+      iAreaGroup += 1
+      props = model_find_object(standards_data['prm_baseline_hvac'],
+        'template' => template,
+        'hvac_building_type' => area_type,
+        'flrs_range_group' => iStoryGroup
+        'area_range_group' => iAreaGroup)
+
+      if !props
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      end
+      below_max? = false
+      above_min? = false
+      # check if actual building floor area is within range for this area group
+      if props['max_area_qual'] == 'LT'
+        if area_ft2 < props['bldg_area_max']
+          below_max? = true
+        end
+      elsif props['max_area_qual'] == 'LE'
+        if area_ft2 <= props['bldg_area_max']
+          below_max? = true
+        end
+      end
+      if props['min_area_qual'] == 'GT'
+        if area_ft2 > props['bldg_area_max']
+          above_min? = true
+        end
+      elsif props['min_area_qual'] == 'GE'
+        if area_ft2 >= props['bldg_area_max']
+          above_min? = true
+        end
+      end
+      if above_min? == true and below_max? == true
+        break
+        baseline_is_found? = true
+      end
+      if iAreaGroup > 9
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+        break
+      end
+    end
+
+    # hash to relate apx G systype categories to sys types for model
+    heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
+    sys_hash = {}
+    if heat_type.to_s == 'fuel'
+      sys_hash['PTAC'] = 'PTAC'
+      sys_hash['PSZ'] = 'PSZ_AC'
+      sys_hash['SZ-CV'] = 'SZ_CV'
+      sys_hash['Heating and ventilation'] = 'Gas_Furnace'
+      sys_hash['PSZ-AC'] = 'PSZ_AC'
+      sys_hash['Packaged VAV'] = 'PVAV_Reheat'
+      sys_hash['VAV'] = 'VAV_Reheat'
+      sys_hash['Unconditioned'] = 'None'
+    else
+      sys_hash['PTAC'] = 'PTHP'
+      sys_hash['PSZ'] = 'PSZ_HP'
+      sys_hash['SZ-CV'] = 'SZ_CV'
+      sys_hash['Heating and ventilation'] = 'Electric_Furnace'
+      sys_hash['PSZ-AC'] = 'PSZ_HP'
+      sys_hash['Packaged VAV'] = 'PVAV_PFP_Boxes'
+      sys_hash['VAV'] = 'VAV_PFP_Boxes'
+      sys_hash['Unconditioned'] = 'None'
+    end     
+  
+    if /districtheating/i =~ fuel_type
+      central_heat = 'DistrictHeating'
+    elsif heat_type.to_s == 'fuel'
+      central_heat = 'NaturalGas'
+    else
+      central_heat = 'Electricity'
+    end
+
+    if /districtheating/i =~ fuel_type and /elec/i !~ fuel_type and /elec/i !~ fuel type
+      # if no zone has fuel or elect, set default to district for zones
+      zone_heat = 'DistrictHeating'
+    elsif heat_type.to_s == 'fuel'
+      zone_heat = 'NaturalGas'
+    else
+      zone_heat = 'Electricity'
+    end
+
+    if /districtcooling/i =~ fuel_type
+      cool_type = 'DistrictCooling'
+    elsif props['system_type'] =~ /Heating and ventilation/i or props['system_type'] =~ /unconditioned/i
+      cool_type = nil
+    end
+
+    system_type = [props['system_type', central_heat, zone_heat, cool_type]
+    return system_type
+
+  end
+
+  # determine whether heaing type is fuel or electric
+  def find_prm_heat_type(hvac_building_type, climate_zone)
+    heat_type_props = model_find_object(standards_data['prm_heat_type'],
+      'template' => template,
+      'hvac_building_type' => hvac_building_type,
+      'climate_zone' => get_climate_zone_code(climate_zone))
+    if !heat_type_props
+      # try again with wild card for climate
+      heat_type_props = model_find_object(standards_data['prm_heat_type'],
+        'template' => template,
+        'hvac_building_type' => hvac_building_type,
+        'climate_zone' => 'any')
+    end
+    if !heat_type_props
+      # try again with wild card for building type
+        heat_type_props = model_find_object(standards_data['prm_heat_type'],
+        'template' => template,
+        'hvac_building_type' => 'all others',
+        'climate_zone' => get_climate_zone_code(climate_zone))
+    end
+    if !heat_type_props
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
+    else
+      return heat_type_props['heat_type']
+    end
+  end  
+
+  def get_climate_zone_code(climate_zone)
+    cz_codes = []
+    cz_codes << '0A'
+    cz_codes << '0B'
+    cz_codes << '1A'
+    cz_codes << '1B'
+    cz_codes << '2A'
+    cz_codes << '2B'
+    cz_codes << '3A'
+    cz_codes << '3B'
+    cz_codes << '3C'
+    cz_codes << '4A'
+    cz_codes << '4B'
+    cz_codes << '4C'
+    cz_codes << '5A'
+    cz_codes << '5B'
+    cz_codes << '5C'
+    cz_codes << '6A'
+    cz_codes << '6B'
+    cz_codes << '7A'
+    cz_codes << '7B'
+    cz_codes << '8A'
+    cz_codes << '8B'
+
+    cz_codes.each do |cz|
+      if /cz.to_s/i =~ climate_zone
+        return cz.to_s
+      end
+    end
   end
 
   # Add the specified baseline system type to the specified zones based on the specified template.
