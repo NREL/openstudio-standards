@@ -166,6 +166,36 @@ class Standard
                                       sys_group['zones'])
       end
 
+    else
+      # Path for standard versions 2016 and later
+      sys_groups.each do |sys_group|
+        # Determine the primary baseline system type
+        system_type = model_prm_stable_baseline_system_type(model,
+                                                    climate_zone,
+                                                    sys_group['occ'],
+                                                    sys_group['fuel'],
+                                                    sys_group['area_ft2'],
+                                                    sys_group['stories'],
+                                                    district_heat_zones)
+
+        sys_group['zones'].sort.each_slice(5) do |zone_list|
+          zone_names = []
+          zone_list.each do |zone|
+            zone_names << zone.name.get.to_s
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+        end
+
+        # Add the system type for these zones
+        puts "DEM: before add prm baseline"
+        model_add_prm_baseline_system(model,
+                                      system_type[0],
+                                      system_type[1],
+                                      system_type[2],
+                                      system_type[3],
+                                      sys_group['zones'])
+      end
+
     end
 
     if /prm/i !~ template
@@ -710,7 +740,12 @@ class Standard
       htd_only_group = {}
       htd_only_group['occ'] = 'heatedonly'
       htd_only_group['fuel'] = 'any'
-      htd_only_group['area_ft2'] = 0
+      area_m2 = 0
+      heated_only_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      htd_only_group['area_ft2'] = area_ft2
       htd_only_group['zones'] = heated_only_zones
       final_groups << htd_only_group
     end
@@ -718,30 +753,35 @@ class Standard
       district_cooled_group = {}
       district_cooled_group['occ'] = hvac_building_type
       district_cooled_group['fuel'] = 'districtcooling'
-      district_cooled_group['area_ft2'] = 0
+      area_m2 = 0
+      district_cooled_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      district_cooled_group['area_ft2'] = area_ft2
       district_cooled_group['zones'] = district_cooled_zones
       # store info if any zone has district, fuel, or electric heating
-      district_heat? = false
-      fuel_heat? = false
-      elec_heat? = false
+      has_district_heat = false
+      has_fuel_heat = false
+      has_elec_heat = false
       district_cooled_zones.each do |zone|
         if zone.heating_fuels.include?('DistrictHeating')
-          district_heat? = true
+          has_district_heat = true
         end
         other_heat = thermal_zone_fossil_or_electric_type(zone,'')
         if other_heat == 'fossil'
-          fuel_heat? = true
+          has_fuel_heat = true
         elsif other_heat == 'electric'        
-          elec_heat? = true
+          has_elec_heat = true
         end
       end        
-      if district_heat?
+      if has_district_heat
         district_cooled_group['fuel'] = 'districtcooling_districtheating'
       end
-      if fuel_heat?
+      if has_fuel_heat
         district_cooled_group['fuel'] += '_fuel'
       end
-      if elec_heat?
+      if has_elec_heat
         district_cooled_group['fuel'] += '_electric'
       end
 
@@ -751,30 +791,35 @@ class Standard
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
       heated_cooled_group['fuel'] = 'any'
-      heated_cooled_group['area_ft2'] = 0
+      area_m2 = 0
+      heated_cooled_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      heated_cooled_group['area_ft2'] = area_ft2
       heated_cooled_group['zones'] = heated_cooled_zones
       # store info if any zone has district, fuel, or electric heating
-      district_heat? = false
-      fuel_heat? = false
-      elec_heat? = false
+      has_district_heat = false
+      has_fuel_heat = false
+      has_elec_heat = false
       heated_cooled_zones.each do |zone|
         if zone.heating_fuels.include?('DistrictHeating')
-          district_heat? = true
+          has_district_heat = true
         end
         other_heat = thermal_zone_fossil_or_electric_type(zone,'')
         if other_heat == 'fossil'
-          fuel_heat? = true
+          has_fuel_heat = true
         elsif other_heat == 'electric'        
-          elec_heat? = true
+          has_elec_heat = true
         end
       end        
-      if district_heat?
+      if has_district_heat
         heated_cooled_group['fuel'] = 'districtheating'
       end
-      if fuel_heat?
+      if has_fuel_heat
         heated_cooled_group['fuel'] += '_fuel'
       end
-      if elec_heat?
+      if has_elec_heat
         heated_cooled_group['fuel'] += '_electric'
       end
       final_groups << heated_cooled_group
@@ -951,8 +996,10 @@ class Standard
       props = model_find_object(standards_data['prm_baseline_hvac'],
         'template' => template,
         'hvac_building_type' => area_type,
-        'flrs_range_group' => iStoryGroup
+        'flrs_range_group' => iStoryGroup,
         'area_range_group' => 1)
+
+      puts "DEM: props:system type: #{props['system_type']}"  
 
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
@@ -960,49 +1007,49 @@ class Standard
       if num_stories < props[bldg_flrs_max]
         # Story Group Is found
         break
-      endif
+      end
       if iStoryGroup > 10
         break
       end
     end
     # Next filter by floor area
     iAreaGroup = 0
-    baseine_is_found? = false
-    do
+    baseine_is_found = false
+    loop do
       iAreaGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
         'template' => template,
         'hvac_building_type' => area_type,
-        'flrs_range_group' => iStoryGroup
+        'flrs_range_group' => iStoryGroup,
         'area_range_group' => iAreaGroup)
 
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       end
-      below_max? = false
-      above_min? = false
+      below_max = false
+      above_min = false
       # check if actual building floor area is within range for this area group
       if props['max_area_qual'] == 'LT'
         if area_ft2 < props['bldg_area_max']
-          below_max? = true
+          below_max = true
         end
       elsif props['max_area_qual'] == 'LE'
         if area_ft2 <= props['bldg_area_max']
-          below_max? = true
+          below_max = true
         end
       end
       if props['min_area_qual'] == 'GT'
         if area_ft2 > props['bldg_area_max']
-          above_min? = true
+          above_min = true
         end
       elsif props['min_area_qual'] == 'GE'
         if area_ft2 >= props['bldg_area_max']
-          above_min? = true
+          above_min = true
         end
       end
-      if above_min? == true and below_max? == true
+      if above_min == true and below_max == true
         break
-        baseline_is_found? = true
+        baseline_is_found = true
       end
       if iAreaGroup > 9
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
@@ -1035,16 +1082,16 @@ class Standard
   
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
-    elsif heat_type.to_s == 'fuel'
+    elsif heat_type =~ /fuel/i
       central_heat = 'NaturalGas'
     else
       central_heat = 'Electricity'
     end
 
-    if /districtheating/i =~ fuel_type and /elec/i !~ fuel_type and /elec/i !~ fuel type
+    if /districtheating/i =~ fuel_type && /elec/i !~ fuel_type && /fuel/i !~ fuel_type
       # if no zone has fuel or elect, set default to district for zones
       zone_heat = 'DistrictHeating'
-    elsif heat_type.to_s == 'fuel'
+    elsif heat_type =~ /fuel/i
       zone_heat = 'NaturalGas'
     else
       zone_heat = 'Electricity'
@@ -1052,11 +1099,13 @@ class Standard
 
     if /districtcooling/i =~ fuel_type
       cool_type = 'DistrictCooling'
-    elsif props['system_type'] =~ /Heating and ventilation/i or props['system_type'] =~ /unconditioned/i
+    elsif props['system_type'] =~ /Heating and ventilation/i || props['system_type'] =~ /unconditioned/i
       cool_type = nil
     end
 
-    system_type = [props['system_type', central_heat, zone_heat, cool_type]
+    system_type = [props['system_type'], central_heat, zone_heat, cool_type]
+    puts "DEM: print array:"
+    p system_type
     return system_type
 
   end
