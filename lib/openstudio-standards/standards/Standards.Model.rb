@@ -171,6 +171,7 @@ class Standard
       sys_groups.each do |sys_group|
         # Determine the primary baseline system type
         system_type = model_prm_stable_baseline_system_type(model,
+                                                    hvac_building_type, 
                                                     climate_zone,
                                                     sys_group['occ'],
                                                     sys_group['fuel'],
@@ -984,14 +985,15 @@ class Standard
   # Limits for each building area type are taken from data table
   # Heating fuel is based on climate zone, unless district heat is in proposed
 
-  def model_prm_stable_baseline_system_type(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, district_heat_zones)
+  def model_prm_stable_baseline_system_type(model, hvac_building_type, climate_zone, area_type, fuel_type, area_ft2, num_stories, district_heat_zones)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
     # Find matching record from prm baseline hvac table
     # First filter by number of stories
     iStoryGroup = 0
-    loop do
+    props = {}
+    0.upto(9) do |i|
       iStoryGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
         'template' => template,
@@ -1004,19 +1006,22 @@ class Standard
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       end
-      if num_stories < props[bldg_flrs_max]
+      if num_stories < props['bldg_flrs_max']
         # Story Group Is found
-        break
-      end
-      if iStoryGroup > 10
+        puts "DEM: story group is found"
+        puts "DEM: props:system type: #{props['system_type']}"
         break
       end
     end
+    puts "DEM: before second loop"
+    puts "DEM: iStoryGroup: #{iStoryGroup}"
+    puts "DEM: props:system type: #{props['system_type']}"
     # Next filter by floor area
     iAreaGroup = 0
     baseine_is_found = false
     loop do
       iAreaGroup += 1
+      puts "DEM: before get data in second loop"
       props = model_find_object(standards_data['prm_baseline_hvac'],
         'template' => template,
         'hvac_building_type' => area_type,
@@ -1039,28 +1044,36 @@ class Standard
         end
       end
       if props['min_area_qual'] == 'GT'
-        if area_ft2 > props['bldg_area_max']
+        if area_ft2 > props['bldg_area_min']
           above_min = true
         end
       elsif props['min_area_qual'] == 'GE'
-        if area_ft2 >= props['bldg_area_max']
+        if area_ft2 >= props['bldg_area_min']
           above_min = true
         end
       end
       if above_min == true and below_max == true
-        break
         baseline_is_found = true
+        break
       end
       if iAreaGroup > 9
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
         break
       end
     end
-
+    puts "DEM: props:system type: #{props['system_type']}"  
+    puts "DEM: before heat type"
+    puts "DEM: climate = #{climate_zone}"
+    puts "DEM: bldg type = #{hvac_building_type}"
     # hash to relate apx G systype categories to sys types for model
     heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
+    puts "DEM: after heat type: #{heat_type}"
+    xxx = props['bldg_area_max']
+    puts "DEM: xxx: #{xxx}"
+    sys_type = props['system_type']
+    puts "DEM: props sys : #{sys_type}"
     sys_hash = {}
-    if heat_type.to_s == 'fuel'
+    if heat_type == 'fuel'
       sys_hash['PTAC'] = 'PTAC'
       sys_hash['PSZ'] = 'PSZ_AC'
       sys_hash['SZ-CV'] = 'SZ_CV'
@@ -1080,6 +1093,10 @@ class Standard
       sys_hash['Unconditioned'] = 'None'
     end     
   
+    puts "DEM: props sys : #{sys_hash['PSZ']}"
+    model_sys_type = sys_hash[props['system_type']]
+    puts "DEM: model sys type = #{model_sys_type}"
+
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
     elsif heat_type =~ /fuel/i
@@ -1087,7 +1104,7 @@ class Standard
     else
       central_heat = 'Electricity'
     end
-
+    puts "DEM: after central heat"
     if /districtheating/i =~ fuel_type && /elec/i !~ fuel_type && /fuel/i !~ fuel_type
       # if no zone has fuel or elect, set default to district for zones
       zone_heat = 'DistrictHeating'
@@ -1096,14 +1113,14 @@ class Standard
     else
       zone_heat = 'Electricity'
     end
-
+    puts "DEM: after zone heat"
     if /districtcooling/i =~ fuel_type
       cool_type = 'DistrictCooling'
     elsif props['system_type'] =~ /Heating and ventilation/i || props['system_type'] =~ /unconditioned/i
       cool_type = nil
     end
 
-    system_type = [props['system_type'], central_heat, zone_heat, cool_type]
+    system_type = [model_sys_type, central_heat, zone_heat, cool_type]
     puts "DEM: print array:"
     p system_type
     return system_type
@@ -1112,10 +1129,11 @@ class Standard
 
   # determine whether heaing type is fuel or electric
   def find_prm_heat_type(hvac_building_type, climate_zone)
+    climate_code = get_climate_zone_code(climate_zone)
     heat_type_props = model_find_object(standards_data['prm_heat_type'],
       'template' => template,
       'hvac_building_type' => hvac_building_type,
-      'climate_zone' => get_climate_zone_code(climate_zone))
+      'climate_zone' => climate_code)
     if !heat_type_props
       # try again with wild card for climate
       heat_type_props = model_find_object(standards_data['prm_heat_type'],
@@ -1128,7 +1146,7 @@ class Standard
         heat_type_props = model_find_object(standards_data['prm_heat_type'],
         'template' => template,
         'hvac_building_type' => 'all others',
-        'climate_zone' => get_climate_zone_code(climate_zone))
+        'climate_zone' => climate_code)
     end
     if !heat_type_props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
@@ -1138,6 +1156,7 @@ class Standard
   end  
 
   def get_climate_zone_code(climate_zone)
+    puts "DEM: #{climate_zone}"
     cz_codes = []
     cz_codes << '0A'
     cz_codes << '0B'
@@ -1162,7 +1181,8 @@ class Standard
     cz_codes << '8B'
 
     cz_codes.each do |cz|
-      if /cz.to_s/i =~ climate_zone
+      pattern = Regexp.new(cz, true)
+      if pattern =~ climate_zone
         return cz.to_s
       end
     end
