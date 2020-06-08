@@ -40,7 +40,10 @@ class Standard
     # Perform a sizing run of the proposed model.
     # Intend is to get individual space load to determine each space's
     # conditioning type: conditioned, unconditioned, semiheated.
+    testx = model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+    puts "DEM: #{testx}"
     if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+      puts "DEM: doing PROP sizing run"
       if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP") == false
         return false
       end
@@ -177,6 +180,7 @@ class Standard
                                                     sys_group['fuel'],
                                                     sys_group['area_ft2'],
                                                     sys_group['stories'],
+                                                    sys_group['zones'],
                                                     district_heat_zones)
 
         sys_group['zones'].sort.each_slice(5) do |zone_list|
@@ -722,21 +726,139 @@ class Standard
       return []
     end
 
+    # Consider special rules for computer rooms
+    # need load of all 
+
+    # Get cooling load of all computer rooms to establish system types
+    comp_room_loads = {}
+    bldg_comp_room_load = 0
+    zones.each do |zn|
+      zone_load = 0.0
+      has_computer_room = false
+      # First check if any space in zone has a computer room
+      zn['zone'].spaces.each do |space|
+        if space.spaceType.get.standardsSpaceType.get == 'computer room'
+          has_computer_room = true
+          break
+        end
+      end
+      if has_computer_room == true
+        # Collect load for entire zone
+        zn['zone'].spaces.each do |space|
+          clg_load_btu_per_ft2 = 0.0
+          clg_load_w_per_m2 = 0.0
+          clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
+          space_load_w = clg_load_w_per_m2 * space.floorArea * space.multiplier
+          space_load_btu = OpenStudio.convert(space_load_w, 'W', 'Btu/hr').get
+          zone_load += space_load_btu
+        end
+      end
+      comp_room_loads[zn['zone'].name.get] = zone_load
+      bldg_comp_room_load += zone_load
+    end
+
+    # Lab zones are grouped separately if total lab exhaust in building > 15000 cfm
+    lab_exhaust_si = 0
+    has_lab_spaces = {}
+
+    puts "DEM: before check for lab spaces"
+    model.getThermalZones.sort.each do |zone|
+      puts "DEM: #{zone.name.get}"
+      # Check if this zone includes laboratory space
+      has_lab = false
+      zone.spaces.each do |space|
+        spacetype = space.spaceType.get.standardsSpaceType.get
+        puts "DEM: #{spacetype}"
+        if space.spaceType.get.standardsSpaceType.get == 'laboratory'
+          has_lab = true
+          break
+        end
+      end
+
+      if has_lab
+        zone.equipment.each do |zone_equipment|
+          # Get tally of exhaust fan flow
+          if zone_equipment.to_FanZoneExhaust.is_initialized
+            puts "DEM: found exh fan"
+            zone_exh_fan = zone_equipment.to_FanZoneExhaust.get
+            puts "DEM: exh fan name: #{zone_exh_fan.name}"
+            # Check if any spaces in this zone are laboratory
+            if has_lab
+              lab_exhaust_si += zone_exh_fan.maximumFlowRate.get
+              has_lab_spaces[zone.name.get] = true
+              puts "DEM: has lab spaces #{zone.name.get}"
+            else
+              has_lab_spaces[zone.name.get] = false
+            end
+          end
+        end
+
+        # Also account for outdoor air exhausted from this zone via return/relief
+
+        
+      end
+    end
+    lab_exhaust_cfm = OpenStudio.convert(lab_exhaust_si, 'm^3/s', 'cfm').get
+    puts "DEM: lab exhaust = #{lab_exhaust_cfm}"
+
+    # Isolate computer rooms onto separate groups
+    # Computer rooms may need to be split to two groups, depending on load
     # Isolate heated-only and destrict cooling zones onto separate groups
     # District heating does not require separate group
     final_groups = []
     heated_only_zones = []
     heated_cooled_zones = []
     district_cooled_zones = []
+    comp_room_svav_zones = []
+    comp_room_psz_zones = []
+    dist_comp_room_svav_zones = []
+    dist_comp_room_psz_zones = []
+    lab_zones = []
+
+    total_area_ft2 = 0
+    puts "DEM: zeor area = #{total_area_ft2}"
     zones.each do |zn|
+      puts "fill zones arrays zone 1 = #{zn['zone'].name.get}"
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
         heated_only_zones << zn['zone']
+      elsif comp_room_loads[zn['zone'].name.get] > 0
+        # This is a computer room zone
+        puts "DEM: comp room zone"
+        if bldg_comp_room_load > 3_000_000 || comp_room_loads[zn['zone'].name.get] > 600_000
+          # System 11
+          if zn['fuel'].include?('DistrictCooling')
+            dist_comp_room_svav_zones << zn['zone']
+          else
+            comp_room_svav_zones << zn['zone']
+          end
+        else 
+          # PSZ
+          if zn['fuel'].include?('DistrictCooling')
+            dist_comp_room_psz_zones << zn['zone']
+          else
+            comp_room_psz_zones << zn['zone']
+          end
+        end
+
+      elsif has_lab_spaces[zn['zone'].name.get] && lab_exhaust_cfm > 15_000
+        puts "DEM: lab zone"
+        lab_zones << zn['zone']
       elsif zn['fuel'].include?('DistrictCooling')
         district_cooled_zones << zn['zone']
       else
         heated_cooled_zones << zn['zone']
       end
+      # Collect total floor area of all zones for this building area type
+      # puts "DEM: #{area_m2}"
+      area_m2 = zn['zone'].floorArea * zn['zone'].multiplier
+      puts "DEM: #{area_m2}"
+      total_area_ft2 += OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
     end
+
+    puts "DEM: #{total_area_ft2}"
+    puts "DEM: after fill zones arrays"
+
+    # Build final_groups array
     unless heated_only_zones.empty?
       htd_only_group = {}
       htd_only_group['occ'] = 'heatedonly'
@@ -746,7 +868,8 @@ class Standard
         area_m2 += zone.floorArea * zone.multiplier
       end
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-      htd_only_group['area_ft2'] = area_ft2
+      htd_only_group['group_area_ft2'] = area_ft2
+      htd_only_group['building_area_type_ft2'] = total_area_ft2
       htd_only_group['zones'] = heated_only_zones
       final_groups << htd_only_group
     end
@@ -759,33 +882,11 @@ class Standard
         area_m2 += zone.floorArea * zone.multiplier
       end
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-      district_cooled_group['area_ft2'] = area_ft2
+      district_cooled_group['group_area_ft2'] = area_ft2
+      district_cooled_group['building_area_type_ft2'] = total_area_ft2
       district_cooled_group['zones'] = district_cooled_zones
       # store info if any zone has district, fuel, or electric heating
-      has_district_heat = false
-      has_fuel_heat = false
-      has_elec_heat = false
-      district_cooled_zones.each do |zone|
-        if zone.heating_fuels.include?('DistrictHeating')
-          has_district_heat = true
-        end
-        other_heat = thermal_zone_fossil_or_electric_type(zone,'')
-        if other_heat == 'fossil'
-          has_fuel_heat = true
-        elsif other_heat == 'electric'        
-          has_elec_heat = true
-        end
-      end        
-      if has_district_heat
-        district_cooled_group['fuel'] = 'districtcooling_districtheating'
-      end
-      if has_fuel_heat
-        district_cooled_group['fuel'] += '_fuel'
-      end
-      if has_elec_heat
-        district_cooled_group['fuel'] += '_electric'
-      end
-
+      district_cooled_group['fuel'] = get_group_heat_types(model, district_cooled_zones)
       final_groups << district_cooled_group
     end
     unless heated_cooled_zones.empty?
@@ -797,43 +898,104 @@ class Standard
         area_m2 += zone.floorArea * zone.multiplier
       end
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-      heated_cooled_group['area_ft2'] = area_ft2
+      heated_cooled_group['group_area_ft2'] = area_ft2
+      heated_cooled_group['building_area_type_ft2'] = total_area_ft2
       heated_cooled_group['zones'] = heated_cooled_zones
       # store info if any zone has district, fuel, or electric heating
-      has_district_heat = false
-      has_fuel_heat = false
-      has_elec_heat = false
-      heated_cooled_zones.each do |zone|
-        if zone.heating_fuels.include?('DistrictHeating')
-          has_district_heat = true
-        end
-        other_heat = thermal_zone_fossil_or_electric_type(zone,'')
-        if other_heat == 'fossil'
-          has_fuel_heat = true
-        elsif other_heat == 'electric'        
-          has_elec_heat = true
-        end
-      end        
-      if has_district_heat
-        heated_cooled_group['fuel'] = 'districtheating'
-      end
-      if has_fuel_heat
-        heated_cooled_group['fuel'] += '_fuel'
-      end
-      if has_elec_heat
-        heated_cooled_group['fuel'] += '_electric'
-      end
+      heated_cooled_group['fuel'] = get_group_heat_types(model, heated_cooled_zones)
       final_groups << heated_cooled_group
+    end
+    unless lab_zones.empty?
+      puts "DEM: do lab_zones"
+      lab_group = {}
+      lab_group['occ'] = hvac_building_type
+      lab_group['fuel'] = 'any'
+      area_m2 = 0
+      lab_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+        puts "DEM: area = #{area_m2}"
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      lab_group['group_area_ft2'] = area_ft2
+      lab_group['building_area_type_ft2'] = total_area_ft2
+      lab_group['zones'] = lab_zones
+      # store info if any zone has district, fuel, or electric heating
+      lab_group['fuel'] = get_group_heat_types(model, lab_zones)
+      final_groups << lab_group
+    end
+    unless comp_room_svav_zones.empty?
+      comp_room_svav_group = {}
+      comp_room_svav_group['occ'] = 'computer room szvav'
+      comp_room_svav_group['fuel'] = 'any'
+      area_m2 = 0
+      comp_room_svav_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      comp_room_svav_group['group_area_ft2'] = area_ft2
+      comp_room_svav_group['building_area_type_ft2'] = total_area_ft2
+      comp_room_svav_group['zones'] = comp_room_svav_zones
+      # store info if any zone has district, fuel, or electric heating
+      comp_room_svav_group['fuel'] = get_group_heat_types(model, comp_room_svav_zones)
+      final_groups << comp_room_svav_group
+    end
+    unless comp_room_psz_zones.empty?
+      comp_room_psz_group = {}
+      comp_room_psz_group['occ'] = 'computer room psz'
+      comp_room_psz_group['fuel'] = 'any'
+      area_m2 = 0
+      comp_room_psz_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      comp_room_psz_group['group_area_ft2'] = area_ft2
+      comp_room_psz_group['building_area_type_ft2'] = total_area_ft2
+      comp_room_psz_group['zones'] = comp_room_psz_zones
+      # store info if any zone has district, fuel, or electric heating
+      comp_room_psz_group['fuel'] = get_group_heat_types(model, comp_room_psz_zones)
+      final_groups << comp_room_psz_group
+    end
+    unless dist_comp_room_svav_zones.empty?
+      dist_comp_room_svav_group = {}
+      dist_comp_room_svav_group['occ'] = hvac_building_type
+      dist_comp_room_svav_group['fuel'] = 'districtcooling'
+      area_m2 = 0
+      dist_comp_room_svav_zones.each do |zone|
+        area_m2 += zone.floorArea * zone.multiplier
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      dist_comp_room_svav_group['group_area_ft2'] = area_ft2
+      dist_comp_room_svav_group['building_area_type_ft2'] = total_area_ft2
+      dist_comp_room_svav_group['zones'] = dist_comp_room_svav_zones
+      # store info if any zone has district, fuel, or electric heating
+      dist_comp_room_svav_group['fuel'] = get_group_heat_types(model, dist_comp_room_svav_zones)
+      final_groups << dist_comp_room_svav_group
+    end
+    unless dist_comp_room_psz_zones.empty?
+      dist_comp_room_psz_group = {}
+      dist_comp_room_psz_group['occ'] = hvac_building_type
+      dist_comp_room_psz_group['fuel'] = 'districtcooling'
+      area_m2 = 0
+      dist_comp_room_psz_zones.each do |zone|
+      end
+      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
+      dist_comp_room_psz_group['group_area_ft2'] = area_ft2
+      dist_comp_room_psz_group['building_area_type_ft2'] = total_area_ft2
+      dist_comp_room_psz_group['zones'] = dist_comp_room_psz_zones
+      # store info if any zone has district, fuel, or electric heating
+      dist_comp_room_psz_group['fuel'] = get_group_heat_types(model, dist_comp_room_psz_zones)
+      final_groups << dist_comp_room_psz_group
     end
 
     ngrps = final_groups.count
+    puts "DEM: ngroups = #{ngrps}"
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
       num_stories = model_num_stories_spanned(model, group['zones'])
       group['stories'] = num_stories
       # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['group_area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|
         zone_names = []
         zone_list.each do |zone|
@@ -843,6 +1005,7 @@ class Standard
       end
     end
 
+    puts "DEM: ngroups = #{ngrps}"
     return final_groups
   end
 
@@ -861,6 +1024,37 @@ class Standard
     end
     return has_district_hash
   end  
+
+  # get list of heat types across a list of zones
+  def get_group_heat_types(model, zones)
+    heat_list = ''
+    has_district_heat = false
+    has_fuel_heat = false
+    has_elec_heat = false
+    puts "DEM: in get heat types"
+    zones.each do |zone|
+      if zone.heating_fuels.include?('DistrictHeating')
+        has_district_heat = true
+      end
+      other_heat = thermal_zone_fossil_or_electric_type(zone,'')
+      if other_heat == 'fossil'
+        has_fuel_heat = true
+      elsif other_heat == 'electric'        
+        has_elec_heat = true
+      end
+    end        
+    if has_district_heat
+      heat_list = 'districtheating'
+    end
+    if has_fuel_heat
+      heat_list += '_fuel'
+    end
+    if has_elec_heat
+      heat_list += '_electric'
+    end
+    puts "DEM: heat type = #{heat_list}"
+    return heat_list
+  end
 
   # Determines the area of the building above which point
   # the non-dominant area type gets it's own HVAC system type.
@@ -985,7 +1179,7 @@ class Standard
   # Limits for each building area type are taken from data table
   # Heating fuel is based on climate zone, unless district heat is in proposed
 
-  def model_prm_stable_baseline_system_type(model, hvac_building_type, climate_zone, area_type, fuel_type, area_ft2, num_stories, district_heat_zones)
+  def model_prm_stable_baseline_system_type(model, hvac_building_type, climate_zone, area_type, fuel_type, area_ft2, num_stories, zones, district_heat_zones)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
@@ -1001,27 +1195,19 @@ class Standard
         'flrs_range_group' => iStoryGroup,
         'area_range_group' => 1)
 
-      puts "DEM: props:system type: #{props['system_type']}"  
-
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       end
       if num_stories < props['bldg_flrs_max']
         # Story Group Is found
-        puts "DEM: story group is found"
-        puts "DEM: props:system type: #{props['system_type']}"
         break
       end
     end
-    puts "DEM: before second loop"
-    puts "DEM: iStoryGroup: #{iStoryGroup}"
-    puts "DEM: props:system type: #{props['system_type']}"
     # Next filter by floor area
     iAreaGroup = 0
     baseine_is_found = false
     loop do
       iAreaGroup += 1
-      puts "DEM: before get data in second loop"
       props = model_find_object(standards_data['prm_baseline_hvac'],
         'template' => template,
         'hvac_building_type' => area_type,
@@ -1061,17 +1247,10 @@ class Standard
         break
       end
     end
-    puts "DEM: props:system type: #{props['system_type']}"  
-    puts "DEM: before heat type"
-    puts "DEM: climate = #{climate_zone}"
-    puts "DEM: bldg type = #{hvac_building_type}"
-    # hash to relate apx G systype categories to sys types for model
+
     heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
-    puts "DEM: after heat type: #{heat_type}"
-    xxx = props['bldg_area_max']
-    puts "DEM: xxx: #{xxx}"
-    sys_type = props['system_type']
-    puts "DEM: props sys : #{sys_type}"
+
+    # hash to relate apx G systype categories to sys types for model
     sys_hash = {}
     if heat_type == 'fuel'
       sys_hash['PTAC'] = 'PTAC'
@@ -1082,6 +1261,7 @@ class Standard
       sys_hash['Packaged VAV'] = 'PVAV_Reheat'
       sys_hash['VAV'] = 'VAV_Reheat'
       sys_hash['Unconditioned'] = 'None'
+      sys_hash['SZ-VAV'] = 'SZ_VAV'
     else
       sys_hash['PTAC'] = 'PTHP'
       sys_hash['PSZ'] = 'PSZ_HP'
@@ -1091,11 +1271,10 @@ class Standard
       sys_hash['Packaged VAV'] = 'PVAV_PFP_Boxes'
       sys_hash['VAV'] = 'VAV_PFP_Boxes'
       sys_hash['Unconditioned'] = 'None'
+      sys_hash['SZ-VAV'] = 'SZ_VAV'
     end     
   
-    puts "DEM: props sys : #{sys_hash['PSZ']}"
     model_sys_type = sys_hash[props['system_type']]
-    puts "DEM: model sys type = #{model_sys_type}"
 
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
@@ -1104,7 +1283,6 @@ class Standard
     else
       central_heat = 'Electricity'
     end
-    puts "DEM: after central heat"
     if /districtheating/i =~ fuel_type && /elec/i !~ fuel_type && /fuel/i !~ fuel_type
       # if no zone has fuel or elect, set default to district for zones
       zone_heat = 'DistrictHeating'
@@ -1113,16 +1291,31 @@ class Standard
     else
       zone_heat = 'Electricity'
     end
-    puts "DEM: after zone heat"
     if /districtcooling/i =~ fuel_type
       cool_type = 'DistrictCooling'
     elsif props['system_type'] =~ /Heating and ventilation/i || props['system_type'] =~ /unconditioned/i
       cool_type = nil
     end
 
-    system_type = [model_sys_type, central_heat, zone_heat, cool_type]
-    puts "DEM: print array:"
+    # Consider special rules for computer rooms
+    # need load of all 
+    zones.each do |zone|
+      zone.spaces.each do |space|
+        clg_load_btu_per_ft2 = 0.0
+        clg_load_w_per_m2 = 0.0
+        clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
+        if clg_load_w_per_m2.is_initialized
+          clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+        end
+        space_load_w = clg_load_w_per_m2 * space.floorArea * space.multiplier
+
+      end
+    end
+
+    puts "DEM: system type: "
     p system_type
+
+    system_type = [model_sys_type, central_heat, zone_heat, cool_type]
     return system_type
 
   end

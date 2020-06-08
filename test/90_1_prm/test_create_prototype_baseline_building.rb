@@ -52,13 +52,50 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
       lpd_space_types = JSON.parse(File.read("#{@json_dir}/lpd_space_types.json"))
       model.getSpaceTypes.sort.each do |space_type|
         next if space_type.floorArea == 0
-        standards_space_type = if space_type.standardsSpaceType.is_initialized
-        space_type.standardsSpaceType.get
+        standards_space_type = ''
+        new_space_type = ''
+        if space_type.standardsSpaceType.is_initialized
+          standards_space_type = space_type.standardsSpaceType.get
         end
         std_bldg_type = space_type.standardsBuildingType.get
         bldg_type_space_type = std_bldg_type + space_type.standardsSpaceType.get
+        
         new_space_type = lpd_space_types[bldg_type_space_type]
+        
+        if new_space_type == ''
+          puts "LPD space type not found in /test/90_1_prm/data/lpd_space_types.json for:  #{bldg_type_space_type}"
+        end
         space_type.setStandardsSpaceType(lpd_space_types[bldg_type_space_type])
+      end
+
+      if building_type == 'PrimarySchool'
+        # For testing purposes, the gym is converted to laboratory space type
+        # add exhaust fan to lab
+        model.getThermalZones.sort.each do |thermal_zone|
+          lab_is_found = false
+          thermal_zone.spaces.each do |space|
+            space_type = space.spaceType.get.standardsSpaceType.get
+            if space_type == 'laboratory'
+              # add an exhaust fan
+              puts "DEM: found laboratory"
+              zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
+              zone_exhaust_fan.setName(space.name.to_s + ' Exhaust Fan')
+              puts "DEM: before set sched"
+              # zone_exhaust_fan.setAvailabilitySchedule('Always On Discrete')
+              puts "DEM: after set sched"
+
+              zone_exhaust_fan.setFanEfficiency(0.6)
+              zone_exhaust_fan.setPressureRise(200)
+
+              # set air flow above threshold for isolation of lab spaces on separate hvac system
+              exhaust_cfm = 15_001
+              maximum_flow_rate = OpenStudio.convert(exhaust_cfm, 'cfm', 'm^3/s').get
+              zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate)
+              zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
+              zone_exhaust_fan.addToThermalZone(thermal_zone)
+            end
+          end
+        end
       end
 
       # Create baseline model
@@ -69,7 +106,7 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
   def test_create_prototype_baseline_building
       # Define prototypes to be generated
       @templates = ['90.1-2013']
-      @building_types = ['SmallOffice','MidriseApartment']
+      @building_types = ['PrimarySchool','LargeOffice','SmallOffice','MidriseApartment']
       @climate_zones = ['ASHRAE 169-2013-2A']
 
       # Set folder for JSON files related to tests
@@ -91,7 +128,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         'RetailStandalone' => 'Retail (stand alone)',
         'PrimarySchool' => 'School (primary)',
         'SecondarySchool' => 'School (secondary and university)',
-        'Warehouse' => 'Warehouse (nonrefrigerated)'
+        'Warehouse' => 'Warehouse (nonrefrigerated)',
+        'Laboratory' => 'All others'
       }
 
       hvac_building_types = {
@@ -110,7 +148,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         'RetailStandalone' => 'retail',
         'PrimarySchool' => 'other nonresidential',
         'SecondarySchool' => 'other nonresidential',
-        'Warehouse' => 'heated-only storage'
+        'Warehouse' => 'heated-only storage',
+        'Laboratory' => 'All others'
       }
 
       swh_building_types = {
@@ -129,7 +168,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         'RetailStandalone' => 'Retail ',
         'PrimarySchool' => 'School/university ',
         'SecondarySchool' => 'School/university ',
-        'Warehouse' => 'Warehouse '
+        'Warehouse' => 'Warehouse ',
+        'Laboratory' => 'Office'
       }
 
       wwr_values = {
@@ -148,7 +188,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         'RetailStandalone' => '0.11',
         'PrimarySchool' => '0.22',
         'SecondarySchool' => '0.22',
-        'Warehouse' => '0.06'
+        'Warehouse' => '0.06',
+        'Laboratory' => '0.2'
       }
 
       hasres_values = {
@@ -167,7 +208,8 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
         'RetailStandalone' => 'false',
         'PrimarySchool' => 'false',
         'SecondarySchool' => 'false',
-        'Warehouse' => 'false'
+        'Warehouse' => 'false',
+        'Laboratory' => 'false'
       }
 
 
