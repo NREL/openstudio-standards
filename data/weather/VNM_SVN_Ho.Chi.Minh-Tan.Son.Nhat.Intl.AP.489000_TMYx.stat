@@ -532,11 +532,15 @@
  -   It may not be indicative of the long term climate for this location.
 
  - Typical/Extreme Period Determination
- - No discernible dry period.....
-     Week closest to average annual temperature selected for Typical Period
-     Typical Week Period selected: May 14:May 20, Average Temp=  27.44°C, Deviation=| 0.021|°C
- - Extremes Selected from annual Min/Max
-     Week closest to maximum annual temperature selected for Typical Period
-     Extreme Hot Week Period selected: Apr 30:May  6, Maximum Temp=  38.00°C, Deviation=| 7.676|°C
-     Week closest to minimum annual temperature selected for Typical Period
-     Extreme Cold Week Period selected: Jan 15:Jan 21, Minimum Temp=  19.00°C, Deviation=| 5.546|°C
+ 
+  - Summer is Jan:Dec
+     Extreme Summer Week (nearest maximum temperature for summer)
+     Extreme Hot Week Period selected: Jun 11:Jun 17, Maximum Temp=  38.00?C, Deviation=| 7.676|?C
+     Typical Summer Week (nearest average temperature for summer)
+     Typical Week Period selected: Aug 13:Aug 19, Average Temp=  27.44?C, Deviation=| 0.021|?C
+
+ - Winter is Jan:Dec
+     Extreme Winter Week (nearest minimum temperature for winter)
+     Extreme Cold Week Period selected: Dec 17:Dec 23, Minimum Temp=  19.00?C, Deviation=| 5.546|?C
+     Typical Winter Week (nearest average temperature for winter)
+     Typical Week Period selected: Aug 13:Aug 19, Average Temp=  27.44?C, Deviation=| 0.021|?C
