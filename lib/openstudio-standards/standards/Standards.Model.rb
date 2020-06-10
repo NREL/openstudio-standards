@@ -38,17 +38,50 @@ class Standard
     model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
 
     # Perform a sizing run of the proposed model.
-    # Intend is to get individual space load to determine each space's
+    # Intent is to get individual space load to determine each space's
     # conditioning type: conditioned, unconditioned, semiheated.
-    testx = model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
-    puts "DEM: #{testx}"
+    puts "DEM: ------ before SR_PROP sizing run --------------------"
     if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
-      puts "DEM: doing PROP sizing run"
+      # Set up some special reports to be used for baseline system selection later
+      # Zone return air flows
+      node_list = []
+      var_name = 'System Node Standard Density Volume Flow Rate'
+      frequency = 'hourly'
+      model.getThermalZones.each do |zone|
+        port_list = zone.returnPortList
+        port_list_objects = port_list.modelObjects
+        #  puts "DEM: exhaust port list size: #{port_list_objects.size}"
+        port_list_objects.each do |node|
+          node_name = node.nameString
+          node_list << node_name
+          #    puts "DEM: next node: #{node_name}"
+          # node_array.each do |variable|
+          output = OpenStudio::Model::OutputVariable.new(var_name,model)
+          output.setKeyValue(node_name)
+          output.setReportingFrequency(frequency)
+        end
+      end
+
+      # air loop relief air flows
+      var_name = 'System Node Standard Density Volume Flow Rate'
+      frequency = 'hourly'
+      model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+        relief_node = air_loop_hvac.reliefAirNode.get
+        puts "DEM: air loop #{air_loop_hvac.nameString}"
+        puts "DEM: relief_node #{relief_node.nameString}"
+        output = OpenStudio::Model::OutputVariable.new(var_name,model)
+        output.setKeyValue(relief_node.nameString)
+        output.setReportingFrequency(frequency)
+      end
+
       if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP") == false
         return false
       end
+
     end
     
+
+
     # Remove external shading devices
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
     model_remove_external_shading_devices(model)
@@ -178,7 +211,7 @@ class Standard
                                                     climate_zone,
                                                     sys_group['occ'],
                                                     sys_group['fuel'],
-                                                    sys_group['area_ft2'],
+                                                    sys_group['building_area_type_ft2'],
                                                     sys_group['stories'],
                                                     sys_group['zones'],
                                                     district_heat_zones)
@@ -744,10 +777,10 @@ class Standard
       end
       if has_computer_room == true
         # Collect load for entire zone
+        clg_load_w_per_m2 = zn['zone'].coolingDesignLoad
         zn['zone'].spaces.each do |space|
           clg_load_btu_per_ft2 = 0.0
           clg_load_w_per_m2 = 0.0
-          clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
           space_load_w = clg_load_w_per_m2 * space.floorArea * space.multiplier
           space_load_btu = OpenStudio.convert(space_load_w, 'W', 'Btu/hr').get
           zone_load += space_load_btu
@@ -758,48 +791,118 @@ class Standard
     end
 
     # Lab zones are grouped separately if total lab exhaust in building > 15000 cfm
-    lab_exhaust_si = 0
+    # Make list of zone objects that contain laboratory spaces
+    lab_zones = []
     has_lab_spaces = {}
-
-    puts "DEM: before check for lab spaces"
     model.getThermalZones.sort.each do |zone|
-      puts "DEM: #{zone.name.get}"
       # Check if this zone includes laboratory space
-      has_lab = false
       zone.spaces.each do |space|
         spacetype = space.spaceType.get.standardsSpaceType.get
-        puts "DEM: #{spacetype}"
+        has_lab_spaces[zone.name.get] = false
         if space.spaceType.get.standardsSpaceType.get == 'laboratory'
-          has_lab = true
+          lab_zones << zone
+          has_lab_spaces[zone.name.get] = true
           break
         end
       end
-
-      if has_lab
-        zone.equipment.each do |zone_equipment|
-          # Get tally of exhaust fan flow
-          if zone_equipment.to_FanZoneExhaust.is_initialized
-            puts "DEM: found exh fan"
-            zone_exh_fan = zone_equipment.to_FanZoneExhaust.get
-            puts "DEM: exh fan name: #{zone_exh_fan.name}"
-            # Check if any spaces in this zone are laboratory
-            if has_lab
-              lab_exhaust_si += zone_exh_fan.maximumFlowRate.get
-              has_lab_spaces[zone.name.get] = true
-              puts "DEM: has lab spaces #{zone.name.get}"
-            else
-              has_lab_spaces[zone.name.get] = false
-            end
-          end
+    end
+    
+    if !lab_zones.empty?
+    # Build a hash of return_node:zone_name
+    node_list = {}
+    zone_return_flow_si = Hash.new(0)
+    var_name = 'System Node Standard Density Volume Flow Rate'
+    frequency = 'hourly'
+    model.getThermalZones.each do |zone|
+      port_list = zone.returnPortList
+      port_list_objects = port_list.modelObjects
+      port_list_objects.each do |node|
+        node_name = node.nameString
+        node_list[node_name] = zone.name.get
+      end
+      zone_return_flow_si[zone.name.get] = 0
+    end
+    
+    # Get return air flow for each zone (even non-lab zones are needed)
+    # Take from hourly reports created during sizing run
+    node_list.each do |node_name, zone_name|
+      sql = model.sqlFile
+      if sql.is_initialized
+        sql = sql.get    
+        query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+        val = sql.execAndReturnFirstDouble(query)
+        query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
+        val = sql.execAndReturnFirstDouble(query)
+        if val.is_initialized
+          result = OpenStudio::OptionalDouble.new(val.get)
         end
+        zone_return_flow_si[zone_name] += result.to_f
+      end   
+    end
+  
+    # Calc ratio of Air Loop relief to sum of zone return for each air loop
+    # and store in zone hash
 
-        # Also account for outdoor air exhausted from this zone via return/relief
+    # For each air loop, get relief air flow and calculate lab exhaust from the central air handler
+    # Take from hourly reports created during sizing run
+    zone_relief_flow_si = {}
+    model.getAirLoopHVACs.sort.each do |air_loop_hvac|
 
-        
+      # First get relief air flow from sizing run sql file
+      relief_node = air_loop_hvac.reliefAirNode.get
+      node_name = relief_node.nameString
+      relief_flow_si = 0
+      relief_fraction = 0
+      sql = model.sqlFile
+      if sql.is_initialized
+        sql = sql.get    
+        query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+        val = sql.execAndReturnFirstDouble(query)
+        query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
+        val = sql.execAndReturnFirstDouble(query)
+        if val.is_initialized
+          result = OpenStudio::OptionalDouble.new(val.get)
+        end
+        relief_flow_si = result.to_f
+      end   
+
+      # Get total flow of zones on this air loop
+      total_zone_return_si = 0
+      air_loop_hvac.thermalZones.each do |zone|
+        total_zone_return_si += zone_return_flow_si[zone.name.get]
+      end
+
+      relief_fraction = relief_flow_si / total_zone_return_si unless total_zone_return_si == 0
+
+      # For each zone calc total effective exhaust
+      air_loop_hvac.thermalZones.each do |zone|
+        zone_relief_flow_si[zone.name.get] = relief_fraction * zone_return_flow_si[zone.name.get]
       end
     end
-    lab_exhaust_cfm = OpenStudio.convert(lab_exhaust_si, 'm^3/s', 'cfm').get
-    puts "DEM: lab exhaust = #{lab_exhaust_cfm}"
+
+    # Now check for exhaust driven by zone exhaust fans
+    lab_exhaust_si = 0
+    lab_relief_si = 0
+    lab_zones.each do |zone|
+      zone.equipment.each do |zone_equipment|
+        # Get tally of exhaust fan flow
+        if zone_equipment.to_FanZoneExhaust.is_initialized
+          zone_exh_fan = zone_equipment.to_FanZoneExhaust.get
+          # Check if any spaces in this zone are laboratory
+          lab_exhaust_si += zone_exh_fan.maximumFlowRate.get
+        end
+      end
+  
+      # Also account for outdoor air exhausted from this zone via return/relief
+      lab_relief_si += zone_relief_flow_si[zone.name.get]
+      
+    end
+  end
+  lab_exhaust_si += lab_relief_si
+  lab_exhaust_cfm = OpenStudio.convert(lab_exhaust_si, 'm^3/s', 'cfm').get
+  puts "DEM: lab exhaust = #{lab_exhaust_cfm}"
+  
+  
 
     # Isolate computer rooms onto separate groups
     # Computer rooms may need to be split to two groups, depending on load
@@ -816,7 +919,6 @@ class Standard
     lab_zones = []
 
     total_area_ft2 = 0
-    puts "DEM: zeor area = #{total_area_ft2}"
     zones.each do |zn|
       puts "fill zones arrays zone 1 = #{zn['zone'].name.get}"
       if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
@@ -841,7 +943,6 @@ class Standard
         end
 
       elsif has_lab_spaces[zn['zone'].name.get] && lab_exhaust_cfm > 15_000
-        puts "DEM: lab zone"
         lab_zones << zn['zone']
       elsif zn['fuel'].include?('DistrictCooling')
         district_cooled_zones << zn['zone']
@@ -849,9 +950,7 @@ class Standard
         heated_cooled_zones << zn['zone']
       end
       # Collect total floor area of all zones for this building area type
-      # puts "DEM: #{area_m2}"
       area_m2 = zn['zone'].floorArea * zn['zone'].multiplier
-      puts "DEM: #{area_m2}"
       total_area_ft2 += OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
     end
 
@@ -906,14 +1005,12 @@ class Standard
       final_groups << heated_cooled_group
     end
     unless lab_zones.empty?
-      puts "DEM: do lab_zones"
       lab_group = {}
       lab_group['occ'] = hvac_building_type
       lab_group['fuel'] = 'any'
       area_m2 = 0
       lab_zones.each do |zone|
         area_m2 += zone.floorArea * zone.multiplier
-        puts "DEM: area = #{area_m2}"
       end
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
       lab_group['group_area_ft2'] = area_ft2
@@ -988,7 +1085,6 @@ class Standard
     end
 
     ngrps = final_groups.count
-    puts "DEM: ngroups = #{ngrps}"
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
@@ -1031,7 +1127,6 @@ class Standard
     has_district_heat = false
     has_fuel_heat = false
     has_elec_heat = false
-    puts "DEM: in get heat types"
     zones.each do |zone|
       if zone.heating_fuels.include?('DistrictHeating')
         has_district_heat = true
@@ -1052,7 +1147,6 @@ class Standard
     if has_elec_heat
       heat_list += '_electric'
     end
-    puts "DEM: heat type = #{heat_list}"
     return heat_list
   end
 
@@ -1187,6 +1281,7 @@ class Standard
     # First filter by number of stories
     iStoryGroup = 0
     props = {}
+    puts "DEM: in baseline system type"
     0.upto(9) do |i|
       iStoryGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
@@ -1250,6 +1345,8 @@ class Standard
 
     heat_type = find_prm_heat_type(hvac_building_type, climate_zone)
 
+    puts "DEM: heat type = #{heat_type}"
+
     # hash to relate apx G systype categories to sys types for model
     sys_hash = {}
     if heat_type == 'fuel'
@@ -1275,6 +1372,8 @@ class Standard
     end     
   
     model_sys_type = sys_hash[props['system_type']]
+    puts "DEM: model sys type = #{model_sys_type}"
+    puts "DEM: fuel_type = #{fuel_type}"
 
     if /districtheating/i =~ fuel_type
       central_heat = 'DistrictHeating'
@@ -1297,25 +1396,11 @@ class Standard
       cool_type = nil
     end
 
-    # Consider special rules for computer rooms
-    # need load of all 
-    zones.each do |zone|
-      zone.spaces.each do |space|
-        clg_load_btu_per_ft2 = 0.0
-        clg_load_w_per_m2 = 0.0
-        clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
-        if clg_load_w_per_m2.is_initialized
-          clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
-        end
-        space_load_w = clg_load_w_per_m2 * space.floorArea * space.multiplier
-
-      end
-    end
-
-    puts "DEM: system type: "
-    p system_type
+    puts "DEM: after check district"
 
     system_type = [model_sys_type, central_heat, zone_heat, cool_type]
+    puts "DEM: system type: "
+    p system_type
     return system_type
 
   end
