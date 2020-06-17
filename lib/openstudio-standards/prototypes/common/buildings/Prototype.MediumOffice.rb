@@ -6,6 +6,9 @@ module MediumOffice
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # TODO: test, need articulatation
+    model_add_transformer(model)
+
     model.getSpaces.sort.each do |space|
       if space.name.get.to_s == 'Core_bottom'
         model_add_elevator(model,
