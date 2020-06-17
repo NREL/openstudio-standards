@@ -15,7 +15,7 @@ class NECB2011
     # zone baseboards: hot water or electric, depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
 
     always_on = model.alwaysOnDiscreteSchedule
 
