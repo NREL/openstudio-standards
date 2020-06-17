@@ -6,6 +6,19 @@ module LargeHotel
   def model_custom_hvac_tweaks(building_type, climate_zone, prototype_input, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
+    # add transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.971
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.983
+    end
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0352,
+                          transformer_size: 150000,
+                          transformer_efficiency: transformer_efficiency)
+
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
 

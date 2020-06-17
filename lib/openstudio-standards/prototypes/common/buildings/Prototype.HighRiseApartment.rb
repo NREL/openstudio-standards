@@ -9,6 +9,19 @@ module HighriseApartment
     # add extra infiltration for ground floor corridor
     add_door_infiltration(climate_zone, model)
 
+    # add transformer
+    case template
+    when '90.1-2004', '90.1-2007'
+      transformer_efficiency = 0.966
+    when '90.1-2010', '90.1-2013'
+      transformer_efficiency = 0.98
+    end
+
+    model_add_transformer(model,
+                          wired_lighting_frac: 0.0015,
+                          transformer_size: 75000,
+                          transformer_efficiency: transformer_efficiency)
+
     return true
   end
 

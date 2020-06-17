@@ -2,9 +2,9 @@ class Standard
   # Add transformers for some prototypes
 
   def model_add_transformer(model,
-                            wired_lighting_frac: 0.2,
-                            transformer_size: 75000,
-                            transformer_efficiency: 0.988)
+                            wired_lighting_frac:,
+                            transformer_size:,
+                            transformer_efficiency:)
     # TODO: default values are for testing only.
     # ems sensor for interior lighting
     facility_int_ltg = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'InteriorLights:Electricity')
@@ -58,5 +58,6 @@ class Standard
     transformer.setReferenceTemperatureforNameplateEfficiency(75)
     transformer.setConsiderTransformerLossforUtilityCost(true)
     transformer.addMeter('Wired_LTG_Electricity')
+    transformer.addMeter('InteriorEquipment:Electricity') # by default, add this as the second meter
   end
 end
