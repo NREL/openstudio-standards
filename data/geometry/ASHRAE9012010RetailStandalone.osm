@@ -54,14 +54,28 @@ OS:Surface,
   WindExposed,                            !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  29.135, -3, 6.096,                      !- X,Y,Z Vertex 1 {m}
-  29.135, 0, 6.096,                       !- X,Y,Z Vertex 2 {m}
+  0, 29.27, 6.096,                        !- X,Y,Z Vertex 1 {m}
+  0, 0, 6.096,                            !- X,Y,Z Vertex 2 {m}
   54.27, 0, 6.096,                        !- X,Y,Z Vertex 3 {m}
-  54.27, 29.27, 6.096,                    !- X,Y,Z Vertex 4 {m}
-  0, 29.27, 6.096,                        !- X,Y,Z Vertex 5 {m}
-  0, 0, 6.096,                            !- X,Y,Z Vertex 6 {m}
-  25.135, 0, 6.096,                       !- X,Y,Z Vertex 7 {m}
-  25.135, -3, 6.096;                      !- X,Y,Z Vertex 8 {m}
+  54.27, 29.27, 6.096;                    !- X,Y,Z Vertex 4 {m}
+  
+  
+OS:Surface,
+  {007c4111-77bc-466f-ac9b-021f9a1a4397}, !- Handle
+  Core_Retail_Roof_Protrusion,            !- Name
+  RoofCeiling,                            !- Surface Type
+  ,                                       !- Construction Name
+  {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Space Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  SunExposed,                             !- Sun Exposure
+  WindExposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  25.135, 0, 6.096,                       !- X,Y,Z Vertex 1 {m}
+  25.135, -3, 6.096,                      !- X,Y,Z Vertex 2 {m}
+  29.135, -3, 6.096,                      !- X,Y,Z Vertex 3 {m}
+  29.135, 0, 6.096;                       !- X,Y,Z Vertex 4 {m}
 
 OS:Space,
   {308a9ccd-586a-4231-b605-b35b346c50c8}, !- Handle
