@@ -88,7 +88,7 @@ def export_openstudio_libraries
             when 'Electric'
               boiler.setFuelType('Electricity')
             when 'Oil'
-              boiler.setFuelType('FuelOil#2')
+              boiler.setFuelType('FuelOilNo2')
           end
           # Set capacity to middle of range
           min_cap_btu_per_hr = props['minimum_capacity'].to_f

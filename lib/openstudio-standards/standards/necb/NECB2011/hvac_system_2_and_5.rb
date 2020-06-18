@@ -47,7 +47,7 @@ class NECB2011
     # -a make up air-unit to provide ventilation to each zone;
     # -a heating loop, cooling loop and condenser loop to serve four pipe fan coil units
     # Arguments:
-    #   boiler_fueltype: "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    #   boiler_fueltype: "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNO2","Coal","Diesel","Gasoline","OtherFuel1"
     #   chiller_type: "Scroll";"Centrifugal";"Rotary Screw";"Reciprocating"
     #   mua_cooling_type: make-up air unit cooling type "DX";"Hydronic"
     #   fan_coil_type options are "TPFC" or "FPFC"
