@@ -67,7 +67,11 @@ class Standard
       set_gas_equipment = false
       set_ventilation = false
       set_infiltration = false
-      space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+      if /prm/i =~ template
+        space_type_apply_int_loads_prm(space_type, model)
+      elsif
+        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+      end
     end
 
     # If any of the lights are missing schedules, assign an always-off schedule to those lights.

@@ -270,20 +270,54 @@ class DOEPrototypeBaseline < CreateDOEPrototypeBuildingTest
 
           # Check U-value against expected U-value
           u_value_goal = {'ATTIC_ROOF_EAST' => 0.063,
-                  'PERIMETER_ZN_1_WALL_SOUTH' => 0.124,
-                  'PERIMETER_ZN_1_WALL_SOUTH_DOOR' => 1.22,
-                  'PERIMETER_ZN_1_WALL_SOUTH_WINDOW_1' => 1.22,
-                  'PERIMETER_ZN_3_WALL_NORTH_DOOR1' => 0.7}
+                          'PERIMETER_ZN_1_WALL_SOUTH' => 0.124,
+                          'PERIMETER_ZN_1_WALL_SOUTH_DOOR' => 1.22,
+                          'PERIMETER_ZN_1_WALL_SOUTH_WINDOW_1' => 1.22,
+                          'PERIMETER_ZN_3_WALL_NORTH_DOOR1' => 0.7}
           u_value_goal.each do |key, value|
             value_si = OpenStudio.convert(value, 'Btu/ft^2*hr*R', 'W/m^2*K').get
             assert(((u_value_baseline[key] - value_si).abs < 0.001 || u_value_baseline[key] == 5.838),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{u_value_baseline[key]} but should be #{value_si}.")
             if key != 'PERIMETER_ZN_3_WALL_NORTH_DOOR1'
-            assert((construction_baseline[key].include? "PRM"),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
+              assert((construction_baseline[key].include? "PRM"),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The construction of the #{key} is #{construction_baseline[key]}, which is not from PRM_Construction tab.")
             end
           end
         end
 
-         # Check that proposed sizing ran
+        # Get LPD in baseline model
+		    if building_type == 'SmallOffice' || building_type == 'MidriseApartment'
+			    lpd_baseline = {}
+          zone_name_smalloffice = ['CORE_ZN ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS','PERIMETER_ZN_1 ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS']
+          zone_name_midriseapartment = ['G CORRIDOR ZN MIDRISEAPARTMENT CORRIDOR LIGHTS','G N1 APARTMENT ZN MIDRISEAPARTMENT APARTMENT ADDITIONAL LIGHTS']
+          if building_type == 'SmallOffice'
+            zone_name = zone_name_smalloffice
+          else
+            zone_name = zone_name_midriseapartment
+          end
+          zone_name.each do |val|
+            query = "Select Value FROM TabularDataWithStrings WHERE
+            ReportName = 'LightingSummary' AND
+            TableName = 'Interior Lighting' AND
+            RowName = '#{val}' AND
+            ColumnName = 'Lighting Power Density' AND
+            Units = 'W/m2'"
+            lpd_baseline[val] = model_baseline.sqlFile().get().execAndReturnFirstDouble(query).get().to_f
+          end
+
+          # Check lpd against expected lpd
+          if building_type == 'SmallOffice'
+            lpd_goal = {'CORE_ZN ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS' => 1.0,
+                        'PERIMETER_ZN_1 ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS' => 1.0}
+          else
+            lpd_goal = {'G CORRIDOR ZN MIDRISEAPARTMENT CORRIDOR LIGHTS' => 0.5,
+                        'G N1 APARTMENT ZN MIDRISEAPARTMENT APARTMENT ADDITIONAL LIGHTS' => 1.07}
+          end
+          lpd_goal.each do |key, value|
+            value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
+            assert(((lpd_baseline[key] - value_si).abs < 0.001),"Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The U-value of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+          end
+        end
+
+        # Check that proposed sizing ran
         assert(File.file?("#{@test_dir}/#{building_type}-#{template}-#{climate_zone}-Baseline/SR_PROP/run/eplusout.sql"), "The #{building_type}, #{template}, #{climate_zone} proposed model sizing run did not run.")
  
         # Check IsResidential for Small Office
