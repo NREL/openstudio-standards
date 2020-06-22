@@ -182,7 +182,7 @@
     },
     {
       "name": "Packaged_RTU_SZ_AC_CAV_Fan",
-      "type": "ConstantVolume",
+      "type": "OnOff",
       "pressure_rise": 2.5,
       "fan_efficiency": 0.54,
       "motor_efficiency": 0.9,
