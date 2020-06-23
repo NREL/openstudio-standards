@@ -13,10 +13,18 @@ module LargeOffice
       transformer_efficiency = 0.987
     end
 
+    # rename datacenter plug loads sub categories, there should be 2 data center plug load objects in large office
+    model.getElectricEquipments.sort.each do |item|
+      if item.nameString.include? 'Data Center'
+        item.setEndUseSubcategory('DataCenterPlugLoads')
+      end
+    end
+
     model_add_transformer(model,
                           wired_lighting_frac: 0.0281,
                           transformer_size: 500000,
-                          transformer_efficiency: transformer_efficiency)
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_meter: 'DataCenterPlugLoads:InteriorEquipment:Electricity')
 
     system_to_space_map = define_hvac_system_map(building_type, climate_zone)
 

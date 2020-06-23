@@ -4,7 +4,9 @@ class Standard
   def model_add_transformer(model,
                             wired_lighting_frac:,
                             transformer_size:,
-                            transformer_efficiency:)
+                            transformer_efficiency:,
+                            excluded_interiorequip_key: '',
+                            excluded_interiorequip_meter: nil)
     # TODO: default values are for testing only.
     # ems sensor for interior lighting
     facility_int_ltg = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'InteriorLights:Electricity')
@@ -40,7 +42,13 @@ class Standard
     wired_ltg_meter.setFuelType('Electricity')
     wired_ltg_meter.addKeyVarGroup('', 'Wired_LTG')
 
-    # TODO: interior equipment meter for transformer needs to be added for certain building types
+    # meter for wired int equip
+    unless excluded_interiorequip_meter.nil?
+      wired_int_equip_meter = OpenStudio::Model::MeterCustomDecrement.new(model, 'InteriorEquipment:Electricity')
+      wired_int_equip_meter.setName('Wired_Int_EQUIP')
+      wired_int_equip_meter.setFuelType('Electricity')
+      wired_int_equip_meter.addKeyVarGroup(excluded_interiorequip_key, excluded_interiorequip_meter)
+    end
 
     # add transformer
     transformer = OpenStudio::Model::ElectricLoadCenterTransformer.new(model)
@@ -58,6 +66,10 @@ class Standard
     transformer.setReferenceTemperatureforNameplateEfficiency(75)
     transformer.setConsiderTransformerLossforUtilityCost(true)
     transformer.addMeter('Wired_LTG_Electricity')
-    transformer.addMeter('InteriorEquipment:Electricity') # by default, add this as the second meter
+    if excluded_interiorequip_meter.nil?
+      transformer.addMeter('InteriorEquipment:Electricity') # by default, add this as the second meter
+    else
+      transformer.addMeter('Wired_Int_EQUIP')
+    end
   end
 end

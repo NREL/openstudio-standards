@@ -20,7 +20,9 @@ module HighriseApartment
     model_add_transformer(model,
                           wired_lighting_frac: 0.0015,
                           transformer_size: 75000,
-                          transformer_efficiency: transformer_efficiency)
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_key: 'T Corridor_Elevators_Equip',
+                          excluded_interiorequip_meter: 'Electric Equipment Electric Energy')
 
     return true
   end

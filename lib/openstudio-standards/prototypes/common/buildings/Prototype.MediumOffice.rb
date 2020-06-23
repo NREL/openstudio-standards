@@ -17,7 +17,9 @@ module MediumOffice
     model_add_transformer(model,
                           wired_lighting_frac: 0.0281,
                           transformer_size: 45000,
-                          transformer_efficiency: transformer_efficiency)
+                          transformer_efficiency: transformer_efficiency,
+                          excluded_interiorequip_key: '2 Elevator Lift Motors',
+                          excluded_interiorequip_meter: 'Electric Equipment Electric Energy')
 
     model.getSpaces.sort.each do |space|
       if space.name.get.to_s == 'Core_bottom'
