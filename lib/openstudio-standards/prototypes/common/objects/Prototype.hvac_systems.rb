@@ -2379,7 +2379,7 @@ class Standard
       # CyclingHeatPump: Unitary Heat Pump system
       if fan_type == 'ConstantVolume'
         fan = create_fan_by_name(model,
-                                 'Packaged_RTU_SZ_AC_CAV_Fan',
+                                 'Packaged_RTU_SZ_AC_CAV_OnOff_Fan',
                                  fan_name: "#{air_loop.name} Fan")
         fan.setAvailabilitySchedule(hvac_op_sch)
       elsif fan_type == 'Cycling'
