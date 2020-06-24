@@ -242,8 +242,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   22.69, 5, 3.05,                         !- X,Y,Z Vertex 1 {m}
   22.69, 5, 0,                            !- X,Y,Z Vertex 2 {m}
-  27.69, 2.04187384066908e-015, 0,        !- X,Y,Z Vertex 3 {m}
-  27.69, 2.04187384066908e-015, 3.05;     !- X,Y,Z Vertex 4 {m}
+  27.69, 0, 0,                            !- X,Y,Z Vertex 3 {m}
+  27.69, 0, 3.05;                         !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {b3a474a3-13e3-41a7-b742-f9eedf1247e8}, !- Handle
@@ -774,8 +774,8 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  27.69, 2.04187384066908e-015, 3.05,     !- X,Y,Z Vertex 1 {m}
-  27.69, 2.04187384066908e-015, 0,        !- X,Y,Z Vertex 2 {m}
+  27.69, 0, 3.05,                         !- X,Y,Z Vertex 1 {m}
+  27.69, 0, 0,                            !- X,Y,Z Vertex 2 {m}
   22.69, 5, 0,                            !- X,Y,Z Vertex 3 {m}
   22.69, 5, 3.05;                         !- X,Y,Z Vertex 4 {m}
 
@@ -1093,7 +1093,7 @@ OS:ConvergenceLimits,
 
 OS:Building,
   {677593f3-2d46-47f5-972e-d3010ee2ef98}, !- Handle
-  DOERefPre1980SmallOffice,               !- Name
+  DOE Reference SmallOffice,              !- Name
   ,                                       !- Building Sector Type
   0,                                      !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}

@@ -101,12 +101,10 @@ module BTAP
 
 
       def getPaths
-        # Find EnergyPlus on this computer.
-        @ep_hash = OpenStudio::EnergyPlus::find_energyplus(BTAP::ENERGY_PLUS_MAJOR_VERSION,BTAP::ENERGY_PLUS_MINOR_VERSION)
         #set the Energyplus.exe path variable
-        @ep_path = OpenStudio::Path.new(  @ep_hash[:energyplus_exe].to_s)
+        @ep_path = OpenStudio.getEnergyPlusExecutable
         #set the root folder for E+
-        @ep_parent_path = @ep_path.parent_path();
+        @ep_parent_path = OpenStudio.getEnergyPlusDirectory
 
         #find IDD path
         idd_path = @ep_parent_path.to_s + "/Energy+.idd"
@@ -146,12 +144,7 @@ module BTAP
       #@author Phylroy A. Lopez
       #@return [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
       def self.find_energyplus_folder()
-        # Find EnergyPlus on this computer.
-        ep_hash = OpenStudio::EnergyPlus::find_energyplus(BTAP::ENERGY_PLUS_MAJOR_VERSION,BTAP::ENERGY_PLUS_MINOR_VERSION)
-        #set the Energyplus.exe path variable
-        ep_path = OpenStudio::Path.new(  ep_hash[:energyplus_exe].to_s)
-        #set the root folder for E+
-        return ep_path.parent_path();
+        return OpenStudio.getEnergyPlusDirectory.to_s
       end
 
       #This method finds the eReadVarsESO.exe and returns the path string.
@@ -370,7 +363,7 @@ module BTAP
         cdd = BTAP::Environment::WeatherFile.new( weather_object.path.get.to_s ).cdd18
         annual_results_array.push( [ hdd, "Heating Degree Days","deg*Day"])
         annual_results_array.push( [ cdd, "Cooling Degree Days","deg*Day"])
-        annual_results_array.push( [ BTAP::Compliance::NECB2011::get_climate_zone_name(hdd), "NECB Climate Zone",""])
+        annual_results_array.push( [ NECB2011.new().get_climate_zone_name(hdd), "NECB Climate Zone",""])
 
 
         annual_results_array.push( [ current_building.floorArea(),"Total Floor Area", "M2"])

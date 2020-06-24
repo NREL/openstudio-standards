@@ -7,7 +7,8 @@
       ],
       "table": [
         {
-          "template": "NECB2011-CONSTANT",
+          "motor_use": "FAN",
+          "motor_type": "CONSTANT",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -17,7 +18,8 @@
           "notes": "To get total fan efficiency of 40% (0.4/0.65)"
         },
         {
-          "template": "NECB2011-VARIABLE",
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -27,7 +29,8 @@
           "notes": "To get total fan efficiency of 55% (0.55/0.65)"
         },
         {
-          "template": "NECB2011-VARIABLE-SUPPLY",
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE-SUPPLY",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -37,7 +40,8 @@
           "notes": "To get total fan efficiency of 55% (0.55/0.65)"
         },
         {
-          "template": "NECB2011-VARIABLE-RETURN",
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE-RETURN",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -47,7 +51,7 @@
           "notes": "To get total fan efficiency of 55% (0.30/0.65)"
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -57,7 +61,7 @@
           "notes": "NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -67,7 +71,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -77,7 +81,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -87,7 +91,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -97,7 +101,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -107,7 +111,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -117,7 +121,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -127,7 +131,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -137,7 +141,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -147,7 +151,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -157,7 +161,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -167,7 +171,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -177,7 +181,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -187,7 +191,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -197,7 +201,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -207,7 +211,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -217,7 +221,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -227,7 +231,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -237,7 +241,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -247,7 +251,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -257,7 +261,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -267,7 +271,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -277,7 +281,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -287,7 +291,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -297,7 +301,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,
@@ -307,7 +311,7 @@
           "notes": null
         },
         {
-          "template": "NECB2011",
+          "motor_use": "PUMP",
           "number_of_poles": 4.0,
           "type": "Enclosed",
           "synchronous_speed": 1800.0,

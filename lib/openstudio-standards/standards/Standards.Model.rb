@@ -1,3 +1,7 @@
+require 'csv'
+
+
+
 class Standard
   attr_accessor :space_multiplier_map
   attr_accessor :standards_data
@@ -12,13 +16,12 @@ class Standard
   # based on the inputs currently in the model.
   # the current model with this model.
   #
-  # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative
-  # compliance path for minimum standard compliance."  This means you can't use
-  # this method for code compliance to get a permit.
+  # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
+  # This means you can't use this method for code compliance to get a permit.
   # @param building_type [String] the building type
   # @param climate_zone [String] the climate zone
   # @param custom [String] the custom logic that will be applied during baseline creation.  Valid choices are 'Xcel Energy CO EDA' or '90.1-2007 with addenda dn'.
-  # If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
+  #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
@@ -34,12 +37,10 @@ class Standard
     model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
     model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
-    # Assign building stories to spaces in the building
-    # where stories are not yet assigned.
+    # Assign building stories to spaces in the building where stories are not yet assigned.
     model_assign_spaces_to_stories(model)
 
-    # Modify the internal loads in each space type,
-    # keeping user-defined schedules.
+    # Modify the internal loads in each space type, keeping user-defined schedules.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
     model.getSpaceTypes.sort.each do |space_type|
       set_people = false
@@ -51,9 +52,8 @@ class Standard
       space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     end
 
-    # If any of the lights are missing schedules, assign an
-    # always-off schedule to those lights.  This is assumed to
-    # be the user's intent in the proposed model.
+    # If any of the lights are missing schedules, assign an always-off schedule to those lights.
+    # This is assumed to be the user's intent in the proposed model.
     model.getLightss.sort.each do |lights|
       if lights.schedule.empty?
         lights.setSchedule(model.alwaysOffDiscreteSchedule)
@@ -82,24 +82,19 @@ class Standard
     # Set the construction properties of all the surfaces in the model
     model_apply_standard_constructions(model, climate_zone)
 
-    # Get the groups of zones that define the
-    # baseline HVAC systems for later use.
-    # This must be done before removing the HVAC systems
-    # because it requires knowledge of proposed HVAC fuels.
+    # Get the groups of zones that define the baseline HVAC systems for later use.
+    # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
     sys_groups = model_prm_baseline_system_groups(model, custom)
 
-    # Remove all HVAC from model,
-    # excluding service water heating
+    # Remove all HVAC from model, excluding service water heating
     model_remove_prm_hvac(model)
 
-    # Modify the service water heating loops
-    # per the baseline rules
+    # Modify the service water heating loops per the baseline rules
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
     model_apply_baseline_swh_loops(model, building_type)
 
-    # Determine the baseline HVAC system type for each of
-    # the groups of zones and add that system type.
+    # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
     sys_groups.each do |sys_group|
       # Determine the primary baseline system type
@@ -165,8 +160,7 @@ class Standard
       return false
     end
 
-    # If there are any multizone systems, reset damper positions
-    # to achieve a 60% ventilation effectiveness minimum for the system
+    # If there are any multizone systems, reset damper positions to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
     model_apply_multizone_vav_outdoor_air_sizing(model)
 
@@ -196,8 +190,7 @@ class Standard
       plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     end
 
-    # Run sizing run with the new chillers, boilers, and
-    # cooling towers to determine capacities
+    # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
       return false
     end
@@ -220,13 +213,8 @@ class Standard
     # Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
 
-    # Delete all the unused curves
-    model.getCurves.sort.each do |curve|
-      if curve.directUseCount == 0
-        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{curve.name} is unused; it will be removed.")
-        model.removeObject(curve.handle)
-      end
-    end
+    # Delete all the unused resource objects
+    model_remove_unused_resource_objects(model)
 
     # TODO: turn off self shading
     # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
@@ -244,16 +232,14 @@ class Standard
     return true
   end
 
-  # Determine if there needs to be a sizing run after constructions
-  # are added so that EnergyPlus can calculate the VLTs of
-  # layer-by-layer glazing constructions.  These VLT values are
-  # needed for the daylighting controls logic for some templates.
+  # Determine if there needs to be a sizing run after constructions are added
+  # so that EnergyPlus can calculate the VLTs of layer-by-layer glazing constructions.
+  # These VLT values are needed for the daylighting controls logic for some templates.
   def model_create_prm_baseline_building_requires_vlt_sizing_run(model)
     return false # Not required for most templates
   end
 
-  # Determine the residential and nonresidential floor areas
-  # based on the space type properties for each space.
+  # Determine the residential and nonresidential floor areas based on the space type properties for each space.
   # For spaces with no space type, assume nonresidential.
   #
   # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
@@ -268,13 +254,12 @@ class Standard
       end
     end
 
-    return {'residential' => res_area_m2, 'nonresidential' => nonres_area_m2}
+    return { 'residential' => res_area_m2, 'nonresidential' => nonres_area_m2 }
   end
 
-  # Determine the number of stories spanned by the
-  # supplied zones.  If all zones on one of the stories have
-  # an indentical multiplier, assume that the multiplier is a
-  # floor multiplier and increase the number of stories accordingly.
+  # Determine the number of stories spanned by the supplied zones.
+  # If all zones on one of the stories have an indentical multiplier,
+  # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
   # Stories do not have to be contiguous.
   #
   # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
@@ -302,11 +287,9 @@ class Standard
     return num_stories
   end
 
-  # Categorize zones by occupancy type and fuel type,
-  # where the types depend on the standard.
+  # Categorize zones by occupancy type and fuel type, where the types depend on the standard.
   #
-  # @return [Array<Hash>] an array of hashes, one for each zone,
-  # with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
+  # @return [Array<Hash>] an array of hashes, one for each zone, with the keys 'zone', 'type' (occ type), 'fuel', and 'area'
   def model_zones_with_occ_and_fuel_type(model, custom)
     zones = []
 
@@ -335,6 +318,9 @@ class Standard
 
       # Occupancy type
       zn_hash['occ'] = thermal_zone_occupancy_type(zone)
+
+      # Building type
+      zn_hash['bldg_type'] = thermal_zone_building_type(zone)
 
       # Fuel type
       zn_hash['fuel'] = thermal_zone_fossil_or_electric_type(zone, custom)
@@ -379,8 +365,8 @@ class Standard
     end
 
     # Group the zones by occupancy type
-    type_to_area = Hash.new {0.0}
-    zones_grouped_by_occ = zones.group_by {|z| z['occ']}
+    type_to_area = Hash.new { 0.0 }
+    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
 
     # Determine the dominant occupancy type by area
     zones_grouped_by_occ.each do |occ_type, zns|
@@ -388,16 +374,14 @@ class Standard
         type_to_area[occ_type] += zn['area']
       end
     end
-    dom_occ = type_to_area.sort_by {|k, v| v}.reverse[0][0]
+    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
 
     # Get the dominant occupancy type group
     dom_occ_group = zones_grouped_by_occ[dom_occ]
 
-    # Check the non-dominant occupancy type groups to see if they
-    # are big enough to trigger the occupancy exception.
+    # Check the non-dominant occupancy type groups to see if they are big enough to trigger the occupancy exception.
     # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group
-    # back to the dominant occupancy type group.
+    # If they are not, add the zones in that group back to the dominant occupancy type group.
     occ_groups = []
     zones_grouped_by_occ.each do |occ_type, zns|
       # Skip the dominant occupancy type
@@ -422,10 +406,8 @@ class Standard
     # Add the dominant occupancy group to the list
     occ_groups << [dom_occ, dom_occ_group]
 
-    # Inside of each remaining occupancy group,
-    # determine the dominant fuel type.  This determination
-    # should only include zones that are part of the
-    # dominant area type inside of this group.
+    # Inside of each remaining occupancy group, determine the dominant fuel type.
+    # This determination should only include zones that are part of the dominant area type inside of this group.
     occ_and_fuel_groups = []
     occ_groups.each do |occ_type, zns|
       # Separate the zones that are part of the dominant occ type
@@ -439,21 +421,19 @@ class Standard
         end
       end
 
-      # Determine the dominant fuel type
-      # from the subset of the dominant area type zones
-      fuel_to_area = Hash.new {0.0}
-      zones_grouped_by_fuel = dom_occ_zns.group_by {|z| z['fuel']}
+      # Determine the dominant fuel type from the subset of the dominant area type zones
+      fuel_to_area = Hash.new { 0.0 }
+      zones_grouped_by_fuel = dom_occ_zns.group_by { |z| z['fuel'] }
       zones_grouped_by_fuel.each do |fuel, zns_by_fuel|
         zns_by_fuel.each do |zn|
           fuel_to_area[fuel] += zn['area']
         end
       end
 
-      sorted_by_area = fuel_to_area.sort_by {|k, v| v}.reverse
+      sorted_by_area = fuel_to_area.sort_by { |k, v| v }.reverse
       dom_fuel = sorted_by_area[0][0]
 
-      # Don't allow unconditioned to be the dominant fuel,
-      # go to the next biggest
+      # Don't allow unconditioned to be the dominant fuel, go to the next biggest
       if dom_fuel == 'unconditioned'
         if sorted_by_area.size > 1
           dom_fuel = sorted_by_area[1][0]
@@ -469,15 +449,12 @@ class Standard
       dom_fuel_group['fuel'] = dom_fuel
       dom_fuel_group['zones'] = zones_grouped_by_fuel[dom_fuel]
 
-      # The zones that aren't part of the dominant occ type
-      # are automatically added to the dominant fuel group
+      # The zones that aren't part of the dominant occ type are automatically added to the dominant fuel group
       dom_fuel_group['zones'] += nondom_occ_zns
 
-      # Check the non-dominant occupancy type groups to see if they
-      # are big enough to trigger the occupancy exception.
+      # Check the non-dominant occupancy type groups to see if they are big enough to trigger the occupancy exception.
       # If they are, leave the group standing alone.
-      # If they are not, add the zones in that group
-      # back to the dominant occupancy type group.
+      # If they are not, add the zones in that group back to the dominant occupancy type group.
       zones_grouped_by_fuel.each do |fuel_type, zns_by_fuel|
         # Skip the dominant occupancy type
         next if fuel_type == dom_fuel
@@ -507,10 +484,8 @@ class Standard
     end
 
     # Moved heated-only zones into their own groups.
-    # Per the PNNL PRM RM, this must be done AFTER
-    # the dominant occ and fuel types are determined
-    # so that heated-only zone areas are part of
-    # the determination.
+    # Per the PNNL PRM RM, this must be done AFTER the dominant occ and fuel types are determined
+    # so that heated-only zone areas are part of the determination.
     final_groups = []
     occ_and_fuel_groups.each do |gp|
       # Skip unconditioned groups
@@ -530,8 +505,7 @@ class Standard
       # Add the group (less unheated zones) to the final list
       final_groups << gp
 
-      # If there are any heated-only zones, create
-      # a new group for them.
+      # If there are any heated-only zones, create a new group for them.
       unless heated_only_zones.empty?
         htd_only_group = {}
         htd_only_group['occ'] = 'heatedonly'
@@ -541,8 +515,7 @@ class Standard
       end
     end
 
-    # Calculate the area for each of the final groups
-    # and replace the zone hashes with the zone objects
+    # Calculate the area for each of the final groups and replace the zone hashes with the zone objects
     final_groups.each do |gp|
       area_m2 = 0.0
       gp_zns = []
@@ -556,13 +529,10 @@ class Standard
     end
 
     # TODO: Remove the secondary zones before
-    # determining the area used to pick the HVAC
-    # system, per PNNL PRM RM
+    # determining the area used to pick the HVAC system, per PNNL PRM RM
 
-    # If there is any district heating or district cooling
-    # in the proposed building, the heating and cooling
-    # fuels in the entire baseline building are changed
-    # for the purposes of HVAC system assignment
+    # If there is any district heating or district cooling in the proposed building, the heating and cooling
+    # fuels in the entire baseline building are changed for the purposes of HVAC system assignment
     all_htg_fuels = []
     all_clg_fuels = []
     model.getThermalZones.sort.each do |zone|
@@ -596,16 +566,14 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'The proposed model included purchased cooling.  All baseline building system selection will be based on this information.')
     end
 
-    # Change the fuel in all final groups
-    # if district systems were found.
+    # Change the fuel in all final groups if district systems were found.
     if district_fuel
       final_groups.each do |gp|
         gp['fuel'] = district_fuel
       end
     end
 
-    # Determine the number of stories spanned
-    # by each group and report out info.
+    # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
       num_stories = model_num_stories_spanned(model, group['zones'])
@@ -633,21 +601,17 @@ class Standard
     return exception_min_area_m2
   end
 
-  # Determine the baseline system type given the
-  # inputs.  Logic is different for different standards.
+  # Determine the baseline system type given the inputs.  Logic is different for different standards.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @param area_type [String] Valid choices are residential,
-  # nonresidential, and heatedonly
-  # @param fuel_type [String] Valid choices are
-  # electric, fossil, fossilandelectric,
-  # purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param area_type [String] Valid choices are residential, nonresidential, and heatedonly
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
   # @param area_ft2 [Double] Area in ft^2
   # @param num_stories [Integer] Number of stories
-  # @return [String] The system type.  Possibilities are
-  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
-  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
-  # @todo add 90.1-2013 systems 11-13
+  # @return [String] The system type.  Possibilities are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
+  #   VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace
+  # TODO: add 90.1-2013 systems 11-13
   def model_prm_baseline_system_type(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
@@ -659,7 +623,7 @@ class Standard
     fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
 
     # Define the lookup by row and by fuel type
-    sys_lookup = Hash.new {|h, k| h[k] = Hash.new(&h.default_proc)}
+    sys_lookup = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
 
     # fossil, fossil and electric, purchased heat, purchased heat and cooling
     sys_lookup['1_or_2']['fossil'] = ['PTAC', 'NaturalGas', nil, 'Electricity']
@@ -710,10 +674,8 @@ class Standard
     return system_type
   end
 
-  # Determines which system number is used
-  # for the baseline system. Default is 90.1-2004 approach.
-  # @return [String] the system number: 1_or_2, 3_or_4,
-  # 5_or_6, 7_or_8, 9_or_10
+  # Determines which system number is used for the baseline system. Default is 90.1-2004 approach.
+  # @return [String] the system number: 1_or_2, 3_or_4, 5_or_6, 7_or_8, 9_or_10
   def model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     sys_num = nil
     # Set the area limit
@@ -743,40 +705,28 @@ class Standard
     return sys_num
   end
 
-  # Change the fuel type based on climate zone, depending on the standard.
-  # Defaults to no change.
+  # Change the fuel type based on climate zone, depending on the standard. Defaults to no change.
   # @return [String] the revised fuel type
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
     return fuel_type # Don't change fuel type for most templates
   end
 
-  # Add the specified baseline system type to the
-  # specified zons based on the specified template.
-  # For some multi-zone system types, the standards require
-  # identifying zones whose loads or schedules
-  # are outliers and putting these systems on separate
-  # single-zone systems.  This method does that.
+  # Add the specified baseline system type to the specified zones based on the specified template.
+  # For some multi-zone system types, the standards require identifying zones whose loads or schedules
+  # are outliers and putting these systems on separate single-zone systems.  This method does that.
   #
-  # @param system_type [String] The system type.  Valid choices are
-  # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
-  # VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
-  # which are also returned by the method
-  # OpenStudio::Model::Model.prm_baseline_system_type.
-  # @param main_heat_fuel [String] main heating fuel.  Valid choices are
-  # Electricity, NaturalGas, DistrictHeating
-  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are
-  # Electricity, NaturalGas, DistrictHeating
-  # @param cool_fuel [String] cooling fuel.  Valid choices are
-  # Electricity, DistrictCooling
-  # @todo add 90.1-2013 systems 11-13
+  # @param system_type [String] The system type.  Valid choices are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat,
+  #   PVAV_PFP_Boxes, VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
+  #   which are also returned by the method OpenStudio::Model::Model.prm_baseline_system_type.
+  # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
+  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
+  # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
+  # TODO: Add 90.1-2013 systems 11-13
   def model_add_prm_baseline_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, zones)
     case system_type
       when 'PTAC' # System 1
-
         unless zones.empty?
-
-          # Retrieve the existing hot water loop
-          # or add a new one if necessary.
+          # Retrieve the existing hot water loop or add a new one if necessary.
           hot_water_loop = nil
           hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                              model.getPlantLoopByName('Hot Water Loop').get
@@ -786,34 +736,25 @@ class Standard
 
           # Add a hot water PTAC to each zone
           model_add_ptac(model,
-                         nil,
-                         hot_water_loop,
                          zones,
-                         'ConstantVolume',
-                         'Water',
-                         'Single Speed DX AC')
+                         cooling_type: "Single Speed DX AC",
+                         heating_type: "Water",
+                         hot_water_loop: hot_water_loop,
+                         fan_type: "ConstantVolume")
         end
 
       when 'PTHP' # System 2
-
         unless zones.empty?
-
-          # Add an air-source packaged terminal
-          # heat pump with electric supplemental heat
-          # to each zone.
+          # add an air-source packaged terminal heat pump with electric supplemental heat to each zone.
           model_add_pthp(model,
-                         nil,
                          zones,
-                         'ConstantVolume')
-
+                         fan_type: 'ConstantVolume')
         end
 
       when 'PSZ_AC' # System 3
-
         unless zones.empty?
-
           heating_type = 'Gas'
-          # If district heating
+          # if district heating
           hot_water_loop = nil
           if main_heat_fuel == 'DistrictHeating'
             heating_type = 'Water'
@@ -833,63 +774,38 @@ class Standard
                                    model.getPlantLoopByName('Chilled Water Loop').get
                                  else
                                    model_add_chw_loop(model,
-                                                      'const_pri',
-                                                      chiller_cooling_type = nil,
-                                                      chiller_condenser_type = nil,
-                                                      chiller_compressor_type = nil,
-                                                      cool_fuel,
-                                                      condenser_water_loop = nil,
-                                                      building_type = nil)
-
+                                                      cooling_fuel: cool_fuel,
+                                                      chw_pumping_type: 'const_pri')
                                  end
           end
 
-          # Add a gas-fired PSZ-AC to each zone
-          # hvac_op_sch=nil means always on
-          # oa_damper_sch to nil means always open
+          # Add a PSZ-AC to each zone
           model_add_psz_ac(model,
-                           sys_name = nil,
-                           hot_water_loop,
-                           chilled_water_loop,
                            zones,
-                           hvac_op_sch = nil,
-                           oa_damper_sch = nil,
-                           fan_location = 'DrawThrough',
-                           fan_type = 'ConstantVolume',
-                           heating_type,
-                           supplemental_heating_type = 'Gas', # Should we really add supplemental heating here?
-                           cooling_type,
-                           building_type = nil)
-
+                           cooling_type: cooling_type,
+                           chilled_water_loop: chilled_water_loop,
+                           heating_type: heating_type,
+                           supplemental_heating_type: "Gas",
+                           hot_water_loop: hot_water_loop,
+                           fan_location: 'DrawThrough',
+                           fan_type: 'ConstantVolume')
         end
 
       when 'PSZ_HP' # System 4
-
         unless zones.empty?
-
-          # Add an air-source packaged single zone
-          # heat pump with electric supplemental heat
-          # to each zone.
+          # Add an air-source packaged single zone heat pump with electric supplemental heat to each zone.
           model_add_psz_ac(model,
-                           'PSZ-HP',
-                           nil,
-                           nil,
                            zones,
-                           nil,
-                           nil,
-                           'DrawThrough',
-                           'ConstantVolume',
-                           'Single Speed Heat Pump',
-                           'Electric',
-                           'Single Speed Heat Pump',
-                           building_type = nil)
-
+                           system_name: 'PSZ-HP',
+                           cooling_type: 'Single Speed Heat Pump',
+                           heating_type: 'Single Speed Heat Pump',
+                           supplemental_heating_type: 'Electric',
+                           fan_location: 'DrawThrough',
+                           fan_type: 'ConstantVolume')
         end
 
       when 'PVAV_Reheat' # System 5
-
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
+        # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = nil
         hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                            model.getPlantLoopByName('Hot Water Loop').get
@@ -904,13 +820,8 @@ class Standard
                                  model.getPlantLoopByName('Chilled Water Loop').get
                                else
                                  model_add_chw_loop(model,
-                                                    'const_pri',
-                                                    chiller_cooling_type = nil,
-                                                    chiller_condenser_type = nil,
-                                                    chiller_compressor_type = nil,
-                                                    cool_fuel,
-                                                    condenser_water_loop = nil,
-                                                    building_type = nil)
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
                                end
         end
 
@@ -938,23 +849,18 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by {|nm, z| z}[0][0]
-          sys_name = "#{story_name} PVAV_Reheat (Sys5)"
+          story_name = stories.sort_by { |nm, z| z }[0][0]
+          system_name = "#{story_name} PVAV_Reheat (Sys5)"
 
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-
             model_add_pvav(model,
-                           sys_name,
                            pri_zones,
-                           nil,
-                           nil,
-                           electric_reheat,
-                           hot_water_loop,
-                           chilled_water_loop,
-                           nil,
-                           nil)
+                           system_name: system_name,
+                           hot_water_loop: hot_water_loop,
+                           chilled_water_loop: chilled_water_loop,
+                           electric_reheat: electric_reheat)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -964,7 +870,6 @@ class Standard
         end
 
       when 'PVAV_PFP_Boxes' # System 6
-
         # If district cooling
         chilled_water_loop = nil
         if cool_fuel == 'DistrictCooling'
@@ -972,13 +877,8 @@ class Standard
                                  model.getPlantLoopByName('Chilled Water Loop').get
                                else
                                  model_add_chw_loop(model,
-                                                    'const_pri',
-                                                    chiller_cooling_type = nil,
-                                                    chiller_condenser_type = nil,
-                                                    chiller_compressor_type = nil,
-                                                    cool_fuel,
-                                                    condenser_water_loop = nil,
-                                                    building_type = nil)
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
                                end
         end
 
@@ -1000,20 +900,17 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by {|nm, z| z}[0][0]
-          sys_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
+          story_name = stories.sort_by { |nm, z| z }[0][0]
+          system_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_pvav_pfp_boxes(model,
-                                     sys_name,
                                      pri_zones,
-                                     nil,
-                                     nil,
-                                     0.62,
-                                     0.9,
-                                     OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                                     chilled_water_loop,
-                                     nil)
+                                     system_name: system_name,
+                                     chilled_water_loop: chilled_water_loop,
+                                     fan_efficiency: 0.62,
+                                     fan_motor_efficiency: 0.9,
+                                     fan_pressure_rise: 4.0)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -1022,9 +919,7 @@ class Standard
         end
 
       when 'VAV_Reheat' # System 7
-
-        # Retrieve the existing hot water loop
-        # or add a new one if necessary.
+        # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = nil
         hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                            model.getPlantLoopByName('Hot Water Loop').get
@@ -1032,38 +927,28 @@ class Standard
                            model_add_hw_loop(model, main_heat_fuel)
                          end
 
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
+        # Retrieve the existing chilled water loop or add a new one if necessary.
         chilled_water_loop = nil
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
             chilled_water_loop = model_add_chw_loop(model,
-                                                    'const_pri',
-                                                    chiller_cooling_type = nil,
-                                                    chiller_condenser_type = nil,
-                                                    chiller_compressor_type = nil,
-                                                    cool_fuel,
-                                                    condenser_water_loop = nil,
-                                                    building_type = nil)
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
           else
             fan_type = model_cw_loop_cooling_tower_fan_type(model)
             condenser_water_loop = model_add_cw_loop(model,
-                                                     'Open Cooling Tower',
-                                                     'Propeller or Axial',
-                                                     fan_type,
-                                                     1,
-                                                     1,
-                                                     nil)
+                                                     cooling_tower_type: 'Open Cooling Tower',
+                                                     cooling_tower_fan_type: 'Propeller or Axial',
+                                                     cooling_tower_capacity_control: fan_type,
+                                                     number_of_cells_per_tower: 1,
+                                                     number_cooling_towers: 1)
             chilled_water_loop = model_add_chw_loop(model,
-                                                    'const_pri_var_sec',
-                                                    'WaterCooled',
-                                                    chiller_condenser_type = nil,
-                                                    'Rotary Screw',
-                                                    cooling_fuel = nil,
-                                                    condenser_water_loop,
-                                                    building_type = nil)
+                                                    chw_pumping_type: 'const_pri_var_sec',
+                                                    chiller_cooling_type: 'WaterCooled',
+                                                    chiller_compressor_type: 'Rotary Screw',
+                                                    condenser_water_loop: condenser_water_loop)
           end
         end
 
@@ -1076,10 +961,8 @@ class Standard
         # Group zones by story
         story_zone_lists = model_group_zones_by_story(model, zones)
 
-        # For the array of zones on each story,
-        # separate the primary zones from the secondary zones.
-        # Add the baseline system type to the primary zones
-        # and add the suplemental system type to the secondary zones.
+        # For the array of zones on each story, separate the primary zones from the secondary zones.
+        # Add the baseline system type to the primary zones and add the suplemental system type to the secondary zones.
         story_zone_lists.each do |story_group|
           # The model_group_zones_by_story(model)  NO LONGER returns empty lists when a given floor doesn't have any of the zones
           # So NO need to filter it out otherwise you get an error undefined method `spaces' for nil:NilClass
@@ -1095,25 +978,21 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by {|nm, z| z}[0][0]
-          sys_name = "#{story_name} VAV_Reheat (Sys7)"
+          story_name = stories.sort_by { |nm, z| z }[0][0]
+          system_name = "#{story_name} VAV_Reheat (Sys7)"
 
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
             model_add_vav_reheat(model,
-                                 sys_name,
-                                 hot_water_loop,
-                                 chilled_water_loop,
                                  pri_zones,
-                                 nil,
-                                 nil,
-                                 0.62,
-                                 0.9,
-                                 OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get,
-                                 nil,
-                                 reheat_type,
-                                 nil)
+                                 system_name: system_name,
+                                 reheat_type: reheat_type,
+                                 hot_water_loop: hot_water_loop,
+                                 chilled_water_loop: chilled_water_loop,
+                                 fan_efficiency: 0.62,
+                                 fan_motor_efficiency: 0.9,
+                                 fan_pressure_rise: 4.0)
           end
 
           # Add a PSZ_AC for each secondary zone
@@ -1123,39 +1002,28 @@ class Standard
         end
 
       when 'VAV_PFP_Boxes' # System 8
-
-        # Retrieve the existing chilled water loop
-        # or add a new one if necessary.
+        # Retrieve the existing chilled water loop or add a new one if necessary.
         chilled_water_loop = nil
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
           if cool_fuel == 'DistrictCooling'
             chilled_water_loop = model_add_chw_loop(model,
-                                                    'const_pri',
-                                                    chiller_cooling_type = nil,
-                                                    chiller_condenser_type = nil,
-                                                    chiller_compressor_type = nil,
-                                                    cool_fuel,
-                                                    condenser_water_loop = nil,
-                                                    building_type = nil)
+                                                    cooling_fuel: cool_fuel,
+                                                    chw_pumping_type: 'const_pri')
           else
             fan_type = model_cw_loop_cooling_tower_fan_type(model)
             condenser_water_loop = model_add_cw_loop(model,
-                                                     'Open Cooling Tower',
-                                                     'Propeller or Axial',
-                                                     fan_type,
-                                                     1,
-                                                     1,
-                                                     nil)
+                                                     cooling_tower_type: 'Open Cooling Tower',
+                                                     cooling_tower_fan_type: 'Propeller or Axial',
+                                                     cooling_tower_capacity_control: fan_type,
+                                                     number_of_cells_per_tower: 1,
+                                                     number_cooling_towers: 1)
             chilled_water_loop = model_add_chw_loop(model,
-                                                    'const_pri_var_sec',
-                                                    'WaterCooled',
-                                                    chiller_condenser_type = nil,
-                                                    'Rotary Screw',
-                                                    cool_fueling = nil,
-                                                    condenser_water_loop,
-                                                    building_type = nil)
+                                                    chw_pumping_type: 'const_pri_var_sec',
+                                                    chiller_cooling_type: 'WaterCooled',
+                                                    chiller_compressor_type: 'Rotary Screw',
+                                                    condenser_water_loop: condenser_water_loop)
           end
         end
 
@@ -1177,19 +1045,17 @@ class Standard
           story_group[0].spaces.each do |space|
             stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
           end
-          story_name = stories.sort_by {|nm, z| z}[0][0]
-          sys_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
+          story_name = stories.sort_by { |nm, z| z }[0][0]
+          system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
           # If and only if there are primary zones to attach to the loop
           unless pri_zones.empty?
             model_add_vav_pfp_boxes(model,
-                                    sys_name,
-                                    chilled_water_loop,
                                     pri_zones,
-                                    nil,
-                                    nil,
-                                    0.62,
-                                    0.9,
-                                    OpenStudio.convert(4.0, 'inH_{2}O', 'Pa').get)
+                                    system_name: system_name,
+                                    chilled_water_loop: chilled_water_loop,
+                                    fan_efficiency:0.62,
+                                    fan_motor_efficiency: 0.9,
+                                    fan_pressure_rise: 4.0)
           end
           # Add a PSZ_HP for each secondary zone
           unless sec_zones.empty?
@@ -1198,9 +1064,7 @@ class Standard
         end
 
       when 'Gas_Furnace' # System 9
-
         unless zones.empty?
-
           # If district heating
           hot_water_loop = nil
           if main_heat_fuel == 'DistrictHeating'
@@ -1210,42 +1074,28 @@ class Standard
                                model_add_hw_loop(model, main_heat_fuel)
                              end
           end
-
           # Add a System 9 - Gas Unit Heater to each zone
           model_add_unitheater(model,
-                               nil,
                                zones,
-                               nil,
-                               'ConstantVolume',
-                               OpenStudio.convert(0.2, 'inH_{2}O', 'Pa').get,
-                               main_heat_fuel,
-                               hot_water_loop,
-                               nil)
-
+                               fan_control_type: 'ConstantVolume',
+                               fan_pressure_rise: 0.2,
+                               heating_type: main_heat_fuel,
+                               hot_water_loop: hot_water_loop)
         end
 
       when 'Electric_Furnace' # System 10
-
         unless zones.empty?
-
           # Add a System 10 - Electric Unit Heater to each zone
           model_add_unitheater(model,
-                               nil,
                                zones,
-                               nil,
-                               'ConstantVolume',
-                               OpenStudio.convert(0.2, 'inH_{2}O', 'Pa').get,
-                               main_heat_fuel,
-                               nil,
-                               nil)
-
+                               fan_control_type: 'ConstantVolume',
+                               fan_pressure_rise: 0.2,
+                               heating_type: main_heat_fuel)
         end
 
       else
-
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "System type #{system_type} is not a valid choice, nothing will be added to the model.")
         return false
-
     end
     return true
   end
@@ -1258,8 +1108,7 @@ class Standard
     return fan_type
   end
 
-  # Looks through the model and creates an hash of what the baseline
-  # system type should be for each zone.
+  # Looks through the model and creates an hash of what the baseline system type should be for each zone.
   #
   # @return [Hash] keys are zones, values are system type strings
   # PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat, PVAV_PFP_Boxes,
@@ -1302,10 +1151,10 @@ class Standard
           # Determine the secondary system type
           sec_system_type = nil
           case pri_system_type
-            when 'PVAV_Reheat', 'VAV_Reheat'
-              sec_system_type = 'PSZ_AC'
-            when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
-              sec_system_type = 'PSZ_HP'
+          when 'PVAV_Reheat', 'VAV_Reheat'
+            sec_system_type = 'PSZ_AC'
+          when 'PVAV_PFP_Boxes', 'VAV_PFP_Boxes'
+            sec_system_type = 'PSZ_HP'
           end
 
           # Group zones by story
@@ -1332,11 +1181,14 @@ class Standard
     return zone_to_sys_type
   end
 
-  # @param array_of_zones [Array] an array of Hashes for each zone,
-  # with the keys 'zone',
+  # @param array_of_zones [Array] an array of Hashes for each zone, with the keys 'zone',
   def model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     # Sort the zones by the desired key
-    array_of_zones = array_of_zones.sort_by {|hsh| hsh[key_to_inspect]}
+    begin
+      array_of_zones = array_of_zones.sort_by { |hsh| hsh[key_to_inspect] }
+    rescue ArgumentError => e
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Unable to sort array_of_zones by #{key_to_inspect} due to #{e.message}, defaulting to order that was passed")
+    end
 
     # Calculate the area-weighted average
     total = 0.0
@@ -1353,19 +1205,27 @@ class Standard
       all_areas << area.round
       all_zn_names << zn['zone'].name.get.to_s
     end
+
+    if total_area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Total area is zero for array_of_zones with key #{key_to_inspect}, unable to calculate area-weighted average.")
+      return false
+    end
+
     avg = total / total_area
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Values for #{field_name}, tol = #{tolerance} #{units}, area ft2:")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "vals  #{all_vals.join(', ')}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "areas #{all_areas.join(', ')}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "names #{all_zn_names.join(', ')}")
 
-    # Calculate the biggest delta
-    # and the index of the biggest delta
-    biggest_delta_i = nil
+    # Calculate the biggest delta and the index of the biggest delta
+    biggest_delta_i = 0 # array at first item in case delta is 0
     biggest_delta = 0.0
     worst = nil
     array_of_zones.each_with_index do |zn, i|
       val = zn[key_to_inspect]
+      if worst.nil? # array at first item in case delta is 0
+        worst = val
+      end
       delta = (val - avg).abs
       if delta >= biggest_delta
         biggest_delta = delta
@@ -1376,10 +1236,7 @@ class Standard
 
     # puts "   #{worst} - #{avg.round} = #{biggest_delta.round} biggest delta"
 
-    # Compare the biggest delta
-    # against the difference and
-    # eliminate that zone if higher
-    # than the limit.
+    # Compare the biggest delta against the difference and eliminate that zone if higher than the limit.
     if biggest_delta > tolerance
       zn_name = array_of_zones[biggest_delta_i]['zone'].name.get.to_s
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} of #{worst.round(1)} #{units} is more than #{tolerance} #{units} outside the area-weighted average of #{avg.round(1)} #{units}; it will be placed on its own secondary system.")
@@ -1387,22 +1244,18 @@ class Standard
       # Call method recursively if something was eliminated
       array_of_zones = model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     else
-      # OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{worst.round(1)} - #{avg.round(1)} = #{biggest_delta.round(1)} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{worst} - #{avg} = #{biggest_delta} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
+      zn_name = array_of_zones[biggest_delta_i]['zone'].name.get.to_s
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} #{worst.round(2)} #{units} - average #{field_name} #{avg.round(2)} #{units} = #{biggest_delta.round(2)} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
     end
 
     return array_of_zones
   end
 
-  # Determine which of the zones
-  # should be served by the primary HVAC system.
-  # First, eliminate zones that differ by more
-  # than 40 full load hours per week.  In this case,
-  # lighting schedule is used as the proxy for operation
-  # instead of occupancy to avoid accidentally removing
-  # transition spaces.  Second, eliminate zones whose
-  # design internal loads differ from the
-  # area-weighted average of all other zones
+  # Determine which of the zones should be served by the primary HVAC system.
+  # First, eliminate zones that differ by more# than 40 full load hours per week.
+  # In this case, lighting schedule is used as the proxy for operation instead
+  # of occupancy to avoid accidentally removing transition spaces.
+  # Second, eliminate zones whose design internal loads differ from the area-weighted average of all other zones
   # on the system by more than 10 Btu/hr*ft^2.
   #
   # @return [Hash] A hash of two arrays of ThermalZones,
@@ -1465,9 +1318,8 @@ class Standard
       zone_data_1 << data
     end
 
-    # Filter out any zones that operate differently by more
-    # than 40hrs/wk.  This will be determined by a difference of more
-    # than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.
+    # Filter out any zones that operate differently by more than 40hrs/wk.
+    # This will be determined by a difference of more than (40 hrs/wk * 52 wks/yr) = 2080 annual full load hrs.
     zones_same_hrs = model_eliminate_outlier_zones(model, zone_data_1, 'wk_op_hrs', 40, 'weekly operating hrs', 'hrs')
 
     # Get the internal loads for
@@ -1482,7 +1334,7 @@ class Standard
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2
       # Get the internal loads
-      int_load_w = thermal_zone_design_internal_load(zone)
+      int_load_w = thermal_zone_design_internal_load(zone) * zone.multiplier
       # Normalize per-area
       int_load_w_per_m2 = int_load_w / area_m2
       int_load_btu_per_ft2 = OpenStudio.convert(int_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
@@ -1519,12 +1371,11 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
-    return {'primary' => pri_zones, 'secondary' => sec_zones}
+    return { 'primary' => pri_zones, 'secondary' => sec_zones }
   end
 
-  # Group an array of zones into multiple arrays, one
-  # for each story in the building.  Zones with spaces on multiple stories
-  # will be assigned to only one of the stories.
+  # Group an array of zones into multiple arrays, one for each story in the building.
+  # Zones with spaces on multiple stories will be assigned to only one of the stories.
   # Removes empty array (when the story doesn't contain any of the zones)
   # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
   def model_group_zones_by_story(model, zones)
@@ -1565,11 +1416,9 @@ class Standard
     return story_zone_lists
   end
 
-  # Assign each space in the model to a building story
-  # based on common z (height) values.  If no story
-  # object is found for a particular height, create a new one
-  # and assign it to the space.  Does not assign a story
-  # to plenum spaces.
+  # Assign each space in the model to a building story based on common z (height) values.
+  # If no story object is found for a particular height, create a new one and assign it to the space.
+  # Does not assign a story to plenum spaces.
   #
   # @return [Bool] returns true if successful, false if not.
   def model_assign_spaces_to_stories(model)
@@ -1591,7 +1440,7 @@ class Standard
     end
 
     # Pre-sort spaces
-    sorted_spaces = sorted_spaces.sort_by {|a| a[1]}
+    sorted_spaces = sorted_spaces.sort_by { |a| a[1] }
 
     # Take the sorted list and assign/make stories
     sorted_spaces.each do |space|
@@ -1607,207 +1456,10 @@ class Standard
     return true
   end
 
-  # Creates a construction set with the construction types specified in the
-  # Performance Rating Method (aka Appendix G aka LEED) and adds it to the model.
-  # This method creates and adds the constructions and their materials as well.
-  #
-  # @param category [String] the construction set category desired.
-  # Valid choices are Nonresidential, Residential, and Semiheated
-  # @return [OpenStudio::Model::DefaultConstructionSet] returns a default
-  # construction set populated with the specified constructions.
-  def model_add_prm_construction_set(model, category)
-    construction_set = OpenStudio::Model::OptionalDefaultConstructionSet.new
-
-    # Find the climate zone set that this climate zone falls into
-    climate_zone_set = model_find_climate_zone_set(model, clim)
-    unless climate_zone_set
-      return construction_set
-    end
-
-    # Get the object data
-    data = standards_lookup_table_first(table_name: 'construction_sets',
-                                        search_criteria: {'template' => template,
-                                               'climate_zone_set' => climate_zone_set,
-                                               'building_type' => building_type,
-                                               'space_type' => spc_type,
-                                               'is_residential' => is_residential})
-    unless data
-      data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                             'climate_zone_set' => climate_zone_set,
-                                                                                             'building_type' => building_type,
-                                                                                             'space_type' => spc_type})
-      unless data
-        return construction_set
-      end
-    end
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding construction set: #{template}-#{clim}-#{building_type}-#{spc_type}-is_residential#{is_residential}")
-
-    name = model_make_name(model, clim, building_type, spc_type)
-
-    # Create a new construction set and name it
-    construction_set = OpenStudio::Model::DefaultConstructionSet.new(model)
-    construction_set.setName(name)
-
-    # Specify the types of constructions
-    # Exterior surfaces constructions
-    exterior_floor_standards_construction_type = 'SteelFramed'
-    exterior_wall_standards_construction_type = 'SteelFramed'
-    exterior_roof_standards_construction_type = 'IEAD'
-
-    # Ground contact surfaces constructions
-    ground_contact_floor_standards_construction_type = 'Unheated'
-    ground_contact_wall_standards_construction_type = 'Mass'
-
-    # Exterior sub surfaces constructions
-    exterior_fixed_window_standards_construction_type = 'IEAD'
-    exterior_operable_window_standards_construction_type = 'IEAD'
-    exterior_door_standards_construction_type = 'IEAD'
-    exterior_overhead_door_standards_construction_type = 'IEAD'
-    exterior_skylight_standards_construction_type = 'IEAD'
-
-    # Exterior surfaces constructions
-    exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
-    construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
-    exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
-                                                                           climate_zone_set,
-                                                                           'ExteriorFloor',
-                                                                           exterior_floor_standards_construction_type,
-                                                                           category))
-
-    exterior_surfaces.setWallConstruction(model_find_and_add_construction(model,
-                                                                          climate_zone_set,
-                                                                          'ExteriorWall',
-                                                                          exterior_wall_standards_construction_type,
-                                                                          category))
-
-    exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
-                                                                                 climate_zone_set,
-                                                                                 'ExteriorRoof',
-                                                                                 exterior_roof_standards_construction_type,
-                                                                                 category))
-
-    # Interior surfaces constructions
-    interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
-    construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
-    construction_name = interior_floors
-    unless construction_name.nil?
-      interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
-    end
-    construction_name = interior_walls
-    unless construction_name.nil?
-      interior_surfaces.setWallConstruction(model_add_construction(model, construction_name))
-    end
-    construction_name = interior_ceilings
-    unless construction_name.nil?
-      interior_surfaces.setRoofCeilingConstruction(model_add_construction(model, construction_name))
-    end
-
-    # Ground contact surfaces constructions
-    ground_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
-    construction_set.setDefaultGroundContactSurfaceConstructions(ground_surfaces)
-    ground_surfaces.setFloorConstruction(model_find_and_add_construction(model,
-                                                                         climate_zone_set,
-                                                                         'GroundContactFloor',
-                                                                         ground_contact_floor_standards_construction_type,
-                                                                         category))
-
-    ground_surfaces.setWallConstruction(model_find_and_add_construction(model,
-                                                                        climate_zone_set,
-                                                                        'GroundContactWall',
-                                                                        ground_contact_wall_standards_construction_type,
-                                                                        category))
-
-    # Exterior sub surfaces constructions
-    exterior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
-    construction_set.setDefaultExteriorSubSurfaceConstructions(exterior_subsurfaces)
-    if exterior_fixed_window_standards_construction_type && exterior_fixed_window_building_category
-      exterior_subsurfaces.setFixedWindowConstruction(model_find_and_add_construction(model,
-                                                                                      climate_zone_set,
-                                                                                      'ExteriorWindow',
-                                                                                      exterior_fixed_window_standards_construction_type,
-                                                                                      category))
-    end
-    if exterior_operable_window_standards_construction_type && exterior_operable_window_building_category
-      exterior_subsurfaces.setOperableWindowConstruction(model_find_and_add_construction(model,
-                                                                                         climate_zone_set,
-                                                                                         'ExteriorWindow',
-                                                                                         exterior_operable_window_standards_construction_type,
-                                                                                         category))
-    end
-    if exterior_door_standards_construction_type && exterior_door_building_category
-      exterior_subsurfaces.setDoorConstruction(model_find_and_add_construction(model,
-                                                                               climate_zone_set,
-                                                                               'ExteriorDoor',
-                                                                               exterior_door_standards_construction_type,
-                                                                               category))
-    end
-    construction_name = exterior_glass_doors
-    unless construction_name.nil?
-      exterior_subsurfaces.setGlassDoorConstruction(model_add_construction(model, construction_name))
-    end
-    if exterior_overhead_door_standards_construction_type && exterior_overhead_door_building_category
-      exterior_subsurfaces.setOverheadDoorConstruction(model_find_and_add_construction(model,
-                                                                                       climate_zone_set,
-                                                                                       'ExteriorDoor',
-                                                                                       exterior_overhead_door_standards_construction_type,
-                                                                                       category))
-    end
-    if exterior_skylight_standards_construction_type && exterior_skylight_building_category
-      exterior_subsurfaces.setSkylightConstruction(model_find_and_add_construction(model,
-                                                                                   climate_zone_set,
-                                                                                   'Skylight',
-                                                                                   exterior_skylight_standards_construction_type,
-                                                                                   category))
-    end
-    if construction_name == tubular_daylight_domes
-      exterior_subsurfaces.setTubularDaylightDomeConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == tubular_daylight_diffusers
-      exterior_subsurfaces.setTubularDaylightDiffuserConstruction(model_add_construction(model, construction_name))
-    end
-
-    # Interior sub surfaces constructions
-    interior_subsurfaces = OpenStudio::Model::DefaultSubSurfaceConstructions.new(model)
-    construction_set.setDefaultInteriorSubSurfaceConstructions(interior_subsurfaces)
-    if construction_name == interior_fixed_windows
-      interior_subsurfaces.setFixedWindowConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == interior_operable_windows
-      interior_subsurfaces.setOperableWindowConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == interior_doors
-      interior_subsurfaces.setDoorConstruction(model_add_construction(model, construction_name))
-    end
-
-    # Other constructions
-    if construction_name == interior_partitions
-      construction_set.setInteriorPartitionConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == space_shading
-      construction_set.setSpaceShadingConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == building_shading
-      construction_set.setBuildingShadingConstruction(model_add_construction(model, construction_name))
-    end
-    if construction_name == site_shading
-      construction_set.setSiteShadingConstruction(model_add_construction(model, construction_name))
-    end
-
-    # componentize the construction set
-    # construction_set_component = construction_set.createComponent
-
-    # Return the construction set
-    return OpenStudio::Model::OptionalDefaultConstructionSet.new(construction_set)
-
-    # Create a constuction set that is all
-  end
-
   # Applies the multi-zone VAV outdoor air sizing requirements
   # to all applicable air loops in the model.
   #
-  # @note This must be performed before the sizing run because
-  # it impacts component sizes, which in turn impact efficiencies.
+  # @note This must be performed before the sizing run because it impacts component sizes, which in turn impact efficiencies.
   def model_apply_multizone_vav_outdoor_air_sizing(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying multizone vav OA sizing.')
 
@@ -1817,61 +1469,65 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying multizone vav OA sizing.')
   end
 
-  # Applies the HVAC parts of the template to all objects in the model
-  # using the the template specified in the model.
-  def model_apply_hvac_efficiency_standard(model, climate_zone)
+  # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
+  def model_apply_hvac_efficiency_standard(model, climate_zone, apply_controls: true)
     sql_db_vars_map = {}
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying HVAC efficiency standards.')
 
     # Air Loop Controls
-    model.getAirLoopHVACs.sort.each {|obj| air_loop_hvac_apply_standard_controls(obj, climate_zone)}
+    if apply_controls.nil? || apply_controls == true
+      model.getAirLoopHVACs.sort.each { |obj| air_loop_hvac_apply_standard_controls(obj, climate_zone) }
+    end
 
     # Plant Loop Controls
     # TODO refactor: enable this code (missing before refactor)
     # getPlantLoops.sort.each { |obj| plant_loop_apply_standard_controls(obj, template, climate_zone) }
 
+    # Zone HVAC Controls
+    model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
+
     ##### Apply equipment efficiencies
 
     # Fans
-    model.getFanVariableVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
-    model.getFanConstantVolumes.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
-    model.getFanOnOffs.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
-    model.getFanZoneExhausts.sort.each {|obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj))}
+    model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    model.getFanOnOffs.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
+    model.getFanZoneExhausts.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
 
     # Pumps
-    model.getPumpConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
-    model.getPumpVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
-    model.getHeaderedPumpsConstantSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
-    model.getHeaderedPumpsVariableSpeeds.sort.each {|obj| pump_apply_standard_minimum_motor_efficiency(obj)}
+    model.getPumpConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    model.getPumpVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    model.getHeaderedPumpsConstantSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
+    model.getHeaderedPumpsVariableSpeeds.sort.each { |obj| pump_apply_standard_minimum_motor_efficiency(obj) }
 
     # Unitary HPs
     # set DX HP coils before DX clg coils because when DX HP coils need to first
     # pull the capacities of their paried DX clg coils, and this does not work
     # correctly if the DX clg coil efficiencies have been set because they are renamed.
-    model.getCoilHeatingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
+    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_heating_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # Unitary ACs
-    model.getCoilCoolingDXTwoSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
-    model.getCoilCoolingDXSingleSpeeds.sort.each {|obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map)}
+    model.getCoilCoolingDXTwoSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_two_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
+    model.getCoilCoolingDXSingleSpeeds.sort.each { |obj| sql_db_vars_map = coil_cooling_dx_single_speed_apply_efficiency_and_curves(obj, sql_db_vars_map) }
 
     # Chillers
     clg_tower_objs = model.getCoolingTowerSingleSpeeds
-    model.getChillerElectricEIRs.sort.each {|obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs)}
+    model.getChillerElectricEIRs.sort.each { |obj| chiller_electric_eir_apply_efficiency_and_curves(obj, clg_tower_objs) }
 
     # Boilers
-    model.getBoilerHotWaters.sort.each {|obj| boiler_hot_water_apply_efficiency_and_curves(obj)}
+    model.getBoilerHotWaters.sort.each { |obj| boiler_hot_water_apply_efficiency_and_curves(obj) }
 
     # Water Heaters
-    model.getWaterHeaterMixeds.sort.each {|obj| water_heater_mixed_apply_efficiency(obj)}
+    model.getWaterHeaterMixeds.sort.each { |obj| water_heater_mixed_apply_efficiency(obj) }
 
     # Cooling Towers
-    model.getCoolingTowerSingleSpeeds.sort.each {|obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj)}
-    model.getCoolingTowerTwoSpeeds.sort.each {|obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj)}
-    model.getCoolingTowerVariableSpeeds.sort.each {|obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj)}
+    model.getCoolingTowerSingleSpeeds.sort.each { |obj| cooling_tower_single_speed_apply_efficiency_and_curves(obj) }
+    model.getCoolingTowerTwoSpeeds.sort.each { |obj| cooling_tower_two_speed_apply_efficiency_and_curves(obj) }
+    model.getCoolingTowerVariableSpeeds.sort.each { |obj| cooling_tower_variable_speed_apply_efficiency_and_curves(obj) }
 
     # ERVs
-    model.getHeatExchangerAirToAirSensibleAndLatents.each {|obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj)}
+    model.getHeatExchangerAirToAirSensibleAndLatents.each { |obj| heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(obj) }
 
     # Gas Heaters
     model.getCoilHeatingGass.sort.each {|obj| coil_heating_gas_apply_efficiency_and_curves(obj)}
@@ -1879,8 +1535,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying HVAC efficiency standards.')
   end
 
-  # Applies daylighting controls to each space in the model
-  # per the standard.
+  # Applies daylighting controls to each space in the model per the standard.
   def model_add_daylighting_controls(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started adding daylighting controls.')
 
@@ -1915,23 +1570,187 @@ class Standard
     return true
   end
 
-  # Method to search through a hash for the objects that meets the
-  # desired search criteria, as passed via a hash.
+
+   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
+  # Returns an Array (empty if nothing found) of matching objects.
+  #
+  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param search_criteria [Hash] hash of search criteria
+  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
+  # @example Find all the schedule rules that match the name
+  #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
+  #   if rules.size.zero?
+  #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+  #     return false
+  #   end
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
+
+    matching_objects = []
+    if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
+      hash_of_objects = hash_of_objects['table']
+    end
+
+    # Compare each of the objects against the search criteria
+    raise("This is not a table #{hash_of_objects}") unless hash_of_objects.respond_to?(:each)
+    hash_of_objects.each do |object|
+      meets_all_search_criteria = true
+      search_criteria.each do |key, value|
+        # Don't check non-existent search criteria
+        next unless object.key?(key)
+        # Stop as soon as one of the search criteria is not met
+        # 'Any' is a special key that matches anything
+        unless object[key] == value || object[key] == 'Any'
+          meets_all_search_criteria = false
+          break
+        end
+      end
+      # Skip objects that don't meet all search criteria
+      next unless meets_all_search_criteria
+      # If made it here, object matches all search criteria
+      matching_objects << object
+    end
+
+    # If capacity was specified, narrow down the matching objects
+    unless capacity.nil?
+      # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity') || !object.key?('maximum_capacity') }
+
+      # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
+
+      # Round up if capacity is an integer
+      if capacity == capacity.round
+        capacity += (capacity * 0.01)
+      end
+      # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
+      matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+
+      # If no object was found, round the capacity down in case the number fell between the limits in the json file.
+      if matching_capacity_objects.size.zero?
+        capacity *= 0.99
+        # Skip objects whose minimum capacity is below or maximum capacity above the specified capacity
+        matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+      else
+        matching_objects = matching_capacity_objects
+      end
+    end
+
+    # If date was specified, narrow down the matching objects
+    unless date.nil?
+      # Skip objects that don't have fields for start_date and end_date
+      matching_objects = matching_objects.reject { |object| !object.key?('start_date') || !object.key?('end_date') }
+
+      # Skip objects whose start date is earlier than the specified date
+      matching_objects = matching_objects.reject { |object| date <= Date.parse(object['start_date']) }
+
+      # Skip objects whose end date is later than the specified date
+      matching_objects = matching_objects.reject { |object| date > Date.parse(object['end_date']) }
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless area.nil?
+      # Skip objects that don't have fields for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_area') || !object.key?('maximum_area') }
+
+      # Skip objects that don't have values specified for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| object['minimum_area'].nil? || object['maximum_area'].nil? }
+
+      # Skip objects whose minimum area is below or maximum area is above area
+      matching_objects = matching_objects.reject { |object| area.to_f <= object['minimum_area'].to_f || area.to_f > object['maximum_area'].to_f }
+    end
+
+    # If area was specified, narrow down the matching objects
+    unless num_floors.nil?
+      # Skip objects that don't have fields for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_floors') || !object.key?('maximum_floors') }
+
+      # Skip objects that don't have values specified for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| object['minimum_floors'].nil? || object['maximum_floors'].nil? }
+
+      # Skip objects whose minimum floors is below or maximum floors is above num_floors
+      matching_objects = matching_objects.reject { |object| num_floors.to_f < object['minimum_floors'].to_f || num_floors.to_f > object['maximum_floors'].to_f }
+    end
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
+    end
+
+    return matching_objects
+  end
+
+  # Method to search through a hash for an object that meets the desired search criteria, as passed via a hash.
+  # If capacity is supplied, the object will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  #
+  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param search_criteria [Hash] hash of search criteria
+  # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @example Find the motor that meets these size criteria
+  #   search_criteria = {
+  #   'template' => template,
+  #   'number_of_poles' => 4.0,
+  #   'type' => 'Enclosed',
+  #   }
+  #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil)
+
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors)
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
+      desired_object = nil
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
+    elsif matching_objects.size == 1
+      desired_object = matching_objects[0]
+    else
+      desired_object = matching_objects[0]
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n #{matching_objects.join("\n")}")
+    end
+
+    return desired_object
+  end
+
+
+
+
+
+  # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
   # @param table_name [Hash] name of table in standards database.
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
-  #   the objects will only be returned if the specified capacity is between
-  #   the minimum_capacity and maximum_capacity values.
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
-  #   rules = model_find_objects(self, standards_data['schedules'], {'name'=>schedule_name})
-  #   if rules.size == 0
-  #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-  #     return false #TODO change to return empty optional schedule:ruleset?
+  #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
+  #   if rules.size.zero?
+  #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
+  #     return false
   #   end
-  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil, date: nil)
+  def standards_lookup_table_many(table_name: , search_criteria: {} , capacity: nil, date: nil, area: nil, num_floors: nil)
     desired_object = nil
     search_criteria_matching_objects = []
     matching_objects = []
@@ -1958,35 +1777,28 @@ class Standard
         end
       end
       # Skip objects that don't meet all search criteria
-      next if meets_all_search_criteria == false
+      next unless meets_all_search_criteria
       # If made it here, object matches all search criteria
-      search_criteria_matching_objects << object
+      matching_objects << object
     end
 
     # If capacity was specified, narrow down the matching objects
-    if capacity.nil?
-      matching_objects = search_criteria_matching_objects
-    else
+    unless capacity.nil?
+      # Skip objects that don't have fields for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity') || !object.key?('maximum_capacity') }
+
+      # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
+
       # Round up if capacity is an integer
       if capacity == capacity.round
         capacity += (capacity * 0.01)
       end
-      search_criteria_matching_objects.each do |object|
-        # Skip objects that don't have fields for minimum_capacity and maximum_capacity
-        next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
-        # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
-        next if object['minimum_capacity'].nil? || object['maximum_capacity'].nil?
-        # Skip objects whose the minimum capacity is below the specified capacity
-        next if capacity.to_f <= object['minimum_capacity'].to_f
-        # Skip objects whose max
-        next if capacity.to_f > object['maximum_capacity'].to_f
-        # Found a matching object
-        matching_objects << object
-      end
-      # If no object was found, round the capacity down a little
-      # to avoid issues where the number fell between the limits
-      # in the json file.
-      if matching_objects.size.zero?
+      # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
+      matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
+
+      # If no object was found, round the capacity down in case the number fell between the limits in the json file.
+      if matching_capacity_objects.size.zero?
         capacity *= 0.99
         search_criteria_matching_objects.each do |object|
           # Skip objects that don't have fields for minimum_capacity and maximum_capacity
@@ -2018,33 +1830,51 @@ class Standard
       end
     end
 
-    # Check the number of matching objects found
-    if matching_objects.size.zero?
-      desired_object = nil
-      # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
+    # If area was specified, narrow down the matching objects
+    unless area.nil?
+      # Skip objects that don't have fields for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_area') || !object.key?('maximum_area') }
+
+      # Skip objects that don't have values specified for minimum_area and maximum_area
+      matching_objects = matching_objects.reject { |object| object['minimum_area'].nil? || object['maximum_area'].nil? }
+
+      # Skip objects whose minimum area is below or maximum area is above area
+      matching_objects = matching_objects.reject { |object| area.to_f <= object['minimum_area'].to_f || area.to_f > object['maximum_area'].to_f }
     end
 
-    #    if new_matching_objects != matching_objects
-    #      puts "new..."
-    #      puts new_matching_objects
-    #      puts "is not.."
-    #      puts matching_objects
-    #      raise ("Hell")
-    #    end
+    # If area was specified, narrow down the matching objects
+    unless num_floors.nil?
+      # Skip objects that don't have fields for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_floors') || !object.key?('maximum_floors') }
+
+      # Skip objects that don't have values specified for minimum_floors and maximum_floors
+      matching_objects = matching_objects.reject { |object| object['minimum_floors'].nil? || object['maximum_floors'].nil? }
+
+      # Skip objects whose minimum floors is below or maximum floors is above num_floors
+      matching_objects = matching_objects.reject { |object| num_floors.to_f < object['minimum_floors'].to_f || num_floors.to_f > object['maximum_floors'].to_f }
+    end
+
+    # Check the number of matching objects found
+    if matching_objects.size.zero?
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
+    end
+
     return matching_objects
   end
 
-  # Method to search through a hash for an object that meets the
-  # desired search criteria, as passed via a hash.  If capacity is supplied,
-  # the object will only be returned if the specified capacity is between
-  # the minimum_capacity and maximum_capacity values.
-  #
+  # Method to search through a hash for an object that meets the desired search criteria, as passed via a hash.
+  # If capacity is supplied, the object will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
   #
   # @param table_name [String] name of table
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
-  #   the objects will only be returned if the specified capacity is between
-  #   the minimum_capacity and maximum_capacity values.
+  #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
+  # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
+  #   the objects will only be returned if the specified date is between the start_date and end_date.
+  # @param area [Double] area of the object in question.  If area is supplied,
+  #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
+  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
   # @return [Hash] Return tbe first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
@@ -2063,7 +1893,7 @@ class Standard
     # Check the number of matching objects found
     if matching_objects.size.zero?
       desired_object = nil
-      # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
     elsif matching_objects.size == 1
       desired_object = matching_objects[0]
     else
@@ -2078,15 +1908,120 @@ class Standard
   #
   # @param value [double] the value to use, 24-7, 365
   # @param name [string] the name of the schedule
+  # @param sch_type_limit [string] the name of a schedule type limit
+  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
   # @return schedule
-  def model_add_constant_schedule_ruleset(model, value, name = nil)
+  def model_add_constant_schedule_ruleset(model,
+                                          value,
+                                          name = nil,
+                                          sch_type_limit: 'Temperature')
+    # check to see if schedule exists with same name and constant value and return if true
+    unless name.nil?
+      existing_sch = model.getScheduleRulesetByName(name)
+      if existing_sch.is_initialized
+        existing_sch = existing_sch.get
+        existing_day_sch_vals = existing_sch.defaultDaySchedule.values
+        if existing_day_sch_vals.size == 1 && existing_day_sch_vals[0] == value
+          return existing_sch
+        end
+      end
+    end
+
     schedule = OpenStudio::Model::ScheduleRuleset.new(model)
     unless name.nil?
       schedule.setName(name)
       schedule.defaultDaySchedule.setName("#{name} Default")
     end
+
+    if !sch_type_limit.nil?
+      sch_type_limits_obj = model_add_schedule_type_limits(model, standard_sch_type_limit: sch_type_limit)
+      schedule.setScheduleTypeLimits(sch_type_limits_obj)
+    end
+
     schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
     return schedule
+  end
+
+  # Create ScheduleTypeLimits
+  #
+  # @param standard_sch_type_limit [string] the name of a standard schedule type limit with predefined limits
+  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
+  # @param name[string] the name of the schedule type limits
+  # @param lower_limit_value [double] the lower limit value for the schedule type
+  # @param upper_limit_value [double] the upper limit value for the schedule type
+  # @param numeric_type [string] the numeric type, options are Continuous or Discrete
+  # @param unit_type [string] the unit type, options are defined in EnergyPlus I/O reference
+  # @return [<OpenStudio::Model::ScheduleTypeLimits>]
+  def model_add_schedule_type_limits(model,
+                                     standard_sch_type_limit: nil,
+                                     name: nil,
+                                     lower_limit_value: nil,
+                                     upper_limit_value: nil,
+                                     numeric_type: nil,
+                                     unit_type: nil)
+
+    if standard_sch_type_limit.nil?
+      if lower_limit_value.nil? || upper_limit_value.nil? || numeric_type.nil? || unit_type.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "If calling model_add_schedule_type_limits without a standard_sch_type_limit, you must specify all properties of ScheduleTypeLimits.")
+        return false
+      end
+      schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+      schedule_type_limits.setName(name) if !name.nil?
+      schedule_type_limits.setLowerLimitValue(lower_limit_value)
+      schedule_type_limits.setUpperLimitValue(upper_limit_value)
+      schedule_type_limits.setNumericType(numeric_type)
+      schedule_type_limits.setUnitType(unit_type)
+    else
+      schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
+      if !schedule_type_limits.empty?
+        schedule_type_limits = schedule_type_limits.get
+      else
+        case standard_sch_type_limit.downcase
+          when 'temperature'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Temperature")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(100.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Temperature")
+
+          when 'humidity ratio'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Humidity Ratio")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(0.3)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Dimensionless")
+
+          when 'fraction', 'fractional'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Fraction")
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(1.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("Dimensionless")
+
+          when 'onoff'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("OnOff")
+            schedule_type_limits.setLowerLimitValue(0)
+            schedule_type_limits.setUpperLimitValue(1)
+            schedule_type_limits.setNumericType("Discrete")
+            schedule_type_limits.setUnitType("Availability")
+
+          when 'activity'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName("Activity")
+            schedule_type_limits.setLowerLimitValue(70.0)
+            schedule_type_limits.setUpperLimitValue(1000.0)
+            schedule_type_limits.setNumericType("Continuous")
+            schedule_type_limits.setUnitType("ActivityLevel")
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Invalid standard_sch_type_limit for method model_add_schedule_type_limits.")
+        end
+      end
+    end
+    return schedule_type_limits
   end
 
   # Create a schedule from the openstudio standards dataset and
@@ -2110,12 +2045,10 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding schedule: #{schedule_name}")
 
     # Find all the schedule rules that match the name
-    rules = standards_lookup_table_many(table_name: 'schedules', search_criteria: {'name' => schedule_name})
+    rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
     if rules.size.zero?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-      sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-      sch_ruleset.setName("NOT ACTUALLY #{schedule_name}")
-      return sch_ruleset
+      return model.alwaysOnDiscreteSchedule
     end
 
     # Make a schedule ruleset
@@ -2158,14 +2091,14 @@ class Standard
 
       # Other days (weekdays, weekends, etc)
       if day_types.include?('Wknd') ||
-          day_types.include?('Wkdy') ||
-          day_types.include?('Sat') ||
-          day_types.include?('Sun') ||
-          day_types.include?('Mon') ||
-          day_types.include?('Tue') ||
-          day_types.include?('Wed') ||
-          day_types.include?('Thu') ||
-          day_types.include?('Fri')
+         day_types.include?('Wkdy') ||
+         day_types.include?('Sat') ||
+         day_types.include?('Sun') ||
+         day_types.include?('Mon') ||
+         day_types.include?('Tue') ||
+         day_types.include?('Wed') ||
+         day_types.include?('Thu') ||
+         day_types.include?('Fri')
 
         # Make the Rule
         sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
@@ -2218,7 +2151,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
 
     # Get the object data
-    data = standards_lookup_table_first(table_name: 'materials', search_criteria: {'name' => material_name})
+    data = model_find_object(standards_data['materials'], 'name' => material_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
       return false # TODO: change to return empty optional material
@@ -2319,7 +2252,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Adding construction: #{construction_name}")
 
     # Get the object data
-    data = standards_lookup_table_first(table_name: 'constructions', search_criteria: {'name' => construction_name})
+    data = model_find_object(standards_data['constructions'], 'name' => construction_name)
     unless data
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for construction: #{construction_name}, will not be created.")
       return OpenStudio::Model::OptionalConstruction.new
@@ -2373,7 +2306,7 @@ class Standard
         else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
           # Set the U-Value
           construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-          # else
+        # else
           # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
         end
 
@@ -2391,6 +2324,54 @@ class Standard
         # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
         construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
 
+      end
+
+      # If the construction is fenestration,
+      # also set the frame type for use in future lookups
+      if construction.isFenestration
+        case standards_construction_type
+        when 'Metal framing (all other)'
+          standards_info.setFenestrationFrameType('Metal Framing')
+        when 'Nonmetal framing (all)'
+          standards_info.setFenestrationFrameType('Non-Metal Framing')
+        end
+      end
+
+      # If the construction has a skylight framing material specified,
+      # get the skylight frame material properties and add frame to
+      # all skylights in the model.
+      if data['skylight_framing']
+        # Get the skylight framing material
+        framing_name = data['skylight_framing']
+        frame_data = model_find_object(standards_data['materials'], 'name' => framing_name)
+        if frame_data
+          frame_width_in = frame_data['frame_width'].to_f
+          frame_with_m = OpenStudio.convert(frame_width_in, 'in', 'm').get
+          frame_resistance_ip = frame_data['resistance'].to_f
+          frame_resistance_si = OpenStudio.convert(frame_resistance_ip, 'hr*ft^2*R/Btu', 'm^2*K/W').get
+          frame_conductance_si = 1.0/frame_resistance_si
+          frame = OpenStudio::Model::WindowPropertyFrameAndDivider.new(model)
+          frame.setName("Skylight frame R-#{frame_resistance_ip.round(2)} #{frame_width_in.round(1)} in. wide")
+          frame.setFrameWidth(frame_with_m)
+          frame.setFrameConductance(frame_conductance_si)
+          skylights_frame_added = 0
+          model.getSubSurfaces.each do |sub_surface|
+            next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
+            # todo enable proper window frame setting after https://github.com/NREL/OpenStudio/issues/2895 is fixed
+            sub_surface.setString(8, frame.name.get.to_s)
+            skylights_frame_added += 1
+            # if sub_surface.allowWindowPropertyFrameAndDivider
+            #   sub_surface.setWindowPropertyFrameAndDivider(frame)
+            #   skylights_frame_added += 1
+            # else
+            #   OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sub_surface.name}: cannot add a frame to this skylight.")
+            # end
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding #{frame.name} to #{skylights_frame_added} skylights.") if skylights_frame_added > 0
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find skylight framing data for: #{framing_name}, will not be created.")
+          return false # TODO: change to return empty optional material
+        end
       end
 
     end
@@ -2424,19 +2405,18 @@ class Standard
     return construction
   end
 
-  # Helper method to find a particular construction and add it to the model
-  # after modifying the insulation value if necessary.
+  # Helper method to find a particular construction and add it to the model after modifying the insulation value if necessary.
   def model_find_and_add_construction(model, climate_zone_set, intended_surface_type, standards_construction_type, building_category)
     # Get the construction properties,
     # which specifies properties by construction category by climate zone set.
     # AKA the info in Tables 5.5-1-5.5-8
 
-    props = standards_lookup_table_first(table_name:'construction_properties',
-                                         search_criteria: {'template' => template,
+    props = model_find_object(standards_data['construction_properties'],
+                              'template' => template,
                               'climate_zone_set' => climate_zone_set,
                               'intended_surface_type' => intended_surface_type,
                               'standards_construction_type' => standards_construction_type,
-                              'building_category' => building_category})
+                              'building_category' => building_category)
 
     if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
@@ -2477,19 +2457,12 @@ class Standard
     end
 
     # Get the object data
-
-    data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                           'climate_zone_set' => climate_zone_set,
-                                                                                           'building_type' => building_type,
-                                                                                           'space_type' => spc_type,
-                                                                                           'is_residential' => is_residential})
+    data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type, 'is_residential' => is_residential)
     unless data
-      data = standards_lookup_table_first(table_name: 'construction_sets', search_criteria: {'template' => template,
-                                                                                             'climate_zone_set' => climate_zone_set,
-                                                                                             'building_type' => building_type,
-                                                                                             'space_type' => spc_type, })
+      # Search again without the is_residential criteria in the case that this field is not specified for a standard
+      data = model_find_object(standards_data['construction_sets'], 'template' => template, 'climate_zone_set' => climate_zone_set, 'building_type' => building_type, 'space_type' => spc_type)
       unless data
-        # if nothing matches say that we could not find it.
+        # if nothing matches say that we could not find it
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Construction set for template =#{template}, climate zone set =#{climate_zone_set}, building type = #{building_type}, space type = #{spc_type}, is residential = #{is_residential} was not found in standards_data['construction_sets']")
         return construction_set
       end
@@ -2506,12 +2479,17 @@ class Standard
     # Exterior surfaces constructions
     exterior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultExteriorSurfaceConstructions(exterior_surfaces)
-    if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
-      exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
-                                                                             climate_zone_set,
-                                                                             'ExteriorFloor',
-                                                                             data['exterior_floor_standards_construction_type'],
-                                                                             data['exterior_floor_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor but the soffit is uninsulated
+    if spc_type == 'Attic'
+      exterior_surfaces.setFloorConstruction(model_add_construction(model, 'Typical Attic Soffit'))
+    else
+      if data['exterior_floor_standards_construction_type'] && data['exterior_floor_building_category']
+        exterior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                               climate_zone_set,
+                                                                               'ExteriorFloor',
+                                                                               data['exterior_floor_standards_construction_type'],
+                                                                               data['exterior_floor_building_category']))
+      end
     end
     if data['exterior_wall_standards_construction_type'] && data['exterior_wall_building_category']
       exterior_surfaces.setWallConstruction(model_find_and_add_construction(model,
@@ -2520,20 +2498,38 @@ class Standard
                                                                             data['exterior_wall_standards_construction_type'],
                                                                             data['exterior_wall_building_category']))
     end
-    if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
-      exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
-                                                                                   climate_zone_set,
-                                                                                   'ExteriorRoof',
-                                                                                   data['exterior_roof_standards_construction_type'],
-                                                                                   data['exterior_roof_building_category']))
+    # Special condition for attics, where the insulation is actually on the floor and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(model_add_construction(model, 'Typical Uninsulated Wood Joist Attic Roof'))
+      end
+    else
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        exterior_surfaces.setRoofCeilingConstruction(model_find_and_add_construction(model,
+                                                                                     climate_zone_set,
+                                                                                     'ExteriorRoof',
+                                                                                     data['exterior_roof_standards_construction_type'],
+                                                                                     data['exterior_roof_building_category']))
+      end
     end
-
     # Interior surfaces constructions
     interior_surfaces = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
     construction_set.setDefaultInteriorSurfaceConstructions(interior_surfaces)
     construction_name = data['interior_floors']
-    unless construction_name.nil?
-      interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
+    # Special condition for attics, where the insulation is actually on the floor and the roof itself is uninsulated
+    if spc_type == 'Attic'
+      if data['exterior_roof_standards_construction_type'] && data['exterior_roof_building_category']
+        interior_surfaces.setFloorConstruction(model_find_and_add_construction(model,
+                                                                               climate_zone_set,
+                                                                               'ExteriorRoof',
+                                                                               data['exterior_roof_standards_construction_type'],
+                                                                               data['exterior_roof_building_category']))
+
+      end
+    else
+      unless construction_name.nil?
+        interior_surfaces.setFloorConstruction(model_add_construction(model, construction_name))
+      end
     end
     construction_name = data['interior_walls']
     unless construction_name.nil?
@@ -2594,9 +2590,12 @@ class Standard
                                                                                data['exterior_door_standards_construction_type'],
                                                                                data['exterior_door_building_category']))
     end
-    construction_name = data['exterior_glass_doors']
-    unless construction_name.nil?
-      exterior_subsurfaces.setGlassDoorConstruction(model_add_construction(model, construction_name))
+    if data['exterior_glass_door_standards_construction_type'] && data['exterior_glass_door_building_category']
+      exterior_subsurfaces.setGlassDoorConstruction(model_find_and_add_construction(model,
+                                                                                    climate_zone_set,
+                                                                                   'GlassDoor',
+                                                                                    data['exterior_glass_door_standards_construction_type'],
+                                                                                    data['exterior_glass_door_building_category']))
     end
     if data['exterior_overhead_door_standards_construction_type'] && data['exterior_overhead_door_building_category']
       exterior_subsurfaces.setOverheadDoorConstruction(model_find_and_add_construction(model,
@@ -2673,7 +2672,7 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
-    data = standards_lookup_table_first(table_name: 'curves', search_criteria: {'name' => curve_name})
+    data = model_find_object(standards_data['curves'], 'name' => curve_name)
     if data.nil?
       OpenStudio::logFree(OpenStudio::Warn, "openstudio.Model.Model", "Could not find a curve called '#{curve_name}' in the standards.")
       return nil
@@ -2800,47 +2799,86 @@ class Standard
     return full_epw_path
   end
 
+  # Find the legacy simulation results from a CSV of previously created results.
+  #
+  # @return [Hash] a hash of results for each fuel, where the keys are in the form 'End Use|Fuel Type',
+  # e.g. Heating|Electricity, Exterior Equipment|Water.  All end use/fuel type combos are present, with
+  # values of 0.0 if none of this end use/fuel type combo was used by the simulation.  Returns nil
+  # if the legacy results couldn't be found.
+  def model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, run_type)
+    # Load the legacy idf results CSV file into a ruby hash
+    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+    standards_data_dir = "#{top_dir}/data/standards"
+    temp = ''
+    # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      # load file from embedded files
+      if run_type == 'dd-only'
+        temp = load_resource_relative('../../../data/standards/legacy_dd_results.csv', 'r:UTF-8')
+      else
+        temp = load_resource_relative('../../../data/standards/legacy_idf_results.csv', 'r:UTF-8')
+      end
+    else
+      # loaded gem from system path
+      if run_type == 'dd-only'
+        temp = File.read("#{standards_data_dir}/legacy_dd_results.csv")
+      else
+        temp = File.read("#{standards_data_dir}/legacy_idf_results.csv")
+      end
+    end
+    legacy_idf_csv = CSV.new(temp, :headers => true, :converters => :all)
+    legacy_idf_results = legacy_idf_csv.to_a.map {|row| row.to_hash }
+
+    # Get the results for this building
+    search_criteria = {
+        'Building Type' => building_type,
+        'Template' => template,
+        'Climate Zone' => climate_zone
+    }
+    energy_values = model_find_object(legacy_idf_results, search_criteria)
+    if energy_values.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy simulation results for #{search_criteria}")
+      return {}
+    end
+
+    return energy_values
+  end
+
   # Method to gather prototype simulation results for a specific climate zone, building type, and template
   #
   # @param climate_zone [String] string for the ASHRAE climate zone.
   # @param building_type [String] string for prototype building type.
   # @return [Hash] Returns a hash with data presented in various bins. Returns nil if no search results
   def model_process_results_for_datapoint(model, climate_zone, building_type)
-    # Combine the data from the JSON files into a single hash
-    top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-    standards_data_dir = "#{top_dir}/data/standards"
-
-    # Load the legacy idf results JSON file into a ruby hash
-    temp = ''
-    begin
-      temp = load_resource_relative('../../../data/standards/legacy_idf_results.json', 'r:UTF-8')
-    rescue NoMethodError
-      temp = File.read("#{standards_data_dir}/legacy_idf_results.json")
-    end
-    legacy_idf_results = JSON.parse(temp)
-
-    # List of all fuel types
-    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
-
-    # List of all end uses
-    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection', 'Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
-
-    # Get legacy idf results
+    # Hash to store the legacy results by fuel and by end use
     legacy_results_hash = {}
     legacy_results_hash['total_legacy_energy_val'] = 0
     legacy_results_hash['total_legacy_water_val'] = 0
     legacy_results_hash['total_energy_by_fuel'] = {}
     legacy_results_hash['total_energy_by_end_use'] = {}
+
+    # Get the legacy simulation results
+    legacy_values = model_legacy_results_by_end_use_and_fuel_type(model, climate_zone, building_type, 'annual')
+    if legacy_values.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find legacy idf results for #{search_criteria}")
+      return legacy_results_hash
+    end
+
+    # List of all fuel types
+    fuel_types = ['Electricity', 'Natural Gas', 'Additional Fuel', 'District Cooling', 'District Heating', 'Water']
+
+    # List of all end uses
+    end_uses = ['Heating', 'Cooling', 'Interior Lighting', 'Exterior Lighting', 'Interior Equipment', 'Exterior Equipment', 'Fans', 'Pumps', 'Heat Rejection','Humidification', 'Heat Recovery', 'Water Systems', 'Refrigeration', 'Generators']
+
+    # Sum the legacy results up by fuel and by end use
     fuel_types.each do |fuel_type|
       end_uses.each do |end_use|
         next if end_use == 'Exterior Equipment'
-
-        # Get the legacy results number
-        legacy_val = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, end_use)
+        legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
 
         # Combine the exterior lighting and exterior equipment
         if end_use == 'Exterior Lighting'
-          legacy_exterior_equipment = legacy_idf_results.dig(building_type, template, climate_zone, fuel_type, 'Exterior Equipment')
+          legacy_exterior_equipment = legacy_values["Exterior Equipment|#{fuel_type}"]
           unless legacy_exterior_equipment.nil?
             legacy_val += legacy_exterior_equipment
           end
@@ -2895,6 +2933,10 @@ class Standard
       result = 46_320
     elsif building_type == 'MediumOffice' # 53,600 ft^2
       result = 4982
+	elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
+      result = 46_320
+    elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
+      result = 4982
     elsif building_type == 'MidriseApartment' # 33,700 ft^2
       result = 3135
     elsif building_type == 'Office'
@@ -2914,6 +2956,8 @@ class Standard
       result = 4014
     elsif building_type == 'SmallOffice' # 5500 ft^2
       result = 511
+    elsif building_type == 'SmallOfficeDetailed' # 5500 ft^2
+      result = 511
     elsif building_type == 'StripMall' # 22,500 ft^2
       result = 2090
     elsif building_type == 'SuperMarket' # 45,002 ft2 (from legacy reference idf file)
@@ -2928,7 +2972,7 @@ class Standard
     return result
   end
 
-  # this is used by other methods to get the clinzte aone and building type from a model.
+  # this is used by other methods to get the climate zone and building type from a model.
   # it has logic to break office into small, medium or large based on building area that can be turned off
   # @param remap_office [bool] re-map small office or leave it alone
   # @return [hash] key for climate zone and building type, both values are strings
@@ -3037,10 +3081,8 @@ class Standard
     return result
   end
 
-  # Get a unique list of constructions with given
-  # boundary condition and a given type of surface.
-  # Pulls from both default construction sets and
-  # hard-assigned constructions.
+  # Get a unique list of constructions with given boundary condition and a given type of surface.
+  # Pulls from both default construction sets and hard-assigned constructions.
   #
   # @param boundary_condition [String] the desired boundary condition
   # valid choices are:
@@ -3090,10 +3132,10 @@ class Standard
 
       # Can't handle incomplete construction sets
       if ext_surfs.empty? ||
-          int_surfs.empty? ||
-          gnd_surfs.empty? ||
-          ext_subsurfs.empty? ||
-          int_subsurfs.empty?
+         int_surfs.empty? ||
+         gnd_surfs.empty? ||
+         ext_subsurfs.empty? ||
+         int_subsurfs.empty?
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
         next
@@ -3194,11 +3236,9 @@ class Standard
     return all_constructions
   end
 
-  # Go through the default construction sets and hard-assigned
-  # constructions. Clone the existing constructions and set their
-  # intended surface type and standards construction type per
-  # the PRM.  For some standards, this will involve making
-  # modifications.  For others, it will not.
+  # Go through the default construction sets and hard-assigned constructions.
+  # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
+  # For some standards, this will involve making modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
@@ -3283,8 +3323,7 @@ class Standard
     return true
   end
 
-  # Apply the standard construction to each surface in the
-  # model, based on the construction type currently assigned.
+  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
   # @return [Bool] true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone)
@@ -3371,28 +3410,27 @@ class Standard
 
     # populate search hash
     search_criteria = {
-        'template' => template,
-        'climate_zone_set' => climate_zone_set,
-        'intended_surface_type' => intended_surface_type,
-        'standards_construction_type' => standards_construction_type,
-        'building_category' => building_category
+      'template' => template,
+      'climate_zone_set' => climate_zone_set,
+      'intended_surface_type' => intended_surface_type,
+      'standards_construction_type' => standards_construction_type,
+      'building_category' => building_category
     }
 
     # switch to use this but update test in standards and measures to load this outside of the method
-    construction_properties = standards_lookup_table_first(table_name: 'construction_properties', search_criteria: search_criteria)
+    construction_properties = model_find_object(standards_data['construction_properties'], search_criteria)
+
 
     return construction_properties
   end
 
-  # Reduces the WWR to the values specified by the PRM. WWR reduction
-  # will be done by moving vertices inward toward centroid.  This causes the least impact
-  # on the daylighting area calculations and controls placement.
+  # Reduces the WWR to the values specified by the PRM.
+  # WWR reduction will be done by moving vertices inward toward centroid.
+  # This causes the least impact on the daylighting area calculations and controls placement.
   #
-  # @todo add proper support for 90.1-2013 with all those building
-  # type specific values
-  # @todo support 90.1-2004 requirement that windows be modeled as
-  # horizontal bands.  Currently just using existing window geometry,
-  # and shrinking as necessary if WWR is above limit.
+  # @todo add proper support for 90.1-2013 with all those building type specific values
+  # @todo support 90.1-2004 requirement that windows be modeled as horizontal bands.
+  # Currently just using existing window geometry, and shrinking as necessary if WWR is above limit.
   # @todo support semiheated spaces as a separate WWR category
   # @todo add window frame area to calculation of WWR
   def model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone)
@@ -3429,11 +3467,10 @@ class Standard
       end
 
       # Determine the space category
-      # TODO This should really use the heating/cooling loads
-      # from the proposed building.  However, in an attempt
-      # to avoid another sizing run just for this purpose,
-      # conditioned status is based on heating/cooling
-      # setpoints.  If heated-only, will be assumed Semiheated.
+      # TODO: This should really use the heating/cooling loads from the proposed building.
+      # However, in an attempt to avoid another sizing run just for this purpose,
+      # conditioned status is based on heating/cooling setpoints.
+      # If heated-only, will be assumed Semiheated.
       # The full-bore method is on the next line in case needed.
       # cat = thermal_zone_conditioning_category(space, template, climate_zone)
       cooled = space_cooled?(space)
@@ -3554,8 +3591,7 @@ class Standard
     return true
   end
 
-  # Reduces the SRR to the values specified by the PRM. SRR reduction
-  # will be done by shrinking vertices toward the centroid.
+  # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @todo support semiheated spaces as a separate SRR category
   # @todo add skylight frame area to calculation of SRR
@@ -3691,10 +3727,8 @@ class Standard
     return srr_lim
   end
 
-  # Remove all HVAC that will be replaced during the
-  # performance rating method baseline generation.
-  # This does not include plant loops that serve
-  # WaterUse:Equipment or Fan:ZoneExhaust
+  # Remove all HVAC that will be replaced during the performance rating method baseline generation.
+  # This does not include plant loops that serve WaterUse:Equipment or Fan:ZoneExhaust
   #
   # @return [Bool] true if successful, false if not
   def model_remove_prm_hvac(model)
@@ -3722,8 +3756,7 @@ class Standard
     return true
   end
 
-  # Remove external shading devices.
-  # Site shading will not be impacted.
+  # Remove external shading devices. Site shading will not be impacted.
   # @return [Bool] returns true if successful, false if not.
   def model_remove_external_shading_devices(model)
     shading_surfaces_removed = 0
@@ -3752,15 +3785,12 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
   end
 
-  # Helper method to get the story object that
-  # cooresponds to a specific minimum z value.
+  # Helper method to get the story object that corresponds to a specific minimum z value.
   # Makes a new story if none found at this height.
   #
   #
-  # @param minz [Double] the z value (height) of the
-  # desired story, in meters.
-  # @param tolerance [Double] tolerance for comparison, in m.
-  # Default is 0.3 m ~1ft
+  # @param minz [Double] the z value (height) of the desired story, in meters.
+  # @param tolerance [Double] tolerance for comparison, in m. Default is 0.3 m ~1ft
   # @return [OpenStudio::Model::BuildingStory] the story
   def model_get_story_for_nominal_z_coordinate(model, minz, tolerance = 0.3)
     model.getBuildingStorys.sort.each do |story|
@@ -3780,7 +3810,7 @@ class Standard
   end
 
   # Returns average daily hot water consumption by building type
-  # recommendations from 2011 ASHRAE Handobook - HVAC Applications Table 7 section 60.14
+  # recommendations from 2011 ASHRAE Handbook - HVAC Applications Table 7 section 60.14
   # Not all building types are included in lookup
   # some recommendations have multiple values based on number of units.
   # Will return an array of hashes. Many may have one array entry.
@@ -3797,36 +3827,38 @@ class Standard
 
     result = []
     if building_type == 'FullServiceRestaurant'
-      result << {units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4}
+      result << { units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4 }
     elsif building_type == 'Hospital'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif ['LargeHotel', 'SmallHotel'].include? building_type
-      result << {units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0}
-      result << {units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0}
-      result << {units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0}
+      result << { units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0 }
+      result << { units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0 }
+      result << { units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0 }
     elsif building_type == 'MidriseApartment'
-      result << {units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0}
-      result << {units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0}
-      result << {units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0}
-      result << {units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0}
-      result << {units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0}
-    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice'].include? building_type
-      result << {units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0}
+      result << { units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0 }
+      result << { units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0 }
+      result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
+      result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
+      result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
+    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice','LargeOfficeDetailed', 'MediumOfficeDetailed', 'SmallOfficeDetailed'].include? building_type
+      result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
     elsif building_type == 'Outpatient'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'PrimarySchool'
-      result << {units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6}
+      result << { units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6 }
     elsif building_type == 'QuickServiceRestaurant'
-      result << {units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7}
+      result << { units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7 }
     elsif building_type == 'Retail'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SecondarySchool'
-      result << {units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8}
+      result << { units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8 }
     elsif building_type == 'StripMall'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'SuperMarket'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     elsif building_type == 'Warehouse'
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
+    elsif ['SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE'].include? building_type
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine hot water demand recommendations")
@@ -3846,8 +3878,7 @@ class Standard
     return swh_gal_per_day
   end
 
-  # Returns average daily internal loads for residential buildings
-  # from Table R405.5.2(1)
+  # Returns average daily internal loads for residential buildings from Table R405.5.2(1)
   #
   # @return [Hash] mech_vent_cfm, infiltration_ach, igain_btu_per_day, internal_mass_lbs
   def model_find_icc_iecc_2015_internal_loads(model, units_per_bldg, bedrooms_per_unit)
@@ -3876,8 +3907,7 @@ class Standard
     return internal_loads
   end
 
-  # Helper method to make a shortened version of a name
-  # that will be readable in a GUI.
+  # Helper method to make a shortened version of a name that will be readable in a GUI.
   def model_make_name(model, clim, building_type, spc_type)
     clim = clim.gsub('ClimateZone ', 'CZ')
     if clim == 'CZ1-8'
@@ -3979,9 +4009,8 @@ class Standard
     return climate_zone_set
   end
 
-  # This method ensures that all spaces with spacetypes defined contain at least
-  # a standardSpaceType appropriate for the template. So, if any space
-  # with a space type defined does not have a Stnadard spacetype, or is undefined, an error will stop
+  # This method ensures that all spaces with spacetypes defined contain at least a standardSpaceType appropriate for the template.
+  # So, if any space with a space type defined does not have a Stnadard spacetype, or is undefined, an error will stop
   # with information that the spacetype needs to be defined.
   def model_validate_standards_spacetypes_in_model(model)
     error_string = ''
@@ -3993,12 +4022,12 @@ class Standard
           next
         else
           search_criteria = {
-              'template' => template,
-              'building_type' => space.spaceType.get.standardsBuildingType.get,
-              'space_type' => space.spaceType.get.standardsSpaceType.get
+            'template' => template,
+            'building_type' => space.spaceType.get.standardsBuildingType.get,
+            'space_type' => space.spaceType.get.standardsSpaceType.get
           }
           # lookup space type properties
-          space_type_properties = standards_lookup_table_first(table_name: 'space_types', search_criteria: search_criteria)
+          space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
           if space_type_properties.nil?
             error_string << "Could not find spacetype of criteria : #{search_criteria}. Please ensure you have a valid standardSpaceType and stantdardBuildingType defined.\n"
             space_type_properties = {}
@@ -4085,7 +4114,7 @@ class Standard
     end
 
     # sort hash by min_z low to high
-    story_hash = story_hash.sort_by {|k, v| v[:min_z]}
+    story_hash = story_hash.sort_by { |k, v| v[:min_z] }
 
     # reassemble into hash after sorting
     hash = {}
@@ -4299,7 +4328,7 @@ class Standard
 
   # Converts the climate zone in the model into the format used
   # by the openstudio-standards lookup tables.  For example:
-  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2006-6A.
+  # institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
   # institution: CEC, value: 3  becomes: CEC T24-CEC3.
   #
   # @param model [OpenStudio::Model::Model] the model
@@ -4311,9 +4340,9 @@ class Standard
       if cz.institution == 'ASHRAE'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
         climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2006-#{cz.value}A"
+                         "ASHRAE 169-2013-#{cz.value}A"
                        else
-                         "ASHRAE 169-2006-#{cz.value}"
+                         "ASHRAE 169-2013-#{cz.value}"
                        end
       elsif cz.institution == 'CEC'
         next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
@@ -4330,7 +4359,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] the model
   # @param climate_zone [String] the climate zone in openstudio-standards format.
-  # For example: ASHRAE 169-2006-2A, CEC T24-CEC3
+  # For example: ASHRAE 169-2013-2A, CEC T24-CEC3
   # @return [Boolean] returns true if successful, false if not
   def model_set_climate_zone(model, climate_zone)
     # Remove previous climate zones from the model
@@ -4338,6 +4367,8 @@ class Standard
     # Split the string into the correct institution and value
     if climate_zone.include? 'ASHRAE 169-2006-'
       model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
+    elsif climate_zone.include? 'ASHRAE 169-2013-'
+      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
     elsif climate_zone.include? 'CEC T24-CEC'
       model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
 
@@ -4442,6 +4473,35 @@ class Standard
   end
 
 
+  # Determines how ventilation for the standard is specified.
+  # When 'Sum', all min OA flow rates are added up.  Commonly used by 90.1.
+  # When 'Maximum', only the biggest OA flow rate.  Used by T24.
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [String] the ventilation method, either Sum or Maximum
+  def model_ventilation_method(model)
+    ventilation_method = 'Sum'
+    return ventilation_method
+  end
+
+  # Removes all of the unused ResourceObjects
+  # (Curves, ScheduleDay, Material, etc.) from the model.
+  #
+  # @return [Bool] returns true if successful, false if not
+  def model_remove_unused_resource_objects(model)
+    model.getResourceObjects.sort.each do |obj|
+      if obj.directUseCount.zero?
+        OpenStudio::logFree(OpenStudio::Debug, 'openstudio.standards.Model', "#{obj.name} is unused; it will be removed.")
+        model.removeObject(obj.handle)
+      end
+    end
+
+    return true
+  end
+
+
+  private
+
   # Helper method to fill in hourly values
   def model_add_vals_to_sch(model, day_sch, sch_type, values)
     if sch_type == 'Constant'
@@ -4456,8 +4516,7 @@ class Standard
     end
   end
 
-  # Modify the existing service water heating loops
-  # to match the baseline required heating type.
+  # Modify the existing service water heating loops to match the baseline required heating type.
   # @return [Bool] return true if successful, false if not
   # @author Julien Marrec
   def model_apply_baseline_swh_loops(model, building_type)
@@ -4465,8 +4524,7 @@ class Standard
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
 
-      # Rename the loop to avoid accidentally hooking
-      # up the HVAC systems to this loop later.
+      # Rename the loop to avoid accidentally hooking up the HVAC systems to this loop later.
       plant_loop.setName('Service Water Heating Loop')
 
       htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
@@ -4476,18 +4534,17 @@ class Standard
       electric = true
 
       if htg_fuels.include?('NaturalGas') ||
-          htg_fuels.include?('PropaneGas') ||
-          htg_fuels.include?('FuelOil#1') ||
-          htg_fuels.include?('FuelOil#2') ||
-          htg_fuels.include?('Coal') ||
-          htg_fuels.include?('Diesel') ||
-          htg_fuels.include?('Gasoline')
+         htg_fuels.include?('PropaneGas') ||
+         htg_fuels.include?('FuelOil#1') ||
+         htg_fuels.include?('FuelOil#2') ||
+         htg_fuels.include?('Coal') ||
+         htg_fuels.include?('Diesel') ||
+         htg_fuels.include?('Gasoline')
         electric = false
       end
 
-      # Per Table G3.1 11.e, if the baseline system was a combination of
-      # heating and service water heating, delete all heating equipment
-      # and recreate a WaterHeater:Mixed.
+      # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
+      # delete all heating equipment and recreate a WaterHeater:Mixed.
       if combination_system
         plant_loop.supplyComponents.each do |component|
           # Get the object type
@@ -4540,13 +4597,11 @@ class Standard
     return true
   end
 
-  # This method goes through certain types of EnergyManagementSystem
-  # variables and replaces UIDs with object names.  This should
-  # be done by the forward translator, and this code should be
-  # removed after this bug is fixed:
+  # This method goes through certain types of EnergyManagementSystem variables and replaces UIDs with object names.
+  # This should be done by the forward translator, and this code should be removed after this bug is fixed:
   # https://github.com/NREL/OpenStudio/issues/2598
   #
-  # @todo remove this method after OpenStudio issue #2598 is fixed.
+  # TODO: remove this method after OpenStudio issue #2598 is fixed.
   def model_temp_fix_ems_references(model)
     # Internal Variables
     model.getEnergyManagementSystemInternalVariables.sort.each do |var|

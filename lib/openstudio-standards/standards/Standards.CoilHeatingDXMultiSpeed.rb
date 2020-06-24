@@ -66,10 +66,7 @@ class Standard
     capacity_kbtu_per_hr = OpenStudio.convert(clg_capacity, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    hp_props = standards_lookup_table_first(table_name: 'heat_pumps',
-                                            search_criteria:  search_criteria,
-                                            capacity: capacity_btu_per_hr,
-                                            date: Date.today)
+    hp_props = model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if hp_props.nil?
@@ -166,7 +163,7 @@ class Standard
     # If specified as SEER
     unless hp_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop(min_seer)
+      cop = seer_to_cop_cooling_with_fan(min_seer)
       coil_heating_dx_multi_speed.setName("#{coil_heating_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXMultiSpeed', "For #{template}: #{coil_heating_dx_multi_speed.name}: #{suppl_heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end

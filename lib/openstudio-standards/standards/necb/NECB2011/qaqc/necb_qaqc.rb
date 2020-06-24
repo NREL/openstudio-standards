@@ -2,6 +2,112 @@ class NECB2011
 
   attr_accessor :qaqc_data
 
+  def get_sql_table_to_json( model, report_name, report_for_string, table_name )
+    table = []
+    query_row_names = "
+     SELECT DISTINCT
+        RowName
+     FROM
+        tabulardatawithstrings
+      WHERE
+        ReportName='#{report_name}'
+      AND
+        ReportForString='#{report_for_string}'
+      AND
+        TableName='#{table_name}'"
+    row_names = model.sqlFile.get.execAndReturnVectorOfString(query_row_names).get
+
+    #get Columns
+    query_col_names = "
+     SELECT DISTINCT
+        ColumnName
+     FROM tabulardatawithstrings
+      WHERE ReportName='#{report_name}'
+      AND ReportForString='#{report_for_string}'
+      AND TableName='#{table_name}'"
+    col_names = model.sqlFile.get.execAndReturnVectorOfString(query_col_names).get
+
+    #get units
+    query_unit_names = "
+     SELECT DISTINCT
+        Units
+     FROM tabulardatawithstrings
+      WHERE ReportName='#{report_name}'
+      AND ReportForString='#{report_for_string}'
+      AND TableName='#{table_name}'"
+    unit_names = model.sqlFile.get.execAndReturnVectorOfString(query_unit_names).get
+
+    row_names.each do |row|
+      next if row.nil? || row == ''
+      row_hash = {}
+      row_hash[:name] = row
+      col_names.each do |col|
+        unit_names.each do |unit|
+          query = "
+        SELECT
+          Value
+        FROM
+          tabulardatawithstrings
+        WHERE
+          ReportName='#{report_name}'
+        AND
+          ReportForString='#{report_for_string}'
+        AND
+          TableName='#{table_name}'
+        AND
+          RowName='#{row}'
+        AND
+          ColumnName='#{col}'
+        AND
+          Units='#{unit}'
+"
+          column_name = "#{col}".gsub(/\s+/, "_").downcase
+          column_name = column_name + "_#{unit}" if unit != ''
+          value = model.sqlFile.get.execAndReturnFirstString(query)
+          next if value.empty? || value.get.nil?
+          value = value.get.strip
+          #check is value is a number
+          if (!!Float(value) rescue false) && value.to_f != 0
+            row_hash[column_name] = value.to_f
+            #Check if value is a date
+          elsif  unit == '' && value =~ /\d\d-\D\D\D-\d\d:\d\d/
+            row_hash[column_name] = DateTime.parse(value)
+            #skip if value in an empty string or a zero value
+          elsif value != '' && value != '0.00'
+            row_hash[column_name] = value
+          end
+        end
+      end
+      if row_hash.size > 1
+        table << row_hash
+      end
+    end
+    result = { report_name: report_name, report_for_string: report_for_string, table_name: table_name, table: table }
+    return result
+  end
+
+  def merge_recursively(a, b)
+    a.merge(b) {|key, a_item, b_item| merge_recursively(a_item, b_item) }
+  end
+
+
+  def get_sql_tables_to_json(model)
+    sql_data = []
+    sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "End Uses")
+    sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "Site and Source Energy")
+    # sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "On-Site Thermal Sources")
+    # sql_data << get_sql_table_to_json(model, "AnnualBuildingUtilityPerformanceSummary", "Entire Facility", "Comfort and Setpoint Not Met Summary")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Window-Wall Ratio")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Conditioned Window-Wall Ratio")
+    # sql_data << get_sql_table_to_json(model, "InputVerificationandResultsSummary", "Entire Facility", "Skylight-Roof Ratio")
+    # sql_data << get_sql_table_to_json(model, "DemandEndUseComponentsSummary", "Entire Facility", "End Uses")
+    # sql_data << get_sql_table_to_json(model, "ComponentSizingSummary", "Entire Facility", "AirLoopHVAC")
+    return sql_data
+  end
+
+
+
+
   def load_qaqc_database_new()
     # Combine the data from the JSON files into a single hash
     files = Dir.glob("#{File.dirname(__FILE__)}/qaqc_data/*.json").select {|e| File.file? e}
@@ -68,12 +174,10 @@ class NECB2011
 
   # Generates the base data hash mainly used to perform qaqc.
   def create_base_data(model)
-    cli_path = OpenStudio.getOpenStudioCLI
+  
     #construct command with local libs
-    f = open("| \"#{cli_path}\" openstudio_version")
-    os_version = f.read()
-    f = open("| \"#{cli_path}\" energyplus_version")
-    eplus_version = f.read()
+    os_version = OpenStudio.openStudioLongVersion
+    eplus_version = OpenStudio.energyPlusVersion
     puts "\n\n\nOS_version is [#{os_version.strip}]"
     puts "\n\n\nEP_version is [#{eplus_version.strip}]"
 
@@ -110,14 +214,18 @@ class NECB2011
                                                                           " AND ReportForString='Entire Facility' AND TableName='Annual and Peak Values - Gas' AND RowName='Gas:Facility'" +
                                                                           " AND ColumnName='Gas Maximum Value' AND Units='W'")
 
+
+    get_sql_tables_to_json(model)
+
+
     # Create hash to store all the collected data.
     qaqc = {}
-    error_warning=[]
+    qaqc[:sql_data] = get_sql_tables_to_json(model)
+    error_warning = []
     qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
     qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     qaqc[:openstudio_version] = os_version.strip
     qaqc[:energyplus_version] = eplus_version.strip
-    qaqc[:date] = Time.now
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -147,7 +255,7 @@ class NECB2011
     qaqc[:geography] ={}
     qaqc[:geography][:hdd] = get_necb_hdd18(model)
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
-    qaqc[:geography][:climate_zone] = BTAP::Compliance::NECB2011::get_climate_zone_name(qaqc[:geography][:hdd])
+    qaqc[:geography][:climate_zone] = NECB2011.new().get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
     qaqc[:geography][:country] = model.getWeatherFile.country
@@ -1141,7 +1249,7 @@ class NECB2011
     # puts JSON.pretty_generate @qaqc_data
     # Exterior Opaque
     necb_section_name = get_qaqc_table(table_name: "exterior_opaque_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     puts "HDD #{qaqc[:geography][:hdd]}"
     tolerance = 3
     # puts "\n\n"
@@ -1193,7 +1301,7 @@ class NECB2011
   def necb_exterior_fenestration_compliance(qaqc)
     #Exterior Fenestration
     necb_section_name = get_qaqc_table(table_name: "exterior_fenestration_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"
@@ -1250,7 +1358,7 @@ class NECB2011
   def necb_exterior_ground_surfaces_compliance(qaqc)
     #Exterior Ground surfaces
     necb_section_name = get_qaqc_table(table_name: "exterior_ground_surfaces_compliance")['refs'].join(",")
-    climate_index = BTAP::Compliance::NECB2011::get_climate_zone_index(qaqc[:geography][:hdd])
+    climate_index = NECB2011.new().get_climate_zone_index(qaqc[:geography][:hdd])
     tolerance = 3
     # puts "\n\n"
     # puts "climate_index: #{climate_index}"

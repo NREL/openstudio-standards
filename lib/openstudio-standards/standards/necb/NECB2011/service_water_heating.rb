@@ -1,19 +1,27 @@
 class NECB2011
-  def model_add_swh(model)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
+    #Get default fuel based on epw location province.
+    if swh_fueltype == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
     if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      shw_pump_head = auto_size_shw_pump_head(model, default: true)
+      # Only add a shw_loop if at least one space calls for shw.  If no space calls for shw put out a warning but do not
+      # add a shw loop.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
+      return true
     else
       shw_pump_head = auto_size_shw_pump_head(model, default: false)
     end
-    shw_pump_motor_eff = 0.9
 
     # Add the main service water heating loop
+    shw_pump_motor_eff = 0.9
 
-    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
 
     main_swh_loop = model_add_swh_loop(model,
                                        'Main Service Water Loop',
@@ -27,15 +35,12 @@ class NECB2011
                                        shw_sizing['parasitic_loss'],
                                        nil)
 
-    if shw_sizing["loop_peak_flow_rate_SI"] == 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'No Service Water Heating Added')
-    else
-      # Note that when water use equipment is assigned to spaces then the water used
-      # by the equipment is multiplied by the space (ultimately thermal zone) multiplier.  Note that there is a separate
-      # water use equipment multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
-    end
+    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by
+    # the space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier
+    # as well which is different than the space (ultimately thermal zone) multiplier.
+    shw_sizing['spaces_w_dhw'].each {|space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop)}
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
+
     return true
   end
 
@@ -75,7 +80,7 @@ class NECB2011
 
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
-    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
+    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOil#2'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
@@ -88,57 +93,57 @@ class NECB2011
     ua_btu_per_hr_per_f = nil
     sl_btu_per_hr = nil
     case fuel_type
-      when 'Electricity'
-        volume_l_per_s = volume_m3 * 1000
-        if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr').get
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)
-          sl_w = if volume_l_per_s < 270
-                   40 + 0.2 * volume_l_per_s # assume bottom inlet
-                 else
-                   0.472 * volume_l_per_s - 33.5
-                 end # assume bottom inlet
-          sl_btu_per_hr = OpenStudio.convert(sl_w, 'W', 'Btu/hr').get
-        else
-          # Fixed water heater efficiency per PNNL
-          water_heater_eff = 1
-          # Calculate the max allowable standby loss (SL)   # use this - NECB does not give SL calculation for cap > 12 kW
-          sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal))
-        end
+    when 'Electricity'
+      volume_l_per_s = volume_m3 * 1000
+      if capacity_btu_per_hr <= OpenStudio.convert(12, 'kW', 'Btu/hr').get
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the max allowable standby loss (SL)
+        sl_w = if volume_l_per_s < 270
+                 40 + 0.2 * volume_l_per_s # assume bottom inlet
+               else
+                 0.472 * volume_l_per_s - 33.5
+               end # assume bottom inlet
+        sl_btu_per_hr = OpenStudio.convert(sl_w, 'W', 'Btu/hr').get
+      else
+        # Fixed water heater efficiency per PNNL
+        water_heater_eff = 1
+        # Calculate the max allowable standby loss (SL)   # use this - NECB does not give SL calculation for cap > 12 kW
+        sl_btu_per_hr = 20 + (35 * Math.sqrt(volume_gal))
+      end
+      # Calculate the skin loss coefficient (UA)
+      ua_btu_per_hr_per_f = sl_btu_per_hr / 70
+    when 'NaturalGas'
+      if capacity_btu_per_hr <= 75_000
+        # Fixed water heater thermal efficiency per PNNL
+        water_heater_eff = 0.82
+        # Calculate the minimum Energy Factor (EF)
+        base_ef = 0.67
+        vol_drt = 0.0019
+        ef = base_ef - (vol_drt * volume_gal)
+        # Calculate the Recovery Efficiency (RE)
+        # based on a fixed capacity of 75,000 Btu/hr
+        # and a fixed volume of 40 gallons by solving
+        # this system of equations:
+        # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+        # 0.82 = (ua*67.5+cap*re)/cap
+        cap = 75_000.0
+        re = (Math.sqrt(6724 * ef ** 2 * cap ** 2 + 40_409_100 * ef ** 2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef ** 2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
         # Calculate the skin loss coefficient (UA)
-        ua_btu_per_hr_per_f = sl_btu_per_hr / 70
-      when 'NaturalGas'
-        if capacity_btu_per_hr <= 75_000
-          # Fixed water heater thermal efficiency per PNNL
-          water_heater_eff = 0.82
-          # Calculate the minimum Energy Factor (EF)
-          base_ef = 0.67
-          vol_drt = 0.0019
-          ef = base_ef - (vol_drt * volume_gal)
-          # Calculate the Recovery Efficiency (RE)
-          # based on a fixed capacity of 75,000 Btu/hr
-          # and a fixed volume of 40 gallons by solving
-          # this system of equations:
-          # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
-          # 0.82 = (ua*67.5+cap*re)/cap
-          cap = 75_000.0
-          re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
-          # Calculate the skin loss coefficient (UA)
-          # based on the actual capacity.
-          ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
-        else
-          # Thermal efficiency requirement from 90.1
-          et = 0.8
-          # Calculate the max allowable standby loss (SL)
-          cap_adj = 800
-          vol_drt = 110
-          sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
-          # Calculate the skin loss coefficient (UA)
-          ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
-          # Calculate water heater efficiency
-          water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
-        end
+        # based on the actual capacity.
+        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
+      else
+        # Thermal efficiency requirement from 90.1
+        et = 0.8
+        # Calculate the max allowable standby loss (SL)
+        cap_adj = 800
+        vol_drt = 110
+        sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
+        # Calculate the skin loss coefficient (UA)
+        ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
+        # Calculate water heater efficiency
+        water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+      end
     end
 
     # Convert to SI
@@ -161,7 +166,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOil#2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
@@ -181,9 +186,9 @@ class NECB2011
     space_peak_flows = []
     water_use = 0
     weekly_peak_flow = {
-        'Default|Wkdy' => Array.new(24,0),
-        'Sat' => Array.new(24,0),
-        'Sun|Hol' => Array.new(24,0)
+        'Default|Wkdy' => Array.new(24, 0),
+        'Sat' => Array.new(24, 0),
+        'Sun|Hol' => Array.new(24, 0)
     }
     peak_day_sched = nil
     peak_hour_sched = 0
@@ -195,17 +200,18 @@ class NECB2011
     shw_spaces = []
     shw_sched_names = []
     # First go through all the spaces in the building and determine and determine their shw requirements
+    space_types_table = @standards_data['space_types']
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
       data = nil
       space_type_name = space.spaceType.get.nameString
       tank_temperature = 60
       # find the specific space_type properties from standard.json
-      standards_lookup_table_many(table_name: 'space_types').each do |space_type|
+      space_types_table.each do |space_type|
         if space_type_name == (space_type['building_type'] + " " + space_type['space_type'])
           if space_type['necb_hvac_system_selection_type'] == "- undefined -"
             break
-          # If there is no service hot water load.. Don't bother adding anything.
+            # If there is no service hot water load.. Don't bother adding anything.
           elsif space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
             break
           else
@@ -226,9 +232,9 @@ class NECB2011
       # when defining water use equipment.  When when water use equipment is assigned to spaces then the water use
       # by the equipment is multiplied by the space multiplier.  Note that there is a separate water use equipment
       # multiplier as well which is different than the space (ultimately thermal zone) multiplier.
-      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f*space_area
-      space_peak_flow = space_peak_flow_ind*space.multiplier
-#      space_peak_flows << space_peak_flow
+      space_peak_flow_ind = data['service_water_heating_peak_flow_per_area'].to_f * space_area
+      space_peak_flow = space_peak_flow_ind * space.multiplier
+      #      space_peak_flows << space_peak_flow
       # Add the peak shw flow rate for the space to the total for the entire building
       total_peak_flow_rate += space_peak_flow
       # Get the tank temperature for the space.  This should always be 60 C but I added this part in case something changes in the future.
@@ -238,7 +244,7 @@ class NECB2011
         tank_temperature = data['service_water_heating_target_temperature']
       end
       # Get the shw schedule
-#      shw_sched_names << data['service_water_heating_schedule']
+      #      shw_sched_names << data['service_water_heating_schedule']
       # 'shw_peakflow_ind_SI' is the shw peak flow rate of the individual space (without the space multiplier)
       space_info = {
           'shw_spaces' => space,
@@ -266,7 +272,9 @@ class NECB2011
             'name' => data['service_water_heating_schedule'],
             'day_types' => day_peak_sched[0]
         }
-        day_sched = standards_lookup_table_first(table_name: 'schedules', search_criteria: search_criteria)
+        schedules_table = @standards_data['schedules']
+
+        day_sched = model_find_object(schedules_table, search_criteria)
         # Make sure the schedule is not empty and contains 24 hours.
         if day_sched.empty? || day_sched['values'].size != 24
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model_add_swh', "The water use schedule called #{data['service_water_heating_schedule']} for #{space_type_name} is corrupted or could not be found.  Please check that the schedules.json file is available and that the schedule names are spelled correctly")
@@ -277,7 +285,7 @@ class NECB2011
         # array tracking hourly shw demand for the building.  Also, determine what the highest hourly demand is for the
         # building.
         day_peak_sched[1].sort.each_with_index do |hour_flow, hour_index|
-          weekly_peak_flow[day_peak_sched[0]][hour_index] += day_sched['values'][hour_index]*space_peak_flow
+          weekly_peak_flow[day_peak_sched[0]][hour_index] += day_sched['values'][hour_index] * space_peak_flow
           if weekly_peak_flow[day_peak_sched[0]][hour_index] > peak_flow_sched
             peak_flow_sched = weekly_peak_flow[day_peak_sched[0]][hour_index]
           end
@@ -315,12 +323,12 @@ class NECB2011
           if hour_index == 23
             next_hour_test = 0
             case day_peak_sched[0]
-              when 'Default|Wkdy'
-                next_day_test = 'Sat'
-              when 'Sat'
-                next_day_test = 'Sun|Hol'
-              when 'Sun|Hol'
-                next_day_test = 'Default|Wkdy'
+            when 'Default|Wkdy'
+              next_day_test = 'Sat'
+            when 'Sat'
+              next_day_test = 'Sun|Hol'
+            when 'Sun|Hol'
+              next_day_test = 'Default|Wkdy'
             end
           else
             next_hour_test = hour_index + 1
@@ -359,11 +367,11 @@ class NECB2011
         max_temp = shw_space['shw_temp_SI']
       end
     end
-    tank_capacity_SI = tank_volume_SI * 1000 * 4180 * (max_temp - 15)/(3600*peak_time_fraction)
-    tank_radius = (tank_volume_SI/(height_to_radius*Math::PI))**(1.0/3)
-    tank_area = 2*(1+height_to_radius)*Math::PI*(tank_radius**2)
+    tank_capacity_SI = tank_volume_SI * 1000 * 4180 * (max_temp - 15) / (3600 * peak_time_fraction)
+    tank_radius = (tank_volume_SI / (height_to_radius * Math::PI)) ** (1.0 / 3)
+    tank_area = 2 * (1 + height_to_radius) * Math::PI * (tank_radius ** 2)
     room_temp = OpenStudio.convert(70, 'F', 'C').get
-    parasitic_loss = u*tank_area*(max_temp - room_temp)
+    parasitic_loss = u * tank_area * (max_temp - room_temp)
     tank_param = {
         "tank_volume_SI" => tank_volume_SI,
         "tank_capacity_SI" => tank_capacity_SI,
@@ -404,7 +412,7 @@ class NECB2011
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
       # added to either the space type in the model or the space type reference file.
       sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
-        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase)) and
             data['building_type'].to_s == 'Space Function'
       end
 
@@ -416,7 +424,7 @@ class NECB2011
       next if sp_type_info['service_water_heating_peak_flow_per_area'].to_f == 0.0 && sp_type_info['service_water_heating_peak_flow_rate'].to_f == 0.0 || sp_type_info['service_water_heating_schedule'].nil?
       space_area = OpenStudio.convert(cond_space['space'].floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space
-      space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f*space_area)*cond_space['space'].multiplier
+      space_peak_flow = (sp_type_info['service_water_heating_peak_flow_per_area'].to_f * space_area) * cond_space['space'].multiplier
       space_peak_flow_SI = OpenStudio.convert(space_peak_flow, 'gal/hr', 'm^3/s').get
       # Determine the total shw peak flow for the building.
       total_peak_flow += space_peak_flow_SI
@@ -445,11 +453,11 @@ class NECB2011
       #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
       #          it is for process water but we assume that is not the case).
       # Determine the bulk velocity of the shw through the pipe.
-      pipe_vel = 4*total_peak_flow/(Math::PI*(pipe_dia_m**2))
+      pipe_vel = 4 * total_peak_flow / (Math::PI * (pipe_dia_m ** 2))
       # Get the Reynolds number.
-      re_pipe = (pipe_vel*pipe_dia_m)/kin_visc_SI
+      re_pipe = (pipe_vel * pipe_dia_m) / kin_visc_SI
       # Step 2:  Figure out what the Darcy-Weisbach friction factor is.
-      relative_rough = pipe_rough_m/pipe_dia_m
+      relative_rough = pipe_rough_m / pipe_dia_m
       f = friction_factor(re_pipe, relative_rough)
       # Step 3:  Calculate the major head loss
       #          Note that you may be thinking that I forgot to divide the last term by 2 in the equation below.  I didn't.
@@ -459,7 +467,7 @@ class NECB2011
       # hl is taken from https://neutrium.net/fluid_flow/pressure-loss-in-pipe accessed 2018-07-26 (I added the height
       # component).  Note that while I allow all of the other physical values to be set I assume that you are building on
       # earth hence g is hard coded to 9.81 m/s^2.
-      hl_Pa = (f*(sizing_pipe_length/pipe_dia_m)*(pipe_vel**2)*density_SI) + density_SI*space_coord_dist[2]*9.81
+      hl_Pa = (f * (sizing_pipe_length / pipe_dia_m) * (pipe_vel ** 2) * density_SI) + density_SI * space_coord_dist[2] * 9.81
       if hl_Pa < 1
         hl_Pa = 1
       end
@@ -469,7 +477,7 @@ class NECB2011
     if hl_Pas.empty?
       return 179532
     else
-      return hl_Pas.max_by{|hl| (hl)}
+      return hl_Pas.max_by {|hl| (hl)}
     end
   end
 
@@ -478,26 +486,26 @@ class NECB2011
     if re_pipe <= 2100
       # Laminar flow use the Uagen-Poiseuille equation.  https://neutrium.net/fluid_flow/pressure-loss-in-pipe
       # accessed 2018-07-25.
-      f = 64.to_f/re_pipe.to_f
+      f = 64.to_f / re_pipe.to_f
     elsif re_pipe > 2100 && re_pipe <= 4000
       # In the transition flow region I interpolate by Reynolds number between laminar and turbulent regimes.  Yeah, that's
       # crap but if you can come up with something better you are welcome to replace what I have below.
       flam = 64.to_f / 2100.to_f
-      pipe_rough_fact = (relative_rough)/3.7
-      factor_A = -2*Math.log10(pipe_rough_fact + (12.to_f/4000.to_f))
-      factor_B = -2*Math.log10(pipe_rough_fact + ((2.51*factor_A)/4000))
-      factor_C = -2*Math.log10(pipe_rough_fact + ((2.51*factor_B)/4000))
-      fturb = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
-      re_int = (re_pipe - 2100.to_f)/1900.to_f
-      f = ((fturb-flam)*re_int) + flam
+      pipe_rough_fact = (relative_rough) / 3.7
+      factor_A = -2 * Math.log10(pipe_rough_fact + (12.to_f / 4000.to_f))
+      factor_B = -2 * Math.log10(pipe_rough_fact + ((2.51 * factor_A) / 4000))
+      factor_C = -2 * Math.log10(pipe_rough_fact + ((2.51 * factor_B) / 4000))
+      fturb = 1 / ((factor_A - (((factor_B - factor_A) ** 2) / (factor_C - 2 * factor_B + factor_A))) ** 2)
+      re_int = (re_pipe - 2100.to_f) / 1900.to_f
+      f = ((fturb - flam) * re_int) + flam
     elsif re_pipe > 4000
       # Turbulent flow use Serghide's Equation which I got from https://neutrium.net/fluid_flow/pressure-loss-in-pipe
       # accessed 2018-07-25.  Apparently it is good for 4000 < Re < 1x10^10 and relative roughness between 1x10-7 and 1.
-      pipe_rough_fact = (relative_rough)/3.7
-      factor_A = -2*Math.log10(pipe_rough_fact + (12/re_pipe))
-      factor_B = -2*Math.log10(pipe_rough_fact + ((2.51*factor_A)/re_pipe))
-      factor_C = -2*Math.log10(pipe_rough_fact + ((2.51*factor_B)/re_pipe))
-      f = 1/((factor_A - (((factor_B-factor_A)**2)/(factor_C - 2*factor_B + factor_A)))**2)
+      pipe_rough_fact = (relative_rough) / 3.7
+      factor_A = -2 * Math.log10(pipe_rough_fact + (12 / re_pipe))
+      factor_B = -2 * Math.log10(pipe_rough_fact + ((2.51 * factor_A) / re_pipe))
+      factor_C = -2 * Math.log10(pipe_rough_fact + ((2.51 * factor_B) / re_pipe))
+      f = 1 / ((factor_A - (((factor_B - factor_A) ** 2) / (factor_C - 2 * factor_B + factor_A))) ** 2)
     end
     return f
   end
@@ -530,7 +538,7 @@ class NECB2011
       # Including regular expressions in the following match for cases where extra characters, which do not belong, are
       # added to either the space type in the model or the space type reference file.
       sp_type_info = @standards_data['tables']['space_types']['table'].detect do |data|
-        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase))and
+        ((Regexp.new(data['space_type'].to_s.upcase)).match(sp_type.upcase) || (Regexp.new(sp_type.upcase).match(data['space_type'].to_s.upcase)) || (data['space_type'].to_s.upcase == sp_type.upcase)) and
             data['building_type'].to_s == 'Space Function'
       end
       if sp_type_info.nil?
@@ -539,9 +547,21 @@ class NECB2011
       end
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
-      if sp_type_info['heating_setpoint_schedule'].nil? then heated = FALSE else heated = TRUE end
-      if sp_type_info['cooling_setpoint_schedule'].nil? then cooled = FALSE else cooled = TRUE end
-      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then not_plenum = FALSE else not_plenum = TRUE end
+      if sp_type_info['heating_setpoint_schedule'].nil? then
+        heated = FALSE
+      else
+        heated = TRUE
+      end
+      if sp_type_info['cooling_setpoint_schedule'].nil? then
+        cooled = FALSE
+      else
+        cooled = TRUE
+      end
+      if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then
+        not_plenum = FALSE
+      else
+        not_plenum = TRUE
+      end
 
       # Determine the bottom surface of the space and calculate it's centroid.  Although the mech room is assumed to
       # be in a space that conditioned and is not a plenum (or attic space) all spaces in the building may not be.
@@ -555,27 +575,27 @@ class NECB2011
       # Get the surfaces for the space.
       space_surfaces = space.surfaces
       # Find the floor (aka the surface with the lowest centroid).
-      min_surf = space_surfaces.min_by{|sp_surface| (sp_surface.centroid.z.to_f)}
+      min_surf = space_surfaces.min_by {|sp_surface| (sp_surface.centroid.z.to_f)}
       # The following is added to determine the overall floor centroid because some spaces have floors composed of more than one surface.
       floor_centroid = [0, 0, 0]
       space_surfaces.each do |sp_surface|
         if min_surf.centroid.z.to_f == sp_surface.centroid.z.to_f
-          floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f*sp_surface.grossArea.to_f
-          floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f*sp_surface.grossArea.to_f
+          floor_centroid[0] = floor_centroid[0] + sp_surface.centroid.x.to_f * sp_surface.grossArea.to_f
+          floor_centroid[1] = floor_centroid[1] + sp_surface.centroid.y.to_f * sp_surface.grossArea.to_f
           floor_centroid[2] = floor_centroid[2] + sp_surface.grossArea
         end
       end
 
-      floor_centroid[0] = floor_centroid[0]/floor_centroid[2]
-      floor_centroid[1] = floor_centroid[1]/floor_centroid[2]
+      floor_centroid[0] = floor_centroid[0] / floor_centroid[2]
+      floor_centroid[1] = floor_centroid[1] / floor_centroid[2]
 
       if lowest_space > (min_surf.centroid.z.to_f + zOrigin)
         lowest_space = min_surf.centroid.z.to_f + zOrigin
       end
       # This part is used to determine the overall x, y centre of the building.  This is determined by summing the x
       # and y components times the floor area and diving by the total floor area.  This is only for conditioned spaces.
-      building_centre[0] += (floor_centroid[0] + xOrigin)*floor_centroid[2]
-      building_centre[1] += (floor_centroid[1] + yOrigin)*floor_centroid[2]
+      building_centre[0] += (floor_centroid[0] + xOrigin) * floor_centroid[2]
+      building_centre[1] += (floor_centroid[1] + yOrigin) * floor_centroid[2]
       building_centre[2] += (floor_centroid[2])
 
       # Check if the space is conditioned and not a plenum.  If it is then add it to the list of conditioned, non-plenum,
@@ -626,13 +646,13 @@ class NECB2011
     centre_spaces = []
     check_spaces.each do |check_space|
       if check_space['space_centroid'][2] == lowest_space
-        check_space['building_cent_dist'] = Math.sqrt(((check_space['space_centroid'][0] - building_centre[0])**2) + ((check_space['space_centroid'][1] - building_centre[1])**2))
+        check_space['building_cent_dist'] = Math.sqrt(((check_space['space_centroid'][0] - building_centre[0]) ** 2) + ((check_space['space_centroid'][1] - building_centre[1]) ** 2))
         centre_spaces << check_space
       end
     end
     # Determine which of the floor spaces is closest to the centre of the building and that one becomes the location of
     # the mechanical room.
-    centre_space = centre_spaces.min_by{|dist| dist['building_cent_dist'].round(1)}
+    centre_space = centre_spaces.min_by {|dist| dist['building_cent_dist'].round(1)}
     return [centre_space, cond_spaces]
   end
 end

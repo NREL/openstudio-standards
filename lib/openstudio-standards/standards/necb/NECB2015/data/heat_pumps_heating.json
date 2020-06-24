@@ -7,7 +7,7 @@
       ],
       "table": [
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Single Package",
           "minimum_capacity": 0.0,
@@ -27,7 +27,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Split System",
           "minimum_capacity": 0.0,
@@ -47,7 +47,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Single Package",
           "minimum_capacity": 65001.0,
@@ -67,7 +67,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Split System",
           "minimum_capacity": 65001.0,
@@ -87,7 +87,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Single Package",
           "minimum_capacity": 136481,
@@ -107,7 +107,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Split System",
           "minimum_capacity": 136481,
@@ -127,7 +127,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Single Package",
           "minimum_capacity": 238841,
@@ -147,7 +147,7 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "template": "NECB2015",
+          
           "cooling_type": "AirCooled",
           "subcategory": "Split System",
           "minimum_capacity": 238841,

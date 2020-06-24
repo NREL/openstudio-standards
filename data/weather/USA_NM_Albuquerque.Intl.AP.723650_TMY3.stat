@@ -1,4 +1,4 @@
- -EnergyPlus Weather Converter V7.2.0.007
+ -EnergyPlus Weather Converter V8.1.0.005
  Statistics for USA_NM_Albuquerque.Intl.AP.723650_TMY3
  Location -- Albuquerque Intl Arpt  Isis NM USA  
       {N 35°  2'} {W 106° 37'} {GMT -7.0 Hours}
@@ -8,49 +8,49 @@
 
  WMO Station 723650
 
- - Displaying Design Conditions from "Climate Design Data 2009 ASHRAE Handbook"
+ - Displaying Design Conditions from "Climate Design Data 2013 ASHRAE Handbook"
  - ASHRAE design conditions are carefully generated from a period of record 
  - (typically 30 years) to be representative of that location and to be suitable
  - for use in heating/cooling load calculations.
 
     	Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996	
     	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
-    	Heating	12	-7.9	-6	-19.2	0.8	3	-17.3	1	3.7	14.6	0.9	12.5	2.7	3.2	0
+    	Heating	12	-7.7	-5.8	-19.8	0.8	4.3	-17.7	1	4.8	14.5	2.3	12.2	3.5	3.1	0
 
     	Design Stat	HottestMonth	DBR	DB004	WB_DB004	DB010	WB_DB010	DB020	WB_DB020	WB004	DB_WB004	WB010	DB_WB010	WB020	DB_WB020	WS_DB004	WD_DB004	DP004	HR_DP004	DB_DP004	DP010	HR_DP010	DB_DP010	DP020	HR_DP020	DB_DP020	EN004	DB_EN004	EN010	DB_EN010	EN020	DB_EN020	#Hrs_8-4_&_DB-12.8/20.6	
     	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
-    	Cooling	7	13.5	35.1	15.7	33.8	15.6	32.6	15.5	18.5	28.1	18	27.4	17.7	26.9	4.4	220	16.4	14.2	19.8	15.7	13.6	20.2	14.9	12.9	20.8	59	27.7	57.4	27.4	55.9	26.6	709
+    	Cooling	7	13.2	35.1	15.6	33.9	15.4	32.6	15.4	18.5	27.4	18	26.9	17.6	26.5	4.3	220	16.4	14.3	20	15.8	13.7	20.3	14.9	12.9	20.8	58.9	27	57.2	26.9	55.7	26.2	707
 
     	Design Stat	WS010	WS025	WS050	WBmax	DBmin_mean	DBmax_mean	DBmin_stddev	DBmax_stddev	DBmin05years	DBmax05years	DBmin10years	DBmax10years	DBmin20years	DBmax20years	DBmin50years	DBmax50years
     	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
-    	Extremes	12.6	11.1	9.3	21.4	-12	37.4	3.2	1.3	-14.3	38.4	-16.1	39.1	-17.9	39.9	-20.2	40.8
+    	Extremes	12.6	11.1	9.2	21.4	-11.7	37.5	3.2	1.3	-14	38.4	-15.8	39.2	-17.6	39.9	-19.9	40.8
 
- - Displaying Monthly Design Conditions "Climate Design Data 2009 ASHRAE Handbook"
+ - Displaying Monthly Design Conditions "Climate Design Data 2013 ASHRAE Handbook"
  - Monthly Optical Sky Depth Beam (taub) and Diffuse (taud)
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	             taub (beam)	0.264	0.279	0.296	0.333	0.372	0.405	0.463	0.433	0.365	0.320	0.278	0.259	
- 	          taud (diffuse)	2.584	2.498	2.428	2.244	2.117	2.025	1.887	2.005	2.225	2.329	2.551	2.646	
+ 	             taub (beam)	0.272	0.269	0.293	0.285	0.287	0.280	0.314	0.311	0.288	0.293	0.275	0.273	
+ 	          taud (diffuse)	2.604	2.612	2.514	2.507	2.475	2.471	2.441	2.481	2.600	2.567	2.625	2.628	
 
  	                    taub	= Clear Sky Optical Depth for Beam Irradiance
  	                    taud	= Clear Sky Optical Depth for Diffuse Irradiance
 
  - Monthly Solar Irradiance Wh/m² (noon on 21st of month)
- 	               ib (beam)	  959	  976	  980	  950	  911	  877	  824	  844	  891	  909	  932	  947	
- 	            id (diffuse)	   83	   97	  111	  138	  158	  173	  197	  172	  133	  113	   85	   75	
+ 	               ib (beam)	  951	  991	  984	 1001	  995	  996	  960	  961	  977	  947	  939	  930	
+ 	            id (diffuse)	   74	   82	   99	  105	  110	  110	  113	  107	   90	   85	   72	   69	
 
  	                      ib	= Clear Sky Noon Beam Normal Irradiance on 21st Day
  	                      id	= Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
 
  - Monthly Drybulb and Mean Coincident Wetbulb Temperatures °C
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	            Drybulb 0.4%	 15.9	 19.7	 24.1	 28.4	 33.6	 37.3	 36.9	 35.0	 33.0	 28.1	 21.2	 15.7	
- 	 Coincident Wetbulb 0.4%	  6.2	  7.5	  9.0	 11.3	 14.0	 16.1	 16.3	 16.8	 15.7	 12.2	  9.3	  5.9	
- 	            Drybulb 2.0%	 13.5	 17.3	 21.7	 26.2	 31.3	 34.9	 35.4	 33.5	 31.0	 26.2	 19.0	 13.0	
- 	 Coincident Wetbulb 2.0%	  4.7	  6.3	  8.1	 10.2	 13.0	 14.8	 16.1	 16.7	 15.2	 11.9	  8.2	  4.9	
- 	            Drybulb 5.0%	 11.7	 15.0	 19.8	 24.4	 29.4	 33.5	 34.1	 32.2	 29.5	 24.3	 17.0	 11.1	
- 	 Coincident Wetbulb 5.0%	  3.9	  5.5	  7.3	  9.5	 12.2	 14.6	 16.0	 16.6	 14.7	 11.4	  7.2	  3.8	
- 	            Drybulb 10.%	  9.7	 13.1	 17.7	 22.6	 27.7	 32.0	 32.7	 30.9	 28.0	 22.2	 14.8	  9.1	
- 	 Coincident Wetbulb 10.%	  3.0	  4.7	  6.4	  8.8	 11.6	 14.3	 16.1	 16.6	 14.3	 10.6	  6.4	  2.8	
+ 	            Drybulb 0.4%	   16	   20	 24.3	 28.4	 33.4	 37.4	   37	 35.2	 32.4	 28.2	 21.4	   16	
+ 	 Coincident Wetbulb 0.4%	  6.2	  7.4	    9	 11.3	   14	 16.1	 16.3	 16.5	   15	 12.3	  8.9	  6.1	
+ 	            Drybulb 2.0%	 13.5	 17.4	 22.1	 26.2	 31.2	   35	 35.4	 33.6	 30.9	 26.3	 19.2	 13.2	
+ 	 Coincident Wetbulb 2.0%	  4.7	  6.2	  8.2	 10.1	 12.8	 14.7	 15.9	 16.4	 14.7	   12	  8.1	    5	
+ 	            Drybulb 5.0%	 11.7	 15.1	   20	 24.4	 29.3	 33.6	   34	 32.4	 29.4	 24.5	 17.3	 11.3	
+ 	 Coincident Wetbulb 5.0%	  3.9	  5.4	  7.3	  9.4	   12	 14.4	 15.9	 16.3	 14.5	 11.4	  7.2	    4	
+ 	            Drybulb 10.%	  9.7	   13	 17.9	 22.6	 27.7	 32.2	 32.6	   31	 27.9	 22.5	   15	  9.2	
+ 	 Coincident Wetbulb 10.%	    3	  4.6	  6.4	  8.7	 11.5	 14.2	   16	 16.3	 14.1	 10.7	  6.3	  2.9	
 
  	            Drybulb 0.4%	= 0.4% Monthly Design Drybulb Temperature
  	 Coincident Wetbulb 0.4%	= 0.4% Monthly Mean Coincident Wetbulb Temperature
@@ -63,31 +63,31 @@
 
  - Monthly Drybulb and Wetbulb Daily Ranges delta°C
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	                 Drybulb	 11.7	 12.6	 14.0	 14.6	 14.8	 15.0	 13.5	 12.6	 13.0	 13.1	 12.2	 11.2	
- 	   Drybulb range - DB 5%	 14.4	 15.7	 16.9	 16.9	 16.5	 16.4	 15.1	 14.1	 14.5	 15.8	 14.9	 13.8	
- 	   Wetbulb range - DB 5%	  8.0	  8.0	  7.8	  7.4	  6.8	  6.4	  4.7	  4.0	  5.0	  6.7	  7.5	  7.8	
+ 	                 Drybulb	 11.6	 12.4	 13.9	 14.4	 14.5	 14.7	 13.2	 12.5	 12.8	 13.1	 12.2	   11	
+ 	   Drybulb range - DB 5%	 14.2	 15.6	 16.8	 16.6	 16.2	 16.3	 14.8	   14	 14.3	 15.6	 14.8	 13.5	
+ 	   Wetbulb range - DB 5%	  7.9	  7.9	  7.7	  7.3	  6.6	  6.3	  4.5	    4	  4.9	  6.6	  7.4	  7.6	
 
  	                 Drybulb	= Mean Daily Dry Bulb Temperature Range
  	   Drybulb range - DB 5%	= Mean Daily Dry Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
  	   Wetbulb range - DB 5%	= Mean Daily Wet Bulb Temperature Range Coincident with 5% Design Dry Bulb Temperature
 
- - Displaying Heating/Cooling Degree Days/Hours from "Climate Design Data 2009 ASHRAE Handbook"
+ - Displaying Heating/Cooling Degree Days/Hours from "Climate Design Data 2013 ASHRAE Handbook"
  - Monthly Standard Heating/Cooling Degree Days/Hours
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	       HDD base 10°C	  218	  129	   62	   16	    0	    0	    0	    0	    0	   12	   97	  230	
- 	     HDD base 18.3°C	  476	  358	  283	  147	   35	    2	    0	    0	   14	  129	  329	  488	
+ 	       HDD base 10°C	  216	  123	   61	   13	    1	    0	    0	    0	    0	   11	   92	  227	
+ 	     HDD base 18.3°C	  473	  352	  278	  142	   34	    2	    0	    0	   11	  121	  322	  484	
 
- 	       CDD base 10°C	    1	    4	   37	  123	  281	  419	  490	  449	  324	  147	   18	    1	
- 	     CDD base 18.3°C	    0	    0	    0	    4	   57	  171	  232	  192	   87	    6	    0	    0	
+ 	       CDD base 10°C	    1	    5	   41	  126	  283	  424	  491	  451	  328	  154	   21	    1	
+ 	     CDD base 18.3°C	    0	    0	    0	    4	   58	  176	  232	  193	   89	    7	    0	    0	
 
- 	     CDH base 23.3°C	    0	    0	    7	  108	  754	 2037	 2424	 1721	  805	  108	    0	    0	
- 	     CDH base 26.7°C	    0	    0	    0	   13	  248	  984	 1198	  732	  252	   11	    0	    0	
+ 	     CDH base 23.3°C	    0	    0	    8	  110	  755	 2084	 2408	 1760	  801	  119	    0	    0	
+ 	     CDH base 26.7°C	    0	    0	    0	   13	  246	 1010	 1182	  753	  238	   12	    0	    0	
 
-    - 2293 annual (standard) cooling degree-days (10°C baseline)
-    -  762 annual (standard) heating degree-days (10°C baseline)
+    - 2326 annual (standard) cooling degree-days (10°C baseline)
+    -  743 annual (standard) heating degree-days (10°C baseline)
 
-    -  749 annual (standard) cooling degree-days (18.3°C baseline)
-    - 2261 annual (standard) heating degree-days (18.3°C baseline)
+    -  761 annual (standard) cooling degree-days (18.3°C baseline)
+    - 2219 annual (standard) heating degree-days (18.3°C baseline)
 
  - Monthly Statistics for Dry Bulb temperatures °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -492,7 +492,7 @@
  - Monthly Calculated "undisturbed" Ground Temperatures** °C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	   0.5 m  	  3.0	  5.0	  8.9	 12.6	 19.6	 23.3	 24.3	 22.4	 18.1	 12.7	  7.4	  4.0	
- 	   2.0 m  	  5.8	  6.3	  8.5	 10.9	 16.3	 19.8	 21.5	 21.1	 18.6	 14.9	 10.7	  7.5	
+ 	   2.0 m  	  5.8	  6.2	  8.5	 10.9	 16.3	 19.8	 21.5	 21.1	 18.6	 14.9	 10.7	  7.5	
  	   4.0 m  	  8.6	  8.3	  9.2	 10.6	 14.2	 16.9	 18.6	 19.0	 17.9	 15.7	 12.9	 10.4	
 
    - **These ground temperatures should NOT BE USED in the GroundTemperatures object to compute building floor losses.

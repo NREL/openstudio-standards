@@ -1,0 +1,51 @@
+{
+  "tables": {
+    "pump_combined_eff": {
+      "refs": [
+        "MNECB Combined motor/impeller efficiencies."
+      ],
+      "table": [
+        {
+          "loop_type": "chilled_water",
+          "comb_eff": 0.6,
+          "components": [
+            "OS_Chiller_Absorption",
+            "OS_Chiller_Absorption_Indirect",
+            "OS_Chiller_EIR",
+            "OS_ChillerHeaterPerformance_Electric_EIR"
+          ],
+          "notes": "Combined efficiency from 5.4.8.4.1.(a) of MNECB Supplement."
+        },
+        {
+          "loop_type": "condenser_water",
+          "comb_eff": 0.7,
+          "components": [
+            "OS_CoolingTower_SingleSpeed",
+            "OS_CoolingTower_TwoSpeed",
+            "OS_CoolingTower_VariableSpeed"
+          ],
+          "notes": "Combined efficiency from 5.4.8.3.11.(c) of MNECB Supplement."
+        },
+        {
+          "loop_type": "hot_water",
+          "comb_eff": 0.6,
+          "components": [
+            "OS_Boiler_HotWater"
+          ],
+          "notes": "Combined efficiency from 5.4.7.6.1.(a) of MNECB Supplement."
+        },
+        {
+          "loop_type": "service_water",
+          "comb_eff": 0.6,
+          "components": [
+            "OS_WaterHeater_HeatPump",
+            "OS_WaterHeater_HeatPump_WrappedCondenser",
+            "OS_WaterHeater_Mixed",
+            "OS_WaterHeater_Stratified"
+          ],
+          "notes": "No combined efficiency provided by MNECB Supplement.  Used the combined efficiency given for the hot water loop."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,497 @@
+[
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom101"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom102"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom103"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom104"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom105"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom201"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom202_205"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom206_208"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom209_212"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom213"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom214"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom215_218"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom219"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom220_223"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom224"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom301"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom302_305"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom306_308"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom309_312"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom313"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom314"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom315_318"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom319"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom320_323"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom324"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom401"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom402_405"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom406_408"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom409_412"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom413"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom414"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom415_418"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom419"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom420_423"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "GuestRoom424"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "CorridorFlr1"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "CorridorFlr2"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "CorridorFlr3"
+    ]
+  },
+  {
+    "type": "PTAC",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Electric",
+    "space_names": [
+      "CorridorFlr4"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "SmallHotel Split-AC Operation",
+    "oa_damper_schedule": "SmallHotel Split-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
+    "space_names": [
+      "ExerciseCenterFlr1",
+      "EmployeeLoungeFlr1",
+      "RestroomFlr1"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "SmallHotel Split-AC Operation",
+    "oa_damper_schedule": "SmallHotel Split-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
+    "space_names": [
+      "FrontLoungeFlr1"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "SmallHotel Split-AC Operation",
+    "oa_damper_schedule": "SmallHotel Split-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
+    "space_names": [
+      "FrontOfficeFlr1"
+    ]
+  },
+  {
+    "type": "SAC",
+    "operation_schedule": "HotelSmall Off During Unoccupied Period",
+    "oa_damper_schedule": "SmallHotel Split-AC OA Damper",
+    "fan_type": "ConstantVolume",
+    "cooling_type": "Single Speed DX AC",
+    "heating_type": "Gas",
+    "supplemental_heating_type": "Gas",
+    "econ_max_of_frac_sch": "HotelSmall SAC_Econ_MaxOAFrac_Sch",
+    "space_names": [
+      "MeetingRoomFlr1"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "MechanicalRoomFlr1"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "FrontStairsFlr1"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "FrontStairsFlr2"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "FrontStairsFlr3"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "FrontStairsFlr4"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "RearStairsFlr1"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "RearStairsFlr2"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "RearStairsFlr3"
+    ]
+  },
+  {
+    "type": "UnitHeater",
+    "operation_schedule": "Always On",
+    "fan_type": "Continuous",
+    "fan_static_pressure": 0.2,
+    "heating_type": "Electric",
+    "space_names": [
+      "RearStairsFlr4"
+    ]
+  }
+]
