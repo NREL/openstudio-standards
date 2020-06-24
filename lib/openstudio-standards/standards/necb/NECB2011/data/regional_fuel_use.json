@@ -18,17 +18,7 @@
             "ON",
             "SK"
           ],
-          "boiler_fueltype": "NaturalGas",
-          "baseboard_type": "Hot Water",
-          "mau_type": true,
-          "mau_heating_coil_type": "Hot Water",
-          "mau_cooling_type": "DX",
-          "chiller_type": "Scroll",
-          "heating_coil_type_sys3": "Gas",
-          "heating_coil_type_sys4": "Gas",
-          "heating_coil_type_sys6": "Hot Water",
-          "fan_type": "var_speed_drive",
-          "swh_fueltype": "NaturalGas"
+          "fueltype_set": "NaturalGas"
         },
         {
           "state_province_regions": [
@@ -40,17 +30,7 @@
             "NF",
             "NL"
           ],
-          "boiler_fueltype": "Electricity",
-          "baseboard_type": "Electric",
-          "mau_type": true,
-          "mau_heating_coil_type": "Electric",
-          "mau_cooling_type": "DX",
-          "chiller_type": "Scroll",
-          "heating_coil_type_sys3": "Electric",
-          "heating_coil_type_sys4": "Electric",
-          "heating_coil_type_sys6": "Electric",
-          "fan_type": "var_speed_drive",
-          "swh_fueltype": "Electricity"
+          "fueltype_set": "Electricity"
         },
         {
           "state_province_regions": [
@@ -58,17 +38,7 @@
             "NU",
             "YT"
           ],
-          "boiler_fueltype": "FuelOil#2",
-          "baseboard_type": "Hot Water",
-          "mau_type": true,
-          "mau_heating_coil_type": "Hot Water",
-          "mau_cooling_type": "DX",
-          "chiller_type": "Scroll",
-          "heating_coil_type_sys3": "Electric",
-          "heating_coil_type_sys4": "Electric",
-          "heating_coil_type_sys6": "Electric",
-          "fan_type": "var_speed_drive",
-          "swh_fueltype": "Electricity"
+          "fueltype_set": "FuelOilNo2"
         }
       ]
     }

@@ -363,7 +363,7 @@ module BTAP
         cdd = BTAP::Environment::WeatherFile.new( weather_object.path.get.to_s ).cdd18
         annual_results_array.push( [ hdd, "Heating Degree Days","deg*Day"])
         annual_results_array.push( [ cdd, "Cooling Degree Days","deg*Day"])
-        annual_results_array.push( [ BTAP::Compliance::NECB2011::get_climate_zone_name(hdd), "NECB Climate Zone",""])
+        annual_results_array.push( [ NECB2011.new().get_climate_zone_name(hdd), "NECB Climate Zone",""])
 
 
         annual_results_array.push( [ current_building.floorArea(),"Total Floor Area", "M2"])

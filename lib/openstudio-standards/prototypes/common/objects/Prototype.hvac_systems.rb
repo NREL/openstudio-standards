@@ -24,7 +24,7 @@ class Standard
   # Creates a hot water loop with a boiler, district heating, or a
   # water-to-water heat pump and adds it to the model.
   #
-  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2, DistrictHeating, HeatPump
+  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2, DistrictHeating, HeatPump
   # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump. Only used when boiler_fuel_type is HeatPump.
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 180F
@@ -128,7 +128,7 @@ class Standard
       when 'AirSourceHeatPump', 'ASHP'
         create_central_air_source_heat_pump(model, hot_water_loop)
       # Boiler
-      when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+      when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
         if boiler_lvg_temp_dsgn.nil?
           lvg_temp_dsgn = dsgn_sup_wtr_temp
         else
@@ -700,7 +700,7 @@ class Standard
     when 'AirSourceHeatPump', 'ASHP'
       heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
-    when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOil#1', 'FuelOil#2'
+    when 'Electricity', 'Gas', 'NaturalGas', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
       heating_equipment = create_boiler_hot_water(model,
                                                   hot_water_loop: heat_pump_water_loop,
                                                   name: "#{heat_pump_water_loop.name} Supplemental Boiler",

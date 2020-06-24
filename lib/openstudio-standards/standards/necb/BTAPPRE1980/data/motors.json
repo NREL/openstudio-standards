@@ -1,0 +1,337 @@
+{
+  "tables": {
+    "motors": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "motor_use": "FAN",
+          "motor_type": "CONSTANT",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.615,
+          "notes": "Total efficiency of 40% from table 5.4.1.A of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.4/0.65)"
+        },
+        {
+          "motor_use": "FAN",
+          "motor_type": "CONSTANT-RETURN",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.385,
+          "notes": "Total efficiency of 25% from table 5.4.1.A of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.25/0.65)"
+        },
+        {
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.8461,
+          "notes": "Total efficiency of 55% from table 5.4.1.B of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.55/0.65)"
+        },
+        {
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE-SUPPLY",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.8461,
+          "notes": "Total efficiency of 55% from table 5.4.1.B of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.55/0.65)"
+        },
+        {
+          "motor_use": "FAN",
+          "motor_type": "VARIABLE-RETURN",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.4615,
+          "notes": "Total efficiency of 30% from table 5.4.1.B of MNECB Supplemental.  Assume impeller efficiency of 65% to calculate motor efficiency (0.30/0.65)"
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 0.08333,
+          "nominal_full_load_efficiency": 0.29,
+          "notes": "NECB does not specify a motor effieciency for pumps.. the prototypes will use the same as the 90.1 2013 for consistancy."
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 0.08334,
+          "maximum_capacity": 0.999,
+          "nominal_full_load_efficiency": 0.7,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 1.0,
+          "maximum_capacity": 1.499,
+          "nominal_full_load_efficiency": 0.855,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 1.5,
+          "maximum_capacity": 1.999,
+          "nominal_full_load_efficiency": 0.865,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 2.0,
+          "maximum_capacity": 2.999,
+          "nominal_full_load_efficiency": 0.865,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 3.0,
+          "maximum_capacity": 4.999,
+          "nominal_full_load_efficiency": 0.895,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 5.0,
+          "maximum_capacity": 7.499,
+          "nominal_full_load_efficiency": 0.895,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 7.5,
+          "maximum_capacity": 9.999,
+          "nominal_full_load_efficiency": 0.917,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 10.0,
+          "maximum_capacity": 14.999,
+          "nominal_full_load_efficiency": 0.917,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 15.0,
+          "maximum_capacity": 19.999,
+          "nominal_full_load_efficiency": 0.924,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 20.0,
+          "maximum_capacity": 24.999,
+          "nominal_full_load_efficiency": 0.93,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 25.0,
+          "maximum_capacity": 29.999,
+          "nominal_full_load_efficiency": 0.936,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 30.0,
+          "maximum_capacity": 39.999,
+          "nominal_full_load_efficiency": 0.936,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 40.0,
+          "maximum_capacity": 49.999,
+          "nominal_full_load_efficiency": 0.941,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 50.0,
+          "maximum_capacity": 59.999,
+          "nominal_full_load_efficiency": 0.945,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 60.0,
+          "maximum_capacity": 74.999,
+          "nominal_full_load_efficiency": 0.95,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 75.0,
+          "maximum_capacity": 99.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 100.0,
+          "maximum_capacity": 124.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 125.0,
+          "maximum_capacity": 149.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 150.0,
+          "maximum_capacity": 199.999,
+          "nominal_full_load_efficiency": 0.958,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 200.0,
+          "maximum_capacity": 249.999,
+          "nominal_full_load_efficiency": 0.962,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 250.0,
+          "maximum_capacity": 299.999,
+          "nominal_full_load_efficiency": 0.95,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 300.0,
+          "maximum_capacity": 349.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 350.0,
+          "maximum_capacity": 399.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 400.0,
+          "maximum_capacity": 449.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 450.0,
+          "maximum_capacity": 499.999,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        },
+        {
+          "motor_use": "PUMP",
+          "number_of_poles": 4.0,
+          "type": "Enclosed",
+          "synchronous_speed": 1800.0,
+          "minimum_capacity": 500.0,
+          "maximum_capacity": 9999.0,
+          "nominal_full_load_efficiency": 0.954,
+          "notes": null
+        }
+      ]
+    }
+  }
+}
