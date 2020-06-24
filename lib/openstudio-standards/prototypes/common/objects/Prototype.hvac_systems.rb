@@ -407,6 +407,16 @@ class Standard
                         pump_tot_hd: 49.7)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding condenser water loop.')
 
+    # retrieve cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
+    wb_0p4pct_mcbd = nil
+    if model.weatherFile.is_initialized
+      wb_0p4pct_mcbd = get_wb_mcb(model.weatherFile.get.path.get.to_s)
+      # correct wet-bulb temperature as per cooling tower model limits:
+      # minimum is 20 deg. C as design inlet air wet bulb temperature of the cooling tower object is 20 deg. C
+      # maximum value is 26.66 otherwise the design inlet air wet bulb temperature is out of the model bounds (-1.00 and 26.67 degrees C)
+      wb_0p4pct_mcbd = [26.66,[20, wb_0p4pct_mcbd].max].min
+    end
+
     # create condenser water loop
     condenser_water_loop = OpenStudio::Model::PlantLoop.new(model)
     if system_name.nil?
@@ -425,6 +435,8 @@ class Standard
     if dsgn_sup_wtr_temp.nil?
       dsgn_sup_wtr_temp = 85.0
       dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+      # Per 90.1-2010 G3.1.3.13, 85F or 10F approaching design wet-bulb temperature, whichever is lower, with a design temperature rise of 10F (range temperature).
+      dsgn_sup_wtr_temp_c = min(dsgn_sup_wtr_temp_c, wb_0p4pct_mcbd + 10) ? !wb_0p4pct_mcbd.nil? : dsgn_sup_wtr_temp_c
     else
       dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
     end
@@ -444,6 +456,9 @@ class Standard
     sizing_plant.setLoopType('Condenser')
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
+    sizing_plant.setSizingOption('Coincident')
+    sizing_plant.setZoneTimestepsinAveragingWindow(6)
+    sizing_plant.setCoincidentSizingFactorMode('GlobalCoolingSizingFactor')
 
     # follow outdoor air wetbulb with given approach temperature
     cw_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(model)
@@ -502,8 +517,17 @@ class Standard
         # cooling_tower.setLowSpeedNominalCapacitySizingFactor
       when 'Variable Speed Fan'
         cooling_tower = OpenStudio::Model::CoolingTowerVariableSpeed.new(model)
+        # Design outdoor air wet-bulb temperature from EPW file
+        # Design range temperature is set to 10F dT per 90.1-2010 G3.1.3.13
+        # Design approach temperature per 90.1-2010 G3.1.3.13, condenser water
+        # design temperature shall be 85F or 10F approaching design wet-bulb
+        # temperature, whichever is lower, with a design temperature rise of 10F.
+        # Design approach temperature to set condenser water design supply temperature
+        # = min (10F, (85 - Design OA WbT from EPW))
+        # 11.11 and 1.11 are EnergyPlus limits
+        cooling_tower.setDesignInletAirWetBulbTemperature(wb_0p4pct_mcbd) unless wb_0p4pct_mcbd.nil?
         cooling_tower.setDesignRangeTemperature(dsgn_sup_wtr_temp_delt_k)
-        cooling_tower.setDesignApproachTemperature(wet_bulb_approach_k)
+        cooling_tower.setDesignApproachTemperature([11.11, [1.11, [OpenStudio.convert(10.0, 'R', 'K').get, OpenStudio.convert(85.0, 'F', 'C').get - wb_0p4pct_mcbd].min].max].min)
         cooling_tower.setFractionofTowerCapacityinFreeConvectionRegime(0.125)
         twr_fan_curve = model_add_curve(model, 'VSD-TWR-FAN-FPLR')
         cooling_tower.setFanPowerRatioFunctionofAirFlowRateRatioCurve(twr_fan_curve)
@@ -1995,7 +2019,7 @@ class Standard
     # create air handler
     air_loop = OpenStudio::Model::AirLoopHVAC.new(model)
     if system_name.nil?
-      air_loop.setName("#{thermal_zones.size} Zone VAV with PFP Boxes and Reheat")
+      air_loop.setName("#{thermal_zones.size} Zone PVAV with PFP Boxes and Reheat")
     else
       air_loop.setName(system_name)
     end
@@ -2944,7 +2968,8 @@ class Standard
                      oa_damper_sch: nil,
                      fan_location: 'DrawThrough',
                      fan_type: 'ConstantVolume',
-                     cooling_type: 'Single Speed DX AC')
+                     cooling_type: 'Single Speed DX AC',
+                     supply_temp_sch: nil)
 
     # hvac operation schedule
     if hvac_op_sch.nil?
@@ -3102,16 +3127,17 @@ class Standard
       zone.setZoneControlHumidistat(humidistat)
 
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
-      # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
-      setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
-      setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
-      setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+      if supply_temp_sch.nil?
+        supply_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                              dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                              name = "AHU Supply Temp Sch")
+      end
+      setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
+      setpoint_mgr_cooling.setName("CRAC supply air setpoint manager")
+      setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
       # Add the OA system
       oa_system.addToNode(supply_inlet_node)
-
-      # Attach the setpoint manager to the supply outlet node
-      setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
       # set air loop availability controls
       air_loop.setAvailabilitySchedule(hvac_op_sch)
@@ -3146,7 +3172,8 @@ class Standard
                      chilled_water_loop: nil,
                      hvac_op_sch: nil,
                      oa_damper_sch: nil,
-                     return_plenum: nil)
+                     return_plenum: nil,
+                     supply_temp_sch: nil)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding CRAH system for #{thermal_zones.size} zones data center.")
     thermal_zones.each do |zone|
@@ -3196,10 +3223,12 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 0.3)
 
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
-    # per ASHRAE 90.4-2016, recommended range of data center supply air temperature is 18-27C
-    setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerSingleZoneCooling.new(model)
-    setpoint_mgr_cooling.setMinimumSupplyAirTemperature(dsgn_temps['prehtg_dsgn_sup_air_temp_c'])
-    setpoint_mgr_cooling.setMaximumSupplyAirTemperature(dsgn_temps['preclg_dsgn_sup_air_temp_c'])
+    if supply_temp_sch.nil?
+      supply_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                            dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                            name = "AHU Supply Temp Sch")
+    end
+    setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
     setpoint_mgr_cooling.setName("CRAH supply air setpoint manager")
     setpoint_mgr_cooling.addToNode(air_loop.supplyOutletNode)
 
@@ -3229,8 +3258,7 @@ class Standard
                                 chilled_water_loop,
                                 air_loop_node: air_loop.supplyInletNode,
                                 name: "#{air_loop.name} Water Clg Coil",
-                                schedule: hvac_op_sch,
-                                design_outlet_air_temperature: dsgn_temps['clg_dsgn_sup_air_temp_c'])
+                                schedule: hvac_op_sch)
     end
 
     # outdoor air intake system
@@ -5436,7 +5464,7 @@ class Standard
   # Determine which type of fan the cooling tower will have.  Defaults to TwoSpeed Fan.
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_cw_loop_cooling_tower_fan_type(model)
-    fan_type = 'TwoSpeed Fan'
+    fan_type = 'Variable Speed Fan'
     return fan_type
   end
 
