@@ -105,7 +105,7 @@ class NECB2011
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).sort.each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
@@ -254,7 +254,7 @@ class NECB2011
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).sort.each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
