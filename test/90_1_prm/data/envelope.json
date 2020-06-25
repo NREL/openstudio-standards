@@ -1,0 +1,30 @@
+{
+    "SmallOffice_90.1-2013_ASHRAE 169-2013-2A_":{
+       "opaque_exterior_name":[
+          [
+             "ATTIC_ROOF_EAST",
+             0.063
+          ],
+          [
+             "PERIMETER_ZN_1_WALL_SOUTH",
+             0.124
+          ]
+       ],
+       "exterior_fenestration_name":[
+          [
+             "PERIMETER_ZN_1_WALL_SOUTH_DOOR",
+             1.22
+          ],
+          [
+             "PERIMETER_ZN_1_WALL_SOUTH_WINDOW_1",
+             1.22
+          ]
+       ],
+       "exterior_door_name":[
+          [
+             "PERIMETER_ZN_3_WALL_NORTH_DOOR1",
+             0.7
+          ]
+       ]
+    }
+ }
