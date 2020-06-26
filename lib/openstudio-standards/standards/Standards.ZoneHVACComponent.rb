@@ -12,7 +12,7 @@ class Standard
   #
   # @return [Bool] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 
     # Convert this to the actual class type
     zone_hvac = if zone_hvac_component.to_ZoneHVACFourPipeFanCoil.is_initialized
@@ -77,7 +77,7 @@ class Standard
     # Calculate the newly set efficacy
     fan_power_new_w = fan_rise_new_pa * max_air_flow_rate / fan_tot_eff
     fan_efficacy_new_w_per_cfm = fan_power_new_w / max_air_flow_rate_cfm
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ZoneHVACComponent', "For #{zone_hvac_component.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ZoneHVACComponent', "For #{zone_hvac_component.name}: fan efficacy set to #{fan_efficacy_new_w_per_cfm.round(2)} W/cfm.")
 
     return true
   end
@@ -210,7 +210,7 @@ class Standard
     vestibule_htg_mgr.setCallingPoint('BeginTimestepBeforePredictor')
     vestibule_htg_mgr.addProgram(vestibule_htg_prg)
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{zone_hvac_component.name}: Vestibule heating control applied, heating disabled below #{htg_lim_f} F.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ZoneHVACComponent', "For #{zone_hvac_component.name}: Vestibule heating control applied, heating disabled below #{htg_lim_f} F.")
 
     return true
   end

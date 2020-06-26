@@ -169,10 +169,12 @@ class Standard
     plant_loop_enable_supply_water_temperature_reset(plant_loop)
 
     # Boiler properties
-    plant_loop.supplyComponents.each do |sc|
-      if sc.to_BoilerHotWater.is_initialized
-        boiler = sc.to_BoilerHotWater.get
-        boiler.setDesignWaterOutletTemperature(hw_temp_c)
+    if plant_loop.model.version < OpenStudio::VersionString.new('3.0.0')
+      plant_loop.supplyComponents.each do |sc|
+        if sc.to_BoilerHotWater.is_initialized
+          boiler = sc.to_BoilerHotWater.get
+          boiler.setDesignWaterOutletTemperature(hw_temp_c)
+        end
       end
     end
     return true
@@ -1164,12 +1166,12 @@ class Standard
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Primary (Supply) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         supply_w_per_gpm += pump_rated_w_per_gpm
       end
     end
@@ -1181,19 +1183,19 @@ class Standard
       if component.to_PumpConstantSpeed.is_initialized
         pump = component.to_PumpConstantSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) Constant Speed Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       elsif component.to_PumpVariableSpeed.is_initialized
         pump = component.to_PumpVariableSpeed.get
         pump_rated_w_per_gpm = pump_rated_w_per_gpm(pump)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Pump', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Secondary (Demand) VSD Pump '#{pump.name}' - pump_rated_w_per_gpm #{pump_rated_w_per_gpm} W/GPM")
         demand_w_per_gpm += pump_rated_w_per_gpm
       end
     end
 
     total_rated_w_per_gpm = supply_w_per_gpm + demand_w_per_gpm
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Loop', "'#{loop_type}' Loop #{plant_loop.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "'#{loop_type}' Loop #{plant_loop.name} - Total #{total_rated_w_per_gpm} W/GPM - Supply #{supply_w_per_gpm} W/GPM - Demand #{demand_w_per_gpm} W/GPM")
 
     return total_rated_w_per_gpm
   end

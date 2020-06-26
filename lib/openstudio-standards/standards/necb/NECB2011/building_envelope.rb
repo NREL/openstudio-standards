@@ -529,7 +529,7 @@ class NECB2011
     normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
     normalweight_concrete_floor.setRoughness('MediumSmooth')
     normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setConductivity(2.31)
+    normalweight_concrete_floor.setThermalConductivity(2.31)
     normalweight_concrete_floor.setDensity(2322)
     normalweight_concrete_floor.setSpecificHeat(832)
 
@@ -553,7 +553,7 @@ class NECB2011
     g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
     g01_13mm_gypsum_board.setRoughness('Smooth')
     g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setConductivity(0.1600)
+    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
     g01_13mm_gypsum_board.setDensity(800)
     g01_13mm_gypsum_board.setSpecificHeat(1090)
     g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
@@ -571,7 +571,7 @@ class NECB2011
     m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
     m10_200mm_concrete_block_basement_wall.setRoughness('MediumRough')
     m10_200mm_concrete_block_basement_wall.setThickness(0.2032)
-    m10_200mm_concrete_block_basement_wall.setConductivity(1.326)
+    m10_200mm_concrete_block_basement_wall.setThermalConductivity(1.326)
     m10_200mm_concrete_block_basement_wall.setDensity(1842)
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 

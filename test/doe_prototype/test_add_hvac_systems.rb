@@ -29,7 +29,8 @@ class TestAddHVACSystems < Minitest::Test
       {system_type: 'PSZ-VAV', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity'},
       {system_type: 'PVAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
        unmet_hrs_htg: 650.0},
-      {system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity'},
+      {system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+       unmet_hrs_htg: 450.0},
 
       # Electric, Electric, forced air
       {system_type: 'PTHP', main_heat_fuel: 'Electricity', zone_heat_fuel: nil, cool_fuel: 'Electricity'},
@@ -41,7 +42,8 @@ class TestAddHVACSystems < Minitest::Test
       {system_type: 'PTAC', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: nil, cool_fuel: 'Electricity'},
       {system_type: 'PVAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity',
        unmet_hrs_htg: 650.0},
-      {system_type: 'VAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity'},
+      {system_type: 'VAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity',
+       unmet_hrs_htg: 450.0},
 
       # Central Air Source Heat Pump plant object, forced air
       {system_type: 'VAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity'},
@@ -50,13 +52,14 @@ class TestAddHVACSystems < Minitest::Test
       {system_type: 'PVAV Reheat', main_heat_fuel: 'HeatPump', zone_heat_fuel: 'HeatPump', cool_fuel: 'HeatPump',
        unmet_hrs_htg: 650.0},
       {system_type: 'VAV Reheat', main_heat_fuel: 'HeatPump', zone_heat_fuel: 'HeatPump', cool_fuel: 'HeatPump',
-       unmet_hrs_htg: 350.0},
+       unmet_hrs_htg: 650.0},
 
       # Gas, District Chilled Water, forced air
       {system_type: 'PSZ-AC', main_heat_fuel: 'NaturalGas', zone_heat_fuel: nil, cool_fuel: 'DistrictCooling'},
       {system_type: 'PVAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling',
        unmet_hrs_htg: 650.0},
-      {system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling'},
+      {system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'DistrictCooling',
+       unmet_hrs_htg: 450.0},
 
       # Electric, District Chilled Water, forced air
       {system_type: 'PSZ-AC', main_heat_fuel: 'Electricity', zone_heat_fuel: nil, cool_fuel: 'DistrictCooling'},
@@ -65,7 +68,8 @@ class TestAddHVACSystems < Minitest::Test
       # District Hot Water, District Chilled Water, forced air
       {system_type: 'PVAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling',
        unmet_hrs_htg: 650.0},
-      {system_type: 'VAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling'},
+      {system_type: 'VAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling',
+       unmet_hrs_htg: 450.0},
 
       ## Hydronic ##
       # Gas, Electric, hydronic

@@ -1246,7 +1246,7 @@ class Standard
       array_of_zones = model_eliminate_outlier_zones(model, array_of_zones, key_to_inspect, tolerance, field_name, units)
     else
       zn_name = array_of_zones[biggest_delta_i]['zone'].name.get.to_s
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} #{worst.round(2)} #{units} - average #{field_name} #{avg.round(2)} #{units} = #{biggest_delta.round(2)} #{units} < tolerance of #{tolerance} #{units}, stopping elimination process.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For zone #{zn_name}, the #{field_name} #{worst.round(2)} #{units} - average #{field_name} #{avg.round(2)} #{units} = #{biggest_delta.round(2)} #{units} less than the tolerance of #{tolerance} #{units}, stopping elimination process.")
     end
 
     return array_of_zones
@@ -1262,7 +1262,7 @@ class Standard
   # @return [Hash] A hash of two arrays of ThermalZones,
   # where the keys are 'primary' and 'secondary'
   def model_differentiate_primary_secondary_thermal_zones(model, zones)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Determining which zones are served by the primary vs. secondary HVAC system.')
 
     # Determine the operational hours (proxy is annual
     # full load lighting hours) for all zones
@@ -1366,10 +1366,10 @@ class Standard
 
     # Report out the primary vs. secondary zones
     unless pri_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Primary system zones = #{pri_zone_names.join(', ')}.")
     end
     unless sec_zone_names.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Secondary system zones = #{sec_zone_names.join(', ')}.")
     end
 
     return { 'primary' => pri_zones, 'secondary' => sec_zones }
@@ -1392,7 +1392,7 @@ class Standard
         if space.thermalZone.is_initialized
           all_zones_on_story << space.thermalZone.get
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
         end
       end
 
@@ -1450,7 +1450,7 @@ class Standard
       if space_obj.buildingStory.empty?
         story = model_get_story_for_nominal_z_coordinate(model, space_minz)
         space_obj.setBuildingStory(story)
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
       end
     end
 
@@ -2184,7 +2184,7 @@ class Standard
 
       material.setRoughness(data['roughness'].to_s)
       material.setThickness(OpenStudio.convert(data['thickness'].to_f, 'in', 'm').get)
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setDensity(OpenStudio.convert(data['density'].to_f, 'lb/ft^3', 'kg/m^3').get)
       material.setSpecificHeat(OpenStudio.convert(data['specific_heat'].to_f, 'Btu/lb*R', 'J/kg*K').get)
       material.setThermalAbsorptance(data['thermal_absorptance'].to_f)
@@ -2195,10 +2195,7 @@ class Standard
       material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
       material.setName(material_name)
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu', 'm^2*K/W').get)
-
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
-      material.setDensity(OpenStudio.convert(data['density'].to_f, 'lb/ft^3', 'kg/m^3').get)
-      material.setSpecificHeat(OpenStudio.convert(data['specific_heat'].to_f, 'Btu/lb*R', 'J/kg*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setThermalAbsorptance(data['thermal_absorptance'].to_f)
       material.setSolarAbsorptance(data['solar_absorptance'].to_f)
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
@@ -2239,7 +2236,7 @@ class Standard
       material.setInfraredTransmittanceatNormalIncidence(data['infrared_transmittance_at_normal_incidence'].to_f)
       material.setFrontSideInfraredHemisphericalEmissivity(data['front_side_infrared_hemispherical_emissivity'].to_f)
       material.setBackSideInfraredHemisphericalEmissivity(data['back_side_infrared_hemispherical_emissivity'].to_f)
-      material.setConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+      material.setThermalConductivity(OpenStudio.convert(data['conductivity'].to_f, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
       material.setDirtCorrectionFactorforSolarandVisibleTransmittance(data['dirt_correction_factor_for_solar_and_visible_transmittance'].to_f)
       if /true/i =~ data['solar_diffusing'].to_s
         material.setSolarDiffusing(true)
@@ -3161,7 +3158,7 @@ class Standard
          ext_subsurfs.empty? ||
          int_subsurfs.empty?
 
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; contructions from this set will not be reported.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; constructions from this set will not be reported.")
         next
       end
 
@@ -3783,18 +3780,18 @@ class Standard
   #
   # @return [Bool] true if successful, false if not
   def model_remove_prm_ems_objects(model)
-    model.getEnergyManagementSystemActuators(&:remove)
-    model.getEnergyManagementSystemConstructionIndexVariables(&:remove)
-    model.getEnergyManagementSystemCurveOrTableIndexVariables(&:remove)
-    model.getEnergyManagementSystemGlobalVariables(&:remove)
-    model.getEnergyManagementSystemInternalVariables(&:remove)
-    model.getEnergyManagementSystemMeteredOutputVariables(&:remove)
-    model.getEnergyManagementSystemOutputVariables(&:remove)
-    model.getEnergyManagementSystemPrograms(&:remove)
-    model.getEnergyManagementSystemProgramCallingManagers(&:remove)
-    model.getEnergyManagementSystemSensors(&:remove)
-    model.getEnergyManagementSystemSubroutines(&:remove)
-    model.getEnergyManagementSystemTrendVariables(&:remove)
+    model.getEnergyManagementSystemActuators.each { |x| x.remove }
+    model.getEnergyManagementSystemConstructionIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemCurveOrTableIndexVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemGlobalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemInternalVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemMeteredOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemOutputVariables.each { |x| x.remove }
+    model.getEnergyManagementSystemPrograms.each { |x| x.remove }
+    model.getEnergyManagementSystemProgramCallingManagers.each { |x| x.remove }
+    model.getEnergyManagementSystemSensors.each { |x| x.remove }
+    model.getEnergyManagementSystemSubroutines.each { |x| x.remove }
+    model.getEnergyManagementSystemTrendVariables.each { |x| x.remove }
 
     return true
   end
@@ -4038,9 +4035,9 @@ class Standard
 
     # Check the results
     if possible_climate_zone_sets.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{clim}.  Make sure to use ASHRAE standards with ASHRAE climate zones and DEER or CA Title 24 standards with CEC climate zones.")
     elsif possible_climate_zone_sets.size > 2
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching cliimate zone set.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{clim}; will return last matching climate zone set.")
     end
 
     # Get the climate zone from the possible set
@@ -4048,7 +4045,7 @@ class Standard
 
     # Check that a climate zone set was found
     if climate_zone_set.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set when #{template}")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set in standard #{template}")
     end
 
     return climate_zone_set
@@ -4309,7 +4306,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "For #{space_type.name}, number of meals = #{num_meals}.") unless num_meals.nil?
 
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards buidling type and space type for #{space_type.name}, it won't be added to space_type_hash.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Cannot identify standards building type and space type for #{space_type.name}, it won't be added to space_type_hash.")
       end
     end
 
@@ -4524,7 +4521,7 @@ class Standard
     end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding geometry')
     unless @space_multiplier_map.empty?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found mulitpliers for space #{@space_multiplier_map}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Found multipliers for space #{@space_multiplier_map}")
     end
     return is_valid
   end
@@ -4918,7 +4915,7 @@ class Standard
         # for now don't look at schedules without targets, in future can alter these by looking at building level hours of operation
         next if not sch.directUseCount > 0 # won't catch if used for space type load instance, but that space type isn't used
         # todo - address schedules that fall into this category, if they are used in the model
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
         next
       end
 
@@ -5391,7 +5388,7 @@ class Standard
       if percent_change.abs > 0.05
         # todo - this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
         # post application checks compares against actual instead of estimated values
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
       end
 
       raw_string = []
