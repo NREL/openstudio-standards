@@ -33,8 +33,8 @@ class NECB_HVAC_Tests < MiniTest::Test
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    templates = ['NECB2011', 'NECB2015'] #list of templates
-    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5}
+    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980'] #list of templates
+    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5, 'BTAPPRE1980' => 4}
     templates.each do |template|
       unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       standard = Standard.build(template)
@@ -95,7 +95,8 @@ class NECB_HVAC_Tests < MiniTest::Test
                                                                                                       zones: model.getThermalZones,
                                                                                                       heating_coil_type: heating_coil_type,
                                                                                                       baseboard_type: baseboard_type,
-                                                                                                      hw_loop: hw_loop)
+                                                                                                      hw_loop: hw_loop,
+                                                                                                      new_auto_zoner: false)
           # Save the model after btap hvac.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
           model.getCoilCoolingDXSingleSpeeds.each do |dxcoil|
