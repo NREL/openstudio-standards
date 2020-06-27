@@ -1,0 +1,103 @@
+{
+  "constants": {
+    "skylight_to_roof_ratio_max_value": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_3.2.1.4(2)"
+      ],
+      "value": 1.1,
+      "units": "ratio",
+      "notes": ""
+    },
+    "sizing_factor_max_cooling": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_8.4.4.9(1)"
+      ],
+      "value": 1.1,
+      "units": "ratio",
+      "notes": ""
+    },
+    "sizing_factor_max_heating": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_8.4.4.9(2)"
+      ],
+      "value": 1.3,
+      "units": "ratio",
+      "notes": ""
+    },
+    "fan_constant_volume_pressure_rise_value": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_5.Assumption"
+      ],
+      "value": 640.0,
+      "units": "Pa",
+      "notes": ""
+    },
+    "supply_fan_variable_volume_pressure_rise_value": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_5.Assumption"
+      ],
+      "value": 1000.0,
+      "units": "Pa",
+      "notes": "Sets the supply fan pressure rise based on the Prototype buildings inputs"
+    },
+    "return_fan_variable_volume_pressure_rise_value": {
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_5.Assumption"
+      ],
+      "value": 250.0,
+      "units": "Pa",
+      "notes": "Sets the return fan pressure rise based on the Prototype buildings inputs"
+    },
+    "infiltration_rate_m3_per_s_per_m2":{
+    "data_type": "value",
+    "refs": [
+      "DOE Technical Report NREL/TP-5500-46861 Report Existing Building Infiltration rate, pg. 29."
+    ],
+    "value": 0.001116,
+    "units": "m3/s/m2",
+    "notes": "Rate = 7.5 L/s/m^2 at 75 Pa converted to rate at 4 Pa assuming n = 0.65"
+  },
+    "infiltration_constant_term_coefficient":{
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_5.Assumption"
+      ],
+      "value": 0.0,
+      "units": "",
+      "notes": ""
+    },
+    "infiltration_temperature_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "NECB2011_S_5.Assumption"
+    ],
+    "value": 0.0,
+    "units": "",
+    "notes": ""
+  },
+    "infiltration_velocity_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "Assumption"
+    ],
+    "value": 0.224,
+    "units": "",
+    "notes": ""
+  },
+    "infiltration_velocity_squared_term_coefficient":{
+    "data_type": "value",
+    "refs": [
+      "Assumption"
+    ],
+    "value": 0.0,
+    "units": "",
+    "notes": ""
+  }
+  }
+}

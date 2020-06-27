@@ -1,6 +1,11 @@
 class NECB2011
-  def model_add_swh(model)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
+    #Get default fuel based on epw location province.
+    if swh_fueltype == 'DefaultFuel'
+      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+    end
 
     # Calculate the tank size and service water pump information
     shw_sizing = auto_size_shw_capacity(model)
@@ -16,7 +21,7 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    swh_fueltype = self.get_canadian_system_defaults_by_weatherfile_name(model)['swh_fueltype']
+
 
     main_swh_loop = model_add_swh_loop(model,
                                        'Main Service Water Loop',
@@ -75,7 +80,7 @@ class NECB2011
 
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
-    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity'
+    unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOilNo2'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
@@ -161,7 +166,7 @@ class NECB2011
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0.8)
 
     # set part-load performance curve
-    if fuel_type == 'NaturalGas'
+    if (fuel_type == 'NaturalGas') || (fuel_type == 'FuelOilNo2')
       plf_vs_plr_curve = model_add_curve(water_heater_mixed.model, 'SWH-EFFFPLR-NECB2011')
       water_heater_mixed.setPartLoadFactorCurve(plf_vs_plr_curve)
     end
@@ -543,19 +548,19 @@ class NECB2011
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
       if sp_type_info['heating_setpoint_schedule'].nil? then
-        heated = FALSE
+        heated = false
       else
-        heated = TRUE
+        heated = true
       end
       if sp_type_info['cooling_setpoint_schedule'].nil? then
-        cooled = FALSE
+        cooled = false
       else
-        cooled = TRUE
+        cooled = true
       end
       if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type']) then
-        not_plenum = FALSE
+        not_plenum = false
       else
-        not_plenum = TRUE
+        not_plenum = true
       end
 
       # Determine the bottom surface of the space and calculate it's centroid.  Although the mech room is assumed to
@@ -597,7 +602,7 @@ class NECB2011
       # spaces and check if it has a 'Mechanical/Electrical' space type.  Note that the mech room is assumed to
       # be in a space that conditioned and is not a plenum (or attic space).
 
-      if (heated == TRUE || cooled == TRUE) and not_plenum == TRUE
+      if (heated == true || cooled == true) and not_plenum == true
         if mech_regex.match(spaceType_name)
           mech_rooms << index
         end

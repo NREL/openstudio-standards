@@ -1,0 +1,67 @@
+{
+  "size_category": [
+    {
+      "template": "Any",
+      "building_category": "Residential",
+      "minimum_floors": 0.0,
+      "maximum_floors": 3.0,
+      "minimum_area": 0.0,
+      "maximum_area": "9.9999999E7",
+      "size_category": "res_small"
+    },
+    {
+      "template": "Any",
+      "building_category": "Residential",
+      "minimum_floors": 3.0,
+      "maximum_floors": 999.0,
+      "minimum_area": 0.0,
+      "maximum_area": "9.9999999E7",
+      "size_category": "res_med"
+    },
+    {
+      "template": "Any",
+      "building_category": "Nonresidential",
+      "minimum_floors": 0.0,
+      "maximum_floors": 3.0,
+      "minimum_area": 0.0,
+      "maximum_area": 75000.0,
+      "size_category": "nonres_small"
+    },
+    {
+      "template": "Any",
+      "building_category": "Nonresidential",
+      "minimum_floors": 4.0,
+      "maximum_floors": 5.0,
+      "minimum_area": 0.0,
+      "maximum_area": 75000.0,
+      "size_category": "nonres_med"
+    },
+    {
+      "template": "Any",
+      "building_category": "Nonresidential",
+      "minimum_floors": 0.0,
+      "maximum_floors": 5.0,
+      "minimum_area": 75000.0,
+      "maximum_area": 150000.0,
+      "size_category": "nonres_med"
+    },
+    {
+      "template": "Any",
+      "building_category": "Nonresidential",
+      "minimum_floors": 0.0,
+      "maximum_floors": 999.0,
+      "minimum_area": 150000.0,
+      "maximum_area": "9.9999999E7",
+      "size_category": "nonres_lg"
+    },
+    {
+      "template": "Any",
+      "building_category": "Nonresidential",
+      "minimum_floors": 6.0,
+      "maximum_floors": 999.0,
+      "minimum_area": 0.0,
+      "maximum_area": "9.9999999E7",
+      "size_category": "nonres_lg"
+    }
+  ]
+}

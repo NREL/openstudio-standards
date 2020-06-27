@@ -1,0 +1,32 @@
+{
+  "tables": {
+    "max_total_loop_pump_power": {
+      "data_type": "table",
+      "refs": [
+        "NECB 2015 Table 5.2.6.3."
+      ],
+      "table": [
+        {
+          
+          "hydronic_system_type": "Heating",
+          "total_normalized_pump_power_wperkw": 4.5
+        },
+        {
+          
+          "hydronic_system_type": "Heat_rejection",
+          "total_normalized_pump_power_wperkw": 12
+        },
+        {
+          
+          "hydronic_system_type": "Cooling",
+          "total_normalized_pump_power_wperkw": 14
+        },
+        {
+          
+          "hydronic_system_type": "WSHP",
+          "total_normalized_pump_power_wperkw": 22
+        }
+      ]
+    }
+  }
+}
