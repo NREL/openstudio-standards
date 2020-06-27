@@ -40,6 +40,8 @@ class Standard
                                                      number_of_cells_per_tower: 2,
                                                      number_cooling_towers: 1)
           end
+          num_chillers = prototype_input['chw_number_chillers']
+          num_chillers = 1 if num_chillers == nil
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
                                                   dsgn_sup_wtr_temp: system['chilled_water_design_supply_water_temperature'],
@@ -48,7 +50,8 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  condenser_water_loop: condenser_water_loop)
+                                                  condenser_water_loop: condenser_water_loop,
+                                                  num_chillers: num_chillers.to_i)
         end
 
         # Add the VAV
