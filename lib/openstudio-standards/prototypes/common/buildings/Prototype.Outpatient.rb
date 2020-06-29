@@ -88,7 +88,35 @@ module Outpatient
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
         elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS'))
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
+
+        # add elevator fan and lights for 90.1 prototypes
+        elec_equip_def2 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
+        elec_equip_def2.setName('Elevator Pump Room Electric Equipment Definition2')
+        elec_equip_def2.setFractionLatent(0)
+        elec_equip_def2.setFractionRadiant(0.1)
+        elec_equip_def2.setFractionLost(0.9)
+
+        case template
+        when '90.1-2004', '90.1-2007'
+          elec_equip_def2.setDesignLevel(485.7)
+        when '90.1-2010'
+          elec_equip_def2.setDesignLevel(317.7)
+        when '90.1-2013'
+          elec_equip_def2.setDesignLevel(188)
+        end
+
+        elec_equip2 = OpenStudio::Model::ElectricEquipment.new(elec_equip_def2)
+        elec_equip2.setName('Elevator Lights Fan')
+        elec_equip2.setSpace(elevator_pump_room)
+
+        case template # light fan schedule for outpatient already exist in the schedule data sheet.
+        when '90.1-2004', '90.1-2007'
+          elec_equip2.setSchedule(model_add_schedule(model, 'OutPatientHealthCare ELEV_LIGHT_FAN_SCH_24_7'))
+        when '90.1-2010', '90.1-2013'
+          elec_equip2.setSchedule(model_add_schedule(model, 'OutPatientHealthCare ELEV_LIGHT_FAN_SCH_ADD_DF'))
+        end
+
+    when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
         elec_equip.setSchedule(model_add_schedule(model, 'OutPatientHealthCare BLDG_ELEVATORS_Pre2004'))
     end
     return true
