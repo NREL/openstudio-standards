@@ -8,13 +8,13 @@ OS:Timestep,
   6;                                      !- Number of Timesteps per Hour
 
 OS:Sizing:Parameters,
-  {004b243b-4b6a-4f4c-8e8e-be8491724b37}, !- Handle
+  {691bdd11-76ff-4c11-a048-35d600c51871}, !- Handle
   1.2,                                    !- Heating Sizing Factor
   1.2,                                    !- Cooling Sizing Factor
   6;                                      !- Timesteps in Averaging Window
 
 OS:ConvergenceLimits,
-  {ceac8795-dbb3-4040-a5d6-64105977a538}, !- Handle
+  {245b0b16-c35d-49e5-9ba1-1fec8ce51ba5}, !- Handle
   1,                                      !- Minimum System Timestep {minutes}
   20;                                     !- Maximum HVAC Iterations
 

@@ -17850,7 +17850,7 @@ OS:Timestep,
   6;                                      !- Number of Timesteps per Hour
 
 OS:Sizing:Parameters,
-  {2eadc2f3-cdb6-40df-b4d5-8b25601bb70f}, !- Handle
+  {b187ffb6-d70c-4cfb-b3e7-f3e486351100}, !- Handle
   1.0,                                    !- Heating Sizing Factor
   1.0,                                    !- Cooling Sizing Factor
   6;                                      !- Timesteps in Averaging Window
