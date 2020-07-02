@@ -10,8 +10,9 @@ module SmallDataCenterHighITE
     # add IT equipment (ITE object) for data center building types
     add_data_center_load(model)
 
+    # This should be added as a retrofit measure instead of being in the prototype
     # modify CRAC supply air setpoint manager
-    modify_crac_sa_stpt_manager(model)
+    # modify_crac_sa_stpt_manager(model)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
 
@@ -45,8 +46,8 @@ module SmallDataCenterHighITE
           it_equipment_def.setDesignEnteringAirTemperature(22.5)    # recommended SAT 18-27C, use the middle T as design
           it_equipment_def.setAirFlowCalculationMethod("FlowControlWithApproachTemperatures")
           # Set the approach temperatures based on CFD simulation results
-          it_equipment_def.setSupplyTemperatureDifference(8.3)   # This is under fully open configuration assumption, based on the lookup table in scorecard
-          it_equipment_def.setReturnTemperatureDifference(-6.7)   # This is under fully open configuration assumption, based on the lookup table in scorecard
+          it_equipment_def.setSupplyTemperatureDifference(9.94)   # This is under fully open configuration assumption, based on the lookup table in scorecard
+          it_equipment_def.setReturnTemperatureDifference(-7.21)   # This is under fully open configuration assumption, based on the lookup table in scorecard
           # after the bug in OpenStudio core is fixed, this temperature schedules was enabled
           it_equipment_def.setSupplyTemperatureDifferenceSchedule(model_add_schedule(model, 'SmallDataCenterHighITE SupplyApproachTemp_SCH'))   # This is under fully open configuration assumption, based on the lookup table in scorecard
           it_equipment_def.setReturnTemperatureDifferenceSchedule(model_add_schedule(model, 'SmallDataCenterHighITE ReturnApproachTemp_SCH'))
