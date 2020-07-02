@@ -242,29 +242,18 @@ Standard.class_eval do
     return true
   end
 
-  # Adds code-minimum constructions based on the building type
-  # as defined in the OpenStudio_Standards_construction_sets.json file.
-  # Where there is a separate construction set specified for the
-  # individual space type, this construction set will be created and applied
-  # to this space type, overriding the whole-building construction set.
-  #
-  # @param building_type [String] the type of building
-  # @param climate_zone [String] the name of the climate zone the building is in
-  # @return [Bool] returns true if successful, false if not
-  def model_add_constructions(model, building_type, climate_zone)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
-    is_residential = 'No' # default is nonresidential for building level
+  # Checks to see if the an adiabatic floor construction has been constructed in an OpenStudio model.
+  # If so, it returns it. If not, it constructs an adiabatic floor construction, adds it to the model,
+  # and then returns it.
+  # @return [OpenStudio::Model::Construction]
+  def model_get_adiabatic_floor_construction(model)
+    adiabatic_construction_name = 'Floor Adiabatic construction'
 
-    # The constructions lookup table uses a slightly different list of building types.
-    @lookup_building_type = model_get_lookup_name(building_type)
-    # TODO: this is a workaround.  Need to synchronize the building type names
-    # across different parts of the code, including splitting of Office types
-    case building_type
-      when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
-        new_lookup_building_type = building_type
-      else
-        new_lookup_building_type = model_get_lookup_name(building_type)
-    end
+    # Check if adiabatic floor construction already exists in the model
+    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
+
+    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
+    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
 
     # Assign construction to adiabatic construction
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
@@ -292,12 +281,30 @@ Standard.class_eval do
     nonres_floor_insulation.setVisibleAbsorptance(0.7)
 
     floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    floor_adiabatic_construction.setName('Floor Adiabatic construction')
+    floor_adiabatic_construction.setName(adiabatic_construction_name)
     floor_layers = OpenStudio::Model::MaterialVector.new
     floor_layers << cp02_carpet_pad
     floor_layers << normalweight_concrete_floor
     floor_layers << nonres_floor_insulation
     floor_adiabatic_construction.setLayers(floor_layers)
+
+    return floor_adiabatic_construction
+
+
+  end
+
+  # Checks to see if the an adiabatic wall construction has been constructed in an OpenStudio model.
+  # If so, it returns it. If not, it constructs an adiabatic wall construction, adds it to the model,
+  # and then returns it.
+  # @return [OpenStudio::Model::Construction]
+  def model_get_adiabatic_wall_construction(model)
+    adiabatic_construction_name = 'Wall Adiabatic construction'
+
+    # Check if adiabatic wall construction already exists in the model
+    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
+
+    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
+    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
 
     g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
@@ -311,11 +318,52 @@ Standard.class_eval do
     g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
 
     wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    wall_adiabatic_construction.setName('Wall Adiabatic construction')
+    wall_adiabatic_construction.setName(adiabatic_construction_name)
     wall_layers = OpenStudio::Model::MaterialVector.new
     wall_layers << g01_13mm_gypsum_board
     wall_layers << g01_13mm_gypsum_board
     wall_adiabatic_construction.setLayers(wall_layers)
+
+    return wall_adiabatic_construction
+
+
+  end
+
+  # Adds code-minimum constructions based on the building type
+  # as defined in the OpenStudio_Standards_construction_sets.json file.
+  # Where there is a separate construction set specified for the
+  # individual space type, this construction set will be created and applied
+  # to this space type, overriding the whole-building construction set.
+  #
+  # @param building_type [String] the type of building
+  # @param climate_zone [String] the name of the climate zone the building is in
+  # @return [Bool] returns true if successful, false if not
+  def model_add_constructions(model, building_type, climate_zone)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
+    is_residential = 'No' # default is nonresidential for building level
+
+    # The constructions lookup table uses a slightly different list of building types.
+    @lookup_building_type = model_get_lookup_name(building_type)
+    # TODO: this is a workaround.  Need to synchronize the building type names
+    # across different parts of the code, including splitting of Office types
+    case building_type
+      when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed'
+        new_lookup_building_type = building_type
+      else
+        new_lookup_building_type = model_get_lookup_name(building_type)
+    end
+
+    # Construct adiabatic constructions
+    floor_adiabatic_construction = model_get_adiabatic_floor_construction(model)
+    wall_adiabatic_construction = model_get_adiabatic_wall_construction(model)
+
+    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
+    cp02_carpet_pad.setName('CP02 CARPET PAD')
+    cp02_carpet_pad.setRoughness('VeryRough')
+    cp02_carpet_pad.setThermalResistance(0.21648)
+    cp02_carpet_pad.setThermalAbsorptance(0.9)
+    cp02_carpet_pad.setSolarAbsorptance(0.7)
+    cp02_carpet_pad.setVisibleAbsorptance(0.8)
 
     m10_200mm_concrete_block_basement_wall = OpenStudio::Model::StandardOpaqueMaterial.new(model)
     m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
@@ -338,6 +386,11 @@ Standard.class_eval do
     basement_floor_layers << cp02_carpet_pad
     basement_floor_construction.setLayers(basement_floor_layers)
 
+    # Constructs all relevant ground FC factor method constructions
+    model_set_below_grade_wall_constructions(model, @lookup_building_type, climate_zone)
+    model_set_floor_constructions(model, @lookup_building_type, climate_zone)
+
+    # Set all remaining wall and floor constructions
     model.getSurfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition.to_s == 'Adiabatic'
         if surface.surfaceType.to_s == 'Wall'
@@ -460,6 +513,261 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying constructions')
 
     return true
+  end
+
+  # Creates and sets below grade wall constructions for 90.1 prototype building models. These utilize
+  # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
+  # @param model[OpenStudio::Model::Model] OpenStudio Model
+  # @param climate_zone [string] climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [string] the type of building
+  # @return [void]
+  def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
+
+    # Find ground contact wall building category
+    construction_set_data = model_get_construction_set(building_type)
+    building_type_category = construction_set_data['exterior_wall_building_category']
+
+    wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
+
+    # If no construction properties are found at all, return and allow code to use default constructions
+    return if wall_construction_properties.nil?
+
+    c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
+
+    # If no c-factor is found in construction properties, return and allow code to use defaults
+    return if c_factor_ip.nil?
+
+    # convert to SI
+    c_factor_si = c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+
+    # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
+    model.getSpaces.each do |space|
+
+      # Get height of the first below grade wall in this space. Will return nil if none are found.
+      below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+      next if below_grade_wall_height.nil?
+
+      c_factor_wall_name = "Basement Wall C-Factor #{c_factor_si.round(2)} Height #{below_grade_wall_height.round(2)}"
+
+      # Check if the wall construction has been constructed already. If so, look it up in the model
+      if model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).is_initialized
+        basement_wall_construction = model.getCFactorUndergroundWallConstructionByName(c_factor_wall_name).get
+      else
+        # Create CFactorUndergroundWallConstruction objects
+        basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+        basement_wall_construction.setCFactor(c_factor_si)
+        basement_wall_construction.setName(c_factor_wall_name)
+        basement_wall_construction.setHeight(below_grade_wall_height)
+      end
+
+      # Set surface construction for walls adjacent to ground (i.e. basement walls)
+      space.surfaces.each do |surface|
+        if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'OtherSideCoefficients'
+          surface.setConstruction(basement_wall_construction)
+          surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+        end
+      end
+    end
+  end
+
+  # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
+  # Returns nil if the space is above grade.
+  # @param space [OpenStudio::Model::Space] space to determine below grade wall height
+  # @return [Numeric, nil]
+  def model_get_space_below_grade_wall_height(space)
+
+    # find height of first below-grade wall adjacent to the ground
+    space.surfaces.each do |surface|
+      next unless surface.surfaceType == 'Wall'
+
+      boundary_condition = surface.outsideBoundaryCondition
+      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition == 'Ground'
+
+      # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
+      z_values = []
+      surface.vertices.each do |vertex|
+        z_values << vertex.z
+      end
+      surface_height = z_values.max - z_values.min
+      return surface_height
+    end
+
+    return nil
+  end
+
+  # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
+  # calculated. Used for F-Factor floors that require additional parameters.
+  # @param model [OpenStudio Model] OpenStudio model being modified
+  # @param building_type [string] the type of building
+  # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
+  def model_set_floor_constructions(model, building_type, climate_zone)
+
+    #Find ground contact wall building category
+    construction_set_data = model_get_construction_set(building_type)
+    building_type_category = construction_set_data['ground_contact_floor_building_category']
+
+    # Find Floor F factor
+    floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
+
+    #If no construction properties are found at all, return and allow code to use default constructions
+    return if floor_construction_properties.nil?
+
+    f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
+
+    #If no f-factor is found in construction properties, return and allow code to use defaults
+    return if f_factor_ip.nil?
+
+    f_factor_si = f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+
+    # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
+    model.getSpaces.each do |space|
+      # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
+      perimeter, area = model_get_f_floor_geometry(space)
+      next if area == 0 # skip floors not adjacent to ground
+
+      # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
+      # NOTE: periods '.' were causing issues and were therefore removed. Caused E+ error with duplicate names despite
+      #       being different.
+      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
+
+      # Check if the floor construction has been constructed already. If so, look it up in the model
+      if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
+        f_floor_construction = model.getFFactorGroundFloorConstructionByName(f_floor_const_name).get
+      else
+        f_floor_construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+        f_floor_construction.setName(f_floor_const_name)
+        f_floor_construction.setFFactor(f_factor_si)
+        f_floor_construction.setArea(area)
+        f_floor_construction.setPerimeterExposed(perimeter)
+      end
+
+      # Set surface construction for floors adjacent to ground
+      space.surfaces.each do |surface|
+        if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+          surface.setConstruction(f_floor_construction)
+          surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+        end
+      end
+    end
+  end
+
+  # This function returns the space's ground perimeter and area. Assumes only one floor per space!
+  # @param space[OpenStudio::Model::Space]
+  # @return [Numeric, Numeric]
+  def model_get_f_floor_geometry(space)
+
+    perimeter = 0
+
+    floors = []
+
+    # Find space's floors
+    space.surfaces.each do |surface|
+      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground'
+        floors << surface
+      end
+    end
+
+    # Raise a warning for any space with more than 1 ground contact floor surface.
+    if floors.length > 1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name.to_s} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
+    elsif floors.empty? #If this space has no ground contact floors, return 0
+      return 0, 0
+    end
+
+    floor = floors[0]
+
+    # cycle through surfaces in space
+    space.surfaces.each do |surface|
+
+      # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
+      if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
+
+        perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
+      end
+    end
+
+    # Get floor area
+    area = floor.netArea
+
+    return perimeter, area
+  end
+
+  # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
+  # FFactorGroundFloorConstruction exposed perimeter calculations.
+  # NOTE: this calculation has a few assumptions:
+  # - Floors are flat. This means they have a constant z-axis value.
+  # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
+  # - The wall and floor share a common space. This space is assumed to only have one floor!
+  # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
+  # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
+  # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
+  def model_calculate_wall_and_floor_intersection(wall, floor)
+
+    # Used for determining if two points are 'equal' if within this length
+    tolerance = 0.0001
+
+    # Get floor and wall edges
+    wall_edge_array = model_get_surface_edges(wall)
+    floor_edge_array = model_get_surface_edges(floor)
+
+    # Floor assumed flat and constant in x-y plane (i.e. a single z value)
+    floor_z_value = floor_edge_array[0][0].z
+
+    # Iterate through wall edges
+    wall_edge_array.each do |wall_edge|
+
+      wall_edge_p1 = wall_edge[0]
+      wall_edge_p2 = wall_edge[1]
+
+      # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
+      # floor and can be skipped
+
+      if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
+        next
+      end
+
+      # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
+      if tolerance <= (wall_edge_p1.z - floor_z_value).abs
+        next
+      end
+
+      # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
+      # length of the wall edge
+      edge_vector = OpenStudio::Vector3d.new(wall_edge_p1-wall_edge_p2)
+      return(edge_vector.length)
+
+    end
+
+    # If no edges intersected, return 0
+    return 0
+
+  end
+
+  # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
+  # intersections.
+  # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
+  # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
+  def model_get_surface_edges(surface)
+
+    vertices = surface.vertices
+    n_vertices = vertices.length
+
+    # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
+    # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
+    edge_array = [] # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
+
+    # Iterate through each vertex in the surface and construct an edge for it
+    for edge_counter in 0..n_vertices - 1
+
+      # If not the last vertex in surface
+      if edge_counter < n_vertices-1
+        edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
+      else # Make index adjustments for final index in vertices array
+        edge_array << [vertices[edge_counter], vertices[0]]
+      end
+    end
+
+    return edge_array
   end
 
   # Adds internal mass objects and constructions based on the building type
@@ -1848,4 +2156,5 @@ Standard.class_eval do
       end
     end
   end
+
 end

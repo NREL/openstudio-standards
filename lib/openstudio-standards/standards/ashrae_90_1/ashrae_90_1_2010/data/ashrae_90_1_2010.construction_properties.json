@@ -7075,7 +7075,7 @@
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
       "assembly_maximum_f_factor": null,
-      "assembly_maximum_c_factor": 1.19,
+      "assembly_maximum_c_factor": 0.119,
       "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_vt_shgc": null,
       "notes": null
