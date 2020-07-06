@@ -2,17 +2,17 @@
     "SmallOffice_90.1-2013_ASHRAE 169-2013-2A_":[
        [
           "CORE_ZN ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS",
-          1.0
+          1.142857143
        ],
        [
           "PERIMETER_ZN_1 ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS",
-          1.0
+          1.142857143
        ]
     ],
     "MidriseApartment_90.1-2013_ASHRAE 169-2013-2A_":[
        [
           "G CORRIDOR ZN MIDRISEAPARTMENT CORRIDOR LIGHTS",
-          0.5
+          0.666667
        ],
        [
           "G N1 APARTMENT ZN MIDRISEAPARTMENT APARTMENT ADDITIONAL LIGHTS",
