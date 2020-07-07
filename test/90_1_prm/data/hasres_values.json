@@ -1,0 +1,18 @@
+{
+    "HighriseApartment":"true",
+    "MidriseApartment":"true",
+    "Hospital":"true",
+    "LargeHotel":"true",
+    "RetailStripmall":"false",
+    "SmallHotel":"true",
+    "LargeOffice":"false",
+    "MediumOffice":"false",
+    "SmallOffice":"false",
+    "Outpatient":"true",
+    "QuickServiceRestaurant":"false",
+    "FullServiceRestaurant":"false",
+    "RetailStandalone":"false",
+    "PrimarySchool":"false",
+    "SecondarySchool":"false",
+    "Warehouse":"false"
+ }

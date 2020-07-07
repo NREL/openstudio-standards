@@ -1,0 +1,19 @@
+{
+    "wwr": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+    "daylighting_control": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+    "isresidential": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+    "envelope": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+    "lpd": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ]
+}
