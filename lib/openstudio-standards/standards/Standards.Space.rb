@@ -780,7 +780,11 @@ class Standard
     return skylight_effective_aperture
   end
 
-  # Removes daylighting controls
+  # Removes daylighting controls from model
+  #
+  # @param model [OpenStudio::Model::Space] OpenStudio space object
+  #
+  # @return [Boolean] Returns true if a sizing run is required
   def space_remove_daylighting_controls(space)
     # Retrieves daylighting control objects
     existing_daylighting_controls = space.daylightingControls
