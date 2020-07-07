@@ -1,0 +1,59 @@
+{
+  "tables": {
+    "fuel_type_sets": {
+      "data_type": "table",
+      "notes": "This is a list of common fuel type set combinations",
+      "refs": [
+        "Survey",
+        "Mike.lubun@canada.ca",
+        "Kamel.Haddad@canada.ca",
+        "Phylroy.lopez@Canada.ca"
+      ],
+      "table": [
+        {
+          "name":"NaturalGas",
+          "boiler_fueltype": "NaturalGas",
+          "baseboard_type": "Hot Water",
+          "mau_type": true,
+          "mau_heating_coil_type": "Hot Water",
+          "mau_cooling_type": "DX",
+          "chiller_type": "Scroll",
+          "heating_coil_type_sys3": "Gas",
+          "heating_coil_type_sys4": "Gas",
+          "heating_coil_type_sys6": "Hot Water",
+          "fan_type": "var_speed_drive",
+          "swh_fueltype": "NaturalGas"
+        },
+        {
+          "name": "Electricity",
+          "boiler_fueltype": "Electricity",
+          "baseboard_type": "Electric",
+          "mau_type": true,
+          "mau_heating_coil_type": "Electric",
+          "mau_cooling_type": "DX",
+          "chiller_type": "Scroll",
+          "heating_coil_type_sys3": "Electric",
+          "heating_coil_type_sys4": "Electric",
+          "heating_coil_type_sys6": "Electric",
+          "fan_type": "var_speed_drive",
+          "swh_fueltype": "Electricity"
+        },
+        {
+          "name": "FuelOilNo2",
+          "boiler_fueltype": "FuelOilNo2",
+          "baseboard_type": "Hot Water",
+          "mau_type": true,
+          "mau_heating_coil_type": "Hot Water",
+          "mau_cooling_type": "DX",
+          "chiller_type": "Scroll",
+          "heating_coil_type_sys3": "Electric",
+          "heating_coil_type_sys4": "Electric",
+          "heating_coil_type_sys6": "Electric",
+          "fan_type": "var_speed_drive",
+          "swh_fueltype": "Electricity"
+        }
+      ]
+    }
+  }
+}
+

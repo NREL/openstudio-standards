@@ -1,4 +1,4 @@
- -EnergyPlus Weather Converter Version 2017.17.06
+ -EnergyPlus Weather Converter Version 2018.10.01
  Statistics for CAN_ON_Sault.Ste.Marie.AP.712600_CWEC2016
  Location -- Sault Ste Marie AP ON CAN  
       {N 46° 29.10'} {W 84° 30.60'} {GMT -5.0 Hours}
@@ -16,6 +16,12 @@
  Comment 2: Downloaded from Climate.Onebuilding.Org -- Ground temps represent 
  undisturbed earth temperatures - calculated from this weather data.
 
+ - Actual Data Years for Monthly Data**
+         Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
+         2010	2009	2011	2001	2000	2001	2007	2006	1999	2001	2010	2005	
+ - ** Not all weather data sources represent contiguous years.
+ - ** Monthly data values may come from different years.
+
  ========================= Handbook Conditions for Design =========================
  - Displaying Design Conditions from "2017 ASHRAE Handbook -- Fundamentals - Chapter 14 Climatic Design Information"
  - ASHRAE design conditions are carefully generated from a period of record 
@@ -26,11 +32,11 @@
     	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
     	Heating	1	-24.6	-21.5	-29.5	0.3	-24.1	-26.2	0.4	-21	12.9	-5.1	10.9	-5.6	1.4	80
 
-    	DesignStat	Hottest Month	Hottest Month DB Ran	Cooling DB/MCWB						Evaporation WB/MCDB						MCWS/PCWD to 0.4% DB		Dehumidification DP/									Enthaply/MCDB						Extreme Max WB	
-    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
+    	DesignStat	HottestMonth		Cooling DB/MCWB						Evaporation WB/MCDB						MCWS/PCWD to 0.4% DB		Dehumidification DP/									Enthaply/MCDB						Extreme Max WB	
+    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{°C}	
     	Cooling	7	11.1	28.4	21.1	26.6	20	25.1	19	22.3	26.5	21.1	25.1	20.1	23.7	3.6	210	20.8	15.8	24.7	19.8	14.8	23.4	18.6	13.8	22.1	66.4	26.6	62.1	25.1	58.4	23.8	26.3
 
-    	DesignStat	Extreme Annual WS			Extreme Annual DB				n-Year Return Period								Extreme Annual WB
+    	DesignStat	Extreme Annual WS			Extreme Annual DB				n-Year Return Period								
     	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
     	Extremes	10.2	8.8	7.8	-29.7	31	4	1.5	-32.6	32.1	-34.9	33	-37.2	33.8	-40.1	34.9	-29.9
 
@@ -48,6 +54,9 @@
 
  	                      ib	 - Clear Sky Noon Beam Normal Irradiance on 21st Day
  	                      id	 - Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
+
+ - Average Monthly Mean Daily All-Sky Radiation Wh/m²
+ 	                Avg Rad 	 1090	 1930	 3330	 4600	 5570	 6000	 5990	 5190	 3760	 2230	 1190	  900	
 
  - Monthly Drybulb and Mean Coincident Wetbulb Temperatures [C]
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -81,20 +90,20 @@
 
  - Monthly Standard Heating/Cooling Degree Days/Hours
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	        HDD base 10C	 2668	  600	  523	  435	  204	   52	    3	    0	    0	   13	  106	  265	
- 	      HDD base 18.3C	 4941	  858	  757	  692	  448	  257	  104	   49	   50	  148	  339	  514	
+ 	        HDD base 10C	  600	  523	  435	  204	   52	    3	    0	    0	   13	  106	  265	  467	
+ 	      HDD base 18.3C	  858	  757	  692	  448	  257	  104	   49	   50	  148	  339	  514	  725	
 
- 	        CDD base 10C	  859	    0	    0	    1	    6	   56	  164	  243	  238	  124	   26	    1	
- 	      CDD base 18.3C	   90	    0	    0	    0	    0	    3	   15	   33	   29	    9	    1	    0	
+ 	        CDD base 10C	    0	    0	    1	    6	   56	  164	  243	  238	  124	   26	    1	    0	
+ 	      CDD base 18.3C	    0	    0	    0	    0	    3	   15	   33	   29	    9	    1	    0	    0	
 
- 	      CDH base 23.3C	  767	    0	    0	    1	    3	   45	  170	  288	  204	   53	    2	    0	
- 	      CDH base 26.7C	  142	    0	    0	    0	    0	    8	   34	   61	   33	    7	    0	    0	
+ 	      CDH base 23.3C	    0	    0	    1	    3	   45	  170	  288	  204	   53	    2	    0	    0	
+ 	      CDH base 26.7C	    0	    0	    0	    0	    8	   34	   61	   33	    7	    0	    0	    0	
 
-    -  725 annual (standard) cooling degree-days (10C baseline)
-    - 5.63 annual (standard) heating degree-days (10C baseline)
+    -  859 annual (standard) cooling degree-days (10C baseline)
+    - 2668 annual (standard) heating degree-days (10C baseline)
 
-    -    0 annual (standard) cooling degree-days (18.3C baseline)
-    -  467 annual (standard) heating degree-days (18.3C baseline)
+    -   90 annual (standard) cooling degree-days (18.3C baseline)
+    - 4941 annual (standard) heating degree-days (18.3C baseline)
 
  - Monthly Standard Average Liquid Precipitation mm
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -425,15 +434,16 @@
 
  - Monthly Statistics for Solar Radiation  (Direct Normal, Diffuse, Global Horizontal) [Wh/m²]
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Direct Avg 	2088 	3057 	4547 	4586 	4735 	5349 	5651 	4875 	3616 	2033 	1508 	1533 	
+ 	Direct Avg 	2088 	3056 	4547 	4586 	4735 	5349 	5651 	4875 	3616 	2033 	1508 	1533 	
 
- 	Direct Max 	5458 	7837 	10078	10244	9845 	9666 	9577 	9227 	8178 	6417 	6148 	5612 	
+ 	Direct Max 	5458 	7837 	10078	10244	9845 	9665 	9577 	9227 	8178 	6416 	6148 	5612 	
  	    Day    	   9 	  23 	  26 	  18 	  26 	   8 	   6 	   8 	   7 	   8 	   9 	   5 	
 
- 	Diffuse Avg	789  	1154 	1602 	2290 	2311 	2486 	2287 	2092 	1712 	1186 	768  	676  	
+ 	Diffuse Avg	788  	1154 	1601 	2289 	2311 	2482 	2287 	2091 	1711 	1186 	768  	676  	
 
- 	Global Avg 	1376 	2277 	3831 	4888 	5526 	6178 	6157 	5148 	3714 	2102 	1258 	1072 	
- - Maximum Direct Normal Solar of 10244 Wh/m² on Apr 18
+ 	Global Avg 	1375 	2277 	3829 	4887 	5526 	6173 	6156 	5148 	3714 	2102 	1257 	1072 	
+
+ - Maximum Direct Normal Solar of 10243 Wh/m² on Apr 18
 
  - Average Hourly Statistics for Direct Normal Solar Radiation [Wh/m²]
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
@@ -483,10 +493,10 @@
  	14:01-15:00	  112	  149	  185	  245	  220	  211	  203	  211	  172	  140	   97	   93	
  	15:01-16:00	   81	  117	  160	  195	  199	  209	  176	  182	  160	  111	   66	   59	
  	16:01-17:00	   41	   71	  114	  156	  169	  162	  176	  143	  113	   64	   26	   16	
- 	17:01-18:00	    2	   27	   64	  105	  132	  123	  146	  111	   72	   11	    0	    0	
- 	18:01-19:00	    0	    0	   15	   53	   87	   94	  101	   66	   17	    0	    0	    0	
- 	19:01-20:00	    0	    0	    0	    3	   22	   44	   41	   12	    0	    0	    0	    0	
- 	20:01-21:00	    0	    0	    0	    0	    0	    3	    1	    0	    0	    0	    0	    0	
+ 	17:01-18:00	    1	   27	   64	  105	  132	  123	  146	  111	   72	   11	    0	    0	
+ 	18:01-19:00	    0	    0	   14	   53	   87	   94	  101	   66	   17	    0	    0	    0	
+ 	19:01-20:00	    0	    0	    0	    2	   22	   44	   41	   12	    0	    0	    0	    0	
+ 	20:01-21:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -499,7 +509,7 @@
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 2:01- 3:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 3:01- 4:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
- 	 4:01- 5:00	    0	    0	    0	    0	    0	    1	    0	    0	    0	    0	    0	    0	
+ 	 4:01- 5:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 5:01- 6:00	    0	    0	    0	    0	    5	   21	    4	    0	    0	    0	    0	    0	
  	 6:01- 7:00	    0	    0	    0	   38	   87	  119	   90	   44	    1	    0	    0	    0	
  	 7:01- 8:00	    0	    0	   53	  156	  220	  272	  241	  184	   98	   14	    0	    0	
@@ -512,10 +522,10 @@
  	14:01-15:00	  212	  313	  494	  549	  598	  634	  666	  580	  432	  282	  157	  148	
  	15:01-16:00	  151	  250	  388	  469	  513	  534	  608	  527	  351	  202	  112	  100	
  	16:01-17:00	   64	  140	  268	  361	  397	  458	  490	  393	  247	   96	   37	   23	
- 	17:01-18:00	    2	   45	  142	  242	  250	  312	  336	  255	  126	   13	    0	    0	
- 	18:01-19:00	    0	    0	   25	   94	  143	  177	  187	  119	   22	    0	    0	    0	
- 	19:01-20:00	    0	    0	    0	    3	   25	   58	   54	   13	    0	    0	    0	    0	
- 	20:01-21:00	    0	    0	    0	    0	    0	    3	    1	    0	    0	    0	    0	    0	
+ 	17:01-18:00	    1	   45	  142	  242	  250	  312	  336	  255	  126	   13	    0	    0	
+ 	18:01-19:00	    0	    0	   23	   94	  143	  177	  187	  119	   22	    0	    0	    0	
+ 	19:01-20:00	    0	    0	    0	    2	   25	   58	   54	   13	    0	    0	    0	    0	
+ 	20:01-21:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	21:01-22:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	22:01-23:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	23:01-24:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -532,10 +542,10 @@
  	Direct Avg 	101  	190  	326  	325  	331  	362  	383  	315  	228  	126  	73   	64   	
 
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Diffuse Avg 	89   	133  	187  	266  	273  	294  	271  	246  	199  	137  	88   	76   	
+ 	Diffuse Avg 	88   	131  	186  	265  	270  	291  	269  	243  	195  	132  	84   	74   	
 
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	Global Avg 	155  	256  	430  	560  	653  	724  	722  	603  	431  	242  	144  	121  	
+ 	Global Avg 	154  	255  	429  	558  	650  	722  	720  	601  	428  	237  	139  	119  	
 
  - Monthly Statistics for Zenith Luminance [kCD/m²] **
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	

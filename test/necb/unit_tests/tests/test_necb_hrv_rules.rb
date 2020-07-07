@@ -44,7 +44,8 @@ class NECB_HVAC_Tests < MiniTest::Test
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop)
+                                                                                                hw_loop: hw_loop,
+                                                                                                new_auto_zoner: false)
     systems = model.getAirLoopHVACs
     # increase default outdoor air requirement so that some of the systems in the project would require an HRV
     for isys in 0..0

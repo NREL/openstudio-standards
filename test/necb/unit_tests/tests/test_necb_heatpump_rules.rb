@@ -25,7 +25,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)
 
-    templates = ['NECB2011', 'NECB2015']
+    templates = ['NECB2011', 'NECB2015', 'BTAPPRE1980']
     templates.each do |template|
 
       heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
@@ -77,7 +77,8 @@ class NECB_HVAC_Tests < MiniTest::Test
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
                                                                                                     baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop)
+                                                                                                    hw_loop: hw_loop,
+                                                                                                    new_auto_zoner: false)
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
@@ -148,7 +149,8 @@ class NECB_HVAC_Tests < MiniTest::Test
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop)
+                                                                                                hw_loop: hw_loop,
+                                                                                                new_auto_zoner: false)
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
     # run the standards
