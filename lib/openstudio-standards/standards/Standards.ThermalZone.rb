@@ -1218,54 +1218,111 @@ class Standard
     # Determine the heating limit based on climate zone
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
-    case climate_zone
-    when 'ASHRAE 169-2006-0A',
-        'ASHRAE 169-2006-0B',
-        'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2013-0A',
-        'ASHRAE 169-2013-0B',
-        'ASHRAE 169-2013-1A',
-        'ASHRAE 169-2013-1B',
-        'ASHRAE 169-2013-2A',
-        'ASHRAE 169-2013-2B'
-      htg_lim_btu_per_ft2 = 5
-    when 'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2013-3A',
-        'ASHRAE 169-2013-3B',
-        'ASHRAE 169-2013-3C'
-      htg_lim_btu_per_ft2 = 10
-    when 'ASHRAE 169-2006-4A',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5A',
+    case template
+    when '90.1-2016', '90.1-PRM-2019'
+      case climate_zone
+      when 'ASHRAE 169-2006-0A',
+          'ASHRAE 169-2006-0B',
+          'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2013-0A',
+          'ASHRAE 169-2013-0B',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-2B'
+        htg_lim_btu_per_ft2 = 5
+      when 'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2013-3A',
+          'ASHRAE 169-2013-3B'
+        htg_lim_btu_per_ft2 = 9
+      when 'ASHRAE 169-2006-3C',
+          'ASHRAE 169-2013-3C'
+        htg_lim_btu_per_ft2 = 7
+      when 'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2013-4A',
+          'ASHRAE 169-2013-4B'
+        htg_lim_btu_per_ft2 = 10
+      when 'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2013-4C'
+        htg_lim_btu_per_ft2 = 8
+      when 'ASHRAE 169-2006-5A',
         'ASHRAE 169-2006-5B',
         'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2013-4A',
-        'ASHRAE 169-2013-4B',
-        'ASHRAE 169-2013-4C',
         'ASHRAE 169-2013-5A',
         'ASHRAE 169-2013-5B',
         'ASHRAE 169-2013-5C'
-      htg_lim_btu_per_ft2 = 15
-    when 'ASHRAE 169-2006-6A',
+        htg_lim_btu_per_ft2 = 12
+      when 'ASHRAE 169-2006-6A',
         'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
         'ASHRAE 169-2013-6A',
-        'ASHRAE 169-2013-6B',
+        'ASHRAE 169-2013-6B'
+        htg_lim_btu_per_ft2 = 14
+      when 'ASHRAE 169-2006-7A',
+        'ASHRAE 169-2006-7B',
         'ASHRAE 169-2013-7A',
         'ASHRAE 169-2013-7B'
-      htg_lim_btu_per_ft2 = 20
-    when 'ASHRAE 169-2006-8A',
+        htg_lim_btu_per_ft2 = 16
+      when 'ASHRAE 169-2006-8A',
         'ASHRAE 169-2006-8B',
         'ASHRAE 169-2013-8A',
         'ASHRAE 169-2013-8B'
-      htg_lim_btu_per_ft2 = 25
+        htg_lim_btu_per_ft2 = 19
+      end
+    else
+      case climate_zone
+      when 'ASHRAE 169-2006-0A',
+          'ASHRAE 169-2006-0B',
+          'ASHRAE 169-2006-1A',
+          'ASHRAE 169-2006-1B',
+          'ASHRAE 169-2006-2A',
+          'ASHRAE 169-2006-2B',
+          'ASHRAE 169-2013-0A',
+          'ASHRAE 169-2013-0B',
+          'ASHRAE 169-2013-1A',
+          'ASHRAE 169-2013-1B',
+          'ASHRAE 169-2013-2A',
+          'ASHRAE 169-2013-2B'
+        htg_lim_btu_per_ft2 = 5
+      when 'ASHRAE 169-2006-3A',
+          'ASHRAE 169-2006-3B',
+          'ASHRAE 169-2006-3C',
+          'ASHRAE 169-2013-3A',
+          'ASHRAE 169-2013-3B',
+          'ASHRAE 169-2013-3C'
+        htg_lim_btu_per_ft2 = 10
+      when 'ASHRAE 169-2006-4A',
+          'ASHRAE 169-2006-4B',
+          'ASHRAE 169-2006-4C',
+          'ASHRAE 169-2006-5A',
+          'ASHRAE 169-2006-5B',
+          'ASHRAE 169-2006-5C',
+          'ASHRAE 169-2013-4A',
+          'ASHRAE 169-2013-4B',
+          'ASHRAE 169-2013-4C',
+          'ASHRAE 169-2013-5A',
+          'ASHRAE 169-2013-5B',
+          'ASHRAE 169-2013-5C'
+        htg_lim_btu_per_ft2 = 15
+      when 'ASHRAE 169-2006-6A',
+          'ASHRAE 169-2006-6B',
+          'ASHRAE 169-2006-7A',
+          'ASHRAE 169-2006-7B',
+          'ASHRAE 169-2013-6A',
+          'ASHRAE 169-2013-6B',
+          'ASHRAE 169-2013-7A',
+          'ASHRAE 169-2013-7B'
+        htg_lim_btu_per_ft2 = 20
+      when 'ASHRAE 169-2006-8A',
+          'ASHRAE 169-2006-8B',
+          'ASHRAE 169-2013-8A',
+          'ASHRAE 169-2013-8B'
+        htg_lim_btu_per_ft2 = 25
+      end
     end
 
     # Cooling limit is climate-independent

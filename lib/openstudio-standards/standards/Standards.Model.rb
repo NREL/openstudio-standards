@@ -70,6 +70,9 @@ class Standard
       space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     end
 
+    # Calculate infiltration as per 90.1 PRM rules
+    model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
+
     # If any of the lights are missing schedules, assign an always-off schedule to those lights.
     # This is assumed to be the user's intent in the proposed model.
     model.getLightss.sort.each do |lights|
@@ -5742,4 +5745,19 @@ class Standard
     return parametric_inputs
   end
 
+  # This method retrieves the lowest story in a model
+  #
+  # @return lowest story included in the model
+  def find_lowest_story(model)
+    min_z_story = 1E+10
+    model.getSpaces.sort.each do |space|
+      story = space.buildingStory
+      space_min_z = building_story_minimum_z_value(story)
+      if space_min_z < min_z_story
+        min_z_story = space_min_z
+        lowest_story = story
+      end
+    end
+    return lowest_story
+  end
 end

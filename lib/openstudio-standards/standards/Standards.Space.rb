@@ -1354,7 +1354,7 @@ class Standard
     return area_m2
   end
 
-  # Calculate the area of the exterior walls,
+  # Calculate the area of the exterior walls, and roofs
   # including the area of the windows on these walls.
   #
   # @return [Double] area in m^2
@@ -1376,6 +1376,84 @@ class Standard
     end
 
     return area_m2
+  end
+
+  # Calculate the space envelope area.
+  # According to the 90.1 definition, building envelope include:
+  # 1. "the elements of a building that separate conditioned spaces from the exterior"
+  # 2. "the elements of a building that separate conditioned space from unconditioned 
+  #    space or that enclose semiheated spaces through which thermal energy may be
+  #    transferred to or from the exterior, to or from unconditioned spaces or to or
+  #    from conditioned spaces."
+  #
+  # Outside boundary conditions currently supported:
+  # - Adiabatic
+  # - Surface
+  # - Outdoors
+  # - Foundation
+  # - Ground
+  # - GroundFCfactorMethod
+  # - OtherSideCoefficients
+  # - OtherSideConditionsModel
+  # - GroundSlabPreprocessorAverage
+  # - GroundSlabPreprocessorCore
+  # - GroundSlabPreprocessorPerimeter
+  # - GroundBasementPreprocessorAverageWall
+  # - GroundBasementPreprocessorAverageFloor
+  # - GroundBasementPreprocessorUpperWall
+  # - GroundBasementPreprocessorLowerWall
+  #
+  # Surface type currently supported:
+  # - Floor
+  # - Wall
+  # - RoofCeiling
+  #
+  # @return [Double] area in m^2
+  def space_envelope_area(space, climate_zone, lowest_story)
+    area_m2 = 0.0
+    
+    # Get the space conditioning type
+    space_cond_type = space_conditioning_category(space, climate_zone)
+    
+    # Loop through all surfaces in this space
+    space.surfaces.sort.each do |surface|
+      # Only account for spaces that are conditioned or semi-heated
+      next unless (space_cond_type == 'Unconditioned')
+
+      surf_cnt = false
+
+      # conditioned space OR semi-heated space <-> exterior
+      # conditioned space OR semi-heated space <-> ground
+      #
+      # isGroundSurface does not check for Foundation outside boundary condition
+      if surface.outsideBoundaryCondition == 'Outdoors' || 
+        (surface.isGroundSurface || surface.surfaceType == 'Wall') ||
+        (surface.outsideBoundaryCondition == 'Foundation' || surface.surfaceType == 'Wall') ||
+        (surface.isGroundSurface || surface.surfaceType == 'Roof') ||
+        (surface.outsideBoundaryCondition == 'Foundation' || surface.surfaceType == 'Roof')
+        surf_cnt = true
+      end
+
+      # conditioned space OR semi-heated space <-> unconditioned spaces
+      unless !surf_cnt
+        # TODO: add a case for 'Zone' when supported
+        if surface.outsideBoundaryCondition == 'Surface'
+          adj_space = surface.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space, climate_zone)
+          surf_cnt = true unless !(adj_space_cond_type == 'Unconditioned')
+        end
+      end
+
+      if surf_cnt
+        # This surface
+        area_m2 += surface.netArea
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |subsurface|
+          area_m2 += subsurface.netArea
+      end
+    end
+
+    return area_m2 * space.multiplier
   end
 
   # Determine if the space is a plenum.
@@ -1512,7 +1590,7 @@ class Standard
     end
 
     # Get the category from the zone
-    cond_cat = zone.get.conditioning_category(climate_zone)
+    cond_cat = zone.get.thermal_zone_conditioning_category(climate_zone)
 
     return cond_cat
   end
