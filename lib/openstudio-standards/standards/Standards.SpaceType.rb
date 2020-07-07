@@ -471,7 +471,9 @@ class Standard
   # Sets the internal loads for Appendix G PRM for 2016 and later
   # Initially, only lighting power density will be set
   # Possibly infiltration will also be set from here
-
+  #
+  # @param model [OpenStudio::Model::SpaceType] OpenStudio space type object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def space_type_apply_int_loads_prm(space_type, model)
     # Skip plenums
     # Check if the space type name

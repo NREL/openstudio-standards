@@ -144,7 +144,7 @@ class AppendixGPRMTests < Minitest::Test
   # database produced by OpenStudio/EnergyPlus after
   # running a simulation.
   #
-  # @param model [OpenStudio::Model:Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param report_name [String] Name of the report as defined in the HTM simulation output file
   # @param table_name [String] Name of the table as defined in the HTM simulation output file
   # @param row_name [String] Name of the row as defined in the HTM simulation output file

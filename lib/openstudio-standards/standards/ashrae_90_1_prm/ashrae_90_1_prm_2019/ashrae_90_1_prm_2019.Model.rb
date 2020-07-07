@@ -4,6 +4,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # Determine if there is a need for a proposed model sizing run.
   # A typical application of such sizing run is to determine space
   # conditioning type.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  #
+  # @return [Boolean] Returns true if a sizing run is required
   def model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
     return true
   end
