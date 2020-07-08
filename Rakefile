@@ -1,5 +1,6 @@
 require 'bundler/gem_tasks'
 require 'json'
+require 'fileutils'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
@@ -28,6 +29,10 @@ namespace :test do
 
   desc 'parallel_run_all_tests_locally'
   Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
+    # Make an empty test/reports directory
+    report_dir = 'test/reports'
+    FileUtils.rm_rf(report_dir) if Dir.exist?(report_dir)
+    Dir.mkdir(report_dir)
     file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
     t.libs << 'test'
     t.test_files = file_list
