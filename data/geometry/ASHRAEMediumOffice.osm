@@ -1587,8 +1587,8 @@ OS:Surface,
 
 OS:ConvergenceLimits,
   {ea7161c9-2055-499f-ae58-3521b531b167}, !- Handle
-  2,                                      !- Minimum System Timestep {minutes}
-  25;                                     !- Maximum HVAC Iterations
+  1,                                      !- Minimum System Timestep {minutes}
+  20;                                     !- Maximum HVAC Iterations
 
 OS:Surface,
   {b1b37198-dadf-4ba2-b5fe-54ebb498f337}, !- Handle
@@ -2607,6 +2607,12 @@ OS:Surface,
 OS:Timestep,
   {b0fa043b-3e91-4705-b798-a26bbea47620}, !- Handle
   6;                                      !- Number of Timesteps per Hour
+
+OS:Sizing:Parameters,
+  {0677494e-4528-4de5-8964-9c0de7d15381}, !- Handle
+  1.0,                                    !- Heating Sizing Factor
+  1.0,                                    !- Cooling Sizing Factor
+  6;                                      !- Timesteps in Averaging Window
 
 OS:Surface,
   {af9a19d0-4115-4c85-a9f9-266ec4973890}, !- Handle
@@ -4470,3 +4476,105 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
   Plenum;                                 !- Standards Space Type
+
+OS:SubSurface,
+  {bc65ca32-39bf-48a6-a1cd-d61dc5fd3db7}, !- Handle
+  Perimeter_bot_ZN_1_Wall_South_Door1,    !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {96a31391-8001-46f3-9a72-de2cd1602d0b}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  15.982594238416, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  15.982594238416, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  16.896994238416, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  16.896994238416, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {cc65cb32-40bf-41a6-a2cd-d61dc5fd3db6}, !- Handle
+  Perimeter_bot_ZN_1_Wall_South_Door2,    !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {96a31391-8001-46f3-9a72-de2cd1602d0b}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  33.011303488322, 0, 2.1336,             !- X,Y,Z Vertex 1 {m}
+  33.011303488322, 0, 0,                  !- X,Y,Z Vertex 2 {m}
+  33.925703488322, 0, 0,                  !- X,Y,Z Vertex 3 {m}
+  33.925703488322, 0, 2.1336;             !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {aa65ab32-40be-42a6-b2cd-b61dc5fd3db2}, !- Handle
+  Perimeter_bot_ZN_3_Wall_North_Door1,    !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c4c69e54-2157-4950-8388-5e464612dd2b}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  33.944687903038, 33.2738, 2.1336,       !- X,Y,Z Vertex 1 {m}
+  33.944687903038, 33.2738, 0,            !- X,Y,Z Vertex 2 {m}
+  33.030287903038, 33.2738, 0,            !- X,Y,Z Vertex 3 {m}
+  33.030287903038, 33.2738, 2.1336;       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {bd65ab32-40bd-42c6-c2cd-c61dc5fd3db1}, !- Handle
+  Perimeter_bot_ZN_3_Wall_North_Door2,    !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {c4c69e54-2157-4950-8388-5e464612dd2b}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  16.843341472948, 33.2738, 2.1336,       !- X,Y,Z Vertex 1 {m}
+  16.843341472948, 33.2738, 0,            !- X,Y,Z Vertex 2 {m}
+  15.928941472948, 33.2738, 0,            !- X,Y,Z Vertex 3 {m}
+  15.928941472948, 33.2738, 2.1336;       !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {ad65ac31-10bd-43c6-a1cd-d11dc5fd3db1}, !- Handle
+  Perimeter_bot_ZN_2_Wall_East_Door,      !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {8f228f71-0dc3-4dc5-8a8b-630b8c9a5571}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  49.911, 30.985198503573, 2.1336,        !- X,Y,Z Vertex 1 {m}
+  49.911, 30.985198503573, 0,             !- X,Y,Z Vertex 2 {m}
+  49.911, 31.899598503573, 0,             !- X,Y,Z Vertex 3 {m}
+  49.911, 31.899598503573, 2.1336;        !- X,Y,Z Vertex 4 {m}
+
+OS:SubSurface,
+  {bc65bc32-22bd-44c6-b2cd-d23dc5fd3ea1}, !- Handle
+  Perimeter_bot_ZN_4_Wall_West_Door,      !- Name
+  Door,                                   !- Sub Surface Type
+  ,                                       !- Construction Name
+  {8efef24a-80d8-4f06-ab27-e51f2a68056b}, !- Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  1,                                      !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 2.279591323208, 2.1336,              !- X,Y,Z Vertex 1 {m}
+  0, 2.279591323208, 0,                   !- X,Y,Z Vertex 2 {m}
+  0, 1.365191323208, 0,                   !- X,Y,Z Vertex 3 {m}
+  0, 1.365191323208, 2.1336;              !- X,Y,Z Vertex 4 {m}

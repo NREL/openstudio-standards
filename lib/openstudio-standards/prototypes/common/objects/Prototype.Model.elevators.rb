@@ -194,10 +194,14 @@ class Standard
       floor_area_ip = OpenStudio.convert(hash[:floor_area], 'm^2', 'ft^2').get
 
       # load elevator_data
-      search_criteria = { 'building_type' => building_type }
+      search_criteria = {
+        'building_type' => building_type,
+        'template' => template
+      }
       elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
       if elevator_data_lookup.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}, elevator counts will not account for serving this portion of the building area.")
+        next
       end
 
       # determine number of passenger elevators
@@ -241,7 +245,7 @@ class Standard
       elevator_data_lookup = model_find_object(standards_data['elevators'], search_criteria)
       if elevator_data_lookup.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.elevators', "Could not find elevator data for #{building_type}.")
-        return nil
+        next
       end
 
       # determine number of additional passenger elevators
@@ -249,7 +253,6 @@ class Standard
         add_pass_elevs += elevator_data_lookup['additional_passenger_elevators']
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Adding #{elevator_data_lookup['additional_passenger_elevators']} additional passenger elevators.")
       else
-        add_pass_elevs += 0.0
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'No additional passenger elevators added to model.')
       end
     end

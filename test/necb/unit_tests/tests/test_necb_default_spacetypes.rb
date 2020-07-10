@@ -137,7 +137,7 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
           shw_target_temperature_schedule = "NA"
         else
           shw__fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
-          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.getPeakFlowRate.value # m3/s
+          shw_peak_flow = water_fixture.waterUseEquipmentDefinition.peakFlowRate # m3/s
           shw_peak_flow_per_area = shw_peak_flow / space_area #m3/s/m2
           # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
           shw_watts_per_person = shw_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
@@ -229,17 +229,17 @@ class NECB2011DefaultSpaceTypesTests < Minitest::Test
         dsoa = st.designSpecificationOutdoorAir.get
         header_output << "outdoorAirMethod,"         
         output << "#{dsoa.outdoorAirMethod },"
-        header_output << "OutdoorAirFlowperFloorArea (#{dsoa.getOutdoorAirFlowperFloorArea.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowperFloorArea.value.round(4)},"
+        header_output << "OutdoorAirFlowperFloorArea (m/s) ,"
+        output << "#{dsoa.outdoorAirFlowperFloorArea.round(4)},"
           
-        header_output << "OutdoorAirFlowperPerson  (#{dsoa.getOutdoorAirFlowperPerson.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowperPerson.value.round(4)},"
+        header_output << "OutdoorAirFlowperPerson  (m^3/s*person) ,"
+        output << "#{dsoa.outdoorAirFlowperPerson.round(4)},"
           
-        header_output << "OutdoorAirFlowRate (#{dsoa.getOutdoorAirFlowRate.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowRate.value.round(4)},"
+        header_output << "OutdoorAirFlowRate (m^3/s) ,"
+        output << "#{dsoa.outdoorAirFlowRate.round(4)},"
           
-        header_output << "OutdoorAirFlowAirChangesperHour (#{dsoa.getOutdoorAirFlowAirChangesperHour.units.print}) ,"
-        output << "#{dsoa.getOutdoorAirFlowAirChangesperHour.value.round(4)},"
+        header_output << "OutdoorAirFlowAirChangesperHour (1/h) ,"
+        output << "#{dsoa.outdoorAirFlowAirChangesperHour.round(4)},"
           
         header_output << "outdoorAirFlowRateFractionSchedule,"
         if dsoa.outdoorAirFlowRateFractionSchedule.empty?

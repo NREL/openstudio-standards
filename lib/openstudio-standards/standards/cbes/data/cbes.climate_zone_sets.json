@@ -1,0 +1,100 @@
+{
+  "climate_zone_sets": [
+    {
+      "name": "ClimateZone CEC1",
+      "climate_zones": [
+        "CEC T24-CEC1"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC10",
+      "climate_zones": [
+        "CEC T24-CEC10"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC11",
+      "climate_zones": [
+        "CEC T24-CEC11"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC12",
+      "climate_zones": [
+        "CEC T24-CEC12"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC13",
+      "climate_zones": [
+        "CEC T24-CEC13"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC14",
+      "climate_zones": [
+        "CEC T24-CEC14"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC15",
+      "climate_zones": [
+        "CEC T24-CEC15"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC16",
+      "climate_zones": [
+        "CEC T24-CEC16"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC2",
+      "climate_zones": [
+        "CEC T24-CEC2"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC3",
+      "climate_zones": [
+        "CEC T24-CEC3"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC4",
+      "climate_zones": [
+        "CEC T24-CEC4"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC5",
+      "climate_zones": [
+        "CEC T24-CEC5"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC6",
+      "climate_zones": [
+        "CEC T24-CEC6"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC7",
+      "climate_zones": [
+        "CEC T24-CEC7"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC8",
+      "climate_zones": [
+        "CEC T24-CEC8"
+      ]
+    },
+    {
+      "name": "ClimateZone CEC9",
+      "climate_zones": [
+        "CEC T24-CEC9"
+      ]
+    }
+  ]
+}

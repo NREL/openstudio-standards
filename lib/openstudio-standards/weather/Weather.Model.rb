@@ -14,6 +14,8 @@ class Standard
 
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
+        'ASHRAE 169-2006-0A' => 'VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2.epw',
+        'ASHRAE 169-2006-0B' => 'ARE_Dubai.Intl.AP.411940_IWEC2.epw',
         'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
         'ASHRAE 169-2006-1B' => 'SAU_Riyadh.404380_IWEC.epw',
         'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
@@ -33,6 +35,8 @@ class Standard
         'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
         'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
         'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+        'ASHRAE 169-2013-0A' => 'VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2.epw',
+        'ASHRAE 169-2013-0B' => 'ARE_Dubai.Intl.AP.411940_IWEC2.epw',
         'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
         'ASHRAE 169-2013-1B' => 'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2.epw',
         'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
@@ -153,7 +157,7 @@ class Standard
     ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
     if File.exist? ddy_file
       ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
-      ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
+      ddy_model.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).sort.each do |d|
         # Import the 99.6% Heating and 0.4% Cooling design days
         ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)|(Clg 0.4% Condns DB=>MCWB)/
         if d.name.get =~ ddy_list
@@ -220,6 +224,25 @@ class Standard
     end
 
     return heating_design_outdoor_temps
+  end
+
+  # Helper method to retrieve the cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
+  def get_wb_mcb(weather_file)
+    # Load in the ddy file based on convention that it is in
+    # the same directory and has the same basename as the epw file.
+    ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+    if File.exist? ddy_file
+      dds = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
+      dds.getDesignDays.sort.each do |dd|
+        if dd.name.get.include? '4% Condns WB=>MDB'
+          return dd.humidityIndicatingConditionsAtMaximumDryBulb
+        end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
+      puts "Could not find .ddy file for: #{ddy_file}."
+    end
+    return false
   end
 end
 

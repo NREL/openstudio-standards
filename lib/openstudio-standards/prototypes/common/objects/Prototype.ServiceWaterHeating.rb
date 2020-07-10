@@ -37,8 +37,6 @@ class Standard
                          number_of_stories = 1,
                          pipe_insulation_thickness = 0.0127, # 1/2in
                          number_water_heaters = 1)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_swh_loop, number_water_heaters = #{number_water_heaters}")
-
     # Service water heating loop
     service_water_loop = OpenStudio::Model::PlantLoop.new(model)
     service_water_loop.setMinimumLoopTemperature(10.0)
@@ -172,7 +170,6 @@ class Standard
                              flowrate_schedule,
                              water_heater_thermal_zone,
                              number_water_heaters)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "In model_add_water_heater, number_water_heaters = #{number_water_heaters}")
     # Water heater
     # TODO Standards - Change water heater methodology to follow
     # 'Model Enhancements Appendix A.'
@@ -262,7 +259,7 @@ class Standard
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
     elsif water_heater_fuel == 'HeatPump'
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple but crappy workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
       # the COP of a HPWH.
@@ -1084,7 +1081,7 @@ class Standard
       copper_pipe.setName("Copper pipe 0.75in type L")
       copper_pipe.setRoughness('Smooth')
       copper_pipe.setThickness(OpenStudio.convert(0.045, 'in', 'm').get)
-      copper_pipe.setConductivity(386.0)
+      copper_pipe.setThermalConductivity(386.0)
       copper_pipe.setDensity(OpenStudio.convert(556, 'lb/ft^3', 'kg/m^3').get)
       copper_pipe.setSpecificHeat(OpenStudio.convert(0.092, 'Btu/lb*R', 'J/kg*K').get)
       copper_pipe.setThermalAbsorptance(0.9) # TODO: find reference for property
@@ -1105,7 +1102,7 @@ class Standard
         insulation.setName("Fiberglass batt #{pipe_insulation_thickness_in.round(2)}in")
         insulation.setRoughness('Smooth')
         insulation.setThickness(OpenStudio.convert(pipe_insulation_thickness_in, 'in', 'm').get)
-        insulation.setConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
+        insulation.setThermalConductivity(OpenStudio.convert(0.46, 'Btu*in/hr*ft^2*R', 'W/m*K').get)
         insulation.setDensity(OpenStudio.convert(0.7, 'lb/ft^3', 'kg/m^3').get)
         insulation.setSpecificHeat(OpenStudio.convert(0.2, 'Btu/lb*R', 'J/kg*K').get)
         insulation.setThermalAbsorptance(0.9) # Irrelevant for Pipe:Indoor; no radiation model is used

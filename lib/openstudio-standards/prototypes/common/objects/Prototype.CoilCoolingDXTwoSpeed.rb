@@ -9,7 +9,7 @@ class Standard
   # @param type [String] the type of two speed DX coil to reference the correct curve set
   def create_coil_cooling_dx_two_speed(model,
                                        air_loop_node: nil,
-                                       name: "2spd DX Clg Coil",
+                                       name: '2spd DX Clg Coil',
                                        schedule: nil,
                                        type: nil)
 
@@ -28,7 +28,7 @@ class Standard
     elsif schedule.class == String
       coil_availability_schedule = model_add_schedule(model, schedule)
 
-      if coil_availability_schedule.nil? && schedule == "alwaysOffDiscreteSchedule"
+      if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
         coil_availability_schedule = model.alwaysOffDiscreteSchedule
       elsif coil_availability_schedule.nil?
         coil_availability_schedule = model.alwaysOnDiscreteSchedule
@@ -50,11 +50,27 @@ class Standard
 
     # curve sets
     if type == 'OS default'
-
       # use OS defaults
+    elsif type == 'Residential Minisplit HP'
+      # Performance curves
+      # These coefficients are in SI units
+      cool_cap_ft_coeffs_si = [0.7531983499655835, 0.003618193903031667, 0.0, 0.006574385031351544, -6.87181191015432e-05, 0.0]
+      cool_eir_ft_coeffs_si = [-0.06376924779982301, -0.0013360593470367282, 1.413060577993827e-05, 0.019433076486584752, -4.91395947154321e-05, -4.909341249475308e-05]
+      cool_cap_fflow_coeffs = [1, 0, 0]
+      cool_eir_fflow_coeffs = [1, 0, 0]
+      cool_plf_fplr_coeffs = [0.89, 0.11, 0]
 
+      # Make the curves
+      clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'Cool-Cap-fT', 0, 100, 0, 100, nil, nil)
+      clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'Cool-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'Cool-EIR-fT', 0, 100, 0, 100, nil, nil)
+      clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'Cool-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
+      clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'Cool-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+      clg_cap_f_of_temp_low_spd = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'Cool-Cap-fT', 0, 100, 0, 100, nil, nil)
+      clg_energy_input_ratio_f_of_temp_low_spd = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'Cool-EIR-fT', 0, 100, 0, 100, nil, nil)
+      clg_coil.setRatedLowSpeedSensibleHeatRatio(0.73)
+      clg_coil.setCondenserType('AirCooled')
     else # default curve set, type == 'PSZ-AC' || 'Split AC' || 'PTAC'
-
       clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)
       clg_cap_f_of_temp.setCoefficient1Constant(0.42415)
       clg_cap_f_of_temp.setCoefficient2x(0.04426)
