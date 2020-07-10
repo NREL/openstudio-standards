@@ -370,5 +370,5 @@ class Standard
     end
 
     return ua
-  end 
+  end
 end

@@ -3940,7 +3940,7 @@ class Standard
   # Determines the skylight to roof ratio limit for a given standard
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
   # 5% by default.
-  def model_prm_skylight_to_roof_ratio_limit_(model)
+  def model_prm_skylight_to_roof_ratio_limit(model)
     srr_lim = 5.0
     return srr_lim
   end

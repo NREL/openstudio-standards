@@ -440,7 +440,7 @@ class Standard
 
   # Calculate the fenestration U-Factor base on the glass, frame,
   # and divider performance and area calculated by EnergyPlus.
-  # 
+  #
   # @param [OpenStudio:Model:Construction] Openstudio Construction object
   #
   # @return [Double] the U-Factor in W/m^2*K
@@ -482,7 +482,7 @@ class Standard
       glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
 
       glass_u_factor_w_per_m2_k = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
-      
+
       # Glass area
       glass_area_query = "SELECT Value
                           FROM tabulardatawithstrings
@@ -508,7 +508,7 @@ class Standard
       frame_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(frame_conductance_query)
 
       frame_conductance_w_per_m2_k = frame_conductance_w_per_m2_k.is_initialized ? frame_conductance_w_per_m2_k.get : 0.0
-      
+
       # Frame area
       frame_area_query = "SELECT Value
                           FROM tabulardatawithstrings
@@ -517,7 +517,7 @@ class Standard
                           AND TableName='Exterior Fenestration'
                           AND ColumnName='Frame Area'
                           AND RowName='#{row_id}'"
-          
+
       frame_area_m2 = sql.execAndReturnFirstDouble(frame_area_query)
 
       frame_area_m2 = frame_area_m2.is_initialized ? frame_area_m2.get : 0.0
@@ -534,7 +534,7 @@ class Standard
       divider_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(divider_conductance_query)
 
       divider_conductance_w_per_m2_k = divider_conductance_w_per_m2_k.is_initialized ? divider_conductance_w_per_m2_k.get : 0.0
-      
+
       # Divider area
       divider_area_query = "SELECT Value
                           FROM tabulardatawithstrings
@@ -543,13 +543,12 @@ class Standard
                           AND TableName='Exterior Fenestration'
                           AND ColumnName='Divder Area'
                           AND RowName='#{row_id}'"
-          
+
       divider_area_m2 = sql.execAndReturnFirstDouble(divider_area_query)
 
       divider_area_m2 = divider_area_m2.is_initialized ? divider_area_m2.get : 0.0
-      
-      u_factor_w_per_m2_k = (glass_u_factor_w_per_m2_k * glass_area_m2 + frame_conductance_w_per_m2_k * frame_area_m2 + divider_conductance_w_per_m2_k * divider_area_m2) / 
-                            (glass_area_m2 + frame_area_m2 + divider_area_m2)
+
+      u_factor_w_per_m2_k = (glass_u_factor_w_per_m2_k * glass_area_m2 + frame_conductance_w_per_m2_k * frame_area_m2 + divider_conductance_w_per_m2_k * divider_area_m2) / (glass_area_m2 + frame_area_m2 + divider_area_m2)
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', 'Model has no sql file containing results, cannot lookup data.')
     end

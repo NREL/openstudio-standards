@@ -50,12 +50,10 @@ class ASHRAE901PRM < Standard
     if infil_sch.nil?
       infil_sch = space.model.alwaysOnDiscreteSchedule
     end
-    
+
     # Remove all pre-existing space infiltration objects
-    space.spaceInfiltrationDesignFlowRates.each do |extisting_infil_obj|
-      extisting_infil_obj.remove
-    end
-    
+    space.spaceInfiltrationDesignFlowRates.each(&:remove)
+
     # Create an infiltration rate object for this space
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
     infiltration.setName("#{space.name} Infiltration")
@@ -63,7 +61,7 @@ class ASHRAE901PRM < Standard
       when 'Flow/ExteriorWallArea'
         infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13))
       when 'Flow/Area'
-        infiltration.setFlowperSpaceFloorArea (adj_infil_flow_area.round(13))
+        infiltration.setFlowperSpaceFloorArea(adj_infil_flow_area.round(13))
     end
     infiltration.setSchedule(infil_sch)
     infiltration.setConstantTermCoefficient(infil_coefficients[0])

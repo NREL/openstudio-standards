@@ -1195,7 +1195,7 @@ class Standard
   end
 
   # Determines whether the zone is conditioned per 90.1,
-  # which is based on heating and cooling loads. Logic to 
+  # which is based on heating and cooling loads. Logic to
   # detect indirectly-conditioned spaces cannot be implemented
   # as part of this measure as it would need to call itself.
   # It is implemented as part of space_conditioning_category().
@@ -1330,7 +1330,7 @@ class Standard
     # Cooling limit is climate-independent
     case template
     when '90.1-2016', '90.1-PRM-2019'
-      clg_lim_btu_per_ft2 = 3.4 
+      clg_lim_btu_per_ft2 = 3.4
     else
       clg_lim_btu_per_ft2 = 5
     end
