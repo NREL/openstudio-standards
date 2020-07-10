@@ -131,7 +131,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   # Determines the skylight to roof ratio limit for a given standard
-  # 3% for 90.1-20-13
+  # 3% for 90.1-PRM-2019
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
   def model_prm_skylight_to_roof_ratio_limit(model)
     srr_lim = 3.0

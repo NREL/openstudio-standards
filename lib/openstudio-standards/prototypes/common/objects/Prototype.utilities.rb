@@ -420,8 +420,6 @@ class Standard
     # Calculate the typical pressure - same for all building types
     final_pressure_pa = 0.5 * cs * rho * uh**2
 
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "Final pressure PA = #{final_pressure_pa.round(3)} Pa.")
-
     adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
 
     return adjusted_infiltration_rate_m3_per_s

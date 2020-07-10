@@ -1,4 +1,4 @@
-class ASHRAE9012013 < ASHRAE901
+class ASHRAE901PRM < Standard
   # @!group Space
 
   # Set the infiltration rate for this space to include
@@ -7,15 +7,23 @@ class ASHRAE9012013 < ASHRAE901
   # @return [Double] true if successful, false if not
   def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
     # Calculate infiltration rate
-    case infil_method
-      when 'flowperExteriorWallArea'
-        # Spread the total infiltration rate over all above grade walls
-        all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.exteriorWallArea
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2 of above grade wall area.")
-      when 'flowperSpaceFloorArea'
-        # Spread the total infiltration rate over all space floor area
-        all_ext_infil_m3_per_s_per_m2 = tot_infil_m3_per_s / space.floorArea
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{all_ext_infil_m3_per_s_per_m2.round(8)} m^3/s*m^2 of space floor area.")
+    case infil_method.to_s
+      when 'Flow/ExteriorWallArea'
+        # Spread the total infiltration rate
+        total_exterior_wall_area = 0
+        space.model.getSpaces.sort.each do |spc|
+          total_exterior_wall_area += spc.exteriorWallArea
+        end
+        adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_ext_wall_area.round(8)} m^3/s*m^2 of above grade wall area.")
+      when 'Flow/Area'
+        # Spread the total infiltration rate
+        total_floor_area = 0
+        space.model.getSpaces.sort.each do |spc|
+          total_floor_area += spc.floorArea
+        end
+        adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_area.round(8)} m^3/s*m^2 of space floor area.")
     end
 
     # Get any infiltration schedule already assigned to this space or its space type
@@ -43,14 +51,19 @@ class ASHRAE9012013 < ASHRAE901
       infil_sch = space.model.alwaysOnDiscreteSchedule
     end
     
+    # Remove all pre-existing space infiltration objects
+    space.spaceInfiltrationDesignFlowRates.each do |extisting_infil_obj|
+      extisting_infil_obj.remove
+    end
+    
     # Create an infiltration rate object for this space
     infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
     infiltration.setName("#{space.name} Infiltration")
-    case infil_method
-      when 'flowperExteriorWallArea'
-        infiltration.setFlowperExteriorWallArea(adj_infil_rate_m3_per_s_per_m2.round(13))
-      when 'flowperSpaceFloorArea'
-      infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2.round(13))
+    case infil_method.to_s
+      when 'Flow/ExteriorWallArea'
+        infiltration.setFlowperExteriorWallArea(adj_infil_flow_ext_wall_area.round(13))
+      when 'Flow/Area'
+        infiltration.setFlowperSpaceFloorArea (adj_infil_flow_area.round(13))
     end
     infiltration.setSchedule(infil_sch)
     infiltration.setConstantTermCoefficient(infil_coefficients[0])

@@ -330,22 +330,71 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check baseline infiltration calculations
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_infiltration(prototypes_base)
+    std = Standard.build('90.1-PRM-2019')
+    space_env_areas = JSON.parse(File.read("#{@@json_dir}/space_envelope_areas.json"))
+
+    # Check that the model_get_infiltration_method and 
+    # model_get_infiltration_coefficients method retrieve
+    # the correct information
+    model = OpenStudio::Model::Model.new()
+    infil_object = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infil_object.setFlowperExteriorWallArea(0.001)
+    infil_object.setConstantTermCoefficient(0.002)
+    infil_object.setTemperatureTermCoefficient(0.003)
+    infil_object.setVelocityTermCoefficient(0.004)
+    infil_object.setVelocitySquaredTermCoefficient(0.005)
+    new_space = OpenStudio::Model::Space.new(model)
+    infil_object.setSpace(new_space)
+    assert(infil_object.designFlowRateCalculationMethod().to_s == std.model_get_infiltration_method(model), "Error in infiltration method retrieval.")
+    assert([infil_object.constantTermCoefficient(),
+            infil_object.temperatureTermCoefficient(),
+            infil_object.velocityTermCoefficient(),
+            infil_object.velocitySquaredTermCoefficient()
+            ] == std.model_get_infiltration_coefficients(model), "Error in infiltration coeffcient retrieval.")
+
+    prototypes_base.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+
+      # Check if the space envelope area calculations
+      spc_env_area = 0 
+      model.getSpaces.sort.each do |spc|
+        spc_env_area += std.space_envelope_area(spc, climate_zone)
+      end
+      assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area} (model) vs. #{space_env_areas[run_id]} (expected).")
+      
+      # Check that infiltrations are not assigned at 
+      # the space type level
+      model.getSpaceTypes.sort.each do |spc|
+        assert(false,"The baseline for the #{building_type}, #{template}, #{climate_zone} model has infiltration specified at the space type level.") unless spc.spaceInfiltrationDesignFlowRates.empty?
+      end
+
+      # Back calculate the I_75 (cfm/ft2), expected value is 1 cfm/ft2 in 90.1-PRM-2019
+      conv_fact = OpenStudio.convert(1, "m^3/s", "ft^3/min").to_f / OpenStudio.convert(1, "m^2", "ft^2").to_f
+      assert((std.model_current_building_envelope_infiltration_at_75pa(model, spc_env_area) * conv_fact).round(2) == 1.0, "The baseline air leakage rate of the building envelope at a fixed building pressure of 75 Pa is different that the requirement (1 cfm/ft2).")
+    end
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      'wwr',
-      'envelope',
-      'lpd',
-      'isresidential',
-      'daylighting_control'
+      #'wwr',
+      #'envelope',
+      #'lpd',
+      #'isresidential',
+      #'daylighting_control',
+      'infiltration'
     ]
 
     # Get list of unique prototypes
     prototypes_to_generate = get_prototype_to_generate(tests, @@prototype_list)
-    puts prototypes_to_generate
     # Generate all unique prototypes
     prototypes_generated = generate_prototypes(prototypes_to_generate)
     # Create all unique baseline
@@ -360,5 +409,6 @@ class AppendixGPRMTests < Minitest::Test
     check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
     check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
     check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
+    check_infiltration(prototypes_base['infiltration']) unless !(tests.include? 'infiltration')
   end
 end

@@ -3940,7 +3940,7 @@ class Standard
   # Determines the skylight to roof ratio limit for a given standard
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
   # 5% by default.
-  def model_prm_skylight_to_roof_ratio_limit(model)
+  def model_prm_skylight_to_roof_ratio_limit_(model)
     srr_lim = 5.0
     return srr_lim
   end
@@ -5755,11 +5755,13 @@ class Standard
 
   # This method retrieves the lowest story in a model
   #
-  # @return lowest story included in the model
+  # @return [OpenStudio::Model::BuildingStory] Lowest story included in the model
   def find_lowest_story(model)
     min_z_story = 1E+10
+    lowest_story = nil
     model.getSpaces.sort.each do |space|
-      story = space.buildingStory
+      story = space.buildingStory.get
+      lowest_story = story if lowest_story.nil?
       space_min_z = building_story_minimum_z_value(story)
       if space_min_z < min_z_story
         min_z_story = space_min_z

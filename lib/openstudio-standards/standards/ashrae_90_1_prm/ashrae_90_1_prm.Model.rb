@@ -1,4 +1,4 @@
-class ASHRAE901PRM < ASHRAE901
+class ASHRAE901PRM < Standard
   # @!group Model
 
   # Determines the area of the building above which point
@@ -119,14 +119,6 @@ class ASHRAE901PRM < ASHRAE901
     return fan_type
   end
 
-  # Determines the skylight to roof ratio limit for a given standard
-  # 3% for 90.1-20-13
-  # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
-  def model_prm_skylight_to_roof_ratio_limit(model)
-    srr_lim = 3.0
-    return srr_lim
-  end
-
   # This method creates customized infiltration objects for each
   # space and removes the SpaceType-level infiltration objects.
   #
@@ -138,7 +130,7 @@ class ASHRAE901PRM < ASHRAE901
     #     and is appropriate for smaller, residential-type buildings."
     # Return an error if the model does use this object
     ela = 0
-    model.getSpaceInfiltrationEffectiveLeakageArea.sort.each do |ELA|
+    model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |effLA|
       ela += 1
     end
     if ela > 0
@@ -153,7 +145,7 @@ class ASHRAE901PRM < ASHRAE901
     #    transferred to or from the exterior, to or from unconditioned spaces or to or
     #    from conditioned spaces."
     building_envelope_area_m2 = 0
-    model.getSpaces.sort.each |space|
+    model.getSpaces.sort.each do |space|
       building_envelope_area_m2 += space_envelope_area(space, climate_zone)
     end
     if building_envelope_area_m2 == 0.0
@@ -163,16 +155,19 @@ class ASHRAE901PRM < ASHRAE901
 
     # Calculate current model air leakage rate @ 75 Pa and report it
     curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model I_75Pa estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
 
     # Calculate building adjusted building envelope
     # air infiltration following the 90.1 PRM rules
     tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(model, building_envelope_area_m2)
 
-    # Find infiltration method used in proposed model, if any
+    # Find infiltration method used in the model, if any.
+    #
     # If multiple methods are used, use per above grade wall
-    # area (i.e. exterior wall area)
+    # area (i.e. exterior wall area), if air/changes per hour
+    # or exterior surface area is used, use flow/area
     infil_method = model_get_infiltration_method(model)
+    infil_method = "Flow/Area" if infil_method != "Flow/Area" || infil_method != "Flow/ExteriorWallArea"
     infil_coefficients = model_get_infiltration_coefficients(model)
 
     # Set the infiltration rate at each space
@@ -190,7 +185,7 @@ class ASHRAE901PRM < ASHRAE901
 
   # This method retrieves the type of infiltration input
   # used in the model. If input is inconsitent, returns
-  # flowperSpaceFloorArea
+  # Flow/Area
   #
   # @return [String] infiltration input type
   def model_get_infiltration_method(model)
@@ -199,13 +194,9 @@ class ASHRAE901PRM < ASHRAE901
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
         old_infil = space.spaceInfiltrationDesignFlowRates[0]
-        if old_infil.flowperExteriorWallArea.is_initialized
-          old_infil_method = 'flowperExteriorWallArea'
-        elsif old_infil.flowperSpaceFloorArea.is_initialized
-          old_infil_method = 'flowperSpaceFloorArea'
-        end
+        old_infil_method = old_infil.designFlowRateCalculationMethod().to_s
         # Return flow per space floor area if method is inconsisten in proposed model
-        return 'flowperSpaceFloorArea' unless (infil_method == old_infil_method && !(infil_method.nil?))
+        return 'Flow/Area' if (infil_method != old_infil_method && !(infil_method.nil?))
         infil_method = old_infil_method
       end
   
@@ -214,18 +205,16 @@ class ASHRAE901PRM < ASHRAE901
         space_type = space.spaceType.get
         unless space_type.spaceInfiltrationDesignFlowRates.empty?
           old_infil = space_type.spaceInfiltrationDesignFlowRates[0]
-          if old_infil.flowperExteriorWallArea.is_initialized
-            old_infil_method = 'flowperExteriorWallArea'
-          elsif old_infil.flowperSpaceFloorArea .is_initialized
-            old_infil_method = 'flowperSpaceFloorArea'
-          end
+          old_infil_method = old_infil.designFlowRateCalculationMethod().to_s
           # Return flow per space floor area if method is inconsisten in proposed model
-          return 'flowperSpaceFloorArea' unless (infil_method == old_infil_method && !(infil_method.nil?))
+          return 'Flow/Area' if (infil_method != old_infil_method && !(infil_method.nil?))
           infil_method = old_infil_method 
         end
       end
-      return infil_method
     end
+
+    return infil_method
+  end
 
   # This method retrieves the infiltration coefficients
   # used in the model. If input is inconsitent, returns
@@ -242,24 +231,16 @@ class ASHRAE901PRM < ASHRAE901
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
         old_infil = space.spaceInfiltrationDesignFlowRates[0]
-        if old_infil.constantTermCoefficient.is_initialized
-          cst = old_infil.constantTermCoefficient.get
-        end
-        if old_infil.temperatureTermCoefficient.is_initialized
-          temp = old_infil.temperatureTermCoefficient.get
-        end
-        if old_infil.velocityTermCoefficient.is_initialized
-          vel = old_infil.velocityTermCoefficient.get
-        end
-        if old_infil.velocitySquaredTermCoefficient.is_initialized
-          vel_2 = old_infil.velocitySquaredTermCoefficient.get
-        end
-        old_infil_coeffs = [cst, temp, vel, vel_2] unless !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
+        cst = old_infil.constantTermCoefficient()
+        temp = old_infil.temperatureTermCoefficient()
+        vel = old_infil.velocityTermCoefficient()
+        vel_2 = old_infil.velocitySquaredTermCoefficient()
+        old_infil_coeffs = [cst, temp, vel, vel_2] if !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
         # Return flow per space floor area if method is inconsisten in proposed model
-        return [0.0, 0.0, 0.224, 0.0] unless (infil_coeffs == old_infil_method && !(infil_coeffs[0].nil? &&
+        return [0.0, 0.0, 0.224, 0.0] if (infil_coeffs != old_infil_coeffs && !(infil_coeffs[0].nil? &&
                                                                                     infil_coeffs[1].nil? &&
                                                                                     infil_coeffs[2].nil? &&
-                                                                                    infil_coeffs[3].nil?)
+                                                                                    infil_coeffs[3].nil?))
         infil_coeffs = old_infil_coeffs
       end
   
@@ -268,30 +249,29 @@ class ASHRAE901PRM < ASHRAE901
         space_type = space.spaceType.get
         unless space_type.spaceInfiltrationDesignFlowRates.empty?
           old_infil = space_type.spaceInfiltrationDesignFlowRates[0]
-          if old_infil.constantTermCoefficient.is_initialized
-            cst = old_infil.constantTermCoefficient.get
-          end
-          if old_infil.temperatureTermCoefficient.is_initialized
-            temp = old_infil.temperatureTermCoefficient.get
-          end
-          if old_infil.velocityTermCoefficient.is_initialized
-            vel = old_infil.velocityTermCoefficient.get
-          end
-          if old_infil.velocitySquaredTermCoefficient.is_initialized
-            vel_2 = old_infil.velocitySquaredTermCoefficient.get
-          end
-          old_infil_coeffs = [cst, temp, vel, vel_2] unless !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
+          cst = old_infil.constantTermCoefficient()
+          temp = old_infil.temperatureTermCoefficient()
+          vel = old_infil.velocityTermCoefficient()
+          vel_2 = old_infil.velocitySquaredTermCoefficient()
+          old_infil_coeffs = [cst, temp, vel, vel_2] if !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
           # Return flow per space floor area if method is inconsisten in proposed model
-          return [0.0, 0.0, 0.224, 0.0] unless (infil_coeffs == old_infil_method && !(infil_coeffs[0].nil? &&
+          return [0.0, 0.0, 0.224, 0.0] unless (infil_coeffs != old_infil_coeffs && !(infil_coeffs[0].nil? &&
                                                                                       infil_coeffs[1].nil? &&
                                                                                       infil_coeffs[2].nil? &&
-                                                                                      infil_coeffs[3].nil?)
+                                                                                      infil_coeffs[3].nil?))
           infil_coeffs = old_infil_coeffs
+        end
       end
-      return infil_coeffs
     end
+    return infil_coeffs
+  end
 
-  # This methods calculate the current model air leakage rate @ 75 Pa
+  # This methods calculate the current model air leakage rate @ 75 Pa.
+  # It assumes that the model follows the PRM methods, see G3.1.1.4
+  # in 90.1-2019 for reference.
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio Model object
+  # @param [Double] Building envelope area as per 90.1 in m^2
   #
   # @return [Float] building model air leakage rate
   def model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
@@ -309,6 +289,7 @@ class ASHRAE901PRM < ASHRAE901
             bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
           elsif infil_obj.airChangesperHour.is_initialized
             bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
+          end
         end
       end
   
@@ -326,10 +307,13 @@ class ASHRAE901PRM < ASHRAE901
               bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
             elsif infil_obj.airChangesperHour.is_initialized
               bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
+            end
           end
         end
       end
     end
+    # adjust_infiltration_to_prototype_building_conditions(1) corresponds
+    # to the 0.112 shown in G3.1.1.4
     curr_tot_infil_m3_per_s_per_envelope_area = bldg_air_leakage_rate / adjust_infiltration_to_prototype_building_conditions(1) / building_envelope_area_m2
     return curr_tot_infil_m3_per_s_per_envelope_area
   end
