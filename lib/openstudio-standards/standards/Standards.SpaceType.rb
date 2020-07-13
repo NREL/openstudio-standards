@@ -546,6 +546,22 @@ class Standard
           inst.remove
         end
       end
+      
+      #if instances.size > 0
+        #instances.each do |lgts|
+          #lgts.schedule.get.to_scheduleRuleset.get.scheduleRules.each do |week_rule|
+          #  day_rule = week_rule.daySchedule()
+          #  times = day_rule.times()
+          #  times.each do |time|
+          #    old_value = day_rule.getValue(time)
+          #    day_rule.removeValue(time)
+          #    new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
+          #    day_rule.addValue(time,new_value)
+          #  end
+          #end
+        #end
+      #end
+
       # Modify the definition of the instance
       if multiple_lpd_value_check == false
         space_type.lights.sort.each do |inst|

@@ -82,6 +82,15 @@ class Standard
       end
     end
 
+    if /prm/i =~ template
+      model.getScheduleTypeLimitss.sort.each do |limit|
+        if limit.name.to_s == 'Fractional'
+          limit.resetUpperLimitValue()
+          limit.setUpperLimitValue(5.0)
+        end
+      end
+    end
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
     # Run a sizing run to calculate VLT for layer-by-layer windows.

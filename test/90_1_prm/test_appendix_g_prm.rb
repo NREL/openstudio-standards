@@ -330,6 +330,72 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  # Check lighting occ sensor
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_light_occ_sensor(prototypes,prototypes_base)
+    light_sch = {}
+    prototypes.each do |prototype, model_proto|
+      building_type, template, climate_zone, mod = prototype
+      # Define name of spaces used for verification
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+      
+      # Get lighting schedule in prototype model
+      light_sch_model = {}
+      puts "\n\n"
+      puts model_proto.getLightss
+    #  model_proto.getLightss.sort.each do |lgts|
+    #    light_sch_model_lgts = {}
+    #  #  #lgts.schedule.get.to_scheduleRuleset.get.scheduleRules.each do |week_rule|
+    #  #  #  light_sch_model_week_rule = {}
+    #  #  #  day_rule = week_rule.daySchedule()
+    #  #  #  times = day_rule.times()
+    #  #  #  #times.each do |time|
+    #  #  #  #  light_sch_model_week_rule[time.to_s] = day_rule.getValue(time)
+    #  #  #  #end
+    #  #  #  light_sch_model_lgts[week_rule.name.to_s] = light_sch_model_week_rule
+    #  #  #end
+    #  #  light_sch_model[lgts.name.to_s] = light_sch_model_week_rule
+    #  end
+    #  light_sch[run_id] = light_sch_model
+    end
+
+    #light_sch_base = {}
+    #prototypes_base.each do |prototype, model_baseline|
+    #  building_type, template, climate_zone, mod = prototype
+    #  # Define name of spaces used for verification
+    #  run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+    #  space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+    #
+    #  # Get lighting schedule in baseline model
+    #  light_sch_model_base = {}
+    #  model_baseline.getLightss.sort.each do |lgts|
+    #    light_sch_model_lgts_base = {}
+    #    light_sch_model_lgts['space_type'] = lgts.space_type.name.to_s
+    #    lgts.schedule.get.to_scheduleRuleset.get.scheduleRules.each do |week_rule|
+    #      light_sch_model_week_rule_base = {}
+    #      day_rule = week_rule.daySchedule()
+    #      times = day_rule.times()
+    #      times.each do |time|
+    #        light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+    #      end
+    #      light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+    #    end
+    #    light_sch_model_base[lgts.name.to_s] = light_sch_model_week_rule_base
+    #  end
+    #
+    #  # Check light schedule against expected light schedule
+    #  light_sch_model_base.each do |key, value|
+    #    value.each do |key1, value1|
+    #      value1.each do |key2, value2|
+    #        assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_name[value['space_type']])).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+    #      end
+    #    end
+    #  end
+    #end
+  end
+
   # Run test suite for the ASHRAE 90.1 appendix G Performance
   # Rating Method (PRM) baseline automation implementation
   # in openstudio-standards.
@@ -351,7 +417,7 @@ class AppendixGPRMTests < Minitest::Test
     # Create all unique baseline
     prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
     # Assign prototypes and baseline to each test
-    prototypes = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
+    prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
@@ -360,5 +426,6 @@ class AppendixGPRMTests < Minitest::Test
     check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
     check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
     check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
+    #check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor'])
   end
 end
