@@ -351,7 +351,7 @@ class AppendixGPRMTests < Minitest::Test
     # Create all unique baseline
     prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
     # Assign prototypes and baseline to each test
-    prototypes = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
+    prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
     prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
