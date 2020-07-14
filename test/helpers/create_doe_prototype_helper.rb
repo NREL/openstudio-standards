@@ -176,6 +176,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             sim_ctrl = model.getSimulationControl
             sim_ctrl.setRunSimulationforSizingPeriods(true)
             sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+            if model.version >= OpenStudio::VersionString.new('3.0.0')
+              sim_ctrl.setDoHVACSizingSimulationforSizingPeriods(true)
+            end
           end
 
           # Save the model
@@ -203,6 +206,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           sim_ctrl = model.getSimulationControl
           sim_ctrl.setRunSimulationforSizingPeriods(true)
           sim_ctrl.setRunSimulationforWeatherFileRunPeriods(false)
+          if model.version >= OpenStudio::VersionString.new('3.0.0')
+            sim_ctrl.setDoHVACSizingSimulationforSizingPeriods(true)
+          end
 
           # Remove all meters
           model.getOutputMeters.each(&:remove)
