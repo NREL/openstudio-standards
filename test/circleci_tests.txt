@@ -192,6 +192,9 @@ necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_chiller_rules.rb
 necb/unit_tests/tests/test_necb_constructions_fdwr.rb
+necb/unit_tests/tests/test_daylighting_sensor_control.rb
+necb/unit_tests/tests/test_dcv.rb
+necb/unit_tests/tests/test_led_lighting.rb
 
 necb/building_regression_tests/tests/test_necb_bldg_FullServiceRestaurant_BTAPPRE1980_Electricity.rb
 necb/building_regression_tests/tests/test_necb_bldg_FullServiceRestaurant_BTAPPRE1980_NaturalGas.rb

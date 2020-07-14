@@ -181,10 +181,11 @@ class NECB2011 < Standard
                                 epw_file: epw_file,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
-                                dcv_type: 'NECB_Default', # Four options: (1) NECB_Default, (2) No DCV, (3) Occupancy-based DCV , (4) CO2-based DCV
-                                lights_type: 'NECB_Default', # Two options: (1) NECB_Default, (2) LED
+                                dcv_type: 'NECB_Default', # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
+                                lights_type: 'NECB_Default', # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: 1.0,
-                                space_height: @space_height
+                                space_height: @space_height,
+                                daylighting_type: 'NECB_Default' # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
     )
   end
 
@@ -205,7 +206,8 @@ class NECB2011 < Standard
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 1.0,
-                           space_height:
+                           space_height:,
+                           daylighting_type: 'NECB_Default'
   )
     apply_weather_data(model: model, epw_file: epw_file)
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale) #Sara
@@ -219,7 +221,9 @@ class NECB2011 < Standard
     # puts model
     # raise('check model for dcv')
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
-    # model_add_daylighting_controls(model)
+    if daylighting_type == 'add_daylighting_controls'
+      model_add_daylighting_controls(model)
+    end
     return model
   end
 
