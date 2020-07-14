@@ -55,7 +55,12 @@ class NECB2011
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, lights_type, lights_scale, space_height)
+    # puts space_type.name.to_s
+    # puts lights_type
+    # puts lights_scale
+    # puts space_height
+
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
@@ -163,7 +168,7 @@ class NECB2011
     end
 
     # Lights
-    apply_standard_lights(set_lights, space_type, space_type_properties)
+    apply_standard_lights(set_lights, space_type, space_type_properties, lights_type, lights_scale, space_height)
 
     # Electric Equipment
     elec_equip_have_info = false
