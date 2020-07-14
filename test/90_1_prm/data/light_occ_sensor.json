@@ -1,22 +1,26 @@
 {
     "SmallOffice_90.1-2013_ASHRAE 169-2013-2A_":[
        [
-          "CORE_ZN ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS",
-          1.0
+          "office - whole building",
+          0.125
        ],
        [
-          "PERIMETER_ZN_1 ZN OFFICE WHOLEBUILDING - SM OFFICE LIGHTS",
-          1.0
+          "attic - unoccupied",
+          0.1
        ]
     ],
     "MidriseApartment_90.1-2013_ASHRAE 169-2013-2A_":[
        [
-          "G CORRIDOR ZN MIDRISEAPARTMENT CORRIDOR LIGHTS",
-          0.5
+          "office - enclosed <= 250 sf",
+          0.375
        ],
        [
-          "G N1 APARTMENT ZN MIDRISEAPARTMENT APARTMENT ADDITIONAL LIGHTS",
-          1.07
-       ]
+          "corridor - all other",
+          0.25
+       ],
+       [
+          "apartment - hardwired",
+          0
+      ]
     ]
  }
