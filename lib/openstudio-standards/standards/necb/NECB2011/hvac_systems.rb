@@ -1932,5 +1932,72 @@ class NECB2011
     return clg_availability_sch, htg_availability_sch
   end
 
+  #This method takes the eff_mod hash which should have the following format:
+  #eff_mod = {
+  #    boiler_eff: -1,
+  #    furnace_eff: -1,
+  #}
+  # Where if the various keys are set to a number between 0.1 to 100.0 the method calls the appropriate method to find
+  # equipment matching the key name (eg. boilers, furnaces, shw tank) and sets the efficiency passed by the appropriate
+  # key.  If any of the keys are outside of 0.1 to 100.0, or are nil, then the method ignores the associated equipment
+  # type keeps and keeps the efficiency set by the associated standard.  If the hash is nil then the method does
+  # nothing.
+  def modify_equipment_efficiency(model:, eff_mod: nil)
+    return if eff_mod.nil?
+    mod_boiler_efficiency(model: model, boiler_eff: eff_mod[:boiler_eff]) unless eff_mod[:boiler_eff].nil?
+    mod_furnace_efficiency(model: model, furnace_eff: eff_mod[:furnace_eff]) unless eff_mod[:furnace_eff].nil?
+  end
 
+  def mod_boiler_efficiency(model:, boiler_eff: nil)
+    return if boiler_eff.nil?
+    return unless (boiler_eff) >= 0.1 && (boiler_eff <= 1.0)
+    plantloops = model.getPlantLoops
+    return if plantloops.nil?
+    cond_lim = @standards_data['constants']['condensing_boiler_lim']['value'].to_f
+    plantloops.sort.each do |plantloop|
+      plantloop.supplyComponents.sort.each do |supplycomp|
+        case supplycomp.iddObjectType.valueName.to_s
+        when 'OS_CentralHeatPumpSystem'
+          puts 'hello'
+        when 'OS_BoilerHotWater'
+          reset_boiler_efficiency(component: supplycomp.to_BoilerHotWater.get, eff: boiler_eff, cond_lim: cond_lim)
+        end
+      end
+    end
+  end
+
+  def reset_boiler_efficiency(component:, eff:, cond_lim:)
+    component.setNominalThermalEfficiency(eff)
+    if boiler_eff >= cond_lim
+      part_load_curve = @standards_data['']
+      puts 'hello'
+    else
+      puts 'hello'
+    end
+  end
+=begin
+
+  # Convert capacity to Btu/hr
+  capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'Btu/hr').get
+  capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
+
+  # Get the boiler properties
+  search_criteria = boiler_hot_water_find_search_criteria(boiler_hot_water)
+  boiler_table = @standards_data['boilers']
+  blr_props = model_find_object(boiler_table, search_criteria, capacity_btu_per_hr)
+  unless blr_props
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
+    successfully_set_all_properties = false
+    return successfully_set_all_properties
+  end
+
+  # Make the EFFFPLR curve
+  eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
+  if eff_fplr
+    boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
+  else
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
+    successfully_set_all_properties = false
+  end
+=end
 end
