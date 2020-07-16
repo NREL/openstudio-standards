@@ -187,6 +187,7 @@ Standard.class_eval do
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
     if model.version >= OpenStudio::VersionString.new('3.0.0')
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
+      sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
     end
 
     # check that all zones have surfaces.
