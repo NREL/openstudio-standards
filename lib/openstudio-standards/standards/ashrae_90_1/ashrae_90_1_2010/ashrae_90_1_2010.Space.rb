@@ -33,14 +33,14 @@ class ASHRAE9012010 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area < 250ft2 per 9.4.1.4.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area less than 250ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     else
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
       if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture < 0.1 per 9.4.1.4 Exception b.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture less than 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
     end
@@ -53,22 +53,22 @@ class ASHRAE9012010 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
       req_top_ctrl = false
     elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area < 900ft2 per 9.4.1.5.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area less than 900ft2 per 9.4.1.5.")
       req_top_ctrl = false
     else
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_skylight_effective_aperture(space, areas['toplighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_top = #{sidelighted_effective_aperture}")
       if sidelighted_effective_aperture < 0.006
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture < 0.006 per 9.4.1.5 Exception b.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because skylight effective aperture less than 0.006 per 9.4.1.5 Exception b.")
         req_top_ctrl = false
       end
     end
 
-    # Retail spaces exception (c) to Section 9.4.1.4
-    if space.spaceType.is_initialized	
+    # Exceptions
+    if space.spaceType.is_initialized
       case space.spaceType.get.standardsSpaceType.to_s
-      # Retail standalone
+      # Retail spaces exception (c) to Section 9.4.1.4
       # req_sec_ctrl set to true to create a second reference point
       when 'Core_Retail'
         req_pri_ctrl = false
@@ -78,6 +78,11 @@ class ASHRAE9012010 < ASHRAE901
         req_sec_ctrl = false
       # Strip mall
       when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3', 'Strip mall - type 0A', 'Strip mall - type 0B'
+        req_pri_ctrl = false
+        req_sec_ctrl = false
+      # Residential apartments
+      when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        req_top_ctrl = false
         req_pri_ctrl = false
         req_sec_ctrl = false
       end
@@ -147,9 +152,10 @@ class ASHRAE9012010 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Baseline infiltration rate
+  # Determine the base infiltration rate at 75 PA.
   #
-  # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
+  # @return [Double] the baseline infiltration rate, in cfm/ft^2
+  # defaults to no infiltration.
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2

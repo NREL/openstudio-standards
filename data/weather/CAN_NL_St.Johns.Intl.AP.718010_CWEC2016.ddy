@@ -10,50 +10,23 @@
  ! TMY data files as future months will not use their start days of week (simulations need to show
  ! continuity in day of week presentation).
  
- ! In an effort to accomodate, the following initial month days are included:
+ ! In an effort to accomodate, the following RunPeriod object is included:
  ! Note JAN 1, 2008 is a Tuesday
- ! Note FEB 1, 2006 is a Wednesday
- ! Note MAR 1, 2011 is a Tuesday
- ! Note APR 1, 2013 is a Monday
- ! Note MAY 1, 2000 is a Monday
- ! Note JUN 1, 2013 is a Saturday
- ! Note JUL 1, 1998 is a Wednesday
- ! Note AUG 1, 2009 is a Saturday
- ! Note SEP 1, 2001 is a Saturday
- ! Note OCT 1, 2010 is a Friday
- ! Note NOV 1, 2013 is a Friday
- ! Note DEC 1, 2006 is a Friday
- 
- ! Since the RunPeriod object changes in V9.0, the following are RunPeriod objects in comments:
- ! Version before EnergyPlus release V9.0
- !RunPeriod,
- !Weather Data,    !- Name
- !  1,             !- Begin Month
- !  1,             !- Begin Day of Month
- !  12,            !- End Month
- !  31,            !- End Day of Month
- !Tuesday,      !- Day of Week for Start Day
- !  No,            !- Use Weather File Holidays and Special Days
- !  No,            !- Use Weather File Daylight Saving Period
- ! Yes,            !- Apply Weekend Holiday Rule
- ! Yes,            !- Use Weather File Rain Indicators
- ! Yes;            !- Use Weather File Snow Indicators
  
  RunPeriod,
-  Weather Data,  !- Name
-  1,             !- Begin Month
-  1,             !- Begin Day of Month
-   ,             !- Begin Year
-  12,            !- End Month
-  31,            !- End Day of Month
-   ,             !- End Year
-  Tuesday,      !- Day of Week for Start Day Tuesday 
-  No,            !- Use Weather File Holidays and Special Days
-  No,            !- Use Weather File Daylight Saving Period
-  Yes,           !- Apply Weekend Holiday Rule
-  Yes,           !- Use Weather File Rain Indicators
-  Yes,           !- Use Weather File Snow Indicators
-  ;              !- Treat Weather as Acual
+ Weather Data,    ! Name
+   1,             ! Begin Month
+   1,             ! Begin Day of Month
+    ,             ! Begin Year
+   12,            ! End Month
+   31,            ! End Day of Month
+    ,             ! End Year
+ Tuesday,      ! Day of Week for Start Day
+   No,            ! Use Weather File Holidays and Special Days
+   No,            ! Use Weather File Daylight Saving Period
+  Yes,            ! Apply Weekend Holiday Rule
+  Yes,            ! Use Weather File Rain Indicators
+  Yes;            ! Use Weather File Snow Indicators
  
  Site:Location,
   St Johns Intl AP_NL_CAN Design_Conditions,     !- Location Name

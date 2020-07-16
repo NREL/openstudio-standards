@@ -25,7 +25,7 @@ class NECB_HVAC_Tests < MiniTest::Test
     FileUtils.mkdir_p(output_folder)
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
-    boiler_fueltypes = ['Electricity', 'NaturalGas', 'FuelOil#2']
+    boiler_fueltypes = ['Electricity','NaturalGas','FuelOilNo2']
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
@@ -40,15 +40,15 @@ class NECB_HVAC_Tests < MiniTest::Test
       fuel_type_min_cap = {}
       fuel_type_min_cap['Electricity'] = []
       fuel_type_min_cap['NaturalGas'] = []
-      fuel_type_min_cap['FuelOil#2'] = []
+      fuel_type_min_cap['FuelOilNo2'] = []
       fuel_type_max_cap = {}
       fuel_type_max_cap['Electricity'] = []
       fuel_type_max_cap['NaturalGas'] = []
-      fuel_type_max_cap['FuelOil#2'] = []
+      fuel_type_max_cap['FuelOilNo2'] = []
       efficiency_type = {}
       efficiency_type['Electricity'] = []
       efficiency_type['NaturalGas'] = []
-      efficiency_type['FuelOil#2'] = []
+      efficiency_type['FuelOilNo2'] = []
 
       # read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges
       CSV.foreach(boiler_expected_result_file, headers: true) do |data|
@@ -86,7 +86,7 @@ class NECB_HVAC_Tests < MiniTest::Test
       actual_boiler_thermal_eff = {}
       actual_boiler_thermal_eff['Electricity'] = []
       actual_boiler_thermal_eff['NaturalGas'] = []
-      actual_boiler_thermal_eff['FuelOil#2'] = []
+      actual_boiler_thermal_eff['FuelOilNo2'] = []
       boiler_fueltypes.each do |boiler_fueltype|
         fuel_type_cap[boiler_fueltype].each do |boiler_cap|
           name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
@@ -123,7 +123,7 @@ class NECB_HVAC_Tests < MiniTest::Test
       actual_boiler_eff = {}
       actual_boiler_eff['Electricity'] = []
       actual_boiler_eff['NaturalGas'] = []
-      actual_boiler_eff['FuelOil#2'] = []
+      actual_boiler_eff['FuelOilNo2'] = []
       boiler_res_file_output_text = "Fuel,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Annual Fuel Utilization Efficiency (AFUE),Thermal Efficiency,Combustion Efficiency\n"
       boiler_fueltypes.each do |ifuel|
         output_line_text = ''

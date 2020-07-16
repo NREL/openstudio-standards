@@ -1,0 +1,100 @@
+{
+  "climate_zones": [
+    {
+      "name": "CEC T24-CEC1",
+      "standard": "CEC T24",
+      "representative_city": "Arcata",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC10",
+      "standard": "CEC T24",
+      "representative_city": "Riverside",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC11",
+      "standard": "CEC T24",
+      "representative_city": "Red Bluff",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC12",
+      "standard": "CEC T24",
+      "representative_city": "Sacramento",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC13",
+      "standard": "CEC T24",
+      "representative_city": "Fresno",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC14",
+      "standard": "CEC T24",
+      "representative_city": "Palmdale",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC15",
+      "standard": "CEC T24",
+      "representative_city": "Palm Spring-Intl",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC16",
+      "standard": "CEC T24",
+      "representative_city": "Blue Canyon",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC2",
+      "standard": "CEC T24",
+      "representative_city": "Santa Rosa",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC3",
+      "standard": "CEC T24",
+      "representative_city": "Oakland",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC4",
+      "standard": "CEC T24",
+      "representative_city": "San Jose-Reid",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC5",
+      "standard": "CEC T24",
+      "representative_city": "Santa Maria",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC6",
+      "standard": "CEC T24",
+      "representative_city": "Torrance",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC7",
+      "standard": "CEC T24",
+      "representative_city": "San Diego-Lindbergh",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC8",
+      "standard": "CEC T24",
+      "representative_city": "Fullerton",
+      "bcl_weather_component_id": null
+    },
+    {
+      "name": "CEC T24-CEC9",
+      "standard": "CEC T24",
+      "representative_city": "Burbank-Glendale",
+      "bcl_weather_component_id": null
+    }
+  ]
+}

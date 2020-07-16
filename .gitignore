@@ -34,3 +34,6 @@ coverage/
 /test/refactor/
 /data/costing/rs_means_auth
 /tmp/
+*.xlsx
+!Scorecard*.xlsx
+/data/standards/openstudio_standards_duplicates_log.csv

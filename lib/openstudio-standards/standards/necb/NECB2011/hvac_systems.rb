@@ -215,12 +215,13 @@ class NECB2011
       zone_thermostat = zone.thermostat.get
       if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
         dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
-        htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
-        htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
-        winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
-        heat_design_t = winter_dd_sch.values.max
+        if dual_thermostat.heatingSetpointTemperatureSchedule.is_initialized
+          htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+          htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
+          winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
+          heat_design_t = winter_dd_sch.values.max
+        end
       end
-
       # initialize counter
       zone_oa = 0.0
       # outdoor defined at space level; get OA flow for all spaces within zone
@@ -283,7 +284,7 @@ class NECB2011
   # @param (see #economizer_required?)
   # @return [Bool] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
-  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac)
+  def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate = nil)
     # Get the oa system
     oa_system = nil
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized

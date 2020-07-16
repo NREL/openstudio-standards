@@ -1,4 +1,3 @@
-
 # Custom changes for the LargeOffice prototype.
 # These are changes that are inconsistent with other prototype
 # building types.
@@ -43,7 +42,8 @@ module LargeOfficeDetailed
 
     # replace EvaporativeFluidCoolerSingleSpeed with CoolingTowerTwoSpeed
     model.getPlantLoops.each do |plant_loop|
-      next unless plant_loop.name.to_s.include? "Heat Pump Loop"
+      next unless plant_loop.name.to_s.include? 'Heat Pump Loop'
+
       sup_wtr_high_temp_f = 65.0
       sup_wtr_low_temp_f = 41.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
@@ -75,9 +75,20 @@ module LargeOfficeDetailed
       end
     end
 
+    remove_basement_infiltration(model)
+
     return true
   end
-  
+
+  def remove_basement_infiltration(model)
+    space_infltrations = model.getSpaceInfiltrationDesignFlowRates
+    space_infltrations.each do |space_inf|
+      if space_inf.name.to_s.include? 'Basement'
+        space_inf = nil
+      end
+    end
+  end
+
   def update_waterheater_loss_coefficient(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', 'NECB2011'
@@ -94,6 +105,14 @@ module LargeOfficeDetailed
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    min_damper_position = template == '90.1-2010' || template == '90.1-2013' ? 0.2 : 0.3
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end

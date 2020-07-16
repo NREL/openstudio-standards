@@ -2393,9 +2393,9 @@ module BTAP
 
         [:outdoors, :ground].each do |bc|
           orientations.each do |orientation|
-            puts "bc= #{bc}"
-            puts boundary_conditions[bc.to_sym]
-            puts boundary_conditions
+            # puts "bc= #{bc}"
+            # puts boundary_conditions[bc.to_sym]
+            # puts boundary_conditions
             surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, boundary_conditions[bc])
             selected_surfaces = BTAP::Geometry::Surfaces::filter_by_surface_types(surfaces, [orientation[:surface_type]])
             BTAP::Geometry::Surfaces::filter_by_azimuth_and_tilt(selected_surfaces, orientation[:azimuth_from], orientation[:azimuth_to], orientation[:tilt_from], orientation[:tilt_to]).each do |surface|

@@ -249,8 +249,33 @@ module Outpatient
     end
   end
 
-  # For operating room 1&2 in 2010 and 2013, VAV minimum air flow is set by schedule
   def model_adjust_vav_minimum_damper(model)
+    # Minimum damper position for Outpatient prototype
+    # Based on AIA 2001 ventilation requirements
+    # See Section 5.2.2.16 in Thornton et al. 2010
+    # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
+    init_mdp = {
+      'FLOOR 1 ANESTHESIA' => 1.0,
+      'FLOOR 1 CLEAN' => 1.0,
+      'FLOOR 1 CLEAN WORK' => 1.0,
+      'FLOOR 1 LOBBY TOILET' => 1.0,
+      'FLOOR 1 MRI TOILET' => 1.0,
+      'FLOOR 1 NURSE TOILET' => 1.0,
+      'FLOOR 1 OPERATING ROOM 1' => 1.0,
+      'FLOOR 1 OPERATING ROOM 2' => 1.0,
+      'FLOOR 1 OPERATING ROOM 3' => 1.0,
+      'FLOOR 1 PACU' => 1.0,
+      'FLOOR 1 PRE-OP ROOM 1' => 1.0,
+      'FLOOR 1 PRE-OP ROOM 2' => 1.0,
+      'FLOOR 1 PRE-OP TOILET' => 1.0,
+      'FLOOR 1 PROCEDURE ROOM' => 1.0,
+      'FLOOR 1 RECOVERY ROOM' => 1.0,
+      'FLOOR 1 SOIL' => 1.0,
+      'FLOOR 1 SOIL HOLD' => 1.0,
+      'FLOOR 1 SOIL WORK' => 1.0,
+      'FLOOR 1 STEP DOWN' => 1.0
+    }
+
     model.getThermalZones.each do |zone|
       air_terminal = zone.airLoopHVACTerminal
       if air_terminal.is_initialized
@@ -258,17 +283,24 @@ module Outpatient
         if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
           air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
           vav_name = air_terminal.name.get
+          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          case template
           # High OA zones
           # Determine whether or not to use the high minimum guess.
           # Cutoff was determined by correlating apparent minimum guesses
           # to OA rates in prototypes since not well documented in papers.
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
-          case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
             air_terminal.setConstantMinimumAirFlowFraction(1.0) if vav_name.include?('Floor 1')
+          # Minimum damper position for Outpatient prototype
+          # Based on AIA 2001 ventilation requirements
+          # See Section 5.2.2.16 in Thornton et al. 2010
+          # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
           when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'
-            air_terminal.setConstantMinimumAirFlowFraction(1.0) if zone_oa_per_area > 0.001 # 0.001 m^3/s*m^2 = .196 cfm/ft2
-           end
+            zone_name = zone.name.to_s.upcase.gsub(' ZN', '').strip
+            if init_mdp.key? zone_name
+              air_terminal.setConstantMinimumAirFlowFraction(init_mdp[zone_name])
+            end
+          end
         end
       end
     end
@@ -365,6 +397,76 @@ module Outpatient
   end
 
   def model_custom_geometry_tweaks(building_type, climate_zone, prototype_input, model)
+
+    return true
+  end
+
+  def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
+    # Minimum damper position
+    # Based on AIA 2001 ventilation requirements
+    # See Section 5.2.2.16 in Thornton et al. 2010
+    # https://www.energycodes.gov/sites/default/files/documents/BECP_Energy_Cost_Savings_STD2010_May2011_v00.pdf
+    if template == '90.1-2004' || template == '90.1-2007'
+      min_damper_position = 0.3
+      init_mdp = {
+        'FLOOR 2 CONFERENCE TOILET' => 1.0,
+        'FLOOR 2 EXAM 1' => 1.0,
+        'FLOOR 2 EXAM 2' => 1.0,
+        'FLOOR 2 EXAM 3' => 1.0,
+        'FLOOR 2 EXAM 4' => 1.0,
+        'FLOOR 2 EXAM 5' => 1.0,
+        'FLOOR 2 EXAM 6' => 1.0,
+        'FLOOR 2 EXAM 7' => 1.0,
+        'FLOOR 2 EXAM 8' => 1.0,
+        'FLOOR 2 EXAM 9' => 1.0,
+        'FLOOR 2 RECEPTION TOILET' => 1.0,
+        'FLOOR 2 WORK TOILET' => 1.0,
+        'FLOOR 3 LOUNGE TOILET' => 1.0,
+        'FLOOR 3 OFFICE TOILET' => 1.0,
+        'FLOOR 3 PHYSICAL THERAPY 1' => 1.0,
+        'FLOOR 3 PHYSICAL THERAPY 2' => 1.0,
+        'FLOOR 3 PHYSICAL THERAPY TOILET' => 1.0,
+        'FLOOR 3 STORAGE 1' => 1.0,
+        'FLOOR 3 TREATMENT' => 1.0
+      }
+    elsif template == '90.1-2010' || template == '90.1-2013'
+      min_damper_position = 0.2
+      init_mdp = {
+        'FLOOR 2 CONFERENCE TOILET' => 1.0,
+        'FLOOR 2 EXAM 1' => 0.51,
+        'FLOOR 2 EXAM 2' => 1.0,
+        'FLOOR 2 EXAM 3' => 1.0,
+        'FLOOR 2 EXAM 4' => 0.64,
+        'FLOOR 2 EXAM 5' => 0.69,
+        'FLOOR 2 EXAM 6' => 0.94,
+        'FLOOR 2 EXAM 7' => 1.0,
+        'FLOOR 2 EXAM 8' => 0.93,
+        'FLOOR 2 EXAM 9' => 1.0,
+        'FLOOR 2 RECEPTION TOILET' => 1.0,
+        'FLOOR 2 WORK TOILET' => 1.0,
+        'FLOOR 3 LOUNGE TOILET' => 1.0,
+        'FLOOR 3 OFFICE TOILET' => 1.0,
+        'FLOOR 3 PHYSICAL THERAPY 1' => 0.69,
+        'FLOOR 3 PHYSICAL THERAPY 2' => 0.83,
+        'FLOOR 3 PHYSICAL THERAPY TOILET' => 1.0,
+        'FLOOR 3 STORAGE 1' => 1.0,
+        'FLOOR 3 TREATMENT' => 0.81
+      }
+    end
+
+    if !init_mdp.nil?
+      airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
+      init_mdp.each do |zn_name, mdp|
+        if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
+          min_damper_position = mdp
+        end
+      end
+    else
+      min_damper_position = 0.3
+    end
+
+    # Set the minimum flow fraction
+    air_terminal_single_duct_vav_reheat.setConstantMinimumAirFlowFraction(min_damper_position)
 
     return true
   end
