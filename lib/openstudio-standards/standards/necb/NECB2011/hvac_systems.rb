@@ -1933,24 +1933,100 @@ class NECB2011
   end
 
   #This method takes the eff_mod hash which should have the following format:
-  #eff_mod = {
-  #    boiler_eff: -1,
-  #    furnace_eff: -1,
+  #"eff_mod": {
+  #    "boiler_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null
+  #        }
+  #    },
+  #    "furnace_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null
+  #        }
+  #    }
   #}
-  # Where if the various keys are set to a number between 0.1 to 100.0 the method calls the appropriate method to find
-  # equipment matching the key name (eg. boilers, furnaces, shw tank) and sets the efficiency passed by the appropriate
-  # key.  If any of the keys are outside of 0.1 to 100.0, or are nil, then the method ignores the associated equipment
+  # Where if a component key (e.g. "boiler_eff") is present the method calls the appropriate method to find
+  # equipment matching the key name (eg. boilers, furnaces, shw tank) and sets the efficiency or part load curve passed
+  # by the appropriate key.  If any of the component keys are nil the method ignores the associated equipment
   # type keeps and keeps the efficiency set by the associated standard.  If the hash is nil then the method does
   # nothing.
   def modify_equipment_efficiency(model:, eff_mod: nil)
     return if eff_mod.nil?
-    mod_boiler_efficiency(model: model, boiler_eff: eff_mod[:boiler_eff]) unless eff_mod[:boiler_eff].nil?
-    mod_furnace_efficiency(model: model, furnace_eff: eff_mod[:furnace_eff]) unless eff_mod[:furnace_eff].nil?
+    mod_boiler_efficiency(model: model, boiler_eff: eff_mod['boiler_eff']) unless eff_mod['boiler_eff'].nil?
+    mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
   end
 
+  # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
+  #    "boiler_eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null
+  #        }
+  #    }
+  # If both "eff" and "part_load" are nil then it does nothing.  If an efficiency is set but is not between 0.1 and 1.0
+  # and "part_load" is nil then it does nothing.  Otherwise, it looks for plant look supply components that match the
+  # "OS_BoilerHotWater" type.  If it finds one it then calls the reset_boiler_efficiency method which resets either the
+  # boiler efficiency, part load efficiency curve, or both.  The method also looks for a condensing boiler cut-off
+  # efficiency above which the boiler is considered to be a condensing boiler unless a custom part load curve is set.
   def mod_boiler_efficiency(model:, boiler_eff: nil)
     return if boiler_eff.nil?
-    return unless (boiler_eff) >= 0.1 && (boiler_eff <= 1.0)
+    unless boiler_eff['eff'].nil?
+      boiler_eff['eff'] = nil if (boiler_eff['eff'] < 0.1 || boiler_eff['eff'] > 1.0)
+    end
+    return if (boiler_eff['eff'].nil? && boiler_eff['parl_load'].nil?)
     plantloops = model.getPlantLoops
     return if plantloops.nil?
     cond_lim = @standards_data['constants']['condensing_boiler_lim']['value'].to_f
@@ -1960,44 +2036,64 @@ class NECB2011
         when 'OS_CentralHeatPumpSystem'
           puts 'hello'
         when 'OS_BoilerHotWater'
-          reset_boiler_efficiency(component: supplycomp.to_BoilerHotWater.get, eff: boiler_eff, cond_lim: cond_lim)
+          reset_boiler_efficiency(model: model, component: supplycomp.to_BoilerHotWater.get, eff: boiler_eff, cond_lim: cond_lim)
         end
       end
     end
   end
 
-  def reset_boiler_efficiency(component:, eff:, cond_lim:)
-    component.setNominalThermalEfficiency(eff)
-    if boiler_eff >= cond_lim
-      part_load_curve = @standards_data['']
-      puts 'hello'
+  # This method takes an OS model, a "OS_BoilerHotWater" type compenent, condensing efficiency limit and an efficiency
+  # hash which looks like:
+  #    "eff": {
+  #        "eff": -1,
+  #        "part_load": {
+  #            "name":  "SAMPLE_CUSTOM_CURVE"
+  #            "form":  "Cubic"
+  #            "coeff_1": 1,
+  #            "coeff_2": 2,
+  #            "coeff_3": 3,
+  #            "coeff_4": 4,
+  #            "coeff_5": null,
+  #            "coeff_6": null,
+  #            "coeff_7": null,
+  #            "coeff_8": null,
+  #            "coeff_9": null,
+  #            "coeff_10": null,
+  #            "minimum_independent_variable_1": 0.0,
+  #            "maximum_independent_variable_1": 1.0,
+  #            "minimum_independent_variable_2": null,
+  #            "maximum_independent_variable_2": null,
+  #            "minimum_dependent_variable_output": null,
+  #            "maximum_dependent_variable_output": null
+  #        }
+  #    }
+  # If eff["eff"] is not nil then it sets the boiler efficiency to that number.  The part load curve is defaulted to a
+  # NECB 2011 non-condensing boiler.  If eff["part_load"] is not set and the efficiency of the boiler is >= the
+  # condensing efficiency limit (cond_lim) then the part load curve is set to the NECB 2011 condensing boiler part load
+  # curve.  If eff["part_load"] is set then the method adds the curve to the standards_data curves.  It then uses the
+  # "model_add_curve" to add the look for the part load curve in standards_data and add it to the OS model.  It then
+  # Sets the part load efficiency curve for the boiler to the curve that was just set.  Very few (or no) checks are done
+  # to part load curves so if they are not entered with care it will crash.
+  def reset_boiler_efficiency(model:, component:, eff:, cond_lim:)
+    component.setNominalThermalEfficiency(eff['eff']) unless eff['eff'].nil?
+    part_load_curve_name = @standards_data['constants']['non_condensing_boiler_part_load_curve']['value'].to_s
+    if ['part_load'].nil?
+      if ['eff'] >= cond_lim
+        part_load_curve_name = @standards_data['constants']['condensing_boiler_part_load_curve']['value'].to_s
+      end
     else
-      puts 'hello'
+      # !!!Check to see if a curve with the same name already exists in standards data!!!
+      @standards_data['curves']['table'] << eff["part_load"]["name"]
+      part_load_curve_name = eff["part_load"]["name"]
+    end
+    part_load_curve = model_add_curve(model, part_load_curve_name)
+    if part_load_curve
+      component.setNormalizedBoilerEfficiencyCurve(part_load_curve)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "There was a problem with the custom boiler curve #{part_load_curve_name} for #{component.name}, the curve will not be set.")
+      successfully_set_all_properties = false
     end
   end
-=begin
 
-  # Convert capacity to Btu/hr
-  capacity_btu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'Btu/hr').get
-  capacity_kbtu_per_hr = OpenStudio.convert(boiler_capacity, 'W', 'kBtu/hr').get
 
-  # Get the boiler properties
-  search_criteria = boiler_hot_water_find_search_criteria(boiler_hot_water)
-  boiler_table = @standards_data['boilers']
-  blr_props = model_find_object(boiler_table, search_criteria, capacity_btu_per_hr)
-  unless blr_props
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find boiler properties, cannot apply efficiency standard.")
-    successfully_set_all_properties = false
-    return successfully_set_all_properties
-  end
-
-  # Make the EFFFPLR curve
-  eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
-  if eff_fplr
-    boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
-  else
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
-    successfully_set_all_properties = false
-  end
-=end
 end
