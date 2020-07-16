@@ -396,7 +396,7 @@ class NECB2011
   # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
   # Chris Kirney 2018-07-27.
-  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.0000004736, density_SI: 983, pipe_rough_m: 0.0000015)
+  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
     mech_room, cond_spaces = find_mech_room(model)
     return 179532 if mech_room.nil? || cond_spaces.nil?
