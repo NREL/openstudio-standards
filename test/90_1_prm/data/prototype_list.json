@@ -15,5 +15,9 @@
     "lpd": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+	"light_occ_sensor": [
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
     ]
 }

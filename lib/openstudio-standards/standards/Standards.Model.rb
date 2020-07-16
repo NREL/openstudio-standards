@@ -73,6 +73,9 @@ class Standard
         space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
     end
+    if /prm/i =~ template
+      space_type_light_sch_change(model)
+    end
 
     # If any of the lights are missing schedules, assign an always-off schedule to those lights.
     # This is assumed to be the user's intent in the proposed model.
