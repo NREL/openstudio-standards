@@ -1,4 +1,4 @@
--urequire_relative '../../helpers/parallel_tests'
+require_relative '../../helpers/parallel_tests'
 TestListFile = Dir.entries(File.join(__dir__, 'tests'))
 RelativeOutputFolder = File.join(__dir__, '../../output')
 
