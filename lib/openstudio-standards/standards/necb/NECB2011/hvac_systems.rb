@@ -2082,9 +2082,14 @@ class NECB2011
         part_load_curve_name = @standards_data['constants']['condensing_boiler_part_load_curve']['value'].to_s
       end
     else
-      # !!!Check to see if a curve with the same name already exists in standards data!!!
-      @standards_data['curves']['table'] << eff["part_load"]["name"]
+      # Check to see if a curve with the same name already exists in standards data
       part_load_curve_name = eff["part_load"]["name"]
+      existing_curve = @standards_data['curves']['table'].select {|curve| curve['name'] == part_load_curve_name}
+      if existing_curve.empty?
+        @standards_data['curves']['table'] << eff["part_load"]["name"]
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "A part load curve with the name #{part_load_curve_name} already exists. The existing curve will be used. The custom curve will be ignored.")
+      end
     end
     part_load_curve = model_add_curve(model, part_load_curve_name)
     if part_load_curve
