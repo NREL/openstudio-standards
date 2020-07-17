@@ -139,7 +139,7 @@
       "value": "FURNACE-EFFPLR-NECB2011",
       "notes": "Part load curve referenced when setting custom furnace efficiencies less than the condensing_furnace_lim above."
     },
-    "condensing_boiler_part_load_curve": {
+    "condensing_furnace_part_load_curve": {
       "data_type": "value",
       "refs": [
         "Assumption"

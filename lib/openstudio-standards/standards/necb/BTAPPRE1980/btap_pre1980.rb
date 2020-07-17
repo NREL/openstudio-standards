@@ -64,7 +64,7 @@ class BTAPPRE1980 < NECB2011
     return model
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, eff_mod: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
@@ -75,6 +75,7 @@ class BTAPPRE1980 < NECB2011
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
     model_apply_existing_building_fan_performance(model: model)
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   #occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
