@@ -336,8 +336,7 @@ class AppendixGPRMTests < Minitest::Test
   # Check lighting occ sensor
   #
   # @param prototypes_base [Hash] Baseline prototypes
-  #def check_light_occ_sensor(prototypes,prototypes_base)
-  def check_light_occ_sensor(prototypes)
+  def check_light_occ_sensor(prototypes,prototypes_base)
     light_sch = {}
     prototypes.each do |prototype, model_proto|
       building_type, template, climate_zone, mod = prototype
@@ -362,60 +361,50 @@ class AppendixGPRMTests < Minitest::Test
       end
       light_sch[run_id] = light_sch_model
     end
-    puts "\n\n"
-    puts light_sch
 
-    #light_sch_base = {}
-    #prototypes_base.each do |prototype, model_baseline|
-    #  building_type, template, climate_zone, mod = prototype
-    #  # Define name of spaces used for verification
-    #  run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
-    #  space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
-    #
-    #  # Get lighting schedule in baseline model
-    #  model_baseline.getSpaceTypes.sort.each do |space_type|
-    #    light_sch_model_base = {}
-    #    space_type.lights.sort.each do |lgts|
-    #      light_sch_model_lgts_base = {}
-    #      light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
-    #      lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-    #        light_sch_model_week_rule_base = {}
-    #        day_rule = week_rule.daySchedule()
-    #        times = day_rule.times()
-    #        times.each do |time|
-    #          light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
-    #        end
-    #        light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
-    #      end
-    #      light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
-    #    end
-    #    puts "\n\n"
-    #    puts light_sch_model_base
-    #  
-    #    # Check light schedule against expected light schedule
-    #    light_sch_model_base.each do |key, value|
-    #      value.each do |key1, value1|
-    #        if key1 != "space_type"
-    #          value1.each do |key2, value2|
-    #            space_type_var = 0
-    #            space_name.each do |key3, value3|
-    #              if value['space_type'] == key3
-    #                space_type_var = value3
-    #              end
-    #            end
-    #            puts "\n\n"
-    #            puts run_id
-    #            puts value['space_type']
-    #            puts light_sch[run_id][key][key1][key2]
-    #            puts value2
-    #            puts space_type_var
-    #            assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
-    #          end
-    #        end
-    #      end
-    #    end
-    #  end
-    #end
+    light_sch_base = {}
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, mod = prototype
+      # Define name of spaces used for verification
+      run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
+    
+      # Get lighting schedule in baseline model
+      model_baseline.getSpaceTypes.sort.each do |space_type|
+        light_sch_model_base = {}
+        space_type.lights.sort.each do |lgts|
+          light_sch_model_lgts_base = {}
+          light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+          lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
+            light_sch_model_week_rule_base = {}
+            day_rule = week_rule.daySchedule()
+            times = day_rule.times()
+            times.each do |time|
+              light_sch_model_week_rule_base[time.to_s] = day_rule.getValue(time)
+            end
+            light_sch_model_lgts_base[week_rule.name.to_s] = light_sch_model_week_rule_base
+          end
+          light_sch_model_base[lgts.name.to_s] = light_sch_model_lgts_base
+        end
+      
+        # Check light schedule against expected light schedule
+        light_sch_model_base.each do |key, value|
+          value.each do |key1, value1|
+            if key1 != "space_type"
+              value1.each do |key2, value2|
+                space_type_var = 0
+                space_name.each do |key3, value3|
+                  if value['space_type'] == key3
+                    space_type_var = value3
+                  end
+                end
+                assert(((light_sch[run_id][key][key1][key2] - value2*(1.0-space_type_var)).abs < 0.001), "Lighting schedule for the #{building_type}, #{template}, #{climate_zone} model is incorrect.")
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
   # Run test suite for the ASHRAE 90.1 appendix G Performance
@@ -424,11 +413,11 @@ class AppendixGPRMTests < Minitest::Test
   def test_create_prototype_baseline_building
     # Select test to run
     tests = [
-      #'wwr',
-      #'envelope',
-      #'lpd',
-      #'isresidential',
-      #'daylighting_control',
+      'wwr',
+      'envelope',
+      'lpd',
+      'isresidential',
+      'daylighting_control',
       'light_occ_sensor'
     ]
 
@@ -440,7 +429,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_baseline_generated = generate_baseline(prototypes_generated, prototypes_to_generate)
     # Assign prototypes and baseline to each test
     prototypes = assign_prototypes(prototypes_generated, tests, prototypes_to_generate)
-    #prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
+    prototypes_base = assign_prototypes(prototypes_baseline_generated, tests, prototypes_to_generate)
 
     # Run tests
     check_wwr(prototypes_base['wwr']) unless !(tests.include? 'wwr')
@@ -448,7 +437,6 @@ class AppendixGPRMTests < Minitest::Test
     check_residential_flag(prototypes_base['isresidential']) unless !(tests.include? 'isresidential')
     check_envelope(prototypes_base['envelope']) unless !(tests.include? 'envelope')
     check_lpd(prototypes_base['lpd']) unless !(tests.include? 'lpd')
-    #check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) unless !(tests.include? 'light_occ_sensor')
-    check_light_occ_sensor(prototypes['light_occ_sensor']) unless !(tests.include? 'light_occ_sensor')
+    check_light_occ_sensor(prototypes['light_occ_sensor'],prototypes_base['light_occ_sensor']) unless !(tests.include? 'light_occ_sensor')
   end
 end
