@@ -84,8 +84,11 @@ class AppendixGPRMTests < Minitest::Test
   # @return [Hash] Hash of OpenStudio Model of the prototypes
   def generate_baseline(prototypes_generated, id_prototype_mapping)
     baseline_prototypes = {}
-    prototypes_generated.each do |id, model|
+    prototypes_generated.each do |id, proposed_model|
       building_type, template, climate_zone, mod = id_prototype_mapping[id]
+
+      # Create a deep copy of the proposed model
+      model = BTAP::FileIO::deep_copy(proposed_model)
 
       # Initialize Standard class
       prototype_creator = Standard.build('90.1-PRM-2019')
@@ -431,7 +434,6 @@ class AppendixGPRMTests < Minitest::Test
 
     # Get list of unique prototypes
     prototypes_to_generate = get_prototype_to_generate(tests, @@prototype_list)
-    puts prototypes_to_generate
     # Generate all unique prototypes
     prototypes_generated = generate_prototypes(prototypes_to_generate)
     # Create all unique baseline
