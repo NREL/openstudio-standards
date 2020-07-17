@@ -1989,7 +1989,7 @@ class NECB2011
   def modify_equipment_efficiency(model:, eff_mod: nil)
     return if eff_mod.nil?
     mod_boiler_efficiency(model: model, boiler_eff: eff_mod['boiler_eff']) unless eff_mod['boiler_eff'].nil?
-    mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
+      #mod_furnace_efficiency(model: model, furnace_eff: eff_mod['furnace_eff']) unless eff_mod['furnace_eff'].nil?
   end
 
   # This model takes an OS model and a boiler efficiency hash sent to it with the following form:
@@ -2024,9 +2024,9 @@ class NECB2011
   def mod_boiler_efficiency(model:, boiler_eff: nil)
     return if boiler_eff.nil?
     unless boiler_eff['eff'].nil?
-      boiler_eff['eff'] = nil if (boiler_eff['eff'] < 0.1 || boiler_eff['eff'] > 1.0)
+      boiler_eff['eff'] = nil if (boiler_eff['eff'] < 0.01 || boiler_eff['eff'] > 1.0)
     end
-    return if (boiler_eff['eff'].nil? && boiler_eff['parl_load'].nil?)
+    return if (boiler_eff['eff'].nil? && boiler_eff['part_load'].nil?)
     plantloops = model.getPlantLoops
     return if plantloops.nil?
     cond_lim = @standards_data['constants']['condensing_boiler_lim']['value'].to_f
@@ -2035,7 +2035,7 @@ class NECB2011
         case supplycomp.iddObjectType.valueName.to_s
         when 'OS_CentralHeatPumpSystem'
           puts 'hello'
-        when 'OS_BoilerHotWater'
+        when 'OS_Boiler_HotWater'
           reset_boiler_efficiency(model: model, component: supplycomp.to_BoilerHotWater.get, eff: boiler_eff, cond_lim: cond_lim)
         end
       end
@@ -2077,16 +2077,16 @@ class NECB2011
   def reset_boiler_efficiency(model:, component:, eff:, cond_lim:)
     component.setNominalThermalEfficiency(eff['eff']) unless eff['eff'].nil?
     part_load_curve_name = @standards_data['constants']['non_condensing_boiler_part_load_curve']['value'].to_s
-    if ['part_load'].nil?
-      if ['eff'] >= cond_lim
+    if eff['part_load'].nil?
+      if eff['eff'] >= cond_lim
         part_load_curve_name = @standards_data['constants']['condensing_boiler_part_load_curve']['value'].to_s
       end
     else
       # Check to see if a curve with the same name already exists in standards data
       part_load_curve_name = eff["part_load"]["name"]
-      existing_curve = @standards_data['curves']['table'].select {|curve| curve['name'] == part_load_curve_name}
+      existing_curve = @standards_data['curves'].select {|curve| curve['name'] == part_load_curve_name}
       if existing_curve.empty?
-        @standards_data['curves']['table'] << eff["part_load"]["name"]
+        @standards_data['curves'] << eff["part_load"]
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "A part load curve with the name #{part_load_curve_name} already exists. The existing curve will be used. The custom curve will be ignored.")
       end
