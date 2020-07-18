@@ -87,8 +87,16 @@ class Standard
         end
       end
       
+      # Modify the lighting schedule to handle lighting occupancy sensors
+      # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
       if /prm/i =~ template
         space_type_light_sch_change(model)
+        model.getScheduleTypeLimitss.sort.each do |limit|
+          if limit.name.to_s == 'Fractional'
+            limit.resetUpperLimitValue()
+            limit.setUpperLimitValue(5.0)
+          end
+        end
       end
 
       # Calculate infiltration as per 90.1 PRM rules
@@ -99,15 +107,6 @@ class Standard
       model.getLightss.sort.each do |lights|
         if lights.schedule.empty?
           lights.setSchedule(model.alwaysOffDiscreteSchedule)
-        end      
-      end
-
-      if /prm/i =~ template
-        model.getScheduleTypeLimitss.sort.each do |limit|
-          if limit.name.to_s == 'Fractional'
-            limit.resetUpperLimitValue()
-            limit.setUpperLimitValue(5.0)
-          end
         end
       end
 

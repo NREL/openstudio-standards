@@ -576,38 +576,22 @@ class Standard
   end
 
   # Modify the lighting schedules for Appendix G PRM for 2016 and later
-  #def space_type_light_sch_change(space_type, model)
-  #  space_type.lights.sort.each do |lgts|
-  #    lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-  #      day_rule = week_rule.daySchedule()
-  #      # clone the current lighting schedule to new schedule
-  #      new_day_rule = day_rule.clone(model).to_ScheduleDay.get
-  #      #day_rule = week_rule.daySchedule()
-  #      times = new_day_rule.times()
-  #      times.each do |time|
-  #        old_value = new_day_rule.getValue(time)
-  #        new_day_rule.removeValue(time)
-  #        new_value = old_value / (1.0 - space_type_properties['occup_sensor_savings'].to_f)
-  #        new_day_rule.addValue(time,new_value)
-  #      end
-  #      
-  #    end
-  #  end
-  #end
-
-  # Modify the lighting schedules for Appendix G PRM for 2016 and later
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def space_type_light_sch_change(model)
     dayschedule_name_check = []
     model.getSpaceTypes.sort.each do |space_type|
       # Get the standards data
       space_type_properties = interior_lighting_get_prm_data(space_type)
       space_type.lights.sort.each do |lgts|
+        # modify day schedule
         lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
           day_rule = week_rule.daySchedule()
           day_rule_name = day_rule.name.to_s
           if not dayschedule_name_check.include?(day_rule_name)
             dayschedule_name_check << day_rule_name
             times = day_rule.times()
+            # remove the effect of occupancy sensors
             times.each do |time|
               old_value = day_rule.getValue(time)
               day_rule.removeValue(time)
@@ -616,11 +600,13 @@ class Standard
             end
           end
         end
+        # modify default schedule
         day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
         day_rule_name = day_rule.name.to_s
         if not dayschedule_name_check.include?(day_rule_name)
           dayschedule_name_check << day_rule_name
           times = day_rule.times()
+          # remove the effect of occupancy sensors
           times.each do |time|
             old_value = day_rule.getValue(time)
             day_rule.removeValue(time)

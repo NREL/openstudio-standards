@@ -340,8 +340,8 @@ class AppendixGPRMTests < Minitest::Test
     light_sch = {}
     prototypes.each do |prototype, model_proto|
       building_type, template, climate_zone, mod = prototype
-      # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
       
       # Get lighting schedule in prototype model
@@ -365,8 +365,8 @@ class AppendixGPRMTests < Minitest::Test
     light_sch_base = {}
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, mod = prototype
-      # Define name of spaces used for verification
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod}"
+      # Define name of spaces used for verification
       space_name = JSON.parse(File.read("#{@@json_dir}/light_occ_sensor.json"))[run_id]
     
       # Get lighting schedule in baseline model
@@ -390,7 +390,7 @@ class AppendixGPRMTests < Minitest::Test
         # Check light schedule against expected light schedule
         light_sch_model_base.each do |key, value|
           value.each do |key1, value1|
-            if key1 != "space_type"
+            if key1 != 'space_type'
               value1.each do |key2, value2|
                 space_type_var = 0
                 space_name.each do |key3, value3|
