@@ -235,8 +235,11 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
-  # 90.1-PRM-2019
+  # 90.1-PRM Common
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
+  # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
 #  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.AirLoopHVAC"
