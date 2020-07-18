@@ -45,10 +45,10 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     puts "***************************************#{name}*******************************************************\n"
     model = standard.load_building_type_from_library(building_type: 'SmallOffice')
     standard.apply_weather_data(model: model, epw_file: weather_file)
-    standard.apply_loads(model: model)
+    standard.apply_loads(model: model, lights_type: @lights_type, lights_scale: 1.0)
     standard.apply_envelope(model: model)
     standard.apply_fdwr_srr_daylighting(model: model)
-    standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+    standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder, lights_type: @lights_type, lights_scale: 1.0, space_height: @space_height)
     hw_loop = nil
     if (baseboard_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)

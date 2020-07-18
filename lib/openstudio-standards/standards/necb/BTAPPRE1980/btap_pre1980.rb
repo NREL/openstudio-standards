@@ -51,20 +51,26 @@ class BTAPPRE1980 < NECB2011
   def model_apply_standard(model:,
                            epw_file:,
                            sizing_run_dir: Dir.pwd,
-                           primary_heating_fuel: 'DefaultFuel')
+                           primary_heating_fuel: 'DefaultFuel',
+                           dcv_type: 'NECB_Default', # Four options: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
+                           lights_type: 'NECB_Default', # Two options: (1) 'NECB_Default', (2) 'LED'
+                           lights_scale: 1.0,
+                           space_height:,
+                           daylighting_type: 'NECB_Default' # Two options: (1) 'NECB_Default', (2) 'add_daylighting_controls'
+    )
     apply_weather_data(model: model, epw_file: epw_file)
-    apply_loads(model: model)
+    apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale)
     apply_envelope( model: model)
     #Keeping default window sizes in pre-1980 buildings and removing daylighting
     #apply_fdwr_srr_daylighting(model: model)
-    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir)
+    apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale, space_height: space_height)
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
-    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
+    apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type)
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
     return model
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type:)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
