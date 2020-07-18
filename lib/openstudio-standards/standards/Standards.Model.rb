@@ -93,7 +93,8 @@ class Standard
       # This is assumed to be the user's intent in the proposed model.
       model.getLightss.sort.each do |lights|
         if lights.schedule.empty?
-          lights.setSchedule(model.alwaysOffDiscreteSchedule)      
+          lights.setSchedule(model.alwaysOffDiscreteSchedule)
+        end      
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
