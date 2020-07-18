@@ -86,12 +86,14 @@ class Standard
         end
       end
 
+      # Calculate infiltration as per 90.1 PRM rules
+      model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
+
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
       model.getLightss.sort.each do |lights|
         if lights.schedule.empty?
-          lights.setSchedule(model.alwaysOffDiscreteSchedule)
-        end
+          lights.setSchedule(model.alwaysOffDiscreteSchedule)      
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
@@ -5770,4 +5772,21 @@ class Standard
     return parametric_inputs
   end
 
+  # This method retrieves the lowest story in a model
+  #
+  # @return [OpenStudio::Model::BuildingStory] Lowest story included in the model
+  def find_lowest_story(model)
+    min_z_story = 1E+10
+    lowest_story = nil
+    model.getSpaces.sort.each do |space|
+      story = space.buildingStory.get
+      lowest_story = story if lowest_story.nil?
+      space_min_z = building_story_minimum_z_value(story)
+      if space_min_z < min_z_story
+        min_z_story = space_min_z
+        lowest_story = story
+      end
+    end
+    return lowest_story
+  end
 end
