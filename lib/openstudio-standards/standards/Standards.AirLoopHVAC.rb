@@ -3160,7 +3160,7 @@ class Standard
 
   # Determine how much residential area the airloop serves
   #
-  # @returns [Double] res_area m^2
+  # @return [Double] res_area m^2
   def air_loop_hvac_residential_area_served(air_loop_hvac)
     res_area = 0.0
 

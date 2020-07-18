@@ -34,266 +34,281 @@ class Standard
     model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', custom, sizing_run_dir, debug)
   end
 
-  def model_create_prm_any_baseline_building(model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+  def model_create_prm_any_baseline_building(prop_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', custom = nil, sizing_run_dir = Dir.pwd, debug = false)
+    # Define different orientation from original orientation
+    # for each individual baseline models
+    degs_from_org = /prm/i =~ template ? [0, 90, 180, 270] : [0]
 
-    # Perform a sizing run of the proposed model.
-    # Intend is to get individual space load to determine each space's
-    # conditioning type: conditioned, unconditioned, semiheated.
-    if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP") == false
-        return false
+    # Create baseline model for each orientation
+    degs_from_org.each do |degs|
+      # New baseline model:
+      # Starting point is the original proposed model
+      model = BTAP::FileIO::deep_copy(prop_model)
+      model.getBuilding.setName("#{template}-#{building_type}-#{climate_zone} PRM baseline created: #{Time.new}")
+
+      # Rotate building if requested,
+      # Site shading isn't rotated
+      model_rotate(model, degs) unless degs == 0
+
+      # Perform a sizing run of the proposed model.
+      # Intend is to get individual space load to determine each space's
+      # conditioning type: conditioned, unconditioned, semiheated.
+      if model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SR_PROP#{degs}") == false
+          return false
+        end
       end
-    end
-    
-    # Remove external shading devices
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
-    model_remove_external_shading_devices(model)
 
-    # Reduce the WWR and SRR, if necessary
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
-    sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
-    model_apply_prm_baseline_skylight_to_roof_ratio(model)
+      # Remove external shading devices
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Removing External Shading Devices ***')
+      model_remove_external_shading_devices(model)
 
-    # Assign building stories to spaces in the building where stories are not yet assigned.
-    model_assign_spaces_to_stories(model)
+      # Reduce the WWR and SRR, if necessary
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adjusting Window and Skylight Ratios ***')
+      sucess, wwr_info = model_apply_prm_baseline_window_to_wall_ratio(model, climate_zone, wwr_building_type)
+      model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
-    # Modify the internal loads in each space type, keeping user-defined schedules.
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
-    model.getSpaceTypes.sort.each do |space_type|
-      set_people = false
-      set_lights = true
-      set_electric_equipment = false
-      set_gas_equipment = false
-      set_ventilation = false
-      set_infiltration = false
-      if /prm/i =~ template
-        space_type_apply_int_loads_prm(space_type, model)
-      elsif
-        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+      # Assign building stories to spaces in the building where stories are not yet assigned.
+      model_assign_spaces_to_stories(model)
+
+      # Modify the internal loads in each space type, keeping user-defined schedules.
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
+      model.getSpaceTypes.sort.each do |space_type|
+        set_people = false
+        set_lights = true
+        set_electric_equipment = false
+        set_gas_equipment = false
+        set_ventilation = false
+        set_infiltration = false
+        if /prm/i =~ template
+          space_type_apply_int_loads_prm(space_type, model)
+        elsif space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+        end
       end
-    end
 
-    # Calculate infiltration as per 90.1 PRM rules
-    model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
+      # Calculate infiltration as per 90.1 PRM rules
+      model_apply_infiltration_standard(model, climate_zone) if /prm/i =~ template
 
-    # If any of the lights are missing schedules, assign an always-off schedule to those lights.
-    # This is assumed to be the user's intent in the proposed model.
-    model.getLightss.sort.each do |lights|
-      if lights.schedule.empty?
-        lights.setSchedule(model.alwaysOffDiscreteSchedule)
+      # If any of the lights are missing schedules, assign an always-off schedule to those lights.
+      # This is assumed to be the user's intent in the proposed model.
+      model.getLightss.sort.each do |lights|
+        if lights.schedule.empty?
+          lights.setSchedule(model.alwaysOffDiscreteSchedule)      
       end
-    end
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
-    # Run a sizing run to calculate VLT for layer-by-layer windows.
-    if model_create_prm_baseline_building_requires_vlt_sizing_run(model)
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SRVLT") == false
-        return false
+      # Run a sizing run to calculate VLT for layer-by-layer windows.
+      if model_create_prm_baseline_building_requires_vlt_sizing_run(model)
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SRVLT") == false
+          return false
+        end
       end
-    end
 
-    # Add or remove daylighting controls to each space
-    # Add daylighting controls for 90.1-2013 and prior
-    # Remove daylighting control for 90.1-PRM-2019 and onward
-    model.getSpaces.sort.each do |space|
-      if /prm/i =~ template
-        space_remove_daylighting_controls(space)
+      # Add or remove daylighting controls to each space
+      # Add daylighting controls for 90.1-2013 and prior
+      # Remove daylighting control for 90.1-PRM-2019 and onward
+      model.getSpaces.sort.each do |space|
+        if /prm/i =~ template
+          space_remove_daylighting_controls(space)
+        else
+          added = space_add_daylighting_controls(space, false, false)
+        end
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
+
+      # Modify some of the construction types as necessary
+      model_apply_prm_construction_types(model)
+
+      # Set the construction properties of all the surfaces in the model
+      if /prm/i !~ template
+        model_apply_standard_constructions(model, climate_zone)
       else
-        added = space_add_daylighting_controls(space, false, false)
+        model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
       end
-    end
-    
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline Constructions ***')
 
-    # Modify some of the construction types as necessary
-    model_apply_prm_construction_types(model)
-
-    # Set the construction properties of all the surfaces in the model
-    if /prm/i !~ template
-      model_apply_standard_constructions(model, climate_zone)
-    else
-      model_apply_standard_constructions(model, climate_zone, wwr_building_type, wwr_info)
-    end
-
-    if /prm/i !~ template
+      if /prm/i !~ template
 
         # Get the groups of zones that define the baseline HVAC systems for later use.
-      # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
-      sys_groups = model_prm_baseline_system_groups(model, custom)
+        # This must be done before removing the HVAC systems because it requires knowledge of proposed HVAC fuels.
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Grouping Zones by Fuel Type and Occupancy Type ***')
+        sys_groups = model_prm_baseline_system_groups(model, custom)
 
-      # Remove all HVAC from model, excluding service water heating
-      model_remove_prm_hvac(model)
+        # Remove all HVAC from model, excluding service water heating
+        model_remove_prm_hvac(model)
 
-      # Remove all EMS objects from the model
-      model_remove_prm_ems_objects(model)
-    end
+        # Remove all EMS objects from the model
+        model_remove_prm_ems_objects(model)
+      end
 
-    if /prm/i !~ template
+      if /prm/i !~ template
 
-      # Modify the service water heating loops per the baseline rules
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-      model_apply_baseline_swh_loops(model, building_type)
-    end
+        # Modify the service water heating loops per the baseline rules
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
+        model_apply_baseline_swh_loops(model, building_type)
+      end
 
-    if /prm/i !~ template
-      # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
-      sys_groups.each do |sys_group|
-        # Determine the primary baseline system type
-        system_type = model_prm_baseline_system_type(model,
-                                                    climate_zone,
-                                                    sys_group['occ'],
-                                                    sys_group['fuel'],
-                                                    sys_group['area_ft2'],
-                                                    sys_group['stories'],
-                                                    custom)
+      if /prm/i !~ template
+        # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
+        sys_groups.each do |sys_group|
+          # Determine the primary baseline system type
+          system_type = model_prm_baseline_system_type(model,
+                                                       climate_zone,
+                                                       sys_group['occ'],
+                                                       sys_group['fuel'],
+                                                       sys_group['area_ft2'],
+                                                       sys_group['stories'],
+                                                       custom)
 
-        sys_group['zones'].sort.each_slice(5) do |zone_list|
-          zone_names = []
-          zone_list.each do |zone|
-            zone_names << zone.name.get.to_s
+          sys_group['zones'].sort.each_slice(5) do |zone_list|
+            zone_names = []
+            zone_list.each do |zone|
+              zone_names << zone.name.get.to_s
+            end
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
           end
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
+
+          # Add the system type for these zones
+          model_add_prm_baseline_system(model,
+                                        system_type[0],
+                                        system_type[1],
+                                        system_type[2],
+                                        system_type[3],
+                                        sys_group['zones'])
         end
 
-        # Add the system type for these zones
-        model_add_prm_baseline_system(model,
-                                      system_type[0],
-                                      system_type[1],
-                                      system_type[2],
-                                      system_type[3],
-                                      sys_group['zones'])
       end
 
+      if /prm/i !~ template
+        # Set the zone sizing SAT for each zone in the model
+        model.getThermalZones.each do |zone|
+          thermal_zone_apply_prm_baseline_supply_temperatures(zone)
+        end
+
+        # Set the system sizing properties based on the zone sizing information
+        model.getAirLoopHVACs.each do |air_loop|
+          air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
+        end
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
+
+      end
+
+      if /prm/i !~ template
+        # SAT reset, economizers
+        model.getAirLoopHVACs.sort.each do |air_loop|
+          air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
+        end
+
+        # Apply the minimum damper positions, assuming no DDC control of VAV terminals
+        model.getAirLoopHVACs.sort.each do |air_loop|
+          air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
+        end
+
+        # Apply the baseline system temperatures
+        model.getPlantLoops.sort.each do |plant_loop|
+          # Skip the SWH loops
+          next if plant_loop_swh_loop?(plant_loop)
+
+          plant_loop_apply_prm_baseline_temperatures(plant_loop)
+        end
+
+        # Set the heating and cooling sizing parameters
+        model_apply_prm_sizing_parameters(model)
+
+        # Run sizing run with the HVAC equipment
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+          return false
+        end
+
+      end
+
+      if /prm/i !~ template
+        # If there are any multizone systems, reset damper positions to achieve a 60% ventilation effectiveness minimum for the system
+        # following the ventilation rate procedure from 62.1
+        model_apply_multizone_vav_outdoor_air_sizing(model)
+
+      end
+
+      if /prm/i !~ template
+        # Set the baseline fan power for all airloops
+        model.getAirLoopHVACs.sort.each do |air_loop|
+          air_loop_hvac_apply_prm_baseline_fan_power(air_loop)
+        end
+
+        # Set the baseline fan power for all zone HVAC
+        model.getZoneHVACComponents.sort.each do |zone_hvac|
+          zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac)
+        end
+
+      end
+
+      if /prm/i !~ template
+        # Set the baseline number of boilers and chillers
+        model.getPlantLoops.sort.each do |plant_loop|
+          # Skip the SWH loops
+          next if plant_loop_swh_loop?(plant_loop)
+
+          plant_loop_apply_prm_number_of_boilers(plant_loop)
+          plant_loop_apply_prm_number_of_chillers(plant_loop)
+        end
+
+        # Set the baseline number of cooling towers
+        # Must be done after all chillers are added
+        model.getPlantLoops.sort.each do |plant_loop|
+          # Skip the SWH loops
+          next if plant_loop_swh_loop?(plant_loop)
+
+          plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
+        end
+
+        # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
+        if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+          return false
+        end
+
+        # Set the pumping control strategy and power
+        # Must be done after sizing components
+        model.getPlantLoops.sort.each do |plant_loop|
+          # Skip the SWH loops
+          next if plant_loop_swh_loop?(plant_loop)
+
+          plant_loop_apply_prm_baseline_pump_power(plant_loop)
+          plant_loop_apply_prm_baseline_pumping_type(plant_loop)
+        end
+
+      end
+
+      if /prm/i !~ template
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
+
+        # Apply the HVAC efficiency standard
+        model_apply_hvac_efficiency_standard(model, climate_zone)
+
+      end
+
+      # Fix EMS references.
+      # Temporary workaround for OS issue #2598
+      model_temp_fix_ems_references(model)
+
+      # Delete all the unused resource objects
+      model_remove_unused_resource_objects(model)
+
+      # TODO: turn off self shading
+      # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
+      # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
+
+      model_status = degs > 0 ? "final_#{degs}" : 'final'
+      model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
+
+      # Translate to IDF and save for debugging
+      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+      idf = forward_translator.translateModel(model)
+      idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
+      idf.save(idf_path, true)
     end
-
-    if /prm/i !~ template
-      # Set the zone sizing SAT for each zone in the model
-      model.getThermalZones.each do |zone|
-        thermal_zone_apply_prm_baseline_supply_temperatures(zone)
-      end
-
-      # Set the system sizing properties based on the zone sizing information
-      model.getAirLoopHVACs.each do |air_loop|
-        air_loop_hvac_apply_prm_sizing_temperatures(air_loop)
-      end
-
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Baseline HVAC System Controls ***')
-
-    end
-
-    if /prm/i !~ template
-      # SAT reset, economizers
-      model.getAirLoopHVACs.sort.each do |air_loop|
-        air_loop_hvac_apply_prm_baseline_controls(air_loop, climate_zone)
-      end
-
-      # Apply the minimum damper positions, assuming no DDC control of VAV terminals
-      model.getAirLoopHVACs.sort.each do |air_loop|
-        air_loop_hvac_apply_minimum_vav_damper_positions(air_loop, false)
-      end
-
-      # Apply the baseline system temperatures
-      model.getPlantLoops.sort.each do |plant_loop|
-        # Skip the SWH loops
-        next if plant_loop_swh_loop?(plant_loop)
-        plant_loop_apply_prm_baseline_temperatures(plant_loop)
-      end
-
-      # Set the heating and cooling sizing parameters
-      model_apply_prm_sizing_parameters(model)
-
-      # Run sizing run with the HVAC equipment
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
-        return false
-      end
-
-    end
-
-    if /prm/i !~ template
-      # If there are any multizone systems, reset damper positions to achieve a 60% ventilation effectiveness minimum for the system
-      # following the ventilation rate procedure from 62.1
-      model_apply_multizone_vav_outdoor_air_sizing(model)
-
-    end
-
-    if /prm/i !~ template
-      # Set the baseline fan power for all airloops
-      model.getAirLoopHVACs.sort.each do |air_loop|
-        air_loop_hvac_apply_prm_baseline_fan_power(air_loop)
-      end
-
-      # Set the baseline fan power for all zone HVAC
-      model.getZoneHVACComponents.sort.each do |zone_hvac|
-        zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac)
-      end
-
-    end
-
-    if /prm/i !~ template
-      # Set the baseline number of boilers and chillers
-      model.getPlantLoops.sort.each do |plant_loop|
-        # Skip the SWH loops
-        next if plant_loop_swh_loop?(plant_loop)
-        plant_loop_apply_prm_number_of_boilers(plant_loop)
-        plant_loop_apply_prm_number_of_chillers(plant_loop)
-      end
-
-      # Set the baseline number of cooling towers
-      # Must be done after all chillers are added
-      model.getPlantLoops.sort.each do |plant_loop|
-        # Skip the SWH loops
-        next if plant_loop_swh_loop?(plant_loop)
-        plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
-      end
-
-      # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-        return false
-      end
-
-      # Set the pumping control strategy and power
-      # Must be done after sizing components
-      model.getPlantLoops.sort.each do |plant_loop|
-        # Skip the SWH loops
-        next if plant_loop_swh_loop?(plant_loop)
-        plant_loop_apply_prm_baseline_pump_power(plant_loop)
-        plant_loop_apply_prm_baseline_pumping_type(plant_loop)
-      end
-
-    end
-
-    if /prm/i !~ template
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Applying Prescriptive HVAC Controls and Equipment Efficiencies ***')
-
-      # Apply the HVAC efficiency standard
-      model_apply_hvac_efficiency_standard(model, climate_zone)
-
-    end
-
-    # Fix EMS references.
-    # Temporary workaround for OS issue #2598
-    model_temp_fix_ems_references(model)
-
-    # Delete all the unused resource objects
-    model_remove_unused_resource_objects(model)
-
-    # TODO: turn off self shading
-    # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
-    # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
-
-    model_status = 'final'
-    model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
-
-    # Translate to IDF and save for debugging
-    forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-    idf = forward_translator.translateModel(model)
-    idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
-    idf.save(idf_path, true)
-
     return true
   end
 
@@ -3363,14 +3378,6 @@ class Standard
     return all_constructions
   end
 
-  # Remove all daylighting controls for Appendix G PRM 2016 and later
-  def model_remove_daylighting_controls(model)
-    puts "In remove daylighting controls"  
-
-
-  end
-
-
   # Go through the default construction sets and hard-assigned constructions.
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
   # For some standards, this will involve making modifications.  For others, it will not.
@@ -5249,7 +5256,19 @@ class Standard
     return true
   end
 
-
+  # This method rotates the building model from its original position
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio Model object
+  # @param degs [Integer] Degress of rotation from original position
+  #
+  # @return [OpenStudio::Model::Model] OpenStudio Model objecty
+  def model_rotate(model, degs)
+    building = model.getBuilding
+    org_north_axis = building.northAxis
+    building.setNorthAxis(org_north_axis + degs)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "The model was rotated of #{degs} degrees from its original position.")
+    return model
+  end
 
   def load_user_geometry_osm(osm_model_path:)
     version_translator = OpenStudio::OSVersion::VersionTranslator.new
