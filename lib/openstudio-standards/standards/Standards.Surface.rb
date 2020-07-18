@@ -352,4 +352,23 @@ class Standard
     }
     return roof_cent
   end
+
+  # Returns the surface and subsurface UA product
+  #
+  # @param [OpenStudio::Model::Surface] OpenStudio model surface object
+  #
+  # @retrun [Double] UA product in W/K
+  def surface_subsurface_ua(surface)
+    # Compute the surface UA product
+    ua = surface.uFactor.get * surface.netArea
+
+    surface.subSurfaces.sort.each do |subsurface|
+      # the uFactor() method does not work for complex glazing inputs
+      # For this cases the U-Factor is retrieved from previous sizing run
+      u_factor = subsurface.uFactor.is_initialized ? subsurface.uFactor.get : construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
+      ua += u_factor * subsurface.netArea
+    end
+
+    return ua
+  end
 end

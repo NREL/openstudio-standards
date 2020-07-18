@@ -16,8 +16,13 @@
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
     ],
-	"light_occ_sensor": [
+	  "light_occ_sensor": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ""]
+    ],
+    "infiltration": [
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", ""]
     ]
 }
