@@ -169,11 +169,7 @@ class NECB2011 < Standard
                                    epw_file:,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
-                                   primary_heating_fuel: 'DefaultFuel'#,
-                                   # dcv_type:,
-                                   # lights_type:,
-                                   # lights_scale:,
-                                   # space_height:
+                                   primary_heating_fuel: 'DefaultFuel'
   )
 
     model = load_building_type_from_library(building_type: building_type)
@@ -210,10 +206,17 @@ class NECB2011 < Standard
                            daylighting_type: 'NECB_Default'
   )
     apply_weather_data(model: model, epw_file: epw_file)
+    # puts model
+    # raise('check model for lights')
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale) #Sara
+    # puts model
+    # raise('check model for lights')
     apply_envelope(model: model)
+    # raise('check model for lights')
     apply_fdwr_srr_daylighting(model: model)
+    # raise('check model for lights')
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale, space_height: space_height)
+    # raise('check model for lights')
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir) #, dcv_type: dcv_type #Sara
     # puts model
     # raise('check model for dcv')
@@ -1299,13 +1302,13 @@ class NECB2011 < Standard
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
   # @return [Bool] returns true if successful, false if not
-  def model_add_loads(model, lights_type = 'NECB_Default', lights_scale = 1.0)
+  def model_add_loads(model, lights_type, lights_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
     # Loop through all the space types currently in the model,
     # which are placeholders, and give them appropriate loads and schedules
     model.getSpaceTypes.sort.each do |space_type|
-
+      # puts space_type.name.to_s
       ##### The below loop is added as the space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***START***
       space_type_spaces = space_type.spaces()
       space_walls_vertices = []
@@ -1333,7 +1336,7 @@ class NECB2011 < Standard
       end
       ##### The above loop is added as thespace_type_apply_internal_loads space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***END***
 
-      # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
+      puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
       # raise('check space_height inside model_add_loads function')
 
       # Rendering color
