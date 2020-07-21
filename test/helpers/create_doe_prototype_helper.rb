@@ -60,7 +60,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       compare_results = false,
       debug = false,
       run_type = 'annual',
-      compare_results_object_by_object = false)
+      compare_results_object_by_object = false,
+      additional_params = nil)
 
     building_types.each do |building_type|
       templates.each do |template|
@@ -68,12 +69,12 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           #need logic to go through weather files only for Canada's NECB2011. It will ignore the ASHRAE climate zone.
           if climate_zone == 'NECB HDD Method'
             epw_files.each do |epw_file|
-              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
+              create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object, additional_params=additional_params)
             end
           else
             #otherwise it will go as normal with the american method and wipe the epw_file variable.
             epw_file = ""
-            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object)
+            create_building(building_type, template, climate_zone, epw_file, create_models, run_models, compare_results, debug, run_type, compare_results_object_by_object, additional_params=additional_params)
           end
         end
       end
@@ -90,7 +91,8 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       debug = false,
       run_type = 'annual',
       compare_results_object_by_object = false,
-      test_name_prefix = '')
+      test_name_prefix = '',
+      additional_params = nil)
 
     method_name = nil
     case template
@@ -143,7 +145,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
       # Create the model, if requested
       if create_models
-        model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+        model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir, additional_params=additional_params)
         @current_model = model
         if model.is_a?(FalseClass)
           OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Model for #{template}_#{building_type} was not created successfully.")

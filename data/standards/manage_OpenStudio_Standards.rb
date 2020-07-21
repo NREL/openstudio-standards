@@ -86,7 +86,7 @@ def unique_properties(sheet_name)
            ['name']
          when 'materials'
            ['name', 'code_category']
-         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
+         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust', 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
          when 'exterior_lighting'
            ['exterior_lighting_zone_number', 'template']
@@ -142,6 +142,8 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['template', 'climate_zone']
          else
            []
          end

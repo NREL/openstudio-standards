@@ -4020,6 +4020,10 @@ class Standard
       building_type = 'LrgDCHighITE'
     elsif building_type == 'Laboratory'
       building_type = 'Laboratory'
+    elsif building_type == 'TallBuilding'
+      building_type = 'TallBldg'
+    elsif building_type == 'SuperTallBuilding'
+      building_type = 'SpTallBldg'
     end
 
     parts = [template]
