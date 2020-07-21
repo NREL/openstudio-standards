@@ -139,7 +139,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
+        standard.model_add_loads(@model, 'NECB_Default', 1.0)
         #Now loop through each space and assign the spacetype.
         @model.getSpaces.each do |space|
           space.setSpaceType(st)

@@ -206,23 +206,12 @@ class NECB2011 < Standard
                            daylighting_type: 'NECB_Default'
   )
     apply_weather_data(model: model, epw_file: epw_file)
-    # puts model
-    # raise('check model for lights')
     apply_loads(model: model, lights_type: lights_type, lights_scale: lights_scale) #Sara
-    # puts model
-    # raise('check model for lights')
     apply_envelope(model: model)
-    # raise('check model for lights')
     apply_fdwr_srr_daylighting(model: model)
-    # raise('check model for lights')
     apply_auto_zoning(model: model, sizing_run_dir: sizing_run_dir, lights_type: lights_type, lights_scale: lights_scale, space_height: space_height)
-    # raise('check model for lights')
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir) #, dcv_type: dcv_type #Sara
-    # puts model
-    # raise('check model for dcv')
     apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir, dcv_type: dcv_type) #Sara
-    # puts model
-    # raise('check model for dcv')
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
     if daylighting_type == 'add_daylighting_controls'
       model_add_daylighting_controls(model)
@@ -1336,7 +1325,7 @@ class NECB2011 < Standard
       end
       ##### The above loop is added as thespace_type_apply_internal_loads space height is needed for the calculation of atriums' LPD when LED lighting is used in atriums. ***END***
 
-      puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
+      # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}" #Sara
       # raise('check space_height inside model_add_loads function')
 
       # Rendering color
