@@ -1939,6 +1939,8 @@ class NECB2011
   #        "part_load": {
   #            "name":  "SAMPLE_CUSTOM_CURVE"
   #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
   #            "coeff_1": 1,
   #            "coeff_2": 2,
   #            "coeff_3": 3,
@@ -1954,7 +1956,8 @@ class NECB2011
   #            "minimum_independent_variable_2": null,
   #            "maximum_independent_variable_2": null,
   #            "minimum_dependent_variable_output": null,
-  #            "maximum_dependent_variable_output": null
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
   #        }
   #    },
   #    "furnace_eff": {
@@ -1962,6 +1965,8 @@ class NECB2011
   #        "part_load": {
   #            "name":  "SAMPLE_CUSTOM_CURVE"
   #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
   #            "coeff_1": 1,
   #            "coeff_2": 2,
   #            "coeff_3": 3,
@@ -1977,7 +1982,8 @@ class NECB2011
   #            "minimum_independent_variable_2": null,
   #            "maximum_independent_variable_2": null,
   #            "minimum_dependent_variable_output": null,
-  #            "maximum_dependent_variable_output": null
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
   #        }
   #    }
   #}
@@ -1998,6 +2004,8 @@ class NECB2011
   #        "part_load": {
   #            "name":  "SAMPLE_CUSTOM_CURVE"
   #            "form":  "Cubic"
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
   #            "coeff_1": 1,
   #            "coeff_2": 2,
   #            "coeff_3": 3,
@@ -2014,6 +2022,7 @@ class NECB2011
   #            "maximum_independent_variable_2": null,
   #            "minimum_dependent_variable_output": null,
   #            "maximum_dependent_variable_output": null
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
   #        }
   #    }
   # If both "eff" and "part_load" are nil then it does nothing.  If an efficiency is set but is not between 0.1 and 1.0
@@ -2049,6 +2058,9 @@ class NECB2011
   #        "part_load": {
   #            "name":  "SAMPLE_CUSTOM_CURVE"
   #            "form":  "Cubic"
+  #            "dependent_variable": "FIRRatio",
+  #            "independent_variable_1": "QRatio",
+  #            "independent_variable_2": nil,
   #            "coeff_1": 1,
   #            "coeff_2": 2,
   #            "coeff_3": 3,
@@ -2064,7 +2076,8 @@ class NECB2011
   #            "minimum_independent_variable_2": null,
   #            "maximum_independent_variable_2": null,
   #            "minimum_dependent_variable_output": null,
-  #            "maximum_dependent_variable_output": null
+  #            "maximum_dependent_variable_output": null,
+  #            "notes": "Test entry.  You don't really need to inculde notes but they are handy for others looking at what you did."
   #        }
   #    }
   # If eff["eff"] is not nil then it sets the boiler efficiency to that number.  The part load curve is defaulted to a
@@ -2090,6 +2103,12 @@ class NECB2011
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "A part load curve with the name #{part_load_curve_name} already exists. The existing curve will be used. The custom curve will be ignored.")
       end
+    end
+    part_load_curve_data = (@standards_data['curves'].select {|curve| curve['name'] == part_load_curve_name})[0]
+    if part_load_curve_data['independent_variable_1'].to_s.upcase == 'TEnteringBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TEnteringBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('EnteringBoiler')
+    elsif part_load_curve_data['independent_variable_1'].to_s.upcase == 'TLeavingBoiler'.upcase || part_load_curve_data['independent_variable_2'].to_s.upcase == 'TLeavingBoiler'.upcase
+      component.setEfficiencyCurveTemperatureEvaluationVariable('LeavingBoiler')
     end
     part_load_curve = model_add_curve(model, part_load_curve_name)
     if part_load_curve
