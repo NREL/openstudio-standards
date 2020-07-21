@@ -279,6 +279,11 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
             legacy_val = legacy_values["#{end_use}|#{fuel_type}"]
             current_val = current_values["#{end_use}|#{fuel_type}"]
 
+            # check that legacy value exists
+            if legacy_val.nil?
+              OpenStudio::logFree(OpenStudio::Error, 'openstudio.model.Model', "Legacy value is nil for enduse '#{end_use}' and fuel type '#{fuel_type}'.")
+            end
+
             # round to nearest decimal place per the rounding tolerance
             legacy_val = legacy_val.round(rounding_tolerance)
             current_val = current_val.round(rounding_tolerance)
