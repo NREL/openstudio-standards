@@ -65,7 +65,11 @@ module OpenstudioStandards
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
-  
+
+  # ECM development
+  require_relative "#{stds}/necb/ECMS/ecms.rb"
+  require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
+
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/comstock_doe_ref_pre_1980/comstock_doe_ref_pre_1980"
