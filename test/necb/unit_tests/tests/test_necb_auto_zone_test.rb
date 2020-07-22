@@ -47,8 +47,7 @@ class NECB_Autozone_Tests < MiniTest::Test
     model = standard.model_create_prototype_model(epw_file: @epw_file,
                                                   sizing_run_dir: File.join(@output_folder, building_type, 'sizing'),
                                                   template: @template,
-                                                  building_type: building_type,
-                                                  new_auto_zoner: true)
+                                                  building_type: building_type)
 
 
     puts "Writing Output #{outfile}"

@@ -58,7 +58,7 @@ class TestAddFFactorFloor < CreateDOEPrototypeBuildingTest
 
       f_factor_construction = f_factor_construction.get
 
-      generated_f_factor = f_factor_construction.getFFactor.value.round(2)
+      generated_f_factor = f_factor_construction.fFactor.round(2)
       generated_area = f_factor_construction.area.round(2)
       generated_perimeter = f_factor_construction.perimeterExposed.round(2)
 

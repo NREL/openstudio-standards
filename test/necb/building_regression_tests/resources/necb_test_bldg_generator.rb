@@ -20,7 +20,7 @@ class GeneratorNECBRegressionTests
   # default loation circleci_tests.txt file when run on
 
   def initialize()
-    @file_out_dir = File.absolute_path(File.join(__dir__,  "..",'tests'))
+    @file_out_dir = File.absolute_path(File.join(__dir__, "..", 'tests'))
 
 
     reset_folder(@file_out_dir)
@@ -38,10 +38,16 @@ class GeneratorNECBRegressionTests
   # Method that will generate the necb building test files.
   def generate_necb_bldg_test_files
     reset_folder(@file_out_dir)
+
+    epw_files = [
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+    ]
     templates = [
         'NECB2011',
         'NECB2015',
-        'NECB2017'
+        'NECB2017',
+        'BTAPPRE1980',
+        'BTAP1980TO2010'
     ]
     building_types = [
         "FullServiceRestaurant",
@@ -60,24 +66,29 @@ class GeneratorNECBRegressionTests
         "SmallHotel",
         "SmallOffice",
         "Warehouse"
+
     ]
-    fuel_types = [
-        'gas',
-        'electric'
-    ]
+    primary_heating_fuels =
+        [
+            'NaturalGas',
+            'Electricity',
+        ]
     #load regression necb template
     necb_bldg_template = File.read("#{__dir__}/template_test_necb_bldg.erb")
     filenames = []
-    templates.each {|template|
-      building_types.each {|building_type|
-        fuel_types.each {|fuel_type|
-          filename = File.join(@file_out_dir, "test_necb_bldg_#{building_type}_#{template}_#{fuel_type}.rb")
-          file_string = ERB.new(necb_bldg_template, 0, "", "@html").result(binding)
-          File.open(filename, 'w') {|file| file.write(file_string)}
-          filenames << filename
-        }
-      }
-    }
+    templates.each do |template|
+      building_types.each do |building_type|
+        primary_heating_fuels.each do |primary_heating_fuel|
+          epw_files.each do |epw_file|
+            test_name =
+            filename = File.join(@file_out_dir, "test_necb_bldg_#{building_type}_#{template}_#{primary_heating_fuel}.rb")
+            file_string = ERB.new(necb_bldg_template, 0, "", "@html").result(binding)
+            File.open(filename, 'w') {|file| file.write(file_string)}
+            filenames << filename
+          end
+        end
+      end
+    end
     return filenames
   end
 end
