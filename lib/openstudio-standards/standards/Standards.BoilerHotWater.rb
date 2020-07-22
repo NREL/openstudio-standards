@@ -18,7 +18,7 @@ class Standard
       fuel_type = 'Gas'
     when 'Electricity'
       fuel_type = 'Electric'
-    when 'FuelOil#1', 'FuelOil#2'
+    when 'FuelOilNo1', 'FuelOilNo2'
       fuel_type = 'Oil'
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")

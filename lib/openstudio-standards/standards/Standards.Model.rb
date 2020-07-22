@@ -4986,8 +4986,8 @@ class Standard
 
       if htg_fuels.include?('NaturalGas') ||
          htg_fuels.include?('PropaneGas') ||
-         htg_fuels.include?('FuelOil#1') ||
-         htg_fuels.include?('FuelOil#2') ||
+         htg_fuels.include?('FuelOilNo1') ||
+         htg_fuels.include?('FuelOilNo2') ||
          htg_fuels.include?('Coal') ||
          htg_fuels.include?('Diesel') ||
          htg_fuels.include?('Gasoline')

@@ -562,15 +562,15 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
 
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline') ||
@@ -602,8 +602,8 @@ class Standard
     htg_fuels = thermal_zone.heating_fuels
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline') ||
@@ -664,7 +664,7 @@ class Standard
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
-    # Electricity, NaturalGas, PropaneGas, FuelOil#1, FuelOil#2,
+    # Electricity, NaturalGas, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
     htg_fuels = thermal_zone.heating_fuels
@@ -673,8 +673,8 @@ class Standard
     fossil = false
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil#1') ||
-       htg_fuels.include?('FuelOil#2') ||
+       htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
        htg_fuels.include?('Gasoline')
