@@ -49,7 +49,7 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       c_factor_construction = model.getCFactorUndergroundWallConstructions[0]
 
       c_factor_height =  c_factor_construction.height.round(3)
-      c_factor_generated = c_factor_construction.getCFactor.value.round(2)
+      c_factor_generated = c_factor_construction.cFactor.round(2)
 
 
       asserts = {
