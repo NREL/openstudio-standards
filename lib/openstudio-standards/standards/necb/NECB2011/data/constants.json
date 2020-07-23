@@ -73,31 +73,95 @@
       "notes": ""
     },
     "infiltration_temperature_term_coefficient":{
-    "data_type": "value",
-    "refs": [
-      "NECB2011_S_5.Assumption"
-    ],
-    "value": 0.0,
-    "units": "",
-    "notes": ""
-  },
+      "data_type": "value",
+      "refs": [
+        "NECB2011_S_5.Assumption"
+      ],
+      "value": 0.0,
+      "units": "",
+      "notes": ""
+    },
     "infiltration_velocity_term_coefficient":{
-    "data_type": "value",
-    "refs": [
-      "Assumption"
-    ],
-    "value": 0.224,
-    "units": "",
-    "notes": ""
-  },
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.224,
+      "units": "",
+      "notes": ""
+    },
     "infiltration_velocity_squared_term_coefficient":{
-    "data_type": "value",
-    "refs": [
-      "Assumption"
-    ],
-    "value": 0.0,
-    "units": "",
-    "notes": ""
-  }
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.0,
+      "units": "",
+      "notes": ""
+    },
+    "condensing_boiler_lim": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.90,
+      "notes": ""
+    },
+    "condensing_boiler_eff_viessmann": {
+      "data_type": "value",
+      "refs": [
+        "Manufacturer Data"
+      ],
+      "value": 0.962,
+      "notes": "Nominal boiler efficiency for Viessmann Vitocrossal 300 CT3-17 condensing boiler"
+    },
+    "condensing_furnace_lim": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": 0.86,
+      "notes": ""
+    },
+    "non_condensing_boiler_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "BOILER-EFFFPLR-NECB2011",
+      "notes": "Part load curve referenced when setting custom boiler efficiencies less than the condensing_boiler_lim above."
+    },
+    "condensing_boiler_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "BOILER-EFFFPLR-COND-NECB2011",
+      "notes": "Part load curve referenced when setting custom boiler efficiencies greater than or equal to the condensing_boiler_lim above"
+    },
+    "condensing_boiler_part_load_curve_viessmann": {
+      "data_type": "value",
+      "refs": [
+        "Curve fit to manufacturer data with some assumptions"
+      ],
+      "value": "BOILER-EFFFPLR-COND-VIESSMANN",
+      "notes": "Part load curve for Viessmann Vitocrossal 300 CT3-17 condensing boiler as per analysis done by Kamel Haddad"
+    },
+    "non_condensing_furnace_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "FURNACE-EFFPLR-NECB2011",
+      "notes": "Part load curve referenced when setting custom furnace efficiencies less than the condensing_furnace_lim above."
+    },
+    "condensing_furnace_part_load_curve": {
+      "data_type": "value",
+      "refs": [
+        "Assumption"
+      ],
+      "value": "FURNACE-EFFPLR-COND-NECB2011",
+      "notes": "Part load curve referenced when setting custom furnace efficiencies greater than or equal to the condensing_furnace_lim above"
+    }
   }
 }
