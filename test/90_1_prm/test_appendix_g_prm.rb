@@ -348,6 +348,17 @@ class AppendixGPRMTests < Minitest::Test
       light_sch_model = {}
       model_proto.getLightss.sort.each do |lgts|
         light_sch_model_lgts = {}
+        
+        # get default schedule
+        day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+        times = day_rule.times()
+        light_sch_model_default_rule = {}
+        times.each do |time|
+          light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+        end
+        light_sch_model_lgts['default schedule'] = light_sch_model_default_rule
+        
+        # get daily schedule
         lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
           light_sch_model_week_rule = {}
           day_rule = week_rule.daySchedule()
@@ -375,6 +386,17 @@ class AppendixGPRMTests < Minitest::Test
         space_type.lights.sort.each do |lgts|
           light_sch_model_lgts_base = {}
           light_sch_model_lgts_base['space_type'] = space_type.standardsSpaceType.to_s
+
+          # get default schedule
+          day_rule = lgts.schedule.get.to_ScheduleRuleset.get.defaultDaySchedule
+          times = day_rule.times()
+          light_sch_model_default_rule = {}
+          times.each do |time|
+            light_sch_model_default_rule[time.to_s] = day_rule.getValue(time)
+          end
+          light_sch_model_lgts_base['default schedule'] = light_sch_model_default_rule
+          
+          # get daily schedule
           lgts.schedule.get.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
             light_sch_model_week_rule_base = {}
             day_rule = week_rule.daySchedule()
