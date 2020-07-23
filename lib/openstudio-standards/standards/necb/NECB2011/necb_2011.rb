@@ -257,7 +257,7 @@ class NECB2011 < Standard
     model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  def apply_standard_efficiencies(model:, sizing_run_dir:)
+  def apply_standard_efficiencies(model:, sizing_run_dir:, eff_mod: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
@@ -267,6 +267,7 @@ class NECB2011 < Standard
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
     model_apply_hvac_efficiency_standard(model, climate_zone)
+    modify_equipment_efficiency(model: model, eff_mod: eff_mod)
   end
 
   def apply_loop_pump_power(model:, sizing_run_dir:)
