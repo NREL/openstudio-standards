@@ -2975,10 +2975,10 @@ class Standard
       # adjusted zone design heating temperature for data center psz_ac
       dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
       dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
-      dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = 72.5
-      dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = 72.5
+      dsgn_temps['htg_dsgn_sup_air_temp_f'] = 55
+      dsgn_temps['clg_dsgn_sup_air_temp_f'] = 55
+      dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = dsgn_temps['htg_dsgn_sup_air_temp_f']
+      dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = dsgn_temps['clg_dsgn_sup_air_temp_f']
       dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
       dsgn_temps['preclg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['preclg_dsgn_sup_air_temp_f'], 'F', 'C').get
       dsgn_temps['htg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['htg_dsgn_sup_air_temp_f'], 'F', 'C').get
@@ -3101,7 +3101,7 @@ class Standard
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
       if supply_temp_sch.nil?
         supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                              dsgn_temps['clg_dsgn_sup_air_temp_c'],
                                                               name = "AHU Supply Temp Sch")
       end
       setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
@@ -3180,8 +3180,8 @@ class Standard
     # adjusted zone design heating temperature for data center psz_ac
     dsgn_temps['prehtg_dsgn_sup_air_temp_f'] = 64.4
     dsgn_temps['preclg_dsgn_sup_air_temp_f'] = 80.6
-    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 72.5
-    dsgn_temps['clg_dsgn_sup_air_temp_f'] = 72.5
+    dsgn_temps['htg_dsgn_sup_air_temp_f'] = 55
+    dsgn_temps['clg_dsgn_sup_air_temp_f'] = 55
     dsgn_temps['zn_htg_dsgn_sup_air_temp_f'] = dsgn_temps['htg_dsgn_sup_air_temp_f']
     dsgn_temps['zn_clg_dsgn_sup_air_temp_f'] = dsgn_temps['clg_dsgn_sup_air_temp_f']
     dsgn_temps['prehtg_dsgn_sup_air_temp_c'] = OpenStudio.convert(dsgn_temps['prehtg_dsgn_sup_air_temp_f'], 'F', 'C').get
@@ -3197,7 +3197,7 @@ class Standard
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
     if supply_temp_sch.nil?
       supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            dsgn_temps['prehtg_dsgn_sup_air_temp_c'],
+                                                            dsgn_temps['clg_dsgn_sup_air_temp_c'],
                                                             name = "AHU Supply Temp Sch")
     end
     setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
