@@ -1001,8 +1001,6 @@ module BTAP
         end
 
 
-
-
       end #module Constructions
 
 
@@ -1029,7 +1027,6 @@ module BTAP
               #Check that the construction was created
               assert(!(construction_set.to_DefaultSurfaceConstructions.empty?))
             end
-
 
 
             #This method creates default subsurface constructions
@@ -1168,35 +1165,43 @@ module BTAP
         #@param tubular_daylight_diffuser_solar_trans [Float] = nil
         #@param tubular_daylight_diffuser_vis_trans [Float] = nil
         def self.customize_default_surface_construction_set!(model:,
-                                                                 name:,
-                                                                 default_surface_construction_set:,
-                                                                 ext_wall_cond: nil,
-                                                                 ext_floor_cond: nil,
-                                                                 ext_roof_cond: nil,
-                                                                 ground_wall_cond: nil,
-                                                                 ground_floor_cond: nil,
-                                                                 ground_roof_cond: nil,
-                                                                 #subsurfaces
-                                                                 fixed_window_cond: nil,
-                                                                 fixed_wind_solar_trans: nil,
-                                                                 fixed_wind_vis_trans: nil,
-                                                                 operable_window_cond: nil,
-                                                                 operable_wind_solar_trans: nil,
-                                                                 operable_wind_vis_trans: nil,
-                                                                 door_construction_cond: nil,
-                                                                 glass_door_cond: nil,
-                                                                 glass_door_solar_trans: nil,
-                                                                 glass_door_vis_trans: nil,
-                                                                 overhead_door_cond: nil,
-                                                                 skylight_cond: nil,
-                                                                 skylight_solar_trans: nil,
-                                                                 skylight_vis_trans: nil,
-                                                                 tubular_daylight_dome_cond: nil,
-                                                                 tubular_daylight_dome_solar_trans: nil,
-                                                                 tubular_daylight_dome_vis_trans: nil,
-                                                                 tubular_daylight_diffuser_cond: nil,
-                                                                 tubular_daylight_diffuser_solar_trans: nil,
-                                                                 tubular_daylight_diffuser_vis_trans: nil
+                                                             name:,
+                                                             default_surface_construction_set:,
+                                                             # ext surfaces
+                                                             ext_wall_cond: nil,
+                                                             ext_floor_cond: nil,
+                                                             ext_roof_cond: nil,
+                                                             # ground surfaces
+                                                             ground_wall_cond: nil,
+                                                             ground_floor_cond: nil,
+                                                             ground_roof_cond: nil,
+                                                             # fixed Windows
+                                                             fixed_window_cond: nil,
+                                                             fixed_wind_solar_trans: nil,
+                                                             fixed_wind_vis_trans: nil,
+                                                             # operable windows
+                                                             operable_wind_solar_trans: nil,
+                                                             operable_window_cond: nil,
+                                                             operable_wind_vis_trans: nil,
+                                                             # glass doors
+                                                             glass_door_cond: nil,
+                                                             glass_door_solar_trans: nil,
+                                                             glass_door_vis_trans: nil,
+                                                             # opaque doors
+                                                             door_construction_cond: nil,
+                                                             overhead_door_cond: nil,
+                                                             # skylights
+                                                             skylight_cond: nil,
+                                                             skylight_solar_trans: nil,
+                                                             skylight_vis_trans: nil,
+                                                             # tubular daylight dome
+                                                             tubular_daylight_dome_cond: nil,
+                                                             tubular_daylight_dome_solar_trans: nil,
+                                                             tubular_daylight_dome_vis_trans: nil,
+                                                             # tubular daylight diffuser
+                                                             tubular_daylight_diffuser_cond: nil,
+                                                             tubular_daylight_diffuser_solar_trans: nil,
+                                                             tubular_daylight_diffuser_vis_trans: nil
         )
 
           #Change name if required.
@@ -1236,7 +1241,7 @@ module BTAP
               tubular_daylight_diffuser_vis_trans: tubular_daylight_diffuser_vis_trans,
               door_construction_conductance: door_construction_cond,
               overhead_door_conductance: overhead_door_cond,
-              )
+          )
           raise ("Could not customize subsurface constructionset") unless default_surface_construction_set.setDefaultExteriorSubSurfaceConstructions(new_ext_subsurface_set)
 
         end
@@ -1376,7 +1381,6 @@ module BTAP
           set.setTubularDaylightDiffuserConstruction(BTAP::Resources::Envelope::Constructions::customize_fenestration_construction(model, subsurface_set.tubularDaylightDiffuserConstruction.get, tubular_daylight_diffuser_conductance, tubular_daylight_diffuser_solar_trans, tubular_daylight_diffuser_vis_trans))
           return set
         end
-
 
 
         #This will customize default surface construction conductance.

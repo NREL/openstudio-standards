@@ -1,6 +1,5 @@
 class NECB2011
 
-
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
   def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
@@ -143,7 +142,6 @@ class NECB2011
     red_res = wwr_res > wwr_lim
     red_sh = wwr_sh > wwr_lim
 
-
     # puts "Current FDWR is #{fdwr}, must be less than #{fdwr_lim}."
     # puts "Current subsurf area is #{total_subsurface_m2} and gross surface area is #{total_wall_m2}"
     # Stop here unless windows / doors need reducing
@@ -273,7 +271,6 @@ class NECB2011
     srr = ((total_subsurface_m2 / total_roof_m2) * 100.0).round(1)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The skylight to roof ratios (SRRs) are: NonRes: #{srr_nr.round}%, Res: #{srr_res.round}%.")
 
-
     # Check against SRR limit
     red_nr = srr_nr > srr_lim
     red_res = srr_res > srr_lim
@@ -323,24 +320,44 @@ class NECB2011
   # @return [Bool] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
-                                             runner: nil,
+                                             # ext surfaces
                                              ext_wall_cond: nil,
                                              ext_floor_cond: nil,
                                              ext_roof_cond: nil,
+                                             # ground surfaces
                                              ground_wall_cond: nil,
                                              ground_floor_cond: nil,
                                              ground_roof_cond: nil,
-                                             door_construction_cond: nil,
+                                             # fixed Windows
                                              fixed_window_cond: nil,
-                                             glass_door_cond: nil,
-                                             overhead_door_cond: nil,
-                                             skylight_cond: nil,
-                                             glass_door_solar_trans: nil,
                                              fixed_wind_solar_trans: nil,
-                                             skylight_solar_trans: nil)
+                                             fixed_wind_vis_trans: nil,
+                                             # operable windows
+                                             operable_wind_solar_trans: nil,
+                                             operable_window_cond: nil,
+                                             operable_wind_vis_trans: nil,
+                                             # glass doors
+                                             glass_door_cond: nil,
+                                             glass_door_solar_trans: nil,
+                                             glass_door_vis_trans: nil,
+                                             # opaque doors
+                                             door_construction_cond: nil,
+                                             overhead_door_cond: nil,
+                                             # skylights
+                                             skylight_cond: nil,
+                                             skylight_solar_trans: nil,
+                                             skylight_vis_trans: nil,
+                                             # tubular daylight dome
+                                             tubular_daylight_dome_cond: nil,
+                                             tubular_daylight_dome_solar_trans: nil,
+                                             tubular_daylight_dome_vis_trans: nil,
+                                             # tubular daylight diffuser
+                                             tubular_daylight_diffuser_cond: nil,
+                                             tubular_daylight_diffuser_solar_trans: nil,
+                                             tubular_daylight_diffuser_vis_trans: nil)
 
     model.getDefaultConstructionSets.sort.each do |default_surface_construction_set|
-      BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
+      BTAP.runner_register('Info', 'apply_standard_construction_properties', runner)
       if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
 
         BTAP.runner_register('Error', 'Weather file is not defined. Please ensure the weather file is defined and exists.', runner)
@@ -351,48 +368,57 @@ class NECB2011
       correct_cond = lambda do |conductivity, surface_type|
         # hdd required in scope for eval function.
         hdd = get_necb_hdd18(model)
-        if conductivity.nil? || conductvity == 0.0
-          value = eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula'])
-        else
-          value = conductivity
-        end
-        return value
+        return conductivity.nil? || conductvity == 0.0 ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity
       end
 
-      old_name = default_surface_construction_set.name.get.to_s
-
-
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
-                                                                                              name: "#{old_name} at hdd = #{get_necb_hdd18(model)}",
+                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model)}",
                                                                                               default_surface_construction_set: default_surface_construction_set,
+                                                                                              # ext surfaces
                                                                                               ext_wall_cond: correct_cond.call(ext_wall_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'}),
                                                                                               ext_floor_cond: correct_cond.call(ext_floor_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'}),
                                                                                               ext_roof_cond: correct_cond.call(ext_roof_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'}),
+                                                                                              # ground surfaces
                                                                                               ground_wall_cond: correct_cond.call(ground_wall_cond, {'boundary_condition' => 'Ground', 'surface' => 'Wall'}),
                                                                                               ground_floor_cond: correct_cond.call(ground_floor_cond, {'boundary_condition' => 'Ground', 'surface' => 'Floor'}),
                                                                                               ground_roof_cond: correct_cond.call(ground_roof_cond, {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'}),
+                                                                                              # fixed Windows
                                                                                               fixed_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                                                                              fixed_wind_vis_trans: fixed_wind_vis_trans,
+                                                                                              # operable windows
+                                                                                              operable_wind_solar_trans: operable_wind_solar_trans,
                                                                                               operable_window_cond: correct_cond.call(fixed_window_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              operable_wind_vis_trans: operable_wind_vis_trans,
+                                                                                              # glass doors
                                                                                               glass_door_cond: correct_cond.call(glass_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              glass_door_solar_trans: glass_door_solar_trans,
+                                                                                              glass_door_vis_trans: glass_door_vis_trans,
+                                                                                              # opaque doors
                                                                                               door_construction_cond: correct_cond.call(door_construction_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
                                                                                               overhead_door_cond: correct_cond.call(overhead_door_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Door'}),
+                                                                                              # skylights
                                                                                               skylight_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              skylight_solar_trans: skylight_solar_trans,
+                                                                                              skylight_vis_trans: skylight_vis_trans,
+                                                                                              # tubular daylight dome
                                                                                               tubular_daylight_dome_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
+                                                                                              tubular_daylight_dome_solar_trans: tubular_daylight_dome_solar_trans,
+                                                                                              tubular_daylight_dome_vis_trans: tubular_daylight_dome_vis_trans,
+                                                                                              # tubular daylight diffuser
                                                                                               tubular_daylight_diffuser_cond: correct_cond.call(skylight_cond, {'boundary_condition' => 'Outdoors', 'surface' => 'Window'}),
-                                                                                              glass_door_solar_trans: glass_door_solar_trans,
-                                                                                              fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                                                                              skylight_solar_trans: skylight_solar_trans)
+                                                                                              tubular_daylight_diffuser_solar_trans: tubular_daylight_diffuser_solar_trans,
+                                                                                              tubular_daylight_diffuser_vis_trans: tubular_daylight_diffuser_vis_trans)
 
 
-      BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
-      return true
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
     # if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
     BTAP::Resources::Envelope.assign_interior_surface_construction_to_adiabatic_surfaces(model, nil)
-  end
+    BTAP.runner_register('Info', ' apply_standard_construction_properties was sucessful.', runner)
 
+  end
 
   # Set all external surface conductances to NECB values.
   # @author phylroy.lopez@nrcan.gc.ca
@@ -453,7 +479,6 @@ class NECB2011
       subsurface.setRSI(1 / conductance_value)
     end
   end
-
 
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
@@ -519,7 +544,6 @@ class NECB2011
     end
   end
 
-
   def model_add_construction_set_from_osm(model:,
                                           construction_set_name: 'BTAP-Mass',
                                           osm_path: File.absolute_path(File.join(__FILE__, '..', '..', 'common/construction_defaults.osm')))
@@ -534,7 +558,6 @@ class NECB2011
     new_construction_set = selected_construction_set.clone(model).to_DefaultConstructionSet.get
     return new_construction_set
   end
-
 
   def assign_contruction_to_adiabatic_surfaces(model)
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
@@ -661,7 +684,6 @@ class NECB2011
     construct_set = model.getBuilding.defaultConstructionSet.get
     fixed_window_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
 
-
     # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
     # should go.
     if fdwr_lim > 1
@@ -720,7 +742,6 @@ class NECB2011
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.")
       return false
     end
-
 
     # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
     # all the skylights should go.
