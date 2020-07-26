@@ -320,6 +320,7 @@ class NECB2011
   # @return [Bool] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
+                                             runner: nil,
                                              # ext surfaces
                                              ext_wall_cond: nil,
                                              ext_floor_cond: nil,
