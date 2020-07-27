@@ -2824,7 +2824,7 @@ module BTAP
         #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
         construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
         #create a new construction with the requested RSI value based on the current construction.
-        return BTAP::Resources::Envelope::Constructions::get_shgc(model,construction)
+        return BTAP::Resources::Envelope::Constructions::get_shgc(surface.model,construction)
       end
 
       #This method gets the tvis for the surface
