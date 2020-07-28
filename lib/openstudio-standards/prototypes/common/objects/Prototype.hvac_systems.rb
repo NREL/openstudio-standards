@@ -585,14 +585,15 @@ class Standard
                         cooling_fuel: 'Electricity',
                         cooling_type: 'EvaporativeFluidCooler',
                         system_name: 'Heat Pump Loop',
-                        sup_wtr_high_temp: 65.0,
-                        sup_wtr_low_temp: 41.0,
+                        sup_wtr_high_temp: 87.0,
+                        sup_wtr_low_temp: 67.0,
                         dsgn_sup_wtr_temp: 102.2,
                         dsgn_sup_wtr_temp_delt: 19.8)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', 'Adding heat pump loop.')
 
     # create heat pump loop
     heat_pump_water_loop = OpenStudio::Model::PlantLoop.new(model)
+    heat_pump_water_loop.setLoadDistributionScheme('SequentialLoad')
     if system_name.nil?
       heat_pump_water_loop.setName('Heat Pump Loop')
     else
@@ -601,13 +602,13 @@ class Standard
 
     # hot water loop sizing and controls
     if sup_wtr_high_temp.nil?
-      sup_wtr_high_temp = 65.0
+      sup_wtr_high_temp = 87.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp, 'F', 'C').get
     else
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp, 'F', 'C').get
     end
     if sup_wtr_low_temp.nil?
-      sup_wtr_low_temp = 41.0
+      sup_wtr_low_temp = 67.0
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp, 'F', 'C').get
     else
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp, 'F', 'C').get
@@ -624,8 +625,8 @@ class Standard
     end
     sizing_plant = heat_pump_water_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
-    heat_pump_water_loop.setMinimumLoopTemperature(5.0)
-    heat_pump_water_loop.setMaximumLoopTemperature(80.0)
+    heat_pump_water_loop.setMinimumLoopTemperature(10.0)
+    heat_pump_water_loop.setMaximumLoopTemperature(35.0)
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
