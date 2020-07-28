@@ -2,46 +2,38 @@
 
 ## Setup
 
-1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads). Minimum supported version is 2.4.4.
+1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads). Minimum supported version is 3.0.0.
 2. Install Ruby:
       1. **On Mac**:
-      2. Install Ruby 2.2.4 using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
+      2. Install Ruby 2.5.X using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
       3. **On Windows**:
-      4. Install [Ruby 2.2.4](https://rubyinstaller.org/downloads/archives/) (`ruby -v` from command prompt to check installed version).
-      5. Install [Ruby DevKit](https://rubyinstaller.org/downloads/archives/) by following [these installation instructions](https://github.com/oneclick/rubyinstaller/wiki/Development-Kit)
-      6. **Using BTAP development Environment**
-      7. Do nothing.
+      4. Install [Ruby+Devkit 2.5.8](https://rubyinstaller.org/downloads/) (`ruby -v` from command prompt to check installed version).
+      5. **Using BTAP development Environment**
+      6. Do nothing.
 
 4. Connect Ruby to OpenStudio:
 	1. **On Mac**:
 	2. Create a file called `openstudio.rb`
-	3. Contents: `require "/Applications/openstudio-2.6.0/Ruby/openstudio.rb"`. Modify `2.6.0` to the version you installed.
+	3. Contents: `require "/Applications/openstudio-3.0.0/Ruby/openstudio.rb"`. Modify `3.0.0` to the version you installed.
 	4. Save it here: `/usr/lib/ruby/site_ruby/openstudio.rb`
 	5. **On Windows**:
 	6. Create a file called `openstudio.rb`
-	7. Contents: `require "C:/openstudio-2.6.0/Ruby/openstudio.rb"`.  Modify `2.6.0` to the version you installed.
-	8. Save it here: `C:/Ruby22-x64/lib/ruby/site_ruby/openstudio.rb`
-	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
+	7. Contents: `require "C:/openstudio-3.0.0/Ruby/openstudio.rb"`.  Modify `3.0.0` to the version you installed.
+	8. Save it here: `C:/Ruby25-x64/lib/ruby/site_ruby/openstudio.rb`
+	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby25-x64\lib\ruby\gems\2.5.0`.
 	10. **Using BTAP development Environment**
 	11.  Do nothing.
 
-5. Enable your OpenStudio Application installation to use the version of the gem built through the development process 
-    1. **On Windows**:
-    2. Start > right click Computer > Properties > Advanced system settings > Environment variables.
-    3. In the User variables section (top) add a new Variable with the name `GEM_HOME` and the Value `C:\Ruby22-x64\lib\ruby\gems\2.2.0`.
-
 5. Install the `bundler` ruby gem. (`gem install bundler` from command prompt)
-6. Install the `json` ruby gem. (`gem install json` from command prompt)
-7. Install [Git](https://git-scm.com/).
-8. Install [GitHub desktop](https://desktop.github.com/) or another GUI that makes Git easier to use.
+6. Install [Git](https://git-scm.com/).
+7. Install [GitHub desktop](https://desktop.github.com/) or another GUI that makes Git easier to use.
 8. Clone the [source code](https://github.com/NREL/openstudio-standards.git) using GitHub desktop (easier) or Git (harder).
 9. Run all commands below from the top level directory 
 10. **On Windows**, use the Git Bash instead of the default command prompt.
 11. **On Mac** the default terminal is fine.
 12. **Using BTAP development Environment** use the terminator terminal ideally.
 13. Command prompt: `bundle install`. This will install all ruby gems necessary to develop this code.
-14. Sign up for an account at [CircleCI](https://circleci.com/) and follow the `NREL/openstudio-standards` project.
-15. That's it, you are ready to make changes!
+14. That's it, you are ready to make changes!
 
 ## Development Process
 
@@ -89,8 +81,8 @@ As you add to/modify the code, please try to fit changes into the current struct
 
 1. Make a new branch for your changes.
 2. Modify the code on your branch.
-3. Modify the [OpenStudio_Standards Google Spreadsheet](https://docs.google.com/spreadsheets/d/15-mlZrWbA4srtFHtWRP1dgPeuI5plFdjCb1B79fEukI/edit?usp=sharing)
- - To get edit access to this spreadsheet, contact <mailto:andrew.parker@nrel.gov>.
+3. Modify the [OpenStudio_Standards Google Spreadsheet](https://drive.google.com/drive/folders/1x7yEU4jnKw-gskLBih8IopStwl0KAMEi?usp=sharing)
+ - To get edit access to this spreadsheet, contact <mailto:Marlena.Praprost@nrel.gov>.
 4. `bundle exec rake data:update` to download the latest version of the spreadsheet from Google Drive and export the JSON files.
 
 ### Test the code
@@ -127,8 +119,9 @@ The main developers will review your changes and either approve the pull request
 
 ### Look at the continuous integration results
 
-1. When a commit is made to /Master, the continuous integration machine will run all the tests.
-2. Go to [openstudio-standards Circle CI](https://circleci.com/gh/NREL/openstudio-standards) and look at the NREL/openstudio-standards project to check out the build status.  If it is failing and your commit broke it, please fix it ASAP!  Also, you can follow a project on Circle CI and you will get email updates when someone breaks the build.
+1. When a commit is made to any branch, the continuous integration machine will run all the tests.
+2. For pull requests, the status of the tests will automatically be posted to GitHub.
+3. Developers will need to be given access to the continuous integration system to see detailed results.
 
 ## Issues and New Features
 
