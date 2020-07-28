@@ -40,7 +40,7 @@ class NECB2011 < Standard
     else
       path = "#{File.dirname(__FILE__)}/../common/"
       raise ('Could not find common folder') unless Dir.exist?(path)
-      files = Dir.glob("#{path}/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{path}/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -62,7 +62,7 @@ class NECB2011 < Standard
         end
       end
     else
-      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select {|e| File.file? e}
+      files = Dir.glob("#{File.dirname(__FILE__)}/data/*.json").select { |e| File.file? e }
       files.each do |file|
         data = JSON.parse(File.read(file))
         if not data["tables"].nil?
@@ -117,7 +117,7 @@ class NECB2011 < Standard
   end
 
   def get_all_spacetype_names
-    return @standards_data['space_types'].map {|space_types| [space_types['building_type'], space_types['space_type']]}
+    return @standards_data['space_types'].map { |space_types| [space_types['building_type'], space_types['space_type']] }
   end
 
   # Enter in [latitude, longitude] for each loc and this method will return the distance.
@@ -129,8 +129,8 @@ class NECB2011 < Standard
     dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
     dlon_rad = (loc2[1] - loc1[1]) * rad_per_deg
 
-    lat1_rad, lon1_rad = loc1.map {|i| i * rad_per_deg}
-    lat2_rad, lon2_rad = loc2.map {|i| i * rad_per_deg}
+    lat1_rad, lon1_rad = loc1.map { |i| i * rad_per_deg }
+    lat2_rad, lon2_rad = loc2.map { |i| i * rad_per_deg }
 
     a = Math.sin(dlat_rad / 2) ** 2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2) ** 2
     c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1 - a))
@@ -200,12 +200,17 @@ class NECB2011 < Standard
     apply_systems(model: model, primary_heating_fuel: primary_heating_fuel, sizing_run_dir: sizing_run_dir)
     apply_standard_efficiencies(model: model, sizing_run_dir: sizing_run_dir)
     model = apply_loop_pump_power(model: model, sizing_run_dir: sizing_run_dir)
+    model.getDefaultConstructionSets.sort.each do |default_surface_construction_set|
+      puts default_surface_construction_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
+    end
     return model
   end
 
-  def apply_loads(model:)
-    raise('validation of model failed.') unless validate_initial_model(model)
-    raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+  def apply_loads(model:, validate: true)
+    if validate
+      raise('validation of model failed.') unless validate_initial_model(model)
+      raise('validation of spacetypes failed.') unless validate_and_upate_space_types(model)
+    end
     #this sets/stores the template version loads that the model uses.
     model.getBuilding.setStandardsTemplate(self.class.name)
     set_occ_sensor_spacetypes(model, @space_type_map)
@@ -223,23 +228,44 @@ class NECB2011 < Standard
   end
 
   def apply_envelope(model:,
-                     properties: {
-                         'outdoors_wall_conductance' => nil,
-                         'outdoors_floor_conductance' => nil,
-                         'outdoors_roofceiling_conductance' => nil,
-                         'ground_wall_conductance' => nil,
-                         'ground_floor_conductance' => nil,
-                         'ground_roofceiling_conductance' => nil,
-                         'outdoors_door_conductance' => nil,
-                         'outdoors_fixedwindow_conductance' => nil
-                     })
+                     ext_wall_cond: nil,
+                     ext_floor_cond: nil,
+                     ext_roof_cond: nil,
+                     ground_wall_cond: nil,
+                     ground_floor_cond: nil,
+                     ground_roof_cond: nil,
+                     door_construction_cond: nil,
+                     fixed_window_cond: nil,
+                     glass_door_cond: nil,
+                     overhead_door_cond: nil,
+                     skylight_cond: nil,
+                     glass_door_solar_trans: nil,
+                     fixed_wind_solar_trans: nil,
+                     skylight_solar_trans: nil)
     raise('validation of model failed.') unless validate_initial_model(model)
     model_apply_infiltration_standard(model)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model_add_constructions(model)
-    apply_standard_construction_properties(model: model, properties: properties)
+    apply_standard_construction_properties(model: model,
+                                           ext_wall_cond: ext_wall_cond,
+                                           ext_floor_cond: ext_floor_cond,
+                                           ext_roof_cond: ext_roof_cond,
+                                           ground_wall_cond: ground_wall_cond,
+                                           ground_floor_cond: ground_floor_cond,
+                                           ground_roof_cond: ground_roof_cond,
+                                           door_construction_cond: door_construction_cond,
+                                           fixed_window_cond: fixed_window_cond,
+                                           glass_door_cond: glass_door_cond,
+                                           overhead_door_cond: overhead_door_cond,
+                                           skylight_cond: skylight_cond,
+                                           glass_door_solar_trans: glass_door_solar_trans,
+                                           fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                           skylight_solar_trans: skylight_solar_trans)
+
+
     model_create_thermal_zones(model, @space_multiplier_map)
+
   end
 
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
@@ -262,7 +288,7 @@ class NECB2011 < Standard
     climate_zone = 'NECB HDD Method'
     raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
-    model.getAirTerminalSingleDuctVAVReheats.each {|iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj)}
+    model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
     # Apply the prototype HVAC assumptions
     model_apply_prototype_hvac_assumptions(model, nil, climate_zone)
     # Apply the HVAC efficiency standard
@@ -295,7 +321,7 @@ class NECB2011 < Standard
     #Now iterate though each vintage
     space_type_vintage_list.each do |template|
       #Create the standard object and get a list of all the spacetypes available for that vintage.
-      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map {|spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s]}
+      standard_space_type_list = Standard.build(template).get_all_spacetype_names.map { |spacetype| [spacetype[0].to_s + '-' + spacetype[1].to_s] }
       # set array to contain unknown spacetypes.
       unknown_spacetypes = []
       # iterate though all space types that the model is using
@@ -332,7 +358,7 @@ class NECB2011 < Standard
       bt_target_vintage_string = "#{self.class.name}_building_type"
       space_type_upgrade_map = @standards_data['space_type_upgrade_map']
       model.getSpaceTypes.sort.each do |st|
-        space_type_map = space_type_upgrade_map.detect {|row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s)}
+        space_type_map = space_type_upgrade_map.detect { |row| (row[st_model_vintage_string] == st.standardsSpaceType.get.to_s) && (row[bt_model_vintage_string] == st.standardsBuildingType.get.to_s) }
         st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set buildingtype') unless st.setStandardsBuildingType(space_type_map[bt_target_vintage_string].to_s.strip)
         raise('could not set this') unless st.setStandardsSpaceType(space_type_map[st_target_vintage_string].to_s.strip)
