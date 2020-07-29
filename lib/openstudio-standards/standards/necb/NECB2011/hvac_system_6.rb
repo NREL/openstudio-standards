@@ -18,7 +18,7 @@ class NECB2011
     # hot water or electric reheat for each story of the building
     # Arguments:
     # "boiler_fueltype" choices match OS choices for boiler fuel type:
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
     # "heating_coil_type": "Electric" or "Hot Water"
     # "baseboard_type": "Electric" and "Hot Water"
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"
@@ -161,7 +161,7 @@ class NECB2011
     # hot water or electric reheat for each story of the building
     # Arguments:
     # "boiler_fueltype" choices match OS choices for boiler fuel type:
-    # "NaturalGas","Electricity","PropaneGas","FuelOil#1","FuelOil#2","Coal","Diesel","Gasoline","OtherFuel1"
+    # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
     # "heating_coil_type": "Electric" or "Hot Water"
     # "baseboard_type": "Electric" and "Hot Water"
     # "chiller_type": "Scroll";"Centrifugal";""Screw";"Reciprocating"

@@ -6,7 +6,7 @@
       ],
       "table": [
         {
-          "template": "NECB2011",
+          
           "fluid_type": "Air",
           "fuel_type": "Gas",
           "condensing": null,
@@ -22,7 +22,7 @@
           "notes": "From NECB 2011"
         },
         {
-          "template": "NECB2011",
+          
           "fluid_type": "Air",
           "fuel_type": "Gas",
           "condensing": null,

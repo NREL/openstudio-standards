@@ -4,6 +4,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # Determine if there is a need for a proposed model sizing run.
   # A typical application of such sizing run is to determine space
   # conditioning type.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  #
+  # @return [Boolean] Returns true if a sizing run is required
   def model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
     return true
   end
@@ -127,7 +131,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   # Determines the skylight to roof ratio limit for a given standard
-  # 3% for 90.1-20-13
+  # 3% for 90.1-PRM-2019
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
   def model_prm_skylight_to_roof_ratio_limit(model)
     srr_lim = 3.0

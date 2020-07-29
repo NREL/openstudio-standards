@@ -1,7 +1,7 @@
 
 OS:Version,
-  {680c1f59-6f25-4443-b3cd-b8675d8746a6}, !- Handle
-  2.3.0;                                  !- Version Identifier
+  {4499e536-9c6f-4e4a-a890-223168315ea8}, !- Handle
+  2.7.1;                                  !- Version Identifier
 
 OS:Rendering:Color,
   {d1e86687-6885-4070-81da-3a576f17ff5c}, !- Handle
@@ -229,6 +229,7 @@ OS:Building,
   ,                                       !- Default Schedule Set Name
   1,                                      !- Standards Number of Stories
   0,                                      !- Standards Number of Above Ground Stories
+  ,                                       !- Standards Template
   ,                                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
@@ -1061,7 +1062,7 @@ OS:Space,
 
 OS:Surface,
   {d99da605-0b73-4b62-981d-16c63e41d476}, !- Handle
-  Surface 1,                              !- Name
+  ConfRoom_1 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1078,7 +1079,7 @@ OS:Surface,
 
 OS:Surface,
   {49bfbf09-d9e5-4af6-80f6-8a96947280e8}, !- Handle
-  Surface 2,                              !- Name
+  ConfRoom_1 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1095,7 +1096,7 @@ OS:Surface,
 
 OS:Surface,
   {87d438ce-a903-4bfb-acd0-eb304b7b1083}, !- Handle
-  Surface 3,                              !- Name
+  ConfRoom_1 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1112,7 +1113,7 @@ OS:Surface,
 
 OS:Surface,
   {4901e7bb-b81e-4a98-8564-5f93bd853631}, !- Handle
-  Surface 4,                              !- Name
+  ConfRoom_1 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1129,7 +1130,7 @@ OS:Surface,
 
 OS:Surface,
   {13c9448d-a18e-4f3f-9a2c-0c2145b2f5bb}, !- Handle
-  Surface 5,                              !- Name
+  ConfRoom_1 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1146,7 +1147,7 @@ OS:Surface,
 
 OS:Surface,
   {0c5b0edc-cc9c-4233-a04b-b6bb09837dca}, !- Handle
-  Surface 6,                              !- Name
+  ConfRoom_1 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {4620d0f3-e448-4cbd-87f1-b4acfead7dd0}, !- Space Name
@@ -1179,7 +1180,7 @@ OS:Space,
 
 OS:Surface,
   {34d45edb-4c8f-475d-9a20-adb33951e559}, !- Handle
-  Surface 7,                              !- Name
+  EnclosedOffice_1 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1196,7 +1197,7 @@ OS:Surface,
 
 OS:Surface,
   {5b79d3e8-9395-48dd-9c92-58469bc8fcef}, !- Handle
-  Surface 9,                              !- Name
+  EnclosedOffice_1 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1213,7 +1214,7 @@ OS:Surface,
 
 OS:Surface,
   {bdf3cb71-a553-4a62-be06-eadd7d89e060}, !- Handle
-  Surface 10,                             !- Name
+  EnclosedOffice_1 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1230,7 +1231,7 @@ OS:Surface,
 
 OS:Surface,
   {0fd71c3e-1b26-40f4-babb-bf603eeebc41}, !- Handle
-  Surface 11,                             !- Name
+  EnclosedOffice_1 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1247,7 +1248,7 @@ OS:Surface,
 
 OS:Surface,
   {e7137dea-050d-41c0-9173-8a9614e76ec8}, !- Handle
-  Surface 12,                             !- Name
+  EnclosedOffice_1 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1264,7 +1265,7 @@ OS:Surface,
 
 OS:Surface,
   {af1aca26-26f2-41e8-9923-10663221ece3}, !- Handle
-  Surface 13,                             !- Name
+  EnclosedOffice_1 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {0fa028e9-92fa-4f93-8cd9-898fb512ee65}, !- Space Name
@@ -1297,7 +1298,7 @@ OS:Space,
 
 OS:Surface,
   {afdaf650-ca90-41b6-9fb4-660a3ec742ab}, !- Handle
-  Surface 14,                             !- Name
+  Lobby - Floor_a,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1314,7 +1315,7 @@ OS:Surface,
 
 OS:Surface,
   {c28afbb9-b2e4-4eab-b719-f9e272e0c4ea}, !- Handle
-  Surface 15,                             !- Name
+  Lobby - Wall 000_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1331,7 +1332,7 @@ OS:Surface,
 
 OS:Surface,
   {0927b950-6603-4479-912e-cfcde681d5ad}, !- Handle
-  Surface 16,                             !- Name
+  Lobby - Wall 090_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1348,7 +1349,7 @@ OS:Surface,
 
 OS:Surface,
   {75f01be6-51f9-4cdc-8375-c6698bf2afdd}, !- Handle
-  Surface 17,                             !- Name
+  Lobby - Wall 180_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1365,7 +1366,7 @@ OS:Surface,
 
 OS:Surface,
   {0e84224c-ad2e-43dc-abf5-6ccf8ad632b1}, !- Handle
-  Surface 18,                             !- Name
+  Lobby - Wall 270_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1382,7 +1383,7 @@ OS:Surface,
 
 OS:Surface,
   {9f245160-55d0-490c-ad25-f6f8615d333d}, !- Handle
-  Surface 19,                             !- Name
+  Lobby - Wall 000_b,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1399,7 +1400,7 @@ OS:Surface,
 
 OS:Surface,
   {3b80f727-3f46-4ba9-aee7-8873070b0099}, !- Handle
-  Surface 20,                             !- Name
+  Lobby - RoofCeiling_a,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {9b7efe44-35f2-48b0-a194-7e682d6f8a59}, !- Space Name
@@ -1432,7 +1433,7 @@ OS:Space,
 
 OS:Surface,
   {b0777362-8d2b-4b03-b11a-3a7989b3208b}, !- Handle
-  Surface 21,                             !- Name
+  EnclosedOffice_2 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1449,7 +1450,7 @@ OS:Surface,
 
 OS:Surface,
   {3e6969f9-da56-4c65-a9d1-8a2ce2608914}, !- Handle
-  Surface 22,                             !- Name
+  EnclosedOffice_2 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1466,7 +1467,7 @@ OS:Surface,
 
 OS:Surface,
   {1d8517dd-585d-4bc7-8b57-928fde0e10c1}, !- Handle
-  Surface 23,                             !- Name
+  EnclosedOffice_2 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1483,7 +1484,7 @@ OS:Surface,
 
 OS:Surface,
   {04981049-3874-4d46-b4bd-61bf49cffa2d}, !- Handle
-  Surface 24,                             !- Name
+  EnclosedOffice_2 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1500,7 +1501,7 @@ OS:Surface,
 
 OS:Surface,
   {34613b6e-6b05-4e2e-9d96-e2dd6d5f116d}, !- Handle
-  Surface 25,                             !- Name
+  EnclosedOffice_2 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1517,7 +1518,7 @@ OS:Surface,
 
 OS:Surface,
   {bdf7f286-5484-481f-a460-ff7952bea804}, !- Handle
-  Surface 26,                             !- Name
+  EnclosedOffice_2 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {599e3f33-0420-4a9d-b445-5bc439428a47}, !- Space Name
@@ -1550,7 +1551,7 @@ OS:Space,
 
 OS:Surface,
   {478da73b-147a-4579-8fcd-a19875071aad}, !- Handle
-  Surface 27,                             !- Name
+  ConfRoom_2 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1567,7 +1568,7 @@ OS:Surface,
 
 OS:Surface,
   {eec4a602-61c4-49a6-b89a-4fa82c6bfa80}, !- Handle
-  Surface 28,                             !- Name
+  ConfRoom_2 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1584,7 +1585,7 @@ OS:Surface,
 
 OS:Surface,
   {0fe92708-cdf3-4730-a39b-7b98f783ed03}, !- Handle
-  Surface 29,                             !- Name
+  ConfRoom_2 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1601,7 +1602,7 @@ OS:Surface,
 
 OS:Surface,
   {65608b4c-8389-459c-a47a-13df1e8b66b6}, !- Handle
-  Surface 30,                             !- Name
+  ConfRoom_2 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1618,7 +1619,7 @@ OS:Surface,
 
 OS:Surface,
   {83949fd6-fad6-427a-a7ab-72d403117a5e}, !- Handle
-  Surface 31,                             !- Name
+  ConfRoom_2 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1635,7 +1636,7 @@ OS:Surface,
 
 OS:Surface,
   {fa09aee3-3276-4ac8-8722-175151ef3dfa}, !- Handle
-  Surface 32,                             !- Name
+  ConfRoom_2 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {96afe6e1-9204-4fae-8f0c-0e6b1fd55eb4}, !- Space Name
@@ -1668,7 +1669,7 @@ OS:Space,
 
 OS:Surface,
   {1dcda615-891c-4dc8-8e07-5b34554033c7}, !- Handle
-  Surface 33,                             !- Name
+  EnclosedOffice_3 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1685,7 +1686,7 @@ OS:Surface,
 
 OS:Surface,
   {152c286d-0fe3-4241-af84-61b3b510b821}, !- Handle
-  Surface 34,                             !- Name
+  EnclosedOffice_3 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1702,7 +1703,7 @@ OS:Surface,
 
 OS:Surface,
   {4f4b46ff-0bd1-44ea-b4d7-36f65ef36977}, !- Handle
-  Surface 35,                             !- Name
+  EnclosedOffice_3 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1719,7 +1720,7 @@ OS:Surface,
 
 OS:Surface,
   {badfefdb-8fc9-4487-a975-e30da302c09c}, !- Handle
-  Surface 36,                             !- Name
+  EnclosedOffice_3 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1736,7 +1737,7 @@ OS:Surface,
 
 OS:Surface,
   {6decd978-1b8b-4840-91d7-9b7626953f18}, !- Handle
-  Surface 37,                             !- Name
+  EnclosedOffice_3 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1753,7 +1754,7 @@ OS:Surface,
 
 OS:Surface,
   {09a0545c-4cc1-4bd7-8788-dbbcd99429e5}, !- Handle
-  Surface 38,                             !- Name
+  EnclosedOffice_3 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {49db0a5c-ab56-4e75-abac-f70b3d43e2b8}, !- Space Name
@@ -1786,7 +1787,7 @@ OS:Space,
 
 OS:Surface,
   {d7e8962d-61c9-4053-abc9-9a0821f5b39f}, !- Handle
-  Surface 39,                             !- Name
+  Corridor_1 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1807,7 +1808,7 @@ OS:Surface,
 
 OS:Surface,
   {a6587ee2-9142-4fea-bd37-e04877dbb832}, !- Handle
-  Surface 40,                             !- Name
+  Corridor_1 - Wall 180_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1824,7 +1825,7 @@ OS:Surface,
 
 OS:Surface,
   {63a84bd5-86fd-4d34-be7e-46fd678d05e8}, !- Handle
-  Surface 41,                             !- Name
+  Corridor_1 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1841,7 +1842,7 @@ OS:Surface,
 
 OS:Surface,
   {65f95cca-6ca8-4d94-8b6c-30922e53495d}, !- Handle
-  Surface 42,                             !- Name
+  Corridor_1 - Wall 000_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1858,7 +1859,7 @@ OS:Surface,
 
 OS:Surface,
   {96f5a1ab-23cb-47b7-913a-7b59b6d48774}, !- Handle
-  Surface 43,                             !- Name
+  Corridor_1 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1875,7 +1876,7 @@ OS:Surface,
 
 OS:Surface,
   {79541496-5ab6-436f-a686-d9b530fb4678}, !- Handle
-  Surface 44,                             !- Name
+  Corridor_1 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1892,7 +1893,7 @@ OS:Surface,
 
 OS:Surface,
   {329524b9-8208-4a56-ba9b-eaa2cd9c1027}, !- Handle
-  Surface 45,                             !- Name
+  Corridor_1 - Wall 180_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1909,7 +1910,7 @@ OS:Surface,
 
 OS:Surface,
   {96b28e3b-c225-4bbe-bea4-964a1d0df85f}, !- Handle
-  Surface 46,                             !- Name
+  Corridor_1 - Wall 090_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1926,7 +1927,7 @@ OS:Surface,
 
 OS:Surface,
   {0549aed2-5851-4792-a2e9-d901b76d287b}, !- Handle
-  Surface 47,                             !- Name
+  Corridor_1 - Wall 090_d,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1943,7 +1944,7 @@ OS:Surface,
 
 OS:Surface,
   {768eccbc-6a82-4816-8f06-965a4ab60cc9}, !- Handle
-  Surface 48,                             !- Name
+  Corridor_1 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1960,7 +1961,7 @@ OS:Surface,
 
 OS:Surface,
   {e86586f8-181e-4799-8788-847d3eab57bd}, !- Handle
-  Surface 49,                             !- Name
+  Corridor_1 - Wall 000_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1977,7 +1978,7 @@ OS:Surface,
 
 OS:Surface,
   {cb8cf9c3-9a9e-4458-9f03-a691ded76937}, !- Handle
-  Surface 50,                             !- Name
+  Corridor_1 - Wall 090_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -1994,7 +1995,7 @@ OS:Surface,
 
 OS:Surface,
   {21160073-7652-463b-9d4f-a2826348213d}, !- Handle
-  Surface 51,                             !- Name
+  Corridor_1 - Wall 180_d,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -2004,14 +2005,14 @@ OS:Surface,
   NoWind,                                 !- Wind Exposure
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
-  0.544115625, 0, 3.048,                  !- X,Y,Z Vertex 1 {m}
-  0.544115625, 0, 0,                      !- X,Y,Z Vertex 2 {m}
+  0.54411563, 0, 3.048,                   !- X,Y,Z Vertex 1 {m}
+  0.54411563, 0, 0,                       !- X,Y,Z Vertex 2 {m}
   4.57120625, 0, 0,                       !- X,Y,Z Vertex 3 {m}
   4.57120625, 0, 3.048;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {8f8a7f8c-07de-493b-9d8b-fe7052db5cb0}, !- Handle
-  Surface 52,                             !- Name
+  Corridor_1 - Wall 180_e,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -2023,12 +2024,12 @@ OS:Surface,
   ,                                       !- Number of Vertices
   0, 0, 3.048,                            !- X,Y,Z Vertex 1 {m}
   0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
-  0.544115625, 0, 0,                      !- X,Y,Z Vertex 3 {m}
-  0.544115625, 0, 3.048;                  !- X,Y,Z Vertex 4 {m}
+  0.54411563, 0, 0,                       !- X,Y,Z Vertex 3 {m}
+  0.54411563, 0, 3.048;                   !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {8405a4b2-df92-4bdf-aeff-f77871f2e8af}, !- Handle
-  Surface 53,                             !- Name
+  Corridor_1 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {a3d18fd3-ffb5-41ad-b703-e82844497593}, !- Space Name
@@ -2065,7 +2066,7 @@ OS:Space,
 
 OS:Surface,
   {2d25d444-0dd0-4bef-8a3a-a13279170f15}, !- Handle
-  Surface 54,                             !- Name
+  Corridor_2 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2086,7 +2087,7 @@ OS:Surface,
 
 OS:Surface,
   {483ad54f-92b6-499a-b2b3-18e60a7a1761}, !- Handle
-  Surface 55,                             !- Name
+  Corridor_2 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2103,7 +2104,7 @@ OS:Surface,
 
 OS:Surface,
   {61fb88b0-4cf0-4a69-bd56-54e5497bbba3}, !- Handle
-  Surface 56,                             !- Name
+  Corridor_2 - Wall 000_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2120,7 +2121,7 @@ OS:Surface,
 
 OS:Surface,
   {71bd9b13-d5ef-4bd8-9bb4-cd0b4b76333c}, !- Handle
-  Surface 57,                             !- Name
+  Corridor_2 - Wall 270_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2137,7 +2138,7 @@ OS:Surface,
 
 OS:Surface,
   {5275623a-0ff8-4cf4-93ec-f9d76731673a}, !- Handle
-  Surface 58,                             !- Name
+  Corridor_2 - Wall 270_d,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2154,7 +2155,7 @@ OS:Surface,
 
 OS:Surface,
   {301874c9-148f-4672-830a-748fba936b87}, !- Handle
-  Surface 59,                             !- Name
+  Corridor_2 - Wall 180_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2171,7 +2172,7 @@ OS:Surface,
 
 OS:Surface,
   {da34923e-61dc-46da-b22c-f63af0d1b7d0}, !- Handle
-  Surface 60,                             !- Name
+  Corridor_2 - Wall 180_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2188,7 +2189,7 @@ OS:Surface,
 
 OS:Surface,
   {a5d0582f-09d9-4bbe-8230-4720b2bfcded}, !- Handle
-  Surface 61,                             !- Name
+  Corridor_2 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2205,7 +2206,7 @@ OS:Surface,
 
 OS:Surface,
   {c1a84b0d-35c4-4ea3-8a47-e12a34794cf2}, !- Handle
-  Surface 62,                             !- Name
+  Corridor_2 - Wall 000_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2222,7 +2223,7 @@ OS:Surface,
 
 OS:Surface,
   {48f18fa6-c4b0-4793-aa11-2a0c578b6c74}, !- Handle
-  Surface 63,                             !- Name
+  Corridor_2 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2239,7 +2240,7 @@ OS:Surface,
 
 OS:Surface,
   {096a6824-108e-4555-9ebc-2abb466342a1}, !- Handle
-  Surface 64,                             !- Name
+  Corridor_2 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2256,7 +2257,7 @@ OS:Surface,
 
 OS:Surface,
   {cddfbd64-ceba-4e25-9c9c-873a79c05278}, !- Handle
-  Surface 65,                             !- Name
+  Corridor_2 - Wall 180_d,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2273,7 +2274,7 @@ OS:Surface,
 
 OS:Surface,
   {1b9961ed-5503-4796-8f29-4f870d3fdfca}, !- Handle
-  Surface 66,                             !- Name
+  Corridor_2 - Wall 270_c,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2290,7 +2291,7 @@ OS:Surface,
 
 OS:Surface,
   {d32b4acd-dcaf-4fe9-921a-a75ac3fe7871}, !- Handle
-  Surface 67,                             !- Name
+  Corridor_2 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {32102686-6033-4031-9855-fd53d14db0ab}, !- Space Name
@@ -2327,7 +2328,7 @@ OS:Space,
 
 OS:Surface,
   {2254cc5e-1388-4c41-8f6f-afd5095c8e3e}, !- Handle
-  Surface 68,                             !- Name
+  EnclosedOffice_4 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2344,7 +2345,7 @@ OS:Surface,
 
 OS:Surface,
   {ea322868-c265-4a08-a190-e3d7729cb40d}, !- Handle
-  Surface 69,                             !- Name
+  EnclosedOffice_4 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2361,7 +2362,7 @@ OS:Surface,
 
 OS:Surface,
   {a5de5e13-030d-4802-8772-fc24b644f446}, !- Handle
-  Surface 70,                             !- Name
+  EnclosedOffice_4 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2378,7 +2379,7 @@ OS:Surface,
 
 OS:Surface,
   {f3fec7ad-5353-4af9-921e-dd7e2d536a15}, !- Handle
-  Surface 71,                             !- Name
+  EnclosedOffice_4 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2395,7 +2396,7 @@ OS:Surface,
 
 OS:Surface,
   {49cdda99-826e-49f4-8279-10d0ed88c0e4}, !- Handle
-  Surface 72,                             !- Name
+  EnclosedOffice_4 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2412,7 +2413,7 @@ OS:Surface,
 
 OS:Surface,
   {6251ade1-fa82-4998-a128-f18cccff66cc}, !- Handle
-  Surface 73,                             !- Name
+  EnclosedOffice_4 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {fa0c0a35-f933-4ec7-8718-e9e0e1bd6ba0}, !- Space Name
@@ -2445,7 +2446,7 @@ OS:Space,
 
 OS:Surface,
   {9ab0d683-e7da-41b9-9845-295bfa4b4d53}, !- Handle
-  Surface 74,                             !- Name
+  Stair - Floor_a,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2462,7 +2463,7 @@ OS:Surface,
 
 OS:Surface,
   {189607d1-114e-4b0e-98d7-e2980abb4bb0}, !- Handle
-  Surface 75,                             !- Name
+  Stair - Wall 270_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2479,7 +2480,7 @@ OS:Surface,
 
 OS:Surface,
   {c1faf488-c6fa-4380-91a7-fb45d52f9e3f}, !- Handle
-  Surface 76,                             !- Name
+  Stair - Wall 000_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2496,7 +2497,7 @@ OS:Surface,
 
 OS:Surface,
   {b48baf7b-64bb-4435-871a-46838aad0ade}, !- Handle
-  Surface 77,                             !- Name
+  Stair - Wall 090_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2513,7 +2514,7 @@ OS:Surface,
 
 OS:Surface,
   {3a0a2452-2aab-4cf5-8937-773532a15249}, !- Handle
-  Surface 78,                             !- Name
+  Stair - Wall 180_a,                     !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2530,7 +2531,7 @@ OS:Surface,
 
 OS:Surface,
   {ad9af532-d513-4d42-b936-4c03a93e84ad}, !- Handle
-  Surface 79,                             !- Name
+  Stair - RoofCeiling_a,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {e2751eeb-4239-4cae-8f4a-05a31a252bb8}, !- Space Name
@@ -2563,7 +2564,7 @@ OS:Space,
 
 OS:Surface,
   {e0d22d48-74df-4643-a5b4-66ad7b0c9274}, !- Handle
-  Surface 80,                             !- Name
+  Storage - Floor_a,                      !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2580,7 +2581,7 @@ OS:Surface,
 
 OS:Surface,
   {e48f5888-7eb3-4a71-ac3c-0a5aa9f66075}, !- Handle
-  Surface 81,                             !- Name
+  Storage - Wall 000_a,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2597,7 +2598,7 @@ OS:Surface,
 
 OS:Surface,
   {1012ec6a-fe91-4083-af18-9e7e0fb0e094}, !- Handle
-  Surface 82,                             !- Name
+  Storage - Wall 090_a,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2614,7 +2615,7 @@ OS:Surface,
 
 OS:Surface,
   {3a4babf2-9989-4d6c-8f60-fe2101665e6a}, !- Handle
-  Surface 83,                             !- Name
+  Storage - Wall 090_b,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2631,7 +2632,7 @@ OS:Surface,
 
 OS:Surface,
   {65ee1371-e553-423a-850f-047d65b54671}, !- Handle
-  Surface 84,                             !- Name
+  Storage - Wall 180_a,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2648,7 +2649,7 @@ OS:Surface,
 
 OS:Surface,
   {fc0c3d09-19a3-497b-8bfb-07b9a14b1b7c}, !- Handle
-  Surface 85,                             !- Name
+  Storage - Wall 180_b,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2665,7 +2666,7 @@ OS:Surface,
 
 OS:Surface,
   {7f763be1-b0ef-4d58-a078-60cd91f0be37}, !- Handle
-  Surface 86,                             !- Name
+  Storage - Wall 270_a,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2682,7 +2683,7 @@ OS:Surface,
 
 OS:Surface,
   {45498a19-a44e-4d5b-91b6-aa56c97981a7}, !- Handle
-  Surface 87,                             !- Name
+  Storage - Wall 270_b,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2699,7 +2700,7 @@ OS:Surface,
 
 OS:Surface,
   {2c13bc69-3a4c-40d7-a4d7-67096a923f3b}, !- Handle
-  Surface 88,                             !- Name
+  Storage - Wall 000_b,                   !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2716,7 +2717,7 @@ OS:Surface,
 
 OS:Surface,
   {87a04ccc-6e9f-4a79-badb-e501a6558f09}, !- Handle
-  Surface 89,                             !- Name
+  Storage - RoofCeiling_a,                !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {ace0428d-1111-4dda-9283-4944e0751f2f}, !- Space Name
@@ -2749,7 +2750,7 @@ OS:Space,
 
 OS:Surface,
   {6db775bb-bf63-4fd8-9520-b79f8724ecf5}, !- Handle
-  Surface 90,                             !- Name
+  Mechanical - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2766,7 +2767,7 @@ OS:Surface,
 
 OS:Surface,
   {b885e427-5606-45d6-80ec-53ff5a5a668c}, !- Handle
-  Surface 91,                             !- Name
+  Mechanical - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2783,7 +2784,7 @@ OS:Surface,
 
 OS:Surface,
   {6d78db85-e8f1-4eee-b414-1561736ffb2a}, !- Handle
-  Surface 92,                             !- Name
+  Mechanical - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2800,7 +2801,7 @@ OS:Surface,
 
 OS:Surface,
   {271f6175-6a3e-4ffb-bdc5-fc6ad6e4f73d}, !- Handle
-  Surface 93,                             !- Name
+  Mechanical - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2817,7 +2818,7 @@ OS:Surface,
 
 OS:Surface,
   {9f10eab7-aef3-4690-bfcf-665987a04a8a}, !- Handle
-  Surface 94,                             !- Name
+  Mechanical - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2834,7 +2835,7 @@ OS:Surface,
 
 OS:Surface,
   {a8e4825f-591d-45a9-939b-9a64fc14ef90}, !- Handle
-  Surface 95,                             !- Name
+  Mechanical - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {40a6f208-5550-43a6-9cc1-5d008dd8ee01}, !- Space Name
@@ -2867,7 +2868,7 @@ OS:Space,
 
 OS:Surface,
   {4ff9c544-41c9-4ded-8fce-28e45f53939d}, !- Handle
-  Surface 96,                             !- Name
+  Restroom_1 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2884,7 +2885,7 @@ OS:Surface,
 
 OS:Surface,
   {cdb74d66-7622-4929-98bf-bc5bdb797323}, !- Handle
-  Surface 97,                             !- Name
+  Restroom_1 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2901,7 +2902,7 @@ OS:Surface,
 
 OS:Surface,
   {7e1a2da9-1cf3-498b-b90d-168fba081dd2}, !- Handle
-  Surface 98,                             !- Name
+  Restroom_1 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2918,7 +2919,7 @@ OS:Surface,
 
 OS:Surface,
   {52d4332e-c161-48ab-8df0-65658a2c71c6}, !- Handle
-  Surface 99,                             !- Name
+  Restroom_1 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2935,7 +2936,7 @@ OS:Surface,
 
 OS:Surface,
   {5c87364d-3421-4d6d-a8cc-9b5df3747c66}, !- Handle
-  Surface 100,                            !- Name
+  Restroom_1 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2952,7 +2953,7 @@ OS:Surface,
 
 OS:Surface,
   {d00f1f1b-d464-448c-9eb5-cbaf5514dc2a}, !- Handle
-  Surface 101,                            !- Name
+  Restroom_1 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {2d7bf70d-97ab-46c4-b834-fe6068d4c426}, !- Space Name
@@ -2985,7 +2986,7 @@ OS:Space,
 
 OS:Surface,
   {4f37c7cc-e8ab-46c5-97aa-98687c7bbcba}, !- Handle
-  Surface 102,                            !- Name
+  Restroom_2 - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3002,7 +3003,7 @@ OS:Surface,
 
 OS:Surface,
   {57846664-77b5-4139-abd2-17a2731640a5}, !- Handle
-  Surface 103,                            !- Name
+  Restroom_2 - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3019,7 +3020,7 @@ OS:Surface,
 
 OS:Surface,
   {e3d66b2b-b639-4238-9985-895bcd734bc0}, !- Handle
-  Surface 104,                            !- Name
+  Restroom_2 - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3036,7 +3037,7 @@ OS:Surface,
 
 OS:Surface,
   {0a722c61-5e0f-4aad-b373-0a3f374be299}, !- Handle
-  Surface 105,                            !- Name
+  Restroom_2 - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3053,7 +3054,7 @@ OS:Surface,
 
 OS:Surface,
   {d1412889-2f14-4092-925f-638e887ccc95}, !- Handle
-  Surface 106,                            !- Name
+  Restroom_2 - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3070,7 +3071,7 @@ OS:Surface,
 
 OS:Surface,
   {dbea65f0-e172-4cea-b958-2655c1a87521}, !- Handle
-  Surface 107,                            !- Name
+  Restroom_2 - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {057345c0-b86d-4955-995e-7f2a58a924c5}, !- Space Name
@@ -3103,7 +3104,7 @@ OS:Space,
 
 OS:Surface,
   {f261eb2f-a624-4d98-af06-0ef36c079521}, !- Handle
-  Surface 108,                            !- Name
+  EnclosedOffice_5 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3120,7 +3121,7 @@ OS:Surface,
 
 OS:Surface,
   {ac66bc26-9b47-4132-bca9-c881ec0c0200}, !- Handle
-  Surface 109,                            !- Name
+  EnclosedOffice_5 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3137,7 +3138,7 @@ OS:Surface,
 
 OS:Surface,
   {4d74bc24-b5cc-47e8-a4b7-b633d68cf284}, !- Handle
-  Surface 110,                            !- Name
+  EnclosedOffice_5 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3154,7 +3155,7 @@ OS:Surface,
 
 OS:Surface,
   {325f2a96-fe91-4c16-8f27-1207a1e82109}, !- Handle
-  Surface 111,                            !- Name
+  EnclosedOffice_5 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3171,7 +3172,7 @@ OS:Surface,
 
 OS:Surface,
   {280e0b68-2a9d-4e81-bdfe-55afd7002d84}, !- Handle
-  Surface 112,                            !- Name
+  EnclosedOffice_5 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3188,7 +3189,7 @@ OS:Surface,
 
 OS:Surface,
   {6dad2d85-7599-4b09-8e1a-ee07f1b5f1a5}, !- Handle
-  Surface 113,                            !- Name
+  EnclosedOffice_5 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {bc05a667-e0b1-4d47-9799-c15207b1a31a}, !- Space Name
@@ -3221,7 +3222,7 @@ OS:Space,
 
 OS:Surface,
   {bbd86c01-0565-4479-9263-2c2cfd1a4903}, !- Handle
-  Surface 114,                            !- Name
+  OpenOffice - Floor_a,                   !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3238,7 +3239,7 @@ OS:Surface,
 
 OS:Surface,
   {aeb313e2-f6ec-4661-93d3-69155d6058f8}, !- Handle
-  Surface 115,                            !- Name
+  OpenOffice - Wall 000_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3255,7 +3256,7 @@ OS:Surface,
 
 OS:Surface,
   {18b414e6-6e2e-4c3c-9adf-664bc3944d6d}, !- Handle
-  Surface 116,                            !- Name
+  OpenOffice - Wall 090_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3272,7 +3273,7 @@ OS:Surface,
 
 OS:Surface,
   {d6b9cace-1bd9-45d9-b88c-ab41ed2461b5}, !- Handle
-  Surface 117,                            !- Name
+  OpenOffice - Wall 180_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3289,7 +3290,7 @@ OS:Surface,
 
 OS:Surface,
   {7e2fa303-c2ef-48a0-b81a-0126633804bc}, !- Handle
-  Surface 118,                            !- Name
+  OpenOffice - Wall 180_b,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3306,7 +3307,7 @@ OS:Surface,
 
 OS:Surface,
   {6089bd69-a1e3-4083-828e-bc18c0b0586b}, !- Handle
-  Surface 119,                            !- Name
+  OpenOffice - Wall 270_a,                !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3323,7 +3324,7 @@ OS:Surface,
 
 OS:Surface,
   {48c3cdd5-3a2e-470e-af92-0837ce5d2535}, !- Handle
-  Surface 120,                            !- Name
+  OpenOffice - RoofCeiling_a,             !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {54b526f8-48fb-4864-a7df-736413fe0fa2}, !- Space Name
@@ -3356,7 +3357,7 @@ OS:Space,
 
 OS:Surface,
   {5255fd6d-b39b-4b1c-9121-e8f36d726f62}, !- Handle
-  Surface 121,                            !- Name
+  EnclosedOffice_6 - Floor_a,             !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3373,7 +3374,7 @@ OS:Surface,
 
 OS:Surface,
   {47f6dc9b-f45a-408e-bb57-a1b0812d0c8e}, !- Handle
-  Surface 122,                            !- Name
+  EnclosedOffice_6 - Wall 180_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3390,7 +3391,7 @@ OS:Surface,
 
 OS:Surface,
   {d52a8647-3741-41e3-b436-0fe2f5afa4e1}, !- Handle
-  Surface 123,                            !- Name
+  EnclosedOffice_6 - Wall 270_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3407,7 +3408,7 @@ OS:Surface,
 
 OS:Surface,
   {44a77928-c80d-45aa-a6ea-e9dd2594e316}, !- Handle
-  Surface 124,                            !- Name
+  EnclosedOffice_6 - Wall 000_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3424,7 +3425,7 @@ OS:Surface,
 
 OS:Surface,
   {69f90bcf-717c-4cab-a5eb-b4d2809222f3}, !- Handle
-  Surface 125,                            !- Name
+  EnclosedOffice_6 - Wall 090_a,          !- Name
   Wall,                                   !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3441,7 +3442,7 @@ OS:Surface,
 
 OS:Surface,
   {7db0758c-4b90-4963-9496-c420172ec256}, !- Handle
-  Surface 126,                            !- Name
+  EnclosedOffice_6 - RoofCeiling_a,       !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {9fcdd6a1-5b9d-4212-9039-8ed869603b40}, !- Space Name
@@ -3481,7 +3482,7 @@ OS:Space,
 
 OS:Surface,
   {ef99b342-4e49-42be-a81a-da6a7186f6f8}, !- Handle
-  Surface 128,                            !- Name
+  Attic - RoofCeiling_c,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3493,11 +3494,11 @@ OS:Surface,
   ,                                       !- Number of Vertices
   9.23, 9.23, 6.328,                      !- X,Y,Z Vertex 1 {m}
   -0.6, 19.06, 3.048,                     !- X,Y,Z Vertex 2 {m}
-  -0.6, -0.599999999999999, 3.048;        !- X,Y,Z Vertex 3 {m}
+  -0.6, -0.6, 3.048;                      !- X,Y,Z Vertex 3 {m}
 
 OS:Surface,
   {ebda4e9b-6edf-446a-9a32-78b072ef6823}, !- Handle
-  Surface 129,                            !- Name
+  Attic - RoofCeiling_b,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3514,7 +3515,7 @@ OS:Surface,
 
 OS:Surface,
   {cdd47afc-6855-4004-a6c6-0069f54a6d2d}, !- Handle
-  Surface 130,                            !- Name
+  Attic - RoofCeiling_a,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3530,7 +3531,7 @@ OS:Surface,
 
 OS:Surface,
   {9b0f5277-255b-4d71-b324-5654de736955}, !- Handle
-  Surface 131,                            !- Name
+  Attic - RoofCeiling_d,                  !- Name
   RoofCeiling,                            !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3541,13 +3542,13 @@ OS:Surface,
   ,                                       !- View Factor to Ground
   ,                                       !- Number of Vertices
   9.23, 9.23, 6.328,                      !- X,Y,Z Vertex 1 {m}
-  -0.6, -0.599999999999999, 3.048,        !- X,Y,Z Vertex 2 {m}
+  -0.6, -0.6, 3.048,                      !- X,Y,Z Vertex 2 {m}
   28.29, -0.6, 3.048,                     !- X,Y,Z Vertex 3 {m}
   18.46, 9.23, 6.328;                     !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {27fed199-d1da-47ba-9d82-3adc2d31fa32}, !- Handle
-  Surface 148,                            !- Name
+  Attic - Floor_h,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3564,7 +3565,7 @@ OS:Surface,
 
 OS:Surface,
   {49d8290d-8945-4fe6-968b-95ad57d55689}, !- Handle
-  Surface 149,                            !- Name
+  Attic - Floor_c,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3577,11 +3578,11 @@ OS:Surface,
   -0.6, 19.06, 3.048,                     !- X,Y,Z Vertex 1 {m}
   0, 18.45945, 3.048,                     !- X,Y,Z Vertex 2 {m}
   0, 0, 3.048,                            !- X,Y,Z Vertex 3 {m}
-  -0.6, -0.599999999999999, 3.048;        !- X,Y,Z Vertex 4 {m}
+  -0.6, -0.6, 3.048;                      !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {24c9f396-5b80-4675-bf79-a583464176be}, !- Handle
-  Surface 151,                            !- Name
+  Attic - Floor_i,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3593,12 +3594,12 @@ OS:Surface,
   ,                                       !- Number of Vertices
   27.6907625, 0, 3.048,                   !- X,Y,Z Vertex 1 {m}
   28.29, -0.6, 3.048,                     !- X,Y,Z Vertex 2 {m}
-  -0.6, -0.599999999999999, 3.048,        !- X,Y,Z Vertex 3 {m}
+  -0.6, -0.6, 3.048,                      !- X,Y,Z Vertex 3 {m}
   0, 0, 3.048;                            !- X,Y,Z Vertex 4 {m}
 
 OS:SubSurface,
   {99bbe199-a6be-44a2-abd7-8fe40b7ae190}, !- Handle
-  Sub Surface 1,                          !- Name
+  ConfRoom_1 - Wall 180_a - Sub:a,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {4901e7bb-b81e-4a98-8564-5f93bd853631}, !- Surface Name
@@ -3615,7 +3616,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {8232a4ce-30b6-4305-b3e9-c80dd4cb9e2e}, !- Handle
-  Sub Surface 2,                          !- Name
+  EnclosedOffice_1 - Wall 180_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {bdf3cb71-a553-4a62-be06-eadd7d89e060}, !- Surface Name
@@ -3632,7 +3633,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {623635ec-2da6-4993-b435-a9f35b7b810b}, !- Handle
-  Sub Surface 3,                          !- Name
+  Lobby - Wall 180_a - Sub:b,             !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {75f01be6-51f9-4cdc-8375-c6698bf2afdd}, !- Surface Name
@@ -3649,7 +3650,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {f89f568b-ffd4-4f27-b029-29474c071a60}, !- Handle
-  Sub Surface 4,                          !- Name
+  Lobby - Wall 180_a - Sub:a,             !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {75f01be6-51f9-4cdc-8375-c6698bf2afdd}, !- Surface Name
@@ -3666,7 +3667,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {391cef8d-5b27-4658-9b55-0a5f808c1cd6}, !- Handle
-  Sub Surface 5,                          !- Name
+  Lobby - Wall 180_a - Sub:c,             !- Name
   DOOR,                                   !- Sub Surface Type
   ,                                       !- Construction Name
   {75f01be6-51f9-4cdc-8375-c6698bf2afdd}, !- Surface Name
@@ -3683,7 +3684,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {1ee2d238-021c-4538-9952-8b49bc7a0c38}, !- Handle
-  Sub Surface 6,                          !- Name
+  EnclosedOffice_2 - Wall 180_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {3e6969f9-da56-4c65-a9d1-8a2ce2608914}, !- Surface Name
@@ -3700,7 +3701,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {a269519c-ba2a-4bd1-90a2-a29d4504deea}, !- Handle
-  Sub Surface 7,                          !- Name
+  ConfRoom_2 - Wall 180_a - Sub:a,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {eec4a602-61c4-49a6-b89a-4fa82c6bfa80}, !- Surface Name
@@ -3717,7 +3718,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {baf91f49-d5f9-465e-b1ac-d2661a12e969}, !- Handle
-  Sub Surface 8,                          !- Name
+  ConfRoom_1 - Wall 270_a - Sub:a,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {13c9448d-a18e-4f3f-9a2c-0c2145b2f5bb}, !- Surface Name
@@ -3734,7 +3735,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {8aa5aa7c-1d04-45b6-a343-2836d66e249b}, !- Handle
-  Sub Surface 9,                          !- Name
+  EnclosedOffice_3 - Wall 270_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {6decd978-1b8b-4840-91d7-9b7626953f18}, !- Surface Name
@@ -3751,7 +3752,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {3b3b07e2-2ad5-4d57-b95f-8bcfa31f590c}, !- Handle
-  Sub Surface 10,                         !- Name
+  EnclosedOffice_3 - Wall 270_a - Sub:b,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {6decd978-1b8b-4840-91d7-9b7626953f18}, !- Surface Name
@@ -3768,7 +3769,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {0bdd2cde-aee5-43bb-98bd-e7b4154feee3}, !- Handle
-  Sub Surface 11,                         !- Name
+  EnclosedOffice_5 - Wall 270_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {280e0b68-2a9d-4e81-bdfe-55afd7002d84}, !- Surface Name
@@ -3785,7 +3786,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {c8f493be-712a-4edf-9c32-4359f305110f}, !- Handle
-  Sub Surface 12,                         !- Name
+  ConfRoom_2 - Wall 090_a - Sub:a,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {83949fd6-fad6-427a-a7ab-72d403117a5e}, !- Surface Name
@@ -3802,7 +3803,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {9da7de18-103d-4979-8559-b7b7b7e7b61f}, !- Handle
-  Sub Surface 13,                         !- Name
+  EnclosedOffice_4 - Wall 090_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {49cdda99-826e-49f4-8279-10d0ed88c0e4}, !- Surface Name
@@ -3819,7 +3820,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {b3f4bcb3-2500-494f-a129-6c1eb9203b62}, !- Handle
-  Sub Surface 14,                         !- Name
+  EnclosedOffice_4 - Wall 090_a - Sub:b,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {49cdda99-826e-49f4-8279-10d0ed88c0e4}, !- Surface Name
@@ -3836,7 +3837,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {c7644407-44a0-4fb6-a13f-b36d2a6fad87}, !- Handle
-  Sub Surface 15,                         !- Name
+  EnclosedOffice_6 - Wall 090_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {69f90bcf-717c-4cab-a5eb-b4d2809222f3}, !- Surface Name
@@ -3853,7 +3854,7 @@ OS:SubSurface,
 
 OS:Surface,
   {6cdc4ece-c1a5-4ec6-a5a7-afb520668c38}, !- Handle
-  Surface 127,                            !- Name
+  Attic - Floor_j,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3870,7 +3871,7 @@ OS:Surface,
 
 OS:Surface,
   {f723a610-66f0-4d1b-88ce-a17db4d7f8cb}, !- Handle
-  Surface 158,                            !- Name
+  Attic - Floor_k,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3887,7 +3888,7 @@ OS:Surface,
 
 OS:Surface,
   {c3c66e04-89f4-4247-b5ca-b4eec7a74fa3}, !- Handle
-  Surface 159,                            !- Name
+  Attic - Floor_f,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3904,7 +3905,7 @@ OS:Surface,
 
 OS:Surface,
   {1a625b5d-5d8a-4ee6-b260-e39f845ba39a}, !- Handle
-  Surface 160,                            !- Name
+  Attic - Floor_b,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3921,7 +3922,7 @@ OS:Surface,
 
 OS:Surface,
   {14fa0dff-f30e-4fee-b3b7-359bd14584f1}, !- Handle
-  Surface 161,                            !- Name
+  Attic - Floor_l,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3938,7 +3939,7 @@ OS:Surface,
 
 OS:Surface,
   {6d41292d-ebb7-44ac-9416-b73e4f06026c}, !- Handle
-  Surface 163,                            !- Name
+  Attic - Floor_m,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3955,7 +3956,7 @@ OS:Surface,
 
 OS:Surface,
   {3d7a3c12-3cc5-4730-aa3d-35c9574679cc}, !- Handle
-  Surface 164,                            !- Name
+  Attic - Floor_e,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3972,7 +3973,7 @@ OS:Surface,
 
 OS:Surface,
   {36448359-63b1-4d3d-9028-0b7000545b12}, !- Handle
-  Surface 165,                            !- Name
+  Attic - Floor_n,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -3989,7 +3990,7 @@ OS:Surface,
 
 OS:Surface,
   {b4dab7b1-41ba-4353-8641-67a06e7d1208}, !- Handle
-  Surface 167,                            !- Name
+  Attic - Floor_o,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4006,7 +4007,7 @@ OS:Surface,
 
 OS:Surface,
   {77798bdf-40ff-4e21-8124-467e812aa234}, !- Handle
-  Surface 168,                            !- Name
+  Attic - Floor_p,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4023,7 +4024,7 @@ OS:Surface,
 
 OS:Surface,
   {1be7b2b1-49f5-4a8c-b337-ed85754d99be}, !- Handle
-  Surface 169,                            !- Name
+  Attic - Floor_g,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4040,7 +4041,7 @@ OS:Surface,
 
 OS:Surface,
   {04c3d22e-aee8-4575-b62e-3e9279661eea}, !- Handle
-  Surface 171,                            !- Name
+  Attic - Floor_d,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4057,7 +4058,7 @@ OS:Surface,
 
 OS:Surface,
   {f7847d71-0251-4c1c-a099-558d08532fcc}, !- Handle
-  Surface 172,                            !- Name
+  Attic - Floor_q,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4074,7 +4075,7 @@ OS:Surface,
 
 OS:Surface,
   {e5dd8aae-ae22-466d-8791-2c37ab769bd2}, !- Handle
-  Surface 173,                            !- Name
+  Attic - Floor_r,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4091,7 +4092,7 @@ OS:Surface,
 
 OS:SubSurface,
   {e6a3e529-b7b6-4bc7-aa83-756e6014c10d}, !- Handle
-  Sub Surface 16,                         !- Name
+  EnclosedOffice_6 - Wall 000_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {44a77928-c80d-45aa-a6ea-e9dd2594e316}, !- Surface Name
@@ -4108,7 +4109,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {6bcc830f-b3c0-4de4-8859-a1c69eebbf7b}, !- Handle
-  Sub Surface 17,                         !- Name
+  OpenOffice - Wall 000_a - Sub:a,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {aeb313e2-f6ec-4661-93d3-69155d6058f8}, !- Surface Name
@@ -4125,7 +4126,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {d97fb31a-dfa8-4af5-8af7-b5d2d0cf47f5}, !- Handle
-  Sub Surface 18,                         !- Name
+  OpenOffice - Wall 000_a - Sub:b,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {aeb313e2-f6ec-4661-93d3-69155d6058f8}, !- Surface Name
@@ -4142,7 +4143,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {be0a46be-6956-44af-b902-10300cd2abc9}, !- Handle
-  Sub Surface 19,                         !- Name
+  OpenOffice - Wall 000_a - Sub:c,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {aeb313e2-f6ec-4661-93d3-69155d6058f8}, !- Surface Name
@@ -4159,7 +4160,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {e89a9013-0566-46fe-8359-bce190abc9ed}, !- Handle
-  Sub Surface 20,                         !- Name
+  OpenOffice - Wall 000_a - Sub:d,        !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {aeb313e2-f6ec-4661-93d3-69155d6058f8}, !- Surface Name
@@ -4176,7 +4177,7 @@ OS:SubSurface,
 
 OS:SubSurface,
   {156726be-1798-4477-9c9b-b9388ccac5d0}, !- Handle
-  Sub Surface 21,                         !- Name
+  EnclosedOffice_5 - Wall 000_a - Sub:a,  !- Name
   FixedWindow,                            !- Sub Surface Type
   ,                                       !- Construction Name
   {ac66bc26-9b47-4132-bca9-c881ec0c0200}, !- Surface Name
@@ -4193,7 +4194,7 @@ OS:SubSurface,
 
 OS:Surface,
   {7aca14a8-6fd0-48c9-ac9b-097f7148c26f}, !- Handle
-  Surface 174,                            !- Name
+  Attic - Floor_s,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4210,7 +4211,7 @@ OS:Surface,
 
 OS:Surface,
   {22e7b47f-b5bc-4aa3-956b-9e7ca0925245}, !- Handle
-  Surface 133,                            !- Name
+  Attic - Floor_t,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4231,7 +4232,7 @@ OS:Surface,
 
 OS:Surface,
   {8a723089-6304-4418-a3a4-48ce54e3d982}, !- Handle
-  Surface 132,                            !- Name
+  Attic - Floor_a,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4252,7 +4253,7 @@ OS:Surface,
 
 OS:Surface,
   {620836cb-28ae-4b50-9e15-33c6f49ab667}, !- Handle
-  Surface 135,                            !- Name
+  Attic - Floor_u,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4271,7 +4272,7 @@ OS:Surface,
 
 OS:Surface,
   {b6225bfb-9bf7-47f0-8b50-6948eeb4fe48}, !- Handle
-  Surface 8,                              !- Name
+  Attic - Floor_v,                        !- Name
   Floor,                                  !- Surface Type
   ,                                       !- Construction Name
   {91cfc07c-2e46-4945-8a9f-387760fa0db8}, !- Space Name
@@ -4368,6 +4369,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {0e2c7c7b-5d29-4b67-8b76-6e000891c8e2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Attic;                    !- Standards Space Type
 
@@ -4385,6 +4387,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {6da57b8c-46fd-4274-b97f-db06a942dfd8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - OpenOffice;               !- Standards Space Type
 
@@ -4402,6 +4405,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {58ddad7a-f214-4f61-9550-8655e973894a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - ClosedOffice;             !- Standards Space Type
 
@@ -4433,6 +4437,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {dc376b19-b9ed-4763-82e3-b08274971093}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Storage;                  !- Standards Space Type
 
@@ -4450,6 +4455,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {2b050801-386a-4014-bcfb-1c0716e4f9a4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Corridor;                 !- Standards Space Type
 
@@ -4467,6 +4473,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {f7e3d7f9-cc2c-421f-b786-ddb373f1e608}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Restroom;                 !- Standards Space Type
 
@@ -4484,6 +4491,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {b8ce435c-7c1d-4617-874e-e45d9dba881a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Lobby;                    !- Standards Space Type
 
@@ -4501,6 +4509,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {a33fce9b-9840-4251-8e37-99b269931de4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Conference;               !- Standards Space Type
 
@@ -4518,6 +4527,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {2f523f3e-fb20-40d6-bc4a-14b65d9eb47b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Elec/MechRoom;            !- Standards Space Type
 
@@ -4535,6 +4545,7 @@ OS:SpaceType,
   ,                                       !- Default Schedule Set Name
   {414e245c-ae4b-4d32-a008-f307b1a150c1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
   SmallOffice - Stair;                    !- Standards Space Type
 
@@ -4558,15 +4569,21 @@ OS:ThermalZone,
   {de3971a9-e849-4805-a97a-7be3f70203e2}, !- Zone Air Inlet Port List
   {de866fca-cea3-4804-869a-71ed417596d6}, !- Zone Air Exhaust Port List
   {04be8b65-f450-48e2-9413-a488b9cc28d6}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {10b7ceda-ff7e-434c-b201-8f95e0fd50ca}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {fb843d90-d797-4a77-b3e8-f4d86a98d4cb}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {10b7ceda-ff7e-434c-b201-8f95e0fd50ca}, !- Handle
+  Port List 2,                            !- Name
+  {132e896e-3460-4ca1-b171-18930604f84f}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {6be50bab-d38e-43dd-8fea-b1864e24957c}, !- Handle
@@ -4640,15 +4657,21 @@ OS:ThermalZone,
   {f33cac3c-95d7-43d8-820a-8ef5951a6e18}, !- Zone Air Inlet Port List
   {cce51fa2-2416-4a2c-99f3-d1e8be6b96b5}, !- Zone Air Exhaust Port List
   {b7f67570-29cd-47de-badf-440f2561d65f}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {03096efe-23ff-4f4a-b2bb-40fb65157e0c}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {9b521543-28ed-45b9-8792-4fdde0561620}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {03096efe-23ff-4f4a-b2bb-40fb65157e0c}, !- Handle
+  Port List 3,                            !- Name
+  {541572cf-093b-465b-b4c4-83784046c9fd}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {b69d9d1e-1b29-4415-bed8-f13d040306b1}, !- Handle
@@ -4722,15 +4745,21 @@ OS:ThermalZone,
   {79a36102-50b3-4e3e-a1c9-57907d92836b}, !- Zone Air Inlet Port List
   {cf290fb3-e346-4223-85cb-63e861083232}, !- Zone Air Exhaust Port List
   {e3fc0ffe-b0a4-4a11-9852-514b2c297dbe}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {71fcc05d-5c4d-43d1-8c19-77f43c174204}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {7ef2b77c-c2e2-4781-89a2-427f174fab04}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {71fcc05d-5c4d-43d1-8c19-77f43c174204}, !- Handle
+  Port List 4,                            !- Name
+  {fa97304b-e496-474b-8de4-5cbd7cdc0e66}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {1644968b-57cf-4753-bfa5-c2343754aa84}, !- Handle
@@ -4804,15 +4833,21 @@ OS:ThermalZone,
   {08ef9771-be05-45c3-98e2-a83d7d5eb4b1}, !- Zone Air Inlet Port List
   {06a8464b-518e-461f-8101-09c415ebec99}, !- Zone Air Exhaust Port List
   {e2173fef-9e6c-4a5b-8044-c6d723bade0a}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {7d2729b2-6a2c-44b7-a249-81c575c7d6e4}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {6fd1a8c6-318e-4eab-a4dc-872d9f03900a}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {7d2729b2-6a2c-44b7-a249-81c575c7d6e4}, !- Handle
+  Port List 5,                            !- Name
+  {166dbe5b-17b8-4b2a-ad2f-2f6838b5e81a}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {0819b756-3325-4f74-b9c2-f61bd832f92d}, !- Handle
@@ -4886,15 +4921,21 @@ OS:ThermalZone,
   {92afed1a-0368-46fc-8dba-b3b0e52a2fd3}, !- Zone Air Inlet Port List
   {e3190ce8-df64-4a61-bc89-f13254ee67d5}, !- Zone Air Exhaust Port List
   {b4c46987-2ac7-4179-b5b9-1921f1410eaf}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {a6c6bf0a-1f1c-40f7-a779-547350011147}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {7cf67187-7c9b-4177-ab02-589fe8712c36}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {a6c6bf0a-1f1c-40f7-a779-547350011147}, !- Handle
+  Port List 6,                            !- Name
+  {ffd0e311-b6ac-4c76-aacb-6d1c70316b6f}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {8a6e5b0e-6435-4af5-9354-82a2d236b555}, !- Handle
@@ -4968,15 +5009,21 @@ OS:ThermalZone,
   {16e732c3-0aee-4db9-b495-c5e6870f278d}, !- Zone Air Inlet Port List
   {971a41a5-ee0d-4327-99dc-7a5b2ecd1537}, !- Zone Air Exhaust Port List
   {68611bea-e7e4-48d4-a616-137d6a5c52ce}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {70bf94ef-d91c-4210-aec6-e0714a22ad91}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {b919fcb4-0510-489b-9238-f3021a2f054e}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {70bf94ef-d91c-4210-aec6-e0714a22ad91}, !- Handle
+  Port List 7,                            !- Name
+  {4d2e9b92-5756-4af0-934f-da299e4677fe}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {0d986d3d-a50a-4132-8722-afd4353d995e}, !- Handle
@@ -5050,15 +5097,21 @@ OS:ThermalZone,
   {ce32c098-19fe-47c7-be4a-ce6d637b6cc2}, !- Zone Air Inlet Port List
   {a3e31ff5-9cb1-447b-9025-dc4c7df1c244}, !- Zone Air Exhaust Port List
   {1a1ec2d6-8f78-4149-a83f-ed7cadf5b4cd}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {36d2e40b-1298-41ab-b0aa-374512e34741}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {1ae1ef9f-1341-4ba6-8f5b-7e5e0a2a0116}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {36d2e40b-1298-41ab-b0aa-374512e34741}, !- Handle
+  Port List 8,                            !- Name
+  {84f4ba19-5af9-422e-b7a0-42df2c971f45}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {de13729f-e744-4c8a-a5bd-06251dd9f86f}, !- Handle
@@ -5132,15 +5185,21 @@ OS:ThermalZone,
   {3159db03-8e7e-4ea8-936e-aada75be162b}, !- Zone Air Inlet Port List
   {2d09dacc-71b5-4a0c-b07a-462ff45218db}, !- Zone Air Exhaust Port List
   {891370f7-8ccd-49d9-97ec-e4a162e0679e}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {d21e3c87-33b3-486c-88bc-36286df70c9c}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {48a190d5-3200-4b8c-a089-b000e8e0a1d1}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {d21e3c87-33b3-486c-88bc-36286df70c9c}, !- Handle
+  Port List 9,                            !- Name
+  {ca902722-b1ba-43bb-97a2-6dabf5a0480a}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {df0f2dba-e86b-4bfa-8795-2ffb51ca5aa8}, !- Handle
@@ -5214,15 +5273,21 @@ OS:ThermalZone,
   {cacb88ba-456f-4263-8d3c-e1f0fe612e10}, !- Zone Air Inlet Port List
   {b6c97b0e-47f3-4b8c-9dc4-36156055f985}, !- Zone Air Exhaust Port List
   {889d95e0-64c5-41b1-b570-d083671ec0b8}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {af095d58-5f89-4884-988c-db96b8c33c3a}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {91da9dc2-8767-41f7-8ec9-00516611830e}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {af095d58-5f89-4884-988c-db96b8c33c3a}, !- Handle
+  Port List 10,                           !- Name
+  {1489d0fa-7556-47d9-94e4-9d986cef89b0}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {334cf0bc-70e1-41c3-ac0c-70746c0fd7c7}, !- Handle
@@ -5296,15 +5361,21 @@ OS:ThermalZone,
   {e686df55-ba6b-4d75-9f03-31cda793213b}, !- Zone Air Inlet Port List
   {5160bf5e-4b28-4427-9b8a-485ef917f655}, !- Zone Air Exhaust Port List
   {da70c9c8-516a-408c-a407-437f1d294a62}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {c7d5693d-1cbd-4941-8d60-d5929c35f359}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {33c6a60e-7c96-4c92-937b-699e08789977}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {c7d5693d-1cbd-4941-8d60-d5929c35f359}, !- Handle
+  Port List 11,                           !- Name
+  {9f6dc97c-a616-4611-bf7e-2b5d04ef1b87}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {66dbe8d7-71b4-4431-bae1-ddd51078d6e0}, !- Handle
@@ -5378,15 +5449,21 @@ OS:ThermalZone,
   {386d00a2-9605-4710-8bc0-de2c89fed010}, !- Zone Air Inlet Port List
   {c06056d1-7c03-4b9b-b80b-65dbb373c259}, !- Zone Air Exhaust Port List
   {098b6553-f29a-4df4-a637-41fd501a3b77}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {ad5b08d0-7ff6-423b-834c-85d3a5d1b336}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {3bb26108-d07c-450f-9280-f590df9b1b17}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {ad5b08d0-7ff6-423b-834c-85d3a5d1b336}, !- Handle
+  Port List 12,                           !- Name
+  {f4c00aa9-d18a-4472-b254-a3418c5bb367}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {4493e53b-de92-49dc-895c-07bbf896b366}, !- Handle
@@ -5460,15 +5537,21 @@ OS:ThermalZone,
   {8a6c6a01-9188-4088-a5cf-32d26e0584fd}, !- Zone Air Inlet Port List
   {4c44a190-05ac-4d13-a6bf-9d9bd6bbb9e6}, !- Zone Air Exhaust Port List
   {7eab91a1-22c6-41e5-a07a-dc77e4096715}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {e29ecf84-21a4-49dd-8d5f-4f73a69ca8c9}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {128a4a11-ef66-4257-8578-f1359616a6c2}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {e29ecf84-21a4-49dd-8d5f-4f73a69ca8c9}, !- Handle
+  Port List 13,                           !- Name
+  {52117b42-1370-4673-9c73-c0bcd5bb24bb}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {b2fad2f1-7b7e-4982-a257-3a9b5a990b71}, !- Handle
@@ -5542,15 +5625,21 @@ OS:ThermalZone,
   {d88b135b-b9a4-4291-88d9-b9d58156ede9}, !- Zone Air Inlet Port List
   {588df299-fbef-4e60-a404-8c23678073c2}, !- Zone Air Exhaust Port List
   {e671ca16-8a63-456c-aff0-ae0e82c0e6d2}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {f7fb01a6-a4e7-458c-8162-5931ed726911}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ea7e22f5-eec3-4254-8c84-d0eb6de14229}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {f7fb01a6-a4e7-458c-8162-5931ed726911}, !- Handle
+  Port List 14,                           !- Name
+  {32636def-d15a-4883-8161-cd5ad7dd2b36}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {0a7a5246-0489-4908-ad5e-738dd67cfef0}, !- Handle
@@ -5624,15 +5713,21 @@ OS:ThermalZone,
   {941f6e0d-c20c-487d-9b47-7d91d38b93d9}, !- Zone Air Inlet Port List
   {6a012d53-02f6-40f5-be6d-f8e7be7e38ef}, !- Zone Air Exhaust Port List
   {4e9b1bf5-8c3b-4335-81ca-6f8cdddadcae}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {8d1dfc05-9c1b-45de-a7bd-d88031c013f5}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {ea832826-bb17-4476-9008-0dbf22bcf30f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {8d1dfc05-9c1b-45de-a7bd-d88031c013f5}, !- Handle
+  Port List 15,                           !- Name
+  {68fe4b0d-55fe-43d0-8f41-6a2f0ae8d450}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {042cb9ff-a0c3-43c9-a58a-d6351e3832ee}, !- Handle
@@ -5706,15 +5801,21 @@ OS:ThermalZone,
   {8c5f95c7-2d99-4112-ba2c-52d8c226be18}, !- Zone Air Inlet Port List
   {43ccd9dc-1a5c-4a66-998b-0f82378870d0}, !- Zone Air Exhaust Port List
   {fb6c30f1-d3a8-4a6b-883a-9689a8ff7138}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {10426634-829a-4f6f-94a1-33c09bb66c10}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {79b66b13-daab-4154-9e62-22dd0acb5e7e}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {10426634-829a-4f6f-94a1-33c09bb66c10}, !- Handle
+  Port List 16,                           !- Name
+  {486b05ce-db34-4686-ab4b-b76e49c45c9d}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {60a2da78-fce8-41d7-b713-fbe519df11f3}, !- Handle
@@ -5788,15 +5889,21 @@ OS:ThermalZone,
   {dc2c4f39-ae3f-4e4c-acfe-b3e14de64c17}, !- Zone Air Inlet Port List
   {e5ca18a6-f070-4fbe-9445-69f67595570d}, !- Zone Air Exhaust Port List
   {a5d995fb-2284-4b4c-a956-704101a68c0e}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {bd808ed7-5712-40fd-b1a5-efebc7f13427}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {db12c58e-67bb-410a-8c2c-2abfb9614152}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {bd808ed7-5712-40fd-b1a5-efebc7f13427}, !- Handle
+  Port List 1,                            !- Name
+  {6a2e89bf-2b40-4bda-9f96-8fa1ed1ee493}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {5c4e4093-1e12-4358-9416-07ae48a782b3}, !- Handle
@@ -5870,15 +5977,21 @@ OS:ThermalZone,
   {7674c407-bec2-457b-b440-4aa76d7fb98d}, !- Zone Air Inlet Port List
   {c8de2e49-6bd5-44f1-ac64-5cdae4c7a206}, !- Zone Air Exhaust Port List
   {e47a3887-c69a-4767-9544-b63906c568e6}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {169d011e-1b13-463a-8e8b-cae854c3db6d}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {5fe46aa2-6e87-49eb-99a2-a2f5f629ed9f}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {169d011e-1b13-463a-8e8b-cae854c3db6d}, !- Handle
+  Port List 17,                           !- Name
+  {496d108e-1882-4d79-b31d-e795e63aaf92}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {c4d327e0-4850-4cbd-9f79-e10ec37c3339}, !- Handle
@@ -5952,15 +6065,21 @@ OS:ThermalZone,
   {2e97558b-0d3b-4366-bdd1-2c7f0bdff29d}, !- Zone Air Inlet Port List
   {3206a85b-0bbc-4325-baaa-d3d35ac8c8c3}, !- Zone Air Exhaust Port List
   {b34fec91-51f6-4db0-80ec-2ee8708c51df}, !- Zone Air Node Name
-  ,                                       !- Zone Return Air Node Name
+  {8485e0ab-f6bd-4e18-b670-1011f4e85ab8}, !- Zone Return Air Port List
   ,                                       !- Primary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Primary Daylighting Control
   ,                                       !- Secondary Daylighting Control Name
   ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
-  ,                                       !- Group Rendering Name
+  {f58ecb07-a229-405b-ba69-035e990fc943}, !- Group Rendering Name
   ,                                       !- Thermostat Name
   No;                                     !- Use Ideal Air Loads
+
+OS:PortList,
+  {8485e0ab-f6bd-4e18-b670-1011f4e85ab8}, !- Handle
+  Port List 18,                           !- Name
+  {15dcc532-3d37-4a26-b9e5-21dfaa066f54}, !- HVAC Component
+  ;                                       !- Port 1
 
 OS:Node,
   {286db087-9ca8-496e-a438-05b3592641ac}, !- Handle
@@ -6020,4 +6139,130 @@ OS:ZoneHVAC:EquipmentList,
   {962e44d0-d5f2-485a-a7d2-af2302fcbe9f}, !- Handle
   Zone HVAC Equipment List 18,            !- Name
   {15dcc532-3d37-4a26-b9e5-21dfaa066f54}; !- Thermal Zone
+
+OS:Rendering:Color,
+  {ea7e22f5-eec3-4254-8c84-d0eb6de14229}, !- Handle
+  Rendering Color 72,                     !- Name
+  255,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {128a4a11-ef66-4257-8578-f1359616a6c2}, !- Handle
+  Rendering Color 73,                     !- Name
+  245,                                    !- Rendering Red Value
+  245,                                    !- Rendering Green Value
+  220;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {ea832826-bb17-4476-9008-0dbf22bcf30f}, !- Handle
+  Rendering Color 74,                     !- Name
+  173,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  47;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {3bb26108-d07c-450f-9280-f590df9b1b17}, !- Handle
+  Rendering Color 75,                     !- Name
+  255,                                    !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {79b66b13-daab-4154-9e62-22dd0acb5e7e}, !- Handle
+  Rendering Color 76,                     !- Name
+  255,                                    !- Rendering Red Value
+  228,                                    !- Rendering Green Value
+  225;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {33c6a60e-7c96-4c92-937b-699e08789977}, !- Handle
+  Rendering Color 77,                     !- Name
+  0,                                      !- Rendering Red Value
+  206,                                    !- Rendering Green Value
+  209;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {db12c58e-67bb-410a-8c2c-2abfb9614152}, !- Handle
+  Rendering Color 78,                     !- Name
+  123,                                    !- Rendering Red Value
+  104,                                    !- Rendering Green Value
+  238;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {91da9dc2-8767-41f7-8ec9-00516611830e}, !- Handle
+  Rendering Color 79,                     !- Name
+  255,                                    !- Rendering Red Value
+  218,                                    !- Rendering Green Value
+  185;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {5fe46aa2-6e87-49eb-99a2-a2f5f629ed9f}, !- Handle
+  Rendering Color 80,                     !- Name
+  186,                                    !- Rendering Red Value
+  85,                                     !- Rendering Green Value
+  211;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {48a190d5-3200-4b8c-a089-b000e8e0a1d1}, !- Handle
+  Rendering Color 81,                     !- Name
+  216,                                    !- Rendering Red Value
+  191,                                    !- Rendering Green Value
+  216;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {1ae1ef9f-1341-4ba6-8f5b-7e5e0a2a0116}, !- Handle
+  Rendering Color 82,                     !- Name
+  176,                                    !- Rendering Red Value
+  196,                                    !- Rendering Green Value
+  222;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {fb843d90-d797-4a77-b3e8-f4d86a98d4cb}, !- Handle
+  Rendering Color 83,                     !- Name
+  199,                                    !- Rendering Red Value
+  21,                                     !- Rendering Green Value
+  133;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {9b521543-28ed-45b9-8792-4fdde0561620}, !- Handle
+  Rendering Color 84,                     !- Name
+  189,                                    !- Rendering Red Value
+  183,                                    !- Rendering Green Value
+  107;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7ef2b77c-c2e2-4781-89a2-427f174fab04}, !- Handle
+  Rendering Color 85,                     !- Name
+  255,                                    !- Rendering Red Value
+  255,                                    !- Rendering Green Value
+  0;                                      !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {6fd1a8c6-318e-4eab-a4dc-872d9f03900a}, !- Handle
+  Rendering Color 86,                     !- Name
+  253,                                    !- Rendering Red Value
+  245,                                    !- Rendering Green Value
+  230;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {7cf67187-7c9b-4177-ab02-589fe8712c36}, !- Handle
+  Rendering Color 87,                     !- Name
+  160,                                    !- Rendering Red Value
+  82,                                     !- Rendering Green Value
+  45;                                     !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {b919fcb4-0510-489b-9238-f3021a2f054e}, !- Handle
+  Rendering Color 88,                     !- Name
+  0,                                      !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  139;                                    !- Rendering Blue Value
+
+OS:Rendering:Color,
+  {f58ecb07-a229-405b-ba69-035e990fc943}, !- Handle
+  Rendering Color 89,                     !- Name
+  0,                                      !- Rendering Red Value
+  0,                                      !- Rendering Green Value
+  128;                                    !- Rendering Blue Value
 

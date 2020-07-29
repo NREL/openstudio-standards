@@ -1,24 +1,37 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: 1.1)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
     # NECB FDWR limit
     hdd = self.get_necb_hdd18(model)
+
     # Get the maximum NECB fdwr
+    # fdwr_set settings:
+    # 0-1:  Remove all windows and add windows to match this fdwr
+    # -1:  Remove all windows and add windows to match max fdwr from NECB
+    # -2:  Do not apply any fdwr changes, leave windows alone (also works for fdwr > 1)
+    # -3:  Use old method which reduces existing window size (if necessary) to meet maximum NECB fdwr limit
+    # <-3.1:  Remove all the windows
+    # > 1:  Do nothing
 
-    # If fdwr_set is 1.1 apply the NECB maximum fenestration and door to wall ratio to the model and ignore the
-    # rest of the method.  If it is between 0.0 and 1.0 apply whatever was passed.  If it is greater than 1.2 follow the
-    # original apply_limit_fdwr method which sets the necb fdwr only if the fdwr in the building is greater than the
-    # maximum allowed NECB fdwr.
-
-    if fdwr_set.to_f > 1.0 && fdwr_set.to_f < 1.2
-      fdwr_set = (max_fwdr(hdd)).round(3)
-    elsif fdwr_set.to_f > 1.2
-      fdwr_set = (max_fwdr(hdd) * 100.0).round(1)
-      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_set)
+    if fdwr_set.to_f > 1.0
+      return
+    elsif fdwr_set.to_f >= 0.0 and fdwr_set <= 1.0
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
+      return
+    elsif fdwr_set.to_f >= -1.1 and fdwr_set <= -0.9
+      fdwr_lim = (max_fwdr(hdd)).round(3)
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_lim.to_f)
+      return
+    elsif fdwr_set.to_f >= -2.1 and fdwr_set <= -1.9
+      return
+    elsif fdwr_set.to_f >= -3.1 and fdwr_set <= -2.9
+      fdwr_lim = (max_fwdr(hdd) * 100.0).round(1)
+      return apply_limit_fdwr(model: model, fdwr_lim: fdwr_lim.to_f)
+    elsif fdwr_set < -3.1
+      apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
+      return
     end
-
-    return apply_max_fdwr_nrcan(model: model, fdwr_lim: fdwr_set.to_f)
   end
 
   def apply_limit_fdwr(model:, fdwr_lim:)
@@ -158,15 +171,40 @@ class NECB2011
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model:, srr_set: 1.1)
+  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0)
 
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
 
-    if srr_set.to_f < 1.2
-      srr_set = self.get_standards_constant('skylight_to_roof_ratio_max_value') if srr_set.to_f > 1.0
-      return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+    # srr_set settings:
+    # 0-1:  Remove all skylights and add skylights to match this srr
+    # -1:  Remove all skylights and add skylights to match max srr from NECB
+    # -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
+    # -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
+    # <-3.1:  Remove all the skylights
+    # > 1:  Do nothing
+
+    if srr_set.to_f > 1.0
+      return
+    elsif srr_set.to_f >= 0.0 && srr_set <= 1.0
+      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+      return
+    elsif srr_set.to_f >= -1.1 && srr_set <= -0.9
+      # Get the maximum NECB srr
+      srr_lim = self.get_standards_constant('skylight_to_roof_ratio_max_value')
+      apply_max_srr_nrcan(model: model, srr_lim: srr_lim.to_f)
+      return
+    elsif srr_set.to_f >= -2.1 && srr_set <= -1.9
+      return
+    elsif srr_set.to_f >= -3.1 && srr_set <= -2.9
+      # Continue with the rest of this method, use old method which reduces existing skylight size (if necessary) to
+      # meet maximum srr limit
+    elsif srr_set < -3.1
+      apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f)
+      return
+    else
+      return
     end
 
     # SRR limit
@@ -282,29 +320,24 @@ class NECB2011
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Bool] returns true if successful, false if not
 
-  def apply_standard_construction_properties(model,
-                                             runner = nil,
-                                             scale_wall = 1.0,
-                                             scale_floor = 1.0,
-                                             scale_roof = 1.0,
-                                             scale_ground_wall = 1.0,
-                                             scale_ground_floor = 1.0,
-                                             scale_ground_roof = 1.0,
-                                             scale_door = 1.0,
-                                             scale_window = 1.0)
+  def apply_standard_construction_properties(model:,
+                                             runner: nil,
+                                             properties: {
+                                                 'outdoors_wall_conductance' => nil,
+                                                 'outdoors_floor_conductance' => nil,
+                                                 'outdoors_roofceiling_conductance' => nil,
+                                                 'ground_wall_conductance' => nil,
+                                                 'ground_floor_conductance' => nil,
+                                                 'ground_roofceiling_conductance' => nil,
+                                                 'outdoors_door_conductance' => nil,
+                                                 'outdoors_fixedwindow_conductance' => nil
+                                             })
 
     model.getDefaultConstructionSets.sort.each do |set|
-      set_construction_set_to_necb!(model,
-                                    set,
-                                    runner,
-                                    scale_wall,
-                                    scale_floor,
-                                    scale_roof,
-                                    scale_ground_wall,
-                                    scale_ground_floor,
-                                    scale_ground_roof,
-                                    scale_door,
-                                    scale_window)
+      set_construction_set_to_necb!(model: model,
+                                    default_surface_construction_set: set,
+                                    runner: nil,
+                                    properties: properties)
     end
     # sets all surfaces to use default constructions sets except adiabatic, where it does a hard assignment of the interior wall construction type.
     model.getPlanarSurfaces.sort.each(&:resetConstruction)
@@ -317,16 +350,19 @@ class NECB2011
   # @param model [OpenStudio::model::Model] A model object
   # @param default_surface_construction_set [String]
   # @return [Boolean] returns true if sucessful, false if not
-  def set_construction_set_to_necb!(model, default_surface_construction_set,
-                                    runner = nil,
-                                    scale_wall = 1.0,
-                                    scale_floor = 1.0,
-                                    scale_roof = 1.0,
-                                    scale_ground_wall = 1.0,
-                                    scale_ground_floor = 1.0,
-                                    scale_ground_roof = 1.0,
-                                    scale_door = 1.0,
-                                    scale_window = 1.0)
+  def set_construction_set_to_necb!(model:,
+                                    default_surface_construction_set:,
+                                    runner: nil,
+                                    properties: {
+                                        'outdoors_wall_conductance' => nil,
+                                        'outdoors_floor_conductance' => nil,
+                                        'outdoors_roofceiling_conductance' => nil,
+                                        'ground_wall_conductance' => nil,
+                                        'ground_floor_conductance' => nil,
+                                        'ground_roofceiling_conductance' => nil,
+                                        'outdoors_door_conductance' => nil,
+                                        'outdoors_fixedwindow_conductance' => nil
+                                    })
     BTAP.runner_register('Info', 'set_construction_set_to_necb!', runner)
     if model.weatherFile.empty? || model.weatherFile.get.path.empty? || !File.exist?(model.weatherFile.get.path.get.to_s)
 
@@ -342,34 +378,35 @@ class NECB2011
     # Get appropriate standards table
     standards_table = @standards_data['surface_thermal_transmittance']
 
+    surface_types = [
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Wall', 'conductance' => properties['outdoors_wall_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Floor', 'conductance' => properties['outdoors_floor_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling', 'conductance' => properties['outdoors_roofceiling_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'Wall', 'conductance' => properties['ground_wall_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'Floor', 'conductance' => properties['ground_floor_conductance']},
+        {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling', 'conductance' => properties['ground_roofceiling_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Window', 'conductance' => properties['outdoors_fixedwindow_conductance']},
+        {'boundary_condition' => 'Outdoors', 'surface' => 'Door', 'conductance' => properties['outdoors_door_conductance']}
+    ]
+
+    surface_types_rsi = {}
+    surface_types.each do |surface_type|
+      surface_types_rsi["#{surface_type['boundary_condition'].downcase}_#{surface_type['surface'].downcase}_conductance"] = surface_type['conductance'].nil? ? 1.0 / (eval(self.model_find_objects(standards_table, surface_type)[0]['formula'])) : (1.0 / surface_type['conductance'])
+    end
+    puts surface_types_rsi
+
     # convert conductance values to rsi values. (Note: we should really be only using conductances in)
-    wall_rsi = 1.0 / (scale_wall * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Wall'})[0]['formula']))
-    floor_rsi = 1.0 / (scale_floor * eval(self.model_find_objects(standards_table,
-                                                                           {'boundary_condition' => 'Outdoors', 'surface' => 'Floor'})[0]['formula']))
-    roof_rsi = 1.0 / (scale_roof * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'RoofCeiling'})[0]['formula']))
-    ground_wall_rsi = 1.0 / (scale_ground_wall * eval(self.model_find_objects(standards_table,
-                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'Wall'})[0]['formula']))
-    ground_floor_rsi = 1.0 / (scale_ground_floor * eval(self.model_find_objects(standards_table,
-                                                                                         {'boundary_condition' => 'Ground', 'surface' => 'Floor'})[0]['formula']))
-    ground_roof_rsi = 1.0 / (scale_ground_roof * eval(self.model_find_objects(standards_table,
-                                                                                       {'boundary_condition' => 'Ground', 'surface' => 'RoofCeiling'})[0]['formula']))
-    door_rsi = 1.0 / (scale_door * eval(self.model_find_objects(standards_table,
-                                                                         {'boundary_condition' => 'Outdoors', 'surface' => 'Door'})[0]['formula']))
-    window_rsi = 1.0 / (scale_window * eval(self.model_find_objects(standards_table,
-                                                                             {'boundary_condition' => 'Outdoors', 'surface' => 'Window'})[0]['formula']))
     BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set_rsi!(model, new_name, default_surface_construction_set,
-                                                                                                wall_rsi, floor_rsi, roof_rsi,
-                                                                                                ground_wall_rsi, ground_floor_rsi, ground_roof_rsi,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil,
-                                                                                                door_rsi,
-                                                                                                door_rsi, nil, nil,
-                                                                                                door_rsi,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil,
-                                                                                                window_rsi, nil, nil)
+                                                                                                surface_types_rsi['outdoors_wall_conductance'], surface_types_rsi['outdoors_floor_conductance'], surface_types_rsi['outdoors_roofceiling_conductance'],
+                                                                                                surface_types_rsi['ground_wall_conductance'], surface_types_rsi['ground_floor_conductance'], surface_types_rsi['ground_roofceiling_conductance'],
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_door_conductance'],
+                                                                                                surface_types_rsi['outdoors_door_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_door_conductance'],
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil,
+                                                                                                surface_types_rsi['outdoors_window_conductance'], nil, nil)
     BTAP.runner_register('Info', 'set_construction_set_to_necb! was sucessful.', runner)
     return true
   end
@@ -529,7 +566,7 @@ class NECB2011
     normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
     normalweight_concrete_floor.setRoughness('MediumSmooth')
     normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setThermalConductivity(2.31)
+    normalweight_concrete_floor.setConductivity(2.31)
     normalweight_concrete_floor.setDensity(2322)
     normalweight_concrete_floor.setSpecificHeat(832)
 
@@ -553,7 +590,7 @@ class NECB2011
     g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
     g01_13mm_gypsum_board.setRoughness('Smooth')
     g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
+    g01_13mm_gypsum_board.setConductivity(0.1600)
     g01_13mm_gypsum_board.setDensity(800)
     g01_13mm_gypsum_board.setSpecificHeat(1090)
     g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
@@ -571,7 +608,7 @@ class NECB2011
     m10_200mm_concrete_block_basement_wall.setName('M10 200mm concrete block basement wall')
     m10_200mm_concrete_block_basement_wall.setRoughness('MediumRough')
     m10_200mm_concrete_block_basement_wall.setThickness(0.2032)
-    m10_200mm_concrete_block_basement_wall.setThermalConductivity(1.326)
+    m10_200mm_concrete_block_basement_wall.setConductivity(1.326)
     m10_200mm_concrete_block_basement_wall.setDensity(1842)
     m10_200mm_concrete_block_basement_wall.setSpecificHeat(912)
 
@@ -638,6 +675,9 @@ class NECB2011
       return false
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    fixed_window_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.fixedWindowConstruction.get
+
 
     # IF FDWR is greater than 1 then something is wrong raise an error.  If it is less than 0.001 assume all the windows
     # should go.
@@ -651,18 +691,18 @@ class NECB2011
       return true
     end
     # Get the required window area.
-    win_area = fdwr_lim*exp_surf_info["total_exp_wall_area_m2"]
+    win_area = fdwr_lim * exp_surf_info["total_exp_wall_area_m2"]
     # Try to put the windows on non-plenum walls if possible.  So determine if you can fit the required window area
     # on the non-plenum wall area.
     if win_area <= exp_surf_info["exp_nonplenum_wall_area_m2"]
       # If you can fit the windows on the non-plenum wall area then recalculate the window ratio so that is is only for
       # the non-plenum walls.
-      nonplenum_fdwr = win_area/exp_surf_info["exp_nonplenum_wall_area_m2"]
+      nonplenum_fdwr = win_area / exp_surf_info["exp_nonplenum_wall_area_m2"]
       exp_surf_info["exp_nonplenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, nonplenum_fdwr)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: nonplenum_fdwr, construction: fixed_window_construct_set)
       end
     else
       # There was not enough non-plenum wall area so add the windows to both the plenum and non-plenum walls.  This is
@@ -672,13 +712,13 @@ class NECB2011
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
       exp_surf_info["exp_plenum_walls"].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
         remove_All_Subsurfaces(surface: exp_surf)
-        set_Window_To_Wall_Ratio_set_name(exp_surf, fdwr_lim)
+        set_Window_To_Wall_Ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
       end
     end
     return true
@@ -688,7 +728,7 @@ class NECB2011
   # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
   # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
   # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
-  def apply_max_srr_nrcan(model:, srr_lim: )
+  def apply_max_srr_nrcan(model:, srr_lim:)
     # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
     exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
     # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
@@ -711,6 +751,9 @@ class NECB2011
       return true
     end
 
+    construct_set = model.getBuilding.defaultConstructionSet.get
+    skylight_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.skylightConstruction.get
+
     # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
     # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
     # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
@@ -718,7 +761,7 @@ class NECB2011
     # L or a V).
     exp_surf_info["exp_nonplenum_roofs"].sort.each do |roof|
       # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
-      sub_surface_create_scaled_subsurfaces_from_surface(roof, srr_lim, model)
+      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, model: model, consturction: skylight_construct_set)
     end
     return true
   end

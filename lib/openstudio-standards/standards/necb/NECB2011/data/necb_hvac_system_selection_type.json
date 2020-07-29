@@ -7,7 +7,7 @@
       ],
       "table": [
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "- undefined -",
           "min_stories": 0,
           "max_stories": 99999,
@@ -17,7 +17,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Assembly Area",
           "min_stories": 0,
           "max_stories": 4,
@@ -27,7 +27,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Assembly Area",
           "min_stories": 5,
           "max_stories": 99999,
@@ -37,7 +37,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Automotive Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -47,7 +47,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Data Processing Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -57,7 +57,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Data Processing Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -67,7 +67,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "General Area",
           "min_stories": 0,
           "max_stories": 2,
@@ -77,7 +77,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "General Area",
           "min_stories": 3,
           "max_stories": 99999,
@@ -87,7 +87,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Historical Collections Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -97,7 +97,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Hospital Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -107,7 +107,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Indoor Arena",
           "min_stories": 0,
           "max_stories": 99999,
@@ -117,7 +117,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Industrial Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -127,7 +127,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Residential/Accomodation Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -137,7 +137,7 @@
           "dwelling": true
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Sleeping Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -147,7 +147,7 @@
           "dwelling": true
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Supermarket/Food Services Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -157,7 +157,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Supermarket/Food Services Area - vented",
           "min_stories": 0,
           "max_stories": 99999,
@@ -167,7 +167,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Warehouse Area",
           "min_stories": 0,
           "max_stories": 99999,
@@ -177,7 +177,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Warehouse Area - refrigerated",
           "min_stories": 0,
           "max_stories": 99999,
@@ -187,7 +187,7 @@
           "dwelling": false
         },
         {
-          "template": "NECB2011",
+          
           "necb_hvac_system_selection_type": "Wildcard",
           "min_stories": 0,
           "max_stories": 99999,

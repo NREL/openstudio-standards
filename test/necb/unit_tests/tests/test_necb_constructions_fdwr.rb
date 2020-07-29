@@ -17,7 +17,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ]
   #Set Compliance vintage
-  Templates = ['NECB2011','NECB2015','NECB2017']
+  Templates = ['NECB2011','NECB2015','NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
@@ -133,7 +133,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard = Standard.build(template)
 
         table = standard.standards_data['tables']['space_types']['table']
-        space_type_properties = table.detect {|st| st["template"] == template && st["building_type"] == building_type && st["space_type"] == space_type }
+        space_type_properties = table.detect {|st| st["building_type"] == building_type && st["space_type"] == space_type }
         st = OpenStudio::Model::SpaceType.new(@model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
         st.setStandardsSpaceType(space_type_properties['space_type'])
@@ -154,8 +154,13 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard.model_add_ground_temperatures(@model, 'HighriseApartment', 'NECB HDD Method')
         @hdd = standard.get_necb_hdd18(@model)
 
-
-        standard.apply_standard_construction_properties(@model) # standards candidate
+        standard.apply_building_default_constructionset(@model) # add necb default construction set
+        standard.apply_standard_construction_properties(model: @model) # standards candidate
+        if template == 'BTAPPRE1980'
+          standard.apply_standard_window_to_wall_ratio(model: @model, fdwr_set: 1.1)
+        else
+          standard.apply_standard_window_to_wall_ratio(model: @model)
+        end
         standard.apply_standard_window_to_wall_ratio(model: @model) # standards candidate
         standard.apply_standard_skylight_to_roof_ratio(model: @model) # standards candidate
 

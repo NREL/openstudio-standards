@@ -780,7 +780,11 @@ class Standard
     return skylight_effective_aperture
   end
 
-  # Removes daylighting controls
+  # Removes daylighting controls from model
+  #
+  # @param model [OpenStudio::Model::Space] OpenStudio space object
+  #
+  # @return [Boolean] Returns true if a sizing run is required
   def space_remove_daylighting_controls(space)
     # Retrieves daylighting control objects
     existing_daylighting_controls = space.daylightingControls
@@ -1354,7 +1358,7 @@ class Standard
     return area_m2
   end
 
-  # Calculate the area of the exterior walls,
+  # Calculate the area of the exterior walls, and roofs
   # including the area of the windows on these walls.
   #
   # @return [Double] area in m^2
@@ -1376,6 +1380,89 @@ class Standard
     end
 
     return area_m2
+  end
+
+  # Calculate the space envelope area.
+  # According to the 90.1 definition, building envelope include:
+  # 1. "the elements of a building that separate conditioned spaces from the exterior"
+  # 2. "the elements of a building that separate conditioned space from unconditioned
+  #    space or that enclose semiheated spaces through which thermal energy may be
+  #    transferred to or from the exterior, to or from unconditioned spaces or to or
+  #    from conditioned spaces."
+  #
+  # Outside boundary conditions currently supported:
+  # - Adiabatic
+  # - Surface
+  # - Outdoors
+  # - Foundation
+  # - Ground
+  # - GroundFCfactorMethod
+  # - OtherSideCoefficients
+  # - OtherSideConditionsModel
+  # - GroundSlabPreprocessorAverage
+  # - GroundSlabPreprocessorCore
+  # - GroundSlabPreprocessorPerimeter
+  # - GroundBasementPreprocessorAverageWall
+  # - GroundBasementPreprocessorAverageFloor
+  # - GroundBasementPreprocessorUpperWall
+  # - GroundBasementPreprocessorLowerWall
+  #
+  # Surface type currently supported:
+  # - Floor
+  # - Wall
+  # - RoofCeiling
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param climate_zone [String] Climate zone, used for space heating/cooling thresholds
+  #
+  # @return [Double] area in m^2
+  def space_envelope_area(space, climate_zone)
+    area_m2 = 0.0
+
+    # Get the space conditioning type
+    space_cond_type = space_conditioning_category(space, climate_zone)
+
+    # Loop through all surfaces in this space
+    space.surfaces.sort.each do |surface|
+      # Only account for spaces that are conditioned or semi-heated
+      next unless space_cond_type != 'Unconditioned'
+
+      surf_cnt = false
+
+      # Conditioned space OR semi-heated space <-> exterior
+      # Conditioned space OR semi-heated space <-> ground
+      #
+      # isGroundSurface does not check for Foundation outside boundary condition
+      # TODO: 90.1 excludes slab-on-grade as "floors", hence, they're currently excluded
+      if surface.outsideBoundaryCondition == 'Outdoors' ||
+         (surface.isGroundSurface && surface.surfaceType == 'Wall') ||
+         (surface.outsideBoundaryCondition == 'Foundation' && surface.surfaceType == 'Wall') ||
+         (surface.isGroundSurface && surface.surfaceType == 'Roof') ||
+         (surface.outsideBoundaryCondition == 'Foundation' && surface.surfaceType == 'Roof')
+        surf_cnt = true
+      end
+
+      # Conditioned space OR semi-heated space <-> unconditioned spaces
+      unless surf_cnt
+        # TODO: add a case for 'Zone' when supported
+        if surface.outsideBoundaryCondition == 'Surface'
+          adj_space = surface.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space, climate_zone)
+          surf_cnt = true unless adj_space_cond_type != 'Unconditioned'
+        end
+      end
+
+      if surf_cnt
+        # This surface
+        area_m2 += surface.netArea
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |subsurface|
+          area_m2 += subsurface.netArea
+        end
+      end
+    end
+
+    return area_m2 * space.multiplier
   end
 
   # Determine if the space is a plenum.
@@ -1501,7 +1588,7 @@ class Standard
   #
   # @param climate_zone [String] climate zone
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
-  # @todo add logic to detect indirectly-conditioned spaces
+  # @todo add logic to detect indirectly-conditioned spaces based on air transfer
   def space_conditioning_category(space, climate_zone)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1511,8 +1598,67 @@ class Standard
       return 'Unconditioned'
     end
 
-    # Get the category from the zone
-    cond_cat = zone.get.conditioning_category(climate_zone)
+    # Get the category from the zone, this methods does NOT detect indirectly
+    # conditioned spaces
+    cond_cat = thermal_zone_conditioning_category(zone.get, climate_zone)
+
+    # Detect indirectly conditioned spaces based on UA sum product comparison
+    if cond_cat == "Unconditioned"
+
+      # Initialize UA sum product for surfaces adjacent to conditioned spaces
+      cond_ua = 0
+
+      # Initialize UA sum product for surfaces adjacent to unconditoned spaces,
+      # semi-heated spaces and outdoors
+      otr_ua = 0
+
+      space.surfaces.sort.each do |surface|
+        # Surfaces adjacent to other surfaces can be next to conditioned,
+        # unconditioned or semi-heated spaces
+        if surface.outsideBoundaryCondition == 'Surface'
+
+          # Retrieve adjacent space conditioning category
+          adj_space = surface.adjacentSurface.get.space.get
+          adj_zone = adj_space.thermalZone.get
+          adj_space_cond_type = thermal_zone_conditioning_category(adj_zone, climate_zone)
+
+          # adj_zone == zone.get means that the surface is adjacent to its zone
+          # This is translated by an adiabtic outside boundary condition, which are
+          # assumed to be used only if the surface is adjacent to a conditioned space
+          if adj_space_cond_type == 'ResConditioned' || adj_space_cond_type == 'NonResConditioned' || adj_zone == zone.get
+            cond_ua += surface_subsurface_ua(surface)
+          else
+            otr_ua += surface_subsurface_ua(surface)
+          end
+
+        # Adiabtic outside boundary condition are assumed to be used only if the
+        # surface is adjacent to a conditioned space
+        elsif surface.outsideBoundaryCondition == 'Adiabatic'
+
+          # If the surface is a floor and is located at the lowest floor of the
+          # building it is assumed to be adjacent to an unconditioned space
+          # (i.e. ground)
+          if surface.surfaceType == 'Floor' && surface.space.get.buildingStory == find_lowest_story(surface.model)
+            otr_ua += surface_subsurface_ua(surface)
+          else
+            cond_ua += surface_subsurface_ua(surface)
+          end
+
+        # All other outside boundary conditions are assumed to be adjacent to either:
+        # outdoors or ground and hence count towards the unconditioned UA product
+        else
+          otr_ua += surface_subsurface_ua(surface)
+        end
+      end
+
+      # Determine if residential
+      res = thermal_zone_residential?(zone.get) ? true : false
+
+      return cond_cat unless cond_ua > otr_ua
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned because its conditioned UA product (#{cond_ua.round} W/K) exceeds its non-conditioned UA product (#{otr_ua.round} W/K).")
+      cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+    end
 
     return cond_cat
   end

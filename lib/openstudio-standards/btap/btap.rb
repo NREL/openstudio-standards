@@ -23,8 +23,7 @@ require 'singleton'
 require 'find'
 require 'date'
 require_relative 'fileio' 
-require_relative 'geometry' 
-require_relative 'compliance' 
+require_relative 'geometry'
 require_relative 'analysis' 
 require_relative 'simmanager' 
 require_relative 'mpc' 
@@ -53,7 +52,7 @@ class String
 end
 
 
-class Fixnum
+class Integer
   #This method converts to Boolean.
   #@author phylroy.lopez@nrcan.gc.ca
   def to_bool

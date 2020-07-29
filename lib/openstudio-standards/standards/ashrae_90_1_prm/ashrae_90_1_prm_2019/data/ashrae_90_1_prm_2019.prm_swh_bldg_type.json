@@ -2,182 +2,182 @@
   "prm_swh_bldg_type": [
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "All others ",
+      "swh_building_type": "All others",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Automotive facility ",
+      "swh_building_type": "Automotive facility",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Convenience store ",
+      "swh_building_type": "Convenience store",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Convention center ",
+      "swh_building_type": "Convention center",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Courthouse ",
+      "swh_building_type": "Courthouse",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Dining: Bar lounge/leisure ",
+      "swh_building_type": "Dining: Bar lounge/leisure",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Dining: Cafeteria/fast food ",
+      "swh_building_type": "Dining: Cafeteria/fast food",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Dining: Family ",
+      "swh_building_type": "Dining: Family",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Dormitory ",
+      "swh_building_type": "Dormitory",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Exercise center ",
+      "swh_building_type": "Exercise center",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Fire station ",
+      "swh_building_type": "Fire station",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Grocery store ",
+      "swh_building_type": "Grocery store",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Gymnasium ",
+      "swh_building_type": "Gymnasium",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Health-care clinic ",
+      "swh_building_type": "Health-care clinic",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Hospital and outpatient surgery center ",
+      "swh_building_type": "Hospital and outpatient surgery center",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Hotel ",
+      "swh_building_type": "Hotel",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Library ",
+      "swh_building_type": "Library",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Manufacturing facility ",
+      "swh_building_type": "Manufacturing facility",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Motel ",
+      "swh_building_type": "Motel",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Motion picture theater ",
+      "swh_building_type": "Motion picture theater",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Multifamily ",
+      "swh_building_type": "Multifamily",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Museum ",
+      "swh_building_type": "Museum",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Office ",
+      "swh_building_type": "Office",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Parking garage ",
+      "swh_building_type": "Parking garage",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Penitentiary ",
+      "swh_building_type": "Penitentiary",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Performing arts theater ",
+      "swh_building_type": "Performing arts theater",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Police station ",
+      "swh_building_type": "Police station",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Post office ",
+      "swh_building_type": "Post office",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Religious facility ",
+      "swh_building_type": "Religious facility",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Retail ",
+      "swh_building_type": "Retail",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "School/university ",
+      "swh_building_type": "School/university",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Sports arena ",
+      "swh_building_type": "Sports arena",
       "baseline_heating_method": "Gas Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Town hall ",
+      "swh_building_type": "Town hall",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Transportation ",
+      "swh_building_type": "Transportation",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Warehouse ",
+      "swh_building_type": "Warehouse",
       "baseline_heating_method": "Electric Resistance Storage"
     },
     {
       "template": "90.1-PRM-2019",
-      "swh_building_type": "Workshop ",
+      "swh_building_type": "Workshop",
       "baseline_heating_method": "Electric Resistance Storage"
     }
   ]
