@@ -25,6 +25,9 @@ class AppendixGPRMTests < Minitest::Test
   def generate_prototypes(prototypes_to_generate)
     prototypes = {}
     @lpd_space_types_alt = {}
+    @bldg_type_alt = {}
+    @bldg_type_alt_now = nil
+    
     prototypes_to_generate.each do |id, prototype|
       # mod is an array of method intended to modify the model
       building_type, template, climate_zone, mod = prototype
@@ -59,6 +62,12 @@ class AppendixGPRMTests < Minitest::Test
         mod.each do |method_mod|
           model = public_send(method_mod, model)
         end
+      end
+
+      if @bldg_type_alt_now != nil
+        @bldg_type_alt[prototype] = @bldg_type_alt_now
+      else
+        @bldg_type_alt[prototype] = nil?
       end
 
       # Save prototype OSM file
@@ -126,9 +135,15 @@ class AppendixGPRMTests < Minitest::Test
         FileUtils.rm_rf(run_dir_baseline)
       end
 
+      if @bldg_type_alt[id_prototype_mapping[id]] == false
+        hvac_building_type = building_type
+      else
+        hvac_building_type = @bldg_type_alt[id_prototype_mapping[id]]
+      end
+
       # Create baseline model
       model_baseline = prototype_creator.model_create_prm_stable_baseline_building(model, building_type, climate_zone,
-                                                                                   @@hvac_building_types[building_type],
+                                                                                   @@hvac_building_types[hvac_building_type],
                                                                                    @@wwr_building_types[building_type],
                                                                                    @@swh_building_types[building_type],
                                                                                    nil, run_dir_baseline, false)
@@ -451,16 +466,51 @@ class AppendixGPRMTests < Minitest::Test
         # System type should be PSZ
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
-          puts "DEM: num zones = #{num_zones}"
           assert(num_zones == 1, "System #{air_loop.name} is multizone, for retail < 25,000 sq ft.")
         end
-      elsif building_type == 'RetailStripmall' && mod[0] == 'SetZoneMultiplierTo2'
+      elsif building_type == 'RetailStripmall' && mod[0] == 'set_zone_multiplier_to_3'
         # System type should be PVAV with 10 zones
         model.getAirLoopHVACs.each do |air_loop|
           num_zones = air_loop.thermalZones.size
-          puts "DEM: num zones = #{num_zones}"
           assert(num_zones == 10, "System #{air_loop.name} multizone grouping failed for retail > 25,000 sq ft.")
         end
+      elsif building_type == 'SmallOffice' && mod[0] == 'set_zone_multiplier_to_4'
+        # 4 to 5 stories, <= 150 ksf --> PVAV
+        # System type should be PVAV with 10 zones, area is 22,012 sf
+        model.getAirLoopHVACs.each do |air_loop|
+          num_zones = air_loop.thermalZones.size
+          assert(num_zones == 5, "System #{air_loop.name} multizone grouping failed for other nonres > 4 to 5 stories, <= 150 ksf")
+        end
+      elsif building_type == 'SmallOffice' && mod[0] == 'set_zone_multiplier_to_6'
+        # 6+ stories, any floor area --> VAV/chiller
+        # This test has floor area 33,018 sf 
+        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+        assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with Small office with zone multiplier = 6")
+      elsif building_type == 'HighriseApartment' && mod[0] == 'change_bldgtype_to_mediumoffice'
+        # system type should be VAV with chiller
+        # for other non-res building, >= 6 stories, any floor area
+        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+        assert(has_chiller, "Building has >= 6 stories but does not have chiller; other non-res category, tested with HighriseApartment converted to MediumOffice.")
+      elsif building_type == 'MidriseApartment' && mod[0] == 'change_bldgtype_to_mediumoffice'
+        # system type should be PVAV
+        # for other non-res building, 4 to 5 stories, 25 to 150 ksf floor area
+        is_multizone = false
+        model.getAirLoopHVACs.each do |air_loop|
+          num_zones = air_loop.thermalZones.size
+          if num_zones > 1
+            is_multizone = true
+          end
+        end
+        puts "DEM: num zones = #{num_zones}"
+        has_chiller = model.getPlantLoopByName('Chilled Water Loop').is_initialized
+        num_dx_coils += model.getCoilCoolingDXSingleSpeeds.size
+        puts "DEM: num zones = #{num_dx_coils}"
+        num_dx_coils += model.getCoilCoolingDXTwoSpeeds.size
+        puts "DEM: num zones = #{num_dx_coils}"
+        num_dx_coils += model.getCoilCoolingDXMultiSpeeds.size
+        puts "DEM: num zones = #{num_dx_coils}"
+
+        assert((has_chiller == false && num_dx_coils > 0), "Building has 4 stories but is not set as PVAV; other non-res category, tested with MidriseApartment converted to MediumOffice.")
       end
 
     end
@@ -468,13 +518,28 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Set ZoneMultiplier to 2 for all zones to change the total building area
-  def SetZoneMultiplierTo2(model)
-    puts "DEM: in SetZoneMultiplierTo2 --------------------------------------"
+  def set_zone_multiplier_to_3(model)
     model.getAirLoopHVACs.each do |air_loop|
-      puts "DEM: air loop = #{air_loop.name.to_s}"
       air_loop.thermalZones.each do |thermal_zone|
-        puts "DEM: mult = #{thermal_zone.multiplier}"
-        thermal_zone.setMultiplier(2)
+        thermal_zone.setMultiplier(3)
+      end
+    end
+    return model
+  end
+
+  def set_zone_multiplier_to_4(model)
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop.thermalZones.each do |thermal_zone|
+        thermal_zone.setMultiplier(4)
+      end
+    end
+    return model
+  end
+
+  def set_zone_multiplier_to_6(model)
+    model.getAirLoopHVACs.each do |air_loop|
+      air_loop.thermalZones.each do |thermal_zone|
+        thermal_zone.setMultiplier(6)
       end
     end
     return model
@@ -572,6 +637,11 @@ class AppendixGPRMTests < Minitest::Test
     end
 
   end
+
+  def change_bldgtype_to_mediumoffice(model)
+    @bldg_type_alt_now = 'MediumOffice'
+    return model
+    end
 
 
   # Run test suite for the ASHRAE 90.1 appendix G Performance

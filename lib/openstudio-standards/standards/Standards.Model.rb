@@ -1030,6 +1030,8 @@ class Standard
     unless heated_cooled_zones.empty?
       heated_cooled_group = {}
       heated_cooled_group['occ'] = hvac_building_type
+      puts "DEM: occ =  #{heated_cooled_group['occ']}  =================="
+
       heated_cooled_group['fuel'] = 'any'
       area_m2 = 0
       heated_cooled_zones.each do |zone|
@@ -1343,7 +1345,8 @@ class Standard
       if !props
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       end
-      if num_stories < props['bldg_flrs_max']
+
+      if num_stories <= props['bldg_flrs_max']
         # Story Group Is found
         break
       end

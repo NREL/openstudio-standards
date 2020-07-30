@@ -26,7 +26,10 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", ["MakeLabLowDistribZoneExh"]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", ["MakeLabHighSystemExh"]],
         ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", ""],
-        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", ["SetZoneMultiplierTo2"]],
-        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""]
-    ]
-}
+        ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_3"]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_4"]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", ["set_zone_multiplier_to_6"]],
+        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", ""],
+        ["HighriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ["change_bldgtype_to_mediumoffice"]],
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", ["change_bldgtype_to_mediumoffice"]]
+    ]}
