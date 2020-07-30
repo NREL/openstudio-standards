@@ -1,4 +1,4 @@
-class ECMS < Standard
+class ECMS < NECB2011
 
   @template = self.new.class.name
   register_standard(@template)
