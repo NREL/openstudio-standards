@@ -46,7 +46,7 @@ class NECB2011ScheduleTests < Minitest::Test
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model)
+        standard.model_add_loads(@model, 'NECB_Default', 1.0)
   
         #Set all spaces to spacetype
         @model.getSpaces.each do |space|
