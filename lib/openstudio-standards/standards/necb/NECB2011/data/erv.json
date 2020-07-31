@@ -7,7 +7,8 @@
       ],
       "table": [
         {
-          "erv_name": "Rotary-Minimum-Eff",
+          "erv_name": "Rotary-Minimum-Eff-Existing",
+          "application": "Existing-ERVS",
           "HeatExchangerType": "Rotary",
           "SensibleEffectivenessat100HeatingAirFlow": 0.5,
           "LatentEffectivenessat100HeatingAirFlow": 0.5,
